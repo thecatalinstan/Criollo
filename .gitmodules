@@ -1,0 +1,4 @@
+[submodule "Libraries/CocoaAsyncSocket"]
+	path = Libraries/CocoaAsyncSocket
+	url = https://github.com/robbiehanson/CocoaAsyncSocket.git
+	branch = master
