@@ -7,8 +7,6 @@
 //
 
 #import <Criollo/CLApplication.h>
-#import <Criollo/CLHTTPRequest.h>
-#import <Criollo/CLHTTPResponse.h>
 
 #import "CLApplication+Internal.h"
 
@@ -17,7 +15,7 @@ NSString* const Criollo = @"Criollo";
 NSString* const CLApplicationRunLoopMode = @"NSDefaultRunLoopMode";
 NSString* const CLErrorDomain = @"CLErrorDomain";
 
-NSUInteger const CLDefaultPortNumber = 1007;
+NSUInteger const CLDefaultPortNumber = 10070;
 
 NSString* const CLRequestKey = @"CLRequest";
 NSString* const CLResponseKey = @"CLResponse";
@@ -45,12 +43,6 @@ int CLApplicationMain(int argc, char * const argv[], id<CLApplicationDelegate> d
             case '?':
                 if (optopt == 'c' || optopt == 'p') {
                     fprintf (stderr, "Option -%c requires an argument.\n", optopt);
-                    exit(EXIT_FAILURE);
-                } else if ( isprint (optopt) ) {
-                    fprintf (stderr, "Unknown option `-%c'.\n", optopt);
-                    exit(EXIT_FAILURE);
-                } else {
-                    fprintf (stderr, "Unknown option character `\\x%x'.\n", optopt);
                     exit(EXIT_FAILURE);
                 }
         }
@@ -145,9 +137,9 @@ int CLApplicationMain(int argc, char * const argv[], id<CLApplicationDelegate> d
     if ( self != nil ) {
         CLApp = self;
         
-        _portNumber = portNumber;
-        _interface = interface;
-        _connectedSockets = [NSMutableArray array];
+        self.portNumber = portNumber;
+        self.interface = interface;
+        self.connections = [NSMutableArray array];
         
         self.delegate = delegate;
     }

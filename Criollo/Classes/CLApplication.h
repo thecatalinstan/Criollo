@@ -66,9 +66,8 @@ extern int CLApplicationMain(int argc, char * const argv[], id<CLApplicationDele
 @property (nonatomic, strong) GCDAsyncSocket* httpSocket;
 @property (nonatomic, strong) NSMutableArray* connections;
 
-@property (nonatomic, strong) NSOperationQueue* delegateQueue;
+@property (nonatomic, strong) dispatch_queue_t delegateQueue;
 @property (nonatomic, strong) NSOperationQueue* workerQueue;
-
 
 + (CLApplication *)sharedApplication;
 

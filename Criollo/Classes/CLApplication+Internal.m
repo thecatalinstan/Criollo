@@ -62,12 +62,9 @@ BOOL shouldKeepRunning;
     self.workerQueue.maxConcurrentOperationCount = NSOperationQueueDefaultMaxConcurrentOperationCount;
     self.workerQueue.qualityOfService = NSQualityOfServiceUserInitiated;
     
-    self.delegateQueue = [[NSOperationQueue alloc] init];
-    self.delegateQueue.name = [[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"DelegateQueue"];
-    self.delegateQueue.maxConcurrentOperationCount = NSOperationQueueDefaultMaxConcurrentOperationCount;
-    self.delegateQueue.qualityOfService = NSQualityOfServiceDefault;
+    self.delegateQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"DelegateQueue"] cStringUsingEncoding:NSASCIIStringEncoding], NULL);
     
-    self.httpSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:self.delegateQueue.underlyingQueue];
+    self.httpSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:self.delegateQueue];
     
     NSError *error;
     BOOL listening = NO;
@@ -77,7 +74,7 @@ BOOL shouldKeepRunning;
         [self presentError:error];
         [self terminate:self];
     } else {
-        [self logFormat:@"Listening on %@:%lu", self.interface, self.portNumber];
+        [self logFormat:@"Listening on %@:%lu", self.interface.length < 7 ? @"*" : self.interface, self.portNumber];
     }
 }
 
@@ -88,7 +85,6 @@ BOOL shouldKeepRunning;
     self.httpSocket = nil;
  
     [self.workerQueue cancelAllOperations];
-    [self.delegateQueue cancelAllOperations];
     
     self.workerQueue = nil;
     self.delegateQueue = nil;

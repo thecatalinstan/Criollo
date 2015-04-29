@@ -6,9 +6,10 @@
 //
 //
 
-#import "CLHTTPConnection.h"
-
+#import <Criollo/CLApplication.h>
 #import <Criollo/GCDAsyncSocket.h>
+
+#import "CLHTTPConnection.h"
 
 @interface CLHTTPConnection () <GCDAsyncSocketDelegate>
 

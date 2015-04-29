@@ -16,7 +16,7 @@
 		ADEDB3AA1AEFCC8B00A26AF1 /* NSDate+RFC1123.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB35F1AEFBD8800A26AF1 /* NSDate+RFC1123.h */; };
 		ADEDB3B01AEFD6F200A26AF1 /* CLApplication+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB3AE1AEFD6F200A26AF1 /* CLApplication+Internal.h */; };
 		ADEDB3B11AEFD6F200A26AF1 /* CLApplication+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = ADEDB3AF1AEFD6F200A26AF1 /* CLApplication+Internal.m */; };
-		ADEDB3B71AF0045C00A26AF1 /* CLHTTPConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB3B51AF0045C00A26AF1 /* CLHTTPConnection.h */; };
+		ADEDB3B71AF0045C00A26AF1 /* CLHTTPConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB3B51AF0045C00A26AF1 /* CLHTTPConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ADEDB3B81AF0045C00A26AF1 /* CLHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = ADEDB3B61AF0045C00A26AF1 /* CLHTTPConnection.m */; };
 /* End PBXBuildFile section */
 
@@ -127,9 +127,9 @@
 				ADEDB3B01AEFD6F200A26AF1 /* CLApplication+Internal.h in Headers */,
 				ADEDB37C1AEFC0B000A26AF1 /* Criollo.h in Headers */,
 				ADEDB3A71AEFCC8B00A26AF1 /* CLApplication.h in Headers */,
+				ADEDB3B71AF0045C00A26AF1 /* CLHTTPConnection.h in Headers */,
 				ADEDB3A91AEFCC8B00A26AF1 /* GCDAsyncSocket.h in Headers */,
 				ADEDB3AA1AEFCC8B00A26AF1 /* NSDate+RFC1123.h in Headers */,
-				ADEDB3B71AF0045C00A26AF1 /* CLHTTPConnection.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
