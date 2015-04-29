@@ -45,11 +45,17 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [self.socket setDelegate:nil delegateQueue:NULL];
+    [self.socket disconnect];
+}
+
 #pragma mark - Request Processing
 
 - (void)initialize
 {
-    [self.socket readDataToData:[GCDAsyncSocket CRLFData] withTimeout:CLSocketReadInitialTimeout maxLength:CLRequestMaxHeaderLineLength tag:CLRequestMaxHeaderLineLength];
+    [self.socket readDataToData:[GCDAsyncSocket CRLFData] withTimeout:CLSocketReadInitialTimeout maxLength:CLRequestMaxHeaderLineLength tag:CLSocketTagReadingRequestHeader];
 }
 
 #pragma mark - GCDAsyncSocketDelegate
@@ -57,21 +63,10 @@
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
 {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    
-    
-    //    if (tag == FCGIRecordAwaitingHeaderTag) {
-    //        FCGIRecord* record = [FCGIRecord recordWithHeaderData:data];
-    //        if (record.contentLength == 0) {
-    //            [self handleRecord:record fromSocket:sock];
-    //        } else {
-    //            dispatch_set_context(sock.delegateQueue, (void *)(CFBridgingRetain(record)));
-    //            [sock readDataToLength:(record.contentLength + record.paddingLength) withTimeout:FCGITimeout tag:FCGIRecordAwaitingContentAndPaddingTag];
-    //        }
-    //    } else if (tag == FCGIRecordAwaitingContentAndPaddingTag) {
-    //        FCGIRecord* record = CFBridgingRelease(dispatch_get_context(sock.delegateQueue));
-    //        [record processContentData:data];
-    //        [self handleRecord:record fromSocket:sock];
-    //    }
+    // Append the header line to the http message
+    if ( tag == CLSocketTagReadingRequestHeader ) {
+        
+    }
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err

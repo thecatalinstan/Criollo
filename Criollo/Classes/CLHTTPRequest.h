@@ -6,22 +6,15 @@
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-@class FCGIRequest;
+@class CLHTTPMessage;
 
-@interface CLHTTPRequest : NSObject {
-    NSMutableData* body;
-}
+@interface CLHTTPRequest : CLHTTPMessage
 
-@property (nonatomic, retain) FCGIRequest* FCGIRequest;
-@property (nonatomic, readonly, retain) NSURL* url;
-@property (nonatomic, readonly, copy) NSDictionary *parameters;
-@property (nonatomic, readonly, copy) NSDictionary *get;
-@property (nonatomic, readonly, copy) NSDictionary *post;
-@property (nonatomic, readonly, copy) NSDictionary *cookie;
-@property (nonatomic, readonly, copy) NSDictionary *files;
+@property (atomic, readonly) NSString* method;
+@property (atomic, readonly) BOOL headerComplete;
 
-- (instancetype)initWithFCGIRequest:(FCGIRequest*)anFCGIRequest;
-+ (instancetype)requestWithFCGIRequest:(FCGIRequest*)anFCGIRequest;
+- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version NS_DESIGNATED_INITIALIZER;
 
+- (BOOL)appendData:(NSData *)data;
 
 @end
