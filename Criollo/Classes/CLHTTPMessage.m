@@ -51,11 +51,6 @@
     return (__bridge_transfer NSString *)CFHTTPMessageCopyHeaderFieldValue(_message, (__bridge CFStringRef)HTTPHeaderField);
 }
 
-- (void)setValue:(NSString*)value forHTTPHeaderField:(NSString *)HTTPHeaderField
-{
-    CFHTTPMessageSetHeaderFieldValue(_message, (__bridge CFStringRef)HTTPHeaderField, (__bridge CFStringRef)value);
-}
-
 - (NSData *)body
 {
     return (__bridge_transfer NSData *)CFHTTPMessageCopyBody(_message);

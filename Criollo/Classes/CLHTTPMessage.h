@@ -16,11 +16,10 @@
 @property (nonatomic, readonly) NSString* version;
 @property (nonatomic, readonly) NSURL* URL;
 @property (nonatomic, readonly) NSDictionary* allHTTPHeaderFields;
-@property (nonatomic, readonly) NSData* data;
 
+@property (nonatomic, readonly) NSData* data;
 @property (nonatomic, strong) NSData* body;
 
 - (NSString *)valueForHTTPHeaderField:(NSString *)HTTPHeaderField;
-- (void)setValue:(NSString*)value forHTTPHeaderField:(NSString *)HTTPHeaderField;
 
 @end

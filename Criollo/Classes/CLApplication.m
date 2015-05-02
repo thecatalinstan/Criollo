@@ -7,6 +7,7 @@
 //
 
 #import <Criollo/CLApplication.h>
+#import <Criollo/CLHTTPRequest.h>
 
 #import "CLApplication+Internal.h"
 
@@ -15,7 +16,7 @@ NSString* const Criollo = @"Criollo";
 NSString* const CLApplicationRunLoopMode = @"NSDefaultRunLoopMode";
 NSString* const CLErrorDomain = @"CLErrorDomain";
 
-NSUInteger const CLDefaultPortNumber = 10070;
+NSUInteger const CLDefaultPortNumber = 1338;
 
 NSString* const CLRequestKey = @"CLRequest";
 NSString* const CLResponseKey = @"CLResponse";
@@ -99,6 +100,13 @@ int CLApplicationMain(int argc, char * const argv[], id<CLApplicationDelegate> d
 }
 
 #pragma mark - Initialization
+
+static NSArray* validHTTPMethods;
+
++ (void)initialize
+{
+    validHTTPMethods = @[@"GET",@"POST", @"PUT", @"DELETE"];
+}
 
 + (CLApplication *)sharedApplication
 {
@@ -211,18 +219,39 @@ int CLApplicationMain(int argc, char * const argv[], id<CLApplicationDelegate> d
 	[[NSNotificationCenter defaultCenter] postNotificationName:CLApplicationWillFinishLaunchingNotification object:self];
 }
 
+#pragma mark - Routing
+- (BOOL)canHandleRequest:(CLHTTPRequest *)request
+{
+//    NSLog(@"%s %@", __PRETTY_FUNCTION__, request.method);
+    BOOL canHandle = YES;
+    if ( request.method == nil || ![validHTTPMethods containsObject:request.method.uppercaseString] ) {
+        canHandle = NO;
+    }
+    return canHandle;
+}
+
 #pragma mark - Output
 
 - (void)presentError:(NSError *)error
 {
-    BOOL shouldPresent = YES;
+    [self logErrorFormat:error.localizedDescription];
+}
+
+- (void)logErrorFormat:(NSString *)format, ...
+{
+    va_list args;
+    va_start(args, format);
+    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
+    va_end(args);
+    
+    BOOL shouldLog = YES;
     
     if ( [self.delegate respondsToSelector:@selector(application:shouldLogError:)] ) {
-        shouldPresent = [self.delegate application:self shouldLogError:error];
+        [self.delegate application:self shouldLogError:formattedString];
     }
     
-    if ( shouldPresent ) {
-        [[NSFileHandle fileHandleWithStandardError] writeData:[[error.localizedDescription stringByAppendingString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+    if ( shouldLog ) {
+        [[NSFileHandle fileHandleWithStandardError] writeData: [[formattedString stringByAppendingString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding]];
     }
 }
 

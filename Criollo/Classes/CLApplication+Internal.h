@@ -11,6 +11,8 @@
 
 void handleSIGTERM(int signum);
 
+@class CLHTTPConnection;
+
 @interface CLApplication (Internal)<GCDAsyncSocketDelegate>
 
 - (void)quit;
@@ -22,5 +24,7 @@ void handleSIGTERM(int signum);
 
 - (void)startRunLoop;
 - (void)stopRunLoop;
+
+- (void)didCloseConnection:(CLHTTPConnection*)connection;
 
 @end

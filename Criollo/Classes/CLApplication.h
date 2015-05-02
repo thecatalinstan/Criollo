@@ -16,6 +16,9 @@ typedef NS_ENUM(NSUInteger, CLError) {
     CLErrorNone             = 0,
     CLErrorSigTERM          = 1007,
     CLErrorSocketError      = 2001,
+    
+    CLErrorRequestMalformedRequest = 3001,
+    CLErrorRequestUnsupportedMethod = 3002,
 };
 
 @class CLApplication;
@@ -31,7 +34,7 @@ typedef NS_ENUM(NSUInteger, CLError) {
 - (CLApplicationTerminateReply)applicationShouldTerminate:(CLApplication *)sender;
 - (void)applicationWillTerminate:(NSNotification *)notification;
 
-- (BOOL)application:(CLApplication*)application shouldLogError:(NSError*)error;
+- (BOOL)application:(CLApplication*)application shouldLogError:(NSString*)errorString;
 - (BOOL)application:(CLApplication*)application shouldLogString:(NSString*)string;
 
 @end
@@ -80,7 +83,10 @@ extern int CLApplicationMain(int argc, char * const argv[], id<CLApplicationDele
 - (void)terminate:(id)sender;
 - (void)replyToApplicationShouldTerminate:(BOOL)shouldTerminate;
 
+- (BOOL)canHandleRequest:(CLHTTPRequest*)request;
+
 - (void)presentError:(NSError*)error;
+- (void)logErrorFormat:(NSString *)format, ...;
 - (void)logFormat:(NSString *)format, ...;
 
 @end

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-@class CLHTTPMessage;
+#import <Criollo/CLHTTPMessage.h>
 
 @interface CLHTTPRequest : CLHTTPMessage
 

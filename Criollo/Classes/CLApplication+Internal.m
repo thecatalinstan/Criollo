@@ -7,6 +7,8 @@
 //
 
 #import <Criollo/CLHTTPConnection.h>
+#import <Criollo/CLHTTPResponse.h>
+
 #import "CLApplication+Internal.h"
 
 void handleSIGTERM(int signum) {
@@ -95,12 +97,27 @@ BOOL shouldKeepRunning;
 #pragma mark - GCDAsyncSocketDelegate
 
 - (void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket
-{
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+{    
+    //    NSLog(@"%s", __PRETTY_FUNCTION__);
     CLHTTPConnection* connection = [[CLHTTPConnection alloc] initWithSocket:newSocket];
     
     @synchronized(self.connections) {
         [self.connections addObject:connection];
+//        NSLog(@"Connections: %lu", (unsigned long)self.connections.count);
+    }
+}
+
+- (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
+{
+//    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+- (void)didCloseConnection:(CLHTTPConnection*)connection
+{
+//    NSLog(@"%s", __PRETTY_FUNCTION__);
+    @synchronized(self.connections) {
+        [self.connections removeObject:connection];
+//        NSLog(@"Connections: %lu", (unsigned long)self.connections.count);
     }
 }
 
