@@ -29,31 +29,32 @@ CLApplication* CLApp;
 
 int CLApplicationMain(int argc, char * const argv[], id<CLApplicationDelegate> delegate)
 {
-    NSString* interface;
-    NSUInteger portNumber = CLDefaultPortNumber;
-    int opt;
-    while ( ( opt = getopt (argc, argv, "i:p:") ) != -1) {
-        switch (opt) {
-            case 'i':
-                interface = [NSString stringWithCString:optarg encoding:NSASCIIStringEncoding];
-                break;
-            case 'p':
-                portNumber = [NSString stringWithCString:optarg encoding:NSASCIIStringEncoding].integerValue;
-                portNumber = MIN(INT16_MAX, MAX(0, portNumber));
-                break;
-            case '?':
-                if (optopt == 'c' || optopt == 'p') {
-                    fprintf (stderr, "Option -%c requires an argument.\n", optopt);
-                    exit(EXIT_FAILURE);
-                }
-        }
-    }
-    
-    (void)signal(SIGTERM, handleSIGTERM) ;
-    
     @autoreleasepool {
+        
+        NSUserDefaults *args = [NSUserDefaults standardUserDefaults];
+        
+        NSString* interface = [args stringForKey:@"i"];
+        if ( interface == nil ) {
+            interface = [args stringForKey:@"interface"];
+            if ( interface == nil ) {
+                interface = @"";
+            }
+        }
+        
+        NSUInteger portNumber = [args integerForKey:@"p"];
+        if ( portNumber == 0 ) {
+            portNumber = [args integerForKey:@"port"];
+            if ( portNumber == 0 ) {
+                portNumber = CLDefaultPortNumber;
+            }
+        }
+        portNumber = MIN(INT16_MAX, MAX(0, portNumber));
+        
+        (void)signal(SIGTERM, handleSIGTERM) ;
+    
         CLApplication* app = [[CLApplication alloc] initWithDelegate:delegate portNumber:portNumber interface:interface];
         [app run];
+        
     }
     return EXIT_SUCCESS;
 }

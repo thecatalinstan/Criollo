@@ -14,51 +14,44 @@
 {
     self = [super init];
     if ( self != nil ) {
-        _message = CFHTTPMessageCreateEmpty(NULL, YES);
+        self.message = CFHTTPMessageCreateEmpty(NULL, YES);
     }
     return self;
 }
 
 - (void)dealloc
 {
-    if (_message) {
-        CFRelease(_message);
-    }
-}
-
-- (NSURL *)URL
-{
-    return (__bridge_transfer NSURL *)CFHTTPMessageCopyRequestURL(_message);
+    CFRelease(self.message);
 }
 
 - (NSString *)version
 {
-    return (__bridge_transfer NSString *)CFHTTPMessageCopyVersion(_message);
+    return (__bridge_transfer NSString *)CFHTTPMessageCopyVersion(self.message);
 }
 
 - (NSData *)data
 {
-    return (__bridge_transfer NSData *)CFHTTPMessageCopySerializedMessage(_message);
+    return (__bridge_transfer NSData *)CFHTTPMessageCopySerializedMessage(self.message);
 }
 
 - (NSDictionary *)allHTTPHeaderFields
 {
-    return (__bridge_transfer NSDictionary *)CFHTTPMessageCopyAllHeaderFields(_message);
+    return (__bridge_transfer NSDictionary *)CFHTTPMessageCopyAllHeaderFields(self.message);
 }
 
 - (NSString *)valueForHTTPHeaderField:(NSString *)HTTPHeaderField
 {
-    return (__bridge_transfer NSString *)CFHTTPMessageCopyHeaderFieldValue(_message, (__bridge CFStringRef)HTTPHeaderField);
+    return (__bridge_transfer NSString *)CFHTTPMessageCopyHeaderFieldValue(self.message, (__bridge CFStringRef)HTTPHeaderField);
 }
 
 - (NSData *)body
 {
-    return (__bridge_transfer NSData *)CFHTTPMessageCopyBody(_message);
+    return (__bridge_transfer NSData *)CFHTTPMessageCopyBody(self.message);
 }
 
 - (void)setBody:(NSData *)body
 {
-    CFHTTPMessageSetBody(_message, (__bridge CFDataRef)body);
+    CFHTTPMessageSetBody(self.message, (__bridge CFDataRef)body);
 }
 
 @end

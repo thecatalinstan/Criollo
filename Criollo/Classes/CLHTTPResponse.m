@@ -41,6 +41,7 @@
 {
     self  = [super init];
     if ( self != nil ) {
+        
         version = version == nil ? CLHTTP11 : version;
         self.message = CFHTTPMessageCreateResponse(NULL, (CFIndex)HTTPStatusCode, (__bridge CFStringRef)description, (__bridge CFStringRef) version);
         self.connection = connection;

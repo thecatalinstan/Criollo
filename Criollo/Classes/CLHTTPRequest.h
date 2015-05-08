@@ -10,6 +10,7 @@
 
 @interface CLHTTPRequest : CLHTTPMessage
 
+@property (nonatomic, readonly) NSURL* URL;
 @property (atomic, readonly) NSString* method;
 @property (atomic, readonly) BOOL headerComplete;
 

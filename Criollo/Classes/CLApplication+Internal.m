@@ -75,8 +75,6 @@ BOOL shouldKeepRunning;
     if ( !listening ) {
         [self presentError:error];
         [self terminate:self];
-    } else {
-        [self logFormat:@"Listening on %@:%lu", self.interface.length < 7 ? @"*" : self.interface, self.portNumber];
     }
 }
 

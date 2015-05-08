@@ -15,12 +15,12 @@
 #import "CLApplication+Internal.h"
 
 @interface CLHTTPConnection () <GCDAsyncSocketDelegate> {
-    CLHTTPRequest* request;
-    CLHTTPResponse* response;
-    
     NSUInteger requestBodyLength;
     NSUInteger requestBodyReceivedBytesLength;
 }
+
+@property (nonatomic, strong) CLHTTPRequest* request;
+@property (nonatomic, strong) CLHTTPResponse* response;
 
 - (void)initialize;
 
@@ -59,7 +59,7 @@
         if (socket != nil ) {
             self.socket = socket;
             [self.socket setDelegate:self delegateQueue:delegateQueue];
-            request = [[CLHTTPRequest alloc] init];
+            self.request = [[CLHTTPRequest alloc] init];
             dispatch_async(self.socket.delegateQueue, ^{ @autoreleasepool {
                 [self initialize];
             }});
@@ -92,7 +92,8 @@
 - (void)didReceiveRequestHeaders
 {
 //    NSLog(@"%s", __PRETTY_FUNCTION__);
-//    NSLog(@"%@", request.allHTTPHeaderFields);
+//    NSLog(@"%@", self.request.allHTTPHeaderFields);
+//    NSLog(@"Method: %@", self.request.method);
 }
 
 - (void)didReceiveRequestHeaderData:(NSData *)data
@@ -113,15 +114,15 @@
 - (void)didReceiveCompleteRequest
 {
     [[CLApp workerQueue] addOperationWithBlock:^{
-        response = [[CLHTTPResponse alloc] initWithHTTPConnection:self HTTPStatusCode:200];
-        [response setValue:@"keep-alive" forHTTPHeaderField:@"Connection"];
-        [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-        [response setValue:@"chunked" forHTTPHeaderField:@"Transfer-encoding"];        
-        [response writeString:@"<h1>Hello world!</h1>"];
+        self.response = [[CLHTTPResponse alloc] initWithHTTPConnection:self HTTPStatusCode:200];
+        [self.response setValue:@"keep-alive" forHTTPHeaderField:@"Connection"];
+        [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+//        [response setValue:@"chunked" forHTTPHeaderField:@"Transfer-encoding"];
+        [self.response writeString:@"<h1>Hello world!</h1>"];
 //        @synchronized([CLApp connections]) {
 //            [response writeFormat:@"<pre>Conntections: %lu</pre>", [CLApp connections].count];
 //        }
-        [response finish];
+        [self.response end];
     }];
     
 //    NSLog(@"%s", __PRETTY_FUNCTION__);
@@ -148,17 +149,17 @@
             break;
     }
     
-    response = [[CLHTTPResponse alloc] initWithHTTPConnection:self HTTPStatusCode:statusCode];
-    [response setValue:@"0" forHTTPHeaderField:@"Content-length"];
-    [response setValue:@"close" forHTTPHeaderField:@"Connection"];
-    [response end];
+    self.response = [[CLHTTPResponse alloc] initWithHTTPConnection:self HTTPStatusCode:statusCode];
+    [self.response setValue:@"0" forHTTPHeaderField:@"Content-length"];
+    [self.response setValue:@"close" forHTTPHeaderField:@"Connection"];
+    [self.response end];
 }
 
 - (BOOL)shouldCloseConnection
 {
 
     BOOL shouldClose = NO;
-    NSString *connection = [request valueForHTTPHeaderField:@"Connection"];
+    NSString *connection = [self.request valueForHTTPHeaderField:@"Connection"];
     if ( connection != nil ) {
         shouldClose = [connection caseInsensitiveCompare:@"close"] == NSOrderedSame;
     }
@@ -174,14 +175,14 @@
     
     if (tag == CLSocketTagBeginReadingRequest || tag == CLSocketTagReadingRequestHeader)
     {
-        BOOL result = [request appendData:data];
+        BOOL result = [self.request appendData:data];
         if (!result) {
             
             // This is the first read, and it went wrong
             [self handleError:CLErrorRequestMalformedRequest object:data];
             return;
             
-        } else if ( !request.headerComplete ) {
+        } else if ( !self.request.headerComplete ) {
 
             [self didReceiveRequestHeaderData:data];
             
@@ -194,12 +195,12 @@
             [self didReceiveRequestHeaders];
             
             // We have all the headers
-            if ( ![CLApp canHandleRequest:request] ) {
-                [self handleError:CLErrorRequestUnsupportedMethod object:request];
+            if ( ![CLApp canHandleRequest:self.request] ) {
+                [self handleError:CLErrorRequestUnsupportedMethod object:self.request];
                 return;
             }
             
-            requestBodyLength = [request valueForHTTPHeaderField:@"Content-Length"].integerValue;
+            requestBodyLength = [self.request valueForHTTPHeaderField:@"Content-Length"].integerValue;
             
             if ( requestBodyLength > 0 ) {
                 NSUInteger bytesToRead = requestBodyLength < CLRequestBodyBufferSize ? requestBodyLength : CLRequestBodyBufferSize;
@@ -231,14 +232,14 @@
 //    NSLog(@"%s", __PRETTY_FUNCTION__);
  
     if ( tag == CLSocketTagFinishSendingResponseAndClosing || tag == CLSocketTagFinishSendingResponse ) {
-        request = nil;
-        response = nil;
+        self.request = nil;
+        self.response = nil;
         
         if ( tag == CLSocketTagFinishSendingResponseAndClosing || self.shouldCloseConnection) {
             [self.socket disconnect];
             return;
         } else {
-            request = [[CLHTTPRequest alloc] init];
+            self.request = [[CLHTTPRequest alloc] init];
             [self initialize];
         }
         
@@ -253,8 +254,8 @@
 //    NSLog(@"%s", __PRETTY_FUNCTION__);
     
     self.socket = nil;
-    request = nil;
-    response = nil;
+    self.request = nil;
+    self.response = nil;
 
     dispatch_queue_t queue = [CLApplication sharedApplication].delegateQueue;
     dispatch_async(queue, ^{ @autoreleasepool {

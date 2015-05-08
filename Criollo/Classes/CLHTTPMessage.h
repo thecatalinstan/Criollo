@@ -14,7 +14,6 @@
 @property (nonatomic, assign) CFHTTPMessageRef message;
 
 @property (nonatomic, readonly) NSString* version;
-@property (nonatomic, readonly) NSURL* URL;
 @property (nonatomic, readonly) NSDictionary* allHTTPHeaderFields;
 
 @property (nonatomic, readonly) NSData* data;

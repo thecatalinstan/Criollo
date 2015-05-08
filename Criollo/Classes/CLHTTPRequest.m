@@ -16,9 +16,17 @@
 {
     self = [super init];
     if ( self != nil ) {
+        if ( self.message != nil ) {
+            CFRelease(self.message);
+        }
         self.message = CFHTTPMessageCreateRequest(NULL, (__bridge CFStringRef)method, (__bridge CFURLRef)URL, (__bridge CFStringRef)version);
     }
     return self;
+}
+
+- (NSURL *)URL
+{
+    return (__bridge_transfer NSURL *)CFHTTPMessageCopyRequestURL(self.message);
 }
 
 - (BOOL)appendData:(NSData *)data

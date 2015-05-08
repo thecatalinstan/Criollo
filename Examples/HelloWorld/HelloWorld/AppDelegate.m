@@ -11,7 +11,7 @@
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    // Insert code here to initialize your application
+    [CLApp logFormat:@"Running at http://%@:%lu/", [CLApp interface].length < 7 ? @"127.0.0.1" :  [CLApp interface], [CLApp portNumber]];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
