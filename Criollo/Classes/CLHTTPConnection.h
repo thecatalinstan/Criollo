@@ -25,10 +25,11 @@
 #define CLSocketTagFinishSendingResponseAndClosing      91
 
 // Limits
-#define CLRequestMaxHeaderLineLength                    8190
+#define CLRequestMaxHeaderLineLength                    1024
+#define CLRequestMaxHeaderLength                        (10 * 1024)
 
 // Buffers
-#define CLRequestBodyBufferSize                         (1024 * 512)
+#define CLRequestBodyBufferSize                         (1024 * 1024)
 
 #import <Criollo/CLApplication.h>
 

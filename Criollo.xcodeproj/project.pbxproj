@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD2712541B011B0E0093AD0B /* GCDAsyncSocket+Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = AD2712521B011B0E0093AD0B /* GCDAsyncSocket+Criollo.h */; };
+		AD2712551B011B0E0093AD0B /* GCDAsyncSocket+Criollo.m in Sources */ = {isa = PBXBuildFile; fileRef = AD2712531B011B0E0093AD0B /* GCDAsyncSocket+Criollo.m */; };
 		ADDAE1351AF0CC17008FA7D6 /* CLHTTPResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = ADEDB39F1AEFCC3A00A26AF1 /* CLHTTPResponse.m */; };
 		ADDAE1361AF0CC1A008FA7D6 /* CLHTTPResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB39E1AEFCC3A00A26AF1 /* CLHTTPResponse.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ADDAE1371AF0CE89008FA7D6 /* CLHTTPRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB39C1AEFCC3A00A26AF1 /* CLHTTPRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -27,6 +29,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AD2712521B011B0E0093AD0B /* GCDAsyncSocket+Criollo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCDAsyncSocket+Criollo.h"; path = "Classes/GCDAsyncSocket+Criollo.h"; sourceTree = "<group>"; };
+		AD2712531B011B0E0093AD0B /* GCDAsyncSocket+Criollo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCDAsyncSocket+Criollo.m"; path = "Classes/GCDAsyncSocket+Criollo.m"; sourceTree = "<group>"; };
 		ADDAE1391AF0D380008FA7D6 /* CLHTTPMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CLHTTPMessage.h; path = Classes/CLHTTPMessage.h; sourceTree = "<group>"; };
 		ADDAE13A1AF0D380008FA7D6 /* CLHTTPMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CLHTTPMessage.m; path = Classes/CLHTTPMessage.m; sourceTree = "<group>"; };
 		ADEDB34E1AEFBD8800A26AF1 /* CLApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CLApplication.h; path = Classes/CLApplication.h; sourceTree = "<group>"; };
@@ -123,6 +127,8 @@
 				ADEDB39D1AEFCC3A00A26AF1 /* CLHTTPRequest.m */,
 				ADEDB39E1AEFCC3A00A26AF1 /* CLHTTPResponse.h */,
 				ADEDB39F1AEFCC3A00A26AF1 /* CLHTTPResponse.m */,
+				AD2712521B011B0E0093AD0B /* GCDAsyncSocket+Criollo.h */,
+				AD2712531B011B0E0093AD0B /* GCDAsyncSocket+Criollo.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -142,6 +148,7 @@
 				ADEDB3B71AF0045C00A26AF1 /* CLHTTPConnection.h in Headers */,
 				ADDAE1371AF0CE89008FA7D6 /* CLHTTPRequest.h in Headers */,
 				ADEDB3A91AEFCC8B00A26AF1 /* GCDAsyncSocket.h in Headers */,
+				AD2712541B011B0E0093AD0B /* GCDAsyncSocket+Criollo.h in Headers */,
 				ADEDB3AA1AEFCC8B00A26AF1 /* NSDate+RFC1123.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -218,6 +225,7 @@
 				ADDAE1351AF0CC17008FA7D6 /* CLHTTPResponse.m in Sources */,
 				ADDAE1381AF0CE89008FA7D6 /* CLHTTPRequest.m in Sources */,
 				ADEDB3B81AF0045C00A26AF1 /* CLHTTPConnection.m in Sources */,
+				AD2712551B011B0E0093AD0B /* GCDAsyncSocket+Criollo.m in Sources */,
 				ADDAE13C1AF0D380008FA7D6 /* CLHTTPMessage.m in Sources */,
 				ADEDB3B11AEFD6F200A26AF1 /* CLApplication+Internal.m in Sources */,
 			);

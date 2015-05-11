@@ -11,6 +11,7 @@
 #import <Criollo/CLHTTPResponse.h>
 #import <Criollo/GCDAsyncSocket.h>
 
+#import "GCDAsyncSocket+Criollo.h"
 #import "CLHTTPConnection.h"
 #import "CLApplication+Internal.h"
 
@@ -70,7 +71,7 @@
 
 - (void)dealloc
 {
-//    NSLog(@"%s", __PRETTY_FUNCTION__);
+////    NSLog(@"%s", __PRETTY_FUNCTION__);
     
     [self.socket setDelegate:nil delegateQueue:NULL];
     [self.socket disconnect];
@@ -80,35 +81,35 @@
 
 - (void)initialize
 {
-//    NSLog(@"%s", __PRETTY_FUNCTION__);
+////    NSLog(@"%s", __PRETTY_FUNCTION__);
     
     requestBodyReceivedBytesLength = 0;
     requestBodyLength = 0;
     
-    [self.socket readDataToData:[GCDAsyncSocket CRLFData] withTimeout:CLSocketReadInitialTimeout maxLength:CLRequestMaxHeaderLineLength tag:CLSocketTagBeginReadingRequest];
+    [self.socket readDataToData:[GCDAsyncSocket CRLFCRLFData] withTimeout:CLSocketReadInitialTimeout maxLength:CLRequestMaxHeaderLength tag:CLSocketTagBeginReadingRequest];
 
 }
 
 - (void)didReceiveRequestHeaders
 {
-//    NSLog(@"%s", __PRETTY_FUNCTION__);
+////    NSLog(@"%s", __PRETTY_FUNCTION__);
 //    NSLog(@"%@", self.request.allHTTPHeaderFields);
 //    NSLog(@"Method: %@", self.request.method);
 }
 
 - (void)didReceiveRequestHeaderData:(NSData *)data
 {
-//    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
+////    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
 }
 
 - (void)didReceiveRequestBody
 {
-//    NSLog(@"%s", __PRETTY_FUNCTION__);
+////    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)didReceiveRequestBodyData:(NSData*)data
 {
-//    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
+////    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
 }
 
 - (void)didReceiveCompleteRequest
@@ -125,12 +126,12 @@
         [self.response end];
     }];
     
-//    NSLog(@"%s", __PRETTY_FUNCTION__);
+////    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)handleError:(CLError)errorType object:(id)object
 {
-//    NSLog(@"%s %lu %@", __PRETTY_FUNCTION__, errorType, object);
+////    NSLog(@"%s %lu %@", __PRETTY_FUNCTION__, errorType, object);
 
     NSUInteger statusCode = 500;
     
@@ -171,7 +172,7 @@
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData*)data withTag:(long)tag
 {
-//    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
+////    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
     
     if (tag == CLSocketTagBeginReadingRequest || tag == CLSocketTagReadingRequestHeader)
     {
@@ -182,12 +183,12 @@
             [self handleError:CLErrorRequestMalformedRequest object:data];
             return;
             
-        } else if ( !self.request.headerComplete ) {
-
-            [self didReceiveRequestHeaderData:data];
-            
-            // Continue to read until we get all the headers
-            [self.socket readDataToData:[GCDAsyncSocket CRLFData] withTimeout:CLSocketReadHeaderLineTimeout maxLength:CLRequestMaxHeaderLineLength tag:CLSocketTagReadingRequestHeader];
+//        } else if ( !self.request.headerComplete ) {
+//
+//            [self didReceiveRequestHeaderData:data];
+//            
+//            // Continue to read until we get all the headers
+//            [self.socket readDataToData:[GCDAsyncSocket CRLFData] withTimeout:CLSocketReadHeaderLineTimeout maxLength:CLRequestMaxHeaderLineLength tag:CLSocketTagReadingRequestHeader];
             
         } else {
             
@@ -229,7 +230,7 @@
 
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag
 {
-//    NSLog(@"%s", __PRETTY_FUNCTION__);
+////    NSLog(@"%s", __PRETTY_FUNCTION__);
  
     if ( tag == CLSocketTagFinishSendingResponseAndClosing || tag == CLSocketTagFinishSendingResponse ) {
         self.request = nil;
@@ -251,7 +252,7 @@
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
 {
-//    NSLog(@"%s", __PRETTY_FUNCTION__);
+////    NSLog(@"%s", __PRETTY_FUNCTION__);
     
     self.socket = nil;
     self.request = nil;
