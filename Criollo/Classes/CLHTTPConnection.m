@@ -25,7 +25,7 @@
 
 - (void)initialize;
 
-- (void)didReceiveRequestHeaders;
+- (void)didReceiveCompleteRequestHeaders;
 - (void)didReceiveRequestHeaderData:(NSData*)data;
 
 - (void)didReceiveRequestBody;
@@ -71,7 +71,7 @@
 
 - (void)dealloc
 {
-////    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     
     [self.socket setDelegate:nil delegateQueue:NULL];
     [self.socket disconnect];
@@ -81,7 +81,7 @@
 
 - (void)initialize
 {
-////    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     
     requestBodyReceivedBytesLength = 0;
     requestBodyLength = 0;
@@ -90,48 +90,51 @@
 
 }
 
-- (void)didReceiveRequestHeaders
+- (void)didReceiveCompleteRequestHeaders
 {
-////    NSLog(@"%s", __PRETTY_FUNCTION__);
-//    NSLog(@"%@", self.request.allHTTPHeaderFields);
-//    NSLog(@"Method: %@", self.request.method);
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%@", self.request.allHTTPHeaderFields);
+    NSLog(@"Method: %@", self.request.method);
 }
 
 - (void)didReceiveRequestHeaderData:(NSData *)data
 {
-////    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
+    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
 }
 
 - (void)didReceiveRequestBody
 {
-////    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)didReceiveRequestBodyData:(NSData*)data
 {
-////    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
+    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
 }
 
 - (void)didReceiveCompleteRequest
 {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    
     [[CLApp workerQueue] addOperationWithBlock:^{
         self.response = [[CLHTTPResponse alloc] initWithHTTPConnection:self HTTPStatusCode:200];
         [self.response setValue:@"keep-alive" forHTTPHeaderField:@"Connection"];
         [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+
 //        [response setValue:@"chunked" forHTTPHeaderField:@"Transfer-encoding"];
+
         [self.response writeString:@"<h1>Hello world!</h1>"];
-//        @synchronized([CLApp connections]) {
-//            [response writeFormat:@"<pre>Conntections: %lu</pre>", [CLApp connections].count];
-//        }
+        @synchronized([CLApp connections]) {
+            [self.response writeFormat:@"<pre>Conntections: %@</pre>", [[CLApp connections] valueForKeyPath:@"request.URL.path"]];
+        }
         [self.response end];
     }];
     
-////    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)handleError:(CLError)errorType object:(id)object
 {
-////    NSLog(@"%s %lu %@", __PRETTY_FUNCTION__, errorType, object);
+    NSLog(@"%s %lu %@", __PRETTY_FUNCTION__, errorType, object);
 
     NSUInteger statusCode = 500;
     
@@ -172,7 +175,7 @@
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData*)data withTag:(long)tag
 {
-////    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
+    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
     
     if (tag == CLSocketTagBeginReadingRequest || tag == CLSocketTagReadingRequestHeader)
     {
@@ -193,7 +196,7 @@
         } else {
             
             [self didReceiveRequestHeaderData:data];
-            [self didReceiveRequestHeaders];
+            [self didReceiveCompleteRequestHeaders];
             
             // We have all the headers
             if ( ![CLApp canHandleRequest:self.request] ) {
@@ -230,7 +233,7 @@
 
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag
 {
-////    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%s", __PRETTY_FUNCTION__);
  
     if ( tag == CLSocketTagFinishSendingResponseAndClosing || tag == CLSocketTagFinishSendingResponse ) {
         self.request = nil;
@@ -252,7 +255,7 @@
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
 {
-////    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     
     self.socket = nil;
     self.request = nil;
