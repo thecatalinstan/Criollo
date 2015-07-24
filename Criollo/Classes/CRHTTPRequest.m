@@ -1,16 +1,16 @@
 //
-//  CLHTTPRequest.m
+//  CRHTTPRequest.m
 //  Criollo
 //
 //  Created by Cătălin Stan on 3/30/14.
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-#import <Criollo/CLHTTPMessage.h>
+#import <Criollo/CRHTTPMessage.h>
 
-#import "CLHTTPRequest.h"
+#import "CRHTTPRequest.h"
 
-@implementation CLHTTPRequest
+@implementation CRHTTPRequest
 
 - (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version
 {

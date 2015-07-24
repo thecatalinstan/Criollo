@@ -1,14 +1,14 @@
 //
-//  CLHTTPRequest.h
+//  CRHTTPRequest.h
 //  Criollo
 //
 //  Created by Cătălin Stan on 3/30/14.
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-#import <Criollo/CLHTTPMessage.h>
+#import <Criollo/CRHTTPMessage.h>
 
-@interface CLHTTPRequest : CLHTTPMessage
+@interface CRHTTPRequest : CRHTTPMessage
 
 @property (nonatomic, readonly) NSURL* URL;
 @property (atomic, readonly) NSString* method;

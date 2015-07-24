@@ -1,33 +1,33 @@
 //
-//  CLApplication.m
+//  CRApplication.m
 //  Criollo
 //
 //  Created by Cătălin Stan on 4/24/13.
 //  Copyright (c) 2013 Catalin Stan. All rights reserved.
 //
 
-#import <Criollo/CLApplication.h>
-#import <Criollo/CLHTTPRequest.h>
+#import <Criollo/CRApplication.h>
+#import <Criollo/CRHTTPRequest.h>
 
-#import "CLApplication+Internal.h"
+#import "CRApplication+Internal.h"
 
 NSString* const Criollo = @"Criollo";
 
-NSString* const CLApplicationRunLoopMode = @"NSDefaultRunLoopMode";
-NSString* const CLErrorDomain = @"CLErrorDomain";
+NSString* const CRApplicationRunLoopMode = @"NSDefaultRunLoopMode";
+NSString* const CRErrorDomain = @"CRErrorDomain";
 
-NSUInteger const CLDefaultPortNumber = 1338;
+NSUInteger const CRDefaultPortNumber = 1338;
 
-NSString* const CLRequestKey = @"CLRequest";
-NSString* const CLResponseKey = @"CLResponse";
+NSString* const CRRequestKey = @"CRRequest";
+NSString* const CRResponseKey = @"CRResponse";
 
-NSString* const CLApplicationWillFinishLaunchingNotification = @"CLApplicationWillFinishLaunchingNotification";
-NSString* const CLApplicationDidFinishLaunchingNotification = @"CLApplicationDidFinishLaunchingNotification";
-NSString* const CLApplicationWillTerminateNotification = @"CLApplicationWillTerminateNotification";
+NSString* const CRApplicationWillFinishLaunchingNotification = @"CRApplicationWillFinishLaunchingNotification";
+NSString* const CRApplicationDidFinishLaunchingNotification = @"CRApplicationDidFinishLaunchingNotification";
+NSString* const CRApplicationWillTerminateNotification = @"CRApplicationWillTerminateNotification";
 
-CLApplication* CLApp;
+CRApplication* CRApp;
 
-int CLApplicationMain(int argc, char * const argv[], id<CLApplicationDelegate> delegate)
+int CRApplicationMain(int argc, char * const argv[], id<CRApplicationDelegate> delegate)
 {
     @autoreleasepool {
         
@@ -45,22 +45,22 @@ int CLApplicationMain(int argc, char * const argv[], id<CLApplicationDelegate> d
         if ( portNumber == 0 ) {
             portNumber = [args integerForKey:@"port"];
             if ( portNumber == 0 ) {
-                portNumber = CLDefaultPortNumber;
+                portNumber = CRDefaultPortNumber;
             }
         }
         portNumber = MIN(INT16_MAX, MAX(0, portNumber));
         
         (void)signal(SIGTERM, handleSIGTERM) ;
     
-        CLApplication* app = [[CLApplication alloc] initWithDelegate:delegate portNumber:portNumber interface:interface];
+        CRApplication* app = [[CRApplication alloc] initWithDelegate:delegate portNumber:portNumber interface:interface];
         [app run];
         
     }
     return EXIT_SUCCESS;
 }
 
-@interface CLApplication () {
-    __strong id<CLApplicationDelegate> _delegate;
+@interface CRApplication () {
+    __strong id<CRApplicationDelegate> _delegate;
     
     BOOL firstRunCompleted;
     BOOL waitingOnTerminateLaterReply;
@@ -71,16 +71,16 @@ int CLApplicationMain(int argc, char * const argv[], id<CLApplicationDelegate> d
 
 @end
 
-@implementation CLApplication
+@implementation CRApplication
 
 #pragma mark - Properties
 
-- (id<CLApplicationDelegate>) delegate
+- (id<CRApplicationDelegate>) delegate
 {
     return _delegate;
 }
 
-- (void)setDelegate:(id<CLApplicationDelegate>)delegate
+- (void)setDelegate:(id<CRApplicationDelegate>)delegate
 {
     if ( _delegate ) {
         [[NSNotificationCenter defaultCenter] removeObserver:_delegate];
@@ -90,13 +90,13 @@ int CLApplicationMain(int argc, char * const argv[], id<CLApplicationDelegate> d
     _delegate = delegate;
     
     if ( [_delegate respondsToSelector:@selector(applicationWillFinishLaunching:)] ) {
-        [[NSNotificationCenter defaultCenter] addObserver:_delegate selector:@selector(applicationWillFinishLaunching:) name:CLApplicationWillFinishLaunchingNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:_delegate selector:@selector(applicationWillFinishLaunching:) name:CRApplicationWillFinishLaunchingNotification object:nil];
     }
     if ( [_delegate respondsToSelector:@selector(applicationDidFinishLaunching:)] ) {
-        [[NSNotificationCenter defaultCenter] addObserver:_delegate selector:@selector(applicationDidFinishLaunching:) name:CLApplicationDidFinishLaunchingNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:_delegate selector:@selector(applicationDidFinishLaunching:) name:CRApplicationDidFinishLaunchingNotification object:nil];
     }
     if ( [_delegate respondsToSelector:@selector(applicationWillTerminate:)] ) {
-        [[NSNotificationCenter defaultCenter] addObserver:_delegate selector:@selector(applicationWillTerminate:) name:CLApplicationWillTerminateNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:_delegate selector:@selector(applicationWillTerminate:) name:CRApplicationWillTerminateNotification object:nil];
     }
 }
 
@@ -109,10 +109,10 @@ static NSArray* validHTTPMethods;
     validHTTPMethods = @[@"GET",@"POST", @"PUT", @"DELETE"];
 }
 
-+ (CLApplication *)sharedApplication
++ (CRApplication *)sharedApplication
 {
 	Class class;
-	if( ! CLApp ) {
+	if( ! CRApp ) {
 		if( ! ( class = [NSBundle mainBundle].principalClass ) ) {
 			NSLog(@"Main bundle does not define an existing principal class: %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSPrincipalClass"]);
 			class = self;
@@ -123,28 +123,28 @@ static NSArray* validHTTPMethods;
 		[class new];
 	}
 
-	return CLApp;
+	return CRApp;
 }
 
 - (instancetype)init {
-    return [self initWithDelegate:nil portNumber:CLDefaultPortNumber interface:nil];
+    return [self initWithDelegate:nil portNumber:CRDefaultPortNumber interface:nil];
 }
 
-- (instancetype)initWithDelegate:(id<CLApplicationDelegate>)delegate
+- (instancetype)initWithDelegate:(id<CRApplicationDelegate>)delegate
 {
-    return [self initWithDelegate:delegate portNumber:CLDefaultPortNumber interface:nil];
+    return [self initWithDelegate:delegate portNumber:CRDefaultPortNumber interface:nil];
 }
 
-- (instancetype)initWithDelegate:(id<CLApplicationDelegate>)delegate portNumber:(NSUInteger)portNumber
+- (instancetype)initWithDelegate:(id<CRApplicationDelegate>)delegate portNumber:(NSUInteger)portNumber
 {
     return [self initWithDelegate:nil portNumber:portNumber interface:nil];
 }
 
-- (instancetype)initWithDelegate:(id<CLApplicationDelegate>)delegate portNumber:(NSUInteger)portNumber interface:(NSString*)interface
+- (instancetype)initWithDelegate:(id<CRApplicationDelegate>)delegate portNumber:(NSUInteger)portNumber interface:(NSString*)interface
 {
     self = [super init];
     if ( self != nil ) {
-        CLApp = self;
+        CRApp = self;
         
         self.portNumber = portNumber;
         self.interface = interface;
@@ -162,25 +162,25 @@ static NSArray* validHTTPMethods;
 	// Stop the main run loop
     [self performSelectorOnMainThread:@selector(stop:) withObject:nil waitUntilDone:YES];
     
-    CLApplicationTerminateReply reply = CLTerminateNow;
+    CRApplicationTerminateReply reply = CRTerminateNow;
     
     if ( [_delegate respondsToSelector:@selector(applicationShouldTerminate:)]) {
         reply = [_delegate applicationShouldTerminate:self];
     }
     
     switch ( reply ) {
-        case CLTerminateCancel:
+        case CRTerminateCancel:
             [self cancelTermination];
             break;
             
-        case CLTerminateLater:
+        case CRTerminateLater:
             waitingOnTerminateLaterReply = YES;
             waitingOnTerminateLaterReplyTimer = [NSTimer timerWithTimeInterval:1.0f target:self selector:@selector(waitingOnTerminateLaterReplyTimerCallback) userInfo:nil repeats:NO];
-            [[NSRunLoop mainRunLoop] addTimer:waitingOnTerminateLaterReplyTimer forMode:CLApplicationRunLoopMode];
-            while (waitingOnTerminateLaterReply && [[NSRunLoop mainRunLoop] runMode:CLApplicationRunLoopMode beforeDate:[NSDate distantFuture]]);
+            [[NSRunLoop mainRunLoop] addTimer:waitingOnTerminateLaterReplyTimer forMode:CRApplicationRunLoopMode];
+            while (waitingOnTerminateLaterReply && [[NSRunLoop mainRunLoop] runMode:CRApplicationRunLoopMode beforeDate:[NSDate distantFuture]]);
             break;
             
-        case CLTerminateNow:
+        case CRTerminateNow:
         default:
             [self quit];
             break;
@@ -217,11 +217,11 @@ static NSArray* validHTTPMethods;
 - (void)finishLaunching
 {
 	// Let observers know that initialization is complete
-	[[NSNotificationCenter defaultCenter] postNotificationName:CLApplicationWillFinishLaunchingNotification object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationWillFinishLaunchingNotification object:self];
 }
 
 #pragma mark - Routing
-- (BOOL)canHandleRequest:(CLHTTPRequest *)request
+- (BOOL)canHandleRequest:(CRHTTPRequest *)request
 {
 //    NSLog(@"%s %@", __PRETTY_FUNCTION__, request.method);
     BOOL canHandle = YES;

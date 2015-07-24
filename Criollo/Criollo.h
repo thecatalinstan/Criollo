@@ -14,10 +14,10 @@ FOUNDATION_EXPORT double CriolloVersionNumber;
 //! Project version string for Criollo.
 FOUNDATION_EXPORT const unsigned char CriolloVersionString[];
 
-#import <Criollo/CLApplication.h>
+#import <Criollo/CRApplication.h>
 #import <Criollo/GCDAsyncSocket.h>
 
-#import <Criollo/CLHTTPConnection.h>
-#import <Criollo/CLHTTPMessage.h>
-#import <Criollo/CLHTTPResponse.h>
-#import <Criollo/CLHTTPRequest.h>
+#import <Criollo/CRHTTPConnection.h>
+#import <Criollo/CRHTTPMessage.h>
+#import <Criollo/CRHTTPResponse.h>
+#import <Criollo/CRHTTPRequest.h>

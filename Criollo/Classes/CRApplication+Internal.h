@@ -1,19 +1,19 @@
 //
-//  CLApplication+Internal.h
+//  CRApplication+Internal.h
 //  Criollo
 //
 //  Created by Cătălin Stan on 28/04/15.
 //
 //
 
-#import <Criollo/CLApplication.h>
+#import <Criollo/CRApplication.h>
 #import <Criollo/GCDAsyncSocket.h>
 
 void handleSIGTERM(int signum);
 
-@class CLHTTPConnection;
+@class CRHTTPConnection;
 
-@interface CLApplication (Internal)<GCDAsyncSocketDelegate>
+@interface CRApplication (Internal)<GCDAsyncSocketDelegate>
 
 - (void)quit;
 - (void)cancelTermination;
@@ -25,6 +25,6 @@ void handleSIGTERM(int signum);
 - (void)startRunLoop;
 - (void)stopRunLoop;
 
-- (void)didCloseConnection:(CLHTTPConnection*)connection;
+- (void)didCloseConnection:(CRHTTPConnection*)connection;
 
 @end

@@ -1,21 +1,21 @@
 //
-//  CLHTTPResponse.m
+//  CRHTTPResponse.m
 //  Criollo
 //
 //  Created by Cătălin Stan on 3/30/14.
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-#import <Criollo/CLApplication.h>
-#import <Criollo/CLHTTPMessage.h>
-#import <Criollo/CLHTTPConnection.h>
+#import <Criollo/CRApplication.h>
+#import <Criollo/CRHTTPMessage.h>
+#import <Criollo/CRHTTPConnection.h>
 #import <Criollo/GCDAsyncSocket.h>
 
-#import "CLHTTPResponse.h"
+#import "CRHTTPResponse.h"
 #import "NSDate+RFC1123.h"
 
 
-@interface CLHTTPResponse (Private)
+@interface CRHTTPResponse (Private)
 
 - (void)writeHeaders;
 - (void)writeData:(NSData*)data withTag:(long)tag;
@@ -23,26 +23,26 @@
 
 @end
 
-@implementation CLHTTPResponse{
+@implementation CRHTTPResponse{
     BOOL alreadySentHeaders;
 }
 
-- (instancetype)initWithHTTPConnection:(CLHTTPConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode
+- (instancetype)initWithHTTPConnection:(CRHTTPConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode
 {
     return [self initWithHTTPConnection:connection HTTPStatusCode:HTTPStatusCode description:nil];
 }
 
-- (instancetype)initWithHTTPConnection:(CLHTTPConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description
+- (instancetype)initWithHTTPConnection:(CRHTTPConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description
 {
     return [self initWithHTTPConnection:connection HTTPStatusCode:HTTPStatusCode description:description version:nil];
 }
 
-- (instancetype)initWithHTTPConnection:(CLHTTPConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version
+- (instancetype)initWithHTTPConnection:(CRHTTPConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version
 {
     self  = [super init];
     if ( self != nil ) {
         
-        version = version == nil ? CLHTTP11 : version;
+        version = version == nil ? CRHTTP11 : version;
         self.message = CFHTTPMessageCreateResponse(NULL, (CFIndex)HTTPStatusCode, (__bridge CFStringRef)description, (__bridge CFStringRef) version);
         self.connection = connection;
     }
@@ -57,7 +57,7 @@
 - (void)setValue:(NSString*)value forHTTPHeaderField:(NSString *)HTTPHeaderField
 {
     if ( alreadySentHeaders ) {
-        [CLApp logErrorFormat:@"Headers already sent."];
+        [CRApp logErrorFormat:@"Headers already sent."];
         [[NSException exceptionWithName:NSInternalInconsistencyException reason:@"Headers already sent." userInfo:nil] raise];
         return;
     }
@@ -86,7 +86,7 @@
     }
     
     [self setBody:nil];
-    [self.connection.socket writeData:self.data withTimeout:CLSocketWriteHeaderTimeout tag:CLSocketTagSendingResponse];
+    [self.connection.socket writeData:self.data withTimeout:CRSocketWriteHeaderTimeout tag:CRSocketTagSendingResponse];
     
     alreadySentHeaders = YES;
 }
@@ -94,17 +94,17 @@
 - (void)writeData:(NSData *)data withTag:(long)tag
 {
     [self writeHeaders];
-    [self.connection.socket writeData:data withTimeout:CLSocketWriteGeneralTimeout tag:tag];
+    [self.connection.socket writeData:data withTimeout:CRSocketWriteGeneralTimeout tag:tag];
 }
 
 - (void)writeData:(NSData*)data
 {
-    [self writeData:data withTag:CLSocketTagSendingResponse];
+    [self writeData:data withTag:CRSocketTagSendingResponse];
 }
 
 - (void)sendData:(NSData*)data
 {
-    [self writeData:data withTag:CLSocketTagFinishSendingResponse];
+    [self writeData:data withTag:CRSocketTagFinishSendingResponse];
 }
 
 - (void)writeString:(NSString*)string
@@ -138,7 +138,7 @@
 
 - (void)sendStatusLine:(BOOL)closeConnection
 {
-    long tag = closeConnection ? CLSocketTagFinishSendingResponseAndClosing : CLSocketTagFinishSendingResponse;
+    long tag = closeConnection ? CRSocketTagFinishSendingResponseAndClosing : CRSocketTagFinishSendingResponse;
     
     NSMutableData* finishData = [NSMutableData data];
     [finishData appendData:[GCDAsyncSocket CRLFData]];

@@ -1,27 +1,27 @@
 //
-//  CLHTTPConnection.m
+//  CRHTTPConnection.m
 //  Criollo
 //
 //  Created by Cătălin Stan on 28/04/15.
 //
 //
 
-#import <Criollo/CLApplication.h>
-#import <Criollo/CLHTTPRequest.h>
-#import <Criollo/CLHTTPResponse.h>
+#import <Criollo/CRApplication.h>
+#import <Criollo/CRHTTPRequest.h>
+#import <Criollo/CRHTTPResponse.h>
 #import <Criollo/GCDAsyncSocket.h>
 
 #import "GCDAsyncSocket+Criollo.h"
-#import "CLHTTPConnection.h"
-#import "CLApplication+Internal.h"
+#import "CRHTTPConnection.h"
+#import "CRApplication+Internal.h"
 
-@interface CLHTTPConnection () <GCDAsyncSocketDelegate> {
+@interface CRHTTPConnection () <GCDAsyncSocketDelegate> {
     NSUInteger requestBodyLength;
     NSUInteger requestBodyReceivedBytesLength;
 }
 
-@property (nonatomic, strong) CLHTTPRequest* request;
-@property (nonatomic, strong) CLHTTPResponse* response;
+@property (nonatomic, strong) CRHTTPRequest* request;
+@property (nonatomic, strong) CRHTTPResponse* response;
 
 - (void)initialize;
 
@@ -33,13 +33,13 @@
 
 - (void)didReceiveCompleteRequest;
 
-- (void)handleError:(CLError)errorType object:(id)object;
+- (void)handleError:(CRError)errorType object:(id)object;
 
 - (BOOL)shouldCloseConnection;
 
 @end
 
-@implementation CLHTTPConnection
+@implementation CRHTTPConnection
 
 - (instancetype)init
 {
@@ -60,7 +60,7 @@
         if (socket != nil ) {
             self.socket = socket;
             [self.socket setDelegate:self delegateQueue:delegateQueue];
-            self.request = [[CLHTTPRequest alloc] init];
+            self.request = [[CRHTTPRequest alloc] init];
             dispatch_async(self.socket.delegateQueue, ^{ @autoreleasepool {
                 [self initialize];
             }});
@@ -86,7 +86,7 @@
     requestBodyReceivedBytesLength = 0;
     requestBodyLength = 0;
     
-    [self.socket readDataToData:[GCDAsyncSocket CRLFCRLFData] withTimeout:CLSocketReadInitialTimeout maxLength:CLRequestMaxHeaderLength tag:CLSocketTagBeginReadingRequest];
+    [self.socket readDataToData:[GCDAsyncSocket CRLFCRLFData] withTimeout:CRSocketReadInitialTimeout maxLength:CRRequestMaxHeaderLength tag:CRSocketTagBeginReadingRequest];
 
 }
 
@@ -116,44 +116,44 @@
 {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     
-    [[CLApp workerQueue] addOperationWithBlock:^{
-        self.response = [[CLHTTPResponse alloc] initWithHTTPConnection:self HTTPStatusCode:200];
+    [[CRApp workerQueue] addOperationWithBlock:^{
+        self.response = [[CRHTTPResponse alloc] initWithHTTPConnection:self HTTPStatusCode:200];
         [self.response setValue:@"keep-alive" forHTTPHeaderField:@"Connection"];
         [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
 
 //        [response setValue:@"chunked" forHTTPHeaderField:@"Transfer-encoding"];
 
         [self.response writeString:@"<h1>Hello world!</h1>"];
-        @synchronized([CLApp connections]) {
-            [self.response writeFormat:@"<pre>Conntections: %@</pre>", [[CLApp connections] valueForKeyPath:@"request.URL.path"]];
+        @synchronized([CRApp connections]) {
+            [self.response writeFormat:@"<pre>Conntections: %@</pre>", [[CRApp connections] valueForKeyPath:@"request.URL.path"]];
         }
         [self.response end];
     }];
     
 }
 
-- (void)handleError:(CLError)errorType object:(id)object
+- (void)handleError:(CRError)errorType object:(id)object
 {
     NSLog(@"%s %lu %@", __PRETTY_FUNCTION__, errorType, object);
 
     NSUInteger statusCode = 500;
     
     switch (errorType) {
-        case CLErrorRequestMalformedRequest:
+        case CRErrorRequestMalformedRequest:
             statusCode = 400;
-            [CLApp logErrorFormat:@"Malformed request: %@", [[NSString alloc] initWithData:object encoding:NSUTF8StringEncoding] ];
+            [CRApp logErrorFormat:@"Malformed request: %@", [[NSString alloc] initWithData:object encoding:NSUTF8StringEncoding] ];
             break;
             
-        case CLErrorRequestUnsupportedMethod:
+        case CRErrorRequestUnsupportedMethod:
             statusCode = 405;
-            [CLApp logErrorFormat:@"Unsuppoerted method %@ for path %@", [object method], [object URL]];
+            [CRApp logErrorFormat:@"Unsuppoerted method %@ for path %@", [object method], [object URL]];
             break;
             
         default:
             break;
     }
     
-    self.response = [[CLHTTPResponse alloc] initWithHTTPConnection:self HTTPStatusCode:statusCode];
+    self.response = [[CRHTTPResponse alloc] initWithHTTPConnection:self HTTPStatusCode:statusCode];
     [self.response setValue:@"0" forHTTPHeaderField:@"Content-length"];
     [self.response setValue:@"close" forHTTPHeaderField:@"Connection"];
     [self.response end];
@@ -177,13 +177,13 @@
 {
     NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
     
-    if (tag == CLSocketTagBeginReadingRequest || tag == CLSocketTagReadingRequestHeader)
+    if (tag == CRSocketTagBeginReadingRequest || tag == CRSocketTagReadingRequestHeader)
     {
         BOOL result = [self.request appendData:data];
         if (!result) {
             
             // This is the first read, and it went wrong
-            [self handleError:CLErrorRequestMalformedRequest object:data];
+            [self handleError:CRErrorRequestMalformedRequest object:data];
             return;
             
 //        } else if ( !self.request.headerComplete ) {
@@ -191,7 +191,7 @@
 //            [self didReceiveRequestHeaderData:data];
 //            
 //            // Continue to read until we get all the headers
-//            [self.socket readDataToData:[GCDAsyncSocket CRLFData] withTimeout:CLSocketReadHeaderLineTimeout maxLength:CLRequestMaxHeaderLineLength tag:CLSocketTagReadingRequestHeader];
+//            [self.socket readDataToData:[GCDAsyncSocket CRLFData] withTimeout:CRSocketReadHeaderLineTimeout maxLength:CRRequestMaxHeaderLineLength tag:CRSocketTagReadingRequestHeader];
             
         } else {
             
@@ -199,31 +199,31 @@
             [self didReceiveCompleteRequestHeaders];
             
             // We have all the headers
-            if ( ![CLApp canHandleRequest:self.request] ) {
-                [self handleError:CLErrorRequestUnsupportedMethod object:self.request];
+            if ( ![CRApp canHandleRequest:self.request] ) {
+                [self handleError:CRErrorRequestUnsupportedMethod object:self.request];
                 return;
             }
             
             requestBodyLength = [self.request valueForHTTPHeaderField:@"Content-Length"].integerValue;
             
             if ( requestBodyLength > 0 ) {
-                NSUInteger bytesToRead = requestBodyLength < CLRequestBodyBufferSize ? requestBodyLength : CLRequestBodyBufferSize;
-                [self.socket readDataToLength:bytesToRead withTimeout:CLSocketReadBodyTimeout tag:CLSocketTagReadingRequestBody];
+                NSUInteger bytesToRead = requestBodyLength < CRRequestBodyBufferSize ? requestBodyLength : CRRequestBodyBufferSize;
+                [self.socket readDataToLength:bytesToRead withTimeout:CRSocketReadBodyTimeout tag:CRSocketTagReadingRequestBody];
             } else {
                 [self didReceiveCompleteRequest];
             }
             
         }
-    } if ( tag == CLSocketTagReadingRequestBody ) {
+    } if ( tag == CRSocketTagReadingRequestBody ) {
 
         requestBodyReceivedBytesLength += data.length;
         [self didReceiveRequestBodyData:data];
         
         if (requestBodyReceivedBytesLength < requestBodyLength) {
             NSUInteger requestBodyLeftBytesLength = requestBodyLength - requestBodyReceivedBytesLength;
-            NSUInteger bytesToRead = requestBodyLeftBytesLength < CLRequestBodyBufferSize ? requestBodyLeftBytesLength : CLRequestBodyBufferSize;
+            NSUInteger bytesToRead = requestBodyLeftBytesLength < CRRequestBodyBufferSize ? requestBodyLeftBytesLength : CRRequestBodyBufferSize;
             
-            [self.socket readDataToLength:bytesToRead withTimeout:CLSocketReadBodyTimeout tag:CLSocketTagReadingRequestBody];
+            [self.socket readDataToLength:bytesToRead withTimeout:CRSocketReadBodyTimeout tag:CRSocketTagReadingRequestBody];
         } else {
             [self didReceiveCompleteRequest];
         }
@@ -235,15 +235,15 @@
 {
     NSLog(@"%s", __PRETTY_FUNCTION__);
  
-    if ( tag == CLSocketTagFinishSendingResponseAndClosing || tag == CLSocketTagFinishSendingResponse ) {
+    if ( tag == CRSocketTagFinishSendingResponseAndClosing || tag == CRSocketTagFinishSendingResponse ) {
         self.request = nil;
         self.response = nil;
         
-        if ( tag == CLSocketTagFinishSendingResponseAndClosing || self.shouldCloseConnection) {
+        if ( tag == CRSocketTagFinishSendingResponseAndClosing || self.shouldCloseConnection) {
             [self.socket disconnect];
             return;
         } else {
-            self.request = [[CLHTTPRequest alloc] init];
+            self.request = [[CRHTTPRequest alloc] init];
             [self initialize];
         }
         
@@ -261,10 +261,10 @@
     self.request = nil;
     self.response = nil;
 
-    dispatch_queue_t queue = [CLApplication sharedApplication].delegateQueue;
+    dispatch_queue_t queue = [CRApplication sharedApplication].delegateQueue;
     dispatch_async(queue, ^{ @autoreleasepool {
-        [CLApp socketDidDisconnect:self.socket withError:err];
-        [CLApp didCloseConnection:self];
+        [CRApp socketDidDisconnect:self.socket withError:err];
+        [CRApp didCloseConnection:self];
     }});
 }
 

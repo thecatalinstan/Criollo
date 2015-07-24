@@ -6,10 +6,10 @@
 //
 //
 
-#define CLHTTP10  ((NSString *)kCFHTTPVersion1_0)
-#define CLHTTP11  ((NSString *)kCFHTTPVersion1_1)
+#define CRHTTP10  ((NSString *)kCFHTTPVersion1_0)
+#define CRHTTP11  ((NSString *)kCFHTTPVersion1_1)
 
-@interface CLHTTPMessage : NSObject
+@interface CRHTTPMessage : NSObject
 
 @property (nonatomic, assign) CFHTTPMessageRef message;
 

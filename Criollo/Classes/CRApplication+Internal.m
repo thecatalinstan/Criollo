@@ -1,22 +1,22 @@
 //
-//  CLApplication+Internal.m
+//  CRApplication+Internal.m
 //  Criollo
 //
 //  Created by Cătălin Stan on 28/04/15.
 //
 //
 
-#import <Criollo/CLHTTPConnection.h>
-#import <Criollo/CLHTTPResponse.h>
+#import <Criollo/CRHTTPConnection.h>
+#import <Criollo/CRHTTPResponse.h>
 
-#import "CLApplication+Internal.h"
+#import "CRApplication+Internal.h"
 
 void handleSIGTERM(int signum) {
-    [CLApp presentError:[NSError errorWithDomain:CLErrorDomain code:CLErrorSigTERM userInfo:@{ NSLocalizedDescriptionKey: @"Got SIGTERM." }]];
-    [CLApp performSelectorOnMainThread:@selector(terminate:) withObject:nil waitUntilDone:YES];
+    [CRApp presentError:[NSError errorWithDomain:CRErrorDomain code:CRErrorSigTERM userInfo:@{ NSLocalizedDescriptionKey: @"Got SIGTERM." }]];
+    [CRApp performSelectorOnMainThread:@selector(terminate:) withObject:nil waitUntilDone:YES];
 }
 
-@implementation CLApplication (Internal)
+@implementation CRApplication (Internal)
 
 BOOL shouldKeepRunning;
 
@@ -25,7 +25,7 @@ BOOL shouldKeepRunning;
 - (void)quit
 {
     [self stopListening];
-    [[NSNotificationCenter defaultCenter] postNotificationName:CLApplicationWillTerminateNotification object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationWillTerminateNotification object:self];
     exit(EXIT_SUCCESS);
 }
 
@@ -43,10 +43,10 @@ BOOL shouldKeepRunning;
     shouldKeepRunning = YES;
     
     [self startListening];
-    [[NSNotificationCenter defaultCenter] postNotificationName:CLApplicationDidFinishLaunchingNotification object:self];
-    [[NSRunLoop mainRunLoop] addTimer:[NSTimer timerWithTimeInterval:[[NSDate distantFuture] timeIntervalSinceNow] target:nil selector:@selector(stop) userInfo:nil repeats:YES] forMode:CLApplicationRunLoopMode];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationDidFinishLaunchingNotification object:self];
+    [[NSRunLoop mainRunLoop] addTimer:[NSTimer timerWithTimeInterval:[[NSDate distantFuture] timeIntervalSinceNow] target:nil selector:@selector(stop) userInfo:nil repeats:YES] forMode:CRApplicationRunLoopMode];
     
-    while ( shouldKeepRunning && [[NSRunLoop mainRunLoop] runMode:CLApplicationRunLoopMode beforeDate:[NSDate distantFuture]] );
+    while ( shouldKeepRunning && [[NSRunLoop mainRunLoop] runMode:CRApplicationRunLoopMode beforeDate:[NSDate distantFuture]] );
 }
 
 - (void)stopRunLoop
@@ -97,7 +97,7 @@ BOOL shouldKeepRunning;
 - (void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket
 {    
     //    NSLog(@"%s", __PRETTY_FUNCTION__);
-    CLHTTPConnection* connection = [[CLHTTPConnection alloc] initWithSocket:newSocket];
+    CRHTTPConnection* connection = [[CRHTTPConnection alloc] initWithSocket:newSocket];
     
     @synchronized(self.connections) {
         [self.connections addObject:connection];
@@ -110,7 +110,7 @@ BOOL shouldKeepRunning;
 //    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
-- (void)didCloseConnection:(CLHTTPConnection*)connection
+- (void)didCloseConnection:(CRHTTPConnection*)connection
 {
 //    NSLog(@"%s", __PRETTY_FUNCTION__);
     @synchronized(self.connections) {

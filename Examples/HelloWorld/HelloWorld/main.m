@@ -10,5 +10,5 @@
 #import "AppDelegate.h"
 
 int main(int argc, char * const argv[]) {
-    return CLApplicationMain(argc, argv, [AppDelegate new]);
+    return CRApplicationMain(argc, argv, [AppDelegate new]);
 }

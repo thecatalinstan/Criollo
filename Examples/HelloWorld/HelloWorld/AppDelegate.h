@@ -8,7 +8,7 @@
 
 #import <Criollo/Criollo.h>
 
-@interface AppDelegate : NSObject <CLApplicationDelegate>
+@interface AppDelegate : NSObject <CRApplicationDelegate>
 
 
 @end

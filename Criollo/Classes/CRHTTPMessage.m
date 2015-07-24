@@ -1,14 +1,14 @@
 //
-//  CLHTTPMessage.m
+//  CRHTTPMessage.m
 //  Criollo
 //
 //  Created by Cătălin Stan on 29/04/15.
 //
 //
 
-#import "CLHTTPMessage.h"
+#import "CRHTTPMessage.h"
 
-@implementation CLHTTPMessage
+@implementation CRHTTPMessage
 
 - (instancetype)init
 {
