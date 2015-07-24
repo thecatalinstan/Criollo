@@ -180,7 +180,9 @@
 		ADEDB3481AEFBCF800A26AF1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = CR;
 				LastUpgradeCheck = 0640;
+				ORGANIZATIONNAME = "Cătălin Stan";
 				TargetAttributes = {
 					ADEDB3751AEFC0B000A26AF1 = {
 						CreatedOnToolsVersion = 6.3.1;
