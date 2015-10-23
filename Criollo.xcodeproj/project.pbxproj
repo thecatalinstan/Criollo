@@ -11,6 +11,8 @@
 		AD19695F1B626EF90098CA89 /* CRServer.m in Sources */ = {isa = PBXBuildFile; fileRef = AD19695D1B626EF90098CA89 /* CRServer.m */; };
 		AD2712541B011B0E0093AD0B /* GCDAsyncSocket+Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = AD2712521B011B0E0093AD0B /* GCDAsyncSocket+Criollo.h */; };
 		AD2712551B011B0E0093AD0B /* GCDAsyncSocket+Criollo.m in Sources */ = {isa = PBXBuildFile; fileRef = AD2712531B011B0E0093AD0B /* GCDAsyncSocket+Criollo.m */; };
+		AD609C5B1BDA661F0003E702 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = AD609C591BDA661F0003E702 /* GCDAsyncSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AD609C5C1BDA661F0003E702 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD609C5A1BDA661F0003E702 /* GCDAsyncSocket.m */; settings = {ASSET_TAGS = (); }; };
 		ADDAE1351AF0CC17008FA7D6 /* CRHTTPResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = ADEDB39F1AEFCC3A00A26AF1 /* CRHTTPResponse.m */; };
 		ADDAE1361AF0CC1A008FA7D6 /* CRHTTPResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB39E1AEFCC3A00A26AF1 /* CRHTTPResponse.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ADDAE1371AF0CE89008FA7D6 /* CRHTTPRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB39C1AEFCC3A00A26AF1 /* CRHTTPRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -19,10 +21,8 @@
 		ADDAE13C1AF0D380008FA7D6 /* CRHTTPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = ADDAE13A1AF0D380008FA7D6 /* CRHTTPMessage.m */; };
 		ADEDB37C1AEFC0B000A26AF1 /* Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB37B1AEFC0B000A26AF1 /* Criollo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ADEDB3A41AEFCC6400A26AF1 /* CRApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = ADEDB34F1AEFBD8800A26AF1 /* CRApplication.m */; };
-		ADEDB3A51AEFCC6400A26AF1 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = ADEDB3661AEFBD9D00A26AF1 /* GCDAsyncSocket.m */; };
 		ADEDB3A61AEFCC6400A26AF1 /* NSDate+RFC1123.m in Sources */ = {isa = PBXBuildFile; fileRef = ADEDB3601AEFBD8800A26AF1 /* NSDate+RFC1123.m */; };
 		ADEDB3A71AEFCC8B00A26AF1 /* CRApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB34E1AEFBD8800A26AF1 /* CRApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		ADEDB3A91AEFCC8B00A26AF1 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB3651AEFBD9D00A26AF1 /* GCDAsyncSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ADEDB3AA1AEFCC8B00A26AF1 /* NSDate+RFC1123.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB35F1AEFBD8800A26AF1 /* NSDate+RFC1123.h */; };
 		ADEDB3B01AEFD6F200A26AF1 /* CRApplication+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB3AE1AEFD6F200A26AF1 /* CRApplication+Internal.h */; };
 		ADEDB3B11AEFD6F200A26AF1 /* CRApplication+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = ADEDB3AF1AEFD6F200A26AF1 /* CRApplication+Internal.m */; };
@@ -35,14 +35,14 @@
 		AD19695D1B626EF90098CA89 /* CRServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRServer.m; path = Classes/CRServer.m; sourceTree = "<group>"; };
 		AD2712521B011B0E0093AD0B /* GCDAsyncSocket+Criollo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCDAsyncSocket+Criollo.h"; path = "Classes/GCDAsyncSocket+Criollo.h"; sourceTree = "<group>"; };
 		AD2712531B011B0E0093AD0B /* GCDAsyncSocket+Criollo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCDAsyncSocket+Criollo.m"; path = "Classes/GCDAsyncSocket+Criollo.m"; sourceTree = "<group>"; };
+		AD609C591BDA661F0003E702 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = Libraries/CocoaAsyncSocket/Source/GCD/GCDAsyncSocket.h; sourceTree = "<group>"; };
+		AD609C5A1BDA661F0003E702 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = Libraries/CocoaAsyncSocket/Source/GCD/GCDAsyncSocket.m; sourceTree = "<group>"; };
 		ADDAE1391AF0D380008FA7D6 /* CRHTTPMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRHTTPMessage.h; path = Classes/CRHTTPMessage.h; sourceTree = "<group>"; };
 		ADDAE13A1AF0D380008FA7D6 /* CRHTTPMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRHTTPMessage.m; path = Classes/CRHTTPMessage.m; sourceTree = "<group>"; };
 		ADEDB34E1AEFBD8800A26AF1 /* CRApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CRApplication.h; path = Classes/CRApplication.h; sourceTree = "<group>"; };
 		ADEDB34F1AEFBD8800A26AF1 /* CRApplication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CRApplication.m; path = Classes/CRApplication.m; sourceTree = "<group>"; };
 		ADEDB35F1AEFBD8800A26AF1 /* NSDate+RFC1123.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSDate+RFC1123.h"; path = "Criollo/Classes/NSDate+RFC1123.h"; sourceTree = "<group>"; };
 		ADEDB3601AEFBD8800A26AF1 /* NSDate+RFC1123.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSDate+RFC1123.m"; path = "Criollo/Classes/NSDate+RFC1123.m"; sourceTree = "<group>"; };
-		ADEDB3651AEFBD9D00A26AF1 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = Libraries/CocoaAsyncSocket/GCD/GCDAsyncSocket.h; sourceTree = "<group>"; };
-		ADEDB3661AEFBD9D00A26AF1 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = Libraries/CocoaAsyncSocket/GCD/GCDAsyncSocket.m; sourceTree = "<group>"; };
 		ADEDB36D1AEFBEF400A26AF1 /* Criollo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Criollo-Prefix.pch"; sourceTree = "<group>"; };
 		ADEDB3761AEFC0B000A26AF1 /* Criollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Criollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADEDB37A1AEFC0B000A26AF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -79,8 +79,8 @@
 		ADEDB3681AEFBE2C00A26AF1 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				ADEDB3651AEFBD9D00A26AF1 /* GCDAsyncSocket.h */,
-				ADEDB3661AEFBD9D00A26AF1 /* GCDAsyncSocket.m */,
+				AD609C591BDA661F0003E702 /* GCDAsyncSocket.h */,
+				AD609C5A1BDA661F0003E702 /* GCDAsyncSocket.m */,
 				ADEDB35F1AEFBD8800A26AF1 /* NSDate+RFC1123.h */,
 				ADEDB3601AEFBD8800A26AF1 /* NSDate+RFC1123.m */,
 			);
@@ -149,12 +149,12 @@
 				AD19695E1B626EF90098CA89 /* CRServer.h in Headers */,
 				ADEDB3B01AEFD6F200A26AF1 /* CRApplication+Internal.h in Headers */,
 				ADEDB37C1AEFC0B000A26AF1 /* Criollo.h in Headers */,
+				AD609C5B1BDA661F0003E702 /* GCDAsyncSocket.h in Headers */,
 				ADDAE13B1AF0D380008FA7D6 /* CRHTTPMessage.h in Headers */,
 				ADDAE1361AF0CC1A008FA7D6 /* CRHTTPResponse.h in Headers */,
 				ADEDB3A71AEFCC8B00A26AF1 /* CRApplication.h in Headers */,
 				ADEDB3B71AF0045C00A26AF1 /* CRHTTPConnection.h in Headers */,
 				ADDAE1371AF0CE89008FA7D6 /* CRHTTPRequest.h in Headers */,
-				ADEDB3A91AEFCC8B00A26AF1 /* GCDAsyncSocket.h in Headers */,
 				AD2712541B011B0E0093AD0B /* GCDAsyncSocket+Criollo.h in Headers */,
 				ADEDB3AA1AEFCC8B00A26AF1 /* NSDate+RFC1123.h in Headers */,
 			);
@@ -188,7 +188,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = CR;
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Cătălin Stan";
 				TargetAttributes = {
 					ADEDB3751AEFC0B000A26AF1 = {
@@ -229,12 +229,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADEDB3A41AEFCC6400A26AF1 /* CRApplication.m in Sources */,
-				ADEDB3A51AEFCC6400A26AF1 /* GCDAsyncSocket.m in Sources */,
 				ADEDB3A61AEFCC6400A26AF1 /* NSDate+RFC1123.m in Sources */,
 				ADDAE1351AF0CC17008FA7D6 /* CRHTTPResponse.m in Sources */,
 				ADDAE1381AF0CE89008FA7D6 /* CRHTTPRequest.m in Sources */,
 				ADEDB3B81AF0045C00A26AF1 /* CRHTTPConnection.m in Sources */,
 				AD2712551B011B0E0093AD0B /* GCDAsyncSocket+Criollo.m in Sources */,
+				AD609C5C1BDA661F0003E702 /* GCDAsyncSocket.m in Sources */,
 				ADDAE13C1AF0D380008FA7D6 /* CRHTTPMessage.m in Sources */,
 				ADEDB3B11AEFD6F200A26AF1 /* CRApplication+Internal.m in Sources */,
 				AD19695F1B626EF90098CA89 /* CRServer.m in Sources */,
@@ -247,6 +247,7 @@
 		ADEDB34C1AEFBCF800A26AF1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ENABLE_TESTABILITY = YES;
 				GCC_PREFIX_HEADER = "Criollo/Criollo-Prefix.pch";
 				ONLY_ACTIVE_ARCH = YES;
 				VALID_ARCHS = x86_64;
@@ -310,8 +311,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.criolloframework.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -361,8 +362,8 @@
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.criolloframework.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";

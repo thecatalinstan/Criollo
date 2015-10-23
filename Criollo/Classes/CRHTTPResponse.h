@@ -17,7 +17,7 @@
 
 - (instancetype)initWithHTTPConnection:(CRHTTPConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode;
 - (instancetype)initWithHTTPConnection:(CRHTTPConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description;
-- (instancetype)initWithHTTPConnection:(CRHTTPConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithHTTPConnection:(CRHTTPConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version;
 
 - (void)setValue:(NSString*)value forHTTPHeaderField:(NSString *)HTTPHeaderField;
 

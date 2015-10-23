@@ -11,7 +11,7 @@
 
 @interface CRHTTPMessage : NSObject
 
-@property (nonatomic, assign) CFHTTPMessageRef message;
+@property (nonatomic, strong) id message;
 
 @property (nonatomic, readonly) NSString* version;
 @property (nonatomic, readonly) NSDictionary* allHTTPHeaderFields;

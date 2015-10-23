@@ -16,32 +16,29 @@
 {
     self = [super init];
     if ( self != nil ) {
-        if ( self.message != nil ) {
-            CFRelease(self.message);
-        }
-        self.message = CFHTTPMessageCreateRequest(NULL, (__bridge CFStringRef)method, (__bridge CFURLRef)URL, (__bridge CFStringRef)version);
+        self.message = CFBridgingRelease( CFHTTPMessageCreateRequest(NULL, (__bridge CFStringRef)method, (__bridge CFURLRef)URL, (__bridge CFStringRef)version) );
     }
     return self;
 }
 
 - (NSURL *)URL
 {
-    return (__bridge_transfer NSURL *)CFHTTPMessageCopyRequestURL(self.message);
+    return (__bridge_transfer NSURL *)CFHTTPMessageCopyRequestURL((__bridge CFHTTPMessageRef)self.message);
 }
 
 - (BOOL)appendData:(NSData *)data
 {
-    return CFHTTPMessageAppendBytes(self.message, data.bytes, data.length);
+    return CFHTTPMessageAppendBytes((__bridge CFHTTPMessageRef)self.message, data.bytes, data.length);
 }
 
 - (BOOL)headerComplete
 {
-    return CFHTTPMessageIsHeaderComplete(self.message);
+    return CFHTTPMessageIsHeaderComplete((__bridge CFHTTPMessageRef _Nonnull)(self.message));
 }
 
 - (NSString *)method
 {
-	return (__bridge_transfer NSString *)CFHTTPMessageCopyRequestMethod(self.message);
+	return (__bridge_transfer NSString *)CFHTTPMessageCopyRequestMethod((__bridge CFHTTPMessageRef _Nonnull)(self.message));
 }
 
 @end

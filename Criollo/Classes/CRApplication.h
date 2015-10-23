@@ -6,27 +6,6 @@
 //  Copyright (c) 2013 Catalin Stan. All rights reserved.
 //
 
-
-/*!
- @abstract Logs the user in or authorizes additional permissions.
- @param permissions the optional array of permissions. Note this is converted to NSSet and is only
- an NSArray for the convenience of literal syntax.
- @param fromViewController the view controller to present from. If nil, the topmost view controller will be
- automatically determined as best as possible.
- @param handler the callback.
- @discussion Use this method when asking for read permissions. You should only ask for permissions when they
- are needed and explain the value to the user. You can inspect the result.declinedPermissions to also
- provide more information to the user if they decline permissions.
- 
- If `[FBSDKAccessToken currentAccessToken]` is not nil, it will be treated as a reauthorization for that user
- and will pass the "rerequest" flag to the login dialog.
- 
- This method will present UI the user. You typically should check if `[FBSDKAccessToken currentAccessToken]`
- already contains the permissions you need before asking to reduce unnecessary app switching. For example,
- you could make that check at viewDidLoad.
- */
-
-
 typedef NS_ENUM(NSUInteger, CRApplicationTerminateReply) {
     CRTerminateCancel = 0,
     CRTerminateNow    = 1,

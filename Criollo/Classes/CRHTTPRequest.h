@@ -14,7 +14,7 @@
 @property (atomic, readonly) NSString* method;
 @property (atomic, readonly) BOOL headerComplete;
 
-- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version;
 
 - (BOOL)appendData:(NSData *)data;
 

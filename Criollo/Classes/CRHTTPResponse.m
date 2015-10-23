@@ -43,7 +43,7 @@
     if ( self != nil ) {
         
         version = version == nil ? CRHTTP11 : version;
-        self.message = CFHTTPMessageCreateResponse(NULL, (CFIndex)HTTPStatusCode, (__bridge CFStringRef)description, (__bridge CFStringRef) version);
+        self.message = CFBridgingRelease(CFHTTPMessageCreateResponse(NULL, (CFIndex)HTTPStatusCode, (__bridge CFStringRef)description, (__bridge CFStringRef) version));
         self.connection = connection;
     }
     return self;
@@ -51,7 +51,7 @@
 
 - (NSUInteger)statusCode
 {
-    return (NSUInteger)CFHTTPMessageGetResponseStatusCode(self.message);
+    return (NSUInteger)CFHTTPMessageGetResponseStatusCode((__bridge CFHTTPMessageRef _Nonnull)(self.message));
 }
 
 - (void)setValue:(NSString*)value forHTTPHeaderField:(NSString *)HTTPHeaderField
@@ -62,7 +62,7 @@
         return;
     }
     
-    CFHTTPMessageSetHeaderFieldValue(self.message, (__bridge CFStringRef)HTTPHeaderField, (__bridge CFStringRef)value);
+    CFHTTPMessageSetHeaderFieldValue((__bridge CFHTTPMessageRef _Nonnull)(self.message), (__bridge CFStringRef)HTTPHeaderField, (__bridge CFStringRef)value);
 }
 
 #pragma mark - Write
