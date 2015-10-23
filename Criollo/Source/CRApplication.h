@@ -12,15 +12,6 @@ typedef NS_ENUM(NSUInteger, CRApplicationTerminateReply) {
     CRTerminateLater  = 2
 };
 
-typedef NS_ENUM(NSUInteger, CRError) {
-    CRErrorNone             = 0,
-    CRErrorSigTERM          = 1007,
-    CRErrorSocketError      = 2001,
-    
-    CRErrorRequestMalformedRequest = 3001,
-    CRErrorRequestUnsupportedMethod = 3002,
-};
-
 @class CRApplication;
 
 @protocol CRApplicationDelegate <NSObject>
@@ -39,54 +30,32 @@ typedef NS_ENUM(NSUInteger, CRError) {
 
 @end
 
-extern NSString* const Criollo;
+FOUNDATION_EXPORT NSUInteger const CRErrorNone;
+FOUNDATION_EXPORT NSUInteger const CRErrorSigTERM;
 
-extern NSString* const CRApplicationRunLoopMode;
+FOUNDATION_EXPORT NSString* const CRApplicationRunLoopMode;
 
-extern NSString* const CRErrorDomain;
+FOUNDATION_EXPORT NSString* const CRApplicationWillFinishLaunchingNotification;
+FOUNDATION_EXPORT NSString* const CRApplicationDidFinishLaunchingNotification;
+FOUNDATION_EXPORT NSString* const CRApplicationWillTerminateNotification;
 
-extern NSUInteger const CRDefaultPortNumber;
-
-extern NSString* const CRRequestKey;
-extern NSString* const CRResponseKey;
-
-extern NSString* const CRApplicationWillFinishLaunchingNotification;
-extern NSString* const CRApplicationDidFinishLaunchingNotification;
-extern NSString* const CRApplicationWillTerminateNotification;
-
-@class CRHTTPRequest, CRHTTPResponse, GCDAsyncSocket;
-
-extern id CRApp;
-extern int CRApplicationMain(int argc, char * const argv[], id<CRApplicationDelegate> delegate);
+FOUNDATION_EXPORT id CRApp;
+FOUNDATION_EXPORT int CRApplicationMain(int argc, char * const argv[], id<CRApplicationDelegate> delegate);
 
 @interface CRApplication : NSObject
 
 @property (nonatomic, assign) id<CRApplicationDelegate> delegate;
 
-@property (atomic, assign) NSUInteger portNumber;
-@property (nonatomic, strong) NSString* interface;
-
-@property (nonatomic, strong) GCDAsyncSocket* httpSocket;
-@property (nonatomic, strong) NSMutableArray* connections;
-
-@property (nonatomic, strong) dispatch_queue_t delegateQueue;
-@property (nonatomic, strong) NSOperationQueue* workerQueue;
-
 + (CRApplication *)sharedApplication;
 
 - (instancetype)initWithDelegate:(id<CRApplicationDelegate>)delegate;
-- (instancetype)initWithDelegate:(id<CRApplicationDelegate>)delegate portNumber:(NSUInteger)portNumber;
-- (instancetype)initWithDelegate:(id<CRApplicationDelegate>)delegate portNumber:(NSUInteger)portNumber interface:(NSString*)interface NS_DESIGNATED_INITIALIZER;
 
 - (void)run;
 - (void)stop:(id)sender;
 - (void)terminate:(id)sender;
 - (void)replyToApplicationShouldTerminate:(BOOL)shouldTerminate;
 
-- (BOOL)canHandleRequest:(CRHTTPRequest*)request;
-
-- (void)presentError:(NSError*)error;
-- (void)logErrorFormat:(NSString *)format, ...;
 - (void)logFormat:(NSString *)format, ...;
+- (void)logErrorFormat:(NSString *)format, ...;
 
 @end
