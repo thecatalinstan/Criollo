@@ -28,5 +28,9 @@
 	<string>Copyright © 2015 Catalin Stan. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
 	<string>CLApplication</string>
+	<key>CRServerInterface</key>
+	<string></string>
+	<key>CRServerPort</key>
+	<string>10781</string>
 </dict>
 </plist>

@@ -31,16 +31,11 @@
 // Buffers
 #define CRRequestBodyBufferSize                         (1024 * 1024)
 
-#import <Criollo/CRApplication.h>
-
 @class GCDAsyncSocket;
 
 @interface CRHTTPConnection : NSObject
 
-@property (nonatomic, strong) GCDAsyncSocket* socket;
 
-- (instancetype)initWithSocket:(GCDAsyncSocket*)socket;
-- (instancetype)initWithSocket:(GCDAsyncSocket*)socket delegateQueue:(dispatch_queue_t)delegateQueue NS_DESIGNATED_INITIALIZER;
 
 
 @end

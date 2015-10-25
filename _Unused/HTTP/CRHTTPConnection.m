@@ -41,33 +41,7 @@
 
 @implementation CRHTTPConnection
 
-- (instancetype)init
-{
-    return [self initWithSocket:nil delegateQueue:nil];
-}
 
-- (instancetype)initWithSocket:(GCDAsyncSocket *)socket
-{
-    NSString* acceptedSocketDelegateQueueLabel = [[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:[NSString stringWithFormat:@"SocketDelegateQueue-%hu", socket.connectedPort]];
-    dispatch_queue_t acceptedSocketDelegateQueue = dispatch_queue_create([acceptedSocketDelegateQueueLabel cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-    return  [self initWithSocket:socket delegateQueue:acceptedSocketDelegateQueue];
-}
-
-- (instancetype)initWithSocket:(GCDAsyncSocket *)socket delegateQueue:(dispatch_queue_t)delegateQueue
-{
-    self = [super init];
-    if (self != nil) {
-        if (socket != nil ) {
-            self.socket = socket;
-            [self.socket setDelegate:self delegateQueue:delegateQueue];
-            self.request = [[CRHTTPRequest alloc] init];
-            dispatch_async(self.socket.delegateQueue, ^{ @autoreleasepool {
-                [self initialize];
-            }});
-        }
-    }
-    return self;
-}
 
 - (void)dealloc
 {

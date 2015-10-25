@@ -10,6 +10,8 @@
 
 #import <Criollo/CRApplication.h>
 #import <Criollo/CRServer.h>
+#import <Criollo/CRServerConfiguration.h>
+#import <Criollo/CRConnection.h>
 
 FOUNDATION_EXPORT NSString* const Criollo;
 FOUNDATION_EXPORT NSString* const CRErrorDomain;

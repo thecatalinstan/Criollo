@@ -8,28 +8,42 @@
 
 #import "AppDelegate.h"
 
+@interface AppDelegate () <CRServerDelegate>
+
+@property (nonatomic, strong) CRServer* server;
+
+@end
+
 @implementation AppDelegate
 
 - (void)applicationWillFinishLaunching:(NSNotification *)notification {
-    [CRApp logFormat:@"%s", __PRETTY_FUNCTION__];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-
-    CRServer* server = [[CRServer alloc] init];
-
-    [CRApp logFormat:@"%s %@", __PRETTY_FUNCTION__, server];
-//    [app logFormat:@"Running at http://%@:%lu/", app.interface.length < 7 ? @"127.0.0.1" :  app.interface, app.portNumber];
+    self.server = [[CRServer alloc] initWithDelegate:self];
+    NSError* error;
+    if ( ! [self.server startListening:&error] ) {
+        [CRApp logErrorFormat:@"Failed to start server. %@", error.localizedDescription];
+        [CRApp terminate:nil];
+    } else {
+        [CRApp logFormat:@"Running at http://%@:%lu/", self.server.configuration.CRServerInterface.length == 0 ? @"127.0.0.1" : self.server.configuration.CRServerInterface, self.server.configuration.CRServerPort];
+    }
 }
 
-
 - (CRApplicationTerminateReply)applicationShouldTerminate:(CRApplication *)sender {
-    [CRApp logFormat:@"%s", __PRETTY_FUNCTION__];
     return CRTerminateNow;
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
-    [CRApp logFormat:@"%s", __PRETTY_FUNCTION__];
+    [self.server stopListening];
+}
+
+#pragma mark - CRServerDelegate
+
+- (void)server:(CRServer *)server didAcceptConnection:(CRConnection *)connection {
+//    NSString* string = [[NSBundle mainBundle].bundleIdentifier stringByAppendingFormat:@" Connections: %lu\n", self.connections.count];
+//    [connection.socket writeData:[string dataUsingEncoding:NSUTF8StringEncoding] withTimeout:0 tag:0];
+//    [connection.socket disconnectAfterWriting];
 }
 
 @end

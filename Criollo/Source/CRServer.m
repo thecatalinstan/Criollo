@@ -7,147 +7,125 @@
 //
 
 #import "CRServer.h"
+#import "CRServerConfiguration.h"
+#import "GCDAsyncSocket.h"
+#import "CRConnection.h"
 
 NSUInteger const CRErrorSocketError = 2001;
-NSUInteger const CRErrorRequestMalformedRequest = 3001;
-NSUInteger const CRErrorRequestUnsupportedMethod = 3002;
-
-NSUInteger const CRDefaultPortNumber = 1338;
 
 NSString* const CRRequestKey = @"CRRequest";
 NSString* const CRResponseKey = @"CRResponse";
 
+@interface CRServer ()
+
+@end
+
 @implementation CRServer
 
-//+ (NSData *)CRLFCRLFData
-//{
-//    return [NSData dataWithBytes:"\x0D\x0A\x0D\x0A" length:4];
-//}
+- (instancetype)init {
+    return [self initWithDelegate:nil portNumber:0 interface:nil];
+}
 
+- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate {
+    return [self initWithDelegate:delegate portNumber:0 interface:nil];
+}
 
-//- (instancetype)init {
-//    self = [super init];
-//    if ( self != nil ) {
-//    }
-//    return self;
-//}
-//
-//- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate {
-//
-//}
-//
-//- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate portNumber:(NSUInteger)portNumber {
-//
-//}
-//
-//- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate portNumber:(NSUInteger)portNumber interface:(NSString *)interface {
-//
-//}
+- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate portNumber:(NSUInteger)portNumber {
+    return [self initWithDelegate:delegate portNumber:portNumber interface:nil];
+}
 
+- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate portNumber:(NSUInteger)portNumber interface:(NSString *)interface {
+    self = [super init];
+    if ( self != nil ) {
+        self.connections = [NSMutableArray array];
+        self.configuration = [[CRServerConfiguration alloc] init];
+        if ( portNumber != 0 ) {
+            self.configuration.CRServerPort = portNumber;
+        }
+        if ( interface.length != 0 ) {
+            self.configuration.CRServerInterface = interface;
+        }
+    }
+    return self;
+}
 
-//static NSArray* validHTTPMethods;
-//
-//+ (void)initialize
-//{
-//    validHTTPMethods = @[@"GET",@"POST", @"PUT", @"DELETE"];
-//}
+#pragma mark - Listening
 
+- (BOOL)startListening:(NSError**)error {
 
-//NSUserDefaults *args = [NSUserDefaults standardUserDefaults];
-//
-//NSString* interface = [args stringForKey:@"i"];
-//if ( interface == nil ) {
-//    interface = [args stringForKey:@"interface"];
-//    if ( interface == nil ) {
-//        interface = @"";
-//    }
-//}
-//
-//NSUInteger portNumber = [args integerForKey:@"p"];
-//if ( portNumber == 0 ) {
-//    portNumber = [args integerForKey:@"port"];
-//    if ( portNumber == 0 ) {
-//        portNumber = CRDefaultPortNumber;
-//    }
-//}
-//portNumber = MIN(INT16_MAX, MAX(0, portNumber));
+    self.workerQueue = [[NSOperationQueue alloc] init];
+    self.workerQueue.name = [[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"WorkerQueue"];
+    self.workerQueue.maxConcurrentOperationCount = NSOperationQueueDefaultMaxConcurrentOperationCount;
+    self.workerQueue.qualityOfService = NSQualityOfServiceUserInitiated;
 
-//#pragma mark - Routing
-//- (BOOL)canHandleRequest:(CRHTTPRequest *)request
-//{
-//    //    NSLog(@"%s %@", __PRETTY_FUNCTION__, request.method);
-//    BOOL canHandle = YES;
-//    if ( request.method == nil || ![validHTTPMethods containsObject:request.method.uppercaseString] ) {
-//        canHandle = NO;
-//    }
-//    return canHandle;
-//}
-//
-//
-//#pragma mark - Listening
-//
-//- (void)startListening
-//{
-//    self.workerQueue = [[NSOperationQueue alloc] init];
-//    self.workerQueue.name = [[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"WorkerQueue"];
-//    self.workerQueue.maxConcurrentOperationCount = NSOperationQueueDefaultMaxConcurrentOperationCount;
-//    self.workerQueue.qualityOfService = NSQualityOfServiceUserInitiated;
-//
-//    self.delegateQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"DelegateQueue"] cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-//
-//    self.httpSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:self.delegateQueue];
-//
-//    NSError *error;
-//    BOOL listening = NO;
-//
-//    listening = [self.httpSocket acceptOnInterface:(self.interface.length == 0 ? nil : self.interface) port:self.portNumber error:&error];
-//    if ( !listening ) {
-//        [self presentError:error];
-//        [self terminate:self];
-//    }
-//}
-//
-//- (void)stopListening
-//{
-//    [self.httpSocket setDelegate:nil];
-//    [self.httpSocket disconnect];
-//    self.httpSocket = nil;
-//
-//    [self.workerQueue cancelAllOperations];
-//
-//    self.workerQueue = nil;
-//    self.delegateQueue = nil;
-//
-//    [self.connections removeAllObjects];
-//}
-//
-//#pragma mark - GCDAsyncSocketDelegate
-//
-//- (void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket
-//{
-//    //    NSLog(@"%s", __PRETTY_FUNCTION__);
-//    CRHTTPConnection* connection = [[CRHTTPConnection alloc] initWithSocket:newSocket];
-//
-//    @synchronized(self.connections) {
-//        [self.connections addObject:connection];
-//        //        NSLog(@"Connections: %lu", (unsigned long)self.connections.count);
-//    }
-//}
-//
-//- (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
-//{
-//    //    NSLog(@"%s", __PRETTY_FUNCTION__);
-//}
-//
-//- (void)didCloseConnection:(CRHTTPConnection*)connection
-//{
-//    //    NSLog(@"%s", __PRETTY_FUNCTION__);
-//    @synchronized(self.connections) {
-//        [self.connections removeObject:connection];
-//        //        NSLog(@"Connections: %lu", (unsigned long)self.connections.count);
-//    }
-//}
+    self.delegateQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"DelegateQueue"] cStringUsingEncoding:NSASCIIStringEncoding], NULL);
 
+    if ( [self.delegate respondsToSelector:@selector(serverWillStartListening:)] ) {
+        [self.delegate serverWillStartListening:self];
+    }
 
+    self.socket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:self.delegateQueue];
+
+    BOOL listening = [self.socket acceptOnInterface:self.configuration.CRServerInterface port:self.configuration.CRServerPort error:error];
+    if ( listening && [self.delegate respondsToSelector:@selector(serverDidStartListening:)] ) {
+        [self.delegate serverDidStartListening:self];
+    }
+
+    return listening;
+}
+
+- (void)stopListening {
+
+    if ( [self.delegate respondsToSelector:@selector(serverWillStopListening:)] ) {
+        [self.delegate serverWillStopListening:self];
+    }
+
+    [self.socket disconnect];
+    self.socket.delegate = nil;
+    self.socket = nil;
+
+    [self.workerQueue cancelAllOperations];
+    self.workerQueue = nil;
+
+    self.delegateQueue = nil;
+
+    [self.connections removeAllObjects];
+
+    if ( [self.delegate respondsToSelector:@selector(serverDidStopListening:)] ) {
+        [self.delegate serverDidStopListening:self];
+    }
+}
+
+#pragma mark - Connections
+
+- (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket {
+    CRConnection* connection = [[CRConnection alloc] initWithSocket:socket server:self];
+    if ( [self.delegate respondsToSelector:@selector(server:didAcceptConnection:)]) {
+        [self.delegate server:self didAcceptConnection:connection];
+    }
+    [connection startReading];
+    return connection;
+}
+
+- (void)didCloseConnection:(CRConnection*)connection {
+    if ( [self.delegate respondsToSelector:@selector(server:didCloseConnection:)]) {
+        [self.delegate server:self didCloseConnection:connection];
+    }
+    @synchronized(self.connections) {
+        [self.connections removeObject:connection];
+    }
+}
+
+#pragma mark - GCDAsyncSocketDelegate
+
+- (void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket {
+    CRConnection* connection = [self newConnectionWithSocket:newSocket];
+    @synchronized(self.connections) {
+        [self.connections addObject:connection];
+    }
+}
+
+- (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
+}
 
 @end

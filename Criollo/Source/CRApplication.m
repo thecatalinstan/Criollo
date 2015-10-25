@@ -8,7 +8,6 @@
 
 #import <Criollo/CRApplication.h>
 
-
 NSUInteger const CRErrorNone = 0;
 NSUInteger const CRErrorSigTERM = 1007;
 

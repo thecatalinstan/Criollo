@@ -6,43 +6,48 @@
 //  Copyright (c) 2015 Cătălin Stan. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
-@class CRServer, GCDAsyncSocket;
+@class CRServer, CRServerConfiguration, GCDAsyncSocket, CRConnection;
 
 FOUNDATION_EXPORT NSUInteger const CRErrorSocketError;
-FOUNDATION_EXPORT NSUInteger const CRErrorRequestMalformedRequest;
-FOUNDATION_EXPORT NSUInteger const CRErrorRequestUnsupportedMethod;
-
-FOUNDATION_EXPORT NSUInteger const CRDefaultPortNumber;
 
 FOUNDATION_EXPORT NSString* const CRRequestKey;
 FOUNDATION_EXPORT NSString* const CRResponseKey;
 
 @protocol CRServerDelegate <NSObject>
 
+@optional
+
+- (void)serverWillStartListening:(CRServer*)server;
+- (void)serverDidStartListening:(CRServer*)server;
+
+- (void)serverWillStopListening:(CRServer*)server;
+- (void)serverDidStopListening:(CRServer*)server;
+
+- (void)server:(CRServer*)server didAcceptConnection:(CRConnection*)connection;
+- (void)server:(CRServer*)server didCloseConnection:(CRConnection*)connection;
+
 @end
 
 @interface CRServer : NSObject
 
-//@property (atomic, assign) NSUInteger portNumber;
-//@property (nonatomic, strong) NSString* interface;
-//
-//@property (nonatomic, strong) GCDAsyncSocket* httpSocket;
-//@property (nonatomic, strong) NSMutableArray* connections;
-//
-//@property (nonatomic, strong) dispatch_queue_t delegateQueue;
-//@property (nonatomic, strong) NSOperationQueue* workerQueue;
-//
-//- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate;
-//- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate portNumber:(NSUInteger)portNumber;
-//- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate portNumber:(NSUInteger)portNumber interface:(NSString*)interface;
+@property (nonatomic, strong) id<CRServerDelegate> delegate;
 
-//- (BOOL)canHandleRequest:(CRHTTPRequest*)request;
-//- (void)startListening;
-//- (void)stopListening;
-//- (void)didCloseConnection:(CRHTTPConnection*)connection;
+@property (nonatomic, strong) CRServerConfiguration* configuration;
 
-//+ (NSData *)CRLFCRLFData;
+@property (nonatomic, strong) GCDAsyncSocket* socket;
+@property (nonatomic, strong) NSMutableArray<CRConnection*>* connections;
+
+@property (nonatomic, strong) dispatch_queue_t delegateQueue;
+@property (nonatomic, strong) NSOperationQueue* workerQueue;
+
+- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate;
+- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate portNumber:(NSUInteger)portNumber;
+- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate portNumber:(NSUInteger)portNumber interface:(NSString*)interface NS_DESIGNATED_INITIALIZER;
+
+- (BOOL)startListening:(NSError**)error;
+- (void)stopListening;
+
+- (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket;
+- (void)didCloseConnection:(CRConnection*)connection;
 
 @end
