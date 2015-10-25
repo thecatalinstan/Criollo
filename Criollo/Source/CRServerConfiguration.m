@@ -8,15 +8,37 @@
 
 #import "CRServerConfiguration.h"
 
+// Defaults
 NSString* const CRServerDefaultInterface = @"";
 NSUInteger const CRServerDefaultPort = 10781;
 
 NSUInteger const CRConnectionDefaultInitialReadTimeout = 30;
+NSUInteger const CRHTTPConnectionDefaultReadHeaderLineTimeout = 30;
+NSUInteger const CRHTTPConnectionDefaultReadBodyTimeout = 30;
+NSUInteger const CRHTTPConnectionDefaultWriteHeaderTimeout = 30;
+NSUInteger const CRHTTPConnectionDefaultWriteBodyTimeout = 0;
+NSUInteger const CRHTTPConnectionDefaultWriteGeneralTimeout = 30;
 
+NSUInteger const CRRequestDefaultMaxHeaderLineLength = 1024;
+NSUInteger const CRRequestDefaultMaxHeaderLength = 10 * 1024;
+NSUInteger const CRRequestDefaultBodyBufferSize = 1024 * 1024;
+
+// Keys
 NSString* const CRServerInterfaceKey = @"CRServerInterface";
 NSString* const CRServerPortKey = @"CRServerPort";
 
 NSString* const CRConnectionInitialReadTimeoutKey = @"CRConnectionInitialReadTimeout";
+NSString* const CRHTTPConnectionReadHeaderLineTimeoutKey = @"CRHTTPConnectionReadHeaderLineTimeout";
+NSString* const CRHTTPConnectionReadBodyTimeoutKey = @"CRHTTPConnectionReadBodyTimeout";
+NSString* const CRHTTPConnectionWriteHeaderTimeoutKey = @"CRHTTPConnectionWriteHeaderTimeout";
+NSString* const CRHTTPConnectionWriteBodyTimeoutKey = @"CRHTTPConnectionWriteBodyTimeout";
+NSString* const CRHTTPConnectionWriteGeneralTimeoutKey = @"CRHTTPConnectionWriteGeneralTimeout";
+
+NSString* const CRRequestMaxHeaderLineLengthKey = @"CRRequestMaxHeaderLineLength";
+NSString* const CRRequestMaxHeaderLengthKey = @"CRRequestMaxHeaderLength";
+NSString* const CRRequestBodyBufferSizeKey = @"CRRequestBodyBufferSize";
+
+
 
 @interface CRServerConfiguration ()
 
@@ -69,6 +91,32 @@ NSString* const CRConnectionInitialReadTimeoutKey = @"CRConnectionInitialReadTim
     // Timeouts
     if ( [mainBundle objectForInfoDictionaryKey:CRConnectionInitialReadTimeoutKey] ) {
         self.CRConnectionInitialReadTimeout = [[mainBundle objectForInfoDictionaryKey:CRConnectionInitialReadTimeoutKey] integerValue];
+    }
+    if ( [mainBundle objectForInfoDictionaryKey:CRHTTPConnectionReadHeaderLineTimeoutKey] ) {
+        self.CRHTTPConnectionReadHeaderLineTimeout = [[mainBundle objectForInfoDictionaryKey:CRHTTPConnectionReadHeaderLineTimeoutKey] integerValue];
+    }
+    if ( [mainBundle objectForInfoDictionaryKey:CRHTTPConnectionReadBodyTimeoutKey] ) {
+        self.CRHTTPConnectionReadBodyTimeout = [[mainBundle objectForInfoDictionaryKey:CRHTTPConnectionReadBodyTimeoutKey] integerValue];
+    }
+    if ( [mainBundle objectForInfoDictionaryKey:CRHTTPConnectionWriteHeaderTimeoutKey] ) {
+        self.CRHTTPConnectionWriteHeaderTimeout = [[mainBundle objectForInfoDictionaryKey:CRHTTPConnectionWriteHeaderTimeoutKey] integerValue];
+    }
+    if ( [mainBundle objectForInfoDictionaryKey:CRHTTPConnectionWriteBodyTimeoutKey] ) {
+        self.CRHTTPConnectionWriteBodyTimeout = [[mainBundle objectForInfoDictionaryKey:CRHTTPConnectionWriteBodyTimeoutKey] integerValue];
+    }
+    if ( [mainBundle objectForInfoDictionaryKey:CRHTTPConnectionWriteGeneralTimeoutKey] ) {
+        self.CRHTTPConnectionWriteGeneralTimeout = [[mainBundle objectForInfoDictionaryKey:CRHTTPConnectionWriteGeneralTimeoutKey] integerValue];
+    }
+
+    if ( [mainBundle objectForInfoDictionaryKey:CRRequestMaxHeaderLineLengthKey] ) {
+        self.CRRequestMaxHeaderLineLength = [[mainBundle objectForInfoDictionaryKey:CRRequestMaxHeaderLineLengthKey] integerValue];
+    }
+    if ( [mainBundle objectForInfoDictionaryKey:CRRequestMaxHeaderLengthKey] ) {
+        self.CRRequestMaxHeaderLength = [[mainBundle objectForInfoDictionaryKey:CRRequestMaxHeaderLengthKey] integerValue];
+    }
+    
+    if ( [mainBundle objectForInfoDictionaryKey:CRRequestBodyBufferSizeKey] ) {
+        self.CRRequestBodyBufferSize = [[mainBundle objectForInfoDictionaryKey:CRRequestBodyBufferSizeKey] integerValue];
     }
 }
 

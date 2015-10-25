@@ -17,6 +17,14 @@
 		AD609C5B1BDA661F0003E702 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = AD609C591BDA661F0003E702 /* GCDAsyncSocket.h */; };
 		AD609C5C1BDA661F0003E702 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD609C5A1BDA661F0003E702 /* GCDAsyncSocket.m */; settings = {ASSET_TAGS = (); }; };
 		AD609C5F1BDA7A4C0003E702 /* Criollo.podSpec in Resources */ = {isa = PBXBuildFile; fileRef = AD609C5E1BDA7A4C0003E702 /* Criollo.podSpec */; settings = {ASSET_TAGS = (); }; };
+		AD61E9761BDD7FDF00F5BD17 /* CRHTTPServer.h in Headers */ = {isa = PBXBuildFile; fileRef = AD61E9741BDD7FDF00F5BD17 /* CRHTTPServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AD61E9771BDD7FDF00F5BD17 /* CRHTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = AD61E9751BDD7FDF00F5BD17 /* CRHTTPServer.m */; settings = {ASSET_TAGS = (); }; };
+		AD61E97A1BDD80C100F5BD17 /* CRHTTPConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = AD61E9781BDD80C100F5BD17 /* CRHTTPConnection.h */; settings = {ASSET_TAGS = (); }; };
+		AD61E97B1BDD80C100F5BD17 /* CRHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = AD61E9791BDD80C100F5BD17 /* CRHTTPConnection.m */; settings = {ASSET_TAGS = (); }; };
+		AD61E9811BDD880C00F5BD17 /* CRFCGIConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = AD61E97D1BDD880C00F5BD17 /* CRFCGIConnection.h */; settings = {ASSET_TAGS = (); }; };
+		AD61E9821BDD880C00F5BD17 /* CRFCGIConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = AD61E97E1BDD880C00F5BD17 /* CRFCGIConnection.m */; settings = {ASSET_TAGS = (); }; };
+		AD61E9831BDD880C00F5BD17 /* CRFCGIServer.h in Headers */ = {isa = PBXBuildFile; fileRef = AD61E97F1BDD880C00F5BD17 /* CRFCGIServer.h */; settings = {ASSET_TAGS = (); }; };
+		AD61E9841BDD880C00F5BD17 /* CRFCGIServer.m in Sources */ = {isa = PBXBuildFile; fileRef = AD61E9801BDD880C00F5BD17 /* CRFCGIServer.m */; settings = {ASSET_TAGS = (); }; };
 		ADEDB37C1AEFC0B000A26AF1 /* Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB37B1AEFC0B000A26AF1 /* Criollo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ADEDB3A41AEFCC6400A26AF1 /* CRApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = ADEDB34F1AEFBD8800A26AF1 /* CRApplication.m */; };
 		ADEDB3A61AEFCC6400A26AF1 /* NSDate+RFC1123.m in Sources */ = {isa = PBXBuildFile; fileRef = ADEDB3601AEFBD8800A26AF1 /* NSDate+RFC1123.m */; };
@@ -35,6 +43,14 @@
 		AD609C591BDA661F0003E702 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = Libraries/CocoaAsyncSocket/Source/GCD/GCDAsyncSocket.h; sourceTree = "<group>"; };
 		AD609C5A1BDA661F0003E702 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = Libraries/CocoaAsyncSocket/Source/GCD/GCDAsyncSocket.m; sourceTree = "<group>"; };
 		AD609C5E1BDA7A4C0003E702 /* Criollo.podSpec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Criollo.podSpec; sourceTree = SOURCE_ROOT; };
+		AD61E9741BDD7FDF00F5BD17 /* CRHTTPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRHTTPServer.h; sourceTree = "<group>"; };
+		AD61E9751BDD7FDF00F5BD17 /* CRHTTPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPServer.m; sourceTree = "<group>"; };
+		AD61E9781BDD80C100F5BD17 /* CRHTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRHTTPConnection.h; sourceTree = "<group>"; };
+		AD61E9791BDD80C100F5BD17 /* CRHTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPConnection.m; sourceTree = "<group>"; };
+		AD61E97D1BDD880C00F5BD17 /* CRFCGIConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFCGIConnection.h; sourceTree = "<group>"; };
+		AD61E97E1BDD880C00F5BD17 /* CRFCGIConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRFCGIConnection.m; sourceTree = "<group>"; };
+		AD61E97F1BDD880C00F5BD17 /* CRFCGIServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFCGIServer.h; sourceTree = "<group>"; };
+		AD61E9801BDD880C00F5BD17 /* CRFCGIServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRFCGIServer.m; sourceTree = "<group>"; };
 		ADEDB34E1AEFBD8800A26AF1 /* CRApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRApplication.h; sourceTree = "<group>"; };
 		ADEDB34F1AEFBD8800A26AF1 /* CRApplication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRApplication.m; sourceTree = "<group>"; };
 		ADEDB35F1AEFBD8800A26AF1 /* NSDate+RFC1123.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSDate+RFC1123.h"; path = "Criollo/Source/NSDate+RFC1123.h"; sourceTree = "<group>"; };
@@ -56,6 +72,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AD61E9731BDD7F8000F5BD17 /* HTTP */ = {
+			isa = PBXGroup;
+			children = (
+				AD61E9741BDD7FDF00F5BD17 /* CRHTTPServer.h */,
+				AD61E9751BDD7FDF00F5BD17 /* CRHTTPServer.m */,
+				AD61E9781BDD80C100F5BD17 /* CRHTTPConnection.h */,
+				AD61E9791BDD80C100F5BD17 /* CRHTTPConnection.m */,
+			);
+			path = HTTP;
+			sourceTree = "<group>";
+		};
+		AD61E97C1BDD880C00F5BD17 /* FCGI */ = {
+			isa = PBXGroup;
+			children = (
+				AD61E97F1BDD880C00F5BD17 /* CRFCGIServer.h */,
+				AD61E9801BDD880C00F5BD17 /* CRFCGIServer.m */,
+				AD61E97D1BDD880C00F5BD17 /* CRFCGIConnection.h */,
+				AD61E97E1BDD880C00F5BD17 /* CRFCGIConnection.m */,
+			);
+			path = FCGI;
+			sourceTree = "<group>";
+		};
 		ADEDB3471AEFBCF700A26AF1 = {
 			isa = PBXGroup;
 			children = (
@@ -107,6 +145,8 @@
 		ADEDB3AB1AEFCCCD00A26AF1 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				AD61E97C1BDD880C00F5BD17 /* FCGI */,
+				AD61E9731BDD7F8000F5BD17 /* HTTP */,
 				ADEDB37B1AEFC0B000A26AF1 /* Criollo.h */,
 				AD4AE76A1BDA7FF100B9F221 /* Criollo.m */,
 				ADEDB34E1AEFBD8800A26AF1 /* CRApplication.h */,
@@ -128,10 +168,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD61E9831BDD880C00F5BD17 /* CRFCGIServer.h in Headers */,
+				AD61E9761BDD7FDF00F5BD17 /* CRHTTPServer.h in Headers */,
+				AD61E97A1BDD80C100F5BD17 /* CRHTTPConnection.h in Headers */,
 				AD19695E1B626EF90098CA89 /* CRServer.h in Headers */,
 				AD4AE7721BDAB1C300B9F221 /* CRConnection.h in Headers */,
 				ADEDB37C1AEFC0B000A26AF1 /* Criollo.h in Headers */,
 				AD609C5B1BDA661F0003E702 /* GCDAsyncSocket.h in Headers */,
+				AD61E9811BDD880C00F5BD17 /* CRFCGIConnection.h in Headers */,
 				ADEDB3A71AEFCC8B00A26AF1 /* CRApplication.h in Headers */,
 				AD227F8A1BDC3F6000C23D52 /* CRServerConfiguration.h in Headers */,
 				ADEDB3AA1AEFCC8B00A26AF1 /* NSDate+RFC1123.h in Headers */,
@@ -208,10 +252,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD4AE76B1BDA7FF100B9F221 /* Criollo.m in Sources */,
+				AD61E9821BDD880C00F5BD17 /* CRFCGIConnection.m in Sources */,
 				ADEDB3A41AEFCC6400A26AF1 /* CRApplication.m in Sources */,
+				AD61E97B1BDD80C100F5BD17 /* CRHTTPConnection.m in Sources */,
 				AD227F8B1BDC3F6000C23D52 /* CRServerConfiguration.m in Sources */,
 				AD4AE7731BDAB1C300B9F221 /* CRConnection.m in Sources */,
 				ADEDB3A61AEFCC6400A26AF1 /* NSDate+RFC1123.m in Sources */,
+				AD61E9771BDD7FDF00F5BD17 /* CRHTTPServer.m in Sources */,
+				AD61E9841BDD880C00F5BD17 /* CRFCGIServer.m in Sources */,
 				AD609C5C1BDA661F0003E702 /* GCDAsyncSocket.m in Sources */,
 				AD19695F1B626EF90098CA89 /* CRServer.m in Sources */,
 			);

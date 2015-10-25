@@ -99,12 +99,7 @@ NSString* const CRResponseKey = @"CRResponse";
 #pragma mark - Connections
 
 - (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket {
-    CRConnection* connection = [[CRConnection alloc] initWithSocket:socket server:self];
-    if ( [self.delegate respondsToSelector:@selector(server:didAcceptConnection:)]) {
-        [self.delegate server:self didAcceptConnection:connection];
-    }
-    [connection startReading];
-    return connection;
+    return [[CRConnection alloc] initWithSocket:socket server:self];
 }
 
 - (void)didCloseConnection:(CRConnection*)connection {
@@ -123,6 +118,10 @@ NSString* const CRResponseKey = @"CRResponse";
     @synchronized(self.connections) {
         [self.connections addObject:connection];
     }
+    if ( [self.delegate respondsToSelector:@selector(server:didAcceptConnection:)]) {
+        [self.delegate server:self didAcceptConnection:connection];
+    }
+    [connection startReading];
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {

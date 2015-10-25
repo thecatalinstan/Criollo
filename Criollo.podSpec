@@ -29,8 +29,8 @@ Pod::Spec.new do |s|
 
   s.source       =  { :git => "https://github.com/thecatalinstan/Criollo.git", :tag => s.version }
 
-  s.source_files  = "Criollo", "Criollo/Classes/*.{h,m}, "Libraries/CocoaAsyncSocket/GCD/GCDAsyncSocket.{h,m}"
-  s.public_header_files = "Criollo", "Criollo/Classes/*.h", "Libraries/CocoaAsyncSocket/GCD/GCDAsyncSocket.h"
+  s.source_files  = "Criollo", "Criollo/Source/*.{h,m}", "Criollo/Source/HTTP/*.{h,m}", "Criollo/Source/FCGI/*.{h,m}", "Libraries/CocoaAsyncSocket/Source/GCD/GCDAsyncSocket.{h,m}"
+  s.public_header_files = "Criollo", "Criollo/Source/*.h", "Criollo/Source/HTTP/*.h", "Criollo/Source/FCGI/*.h", "Libraries/CocoaAsyncSocket/Source/GCD/GCDAsyncSocket.h"
 
   s.osx.deployment_target = "10.10"
   s.osx.frameworks = "CFNetwork", "Foundation"
