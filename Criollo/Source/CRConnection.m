@@ -67,11 +67,18 @@
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData*)data withTag:(long)tag {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [self.socket writeData:data withTimeout:self.server.configuration.CRConnectionInitialReadTimeout tag:0];
+    NSString* string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    if ( [string.lowercaseString isEqualToString:@"bye\r\n"] ) {
+        [self.socket writeData:[@"Bye.\r\n" dataUsingEncoding:NSUTF8StringEncoding] withTimeout:self.server.configuration.CRConnectionInitialReadTimeout tag:0];
+        [self.socket disconnectAfterWriting];
+    } else {
+        [self.socket writeData:data withTimeout:self.server.configuration.CRConnectionInitialReadTimeout tag:0];
+    }
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    [self.socket readDataToData:[CRConnection CRLFData] withTimeout:self.server.configuration.CRConnectionInitialReadTimeout tag:0];
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
