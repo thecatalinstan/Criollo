@@ -7,8 +7,6 @@
 //
 
 #define CRSocketTagSendingResponse                      20
-#define CRSocketTagSendingResponseHeaders               21
-#define CRSocketTagSendingResponseBody                  22
 
 #define CRSocketTagBeginReadingRequest                  10
 #define CRSocketTagReadingRequestHeader                 11

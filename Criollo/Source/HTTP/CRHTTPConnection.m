@@ -72,20 +72,17 @@
         [self.response setValue:@"keep-alive" forHTTPHeaderField:@"Connection"];
         [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
 
-        //        [response setValue:@"chunked" forHTTPHeaderField:@"Transfer-encoding"];
+//        [response setValue:@"chunked" forHTTPHeaderField:@"Transfer-encoding"];
 
         [self.response writeString:@"<h1>Hello world!</h1>"];
         @synchronized(self.server.connections) {
             [self.response writeFormat:@"<pre>Conntections: %@</pre>",[self.server.connections valueForKeyPath:@"request.URL.path"]];
         }
-        [self.response end];
+        [self.response finish];
     }];
 }
 
-- (void)handleError:(NSUInteger)errorType object:(id)object
-{
-    NSLog(@"%s %lu %@", __PRETTY_FUNCTION__, errorType, object);
-
+- (void)handleError:(NSUInteger)errorType object:(id)object {
     NSUInteger statusCode = 500;
 
     switch (errorType) {
@@ -96,7 +93,7 @@
 
         case CRErrorRequestUnsupportedMethod:
             statusCode = 405;
-            [CRApp logErrorFormat:@"Unsuppoerted method %@ for path %@", [object method], [object URL]];
+            [CRApp logErrorFormat:@"Cannot %@", object[CRRequestKey]];
             break;
 
         default:
@@ -113,22 +110,28 @@
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData*)data withTag:(long)tag {
     NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
+    NSLog(@" * %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
 
     if ( tag == CRSocketTagBeginReadingRequest ) {
         // Parse the first line of the header
         NSString* decodedHeader = [[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(0, data.length - 2)] encoding:NSUTF8StringEncoding];
-        NSArray* decodedHeaderComponents = [decodedHeader componentsSeparatedByString:@" "];
+        NSArray* decodedHeaderComponents = [decodedHeader componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 
-        NSString* method = decodedHeaderComponents[0];
-        NSString* path = decodedHeaderComponents[1];
-        NSString* version = decodedHeaderComponents[2];
-
-        if ( [self.server canHandleHTTPMethod:method forPath:path] ) {
-            self.request = [[CRRequest alloc] initWithMethod:method URL:[NSURL URLWithString:path] version:version];
+        if ( decodedHeaderComponents.count == 3 ) {
+            NSString *method = decodedHeaderComponents[0];
+            NSString *path = decodedHeaderComponents[1];
+            NSString *version = decodedHeaderComponents[2];
+            if ( [self.server canHandleHTTPMethod:method forPath:path] ) {
+                self.request = [[CRRequest alloc] initWithMethod:method URL:[NSURL URLWithString:path] version:version];
+            } else {
+                [self handleError:CRErrorRequestUnsupportedMethod object:@{CRRequestKey:[NSString stringWithFormat:@"%@ %@", method, path]}];
+                return;
+            }
         } else {
-            [self handleError:CRErrorRequestUnsupportedMethod object:self.request];
+            [self handleError:CRErrorRequestMalformedRequest object:data];
             return;
         }
+
     }
 
     BOOL result = [self.request appendData:data];
@@ -177,9 +180,9 @@
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%s %lu", __PRETTY_FUNCTION__, tag);
 
-    switch (tag) {
+    switch ( tag ) {
         case CRSocketTagFinishSendingResponseAndClosing:
         case CRSocketTagFinishSendingResponse:
             self.request = nil;

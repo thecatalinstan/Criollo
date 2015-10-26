@@ -93,32 +93,57 @@ NSString* const CRRequestBodyBufferSizeKey = @"CRRequestBodyBufferSize";
     // Timeouts
     if ( [mainBundle objectForInfoDictionaryKey:CRConnectionInitialReadTimeoutKey] ) {
         self.CRConnectionInitialReadTimeout = [[mainBundle objectForInfoDictionaryKey:CRConnectionInitialReadTimeoutKey] integerValue];
+    } else {
+        self.CRConnectionInitialReadTimeout = CRConnectionDefaultInitialReadTimeout;
     }
     if ( [mainBundle objectForInfoDictionaryKey:CRHTTPConnectionReadHeaderLineTimeoutKey] ) {
         self.CRHTTPConnectionReadHeaderLineTimeout = [[mainBundle objectForInfoDictionaryKey:CRHTTPConnectionReadHeaderLineTimeoutKey] integerValue];
+    } else {
+        self.CRHTTPConnectionReadHeaderLineTimeout = CRHTTPConnectionDefaultReadHeaderLineTimeout;
+    }
+    if ( [mainBundle objectForInfoDictionaryKey:CRHTTPConnectionReadHeaderTimeoutKey] ) {
+        self.CRHTTPConnectionReadHeaderTimeout = [[mainBundle objectForInfoDictionaryKey:CRHTTPConnectionReadHeaderTimeoutKey] integerValue];
+    } else {
+        self.CRHTTPConnectionReadHeaderTimeout = CRHTTPConnectionDefaultReadHeaderTimeout;
     }
     if ( [mainBundle objectForInfoDictionaryKey:CRHTTPConnectionReadBodyTimeoutKey] ) {
         self.CRHTTPConnectionReadBodyTimeout = [[mainBundle objectForInfoDictionaryKey:CRHTTPConnectionReadBodyTimeoutKey] integerValue];
+    } else {
+        self.CRHTTPConnectionReadBodyTimeout = CRHTTPConnectionDefaultReadBodyTimeout;
     }
     if ( [mainBundle objectForInfoDictionaryKey:CRHTTPConnectionWriteHeaderTimeoutKey] ) {
         self.CRHTTPConnectionWriteHeaderTimeout = [[mainBundle objectForInfoDictionaryKey:CRHTTPConnectionWriteHeaderTimeoutKey] integerValue];
+    } else {
+        self.CRHTTPConnectionWriteHeaderTimeout = CRHTTPConnectionDefaultWriteHeaderTimeout;
     }
     if ( [mainBundle objectForInfoDictionaryKey:CRHTTPConnectionWriteBodyTimeoutKey] ) {
         self.CRHTTPConnectionWriteBodyTimeout = [[mainBundle objectForInfoDictionaryKey:CRHTTPConnectionWriteBodyTimeoutKey] integerValue];
+    } else {
+        self.CRHTTPConnectionWriteBodyTimeout = CRHTTPConnectionDefaultWriteBodyTimeout;
     }
     if ( [mainBundle objectForInfoDictionaryKey:CRHTTPConnectionWriteGeneralTimeoutKey] ) {
         self.CRHTTPConnectionWriteGeneralTimeout = [[mainBundle objectForInfoDictionaryKey:CRHTTPConnectionWriteGeneralTimeoutKey] integerValue];
+    } else {
+        self.CRHTTPConnectionWriteGeneralTimeout = CRHTTPConnectionDefaultWriteGeneralTimeout;
     }
 
+    // Limits
     if ( [mainBundle objectForInfoDictionaryKey:CRRequestMaxHeaderLineLengthKey] ) {
         self.CRRequestMaxHeaderLineLength = [[mainBundle objectForInfoDictionaryKey:CRRequestMaxHeaderLineLengthKey] integerValue];
+    } else {
+        self.CRRequestMaxHeaderLineLength = CRRequestDefaultMaxHeaderLineLength;
     }
     if ( [mainBundle objectForInfoDictionaryKey:CRRequestMaxHeaderLengthKey] ) {
         self.CRRequestMaxHeaderLength = [[mainBundle objectForInfoDictionaryKey:CRRequestMaxHeaderLengthKey] integerValue];
+    } else {
+        self.CRRequestMaxHeaderLength = CRRequestDefaultMaxHeaderLength;
     }
-    
+
+    // Buffers
     if ( [mainBundle objectForInfoDictionaryKey:CRRequestBodyBufferSizeKey] ) {
         self.CRRequestBodyBufferSize = [[mainBundle objectForInfoDictionaryKey:CRRequestBodyBufferSizeKey] integerValue];
+    } else {
+        self.CRRequestBodyBufferSize = CRRequestDefaultBodyBufferSize;
     }
 }
 

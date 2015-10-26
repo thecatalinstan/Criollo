@@ -101,6 +101,7 @@
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
+    NSLog(@"%s %@", __PRETTY_FUNCTION__, err);
     self.socket = nil;
     self.request = nil;
     self.response = nil;
