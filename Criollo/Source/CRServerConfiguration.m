@@ -14,6 +14,7 @@ NSUInteger const CRServerDefaultPort = 10781;
 
 NSUInteger const CRConnectionDefaultInitialReadTimeout = 30;
 NSUInteger const CRHTTPConnectionDefaultReadHeaderLineTimeout = 30;
+NSUInteger const CRHTTPConnectionDefaultReadHeaderTimeout = 30;
 NSUInteger const CRHTTPConnectionDefaultReadBodyTimeout = 30;
 NSUInteger const CRHTTPConnectionDefaultWriteHeaderTimeout = 30;
 NSUInteger const CRHTTPConnectionDefaultWriteBodyTimeout = 0;
@@ -29,6 +30,7 @@ NSString* const CRServerPortKey = @"CRServerPort";
 
 NSString* const CRConnectionInitialReadTimeoutKey = @"CRConnectionInitialReadTimeout";
 NSString* const CRHTTPConnectionReadHeaderLineTimeoutKey = @"CRHTTPConnectionReadHeaderLineTimeout";
+NSString* const CRHTTPConnectionReadHeaderTimeoutKey = @"CRHTTPConnectionReadHeaderTimeout";
 NSString* const CRHTTPConnectionReadBodyTimeoutKey = @"CRHTTPConnectionReadBodyTimeout";
 NSString* const CRHTTPConnectionWriteHeaderTimeoutKey = @"CRHTTPConnectionWriteHeaderTimeout";
 NSString* const CRHTTPConnectionWriteBodyTimeoutKey = @"CRHTTPConnectionWriteBodyTimeout";

@@ -20,7 +20,7 @@
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    self.server = [[CRServer alloc] initWithDelegate:self];
+    self.server = [[CRHTTPServer alloc] initWithDelegate:self];
     NSError* error;
     if ( ! [self.server startListening:&error] ) {
         [CRApp logErrorFormat:@"Failed to start server. %@", error.localizedDescription];

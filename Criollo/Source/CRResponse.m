@@ -8,6 +8,8 @@
 
 #import "CRResponse.h"
 #import "CRApplication.h"
+#import "CRServer.h"
+#import "CRServerConfiguration.h"
 #import "CRConnection.h"
 #import "GCDAsyncSocket.h"
 #import "NSDate+RFC1123.h"
@@ -84,7 +86,7 @@
     }
     
     [self setBody:nil];
-    [self.connection.socket writeData:self.data withTimeout:CRSocketWriteHeaderTimeout tag:CRSocketTagSendingResponse];
+    [self.connection.socket writeData:self.data withTimeout:self.connection.server.configuration.CRHTTPConnectionWriteHeaderTimeout tag:CRSocketTagSendingResponse];
     
     alreadySentHeaders = YES;
 }
@@ -92,7 +94,7 @@
 - (void)writeData:(NSData *)data withTag:(long)tag
 {
     [self writeHeaders];
-    [self.connection.socket writeData:data withTimeout:CRSocketWriteGeneralTimeout tag:tag];
+    [self.connection.socket writeData:data withTimeout:self.connection.server.configuration.CRHTTPConnectionWriteGeneralTimeout tag:tag];
 }
 
 - (void)writeData:(NSData*)data
@@ -117,7 +119,6 @@
 
 - (void)writeFormat:(NSString*)format, ...
 {
-
     va_list args;
     va_start(args, format);
     NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];

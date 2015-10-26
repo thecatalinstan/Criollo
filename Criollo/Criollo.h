@@ -26,3 +26,5 @@
 
 FOUNDATION_EXPORT NSString* const Criollo;
 FOUNDATION_EXPORT NSString* const CRErrorDomain;
+
+typedef NSUInteger CRError;

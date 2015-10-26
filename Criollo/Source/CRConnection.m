@@ -10,6 +10,8 @@
 #import "CRServer.h"
 #import "CRServerConfiguration.h"
 #import "GCDAsyncSocket.h"
+#import "CRRequest.h"
+#import "CRResponse.h"
 
 @interface CRConnection () <GCDAsyncSocketDelegate>
 
@@ -57,9 +59,37 @@
     return self;
 }
 
+- (void)dealloc {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [self.socket setDelegate:nil delegateQueue:NULL];
+    [self.socket disconnect];
+}
+
 #pragma mark - Data
 
 - (void)startReading {
+}
+
+- (void)didReceiveCompleteRequestHeaders {
+    NSLog(@"%s, %@", __PRETTY_FUNCTION__, self.request.allHTTPHeaderFields);
+}
+
+- (void)didReceiveRequestBody {
+    NSLog(@"%s, %lu bytes", __PRETTY_FUNCTION__, self.request.body.length);
+}
+
+- (void)didReceiveCompleteRequest {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+#pragma mark - State
+- (BOOL)shouldClose {
+    BOOL shouldClose = NO;
+    NSString *connectionHeader = [self.request valueForHTTPHeaderField:@"Connection"];
+    if ( connectionHeader != nil ) {
+        shouldClose = [connectionHeader caseInsensitiveCompare:@"close"] == NSOrderedSame;
+    }
+    return shouldClose;
 }
 
 #pragma mark - GCDAsyncSocketDelegate
@@ -72,6 +102,9 @@
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
     self.socket = nil;
+    self.request = nil;
+    self.response = nil;
+
     dispatch_async(self.server.delegateQueue, ^{ @autoreleasepool {
         [self.server didCloseConnection:self];
     }});

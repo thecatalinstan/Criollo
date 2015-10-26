@@ -111,6 +111,13 @@ NSString* const CRResponseKey = @"CRResponse";
     }
 }
 
+#pragma mark - Routing
+
+- (BOOL)canHandleHTTPMethod:(NSString *)HTTPMethod forPath:(NSString *)path
+{
+    return YES;
+}
+
 #pragma mark - GCDAsyncSocketDelegate
 
 - (void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket {

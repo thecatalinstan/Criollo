@@ -8,6 +8,8 @@
 
 #import "CRConnection.h"
 
+@class CRRequest, CRResponse;
+
 @interface CRHTTPConnection : CRConnection
 
 @end

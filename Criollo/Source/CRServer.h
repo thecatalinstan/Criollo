@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Cătălin Stan. All rights reserved.
 //
 
-@class CRServer, CRServerConfiguration, GCDAsyncSocket, CRConnection;
+@class CRServer, CRServerConfiguration, GCDAsyncSocket, CRConnection, CRRequest;
 
 FOUNDATION_EXPORT NSUInteger const CRErrorSocketError;
 
@@ -49,5 +49,7 @@ FOUNDATION_EXPORT NSString* const CRResponseKey;
 
 - (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket;
 - (void)didCloseConnection:(CRConnection*)connection;
+
+- (BOOL)canHandleHTTPMethod:(NSString*)HTTPMethod forPath:(NSString*)path;
 
 @end

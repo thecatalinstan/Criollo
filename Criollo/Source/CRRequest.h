@@ -8,6 +8,9 @@
 
 #import "CRMessage.h"
 
+#define CRErrorRequestMalformedRequest      3001
+#define    CRErrorRequestUnsupportedMethod  3002
+
 @interface CRRequest : CRMessage
 
 @property (nonatomic, readonly) NSURL* URL;

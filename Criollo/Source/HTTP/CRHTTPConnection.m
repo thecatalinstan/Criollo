@@ -8,34 +8,194 @@
 
 #import "CRHTTPConnection.h"
 #import "GCDAsyncSocket.h"
+#import "CRApplication.h"
 #import "CRServer.h"
 #import "CRServerConfiguration.h"
+#import "CRRequest.h"
+#import "CRResponse.h"
 
-#define CRSocketTagBeginReadingRequest                  10
-#define CRSocketTagReadingRequestHeader                 11
-#define CRSocketTagReadingRequestBody                   12
+@interface CRHTTPConnection () {
+    NSUInteger requestBodyLength;
+    NSUInteger requestBodyReceivedBytesLength;
+}
 
-#define CRSocketTagSendingResponse                      20
-#define CRSocketTagSendingResponseHeaders               21
-#define CRSocketTagSendingResponseBody                  22
+- (void)didReceiveRequestHeaderData:(NSData*)data;
+- (void)didReceiveRequestBodyData:(NSData*)data;
 
-#define CRSocketTagFinishSendingResponse                90
-#define CRSocketTagFinishSendingResponseAndClosing      91
+@end
 
 @implementation CRHTTPConnection
+
+- (instancetype)initWithSocket:(GCDAsyncSocket *)socket server:(CRServer *)server delegateQueue:(dispatch_queue_t)delegateQueue {
+    self = [super initWithSocket:socket server:server delegateQueue:delegateQueue];
+    if ( self != nil ) {
+
+    }
+    return self;
+}
 
 #pragma mark - Data
 
 - (void)startReading {
-//    [self.socket readDataToData:[CRConnection CRLFCRLFData] withTimeout:self.server.configuration.CRConnectionInitialReadTimeout maxLength:self.server.configuration.CRRequestMaxHeaderLineLength tag:CRSocketTagBeginReadingRequest];
+    requestBodyLength = 0;
+    requestBodyReceivedBytesLength = 0;
+
+    // Read the first request header
+    [self.socket readDataToData:[CRConnection CRLFData] withTimeout:self.server.configuration.CRConnectionInitialReadTimeout + self.server.configuration.CRHTTPConnectionReadHeaderLineTimeout maxLength:self.server.configuration.CRRequestMaxHeaderLineLength tag:CRSocketTagBeginReadingRequest];
+}
+
+- (void)didReceiveRequestHeaderData:(NSData*)data {
+    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
+}
+
+- (void)didReceiveRequestBodyData:(NSData*)data {
+    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
+}
+
+- (void)didReceiveCompleteRequestHeaders {
+    [super didReceiveCompleteRequestHeaders];
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+- (void)didReceiveRequestBody {
+    [super didReceiveRequestBody];
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+- (void)didReceiveCompleteRequest {
+    [super didReceiveCompleteRequest];
+
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
+    [self.server.workerQueue addOperationWithBlock:^{
+        self.response = [[CRResponse alloc] initWithHTTPConnection:self HTTPStatusCode:200];
+        [self.response setValue:@"keep-alive" forHTTPHeaderField:@"Connection"];
+        [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+
+        //        [response setValue:@"chunked" forHTTPHeaderField:@"Transfer-encoding"];
+
+        [self.response writeString:@"<h1>Hello world!</h1>"];
+        @synchronized(self.server.connections) {
+            [self.response writeFormat:@"<pre>Conntections: %@</pre>",[self.server.connections valueForKeyPath:@"request.URL.path"]];
+        }
+        [self.response end];
+    }];
+}
+
+- (void)handleError:(NSUInteger)errorType object:(id)object
+{
+    NSLog(@"%s %lu %@", __PRETTY_FUNCTION__, errorType, object);
+
+    NSUInteger statusCode = 500;
+
+    switch (errorType) {
+        case CRErrorRequestMalformedRequest:
+            statusCode = 400;
+            [CRApp logErrorFormat:@"Malformed request: %@", [[NSString alloc] initWithData:object encoding:NSUTF8StringEncoding] ];
+            break;
+
+        case CRErrorRequestUnsupportedMethod:
+            statusCode = 405;
+            [CRApp logErrorFormat:@"Unsuppoerted method %@ for path %@", [object method], [object URL]];
+            break;
+
+        default:
+            break;
+    }
+
+    self.response = [[CRResponse alloc] initWithHTTPConnection:self HTTPStatusCode:statusCode];
+    [self.response setValue:@"0" forHTTPHeaderField:@"Content-length"];
+    [self.response setValue:@"close" forHTTPHeaderField:@"Connection"];
+    [self.response end];
 }
 
 #pragma mark - GCDAsyncSocketDelegate
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData*)data withTag:(long)tag {
+    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
+
+    if ( tag == CRSocketTagBeginReadingRequest ) {
+        // Parse the first line of the header
+        NSString* decodedHeader = [[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(0, data.length - 2)] encoding:NSUTF8StringEncoding];
+        NSArray* decodedHeaderComponents = [decodedHeader componentsSeparatedByString:@" "];
+
+        NSString* method = decodedHeaderComponents[0];
+        NSString* path = decodedHeaderComponents[1];
+        NSString* version = decodedHeaderComponents[2];
+
+        if ( [self.server canHandleHTTPMethod:method forPath:path] ) {
+            self.request = [[CRRequest alloc] initWithMethod:method URL:[NSURL URLWithString:path] version:version];
+        } else {
+            [self handleError:CRErrorRequestUnsupportedMethod object:self.request];
+            return;
+        }
+    }
+
+    BOOL result = [self.request appendData:data];
+    if (!result) {
+        // Failed on first read
+        [self handleError:CRErrorRequestMalformedRequest object:data];
+        return;
+    }
+
+    switch (tag) {
+        case CRSocketTagBeginReadingRequest:
+            // We've read the first header line and it's ok.
+            // Continue to read the rest of the headers
+            [self didReceiveRequestHeaderData:data];
+            [self.socket readDataToData:[CRConnection CRLFCRLFData] withTimeout:self.server.configuration.CRHTTPConnectionReadHeaderTimeout maxLength:self.server.configuration.CRRequestMaxHeaderLength tag:CRSocketTagReadingRequestHeader];
+            break;
+
+        case CRSocketTagReadingRequestHeader:
+            // We have all the headers
+            [self didReceiveRequestHeaderData:data];
+            [self didReceiveCompleteRequestHeaders];
+
+            requestBodyLength = [self.request valueForHTTPHeaderField:@"Content-Length"].integerValue;
+            if ( requestBodyLength > 0 ) {
+                NSUInteger bytesToRead = requestBodyLength < self.server.configuration.CRRequestBodyBufferSize ? requestBodyLength : self.server.configuration.CRRequestBodyBufferSize;
+                [self.socket readDataToLength:bytesToRead withTimeout:self.server.configuration.CRHTTPConnectionReadBodyTimeout tag:CRSocketTagReadingRequestBody];
+            } else {
+                [self didReceiveCompleteRequest];
+            }
+            break;
+
+        case CRSocketTagReadingRequestBody:
+            // We are receiving data
+            [self didReceiveRequestBodyData:data];
+            requestBodyReceivedBytesLength += data.length;
+
+            if (requestBodyReceivedBytesLength < requestBodyLength) {
+                NSUInteger requestBodyLeftBytesLength = requestBodyLength - requestBodyReceivedBytesLength;
+                NSUInteger bytesToRead = requestBodyLeftBytesLength < self.server.configuration.CRRequestBodyBufferSize ? requestBodyLeftBytesLength : self.server.configuration.CRRequestBodyBufferSize;
+                [self.socket readDataToLength:bytesToRead withTimeout:self.server.configuration.CRHTTPConnectionReadBodyTimeout tag:CRSocketTagReadingRequestBody];
+            } else {
+                [self didReceiveCompleteRequest];
+            }
+            break;
+    }
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
+    switch (tag) {
+        case CRSocketTagFinishSendingResponseAndClosing:
+        case CRSocketTagFinishSendingResponse:
+            self.request = nil;
+            self.response = nil;
+            if ( tag == CRSocketTagFinishSendingResponseAndClosing || self.shouldClose) {
+                [self.socket disconnect];
+                return;
+            } else {
+                [self startReading];
+            }
+            break;
+
+        default:
+            break;
+    }
+
 }
 
 @end

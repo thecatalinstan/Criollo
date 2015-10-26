@@ -29,6 +29,7 @@ FOUNDATION_EXPORT NSString* const CRServerPortKey;
 
 FOUNDATION_EXPORT NSString* const CRConnectionInitialReadTimeoutKey;
 FOUNDATION_EXPORT NSString* const CRHTTPConnectionReadHeaderLineTimeoutKey;
+FOUNDATION_EXPORT NSString* const CRHTTPConnectionReadHeaderTimeoutKey;
 FOUNDATION_EXPORT NSString* const CRHTTPConnectionReadBodyTimeoutKey;
 FOUNDATION_EXPORT NSString* const CRHTTPConnectionWriteHeaderTimeoutKey;
 FOUNDATION_EXPORT NSString* const CRHTTPConnectionWriteBodyTimeoutKey;
@@ -47,6 +48,7 @@ FOUNDATION_EXPORT NSString* const CRRequestBodyBufferSizeKey;
 
 @property (nonatomic, assign) NSUInteger CRConnectionInitialReadTimeout;
 @property (nonatomic, assign) NSUInteger CRHTTPConnectionReadHeaderLineTimeout;
+@property (nonatomic, assign) NSUInteger CRHTTPConnectionReadHeaderTimeout;
 @property (nonatomic, assign) NSUInteger CRHTTPConnectionReadBodyTimeout;
 @property (nonatomic, assign) NSUInteger CRHTTPConnectionWriteHeaderTimeout;
 @property (nonatomic, assign) NSUInteger CRHTTPConnectionWriteBodyTimeout;
