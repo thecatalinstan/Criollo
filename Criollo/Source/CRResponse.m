@@ -78,10 +78,10 @@
         return;
     }
 
-    if ( [self valueForHTTPHeaderField:@"Date"] == nil ) {
-        [self setValue:[[NSDate date] rfc1123String] forHTTPHeaderField:@"Date"];
-    }
-    
+//    if ( [self valueForHTTPHeaderField:@"Date"] == nil ) {
+//        [self setValue:[[NSDate date] rfc1123String] forHTTPHeaderField:@"Date"];
+//    }
+
     if ( [self valueForHTTPHeaderField:@"Content-Type"] == nil ) {
         [self setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
     }

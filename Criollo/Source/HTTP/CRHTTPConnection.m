@@ -17,6 +17,7 @@
 @interface CRHTTPConnection () {
     NSUInteger requestBodyLength;
     NSUInteger requestBodyReceivedBytesLength;
+    BOOL didPerformInitialRead;
 }
 
 - (void)didReceiveRequestHeaderData:(NSData*)data;
@@ -41,7 +42,7 @@
     requestBodyReceivedBytesLength = 0;
 
     // Read the first request header
-    [self.socket readDataToData:[CRConnection CRLFData] withTimeout:self.server.configuration.CRConnectionInitialReadTimeout + self.server.configuration.CRHTTPConnectionReadHeaderLineTimeout maxLength:self.server.configuration.CRRequestMaxHeaderLineLength tag:CRSocketTagBeginReadingRequest];
+    [self.socket readDataToData:[CRConnection CRLFData] withTimeout:(didPerformInitialRead ? self.server.configuration.CRHTTPConnectionKeepAliveTimeout : self.server.configuration.CRConnectionInitialReadTimeout) + self.server.configuration.CRHTTPConnectionReadHeaderLineTimeout maxLength:self.server.configuration.CRRequestMaxHeaderLineLength tag:CRSocketTagBeginReadingRequest];
 }
 
 - (void)didReceiveRequestHeaderData:(NSData*)data {
@@ -62,15 +63,7 @@
     [super didReceiveCompleteRequest];
 
     NSMutableString* string = [NSMutableString stringWithString:@"<h1>Hello world!</h1>"];
-    @synchronized(self.server.connections) {
-        [string appendFormat:@"<pre>Conntections: %lu</pre>", self.server.connections.count];
-    }
-
     self.response = [[CRResponse alloc] initWithHTTPConnection:self HTTPStatusCode:200 description:@"asdfadsfas" version:self.request.version];
-
-//    NSString* connectionHeader = [self.request valueForHTTPHeaderField:@"Connection"];
-//    [self.response setValue:@"keep-alive" forHTTPHeaderField:@"Connection"];
-//    [self.response setValue:@(string.length).stringValue forHTTPHeaderField:@"Content-length"];
     [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
     [self.response writeString:string];
     [self.response finish];
@@ -103,6 +96,8 @@
 #pragma mark - GCDAsyncSocketDelegate
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData*)data withTag:(long)tag {
+
+    didPerformInitialRead = YES;
 
     if ( tag == CRSocketTagBeginReadingRequest ) {
         // Parse the first line of the header
@@ -181,8 +176,6 @@
             } else {
                 [self startReading];
             }
-            self.request = nil;
-            self.response = nil;
             break;
 
         default:

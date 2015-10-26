@@ -21,8 +21,12 @@ NSUInteger const CRHTTPConnectionDefaultWriteBodyTimeout = 0;
 NSUInteger const CRHTTPConnectionDefaultWriteGeneralTimeout = 30;
 
 NSUInteger const CRRequestDefaultMaxHeaderLineLength = 1024;
-NSUInteger const CRRequestDefaultMaxHeaderLength = 10 * 1024;
-NSUInteger const CRRequestDefaultBodyBufferSize = 1024 * 1024;
+NSUInteger const CRRequestDefaultMaxHeaderLength = 20 * 1024;
+
+NSUInteger const CRRequestDefaultBodyBufferSize = 8 * 1024 * 1024;
+
+NSUInteger const CRHTTPConnectionDefaultKeepAliveTimeout = 15;
+NSUInteger const CRHTTPConnectionDefaultMaxKeepAliveConnections = 100;
 
 // Keys
 NSString* const CRServerInterfaceKey = @"CRServerInterface";
@@ -40,6 +44,8 @@ NSString* const CRRequestMaxHeaderLineLengthKey = @"CRRequestMaxHeaderLineLength
 NSString* const CRRequestMaxHeaderLengthKey = @"CRRequestMaxHeaderLength";
 NSString* const CRRequestBodyBufferSizeKey = @"CRRequestBodyBufferSize";
 
+NSString* const CRHTTPConnectionKeepAliveTimeoutKey = @"CRHTTPConnectionKeepAliveTimeoutKey";
+NSString* const CRHTTPConnectionMaxKeepAliveConnectionsKey = @"CRHTTPConnectionMaxKeepAliveConnectionsKey";
 
 
 @interface CRServerConfiguration ()
@@ -144,6 +150,18 @@ NSString* const CRRequestBodyBufferSizeKey = @"CRRequestBodyBufferSize";
         self.CRRequestBodyBufferSize = [[mainBundle objectForInfoDictionaryKey:CRRequestBodyBufferSizeKey] integerValue];
     } else {
         self.CRRequestBodyBufferSize = CRRequestDefaultBodyBufferSize;
+    }
+
+    // Keep alive
+    if ( [mainBundle objectForInfoDictionaryKey:CRHTTPConnectionKeepAliveTimeoutKey] ) {
+        self.CRHTTPConnectionKeepAliveTimeout = [[mainBundle objectForInfoDictionaryKey:CRHTTPConnectionKeepAliveTimeoutKey] integerValue];
+    } else {
+        self.CRHTTPConnectionKeepAliveTimeout = CRHTTPConnectionDefaultKeepAliveTimeout;
+    }
+    if ( [mainBundle objectForInfoDictionaryKey:CRHTTPConnectionMaxKeepAliveConnectionsKey] ) {
+        self.CRHTTPConnectionMaxKeepAliveConnections = [[mainBundle objectForInfoDictionaryKey:CRHTTPConnectionMaxKeepAliveConnectionsKey] integerValue];
+    } else {
+        self.CRHTTPConnectionMaxKeepAliveConnections = CRHTTPConnectionDefaultMaxKeepAliveConnections;
     }
 }
 

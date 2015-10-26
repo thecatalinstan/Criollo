@@ -44,9 +44,7 @@
 }
 
 - (instancetype)initWithSocket:(GCDAsyncSocket *)socket server:(CRServer *)server {
-    NSString* acceptedSocketDelegateQueueLabel = [[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:[NSString stringWithFormat:@"SocketDelegateQueue-%hu", socket.connectedPort]];
-    dispatch_queue_t acceptedSocketDelegateQueue = dispatch_queue_create([acceptedSocketDelegateQueueLabel cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-    return  [self initWithSocket:socket server:server delegateQueue:acceptedSocketDelegateQueue];
+    return  [self initWithSocket:socket server:server delegateQueue:nil];
 }
 
 - (instancetype)initWithSocket:(GCDAsyncSocket *)socket server:(CRServer *)server delegateQueue:(dispatch_queue_t)delegateQueue {
@@ -54,7 +52,13 @@
     if (self != nil) {
         self.server = server;
         self.socket = socket;
-        [self.socket setDelegate:self delegateQueue:delegateQueue];
+        self.socket.delegate = self;
+        if( delegateQueue == nil) {
+            NSString* acceptedSocketDelegateQueueLabel = [[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:[NSString stringWithFormat:@"SocketDelegateQueue-%hu", socket.connectedPort]];
+            delegateQueue = dispatch_queue_create([acceptedSocketDelegateQueueLabel cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_CONCURRENT);
+            dispatch_set_target_queue(delegateQueue, server.acceptedSocketDelegateTargetQueue);
+        }
+        self.socket.delegateQueue = delegateQueue;
     }
     return self;
 }
@@ -81,14 +85,20 @@
 
 #pragma mark - State
 - (BOOL)shouldClose {
-    BOOL shouldClose = NO;
-    NSString *connectionHeader = [self.request valueForHTTPHeaderField:@"Connection"];
 
+    if ( self.ignoreKeepAlive ) {
+        return YES;
+    }
+
+    BOOL shouldClose = NO;
+
+    NSString *connectionHeader = [self.request valueForHTTPHeaderField:@"Connection"];
     if ( connectionHeader != nil ) {
         shouldClose = [connectionHeader caseInsensitiveCompare:@"close"] == NSOrderedSame;
     } else {
         shouldClose = [self.request.version isEqualToString:CRHTTP10];
     }
+
     return shouldClose;
 }
 
@@ -101,14 +111,7 @@
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    self.socket = nil;
-    self.request = nil;
-    self.response = nil;
-
-    dispatch_async(self.server.delegateQueue, ^{ @autoreleasepool {
-        [self.server didCloseConnection:self];
-    }});
+    [self.server didCloseConnection:self];
 }
 
 @end

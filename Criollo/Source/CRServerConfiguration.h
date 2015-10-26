@@ -24,6 +24,9 @@
 @property (nonatomic, assign) NSUInteger CRRequestMaxHeaderLineLength;
 @property (nonatomic, assign) NSUInteger CRRequestMaxHeaderLength;
 
+@property (nonatomic, assign) NSUInteger CRHTTPConnectionKeepAliveTimeout;
+@property (nonatomic, assign) NSUInteger CRHTTPConnectionMaxKeepAliveConnections;
+
 @property (nonatomic, assign) NSUInteger CRRequestBodyBufferSize;
 
 @end

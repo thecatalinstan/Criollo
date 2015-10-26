@@ -38,7 +38,8 @@ FOUNDATION_EXPORT NSString* const CRResponseKey;
 @property (nonatomic, strong) NSMutableArray<CRConnection*>* connections;
 
 @property (nonatomic, strong) dispatch_queue_t delegateQueue;
-@property (nonatomic, strong) NSOperationQueue* workerQueue;
+@property (nonatomic, strong) dispatch_queue_t acceptedSocketDelegateTargetQueue;
+@property (nonatomic, strong) dispatch_queue_t acceptedSocketSocketTargetQueue;
 
 - (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate;
 - (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate portNumber:(NSUInteger)portNumber;

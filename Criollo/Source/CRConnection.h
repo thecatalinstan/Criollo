@@ -25,6 +25,7 @@
 @property (nonatomic, strong) CRRequest* request;
 @property (nonatomic, strong) CRResponse* response;
 
+@property (nonatomic, assign) BOOL ignoreKeepAlive;
 @property (nonatomic, readonly) BOOL shouldClose;
 
 + (NSData*)CRLFData;

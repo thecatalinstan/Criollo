@@ -53,12 +53,14 @@ NSString* const CRResponseKey = @"CRResponse";
 
 - (BOOL)startListening:(NSError**)error {
 
-    self.workerQueue = [[NSOperationQueue alloc] init];
-    self.workerQueue.name = [[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"WorkerQueue"];
-    self.workerQueue.maxConcurrentOperationCount = NSOperationQueueDefaultMaxConcurrentOperationCount;
-    self.workerQueue.qualityOfService = NSQualityOfServiceUserInitiated;
+    self.delegateQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"DelegateQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
+    dispatch_set_target_queue(self.delegateQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
 
-    self.delegateQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"DelegateQueue"] cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+    self.acceptedSocketSocketTargetQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"AcceptedSocketSocketTargetQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
+    dispatch_set_target_queue(self.acceptedSocketSocketTargetQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0));
+
+    self.acceptedSocketDelegateTargetQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"AcceptedSocketDelegateTargetQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
+    dispatch_set_target_queue(self.acceptedSocketDelegateTargetQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0));
 
     if ( [self.delegate respondsToSelector:@selector(serverWillStartListening:)] ) {
         [self.delegate serverWillStartListening:self];
@@ -83,9 +85,6 @@ NSString* const CRResponseKey = @"CRResponse";
     [self.socket disconnect];
     self.socket.delegate = nil;
     self.socket = nil;
-
-    [self.workerQueue cancelAllOperations];
-    self.workerQueue = nil;
 
     self.delegateQueue = nil;
 
@@ -121,10 +120,11 @@ NSString* const CRResponseKey = @"CRResponse";
 #pragma mark - GCDAsyncSocketDelegate
 
 - (void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [newSocket markSocketQueueTargetQueue:self.acceptedSocketSocketTargetQueue];
     CRConnection* connection = [self newConnectionWithSocket:newSocket];
     @synchronized(self.connections) {
         [self.connections addObject:connection];
+        connection.ignoreKeepAlive = self.connections.count >= self.configuration.CRHTTPConnectionMaxKeepAliveConnections;
     }
     if ( [self.delegate respondsToSelector:@selector(server:didAcceptConnection:)]) {
         [self.delegate server:self didAcceptConnection:connection];
