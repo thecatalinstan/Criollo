@@ -70,6 +70,7 @@
 }
 
 - (void)didReceiveCompleteRequestHeaders {
+//    NSLog ( @"%s %@", __PRETTY_FUNCTION__, self.request.allHTTPHeaderFields );
 }
 
 - (void)didReceiveRequestBody {
@@ -82,8 +83,11 @@
 - (BOOL)shouldClose {
     BOOL shouldClose = NO;
     NSString *connectionHeader = [self.request valueForHTTPHeaderField:@"Connection"];
+
     if ( connectionHeader != nil ) {
         shouldClose = [connectionHeader caseInsensitiveCompare:@"close"] == NSOrderedSame;
+    } else {
+        shouldClose = [self.request.version isEqualToString:CRHTTP10];
     }
     return shouldClose;
 }
@@ -97,6 +101,7 @@
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     self.socket = nil;
     self.request = nil;
     self.response = nil;

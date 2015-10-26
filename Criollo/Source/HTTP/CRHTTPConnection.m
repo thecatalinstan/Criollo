@@ -61,19 +61,19 @@
 - (void)didReceiveCompleteRequest {
     [super didReceiveCompleteRequest];
 
-    [self.server.workerQueue addOperationWithBlock:^{
-        NSMutableString* string = [NSMutableString stringWithString:@"<h1>Hello world!</h1>"];
-        @synchronized(self.server.connections) {
-            [string appendFormat:@"<pre>Conntections: %@</pre>",[self.server.connections valueForKeyPath:@"request.URL.path"]];
-        }
+    NSMutableString* string = [NSMutableString stringWithString:@"<h1>Hello world!</h1>"];
+    @synchronized(self.server.connections) {
+        [string appendFormat:@"<pre>Conntections: %lu</pre>", self.server.connections.count];
+    }
 
-        self.response = [[CRResponse alloc] initWithHTTPConnection:self HTTPStatusCode:200];
-        [self.response setValue:@"keep-alive" forHTTPHeaderField:@"Connection"];
-        [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-        [self.response setValue:@(string.length).stringValue forHTTPHeaderField:@"Content-length"];
-        [self.response writeString:string];
-        [self.response finish];
-    }];
+    self.response = [[CRResponse alloc] initWithHTTPConnection:self HTTPStatusCode:200 description:@"asdfadsfas" version:self.request.version];
+
+//    NSString* connectionHeader = [self.request valueForHTTPHeaderField:@"Connection"];
+//    [self.response setValue:@"keep-alive" forHTTPHeaderField:@"Connection"];
+//    [self.response setValue:@(string.length).stringValue forHTTPHeaderField:@"Content-length"];
+    [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+    [self.response writeString:string];
+    [self.response finish];
 }
 
 - (void)handleError:(NSUInteger)errorType object:(id)object {
@@ -176,14 +176,13 @@
     switch ( tag ) {
         case CRSocketTagFinishSendingResponseAndClosing:
         case CRSocketTagFinishSendingResponse:
-            self.request = nil;
-            self.response = nil;
             if ( tag == CRSocketTagFinishSendingResponseAndClosing || self.shouldClose) {
                 [self.socket disconnect];
-                return;
             } else {
                 [self startReading];
             }
+            self.request = nil;
+            self.response = nil;
             break;
 
         default:

@@ -43,7 +43,6 @@
 {
     self  = [super init];
     if ( self != nil ) {
-        
         version = version == nil ? CRHTTP11 : version;
         self.message = CFBridgingRelease(CFHTTPMessageCreateResponse(NULL, (CFIndex)HTTPStatusCode, (__bridge CFStringRef)description, (__bridge CFStringRef) version));
         self.connection = connection;
@@ -88,7 +87,11 @@
     }
 
     if ( [self valueForHTTPHeaderField:@"Connection"] == nil ) {
-        [self setValue:@"keep-alive" forHTTPHeaderField:@"Connection"];
+        NSString* connectionHeader = @"keep-alive";
+        if ( [self.version isEqualToString:CRHTTP10] ) {
+            connectionHeader = @"close";
+        }
+        [self setValue:connectionHeader forHTTPHeaderField:@"Connection"];
     }
 
     if ( [self valueForHTTPHeaderField:@"Content-length"] == nil ) {
@@ -97,7 +100,7 @@
     
     [self setBody:nil];
     [self.connection.socket writeData:self.data withTimeout:self.connection.server.configuration.CRHTTPConnectionWriteHeaderTimeout tag:CRSocketTagSendingResponse];
-    
+
     alreadySentHeaders = YES;
 }
 
@@ -115,14 +118,9 @@
         [chunkedData appendData:data];
         [chunkedData appendData: [CRConnection CRLFData]];
 
-        // The footer
-        if ( tag == CRSocketTagFinishSendingResponse || tag == CRSocketTagFinishSendingResponseAndClosing ) {
-            [chunkedData appendData: [@"0" dataUsingEncoding:NSUTF8StringEncoding]];
-            [chunkedData appendData: [CRConnection CRLFCRLFData]];
-        }
         data = chunkedData;
     }
-    [self.connection.socket writeData:data withTimeout:self.connection.server.configuration.CRHTTPConnectionWriteGeneralTimeout tag:tag];
+    [self.connection.socket writeData:data withTimeout:self.connection.server.configuration.CRHTTPConnectionWriteBodyTimeout tag:tag];
 }
 
 - (void)writeData:(NSData*)data
@@ -167,10 +165,13 @@
 {
     long tag = closeConnection ? CRSocketTagFinishSendingResponseAndClosing : CRSocketTagFinishSendingResponse;
     
-    NSMutableData* finishData = [NSMutableData data];
-    [finishData appendData:[GCDAsyncSocket CRLFData]];
-    [finishData appendData:[GCDAsyncSocket CRLFData]];
-    [self writeData:finishData.copy withTag:tag];
+    NSMutableData* statusData = [NSMutableData data];
+    if ( self.isChunked ) {
+        [statusData appendData: [@"0" dataUsingEncoding:NSUTF8StringEncoding]];
+        [statusData appendData:[CRConnection CRLFData]];
+    }
+    [statusData appendData:[CRConnection CRLFData]];
+    [self.connection.socket writeData:statusData withTimeout:self.connection.server.configuration.CRHTTPConnectionWriteBodyTimeout tag:tag];
 }
 
 - (void)finish

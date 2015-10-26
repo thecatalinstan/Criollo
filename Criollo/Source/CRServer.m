@@ -121,6 +121,7 @@ NSString* const CRResponseKey = @"CRResponse";
 #pragma mark - GCDAsyncSocketDelegate
 
 - (void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     CRConnection* connection = [self newConnectionWithSocket:newSocket];
     @synchronized(self.connections) {
         [self.connections addObject:connection];
