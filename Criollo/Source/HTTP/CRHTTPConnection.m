@@ -45,39 +45,33 @@
 }
 
 - (void)didReceiveRequestHeaderData:(NSData*)data {
-    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
 }
 
 - (void)didReceiveRequestBodyData:(NSData*)data {
-    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
 }
 
 - (void)didReceiveCompleteRequestHeaders {
     [super didReceiveCompleteRequestHeaders];
-    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)didReceiveRequestBody {
     [super didReceiveRequestBody];
-    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)didReceiveCompleteRequest {
     [super didReceiveCompleteRequest];
 
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     [self.server.workerQueue addOperationWithBlock:^{
+        NSMutableString* string = [NSMutableString stringWithString:@"<h1>Hello world!</h1>"];
+        @synchronized(self.server.connections) {
+            [string appendFormat:@"<pre>Conntections: %@</pre>",[self.server.connections valueForKeyPath:@"request.URL.path"]];
+        }
+
         self.response = [[CRResponse alloc] initWithHTTPConnection:self HTTPStatusCode:200];
         [self.response setValue:@"keep-alive" forHTTPHeaderField:@"Connection"];
         [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-
-//        [response setValue:@"chunked" forHTTPHeaderField:@"Transfer-encoding"];
-
-        [self.response writeString:@"<h1>Hello world!</h1>"];
-        @synchronized(self.server.connections) {
-            [self.response writeFormat:@"<pre>Conntections: %@</pre>",[self.server.connections valueForKeyPath:@"request.URL.path"]];
-        }
+        [self.response setValue:@(string.length).stringValue forHTTPHeaderField:@"Content-length"];
+        [self.response writeString:string];
         [self.response finish];
     }];
 }
@@ -109,8 +103,6 @@
 #pragma mark - GCDAsyncSocketDelegate
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData*)data withTag:(long)tag {
-    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
-    NSLog(@" * %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
 
     if ( tag == CRSocketTagBeginReadingRequest ) {
         // Parse the first line of the header
@@ -180,7 +172,6 @@
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
-    NSLog(@"%s %lu", __PRETTY_FUNCTION__, tag);
 
     switch ( tag ) {
         case CRSocketTagFinishSendingResponseAndClosing:

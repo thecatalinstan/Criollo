@@ -60,7 +60,6 @@
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self.socket setDelegate:nil delegateQueue:NULL];
     [self.socket disconnect];
 }
@@ -71,15 +70,12 @@
 }
 
 - (void)didReceiveCompleteRequestHeaders {
-    NSLog(@"%s, %@", __PRETTY_FUNCTION__, self.request.allHTTPHeaderFields);
 }
 
 - (void)didReceiveRequestBody {
-    NSLog(@"%s, %lu bytes", __PRETTY_FUNCTION__, self.request.body.length);
 }
 
 - (void)didReceiveCompleteRequest {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 #pragma mark - State
@@ -101,7 +97,6 @@
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
-    NSLog(@"%s %@", __PRETTY_FUNCTION__, err);
     self.socket = nil;
     self.request = nil;
     self.response = nil;

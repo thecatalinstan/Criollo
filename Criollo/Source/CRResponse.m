@@ -17,6 +17,8 @@
 
 @interface CRResponse (Private)
 
+@property (nonatomic, readonly) BOOL isChunked;
+
 - (void)writeHeaders;
 - (void)writeData:(NSData*)data withTag:(long)tag;
 - (void)sendStatusLine:(BOOL)closeConnection;
@@ -65,6 +67,10 @@
     CFHTTPMessageSetHeaderFieldValue((__bridge CFHTTPMessageRef _Nonnull)(self.message), (__bridge CFStringRef)HTTPHeaderField, (__bridge CFStringRef)value);
 }
 
+- (BOOL)isChunked {
+    return [[self valueForHTTPHeaderField:@"Transfer-encoding"] isEqualToString:@"chunked"];
+}
+
 #pragma mark - Write
 
 - (void)writeHeaders
@@ -84,6 +90,10 @@
     if ( [self valueForHTTPHeaderField:@"Connection"] == nil ) {
         [self setValue:@"keep-alive" forHTTPHeaderField:@"Connection"];
     }
+
+    if ( [self valueForHTTPHeaderField:@"Content-length"] == nil ) {
+        [self setValue:@"chunked" forHTTPHeaderField:@"Transfer-encoding"];
+    }
     
     [self setBody:nil];
     [self.connection.socket writeData:self.data withTimeout:self.connection.server.configuration.CRHTTPConnectionWriteHeaderTimeout tag:CRSocketTagSendingResponse];
@@ -94,6 +104,24 @@
 - (void)writeData:(NSData *)data withTag:(long)tag
 {
     [self writeHeaders];
+    if ( self.isChunked ) {
+        NSMutableData* chunkedData = [NSMutableData data];
+
+        // Chunk size + CRLF
+        [chunkedData appendData: [[NSString stringWithFormat:@"%lx", data.length] dataUsingEncoding:NSUTF8StringEncoding]];
+        [chunkedData appendData: [CRConnection CRLFData]];
+
+        // The actual data
+        [chunkedData appendData:data];
+        [chunkedData appendData: [CRConnection CRLFData]];
+
+        // The footer
+        if ( tag == CRSocketTagFinishSendingResponse || tag == CRSocketTagFinishSendingResponseAndClosing ) {
+            [chunkedData appendData: [@"0" dataUsingEncoding:NSUTF8StringEncoding]];
+            [chunkedData appendData: [CRConnection CRLFCRLFData]];
+        }
+        data = chunkedData;
+    }
     [self.connection.socket writeData:data withTimeout:self.connection.server.configuration.CRHTTPConnectionWriteGeneralTimeout tag:tag];
 }
 
