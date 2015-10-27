@@ -35,11 +35,12 @@ FOUNDATION_EXPORT NSString* const CRResponseKey;
 @property (nonatomic, strong) GCDAsyncSocket* socket;
 @property (nonatomic, strong) NSMutableArray<CRConnection*>* connections;
 
-- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate;
-- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate portNumber:(NSUInteger)portNumber;
-- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate portNumber:(NSUInteger)portNumber interface:(NSString*)interface NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate NS_DESIGNATED_INITIALIZER;
 
+- (BOOL)startListening;
 - (BOOL)startListening:(NSError**)error;
+- (BOOL)startListeningOnPortNumber:(NSUInteger)portNumber error:(NSError**)error;
+- (BOOL)startListeningOnPortNumber:(NSUInteger)portNumber interface:(NSString*)interface error:(NSError**)error;
 - (void)stopListening;
 - (void)closeAllConnections;
 

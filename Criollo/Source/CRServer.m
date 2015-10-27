@@ -21,7 +21,7 @@ NSString* const CRResponseKey = @"CRResponse";
 }
 
 @property (nonatomic, strong) dispatch_queue_t isolationQueue;
-@property (nonatomic, strong) dispatch_queue_t delegateQueue;
+@property (nonatomic, strong) dispatch_queue_t socketDelegateQueue;
 @property (nonatomic, strong) dispatch_queue_t acceptedSocketDelegateTargetQueue;
 @property (nonatomic, strong) dispatch_queue_t acceptedSocketSocketTargetQueue;
 
@@ -30,27 +30,14 @@ NSString* const CRResponseKey = @"CRResponse";
 @implementation CRServer
 
 - (instancetype)init {
-    return [self initWithDelegate:nil portNumber:0 interface:nil];
+    return [self initWithDelegate:nil];
 }
 
 - (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate {
-    return [self initWithDelegate:delegate portNumber:0 interface:nil];
-}
-
-- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate portNumber:(NSUInteger)portNumber {
-    return [self initWithDelegate:delegate portNumber:portNumber interface:nil];
-}
-
-- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate portNumber:(NSUInteger)portNumber interface:(NSString *)interface {
     self = [super init];
     if ( self != nil ) {
         self.configuration = [[CRServerConfiguration alloc] init];
-        if ( portNumber != 0 ) {
-            self.configuration.CRServerPort = portNumber;
-        }
-        if ( interface.length != 0 ) {
-            self.configuration.CRServerInterface = interface;
-        }
+        self.delegate = delegate;
     }
     return self;
 }
@@ -64,13 +51,32 @@ NSString* const CRResponseKey = @"CRResponse";
 
 #pragma mark - Listening
 
-- (BOOL)startListening:(NSError**)error {
+- (BOOL)startListening {
+    return [self startListeningOnPortNumber:0 interface:nil error:nil];
+}
+
+- (BOOL)startListening:(NSError *__autoreleasing *)error {
+    return [self startListeningOnPortNumber:0 interface:nil error:error];
+}
+
+- (BOOL)startListeningOnPortNumber:(NSUInteger)portNumber error:(NSError *__autoreleasing *)error {
+    return [self startListeningOnPortNumber:portNumber interface:nil error:error];
+}
+
+- (BOOL)startListeningOnPortNumber:(NSUInteger)portNumber interface:(NSString *)interface error:(NSError *__autoreleasing *)error {
+
+    if ( portNumber != 0 ) {
+        self.configuration.CRServerPort = portNumber;
+    }
+    if ( interface.length != 0 ) {
+        self.configuration.CRServerInterface = interface;
+    }
 
     self.isolationQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"IsolationQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
     dispatch_set_target_queue(self.isolationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
 
-    self.delegateQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"DelegateQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_CONCURRENT);
-    dispatch_set_target_queue(self.delegateQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
+    self.socketDelegateQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"DelegateQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_CONCURRENT);
+    dispatch_set_target_queue(self.socketDelegateQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
 
     self.acceptedSocketSocketTargetQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"AcceptedSocketSocketTargetQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
     dispatch_set_target_queue(self.acceptedSocketSocketTargetQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0));
@@ -79,7 +85,7 @@ NSString* const CRResponseKey = @"CRResponse";
     dispatch_set_target_queue(self.acceptedSocketDelegateTargetQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0));
 
     self.connections = [NSMutableArray array];
-    self.socket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:self.delegateQueue];
+    self.socket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:self.socketDelegateQueue];
 
     if ( [self.delegate respondsToSelector:@selector(serverWillStartListening:)] ) {
         [self.delegate serverWillStartListening:self];
@@ -107,12 +113,10 @@ NSString* const CRResponseKey = @"CRResponse";
     
 }
 
-
 #pragma mark - Connections
 
 - (void)closeAllConnections {
     dispatch_barrier_async(self.isolationQueue, ^{
-        NSLog(@"%s", __PRETTY_FUNCTION__);
         [self.connections enumerateObjectsUsingBlock:^(CRConnection * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [obj.socket disconnectAfterReadingAndWriting];
         }];
