@@ -100,21 +100,25 @@ NSString* const CRResponseKey = @"CRResponse";
     }
 
     [self.socket disconnect];
-    self.socket.delegate = nil;
-    self.socket = nil;
-
-    self.delegateQueue = nil;
-    self.acceptedSocketDelegateTargetQueue = nil;
-    self.acceptedSocketSocketTargetQueue = nil;
-
-    [self.connections removeAllObjects];
 
     if ( [self.delegate respondsToSelector:@selector(serverDidStopListening:)] ) {
         [self.delegate serverDidStopListening:self];
     }
+    
 }
 
+
 #pragma mark - Connections
+
+- (void)closeAllConnections {
+    dispatch_barrier_async(self.isolationQueue, ^{
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+        [self.connections enumerateObjectsUsingBlock:^(CRConnection * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [obj.socket disconnectAfterReadingAndWriting];
+        }];
+        [self.connections removeAllObjects];
+    });
+}
 
 - (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket {
     return [[CRConnection alloc] initWithSocket:socket server:self];

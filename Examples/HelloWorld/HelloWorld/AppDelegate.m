@@ -31,7 +31,15 @@
 }
 
 - (CRApplicationTerminateReply)applicationShouldTerminate:(CRApplication *)sender {
-    return CRTerminateNow;
+    if ( self.server.connections.count > 0 ) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            [self.server closeAllConnections];
+        });
+        return CRTerminateLater;
+    } else {
+        return CRTerminateNow;
+    }
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {

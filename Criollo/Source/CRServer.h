@@ -41,6 +41,7 @@ FOUNDATION_EXPORT NSString* const CRResponseKey;
 
 - (BOOL)startListening:(NSError**)error;
 - (void)stopListening;
+- (void)closeAllConnections;
 
 - (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket;
 - (void)didCloseConnection:(CRConnection*)connection;
