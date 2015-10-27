@@ -12,13 +12,13 @@
 NSString* const CRServerDefaultInterface = @"";
 NSUInteger const CRServerDefaultPort = 10781;
 
-NSUInteger const CRConnectionDefaultInitialReadTimeout = 30;
-NSUInteger const CRHTTPConnectionDefaultReadHeaderLineTimeout = 30;
-NSUInteger const CRHTTPConnectionDefaultReadHeaderTimeout = 30;
-NSUInteger const CRHTTPConnectionDefaultReadBodyTimeout = 30;
-NSUInteger const CRHTTPConnectionDefaultWriteHeaderTimeout = 30;
-NSUInteger const CRHTTPConnectionDefaultWriteBodyTimeout = 0;
-NSUInteger const CRHTTPConnectionDefaultWriteGeneralTimeout = 30;
+NSUInteger const CRConnectionDefaultInitialReadTimeout = 5;
+NSUInteger const CRHTTPConnectionDefaultReadHeaderLineTimeout = 2;
+NSUInteger const CRHTTPConnectionDefaultReadHeaderTimeout = 2;
+NSUInteger const CRHTTPConnectionDefaultReadBodyTimeout = 2;
+NSUInteger const CRHTTPConnectionDefaultWriteHeaderTimeout = 2;
+NSUInteger const CRHTTPConnectionDefaultWriteBodyTimeout = 2;
+NSUInteger const CRHTTPConnectionDefaultWriteGeneralTimeout = 5;
 
 NSUInteger const CRRequestDefaultMaxHeaderLineLength = 1024;
 NSUInteger const CRRequestDefaultMaxHeaderLength = 20 * 1024;
@@ -26,7 +26,7 @@ NSUInteger const CRRequestDefaultMaxHeaderLength = 20 * 1024;
 NSUInteger const CRRequestDefaultBodyBufferSize = 8 * 1024 * 1024;
 
 NSUInteger const CRHTTPConnectionDefaultKeepAliveTimeout = 15;
-NSUInteger const CRHTTPConnectionDefaultMaxKeepAliveConnections = 100;
+NSUInteger const CRHTTPConnectionDefaultMaxKeepAliveConnections = 10;
 
 // Keys
 NSString* const CRServerInterfaceKey = @"CRServerInterface";

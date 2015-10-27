@@ -42,7 +42,8 @@
     requestBodyReceivedBytesLength = 0;
 
     // Read the first request header
-    [self.socket readDataToData:[CRConnection CRLFData] withTimeout:(didPerformInitialRead ? self.server.configuration.CRHTTPConnectionKeepAliveTimeout : self.server.configuration.CRConnectionInitialReadTimeout) + self.server.configuration.CRHTTPConnectionReadHeaderLineTimeout maxLength:self.server.configuration.CRRequestMaxHeaderLineLength tag:CRSocketTagBeginReadingRequest];
+    NSUInteger timeout = (didPerformInitialRead ? self.server.configuration.CRHTTPConnectionKeepAliveTimeout : self.server.configuration.CRConnectionInitialReadTimeout) + self.server.configuration.CRHTTPConnectionReadHeaderLineTimeout;
+    [self.socket readDataToData:[CRConnection CRLFData] withTimeout:timeout maxLength:self.server.configuration.CRRequestMaxHeaderLineLength tag:CRSocketTagBeginReadingRequest];
 }
 
 - (void)didReceiveRequestHeaderData:(NSData*)data {
@@ -53,6 +54,7 @@
 
 - (void)didReceiveCompleteRequestHeaders {
     [super didReceiveCompleteRequestHeaders];
+//    NSLog(@"%@", self.request.allHTTPHeaderFields);
 }
 
 - (void)didReceiveRequestBody {

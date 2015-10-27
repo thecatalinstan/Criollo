@@ -53,12 +53,6 @@
         self.server = server;
         self.socket = socket;
         self.socket.delegate = self;
-        if( delegateQueue == nil) {
-            NSString* acceptedSocketDelegateQueueLabel = [[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:[NSString stringWithFormat:@"SocketDelegateQueue-%hu", socket.connectedPort]];
-            delegateQueue = dispatch_queue_create([acceptedSocketDelegateQueueLabel cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_CONCURRENT);
-            dispatch_set_target_queue(delegateQueue, server.acceptedSocketDelegateTargetQueue);
-        }
-        self.socket.delegateQueue = delegateQueue;
     }
     return self;
 }
