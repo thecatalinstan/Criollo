@@ -40,14 +40,10 @@
 #pragma mark - Initializers
 
 - (instancetype)init {
-    return [self initWithSocket:nil server:nil delegateQueue:nil];
+    return [self initWithSocket:nil server:nil];
 }
 
 - (instancetype)initWithSocket:(GCDAsyncSocket *)socket server:(CRServer *)server {
-    return  [self initWithSocket:socket server:server delegateQueue:nil];
-}
-
-- (instancetype)initWithSocket:(GCDAsyncSocket *)socket server:(CRServer *)server delegateQueue:(dispatch_queue_t)delegateQueue {
     self = [super init];
     if (self != nil) {
         self.server = server;

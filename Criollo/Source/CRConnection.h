@@ -31,8 +31,7 @@
 + (NSData*)CRLFData;
 + (NSData*)CRLFCRLFData;
 
-- (instancetype)initWithSocket:(GCDAsyncSocket*)socket server:(CRServer*)server;
-- (instancetype)initWithSocket:(GCDAsyncSocket*)socket server:(CRServer*)server delegateQueue:(dispatch_queue_t)delegateQueue NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithSocket:(GCDAsyncSocket*)socket server:(CRServer*)server NS_DESIGNATED_INITIALIZER;
 
 - (void)startReading;
 

@@ -27,14 +27,6 @@
 
 @implementation CRHTTPConnection
 
-- (instancetype)initWithSocket:(GCDAsyncSocket *)socket server:(CRServer *)server delegateQueue:(dispatch_queue_t)delegateQueue {
-    self = [super initWithSocket:socket server:server delegateQueue:delegateQueue];
-    if ( self != nil ) {
-
-    }
-    return self;
-}
-
 #pragma mark - Data
 
 - (void)startReading {

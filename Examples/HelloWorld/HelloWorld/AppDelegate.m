@@ -41,9 +41,6 @@
 #pragma mark - CRServerDelegate
 
 - (void)server:(CRServer *)server didAcceptConnection:(CRConnection *)connection {
-//    NSString* string = [[NSBundle mainBundle].bundleIdentifier stringByAppendingFormat:@" Connections: %lu\n", self.connections.count];
-//    [connection.socket writeData:[string dataUsingEncoding:NSUTF8StringEncoding] withTimeout:0 tag:0];
-//    [connection.socket disconnectAfterWriting];
 }
 
 @end
