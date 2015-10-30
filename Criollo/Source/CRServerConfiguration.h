@@ -14,6 +14,7 @@
 @property (nonatomic, assign) NSUInteger CRServerPort;
 
 @property (nonatomic, assign) NSUInteger CRConnectionInitialReadTimeout;
+
 @property (nonatomic, assign) NSUInteger CRHTTPConnectionReadHeaderLineTimeout;
 @property (nonatomic, assign) NSUInteger CRHTTPConnectionReadHeaderTimeout;
 @property (nonatomic, assign) NSUInteger CRHTTPConnectionReadBodyTimeout;
@@ -28,5 +29,7 @@
 @property (nonatomic, assign) NSUInteger CRHTTPConnectionMaxKeepAliveConnections;
 
 @property (nonatomic, assign) NSUInteger CRRequestBodyBufferSize;
+
+@property (nonatomic, assign) NSUInteger CRFCGIConnectionReadRecordTimeout;
 
 @end

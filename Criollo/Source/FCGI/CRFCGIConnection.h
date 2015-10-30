@@ -8,6 +8,9 @@
 
 #import "CRConnection.h"
 
+#define CRFCGIConnectionSocketTagReadHeader     10
+#define CRFCGIConnectionSocketTagReadContent    12
+
 @interface CRFCGIConnection : CRConnection
 
 @end

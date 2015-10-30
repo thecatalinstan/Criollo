@@ -6,15 +6,6 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#define CRSocketTagSendingResponse                      20
-
-#define CRSocketTagBeginReadingRequest                  10
-#define CRSocketTagReadingRequestHeader                 11
-#define CRSocketTagReadingRequestBody                   12
-
-#define CRSocketTagFinishSendingResponse                90
-#define CRSocketTagFinishSendingResponseAndClosing      91
-
 @class GCDAsyncSocket, CRServer, CRRequest, CRResponse;
 
 @interface CRConnection : NSObject

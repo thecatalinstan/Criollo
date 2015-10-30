@@ -12,16 +12,13 @@
 #import "CRServer.h"
 #import "CRServerConfiguration.h"
 #import "CRRequest.h"
-#import "CRResponse.h"
+#import "CRHTTPResponse.h"
 
 @interface CRHTTPConnection () {
     NSUInteger requestBodyLength;
     NSUInteger requestBodyReceivedBytesLength;
     BOOL didPerformInitialRead;
 }
-
-- (void)didReceiveRequestHeaderData:(NSData*)data;
-- (void)didReceiveRequestBodyData:(NSData*)data;
 
 @end
 
@@ -35,18 +32,12 @@
 
     // Read the first request header
     NSUInteger timeout = (didPerformInitialRead ? self.server.configuration.CRHTTPConnectionKeepAliveTimeout : self.server.configuration.CRConnectionInitialReadTimeout) + self.server.configuration.CRHTTPConnectionReadHeaderLineTimeout;
-    [self.socket readDataToData:[CRConnection CRLFData] withTimeout:timeout maxLength:self.server.configuration.CRRequestMaxHeaderLineLength tag:CRSocketTagBeginReadingRequest];
-}
-
-- (void)didReceiveRequestHeaderData:(NSData*)data {
-}
-
-- (void)didReceiveRequestBodyData:(NSData*)data {
+    [self.socket readDataToData:[CRConnection CRLFData] withTimeout:timeout maxLength:self.server.configuration.CRRequestMaxHeaderLineLength tag:CRHTTPConnectionSocketTagBeginReadingRequest];
 }
 
 - (void)didReceiveCompleteRequestHeaders {
     [super didReceiveCompleteRequestHeaders];
-//    NSLog(@"%@", self.request.allHTTPHeaderFields);
+    //    NSLog(@"%@", self.request.allHTTPHeaderFields);
 }
 
 - (void)didReceiveRequestBody {
@@ -57,9 +48,8 @@
     [super didReceiveCompleteRequest];
 
     NSMutableString* string = [NSMutableString stringWithString:@"<h1>Hello world!</h1>"];
-    self.response = [[CRResponse alloc] initWithHTTPConnection:self HTTPStatusCode:200 description:@"asdfadsfas" version:self.request.version];
+    self.response = [[CRHTTPResponse alloc] initWithConnection:self HTTPStatusCode:200 description:@"asdfadsfas" version:self.request.version];
     [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-    [self.response writeString:string];
     [self.response finish];
 }
 
@@ -81,7 +71,7 @@
             break;
     }
 
-    self.response = [[CRResponse alloc] initWithHTTPConnection:self HTTPStatusCode:statusCode];
+    self.response = [[CRHTTPResponse alloc] initWithConnection:self HTTPStatusCode:statusCode];
     [self.response setValue:@"0" forHTTPHeaderField:@"Content-length"];
     [self.response setValue:@"close" forHTTPHeaderField:@"Connection"];
     [self.response end];
@@ -93,7 +83,7 @@
 
     didPerformInitialRead = YES;
 
-    if ( tag == CRSocketTagBeginReadingRequest ) {
+    if ( tag == CRHTTPConnectionSocketTagBeginReadingRequest ) {
         // Parse the first line of the header
         NSString* decodedHeader = [[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(0, data.length - 2)] encoding:NSUTF8StringEncoding];
         NSArray* decodedHeaderComponents = [decodedHeader componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -123,36 +113,33 @@
     }
 
     switch (tag) {
-        case CRSocketTagBeginReadingRequest:
+        case CRHTTPConnectionSocketTagBeginReadingRequest:
             // We've read the first header line and it's ok.
             // Continue to read the rest of the headers
-            [self didReceiveRequestHeaderData:data];
-            [self.socket readDataToData:[CRConnection CRLFCRLFData] withTimeout:self.server.configuration.CRHTTPConnectionReadHeaderTimeout maxLength:self.server.configuration.CRRequestMaxHeaderLength tag:CRSocketTagReadingRequestHeader];
+            [self.socket readDataToData:[CRConnection CRLFCRLFData] withTimeout:self.server.configuration.CRHTTPConnectionReadHeaderTimeout maxLength:self.server.configuration.CRRequestMaxHeaderLength tag:CRHTTPConnectionSocketTagReadingRequestHeader];
             break;
 
-        case CRSocketTagReadingRequestHeader:
+        case CRHTTPConnectionSocketTagReadingRequestHeader:
             // We have all the headers
-            [self didReceiveRequestHeaderData:data];
             [self didReceiveCompleteRequestHeaders];
 
             requestBodyLength = [self.request valueForHTTPHeaderField:@"Content-Length"].integerValue;
             if ( requestBodyLength > 0 ) {
                 NSUInteger bytesToRead = requestBodyLength < self.server.configuration.CRRequestBodyBufferSize ? requestBodyLength : self.server.configuration.CRRequestBodyBufferSize;
-                [self.socket readDataToLength:bytesToRead withTimeout:self.server.configuration.CRHTTPConnectionReadBodyTimeout tag:CRSocketTagReadingRequestBody];
+                [self.socket readDataToLength:bytesToRead withTimeout:self.server.configuration.CRHTTPConnectionReadBodyTimeout tag:CRHTTPConnectionSocketTagReadingRequestBody];
             } else {
                 [self didReceiveCompleteRequest];
             }
             break;
 
-        case CRSocketTagReadingRequestBody:
+        case CRHTTPConnectionSocketTagReadingRequestBody:
             // We are receiving data
-            [self didReceiveRequestBodyData:data];
             requestBodyReceivedBytesLength += data.length;
 
             if (requestBodyReceivedBytesLength < requestBodyLength) {
                 NSUInteger requestBodyLeftBytesLength = requestBodyLength - requestBodyReceivedBytesLength;
                 NSUInteger bytesToRead = requestBodyLeftBytesLength < self.server.configuration.CRRequestBodyBufferSize ? requestBodyLeftBytesLength : self.server.configuration.CRRequestBodyBufferSize;
-                [self.socket readDataToLength:bytesToRead withTimeout:self.server.configuration.CRHTTPConnectionReadBodyTimeout tag:CRSocketTagReadingRequestBody];
+                [self.socket readDataToLength:bytesToRead withTimeout:self.server.configuration.CRHTTPConnectionReadBodyTimeout tag:CRHTTPConnectionSocketTagReadingRequestBody];
             } else {
                 [self didReceiveCompleteRequest];
             }
@@ -163,19 +150,19 @@
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
 
     switch ( tag ) {
-        case CRSocketTagFinishSendingResponseAndClosing:
-        case CRSocketTagFinishSendingResponse:
-            if ( tag == CRSocketTagFinishSendingResponseAndClosing || self.shouldClose) {
+        case CRHTTPConnectionSocketTagFinishSendingResponseAndClosing:
+        case CRHTTPConnectionSocketTagFinishSendingResponse:
+            if ( tag == CRHTTPConnectionSocketTagFinishSendingResponseAndClosing || self.shouldClose) {
                 [self.socket disconnect];
             } else {
                 [self startReading];
             }
             break;
-
+            
         default:
             break;
     }
-
+    
 }
 
 @end

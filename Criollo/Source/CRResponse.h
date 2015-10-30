@@ -14,10 +14,11 @@
 
 @property (atomic, readonly) NSUInteger statusCode;
 @property (nonatomic, assign) CRConnection* connection;
+@property (atomic, readonly) BOOL alreadySentHeaders;
 
-- (instancetype)initWithHTTPConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode;
-- (instancetype)initWithHTTPConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description;
-- (instancetype)initWithHTTPConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version;
+- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode;
+- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description;
+- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version;
 
 - (void)setValue:(NSString*)value forHTTPHeaderField:(NSString *)HTTPHeaderField;
 

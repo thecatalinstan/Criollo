@@ -13,17 +13,20 @@
 #import "CRServerConfiguration.h"
 #import "CRRequest.h"
 #import "CRResponse.h"
+#import "CRFCGIRecord.h"
+
+@interface CRFCGIConnection ()
+
+@end
 
 @implementation CRFCGIConnection
 
 #pragma mark - Data
 
 - (void)startReading {
-//    // Read the first request header
-//    NSUInteger timeout = (didPerformInitialRead ? self.server.configuration.CRHTTPConnectionKeepAliveTimeout : self.server.configuration.CRConnectionInitialReadTimeout) + self.server.configuration.CRHTTPConnectionReadHeaderLineTimeout;
-//    [self.socket readDataToData:[CRConnection CRLFData] withTimeout:timeout maxLength:self.server.configuration.CRRequestMaxHeaderLineLength tag:CRSocketTagBeginReadingRequest];
-//
-//    [newSocket readDataToLength:FCGIRecordFixedLengthPartLength withTimeout:FCGITimeout tag:FCGIRecordAwaitingHeaderTag];
+    // Read the first request header
+    NSUInteger timeout = self.server.configuration.CRFCGIConnectionReadRecordTimeout;
+    [self.socket readDataToLength:CRFCGIRecordHeaderLength withTimeout:timeout tag:CRFCGIConnectionSocketTagReadHeader];
 }
 
 #pragma mark - GCDAsyncSocketDelegate

@@ -13,6 +13,7 @@ NSString* const CRServerDefaultInterface = @"";
 NSUInteger const CRServerDefaultPort = 10781;
 
 NSUInteger const CRConnectionDefaultInitialReadTimeout = 5;
+
 NSUInteger const CRHTTPConnectionDefaultReadHeaderLineTimeout = 2;
 NSUInteger const CRHTTPConnectionDefaultReadHeaderTimeout = 2;
 NSUInteger const CRHTTPConnectionDefaultReadBodyTimeout = 2;
@@ -27,6 +28,8 @@ NSUInteger const CRRequestDefaultBodyBufferSize = 8 * 1024 * 1024;
 
 NSUInteger const CRHTTPConnectionDefaultKeepAliveTimeout = 15;
 NSUInteger const CRHTTPConnectionDefaultMaxKeepAliveConnections = 10;
+
+NSUInteger const CRFCGIConnectionDefaultReadRecordTimeout = 5;
 
 // Keys
 NSString* const CRServerInterfaceKey = @"CRServerInterface";
@@ -44,8 +47,9 @@ NSString* const CRRequestMaxHeaderLineLengthKey = @"CRRequestMaxHeaderLineLength
 NSString* const CRRequestMaxHeaderLengthKey = @"CRRequestMaxHeaderLength";
 NSString* const CRRequestBodyBufferSizeKey = @"CRRequestBodyBufferSize";
 
-NSString* const CRHTTPConnectionKeepAliveTimeoutKey = @"CRHTTPConnectionKeepAliveTimeoutKey";
-NSString* const CRHTTPConnectionMaxKeepAliveConnectionsKey = @"CRHTTPConnectionMaxKeepAliveConnectionsKey";
+NSString* const CRHTTPConnectionKeepAliveTimeoutKey = @"CRHTTPConnectionKeepAliveTimeout";
+NSString* const CRHTTPConnectionMaxKeepAliveConnectionsKey = @"CRHTTPConnectionMaxKeepAliveConnections";
+NSString* const CRFCGIConnectionReadRecordTimeoutKey = @"CRFCGIConnectionReadRecordTimeout";
 
 
 @interface CRServerConfiguration ()
@@ -131,6 +135,12 @@ NSString* const CRHTTPConnectionMaxKeepAliveConnectionsKey = @"CRHTTPConnectionM
         self.CRHTTPConnectionWriteGeneralTimeout = [[mainBundle objectForInfoDictionaryKey:CRHTTPConnectionWriteGeneralTimeoutKey] integerValue];
     } else {
         self.CRHTTPConnectionWriteGeneralTimeout = CRHTTPConnectionDefaultWriteGeneralTimeout;
+    }
+
+    if ( [mainBundle objectForInfoDictionaryKey:CRFCGIConnectionReadRecordTimeoutKey] ) {
+        self.CRFCGIConnectionReadRecordTimeout = [[mainBundle objectForInfoDictionaryKey:CRFCGIConnectionReadRecordTimeoutKey] integerValue];
+    } else {
+        self.CRFCGIConnectionReadRecordTimeout = CRFCGIConnectionDefaultReadRecordTimeout;
     }
 
     // Limits

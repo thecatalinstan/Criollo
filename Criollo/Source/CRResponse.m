@@ -15,31 +15,26 @@
 #import "NSDate+RFC1123.h"
 
 
-@interface CRResponse (Private)
-
-@property (nonatomic, readonly) BOOL isChunked;
+@interface CRResponse ()
 
 - (void)writeHeaders;
-- (void)writeData:(NSData*)data withTag:(long)tag;
-- (void)sendStatusLine:(BOOL)closeConnection;
+- (void)writeData:(NSData*)data closeConnection:(BOOL)flag;
 
 @end
 
-@implementation CRResponse{
-    BOOL alreadySentHeaders;
-}
+@implementation CRResponse
 
-- (instancetype)initWithHTTPConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode
+- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode
 {
-    return [self initWithHTTPConnection:connection HTTPStatusCode:HTTPStatusCode description:nil];
+    return [self initWithConnection:connection HTTPStatusCode:HTTPStatusCode description:nil];
 }
 
-- (instancetype)initWithHTTPConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description
+- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description
 {
-    return [self initWithHTTPConnection:connection HTTPStatusCode:HTTPStatusCode description:description version:nil];
+    return [self initWithConnection:connection HTTPStatusCode:HTTPStatusCode description:description version:nil];
 }
 
-- (instancetype)initWithHTTPConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version
+- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version
 {
     self  = [super init];
     if ( self != nil ) {
@@ -57,7 +52,7 @@
 
 - (void)setValue:(NSString*)value forHTTPHeaderField:(NSString *)HTTPHeaderField
 {
-    if ( alreadySentHeaders ) {
+    if ( self.alreadySentHeaders ) {
         [CRApp logErrorFormat:@"Headers already sent."];
         [[NSException exceptionWithName:NSInternalInconsistencyException reason:@"Headers already sent." userInfo:nil] raise];
         return;
@@ -66,85 +61,31 @@
     CFHTTPMessageSetHeaderFieldValue((__bridge CFHTTPMessageRef _Nonnull)(self.message), (__bridge CFStringRef)HTTPHeaderField, (__bridge CFStringRef)value);
 }
 
-- (BOOL)isChunked {
-    return [[self valueForHTTPHeaderField:@"Transfer-encoding"] isEqualToString:@"chunked"];
-}
-
 #pragma mark - Write
 
-- (void)writeHeaders
-{
-    if ( alreadySentHeaders ) {
-        return;
-    }
-
-//    if ( [self valueForHTTPHeaderField:@"Date"] == nil ) {
-//        [self setValue:[[NSDate date] rfc1123String] forHTTPHeaderField:@"Date"];
-//    }
-
-    if ( [self valueForHTTPHeaderField:@"Content-Type"] == nil ) {
-        [self setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-    }
-
-    if ( [self valueForHTTPHeaderField:@"Connection"] == nil ) {
-        NSString* connectionHeader = @"keep-alive";
-        if ( [self.version isEqualToString:CRHTTP10] ) {
-            connectionHeader = @"close";
-        }
-        [self setValue:connectionHeader forHTTPHeaderField:@"Connection"];
-    }
-
-    if ( [self valueForHTTPHeaderField:@"Content-length"] == nil ) {
-        [self setValue:@"chunked" forHTTPHeaderField:@"Transfer-encoding"];
-    }
-    
-    [self setBody:nil];
-    [self.connection.socket writeData:self.data withTimeout:self.connection.server.configuration.CRHTTPConnectionWriteHeaderTimeout tag:CRSocketTagSendingResponse];
-
-    alreadySentHeaders = YES;
+- (void)writeHeaders {
 }
 
-- (void)writeData:(NSData *)data withTag:(long)tag
-{
-    [self writeHeaders];
-    if ( self.isChunked ) {
-        NSMutableData* chunkedData = [NSMutableData data];
-
-        // Chunk size + CRLF
-        [chunkedData appendData: [[NSString stringWithFormat:@"%lx", data.length] dataUsingEncoding:NSUTF8StringEncoding]];
-        [chunkedData appendData: [CRConnection CRLFData]];
-
-        // The actual data
-        [chunkedData appendData:data];
-        [chunkedData appendData: [CRConnection CRLFData]];
-
-        data = chunkedData;
-    }
-    [self.connection.socket writeData:data withTimeout:self.connection.server.configuration.CRHTTPConnectionWriteBodyTimeout tag:tag];
+- (void)writeData:(NSData *)data closeConnection:(BOOL)flag {
 }
 
-- (void)writeData:(NSData*)data
-{
-    [self writeData:data withTag:CRSocketTagSendingResponse];
+- (void)writeData:(NSData*)data {
+    [self writeData:data closeConnection:NO];
 }
 
-- (void)sendData:(NSData*)data
-{
-    [self writeData:data withTag:CRSocketTagFinishSendingResponse];
+- (void)sendData:(NSData*)data {
+    [self writeData:data closeConnection:YES];
 }
 
-- (void)writeString:(NSString*)string
-{
+- (void)writeString:(NSString*)string {
     [self writeData:[string dataUsingEncoding:NSUTF8StringEncoding]];
 }
 
-- (void)sendString:(NSString*)string
-{
+- (void)sendString:(NSString*)string {
     [self sendData:[string dataUsingEncoding:NSUTF8StringEncoding]];
 }
 
-- (void)writeFormat:(NSString*)format, ...
-{
+- (void)writeFormat:(NSString*)format, ... {
     va_list args;
     va_start(args, format);
     NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
@@ -152,8 +93,7 @@
     [self writeString:formattedString];
 }
 
-- (void)sendFormat:(NSString*)format, ...
-{
+- (void)sendFormat:(NSString*)format, ... {
     va_list args;
     va_start(args, format);
     NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
@@ -161,27 +101,10 @@
     [self sendString:formattedString];
 }
 
-- (void)sendStatusLine:(BOOL)closeConnection
-{
-    long tag = closeConnection ? CRSocketTagFinishSendingResponseAndClosing : CRSocketTagFinishSendingResponse;
-    
-    NSMutableData* statusData = [NSMutableData data];
-    if ( self.isChunked ) {
-        [statusData appendData: [@"0" dataUsingEncoding:NSUTF8StringEncoding]];
-        [statusData appendData:[CRConnection CRLFData]];
-    }
-    [statusData appendData:[CRConnection CRLFData]];
-    [self.connection.socket writeData:statusData withTimeout:self.connection.server.configuration.CRHTTPConnectionWriteBodyTimeout tag:tag];
+- (void)finish {
 }
 
-- (void)finish
-{
-    [self sendStatusLine:NO];
-}
-
-- (void)end
-{
-    [self sendStatusLine:YES];
+- (void)end {
 }
 
 
