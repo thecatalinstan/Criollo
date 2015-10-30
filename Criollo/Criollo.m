@@ -6,6 +6,8 @@
 //
 //
 
+#import "Criollo.h"
+
 NSString* const Criollo = @"Criollo";
 NSString* const CRErrorDomain = @"CRErrorDomain";
 
