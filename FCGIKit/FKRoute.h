@@ -1,6 +1,6 @@
 //
-//  CLRoute.h
-//  Criollo
+//  FCGIKitRoute.h
+//  FCGIKit
 //
 //  Created by Cătălin Stan on 5/18/14.
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
@@ -10,10 +10,10 @@
 
 /**
 
-The CLRoute Object
+The FKRoute Object
  
  */
-@interface CLRoute : NSObject<NSCoding> {
+@interface FKRoute : NSObject<NSCoding> {
     NSString* _requestPath;
     Class _controllerClass;
     NSString* _nibName;

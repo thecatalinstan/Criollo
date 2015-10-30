@@ -1,48 +1,48 @@
 //
-//  CLRoutingCenter.m
-//  Criollo
+//  FCGIKitRoutingCenter.m
+//  FCGIKit
 //
 //  Created by Cătălin Stan on 5/18/14.
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-#import "CLRoutingCenter.h"
-#import "Criollo.h"
-#import "CLRoute.h"
+#import "FKRoutingCenter.h"
+#import "FCGIKit.h"
+#import "FKRoute.h"
 
 
-@interface CLRoutingCenter (Private)
+@interface FKRoutingCenter (Private)
 
 - (void)loadRoutes:(NSArray*)routes;
 
 @end
 
-@implementation CLRoutingCenter (Private)
+@implementation FKRoutingCenter (Private)
 
 - (void)loadRoutes:(NSArray*)routesOrNil {
     if ( routesOrNil == nil ) {
-        routesOrNil = [[NSBundle mainBundle] objectForInfoDictionaryKey:CLRoutesKey];
+        routesOrNil = [[NSBundle mainBundle] objectForInfoDictionaryKey:FKRoutesKey];
     }
 	
     NSMutableDictionary* routesDictionary = [[NSMutableDictionary alloc] initWithCapacity:routesOrNil.count];
     [routesOrNil enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        CLRoute* route = [[CLRoute alloc] initWithInfoDictionary:obj];
+        FKRoute* route = [[FKRoute alloc] initWithInfoDictionary:obj];
 		NSString* key = route.requestPath.pathComponents.count >= 2 ? route.requestPath.pathComponents[1] : @"";
         routesDictionary[key] = route;
     }];
-    routes = routesDictionary.copy;
+    routes = routesDictionary;
 }
 
 @end
 
-@implementation CLRoutingCenter
+@implementation FKRoutingCenter
 
-static CLRoutingCenter* sharedCenter;
+static FKRoutingCenter* sharedCenter;
 
-+ (CLRoutingCenter *)sharedCenter
++ (FKRoutingCenter *)sharedCenter
 {
     if ( sharedCenter == nil ) {
-        sharedCenter = [[CLRoutingCenter alloc] initWithRoutes:nil];
+        sharedCenter = [[FKRoutingCenter alloc] initWithRoutes:nil];
     }
     return sharedCenter;
 }
@@ -56,7 +56,7 @@ static CLRoutingCenter* sharedCenter;
     return self;
 }
 
-- (CLRoute *)routeForRequestURI:(NSString *)requestURI
+- (FKRoute *)routeForRequestURI:(NSString *)requestURI
 {
 	NSString* key = requestURI.pathComponents.count >= 2 ? requestURI.pathComponents[1] : @"";
     return routes[key];
@@ -64,7 +64,7 @@ static CLRoutingCenter* sharedCenter;
 
 - (NSDictionary *)allRoutes
 {
-    return routes.copy;
+    return routes;
 }
 
 

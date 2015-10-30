@@ -20,13 +20,13 @@
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    self.server = [[CRHTTPServer alloc] initWithDelegate:self];
+    self.server = [[CRFCGIServer alloc] initWithDelegate:self];
     NSError* error;
     if ( ! [self.server startListening:&error] ) {
         [CRApp logErrorFormat:@"Failed to start server. %@", error.localizedDescription];
         [CRApp terminate:nil];
     } else {
-        [CRApp logFormat:@"Running at http://%@:%lu/", self.server.configuration.CRServerInterface.length == 0 ? @"127.0.0.1" : self.server.configuration.CRServerInterface, self.server.configuration.CRServerPort];
+        [CRApp logFormat:@"Running at fcgi://%@:%lu/", self.server.configuration.CRServerInterface.length == 0 ? @"127.0.0.1" : self.server.configuration.CRServerInterface, self.server.configuration.CRServerPort];
     }
 }
 

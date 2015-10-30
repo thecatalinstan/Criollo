@@ -1,16 +1,16 @@
 //
-//  CLRoute.m
-//  Criollo
+//  FCGIKitRoute.m
+//  FCGIKit
 //
 //  Created by Cătălin Stan on 5/18/14.
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-#import "CLRoute.h"
-#import "CLViewController.h"
-#import "Criollo.h"
+#import "FKRoute.h"
+#import "FKViewController.h"
+#import "FCGIKit.h"
 
-@implementation CLRoute
+@implementation FKRoute
 
 @synthesize requestPath = _requestPath;
 @synthesize controllerClass = _controllerClass;
@@ -26,7 +26,7 @@
     self = [self init];
     if ( self != nil ) {
         _requestPath = requestPath;
-        _controllerClass = controllerClass == nil ? [CLViewController class] : controllerClass;
+        _controllerClass = controllerClass == nil ? [FKViewController class] : controllerClass;
         _nibName = nibName;
         _userInfo = userInfo;
     }
@@ -35,19 +35,19 @@
 
 - (instancetype)initWithInfoDictionary:(NSDictionary *)infoDictionary
 {
-    NSString* requestPath = infoDictionary[CLRoutePathKey];
-    Class controllerClass = NSClassFromString(infoDictionary[CLRouteControllerKey]);
-    NSString* nibName = infoDictionary[CLRouteNibNameKey];
-    NSDictionary* userInfo = infoDictionary[CLRouteUserInfoKey];
+    NSString* requestPath = infoDictionary[FKRoutePathKey];
+    Class controllerClass = NSClassFromString(infoDictionary[FKRouteControllerKey]);
+    NSString* nibName = infoDictionary[FKRouteNibNameKey];
+    NSDictionary* userInfo = infoDictionary[FKRouteUserInfoKey];
     return [self initWithRequestPath:requestPath controllerClass:controllerClass nibName:nibName userInfo:userInfo];
 }
 
 - (NSDictionary *)infoDictionary
 {
-	NSDictionary* infoDictionary = @{ CLRoutePathKey: self.requestPath,
-									  CLRouteControllerKey: NSStringFromClass(self.controllerClass),
-									  CLRouteNibNameKey: self.nibName,
-									  CLRouteUserInfoKey: self.userInfo
+	NSDictionary* infoDictionary = @{ FKRoutePathKey: self.requestPath,
+									  FKRouteControllerKey: NSStringFromClass(self.controllerClass),
+									  FKRouteNibNameKey: self.nibName,
+									  FKRouteUserInfoKey: self.userInfo
 									 };
 	return infoDictionary;
 }
@@ -60,19 +60,19 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
-    [encoder encodeObject:self.requestPath forKey:CLRoutePathKey];
-    [encoder encodeObject:self.controllerClass forKey:CLRouteControllerKey];
-	[encoder encodeObject:self.nibName forKey:CLRouteNibNameKey];
-	[encoder encodeObject:self.userInfo forKey:CLRouteUserInfoKey];
+    [encoder encodeObject:self.requestPath forKey:FKRoutePathKey];
+    [encoder encodeObject:self.controllerClass forKey:FKRouteControllerKey];
+	[encoder encodeObject:self.nibName forKey:FKRouteNibNameKey];
+	[encoder encodeObject:self.userInfo forKey:FKRouteUserInfoKey];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
     self = [self init];
     if( self != nil ) {
-		self.requestPath = [decoder decodeObjectForKey:CLRoutePathKey];
-		self.controllerClass = [decoder decodeObjectForKey:CLRouteControllerKey];
-		self.nibName = [decoder decodeObjectForKey:CLRouteNibNameKey];
-		self.userInfo = [decoder decodeObjectForKey:CLRouteUserInfoKey];
+		self.requestPath = [decoder decodeObjectForKey:FKRoutePathKey];
+		self.controllerClass = [decoder decodeObjectForKey:FKRouteControllerKey];
+		self.nibName = [decoder decodeObjectForKey:FKRouteNibNameKey];
+		self.userInfo = [decoder decodeObjectForKey:FKRouteUserInfoKey];
 		
     }
     return self;

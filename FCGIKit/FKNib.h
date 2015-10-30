@@ -1,6 +1,6 @@
 //
-//  CLNib.h
-//  Criollo
+//  FCGIKitNib.h
+//  FCGIKit
 //
 //  Created by Cătălin Stan on 5/18/14.
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface CLNib : NSObject {
+@interface FKNib : NSObject {
     NSBundle* bundle;
     
     NSData* _data;
@@ -24,6 +24,6 @@
 
 + (void)cacheNibNames:(NSArray*)nibNames bundle:(NSBundle*)nibBundle;
 
-+ (CLNib *)cachedNibForNibName:(NSString*)nibName;
-+ (void)cacheNib:(CLNib *)nib forNibName:(NSString*)nibName;
++ (FKNib *)cachedNibForNibName:(NSString*)nibName;
++ (void)cacheNib:(FKNib *)nib forNibName:(NSString*)nibName;
 @end

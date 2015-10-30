@@ -1,14 +1,14 @@
 //
-//  CLView.m
-//  Criollo
+//  FCGIKitView.m
+//  FCGIKit
 //
 //  Created by Cătălin Stan on 5/17/14.
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-#import "CLView.h"
+#import "FKView.h"
 
-@implementation CLView
+@implementation FKView
 
 @synthesize templateText = _templateText;
 

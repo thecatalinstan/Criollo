@@ -1,16 +1,16 @@
 //
-//  CLHTTPRequest.m
-//  Criollo
+//  FCGIKitHTTPRequest.m
+//  FCGIKit
 //
 //  Created by Cătălin Stan on 3/30/14.
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-#import "CLHTTPRequest.h"
+#import "FKHTTPRequest.h"
 #import "FCGIRequest.h"
-#import "NSString+Criollo.h"
+#import "NSString+FCGIKit.h"
 
-@interface CLHTTPRequest (Private)
+@interface FKHTTPRequest (Private)
 
 - (NSDictionary*)parseQueryString:(NSString*)queryString;
 - (NSArray*)parseMultipartFormData:(NSData*)data boundary:(NSString*)boundary;
@@ -19,7 +19,7 @@
 
 @end
 
-@implementation CLHTTPRequest (Private)
+@implementation FKHTTPRequest (Private)
 
 - (NSDictionary*)parseQueryString:(NSString*)queryString
 {
@@ -33,7 +33,7 @@
         result[key.stringByDecodingURLEncodedString] = value.stringByDecodingURLEncodedString;
     }];
     
-    return result.copy;
+    return result;
 }
 
 - (NSArray*)parseMultipartFormData:(NSData*)data boundary:(NSString*)boundary
@@ -77,7 +77,7 @@
     } while (resultRange.location != NSNotFound);
     
     
-    return @[post.copy, files.copy];
+    return @[post, files];
 }
 
 - (NSDictionary*)parseMultipartFormDataPart:(NSData*)data
@@ -102,12 +102,12 @@
         NSString* value = [[NSString alloc] initWithData:bodyData encoding:NSUTF8StringEncoding];
         return @{ key: value};
     } else {
-        NSString* tmpFilename = [[CLApp temporaryDirectoryLocation] stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+        NSString* tmpFilename = [[FKApp temporaryDirectoryLocation] stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
         [bodyData writeToFile:tmpFilename atomically:NO];
-        NSDictionary* value = @{ CLFileNameKey: headers[@"Content-Disposition"][@"filename"],
-                                 CLFileTmpNameKey: tmpFilename,
-                                 CLFileContentTypeKey: headers[@"Content-Type"][@"_"],
-                                 CLFileSizeKey: @(bodyData.length)};
+        NSDictionary* value = @{ FKFileNameKey: headers[@"Content-Disposition"][@"filename"],
+                                 FKFileTmpNameKey: tmpFilename,
+                                 FKFileContentTypeKey: headers[@"Content-Type"][@"_"],
+                                 FKFileSizeKey: @(bodyData.length)};
         return @{ key: value };
     }
 }
@@ -130,7 +130,7 @@
 
 @end
 
-@implementation CLHTTPRequest
+@implementation FKHTTPRequest
 
 @synthesize FCGIRequest = _FCGIRequest;
 
@@ -184,7 +184,7 @@
 
 + (instancetype)requestWithFCGIRequest:(FCGIRequest *)anFCGIRequest
 {
-    return [[CLHTTPRequest alloc] initWithFCGIRequest:anFCGIRequest];
+    return [[FKHTTPRequest alloc] initWithFCGIRequest:anFCGIRequest];
 }
 
 @end

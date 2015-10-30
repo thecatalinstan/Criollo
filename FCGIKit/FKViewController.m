@@ -1,19 +1,19 @@
 //
-//  CLViewController.m
-//  Criollo
+//  FCGIKitViewController.m
+//  FCGIKit
 //
 //  Created by Cătălin Stan on 5/17/14.
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-#import "CLApplication.h"
-#import "CLViewController.h"
-#import "CLView.h"
-#import "CLNib.h"
-#import "CLHTTPRequest.h"
-#import "CLHTTPResponse.h"
+#import "FKApplication.h"
+#import "FKViewController.h"
+#import "FKView.h"
+#import "FKNib.h"
+#import "FKHTTPRequest.h"
+#import "FKHTTPResponse.h"
 
-@implementation CLViewController
+@implementation FKViewController
 
 @synthesize view = _view;
 @synthesize nibBundle = _nibBundle;
@@ -37,12 +37,12 @@
         _nibBundle = nibBundleOrNil;
         _userInfo = userInfo;
 		
-		if ( userInfo[CLRequestKey] ) {
-			_request = userInfo[CLRequestKey];
+		if ( userInfo[FKRequestKey] ) {
+			_request = userInfo[FKRequestKey];
 		}
 		
-		if ( userInfo[CLResponseKey] ) {
-			_response = userInfo[CLResponseKey];
+		if ( userInfo[FKResponseKey] ) {
+			_response = userInfo[FKResponseKey];
 		}
 
         [self loadView];
@@ -53,11 +53,11 @@
 - (void)loadView
 {
     // Load the NIB file
-    CLNib* templateNib = [CLNib cachedNibForNibName:self.nibName];
+    FKNib* templateNib = [FKNib cachedNibForNibName:self.nibName];
     if ( templateNib == nil ) {
-        templateNib = [[CLNib alloc] initWithNibNamed:self.nibName bundle:self.nibBundle];
+        templateNib = [[FKNib alloc] initWithNibNamed:self.nibName bundle:self.nibBundle];
         if ( templateNib != nil ) {
-            [CLNib cacheNib:templateNib forNibName:self.nibName];
+            [FKNib cacheNib:templateNib forNibName:self.nibName];
         }
     }
     
@@ -68,9 +68,9 @@
 	
 	
     if ( viewClass == nil ) {
-        viewClass = [CLView class];
+        viewClass = [FKView class];
     }
-    CLView* view = [[viewClass alloc] initWithTemplateText:templateText];
+    FKView* view = [[viewClass alloc] initWithTemplateText:templateText];
     [self setView:view];
     
     [self viewDidLoad];
@@ -101,7 +101,7 @@
 
 - (NSDictionary *)allVariables
 {
-    return variables.copy;
+    return variables;
 }
 
 - (void)addVariablesFromDictionary:(NSDictionary *)variablesDictionary

@@ -1,6 +1,6 @@
 //
-//  CLViewController.h
-//  Criollo
+//  FCGIKitViewController.h
+//  FCGIKit
 //
 //  Created by Cătălin Stan on 5/17/14.
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
@@ -8,28 +8,28 @@
 
 #import <Foundation/Foundation.h>
 
-@class CLView, CLHTTPRequest, CLHTTPResponse;
+@class FKView, FKHTTPRequest, FKHTTPResponse;
 
-@interface CLViewController : NSObject {
-    CLView* _view;
+@interface FKViewController : NSObject {
+    FKView* _view;
     
     NSString* _nibName;
     NSBundle* _nibBundle;
 
-    CLHTTPResponse* _response;
-    CLHTTPRequest* _request;
+    FKHTTPResponse* _response;
+    FKHTTPRequest* _request;
     
     NSDictionary* _userInfo;
     
     NSMutableDictionary* variables;
 }
 
-@property (nonatomic, retain) IBOutlet CLView* view;
+@property (nonatomic, retain) IBOutlet FKView* view;
 
 @property (nonatomic, readonly) NSString* nibName;
 @property (nonatomic, readonly) NSBundle* nibBundle;
-@property (nonatomic, retain) CLHTTPRequest* request;
-@property (nonatomic, retain) CLHTTPResponse* response;
+@property (nonatomic, retain) FKHTTPRequest* request;
+@property (nonatomic, retain) FKHTTPResponse* response;
 @property (nonatomic, retain) NSDictionary* userInfo;
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;

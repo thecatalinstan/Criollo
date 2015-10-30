@@ -1,15 +1,15 @@
 //
-//  NSHTTPCookie+Criollo.m
-//  Criollo
+//  NSHTTPCookie+FCGIKit.m
+//  FCGIKit
 //
 //  Created by Cătălin Stan on 5/17/14.
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-#import "NSHTTPCookie+Criollo.h"
+#import "NSHTTPCookie+FCGIKit.h"
 #import "NSDate+RFC1123.h"
 
-@implementation NSHTTPCookie (Criollo)
+@implementation NSHTTPCookie (FCGIKit)
 
 - (NSString *)HTTPHeaderField
 {

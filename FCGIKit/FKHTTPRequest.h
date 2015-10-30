@@ -1,6 +1,6 @@
 //
-//  CLHTTPRequest.h
-//  Criollo
+//  FCGIKitHTTPRequest.h
+//  FCGIKit
 //
 //  Created by Cătălin Stan on 3/30/14.
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
@@ -10,7 +10,7 @@
 
 @class FCGIRequest;
 
-@interface CLHTTPRequest : NSObject {
+@interface FKHTTPRequest : NSObject {
     NSMutableData* body;
 }
 
