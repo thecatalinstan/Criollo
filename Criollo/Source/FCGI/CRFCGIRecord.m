@@ -8,6 +8,56 @@
 
 #import "CRFCGIRecord.h"
 
+NSString* NSStringFromCRFCGIVersion(CRFCGIVersion version) {
+    NSString* versionName;
+    switch (version) {
+        case CRFCGIVersion1:
+            versionName = @"CRFCGIVersion1";
+            break;
+    }
+    return versionName;
+}
+
+NSString* NSStringFromCRFCGIRecordType(CRFCGIRecordType recordType) {
+    NSString* recordTypeName;
+    switch (recordType) {
+        case CRFCGIRecordTypeBeginRequest:
+            recordTypeName = @"CRFCGIRecordTypeBeginRequest";
+            break;
+        case CRFCGIRecordTypeAbortRequest:
+            recordTypeName = @"CRFCGIRecordTypeAbortRequest";
+            break;
+        case CRFCGIRecordTypeEndRequest:
+            recordTypeName = @"CRFCGIRecordTypeEndRequest";
+            break;
+        case CRFCGIRecordTypeParams:
+            recordTypeName = @"CRFCGIRecordTypeParams";
+            break;
+        case CRFCGIRecordTypeStdIn:
+            recordTypeName = @"CRFCGIRecordTypeStdIn";
+            break;
+        case CRFCGIRecordTypeStdOut:
+            recordTypeName = @"CRFCGIRecordTypeStdOut";
+            break;
+        case CRFCGIRecordTypeStdErr:
+            recordTypeName = @"CRFCGIRecordTypeStdErr";
+            break;
+        case CRFCGIRecordTypeData:
+            recordTypeName = @"CRFCGIRecordTypeData";
+            break;
+        case CRFCGIRecordTypeGetValues:
+            recordTypeName = @"CRFCGIRecordTypeGetValues";
+            break;
+        case CRFCGIRecordTypeGetValuesResult:
+            recordTypeName = @"CRFCGIRecordTypeGetValuesResult";
+            break;
+        case CRFCGIRecordTypeUnknown:
+            recordTypeName = @"CRFCGIRecordTypeUnknown";
+            break;
+    }
+    return recordTypeName;
+}
+
 @interface CRFCGIRecord ()
 
 @property (nonatomic, readonly, copy) NSData *headerProtocolData;
@@ -28,19 +78,21 @@
     self = [super init];
     if ( self != nil ) {
         if ( data != nil ) {
-            self.version = (CRFCGIVersion) [data subdataWithRange:NSMakeRange(0, 1)].bytes;
-            self.type = (CRFCGIRecordType) [data subdataWithRange:NSMakeRange(1, 1)].bytes;
-            self.requestID = CFSwapInt16BigToHost( (UInt16) [data subdataWithRange:NSMakeRange(2, 2)].bytes);
-            self.contentLength = CFSwapInt16BigToHost( (UInt16) [data subdataWithRange:NSMakeRange(4, 2)].bytes);
-            self.paddingLength = (UInt8) [data subdataWithRange:NSMakeRange(6, 1)].bytes;
-            self.reserved = 0x00;
+            [data getBytes:&_version range:NSMakeRange(0, 1)];
+            [data getBytes:&_type range:NSMakeRange(1, 1)];
+
+            [data getBytes:&_requestID range:NSMakeRange(2, 2)];
+            _requestID = CFSwapInt16BigToHost(_requestID);
+
+            [data getBytes:&_contentLength range:NSMakeRange(4, 2)];
+            _contentLength = CFSwapInt16BigToHost(_contentLength);
+
+            [data getBytes:&_paddingLength range:NSMakeRange(6, 1)];
+
+            _reserved = 0x00;
         }
     }
     return self;
-}
-
-- (void)processContentData:(NSData *)data {
-
 }
 
 @end

@@ -52,9 +52,6 @@
     NSMutableString* string = [NSMutableString stringWithString:@"<h1>Hello world!</h1>"];
     self.response = [[CRHTTPResponse alloc] initWithConnection:self HTTPStatusCode:200 description:@"asdfadsfas" version:self.request.version];
     [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-//    [self.response writeString:string];
-//    [self.response finish];
-
     [self.response sendString:string];
 }
 

@@ -26,15 +26,8 @@ typedef NS_ENUM(UInt8, CRFCGIRecordType) {
     CRFCGIRecordTypeUnknown = 11
 };
 
-typedef NS_ENUM(UInt8, CRFCGIRequestRole) {
-    CRFCGIRequestRoleResponder = 1,
-    CRFCGIRequestRoleAuthorizer = 2,
-    CRFCGIRequestRoleFilter = 3
-};
-typedef UInt8   CRFCGIRequestFlags;
-
-//typedef UInt32  CRFCGIApplicationStatus;
-//typedef UInt8   CRFCGIProtocolStatus;
+extern NSString* NSStringFromCRFCGIVersion(CRFCGIVersion version);
+extern NSString* NSStringFromCRFCGIRecordType(CRFCGIRecordType recordType);
 
 @interface CRFCGIRecord : NSObject
 
@@ -50,7 +43,5 @@ typedef UInt8   CRFCGIRequestFlags;
 + (CRFCGIRecord*)recordWithHeaderData:(NSData*)data;
 
 - (instancetype)initWithHeaderData:(NSData*)data NS_DESIGNATED_INITIALIZER;
-
-- (void)processContentData:(NSData*)data;
 
 @end
