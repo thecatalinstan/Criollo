@@ -22,5 +22,6 @@ extern NSString* NSStringFromCRFCGIRequestRole(CRFCGIRequestRole requestRole);
 
 @property (nonatomic, assign) CRFCGIRequestRole requestRole;
 @property (nonatomic, assign) CRFCGIRequestFlags requestFlags;
+@property (nonatomic, strong) NSData *protocolData;
 
 @end

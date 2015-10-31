@@ -72,6 +72,7 @@
 }
 
 - (void)didReceiveCompleteRequest {
+    NSLog(@"%s %@", __PRETTY_FUNCTION__, self.request.body);
 }
 
 #pragma mark - State

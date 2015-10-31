@@ -25,11 +25,6 @@ NSString* const FKProtocolStatusKey = @"FKProtocolStatus";
 	
 	else if ([record isKindOfClass:[FCGIByteStreamRecord class]]) {
 		
-		NSString* globalRequestId = [NSString stringWithFormat:@"%d-%d", record.requestId, [socket connectedPort]];
-		FCGIRequest* request;
-		@synchronized(_currentRequests) {
-			request = _currentRequests[globalRequestId];
-		}
 		NSData* data = [(FCGIByteStreamRecord*)record data];
 		if ( [data length] > 0 ) {
 			[request.stdinData appendData:data];
@@ -87,45 +82,7 @@ NSString* const FKProtocolStatusKey = @"FKProtocolStatus";
 	}
 }
 
-
-- (FKViewController *)instantiateViewControllerForRoute:(FKRoute *)route userInfo:(NSDictionary*)userInfo
-{
-	NSString* nibName = route.nibName == nil ? [NSStringFromClass(route.controllerClass) stringByReplacingOccurrencesOfString:@"Controller" withString:@""] : route.nibName;
-	
-	NSMutableDictionary* combinedUserInfo = [NSMutableDictionary dictionary];
-	
-	if ( userInfo ) {
-		[combinedUserInfo addEntriesFromDictionary:userInfo];
-	}
-	
-	if ( route.userInfo ){
-		[combinedUserInfo addEntriesFromDictionary:route.userInfo];
-	}
-	
-	FKViewController* controller = [[route.controllerClass alloc] initWithNibName:nibName bundle:[NSBundle mainBundle] userInfo:combinedUserInfo];
-	
-	return controller;
-}
-
 #pragma mark - GCDAsyncSocketDelegate
-
-
-- (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
-{
-	if (tag == FCGIRecordAwaitingHeaderTag) {
-		FCGIRecord* record = [FCGIRecord recordWithHeaderData:data];
-		if (record.contentLength == 0) {
-			[self handleRecord:record fromSocket:sock];
-		} else {
-			dispatch_set_context(sock.delegateQueue, (void *)(CFBridgingRetain(record)));
-			[sock readDataToLength:(record.contentLength + record.paddingLength) withTimeout:FCGITimeout tag:FCGIRecordAwaitingContentAndPaddingTag];
-		}
-	} else if (tag == FCGIRecordAwaitingContentAndPaddingTag) {
-		FCGIRecord* record = CFBridgingRelease(dispatch_get_context(sock.delegateQueue));
-		[record processContentData:data];
-		[self handleRecord:record fromSocket:sock];
-	}
-}
 
 
 @end
