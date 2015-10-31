@@ -182,10 +182,11 @@
 
         while ( startOffset < dataLength ) {
             parseValuePairBlock(&startOffset, &paramName, &paramValue, NULL);
+            if ( paramName.length != 0 && paramValue != nil ) {
+                self.currentRequestParams[paramName] = paramValue;
+            }
         }
-        if ( paramName.length != 0 && paramValue != nil ) {
-            self.currentRequestParams[paramName] = paramValue;
-        }
+
     });
 
 }
@@ -202,16 +203,29 @@
 
         case CRFCGIConnectionSocketTagReadRecordHeader:
             self.currentRecord = [[CRFCGIRecord alloc] initWithHeaderData:data];
+            NSLog(@" * Header: %@ %hu", NSStringFromCRFCGIRecordType(self.currentRecord.type), self.currentRecord.contentLength);
 
             // Process the record header
             if (self.currentRecord.contentLength == 0) {
 
                 // Zero-length content records are markers
                 switch (self.currentRecord.type) {
-                    case CRFCGIRecordTypeParams:
+                    case CRFCGIRecordTypeParams: {
                         // We've finished reading the parameters
-                        
-                        break;
+                        NSString* method = self.currentRequestParams[@"REQUEST_METHOD"];
+                        NSString* path = self.currentRequestParams[@"DOCUMENT_URI"];
+                        NSString* version = self.currentRequestParams[@"SERVER_PROTOCOL"];
+                        if ( [self.server canHandleHTTPMethod:method forPath:path] ) {
+                            [self.currentRequestParams removeObjectsForKeys:@[@"REQUEST_METHOD", @"DOCUMENT_URI", @"SERVER_PROTOCOL"]];
+                            self.request = [[CRFCGIRequest alloc] initWithMethod:method URL:[NSURL URLWithString:path] version:version env:self.currentRequestParams];
+
+                            [self didReceiveCompleteRequestHeaders];
+                        } else {
+                            [self handleError:CRErrorRequestUnsupportedMethod object:@{CRRequestKey:[NSString stringWithFormat:@"%@ %@", method, path]}];
+                            return;
+                        }
+                    }
+                    break;
 
                     default:
                         break;
@@ -226,7 +240,7 @@
             break;
 
         case CRFCGIConnectionSocketTagReadRecordContent:
-            NSLog(@"%@ %lu", NSStringFromCRFCGIRecordType(self.currentRecord.type), data.length);
+            NSLog(@" * Content: %@ %lu", NSStringFromCRFCGIRecordType(self.currentRecord.type), data.length);
 
             // Process the header content data
             switch (self.currentRecord.type) {

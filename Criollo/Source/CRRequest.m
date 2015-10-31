@@ -10,32 +10,32 @@
 
 @implementation CRRequest
 
-- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version
-{
+- (instancetype)init {
+    return [self initWithMethod:nil URL:nil version:nil env:nil];
+}
+
+- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version {
+    return [self initWithMethod:method URL:URL version:version env:nil];
+}
+
+- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version env:(NSDictionary *)env {
     self = [super init];
     if ( self != nil ) {
         self.message = CFBridgingRelease( CFHTTPMessageCreateRequest(NULL, (__bridge CFStringRef)method, (__bridge CFURLRef)URL, (__bridge CFStringRef)version) );
+        _env = env;
     }
     return self;
 }
 
-- (NSURL *)URL
-{
+- (NSURL *)URL {
     return (__bridge_transfer NSURL *)CFHTTPMessageCopyRequestURL((__bridge CFHTTPMessageRef)self.message);
 }
 
-- (BOOL)appendData:(NSData *)data
-{
+- (BOOL)appendData:(NSData *)data {
     return CFHTTPMessageAppendBytes((__bridge CFHTTPMessageRef)self.message, data.bytes, data.length);
 }
 
-- (BOOL)headerComplete
-{
-    return CFHTTPMessageIsHeaderComplete((__bridge CFHTTPMessageRef _Nonnull)(self.message));
-}
-
-- (NSString *)method
-{
+- (NSString *)method {
 	return (__bridge_transfer NSString *)CFHTTPMessageCopyRequestMethod((__bridge CFHTTPMessageRef _Nonnull)(self.message));
 }
 

@@ -23,34 +23,7 @@ NSString* const FKProtocolStatusKey = @"FKProtocolStatus";
 -(void)handleRecord:(FCGIRecord*)record fromSocket:(GCDAsyncSocket *)socket
 {
 	
-	if ([record isKindOfClass:[FCGIBeginRequestRecord class]]) {
-		
-		FCGIRequest* request = [[FCGIRequest alloc] initWithBeginRequestRecord:(FCGIBeginRequestRecord*)record];
-		request.socket = socket;
-		NSString* globalRequestId = [NSString stringWithFormat:@"%d-%d", record.requestId, socket.connectedPort];
-		@synchronized(_currentRequests) {
-			_currentRequests[globalRequestId] = request;
-		}
-		[socket readDataToLength:FCGIRecordFixedLengthPartLength withTimeout:FCGITimeout tag:FCGIRecordAwaitingHeaderTag];
-		
-	} else if ([record isKindOfClass:[FCGIParamsRecord class]]) {
-		
-		NSString* globalRequestId = [NSString stringWithFormat:@"%d-%d", record.requestId, [socket connectedPort]];
-		FCGIRequest* request;
-		@synchronized(_currentRequests) {
-			request = _currentRequests[globalRequestId];
-		}
-		NSDictionary* params = [(FCGIParamsRecord*)record params];
-		if ([params count] > 0) {
-			[request.parameters addEntriesFromDictionary:params];
-		} else {
-			if ( _delegate && [_delegate respondsToSelector:@selector(application:didReceiveRequest:)] ) {
-				[_delegate application:self didReceiveRequest:@{FKRequestKey: request}];
-			}
-		}
-		[socket readDataToLength:FCGIRecordFixedLengthPartLength withTimeout:FCGITimeout tag:FCGIRecordAwaitingHeaderTag];
-		
-	} else if ([record isKindOfClass:[FCGIByteStreamRecord class]]) {
+	else if ([record isKindOfClass:[FCGIByteStreamRecord class]]) {
 		
 		NSString* globalRequestId = [NSString stringWithFormat:@"%d-%d", record.requestId, [socket connectedPort]];
 		FCGIRequest* request;
