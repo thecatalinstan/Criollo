@@ -18,7 +18,7 @@
 @interface CRResponse ()
 
 - (void)writeHeaders;
-- (void)writeData:(NSData*)data closeConnection:(BOOL)flag;
+- (void)writeData:(NSData*)data finish:(BOOL)flag;
 
 @end
 
@@ -66,15 +66,15 @@
 - (void)writeHeaders {
 }
 
-- (void)writeData:(NSData *)data closeConnection:(BOOL)flag {
+- (void)writeData:(NSData *)data finish:(BOOL)flag {
 }
 
 - (void)writeData:(NSData*)data {
-    [self writeData:data closeConnection:NO];
+    [self writeData:data finish:NO];
 }
 
 - (void)sendData:(NSData*)data {
-    [self writeData:data closeConnection:YES];
+    [self writeData:data finish:YES];
 }
 
 - (void)writeString:(NSString*)string {

@@ -37,6 +37,10 @@
 		ADA37C821BE3B86B008D89CA /* CRHTTPResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA37C801BE3B86B008D89CA /* CRHTTPResponse.m */; };
 		ADA37C851BE3C019008D89CA /* CRFCGIResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = ADA37C831BE3C019008D89CA /* CRFCGIResponse.h */; };
 		ADA37C861BE3C019008D89CA /* CRFCGIResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA37C841BE3C019008D89CA /* CRFCGIResponse.m */; };
+		ADA37C891BE3C713008D89CA /* CRHTTPServerConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = ADA37C871BE3C713008D89CA /* CRHTTPServerConfiguration.h */; };
+		ADA37C8A1BE3C713008D89CA /* CRHTTPServerConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA37C881BE3C713008D89CA /* CRHTTPServerConfiguration.m */; };
+		ADA37C8D1BE3C7A0008D89CA /* CRFCGIServerConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = ADA37C8B1BE3C7A0008D89CA /* CRFCGIServerConfiguration.h */; };
+		ADA37C8E1BE3C7A0008D89CA /* CRFCGIServerConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA37C8C1BE3C7A0008D89CA /* CRFCGIServerConfiguration.m */; };
 		ADEDB37C1AEFC0B000A26AF1 /* Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB37B1AEFC0B000A26AF1 /* Criollo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ADEDB3A41AEFCC6400A26AF1 /* CRApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = ADEDB34F1AEFBD8800A26AF1 /* CRApplication.m */; };
 		ADEDB3A61AEFCC6400A26AF1 /* NSDate+RFC1123.m in Sources */ = {isa = PBXBuildFile; fileRef = ADEDB3601AEFBD8800A26AF1 /* NSDate+RFC1123.m */; };
@@ -75,6 +79,10 @@
 		ADA37C801BE3B86B008D89CA /* CRHTTPResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPResponse.m; sourceTree = "<group>"; };
 		ADA37C831BE3C019008D89CA /* CRFCGIResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFCGIResponse.h; sourceTree = "<group>"; };
 		ADA37C841BE3C019008D89CA /* CRFCGIResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRFCGIResponse.m; sourceTree = "<group>"; };
+		ADA37C871BE3C713008D89CA /* CRHTTPServerConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRHTTPServerConfiguration.h; sourceTree = "<group>"; };
+		ADA37C881BE3C713008D89CA /* CRHTTPServerConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPServerConfiguration.m; sourceTree = "<group>"; };
+		ADA37C8B1BE3C7A0008D89CA /* CRFCGIServerConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFCGIServerConfiguration.h; sourceTree = "<group>"; };
+		ADA37C8C1BE3C7A0008D89CA /* CRFCGIServerConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRFCGIServerConfiguration.m; sourceTree = "<group>"; };
 		ADEDB34E1AEFBD8800A26AF1 /* CRApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRApplication.h; sourceTree = "<group>"; };
 		ADEDB34F1AEFBD8800A26AF1 /* CRApplication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRApplication.m; sourceTree = "<group>"; };
 		ADEDB35F1AEFBD8800A26AF1 /* NSDate+RFC1123.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSDate+RFC1123.h"; path = "Criollo/Source/NSDate+RFC1123.h"; sourceTree = "<group>"; };
@@ -101,6 +109,8 @@
 			children = (
 				AD61E9741BDD7FDF00F5BD17 /* CRHTTPServer.h */,
 				AD61E9751BDD7FDF00F5BD17 /* CRHTTPServer.m */,
+				ADA37C871BE3C713008D89CA /* CRHTTPServerConfiguration.h */,
+				ADA37C881BE3C713008D89CA /* CRHTTPServerConfiguration.m */,
 				AD61E9781BDD80C100F5BD17 /* CRHTTPConnection.h */,
 				AD61E9791BDD80C100F5BD17 /* CRHTTPConnection.m */,
 				ADA37C7F1BE3B86B008D89CA /* CRHTTPResponse.h */,
@@ -114,6 +124,8 @@
 			children = (
 				AD61E97F1BDD880C00F5BD17 /* CRFCGIServer.h */,
 				AD61E9801BDD880C00F5BD17 /* CRFCGIServer.m */,
+				ADA37C8B1BE3C7A0008D89CA /* CRFCGIServerConfiguration.h */,
+				ADA37C8C1BE3C7A0008D89CA /* CRFCGIServerConfiguration.m */,
 				AD61E97D1BDD880C00F5BD17 /* CRFCGIConnection.h */,
 				AD61E97E1BDD880C00F5BD17 /* CRFCGIConnection.m */,
 				ADA37C831BE3C019008D89CA /* CRFCGIResponse.h */,
@@ -183,10 +195,10 @@
 				ADEDB34F1AEFBD8800A26AF1 /* CRApplication.m */,
 				AD19695C1B626EF90098CA89 /* CRServer.h */,
 				AD19695D1B626EF90098CA89 /* CRServer.m */,
-				AD4AE7701BDAB1C300B9F221 /* CRConnection.h */,
-				AD4AE7711BDAB1C300B9F221 /* CRConnection.m */,
 				AD227F881BDC3F6000C23D52 /* CRServerConfiguration.h */,
 				AD227F891BDC3F6000C23D52 /* CRServerConfiguration.m */,
+				AD4AE7701BDAB1C300B9F221 /* CRConnection.h */,
+				AD4AE7711BDAB1C300B9F221 /* CRConnection.m */,
 				AD61E9851BDD8C8E00F5BD17 /* CRMessage.h */,
 				AD61E9861BDD8C8E00F5BD17 /* CRMessage.m */,
 				AD61E9871BDD8C8E00F5BD17 /* CRRequest.h */,
@@ -217,7 +229,9 @@
 				ADA37C811BE3B86B008D89CA /* CRHTTPResponse.h in Headers */,
 				AD61E9811BDD880C00F5BD17 /* CRFCGIConnection.h in Headers */,
 				ADEDB3A71AEFCC8B00A26AF1 /* CRApplication.h in Headers */,
+				ADA37C891BE3C713008D89CA /* CRHTTPServerConfiguration.h in Headers */,
 				AD227F8A1BDC3F6000C23D52 /* CRServerConfiguration.h in Headers */,
+				ADA37C8D1BE3C7A0008D89CA /* CRFCGIServerConfiguration.h in Headers */,
 				ADA37C851BE3C019008D89CA /* CRFCGIResponse.h in Headers */,
 				ADEDB3AA1AEFCC8B00A26AF1 /* NSDate+RFC1123.h in Headers */,
 				AD61E98B1BDD8C8E00F5BD17 /* CRMessage.h in Headers */,
@@ -297,6 +311,7 @@
 				AD61E9821BDD880C00F5BD17 /* CRFCGIConnection.m in Sources */,
 				ADEDB3A41AEFCC6400A26AF1 /* CRApplication.m in Sources */,
 				AD61E97B1BDD80C100F5BD17 /* CRHTTPConnection.m in Sources */,
+				ADA37C8A1BE3C713008D89CA /* CRHTTPServerConfiguration.m in Sources */,
 				AD227F8B1BDC3F6000C23D52 /* CRServerConfiguration.m in Sources */,
 				AD4AE7731BDAB1C300B9F221 /* CRConnection.m in Sources */,
 				ADEDB3A61AEFCC6400A26AF1 /* NSDate+RFC1123.m in Sources */,
@@ -307,6 +322,7 @@
 				AD61E98C1BDD8C8E00F5BD17 /* CRMessage.m in Sources */,
 				AD61E9841BDD880C00F5BD17 /* CRFCGIServer.m in Sources */,
 				AD609C5C1BDA661F0003E702 /* GCDAsyncSocket.m in Sources */,
+				ADA37C8E1BE3C7A0008D89CA /* CRFCGIServerConfiguration.m in Sources */,
 				ADA37C751BE38E69008D89CA /* CRFCGIRecord.m in Sources */,
 				AD19695F1B626EF90098CA89 /* CRServer.m in Sources */,
 				ADA37C821BE3B86B008D89CA /* CRHTTPResponse.m in Sources */,

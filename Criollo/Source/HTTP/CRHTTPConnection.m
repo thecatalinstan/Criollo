@@ -10,7 +10,7 @@
 #import "GCDAsyncSocket.h"
 #import "CRApplication.h"
 #import "CRServer.h"
-#import "CRServerConfiguration.h"
+#import "CRHTTPServerConfiguration.h"
 #import "CRRequest.h"
 #import "CRHTTPResponse.h"
 
@@ -30,9 +30,11 @@
     requestBodyLength = 0;
     requestBodyReceivedBytesLength = 0;
 
+    CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.server.configuration;
+
     // Read the first request header
-    NSUInteger timeout = (didPerformInitialRead ? self.server.configuration.CRHTTPConnectionKeepAliveTimeout : self.server.configuration.CRConnectionInitialReadTimeout) + self.server.configuration.CRHTTPConnectionReadHeaderLineTimeout;
-    [self.socket readDataToData:[CRConnection CRLFData] withTimeout:timeout maxLength:self.server.configuration.CRRequestMaxHeaderLineLength tag:CRHTTPConnectionSocketTagBeginReadingRequest];
+    NSUInteger timeout = didPerformInitialRead ? config.CRConnectionKeepAliveTimeout : config.CRConnectionInitialReadTimeout + config.CRHTTPConnectionReadHeaderLineTimeout;
+    [self.socket readDataToData:[CRConnection CRLFData] withTimeout:timeout maxLength:config.CRRequestMaxHeaderLineLength tag:CRHTTPConnectionSocketTagBeginReadingRequest];
 }
 
 - (void)didReceiveCompleteRequestHeaders {
@@ -50,7 +52,10 @@
     NSMutableString* string = [NSMutableString stringWithString:@"<h1>Hello world!</h1>"];
     self.response = [[CRHTTPResponse alloc] initWithConnection:self HTTPStatusCode:200 description:@"asdfadsfas" version:self.request.version];
     [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-    [self.response finish];
+//    [self.response writeString:string];
+//    [self.response finish];
+
+    [self.response sendString:string];
 }
 
 - (void)handleError:(NSUInteger)errorType object:(id)object {
@@ -112,11 +117,13 @@
         return;
     }
 
+    CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.server.configuration;
+
     switch (tag) {
         case CRHTTPConnectionSocketTagBeginReadingRequest:
             // We've read the first header line and it's ok.
             // Continue to read the rest of the headers
-            [self.socket readDataToData:[CRConnection CRLFCRLFData] withTimeout:self.server.configuration.CRHTTPConnectionReadHeaderTimeout maxLength:self.server.configuration.CRRequestMaxHeaderLength tag:CRHTTPConnectionSocketTagReadingRequestHeader];
+            [self.socket readDataToData:[CRConnection CRLFCRLFData] withTimeout:config.CRHTTPConnectionReadHeaderTimeout maxLength:config.CRRequestMaxHeaderLength tag:CRHTTPConnectionSocketTagReadingRequestHeader];
             break;
 
         case CRHTTPConnectionSocketTagReadingRequestHeader:
@@ -125,8 +132,8 @@
 
             requestBodyLength = [self.request valueForHTTPHeaderField:@"Content-Length"].integerValue;
             if ( requestBodyLength > 0 ) {
-                NSUInteger bytesToRead = requestBodyLength < self.server.configuration.CRRequestBodyBufferSize ? requestBodyLength : self.server.configuration.CRRequestBodyBufferSize;
-                [self.socket readDataToLength:bytesToRead withTimeout:self.server.configuration.CRHTTPConnectionReadBodyTimeout tag:CRHTTPConnectionSocketTagReadingRequestBody];
+                NSUInteger bytesToRead = requestBodyLength < config.CRRequestBodyBufferSize ? requestBodyLength : config.CRRequestBodyBufferSize;
+                [self.socket readDataToLength:bytesToRead withTimeout:config.CRHTTPConnectionReadBodyTimeout tag:CRHTTPConnectionSocketTagReadingRequestBody];
             } else {
                 [self didReceiveCompleteRequest];
             }
@@ -138,8 +145,8 @@
 
             if (requestBodyReceivedBytesLength < requestBodyLength) {
                 NSUInteger requestBodyLeftBytesLength = requestBodyLength - requestBodyReceivedBytesLength;
-                NSUInteger bytesToRead = requestBodyLeftBytesLength < self.server.configuration.CRRequestBodyBufferSize ? requestBodyLeftBytesLength : self.server.configuration.CRRequestBodyBufferSize;
-                [self.socket readDataToLength:bytesToRead withTimeout:self.server.configuration.CRHTTPConnectionReadBodyTimeout tag:CRHTTPConnectionSocketTagReadingRequestBody];
+                NSUInteger bytesToRead = requestBodyLeftBytesLength < config.CRRequestBodyBufferSize ? requestBodyLeftBytesLength : config.CRRequestBodyBufferSize;
+                [self.socket readDataToLength:bytesToRead withTimeout:config.CRHTTPConnectionReadBodyTimeout tag:CRHTTPConnectionSocketTagReadingRequestBody];
             } else {
                 [self didReceiveCompleteRequest];
             }

@@ -10,7 +10,7 @@
 #import "GCDAsyncSocket.h"
 #import "CRApplication.h"
 #import "CRServer.h"
-#import "CRServerConfiguration.h"
+#import "CRFCGIServerConfiguration.h"
 #import "CRRequest.h"
 #import "CRResponse.h"
 #import "CRFCGIRecord.h"
@@ -25,7 +25,7 @@
 
 - (void)startReading {
     // Read the first request header
-    NSUInteger timeout = self.server.configuration.CRFCGIConnectionReadRecordTimeout;
+    NSUInteger timeout = ((CRFCGIServerConfiguration*)self.server.configuration).CRFCGIConnectionReadRecordTimeout;
     [self.socket readDataToLength:CRFCGIRecordHeaderLength withTimeout:timeout tag:CRFCGIConnectionSocketTagReadHeader];
 }
 

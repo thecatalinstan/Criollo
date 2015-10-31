@@ -8,6 +8,8 @@
 
 #import "CRServer.h"
 
+@class CRHTTPServerConfiguration;
+
 @interface CRHTTPServer : CRServer
 
 @end

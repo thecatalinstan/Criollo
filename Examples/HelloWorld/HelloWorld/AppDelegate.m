@@ -32,18 +32,18 @@
         [CRApp logFormat:@"Started HTTP server at http://%@:%lu/", self.HTTPServer.configuration.CRServerInterface.length == 0 ? @"127.0.0.1" : self.HTTPServer.configuration.CRServerInterface, self.HTTPServer.configuration.CRServerPort];
     }
 
-    self.FCGIServer = [[CRFCGIServer alloc] initWithDelegate:self];
-    NSError* FCGIServerError;
-    if ( ! [self.FCGIServer startListeningOnPortNumber:FCGIPortNumber error:&FCGIServerError] ) {
-        [CRApp logErrorFormat:@"Failed to start FCGI server. %@", FCGIServerError.localizedDescription];
-    } else {
-        [CRApp logFormat:@"Running FCGI server on %@:%lu", self.FCGIServer.configuration.CRServerInterface.length == 0 ? @"127.0.0.1" : self.FCGIServer.configuration.CRServerInterface, self.FCGIServer.configuration.CRServerPort];
-    }
+//    self.FCGIServer = [[CRFCGIServer alloc] initWithDelegate:self];
+//    NSError* FCGIServerError;
+//    if ( ! [self.FCGIServer startListeningOnPortNumber:FCGIPortNumber error:&FCGIServerError] ) {
+//        [CRApp logErrorFormat:@"Failed to start FCGI server. %@", FCGIServerError.localizedDescription];
+//    } else {
+//        [CRApp logFormat:@"Running FCGI server on %@:%lu", self.FCGIServer.configuration.CRServerInterface.length == 0 ? @"127.0.0.1" : self.FCGIServer.configuration.CRServerInterface, self.FCGIServer.configuration.CRServerPort];
+//    }
 
-    if ( HTTPServerError != nil  && FCGIServerError != nil ) {
-        [CRApp logErrorFormat:@"%@", @"Neither the FCGI nor the HTTP server could be started. Exiting."];
-        [CRApp terminate:nil];
-    }
+//    if ( HTTPServerError != nil  && FCGIServerError != nil ) {
+//        [CRApp logErrorFormat:@"%@", @"Neither the FCGI nor the HTTP server could be started. Exiting."];
+//        [CRApp terminate:nil];
+//    }
 }
 
 - (CRApplicationTerminateReply)applicationShouldTerminate:(CRApplication *)sender {

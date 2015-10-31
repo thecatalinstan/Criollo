@@ -156,7 +156,7 @@ NSString* const CRResponseKey = @"CRResponse";
     CRConnection* connection = [self newConnectionWithSocket:newSocket];
     dispatch_async(self.isolationQueue, ^(){
         [self.connections addObject:connection];
-        connection.ignoreKeepAlive = self.connections.count >= self.configuration.CRHTTPConnectionMaxKeepAliveConnections;
+        connection.ignoreKeepAlive = self.connections.count >= self.configuration.CRConnectionMaxKeepAliveConnections;
     });
     if ( [self.delegate respondsToSelector:@selector(server:didAcceptConnection:)]) {
         [self.delegate server:self didAcceptConnection:connection];

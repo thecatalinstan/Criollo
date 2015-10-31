@@ -9,7 +9,7 @@
 #import "CRHTTPResponse.h"
 #import "CRHTTPConnection.h"
 #import "CRHTTPServer.h"
-#import "CRServerConfiguration.h"
+#import "CRHTTPServerConfiguration.h"
 #import "GCDAsyncSocket.h"
 
 @interface CRHTTPResponse () {
@@ -32,6 +32,8 @@
         return;
     }
 
+    CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.connection.server.configuration;
+
     //    if ( [self valueForHTTPHeaderField:@"Date"] == nil ) {
     //        [self setValue:[[NSDate date] rfc1123String] forHTTPHeaderField:@"Date"];
     //    }
@@ -53,14 +55,17 @@
     }
 
     [self setBody:nil];
-    [self.connection.socket writeData:self.data withTimeout:self.connection.server.configuration.CRHTTPConnectionWriteHeaderTimeout tag:CRHTTPConnectionSocketTagSendingResponse];
+    [self.connection.socket writeData:self.data withTimeout:config.CRHTTPConnectionWriteHeaderTimeout tag:CRHTTPConnectionSocketTagSendingResponse];
 
     _alreadySentHeaders = YES;
 }
 
-- (void)writeData:(NSData *)data closeConnection:(BOOL)flag
+- (void)writeData:(NSData *)data finish:(BOOL)flag
 {
     [self writeHeaders];
+
+    CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.connection.server.configuration;
+
     if ( self.isChunked ) {
         NSMutableData* chunkedData = [NSMutableData data];
 
@@ -75,12 +80,16 @@
         data = chunkedData;
     }
 
-    long tag = flag ? CRHTTPConnectionSocketTagFinishSendingResponseAndClosing : CRHTTPConnectionSocketTagFinishSendingResponse;
-    [self.connection.socket writeData:data withTimeout:self.connection.server.configuration.CRHTTPConnectionWriteBodyTimeout tag:tag];
+    [self.connection.socket writeData:data withTimeout:config.CRHTTPConnectionWriteBodyTimeout tag:CRHTTPConnectionSocketTagSendingResponse];
+    if ( flag ) {
+        [self finish];
+    }
 }
 
 - (void)sendStatusLine:(BOOL)closeConnection
 {
+    CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.connection.server.configuration;
+
     long tag = closeConnection ? CRHTTPConnectionSocketTagFinishSendingResponseAndClosing : CRHTTPConnectionSocketTagFinishSendingResponse;
 
     NSMutableData* statusData = [NSMutableData data];
@@ -89,7 +98,7 @@
         [statusData appendData:[CRConnection CRLFData]];
     }
     [statusData appendData:[CRConnection CRLFData]];
-    [self.connection.socket writeData:statusData withTimeout:self.connection.server.configuration.CRHTTPConnectionWriteBodyTimeout tag:tag];
+    [self.connection.socket writeData:statusData withTimeout:config.CRHTTPConnectionWriteBodyTimeout tag:tag];
 }
 
 - (void)finish {
