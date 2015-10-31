@@ -64,7 +64,8 @@
 }
 
 - (void)didReceiveCompleteRequestHeaders {
-//    NSLog ( @"%s %@", __PRETTY_FUNCTION__, self.request.allHTTPHeaderFields );
+    NSLog ( @"%s %@", __PRETTY_FUNCTION__, self.request.allHTTPHeaderFields );
+    NSLog ( @"%s %@", __PRETTY_FUNCTION__, self.request.env );
 }
 
 - (void)didReceiveRequestBody {
