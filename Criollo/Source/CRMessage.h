@@ -14,7 +14,7 @@
 @property (nonatomic, strong) id message;
 
 @property (nonatomic, readonly) NSString* version;
-@property (nonatomic, readonly) NSDictionary* allHTTPHeaderFields;
+@property (nonatomic, readonly) NSDictionary<NSString*, NSString*>* allHTTPHeaderFields;
 
 @property (nonatomic, readonly) NSData* data;
 @property (nonatomic, strong) NSData* body;

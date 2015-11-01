@@ -60,7 +60,30 @@
 
 - (void)didReceiveCompleteRequestHeaders {
     [super didReceiveCompleteRequestHeaders];
-    //    NSLog(@"%@", self.request.env);
+
+    // Create HTTP headers from FCGI Params
+    NSMutableData* headersData = [NSMutableData data];
+    [self.request.env enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        if ( ![key hasPrefix:@"HTTP_"] ) {
+            return;
+        }
+        NSArray<NSString*>* headerParts = [[key substringFromIndex:5] componentsSeparatedByString:@"_"];
+        NSMutableArray<NSString*>* transformedHeaderParts = [NSMutableArray arrayWithCapacity:headerParts.count];
+
+        [headerParts enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString* transformedHeaderPart = [[obj substringToIndex:1].uppercaseString stringByAppendingString:[obj substringFromIndex:1].lowercaseString];
+            [transformedHeaderParts addObject:transformedHeaderPart];
+        }];
+
+        NSString* headerName = [transformedHeaderParts componentsJoinedByString:@"-"];
+
+        NSData* headerData = [[NSString stringWithFormat:@"%@: %@", headerName, obj] dataUsingEncoding:NSUTF8StringEncoding];
+        [headersData appendData:headerData];
+        [headersData appendData:[CRConnection CRLFData]];
+    }];
+
+    [self.request appendData:headersData];
+    [self.request appendData:[CRConnection CRLFData]];
 }
 
 - (void)didReceiveRequestBody {
@@ -70,10 +93,10 @@
 - (void)didReceiveCompleteRequest {
     [super didReceiveCompleteRequest];
 
-//    NSMutableString* string = [NSMutableString stringWithString:@"<h1>Hello world!</h1>"];
-//    self.response = [[CRFCGIResponse alloc] initWithConnection:self HTTPStatusCode:200 description:@"asdfadsfas" version:self.request.version];
-//    [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-//    [self.response sendString:string];
+    NSMutableString* string = [NSMutableString stringWithString:@"<h1>Hello world!</h1>"];
+    self.response = [[CRFCGIResponse alloc] initWithConnection:self HTTPStatusCode:200 description:@"asdfadsfas" version:self.request.version];
+    [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+    [self.response sendString:string];
 }
 
 - (void)handleError:(NSUInteger)errorType object:(id)object {
@@ -215,10 +238,11 @@
                         NSString* path = currentRequestParams[@"DOCUMENT_URI"];
                         NSString* version = currentRequestParams[@"SERVER_PROTOCOL"];
                         if ( [self.server canHandleHTTPMethod:method forPath:path] ) {
-                            [currentRequestParams removeObjectsForKeys:@[@"REQUEST_METHOD", @"DOCUMENT_URI", @"SERVER_PROTOCOL"]];
+//                            [currentRequestParams removeObjectsForKeys:@[@"REQUEST_METHOD", @"DOCUMENT_URI", @"SERVER_PROTOCOL"]];
                             self.request = [[CRFCGIRequest alloc] initWithMethod:method URL:[NSURL URLWithString:path] version:version env:currentRequestParams];
 
                             [self didReceiveCompleteRequestHeaders];
+
                             requestBodyLength = [self.request.env[@"CONTENT_LENGTH"] integerValue];
                             if ( requestBodyLength > 0 ) {
                                 [self.socket readDataToLength:CRFCGIRecordHeaderLength withTimeout:config.CRFCGIConnectionReadRecordTimeout tag:CRFCGIConnectionSocketTagReadRecordHeader];
@@ -233,7 +257,14 @@
                         break;
 
                     case CRFCGIRecordTypeStdIn: {
+                        // We have received the request body
+                        [self didReceiveRequestBody];
 
+                        if ( requestBodyLength == self.request.body.length ) {
+                            [self didReceiveCompleteRequest];
+                        } else {
+                            [self handleError:CRErrorRequestMalformedRequest object:self.request.body];
+                        }
                     }
                         break;
 
@@ -262,11 +293,18 @@
 
                     // Request flags
                     [data getBytes:&currentRequestFlags range:NSMakeRange(2, 1)];
+
+                    // Go on reaading the next record
+                    [self.socket readDataToLength:CRFCGIRecordHeaderLength withTimeout:config.CRFCGIConnectionReadRecordTimeout tag:CRFCGIConnectionSocketTagReadRecordHeader];
+
                     break;
 
                 case CRFCGIRecordTypeParams:
                     // We are receiving the params
                     [self appendParamsFromData:data length:(currentRecord.contentLength - currentRecord.paddingLength)];
+
+                    // Go on reaading the next record
+                    [self.socket readDataToLength:CRFCGIRecordHeaderLength withTimeout:config.CRFCGIConnectionReadRecordTimeout tag:CRFCGIConnectionSocketTagReadRecordHeader];
                     break;
 
                 case CRFCGIRecordTypeStdIn: {
@@ -276,12 +314,8 @@
 
                     requestBodyReceivedBytesLength += currentRecordContentData.length;
 
-                    if (requestBodyReceivedBytesLength < requestBodyLength) {
-                        [self.socket readDataToLength:CRFCGIRecordHeaderLength withTimeout:config.CRFCGIConnectionReadRecordTimeout tag:CRFCGIConnectionSocketTagReadRecordHeader];
-                    } else {
-                        [self didReceiveCompleteRequest];
-                    }
-
+                    // Go on reaading the next record
+                    [self.socket readDataToLength:CRFCGIRecordHeaderLength withTimeout:config.CRFCGIConnectionReadRecordTimeout tag:CRFCGIConnectionSocketTagReadRecordHeader];
                 }
                     break;
 
@@ -289,7 +323,7 @@
                     break;
             }
             
-            [self.socket readDataToLength:CRFCGIRecordHeaderLength withTimeout:config.CRFCGIConnectionReadRecordTimeout tag:CRFCGIConnectionSocketTagReadRecordHeader];
+
             
             break;
             

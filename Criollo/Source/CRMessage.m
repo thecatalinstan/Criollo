@@ -33,7 +33,7 @@
     return (__bridge_transfer NSData *)CFHTTPMessageCopySerializedMessage((__bridge CFHTTPMessageRef _Nonnull)(self.message));
 }
 
-- (NSDictionary *)allHTTPHeaderFields
+- (NSDictionary<NSString*, NSString*> *)allHTTPHeaderFields
 {
     return (__bridge_transfer NSDictionary *)CFHTTPMessageCopyAllHeaderFields((__bridge CFHTTPMessageRef _Nonnull)(self.message));
 }

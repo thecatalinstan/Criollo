@@ -8,7 +8,9 @@
 
 #import "CRRequest.h"
 
-@implementation CRRequest
+@implementation CRRequest {
+    NSMutableDictionary* _env;
+}
 
 - (instancetype)init {
     return [self initWithMethod:nil URL:nil version:nil env:nil];
@@ -22,7 +24,11 @@
     self = [super init];
     if ( self != nil ) {
         self.message = CFBridgingRelease( CFHTTPMessageCreateRequest(NULL, (__bridge CFStringRef)method, (__bridge CFURLRef)URL, (__bridge CFStringRef)version) );
-        _env = env;
+        if ( env == nil ) {
+            _env = [NSMutableDictionary dictionary];
+        } else {
+            [self setEnv:env];
+        }
     }
     return self;
 }
@@ -37,6 +43,22 @@
 
 - (NSString *)method {
 	return (__bridge_transfer NSString *)CFHTTPMessageCopyRequestMethod((__bridge CFHTTPMessageRef _Nonnull)(self.message));
+}
+
+- (NSDictionary<NSString *,NSString *> *)env {
+    return _env;
+}
+
+- (void)setEnv:(NSDictionary<NSString *,NSString *> *)envDictionary {
+    if ( [envDictionary isKindOfClass:[NSMutableDictionary class]] ) {
+        _env = (NSMutableDictionary*)envDictionary;
+    } else {
+        _env = envDictionary.mutableCopy;
+    }
+}
+
+- (void)setEnv:(NSString *)obj forKey:(NSString *)key {
+    [_env setObject:obj forKey:key];
 }
 
 @end

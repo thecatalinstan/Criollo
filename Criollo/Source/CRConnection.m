@@ -64,15 +64,16 @@
 }
 
 - (void)didReceiveCompleteRequestHeaders {
-    NSLog ( @"%s %@", __PRETTY_FUNCTION__, self.request.allHTTPHeaderFields );
-    NSLog ( @"%s %@", __PRETTY_FUNCTION__, self.request.env );
 }
 
 - (void)didReceiveRequestBody {
 }
 
 - (void)didReceiveCompleteRequest {
-    NSLog(@"%s %@", __PRETTY_FUNCTION__, self.request.body);
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%@", self.request.allHTTPHeaderFields);
+    NSLog(@"%@", self.request.env);
+//    NSLog(@"%@", [[NSString alloc] initWithData:self.request.body encoding:NSUTF8StringEncoding]);
 }
 
 #pragma mark - State

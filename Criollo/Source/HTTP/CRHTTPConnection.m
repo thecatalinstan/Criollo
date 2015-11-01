@@ -39,7 +39,39 @@
 
 - (void)didReceiveCompleteRequestHeaders {
     [super didReceiveCompleteRequestHeaders];
-//    NSLog(@"%@", self.request.allHTTPHeaderFields);
+
+    // Create ENV from HTTP headers
+    NSMutableDictionary* env = [NSMutableDictionary dictionary];
+    [self.request.allHTTPHeaderFields enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        NSString* headerName = [@"HTTP_" stringByAppendingString:[key.uppercaseString stringByReplacingOccurrencesOfString:@"-" withString:@"_"]];
+        [env setObject:obj forKey:headerName];
+    }];
+
+    if ( env[@"HTTP_CONTENT_LENGTH"] ) {
+        env[@"CONTENT_LENGTH"] = env[@"HTTP_CONTENT_LENGTH"];
+    }
+    if ( env[@"HTTP_CONTENT_TYPE"] ) {
+        env[@"CONTENT_TYPE"] = env[@"HTTP_CONTENT_TYPE"];
+    }
+
+    if ( env[@"HTTP_HOST"]) {
+        env[@"SERVER_NAME"] = env[@"HTTP_HOST"];
+    }
+//    env[@"SERVER_SOFTWARE"] = @"";
+
+    env[@"REQUEST_METHOD"] = self.request.method;
+    env[@"SERVER_PROTOCOL"] = self.request.version;
+    env[@"REQUEST_URI"] = self.request.URL.absoluteString;
+    env[@"DOCUMENT_URI"] = self.request.URL.path;
+    env[@"SCRIPT_NAME"] = self.request.URL.path;
+    env[@"QUERY_STRING"] = self.request.URL.query;
+
+    env[@"REMOTE_ADDR"] = self.socket.connectedHost;
+    env[@"REMOTE_PORT"] = @(self.socket.connectedPort);
+    env[@"SERVER_ADDR"] = self.socket.localHost;
+    env[@"SERVER_PORT"] = @(self.socket.localPort);
+
+    [self.request setEnv:env];
 }
 
 - (void)didReceiveRequestBody {

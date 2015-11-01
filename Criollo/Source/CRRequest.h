@@ -15,11 +15,14 @@
 
 @property (nonatomic, readonly) NSURL* URL;
 @property (nonatomic, readonly) NSString* method;
-@property (nonatomic, readonly) NSDictionary* env;
+@property (nonatomic, readonly) NSDictionary<NSString*, NSString*>* env;
 
 - (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version;
 - (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version env:(NSDictionary*)env NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)appendData:(NSData *)data;
+
+- (void)setEnv:(NSDictionary<NSString*,NSString*>*)envDictionary;
+- (void)setEnv:(NSString*)obj forKey:(NSString*)key;
 
 @end
