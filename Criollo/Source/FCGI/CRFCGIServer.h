@@ -8,9 +8,6 @@
 
 #import "CRServer.h"
 
-//typedef UInt32  CRFCGIApplicationStatus;
-//typedef UInt8   CRFCGIProtocolStatus;
-
 @interface CRFCGIServer : CRServer
 
 @end

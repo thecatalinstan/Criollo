@@ -90,7 +90,7 @@
 {
     CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.connection.server.configuration;
 
-    long tag = closeConnection ? CRHTTPConnectionSocketTagFinishSendingResponseAndClosing : CRHTTPConnectionSocketTagFinishSendingResponse;
+    long tag = closeConnection ? CRConnectionSocketTagFinishSendingResponseAndClosing : CRConnectionSocketTagFinishSendingResponse;
 
     NSMutableData* statusData = [NSMutableData data];
     if ( self.isChunked ) {
@@ -102,10 +102,12 @@
 }
 
 - (void)finish {
+    [self writeHeaders];
     [self sendStatusLine:NO];
 }
 
 - (void)end {
+    [self writeHeaders];
     [self sendStatusLine:YES];
 }
 

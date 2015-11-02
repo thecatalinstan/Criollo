@@ -106,9 +106,29 @@
     }
 
     self.response = [[CRHTTPResponse alloc] initWithConnection:self HTTPStatusCode:statusCode];
-    [self.response setValue:@"0" forHTTPHeaderField:@"Content-length"];
     [self.response setValue:@"close" forHTTPHeaderField:@"Connection"];
+    [self.response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
+    [self.response writeFormat:@"Cannot %@", object[CRRequestKey]];
     [self.response end];
+}
+
+#pragma mark - State
+
+- (BOOL)shouldClose {
+    if ( self.ignoreKeepAlive ) {
+        return YES;
+    }
+
+    BOOL shouldClose = NO;
+
+    NSString *connectionHeader = [self.request valueForHTTPHeaderField:@"Connection"];
+    if ( connectionHeader != nil ) {
+        shouldClose = [connectionHeader caseInsensitiveCompare:@"close"] == NSOrderedSame;
+    } else {
+        shouldClose = [self.request.version isEqualToString:CRHTTP10];
+    }
+
+    return shouldClose;
 }
 
 #pragma mark - GCDAsyncSocketDelegate
@@ -181,24 +201,6 @@
             }
             break;
     }
-}
-
-- (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
-
-    switch ( tag ) {
-        case CRHTTPConnectionSocketTagFinishSendingResponseAndClosing:
-        case CRHTTPConnectionSocketTagFinishSendingResponse:
-            if ( tag == CRHTTPConnectionSocketTagFinishSendingResponseAndClosing || self.shouldClose) {
-                [self.socket disconnect];
-            } else {
-                [self startReading];
-            }
-            break;
-            
-        default:
-            break;
-    }
-    
 }
 
 @end

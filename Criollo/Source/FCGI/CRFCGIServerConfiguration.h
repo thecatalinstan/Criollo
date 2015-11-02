@@ -11,5 +11,7 @@
 @interface CRFCGIServerConfiguration : CRServerConfiguration
 
 @property (nonatomic, assign) NSUInteger CRFCGIConnectionReadRecordTimeout;
+@property (nonatomic, assign) NSUInteger CRFCGIConnectionWriteRecordTimeout;
+@property (nonatomic, assign) NSUInteger CRFCGIConnectionSocketWriteBuffer;
 
 @end

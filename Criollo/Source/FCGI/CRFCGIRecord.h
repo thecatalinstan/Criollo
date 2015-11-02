@@ -40,8 +40,11 @@ extern NSString* NSStringFromCRFCGIRecordType(CRFCGIRecordType recordType);
 @property (nonatomic, strong) NSData* contentData;
 @property (nonatomic, strong) NSData* paddingData;
 
+@property (nonatomic, readonly) NSData* FCGIRecordData;
+
 + (CRFCGIRecord*)recordWithHeaderData:(NSData*)data;
 
 - (instancetype)initWithHeaderData:(NSData*)data NS_DESIGNATED_INITIALIZER;
+
 
 @end

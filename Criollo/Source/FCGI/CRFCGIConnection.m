@@ -21,6 +21,7 @@
     BOOL didPerformInitialRead;
 
     CRFCGIRecord* currentRecord;
+    UInt16 currentRequestID;
     CRFCGIRequestRole currentRequestRole;
     CRFCGIRequestFlags currentRequestFlags;
     NSMutableDictionary* currentRequestParams;
@@ -49,6 +50,10 @@
     requestBodyLength = 0;
     requestBodyReceivedBytesLength = 0;
 
+    currentRecord = nil;
+    currentRequestID = 0;
+    currentRequestRole = CRFCGIRequestRoleResponder;
+    currentRequestFlags = 0;
     currentRequestParams = [NSMutableDictionary dictionary];
 
     CRFCGIServerConfiguration* config = (CRFCGIServerConfiguration*)self.server.configuration;
@@ -94,9 +99,10 @@
     [super didReceiveCompleteRequest];
 
     NSMutableString* string = [NSMutableString stringWithString:@"<h1>Hello world!</h1>"];
-    self.response = [[CRFCGIResponse alloc] initWithConnection:self HTTPStatusCode:200 description:@"asdfadsfas" version:self.request.version];
+    self.response = [[CRFCGIResponse alloc] initWithConnection:self HTTPStatusCode:200 description:nil version:self.request.version];
     [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-    [self.response sendString:string];
+    [self.response writeString:string];
+    [self.response finish];
 }
 
 - (void)handleError:(NSUInteger)errorType object:(id)object {
@@ -118,9 +124,8 @@
     }
 
     self.response = [[CRFCGIResponse alloc] initWithConnection:self HTTPStatusCode:statusCode];
-    [self.response setValue:@"0" forHTTPHeaderField:@"Content-length"];
-    [self.response setValue:@"close" forHTTPHeaderField:@"Connection"];
-    [self.response end];
+    [self.response writeFormat:@"Cannot %@", object[CRRequestKey]];
+    [self.response finish];
 }
 
 #pragma mark - Record Processing
@@ -213,6 +218,18 @@
 
 }
 
+#pragma mark - State
+
+- (BOOL)shouldClose {
+    if ( self.ignoreKeepAlive ) {
+        return YES;
+    }
+
+    CRFCGIRequest* request = (CRFCGIRequest*)self.request;
+    BOOL shouldClose = (request.requestFlags & CRFCGIConnectionFlagKeepAlive) == 0;
+    return shouldClose;
+}
+
 #pragma mark - GCDAsyncSocketDelegate
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData*)data withTag:(long)tag {
@@ -225,7 +242,8 @@
 
         case CRFCGIConnectionSocketTagReadRecordHeader:
             currentRecord = [[CRFCGIRecord alloc] initWithHeaderData:data];
-            NSLog(@" * Header: %@ %hu", NSStringFromCRFCGIRecordType(currentRecord.type), currentRecord.contentLength);
+
+//            NSLog(@" * Header: %@ %hu", NSStringFromCRFCGIRecordType(currentRecord.type), currentRecord.contentLength);
 
             // Process the record header
             if (currentRecord.contentLength == 0) {
@@ -237,12 +255,16 @@
                         NSString* method = currentRequestParams[@"REQUEST_METHOD"];
                         NSString* path = currentRequestParams[@"DOCUMENT_URI"];
                         NSString* version = currentRequestParams[@"SERVER_PROTOCOL"];
+
+                        CRFCGIRequest* request = [[CRFCGIRequest alloc] initWithMethod:method URL:[NSURL URLWithString:path] version:version env:currentRequestParams];
+                        request.requestID = currentRequestID;
+                        request.requestRole = currentRequestRole;
+                        request.requestFlags = currentRequestFlags;
+                        self.request = request;
+
+                        [self didReceiveCompleteRequestHeaders];
+
                         if ( [self.server canHandleHTTPMethod:method forPath:path] ) {
-//                            [currentRequestParams removeObjectsForKeys:@[@"REQUEST_METHOD", @"DOCUMENT_URI", @"SERVER_PROTOCOL"]];
-                            self.request = [[CRFCGIRequest alloc] initWithMethod:method URL:[NSURL URLWithString:path] version:version env:currentRequestParams];
-
-                            [self didReceiveCompleteRequestHeaders];
-
                             requestBodyLength = [self.request.env[@"CONTENT_LENGTH"] integerValue];
                             if ( requestBodyLength > 0 ) {
                                 [self.socket readDataToLength:CRFCGIRecordHeaderLength withTimeout:config.CRFCGIConnectionReadRecordTimeout tag:CRFCGIConnectionSocketTagReadRecordHeader];
@@ -250,6 +272,7 @@
                                 [self didReceiveCompleteRequest];
                             }
                         } else {
+                            requestBodyLength = 0;
                             [self handleError:CRErrorRequestUnsupportedMethod object:@{CRRequestKey:[NSString stringWithFormat:@"%@ %@", method, path]}];
 
                         }
@@ -282,11 +305,15 @@
             break;
 
         case CRFCGIConnectionSocketTagReadRecordContent:
-            NSLog(@" * Content: %@ %lu", NSStringFromCRFCGIRecordType(currentRecord.type), data.length);
+
+//            NSLog(@" * Content: %@ %lu", NSStringFromCRFCGIRecordType(currentRecord.type), data.length);
 
             // Process the header content data
             switch (currentRecord.type) {
                 case CRFCGIRecordTypeBeginRequest:
+                    // Request ID
+                    currentRequestID = currentRecord.requestID;
+
                     // Request role
                     [data getBytes:&currentRequestRole range:NSMakeRange(0, 2)];
                     currentRequestRole = CFSwapInt16BigToHost(currentRequestRole);
@@ -331,10 +358,6 @@
             break;
     }
     
-}
-
-- (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 @end

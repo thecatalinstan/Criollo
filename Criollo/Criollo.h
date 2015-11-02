@@ -17,10 +17,15 @@
 #import <Criollo/CRResponse.h>
 
 #import <Criollo/CRHTTPServer.h>
+#import <Criollo/CRHTTPServerConfiguration.h>
 #import <Criollo/CRHTTPConnection.h>
+#import <Criollo/CRHTTPResponse.h>
 
 #import <Criollo/CRFCGIServer.h>
+#import <Criollo/CRFCGIServerConfiguration.h>
 #import <Criollo/CRFCGIConnection.h>
+#import <Criollo/CRFCGIRequest.h>
+#import <Criollo/CRFCGIResponse.h>
 
 FOUNDATION_EXPORT NSString* const Criollo;
 FOUNDATION_EXPORT NSString* const CRErrorDomain;

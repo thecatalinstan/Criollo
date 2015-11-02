@@ -20,8 +20,8 @@ extern NSString* NSStringFromCRFCGIRequestRole(CRFCGIRequestRole requestRole);
 
 @interface CRFCGIRequest : CRRequest
 
+@property (nonatomic, assign) UInt16 requestID;
 @property (nonatomic, assign) CRFCGIRequestRole requestRole;
 @property (nonatomic, assign) CRFCGIRequestFlags requestFlags;
-@property (nonatomic, strong) NSData *protocolData;
 
 @end

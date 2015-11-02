@@ -26,4 +26,6 @@ NSString* NSStringFromCRFCGIRequestRole(CRFCGIRequestRole requestRole) {
 
 @implementation CRFCGIRequest
 
+
+
 @end

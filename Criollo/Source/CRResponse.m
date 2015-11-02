@@ -24,6 +24,11 @@
 
 @implementation CRResponse
 
+- (instancetype)init
+{
+    return [self initWithConnection:nil HTTPStatusCode:200];
+}
+
 - (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode
 {
     return [self initWithConnection:connection HTTPStatusCode:HTTPStatusCode description:nil];

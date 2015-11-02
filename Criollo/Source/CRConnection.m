@@ -70,41 +70,41 @@
 }
 
 - (void)didReceiveCompleteRequest {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSLog(@"%@", self.request.allHTTPHeaderFields);
-    NSLog(@"%@", self.request.env);
+//    NSLog(@"%s", __PRETTY_FUNCTION__);
+//    NSLog(@"%@", self.request.allHTTPHeaderFields);
+//    NSLog(@"%@", self.request.env);
 //    NSLog(@"%@", [[NSString alloc] initWithData:self.request.body encoding:NSUTF8StringEncoding]);
 }
 
 #pragma mark - State
 - (BOOL)shouldClose {
-
-    if ( self.ignoreKeepAlive ) {
-        return YES;
-    }
-
-    BOOL shouldClose = NO;
-
-    NSString *connectionHeader = [self.request valueForHTTPHeaderField:@"Connection"];
-    if ( connectionHeader != nil ) {
-        shouldClose = [connectionHeader caseInsensitiveCompare:@"close"] == NSOrderedSame;
-    } else {
-        shouldClose = [self.request.version isEqualToString:CRHTTP10];
-    }
-
-    return shouldClose;
+    return NO;
 }
 
 #pragma mark - GCDAsyncSocketDelegate
 
-- (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData*)data withTag:(long)tag {
-}
-
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
+
+    switch ( tag ) {
+        case CRConnectionSocketTagFinishSendingResponseAndClosing:
+        case CRConnectionSocketTagFinishSendingResponse:
+            if ( tag == CRConnectionSocketTagFinishSendingResponseAndClosing || self.shouldClose) {
+                [self.socket disconnectAfterWriting];
+            } else {
+                [self startReading];
+            }
+            break;
+
+        default:
+            break;
+    }
+
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
     [self.server didCloseConnection:self];
 }
+
+
 
 @end
