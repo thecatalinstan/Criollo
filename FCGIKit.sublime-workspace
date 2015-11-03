@@ -824,6 +824,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"machine",
+			"instancetype",
 			"recordHeaderData",
 			"ReadR",
 			"requestID",
@@ -949,9 +951,7 @@
 			"shouldShowDetails",
 			"isLoadedEvent",
 			"top_state",
-			"isLoadedEvent",
-			"= !",
-			"&& !_.isUndefined"
+			"isLoadedEvent"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1010,6 +1010,10 @@
 		]
 	},
 	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 102.0
+	},
 	"output.find_results":
 	{
 		"height": 102.0

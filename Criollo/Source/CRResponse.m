@@ -26,12 +26,12 @@
 
 - (instancetype)init
 {
-    return [self initWithConnection:nil HTTPStatusCode:200];
+    return [self initWithConnection:nil HTTPStatusCode:200 description:nil version:nil];
 }
 
 - (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode
 {
-    return [self initWithConnection:connection HTTPStatusCode:HTTPStatusCode description:nil];
+    return [self initWithConnection:connection HTTPStatusCode:HTTPStatusCode description:nil version:nil];
 }
 
 - (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description

@@ -92,6 +92,11 @@
     [super handleError:errorType object:object];
 }
 
+#pragma mark - Responses
+
+- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version {
+    return [[CRFCGIResponse alloc] initWithConnection:self HTTPStatusCode:HTTPStatusCode description:description version:version];
+}
 
 #pragma mark - Record Processing
 

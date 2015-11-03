@@ -22,6 +22,8 @@
 @property (nonatomic, assign) BOOL ignoreKeepAlive;
 @property (nonatomic, readonly) BOOL shouldClose;
 
+@property (nonatomic, strong) NSDate* requestTime;
+
 + (NSData*)CRLFData;
 + (NSData*)CRLFCRLFData;
 
@@ -34,5 +36,10 @@
 - (void)didReceiveCompleteRequest;
 
 - (void)handleError:(NSUInteger)errorType object:(id)object;
+
+- (CRResponse*)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode;
+- (CRResponse*)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description;
+- (CRResponse*)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version;
+
 
 @end

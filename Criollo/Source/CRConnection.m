@@ -7,11 +7,16 @@
 //
 
 #import "CRConnection.h"
+#import "CRApplication.h"
 #import "CRServer.h"
 #import "CRServerConfiguration.h"
 #import "GCDAsyncSocket.h"
 #import "CRRequest.h"
 #import "CRResponse.h"
+
+#include <sys/types.h>
+#include <sys/sysctl.h>
+#import "NSDate+RFC1123.h"
 
 @interface CRConnection () <GCDAsyncSocketDelegate>
 
@@ -35,6 +40,20 @@
         _CRLFData = [NSData dataWithBytes:"\x0D\x0A" length:2];
     });
     return _CRLFData;
+}
+
+#pragma mark - Responses
+
+- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode {
+    return [self responseWithHTTPStatusCode:HTTPStatusCode description:nil version:nil];
+}
+
+- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description {
+    return [self responseWithHTTPStatusCode:HTTPStatusCode description:description version:nil];
+}
+
+- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version {
+    return [[CRResponse alloc] initWithConnection:self HTTPStatusCode:HTTPStatusCode description:description version:version];
 }
 
 #pragma mark - Initializers
@@ -70,42 +89,47 @@
 }
 
 - (void)didReceiveCompleteRequest {
-//    NSMutableString* string = [NSMutableString stringWithString:@"<h1>Hello world!</h1>"];
-//    self.response = [[CRFCGIResponse alloc] initWithConnection:self HTTPStatusCode:200 description:nil version:self.request.version];
-//    [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-//    [self.response writeString:string];
-//    [self.response finish];
-//
-//    NSMutableString* string = [NSMutableString stringWithString:@"<h1>Hello world!</h1>"];
-//    self.response = [[CRHTTPResponse alloc] initWithConnection:self HTTPStatusCode:200 description:@"asdfadsfas" version:self.request.version];
-//    [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-//    [self.response sendString:string];
+
+    NSDate* startTime = [NSDate date];
+    NSUInteger statusCode = 200;
+
+    self.response = [self responseWithHTTPStatusCode:statusCode];
+    [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+
+    [self.response writeString:@"<h1>Hello world!</h1>"];
+    [self.response writeFormat:@"<h2>Connection:</h2><pre>%@</pre>", self.className];
+    [self.response writeFormat:@"<h2>Request:</h2><pre>%@</pre>", self.request.allHTTPHeaderFields];
+    [self.response writeFormat:@"<h2>Environment:</h2><pre>%@</pre>", self.request.env];
+    [self.response writeString:@"<hr/>"];
+
+    [self.response writeFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
+    [self.response finish];
+
 }
 
 - (void)handleError:(NSUInteger)errorType object:(id)object {
-//    NSUInteger statusCode = 500;
-//
-//    switch (errorType) {
-//        case CRErrorRequestMalformedRequest:
-//            statusCode = 400;
-//            [CRApp logErrorFormat:@"Malformed request: %@", [[NSString alloc] initWithData:object encoding:NSUTF8StringEncoding] ];
-//            break;
-//
-//        case CRErrorRequestUnsupportedMethod:
-//            statusCode = 405;
-//            [CRApp logErrorFormat:@"Cannot %@", object[CRRequestKey]];
-//            break;
-//
-//        default:
-//            break;
-//    }
-//
-//    self.response = [[CRFCGIResponse alloc] initWithConnection:self HTTPStatusCode:statusCode];
-//    self.response = [[CRHTTPResponse alloc] initWithConnection:self HTTPStatusCode:statusCode];
-//    [self.response setValue:@"close" forHTTPHeaderField:@"Connection"];
-//    [self.response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
-//    [self.response writeFormat:@"Cannot %@", object[CRRequestKey]];
-//    [self.response finish];
+    NSUInteger statusCode = 500;
+
+    switch (errorType) {
+        case CRErrorRequestMalformedRequest:
+            statusCode = 400;
+            [CRApp logErrorFormat:@"Malformed request: %@", [[NSString alloc] initWithData:object encoding:NSUTF8StringEncoding] ];
+            break;
+
+        case CRErrorRequestUnsupportedMethod:
+            statusCode = 405;
+            [CRApp logErrorFormat:@"Cannot %@", object[CRRequestKey]];
+            break;
+
+        default:
+            break;
+    }
+
+    self.response = [self responseWithHTTPStatusCode:statusCode];
+    [self.response setValue:@"close" forHTTPHeaderField:@"Connection"];
+    [self.response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
+    [self.response writeFormat:@"Cannot %@", object[CRRequestKey]];
+    [self.response finish];
 }
 
 #pragma mark - State

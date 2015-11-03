@@ -12,9 +12,9 @@
 
 @interface CRResponse : CRMessage
 
-@property (atomic, readonly) NSUInteger statusCode;
+@property (nonatomic, readonly) NSUInteger statusCode;
 @property (nonatomic, assign) CRConnection* connection;
-@property (atomic, readonly) BOOL alreadySentHeaders;
+@property (nonatomic, readonly) BOOL alreadySentHeaders;
 
 - (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode;
 - (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description;
