@@ -33,4 +33,6 @@
 - (void)didReceiveRequestBody;
 - (void)didReceiveCompleteRequest;
 
+- (void)handleError:(NSUInteger)errorType object:(id)object;
+
 @end

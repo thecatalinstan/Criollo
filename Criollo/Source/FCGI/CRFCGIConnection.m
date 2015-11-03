@@ -86,36 +86,12 @@
 
 - (void)didReceiveCompleteRequest {
     [super didReceiveCompleteRequest];
-
-    NSMutableString* string = [NSMutableString stringWithString:@"<h1>Hello world!</h1>"];
-    self.response = [[CRFCGIResponse alloc] initWithConnection:self HTTPStatusCode:200 description:nil version:self.request.version];
-    [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-    [self.response writeString:string];
-    [self.response finish];
 }
 
 - (void)handleError:(NSUInteger)errorType object:(id)object {
-    NSUInteger statusCode = 500;
-
-    switch (errorType) {
-        case CRErrorRequestMalformedRequest:
-            statusCode = 400;
-            [CRApp logErrorFormat:@"Malformed request: %@", [[NSString alloc] initWithData:object encoding:NSUTF8StringEncoding] ];
-            break;
-
-        case CRErrorRequestUnsupportedMethod:
-            statusCode = 405;
-            [CRApp logErrorFormat:@"Cannot %@", object[CRRequestKey]];
-            break;
-
-        default:
-            break;
-    }
-
-    self.response = [[CRFCGIResponse alloc] initWithConnection:self HTTPStatusCode:statusCode];
-    [self.response writeFormat:@"Cannot %@", object[CRRequestKey]];
-    [self.response finish];
+    [super handleError:errorType object:object];
 }
+
 
 #pragma mark - Record Processing
 
