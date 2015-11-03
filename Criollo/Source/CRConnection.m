@@ -96,15 +96,16 @@
     self.response = [self responseWithHTTPStatusCode:statusCode];
     [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
 
-    [self.response writeString:@"<h1>Hello world!</h1>"];
-    [self.response writeFormat:@"<h2>Connection:</h2><pre>%@</pre>", self.className];
-    [self.response writeFormat:@"<h2>Request:</h2><pre>%@</pre>", self.request.allHTTPHeaderFields];
-    [self.response writeFormat:@"<h2>Environment:</h2><pre>%@</pre>", self.request.env];
-    [self.response writeString:@"<hr/>"];
+    NSMutableString* response = [[NSMutableString alloc] init];
 
-    [self.response writeFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
-    [self.response finish];
+    [response appendString:@"<h1>Hello world!</h1>"];
+    [response appendFormat:@"<h2>Connection:</h2><pre>%@</pre>", self.className];
+    [response appendFormat:@"<h2>Request:</h2><pre>%@</pre>", self.request.allHTTPHeaderFields];
+    [response appendFormat:@"<h2>Environment:</h2><pre>%@</pre>", self.request.env];
+    [response appendString:@"<hr/>"];
+    [response appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
 
+    [self.response sendString:response];
 }
 
 - (void)handleError:(NSUInteger)errorType object:(id)object {
