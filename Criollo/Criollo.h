@@ -8,16 +8,26 @@
 
 #import <Foundation/Foundation.h>
 
-//! Project version number for Criollo.
-FOUNDATION_EXPORT double CriolloVersionNumber;
-
-//! Project version string for Criollo.
-FOUNDATION_EXPORT const unsigned char CriolloVersionString[];
-
 #import <Criollo/CRApplication.h>
-#import <Criollo/GCDAsyncSocket.h>
+#import <Criollo/CRServer.h>
+#import <Criollo/CRServerConfiguration.h>
+#import <Criollo/CRConnection.h>
+#import <Criollo/CRMessage.h>
+#import <Criollo/CRRequest.h>
+#import <Criollo/CRResponse.h>
 
+#import <Criollo/CRHTTPServer.h>
+#import <Criollo/CRHTTPServerConfiguration.h>
 #import <Criollo/CRHTTPConnection.h>
-#import <Criollo/CRHTTPMessage.h>
 #import <Criollo/CRHTTPResponse.h>
-#import <Criollo/CRHTTPRequest.h>
+
+#import <Criollo/CRFCGIServer.h>
+#import <Criollo/CRFCGIServerConfiguration.h>
+#import <Criollo/CRFCGIConnection.h>
+#import <Criollo/CRFCGIRequest.h>
+#import <Criollo/CRFCGIResponse.h>
+
+FOUNDATION_EXPORT NSString* const Criollo;
+FOUNDATION_EXPORT NSString* const CRErrorDomain;
+
+typedef NSUInteger CRError;
