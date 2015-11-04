@@ -93,11 +93,7 @@
     NSDate* startTime = [NSDate date];
     NSUInteger statusCode = 200;
 
-    self.response = [self responseWithHTTPStatusCode:statusCode];
-    [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-
     NSMutableString* response = [[NSMutableString alloc] init];
-
     [response appendString:@"<h1>Hello world!</h1>"];
     [response appendFormat:@"<h2>Connection:</h2><pre>%@</pre>", self.className];
     [response appendFormat:@"<h2>Request:</h2><pre>%@</pre>", self.request.allHTTPHeaderFields];
@@ -105,7 +101,11 @@
     [response appendString:@"<hr/>"];
     [response appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
 
-    [self.response sendString:response];
+    self.response = [self responseWithHTTPStatusCode:statusCode];
+    [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+//    [self.response setValue:@(response.length).stringValue forHTTPHeaderField:@"Content-Length"];
+    [self.response writeString:response];
+    [self.response finish];
 }
 
 - (void)handleError:(NSUInteger)errorType object:(id)object {
