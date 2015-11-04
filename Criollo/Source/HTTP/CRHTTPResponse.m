@@ -14,10 +14,8 @@
 #import "NSDate+RFC1123.h"
 
 @interface CRHTTPResponse () {
-    BOOL _alreadySentHeaders;
+    BOOL didBuildHeaders;
 }
-
-- (void)sendStatusLine:(BOOL)closeConnection;
 
 @end
 
@@ -27,13 +25,34 @@
     return [[self valueForHTTPHeaderField:@"Transfer-encoding"] isEqualToString:@"chunked"];
 }
 
-- (void)writeHeaders
-{
-    if ( _alreadySentHeaders ) {
-        return;
+- (BOOL)appendData:(NSData*)data {
+    if ( !didBuildHeaders ) {
+        [self buildHeaders];
     }
 
-    CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.connection.server.configuration;
+    BOOL result = YES;
+
+    if ( self.isChunked ) {
+        // Chunk size + CRLF
+        result = result && [super appendData: [[NSString stringWithFormat:@"%lx", data.length] dataUsingEncoding:NSUTF8StringEncoding]];
+        result = result && [super appendData: [CRConnection CRLFData]];
+
+        // The actual data
+        result = result && [super appendData:data];
+        result = result && [super appendData: [CRConnection CRLFData]];
+    } else {
+        // Append the actual data;
+        result = result && [super appendData:data];
+    }
+
+    return result;
+}
+
+- (void)buildHeaders {
+
+    if ( didBuildHeaders ) {
+        return;
+    }
 
     if ( [self valueForHTTPHeaderField:@"Date"] == nil ) {
         [self setValue:[NSDate date].rfc1123String forHTTPHeaderField:@"Date"];
@@ -55,61 +74,21 @@
         [self setValue:@"chunked" forHTTPHeaderField:@"Transfer-encoding"];
     }
 
-    [self setBody:nil];
-    [self.connection.socket writeData:self.data withTimeout:config.CRHTTPConnectionWriteHeaderTimeout tag:CRHTTPConnectionSocketTagSendingResponse];
-
-    _alreadySentHeaders = YES;
+    didBuildHeaders = YES;
 }
 
-- (void)writeData:(NSData *)data finish:(BOOL)flag
-{
-    [self writeHeaders];
+- (void)writeDataToSocketWithTag:(long)tag {
+
+    // Append end resonse footer
+    if ( self.isChunked ) {
+        [super appendData: [@"0" dataUsingEncoding:NSUTF8StringEncoding]];
+        [super appendData:[CRConnection CRLFData]];
+        [super appendData:[CRConnection CRLFData]];
+    }
 
     CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.connection.server.configuration;
-
-    if ( self.isChunked ) {
-        NSMutableData* chunkedData = [NSMutableData data];
-
-        // Chunk size + CRLF
-        [chunkedData appendData: [[NSString stringWithFormat:@"%lx", data.length] dataUsingEncoding:NSUTF8StringEncoding]];
-        [chunkedData appendData: [CRConnection CRLFData]];
-
-        // The actual data
-        [chunkedData appendData:data];
-        [chunkedData appendData: [CRConnection CRLFData]];
-
-        data = chunkedData;
-    }
-
-    [self.connection.socket writeData:data withTimeout:config.CRHTTPConnectionWriteBodyTimeout tag:CRHTTPConnectionSocketTagSendingResponse];
-    if ( flag ) {
-        [self finish];
-    }
+    [self.connection.socket writeData:self.serializedData withTimeout:config.CRHTTPConnectionWriteBodyTimeout tag:tag];
 }
 
-- (void)sendStatusLine:(BOOL)closeConnection
-{
-    CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.connection.server.configuration;
-
-    long tag = closeConnection ? CRConnectionSocketTagFinishSendingResponseAndClosing : CRConnectionSocketTagFinishSendingResponse;
-
-    NSMutableData* statusData = [NSMutableData data];
-    if ( self.isChunked ) {
-        [statusData appendData: [@"0" dataUsingEncoding:NSUTF8StringEncoding]];
-        [statusData appendData:[CRConnection CRLFData]];
-    }
-    [statusData appendData:[CRConnection CRLFData]];
-    [self.connection.socket writeData:statusData withTimeout:config.CRHTTPConnectionWriteBodyTimeout tag:tag];
-}
-
-- (void)finish {
-    [self writeHeaders];
-    [self sendStatusLine:NO];
-}
-
-- (void)end {
-    [self writeHeaders];
-    [self sendStatusLine:YES];
-}
 
 @end

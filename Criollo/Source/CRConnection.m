@@ -134,14 +134,17 @@
 }
 
 #pragma mark - State
+
 - (BOOL)shouldClose {
     return NO;
 }
 
 #pragma mark - GCDAsyncSocketDelegate
 
-- (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
+//- (void)socket:(GCDAsyncSocket *)sock didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag {
+//}
 
+- (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
     switch ( tag ) {
         case CRConnectionSocketTagFinishSendingResponseAndClosing:
         case CRConnectionSocketTagFinishSendingResponse:

@@ -16,9 +16,11 @@
 @property (nonatomic, readonly) NSString* version;
 @property (nonatomic, readonly) NSDictionary<NSString*, NSString*>* allHTTPHeaderFields;
 
-@property (nonatomic, readonly) NSData* data;
+@property (nonatomic, readonly) NSData* serializedData;
 @property (nonatomic, strong) NSData* body;
 
 - (NSString *)valueForHTTPHeaderField:(NSString *)HTTPHeaderField;
+
+- (BOOL)appendData:(NSData *)data;
 
 @end
