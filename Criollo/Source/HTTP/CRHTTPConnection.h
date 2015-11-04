@@ -15,8 +15,6 @@
 #define CRHTTPConnectionSocketTagReadingRequestHeader                 11
 #define CRHTTPConnectionSocketTagReadingRequestBody                   12
 
-#define CRHTTPConnectionSocketTagSendingResponse                      20
-
 @interface CRHTTPConnection : CRConnection
 
 @end
