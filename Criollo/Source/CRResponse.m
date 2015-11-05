@@ -17,12 +17,8 @@
 
 @interface CRResponse ()
 
-- (void)writeData:(NSData*)data finish:(BOOL)flag;
-
 - (void)buildHeaders;
-- (void)writeDataToSocketWithTag:(long)tag;
-
-- (void)flush:(BOOL)closeConnection;
+- (void)writeData:(NSData*)data finish:(BOOL)flag;
 
 @end
 
@@ -61,12 +57,6 @@
 
 - (void)setValue:(NSString*)value forHTTPHeaderField:(NSString *)HTTPHeaderField
 {
-//    if ( self.alreadySentHeaders ) {
-//        [CRApp logErrorFormat:@"Headers already sent."];
-//        [[NSException exceptionWithName:NSInternalInconsistencyException reason:@"Headers already sent." userInfo:nil] raise];
-//        return;
-//    }
-
     CFHTTPMessageSetHeaderFieldValue((__bridge CFHTTPMessageRef _Nonnull)(self.message), (__bridge CFStringRef)HTTPHeaderField, (__bridge CFStringRef)value);
 }
 
@@ -104,32 +94,9 @@
     [self sendString:formattedString];
 }
 
-- (void)writeData:(NSData *)data finish:(BOOL)flag {
-    [self appendData:data];
-    if ( flag ) {
-        [self finish];
-    }
-}
-
-- (void)finish {
-    [self flush:NO];
-}
-
-- (void)end {
-    [self flush:YES];
-}
-
-- (void)buildHeaders {
-}
-
-- (void)writeDataToSocketWithTag:(long)tag {
-}
-
-- (void)flush:(BOOL)closeConnection {
-    long tag = closeConnection ? CRConnectionSocketTagFinishSendingResponseAndClosing : CRConnectionSocketTagFinishSendingResponse;
-    [self buildHeaders];
-    [self writeDataToSocketWithTag:tag];
-}
+- (void)buildHeaders {}
+- (void)writeData:(NSData *)data finish:(BOOL)flag {}
+- (void)finish {}
 
 
 @end

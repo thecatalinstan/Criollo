@@ -14,7 +14,8 @@
 #import "NSDate+RFC1123.h"
 
 @interface CRHTTPResponse () {
-    BOOL didBuildHeaders;
+    BOOL _alreadySentHeaders;
+    BOOL _alreadyBuiltHeaders;
 }
 
 @end
@@ -25,32 +26,9 @@
     return [[self valueForHTTPHeaderField:@"Transfer-encoding"] isEqualToString:@"chunked"];
 }
 
-- (BOOL)appendData:(NSData*)data {
-    if ( !didBuildHeaders ) {
-        [self buildHeaders];
-    }
-
-    BOOL result = YES;
-
-    if ( self.isChunked ) {
-        // Chunk size + CRLF
-        result = result && [super appendData: [[NSString stringWithFormat:@"%lx", data.length] dataUsingEncoding:NSUTF8StringEncoding]];
-        result = result && [super appendData: [CRConnection CRLFData]];
-
-        // The actual data
-        result = result && [super appendData:data];
-        result = result && [super appendData: [CRConnection CRLFData]];
-    } else {
-        // Append the actual data;
-        result = result && [super appendData:data];
-    }
-
-    return result;
-}
-
-- (void)buildHeaders {
-
-    if ( didBuildHeaders ) {
+- (void)buildHeaders
+{
+    if ( _alreadyBuiltHeaders ) {
         return;
     }
 
@@ -74,20 +52,68 @@
         [self setValue:@"chunked" forHTTPHeaderField:@"Transfer-encoding"];
     }
 
-    didBuildHeaders = YES;
+    _alreadyBuiltHeaders = YES;
 }
 
-- (void)writeDataToSocketWithTag:(long)tag {
+- (void)writeData:(NSData *)data finish:(BOOL)flag
+{
+    CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.connection.server.configuration;
 
-    // Append end resonse footer
-    if ( self.isChunked ) {
-        [super appendData: [@"0" dataUsingEncoding:NSUTF8StringEncoding]];
-        [super appendData:[CRConnection CRLFData]];
-        [super appendData:[CRConnection CRLFData]];
+    NSMutableData* dataToSend = [NSMutableData dataWithCapacity:1024];
+
+    if ( !_alreadySentHeaders ) {
+        [self buildHeaders];
+        [self setBody:nil];
+        NSData* headersSerializedData = self.serializedData;
+        NSData* headerData = [NSData dataWithBytesNoCopy:(void*)headersSerializedData.bytes length:headersSerializedData.length freeWhenDone:NO];
+        [dataToSend appendData:headerData];
+        _alreadySentHeaders = YES;
     }
 
+    if ( self.isChunked ) {
+        // Chunk size + CRLF
+        [dataToSend appendData: [[NSString stringWithFormat:@"%lx", data.length] dataUsingEncoding:NSUTF8StringEncoding]];
+        [dataToSend appendData: [CRConnection CRLFData]];
+    }
+
+    // The actual data
+    [dataToSend appendData:data];
+	
+    if ( self.isChunked ) {
+				// Chunk termination
+        [dataToSend appendData: [CRConnection CRLFData]];
+    }
+
+    if ( flag && self.isChunked ) {
+        [dataToSend appendData: [@"0" dataUsingEncoding:NSUTF8StringEncoding]];
+        [dataToSend appendData:[CRConnection CRLFCRLFData]];
+    }
+
+    long tag = flag ? CRConnectionSocketTagFinishSendingResponse : CRConnectionSocketTagSendingResponse;
+    [self.connection.socket writeData:dataToSend withTimeout:config.CRHTTPConnectionWriteBodyTimeout tag:tag];
+}
+
+- (void)finish {
     CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.connection.server.configuration;
-    [self.connection.socket writeData:self.serializedData withTimeout:config.CRHTTPConnectionWriteBodyTimeout tag:tag];
+
+    NSMutableData* dataToSend = [NSMutableData dataWithCapacity:1024];
+
+    if ( !_alreadySentHeaders ) {
+        [self buildHeaders];
+        [self setBody:nil];
+        NSData* headersSerializedData = self.serializedData;
+        NSData* headerData = [NSMutableData dataWithBytesNoCopy:(void*)headersSerializedData.bytes length:headersSerializedData.length freeWhenDone:NO];
+        [dataToSend appendData:headerData];
+        _alreadySentHeaders = YES;
+    }
+
+    if ( self.isChunked ) {
+        [dataToSend appendData: [@"0\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    } else {
+        [dataToSend appendData: [@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+
+    [self.connection.socket writeData:dataToSend withTimeout:config.CRHTTPConnectionWriteBodyTimeout tag:CRConnectionSocketTagFinishSendingResponse];
 }
 
 

@@ -6,8 +6,9 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
+#define CRConnectionSocketTagSendingResponse                    20
+
 #define CRConnectionSocketTagFinishSendingResponse                  90
-#define CRConnectionSocketTagFinishSendingResponseAndClosing        91
 
 @class GCDAsyncSocket, CRServer, CRRequest, CRResponse;
 

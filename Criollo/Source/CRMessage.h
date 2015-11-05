@@ -21,6 +21,4 @@
 
 - (NSString *)valueForHTTPHeaderField:(NSString *)HTTPHeaderField;
 
-- (BOOL)appendData:(NSData *)data;
-
 @end

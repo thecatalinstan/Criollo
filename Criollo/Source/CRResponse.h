@@ -31,6 +31,5 @@
 - (void)sendFormat:(NSString*)format, ...;
 
 - (void)finish;
-- (void)end;
 
 @end

@@ -90,22 +90,24 @@
 
 - (void)didReceiveCompleteRequest {
 
-    NSDate* startTime = [NSDate date];
-    NSUInteger statusCode = 200;
+    self.response = [self responseWithHTTPStatusCode:200];
+    [self.response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+    [self.response sendString:@"Hello World\n"];
 
-    NSMutableString* response = [[NSMutableString alloc] init];
-    [response appendString:@"<h1>Hello world!</h1>"];
-    [response appendFormat:@"<h2>Connection:</h2><pre>%@</pre>", self.className];
-    [response appendFormat:@"<h2>Request:</h2><pre>%@</pre>", self.request.allHTTPHeaderFields];
-    [response appendFormat:@"<h2>Environment:</h2><pre>%@</pre>", self.request.env];
-    [response appendString:@"<hr/>"];
-    [response appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
-
-    self.response = [self responseWithHTTPStatusCode:statusCode];
-    [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+//    NSDate* startTime = [NSDate date];
+//    NSUInteger statusCode = 200;
+//    NSMutableString* response = [[NSMutableString alloc] init];
+//    [response appendString:@"<h1>Hello world!</h1>"];
+//    [response appendFormat:@"<h2>Connection:</h2><pre>%@</pre>", self.className];
+//    [response appendFormat:@"<h2>Request:</h2><pre>%@</pre>", self.request.allHTTPHeaderFields];
+//    [response appendFormat:@"<h2>Environment:</h2><pre>%@</pre>", self.request.env];
+//    [response appendString:@"<hr/>"];
+//    [response appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
+//
+//    self.response = [self responseWithHTTPStatusCode:statusCode];
+//    [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
 //    [self.response setValue:@(response.length).stringValue forHTTPHeaderField:@"Content-Length"];
-    [self.response writeString:response];
-    [self.response finish];
+//    [self.response sendString:response];
 }
 
 - (void)handleError:(NSUInteger)errorType object:(id)object {
@@ -146,9 +148,8 @@
 
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
     switch ( tag ) {
-        case CRConnectionSocketTagFinishSendingResponseAndClosing:
         case CRConnectionSocketTagFinishSendingResponse:
-            if ( tag == CRConnectionSocketTagFinishSendingResponseAndClosing || self.shouldClose) {
+            if ( self.shouldClose ) {
                 [self.socket disconnectAfterWriting];
             } else {
                 [self startReading];

@@ -37,9 +37,14 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
     return protocolStatusName;
 }
 
-@interface CRFCGIResponse () {
-    BOOL didBuildHeaders;
+@interface CRFCGIResponse ()  {
+    BOOL _alreadySentHeaders;
+    BOOL _alreadyBuiltHeaders;
 }
+
+@property (nonatomic, readonly) NSData* endRequestRecordData;
+
+- (NSData*)FCGIRecordDataWithContentData:(NSData *)data;
 
 @end
 
@@ -54,18 +59,8 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
     return self;
 }
 
-- (BOOL)appendData:(NSData*)data {
-    if ( !didBuildHeaders ) {
-        [self buildHeaders];
-    }
-
-    BOOL result = YES;
-    result = result && [super appendData:data];
-    return result;
-}
-
 - (void)buildHeaders {
-    if ( didBuildHeaders ) {
+    if ( _alreadyBuiltHeaders ) {
         return;
     }
 
@@ -73,18 +68,66 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
         [self setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
     }
 
-    didBuildHeaders = YES;
+    _alreadyBuiltHeaders = YES;
 }
 
-- (void)writeDataToSocketWithTag:(long)tag {
+- (void)writeData:(NSData *)data finish:(BOOL)flag {
 
-    NSData* responseData = self.serializedData;
-    NSMutableData* recordData = [NSMutableData data];
     CRFCGIServerConfiguration* config = (CRFCGIServerConfiguration*)self.connection.server.configuration;
 
+    NSMutableData* dataToSend = [NSMutableData dataWithCapacity:1024];
+
+    if ( !_alreadySentHeaders ) {
+        [self buildHeaders];
+        [self setBody:nil];
+        NSData* headersSerializedData = self.serializedData;
+        NSData* headerData = [self FCGIRecordDataWithContentData:[NSData dataWithBytesNoCopy:(void*)headersSerializedData.bytes length:headersSerializedData.length freeWhenDone:NO]];
+        [dataToSend appendData:headerData];
+        _alreadySentHeaders = YES;
+    }
+
+    // The actual data
+    [dataToSend appendData:[self FCGIRecordDataWithContentData:data]];
+
+    if ( flag ) {
+        // End request record
+        [dataToSend appendData:self.endRequestRecordData];
+    }
+
+    long tag = flag ? CRConnectionSocketTagFinishSendingResponse : CRConnectionSocketTagSendingResponse;
+    [self.connection.socket writeData:dataToSend withTimeout:config.CRFCGIConnectionWriteRecordTimeout tag:tag];
+}
+
+- (void)finish {
+    CRFCGIServerConfiguration* config = (CRFCGIServerConfiguration*)self.connection.server.configuration;
+
+    NSMutableData* dataToSend = [NSMutableData dataWithCapacity:1024];
+
+    if ( !_alreadySentHeaders ) {
+        [self buildHeaders];
+        [self setBody:nil];
+        NSData* headersSerializedData = self.serializedData;
+        NSData* headerData = [self FCGIRecordDataWithContentData:[NSData dataWithBytesNoCopy:(void*)headersSerializedData.bytes length:headersSerializedData.length freeWhenDone:NO]];
+        [dataToSend appendData:headerData];
+        _alreadySentHeaders = YES;
+    }
+
+    // End request record
+    [dataToSend appendData:self.endRequestRecordData];
+
+    [self.connection.socket writeData:dataToSend withTimeout:config.CRFCGIConnectionWriteRecordTimeout tag:CRConnectionSocketTagFinishSendingResponse];
+}
+
+- (NSData*)FCGIRecordDataWithContentData:(NSData *)data {
+
+    CRFCGIServerConfiguration* config = (CRFCGIServerConfiguration*)self.connection.server.configuration;
+
+    NSMutableData* recordData = [NSMutableData dataWithCapacity:config.CRFCGIConnectionSocketWriteBuffer];
     NSUInteger offset = 0;
+
     do {
-        NSUInteger chunkSize = responseData.length - offset > config.CRFCGIConnectionSocketWriteBuffer ? config.CRFCGIConnectionSocketWriteBuffer : responseData.length - offset;
+        NSUInteger chunkSize = data.length - offset > config.CRFCGIConnectionSocketWriteBuffer ? config.CRFCGIConnectionSocketWriteBuffer : data.length - offset;
+
 
         CRFCGIVersion version = CRFCGIVersion1;
         [recordData appendBytes:&version length:1];
@@ -104,14 +147,21 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
         UInt8 reserved = 0x00;
         [recordData appendBytes:&reserved length:1];
 
-        NSData* chunk = [NSData dataWithBytesNoCopy:((char *)responseData.bytes + offset) length:chunkSize freeWhenDone:NO];
+        NSData* chunk = [NSData dataWithBytesNoCopy:((char *)data.bytes + offset) length:chunkSize freeWhenDone:NO];
         [recordData appendData:chunk];
 
         offset += chunkSize;
         
-    } while (offset < responseData.length);
+    } while (offset < data.length);
 
-    // Append the end request record
+    return recordData;
+    
+}
+
+- (NSData*)endRequestRecordData {
+
+    NSMutableData* recordData = [NSMutableData data];
+
     CRFCGIVersion version = CRFCGIVersion1;
     [recordData appendBytes:&version length:1];
 
@@ -141,7 +191,7 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
     [recordData appendBytes:&reserved length:1];
     [recordData appendBytes:&reserved length:1];
 
-    [self.connection.socket writeData:recordData withTimeout:config.CRFCGIConnectionWriteRecordTimeout tag:tag];
+    return recordData;
 }
 
 
