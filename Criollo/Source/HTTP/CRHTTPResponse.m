@@ -18,6 +18,8 @@
     BOOL _alreadyBuiltHeaders;
 }
 
+- (NSMutableData*)initialResponseData;
+
 @end
 
 @implementation CRHTTPResponse
@@ -59,16 +61,7 @@
 {
     CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.connection.server.configuration;
 
-    NSMutableData* dataToSend = [NSMutableData dataWithCapacity:1024];
-
-    if ( !_alreadySentHeaders ) {
-        [self buildHeaders];
-        [self setBody:nil];
-        NSData* headersSerializedData = self.serializedData;
-        NSData* headerData = [NSData dataWithBytesNoCopy:(void*)headersSerializedData.bytes length:headersSerializedData.length freeWhenDone:NO];
-        [dataToSend appendData:headerData];
-        _alreadySentHeaders = YES;
-    }
+    NSMutableData* dataToSend = [self initialResponseData];
 
     if ( self.isChunked ) {
         // Chunk size + CRLF
@@ -96,7 +89,19 @@
 - (void)finish {
     CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.connection.server.configuration;
 
-    NSMutableData* dataToSend = [NSMutableData dataWithCapacity:1024];
+    NSMutableData* dataToSend = [self initialResponseData];
+    if ( self.isChunked ) {
+        [dataToSend appendData: [@"0\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    } else {
+        [dataToSend appendData: [@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+
+    [self.connection.socket writeData:dataToSend withTimeout:config.CRHTTPConnectionWriteBodyTimeout tag:CRConnectionSocketTagFinishSendingResponse];
+}
+
+- (NSMutableData*)initialResponseData {
+
+    NSMutableData* dataToSend = [NSMutableData dataWithCapacity:CRResponseDataInitialCapacity];
 
     if ( !_alreadySentHeaders ) {
         [self buildHeaders];
@@ -107,13 +112,8 @@
         _alreadySentHeaders = YES;
     }
 
-    if ( self.isChunked ) {
-        [dataToSend appendData: [@"0\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-    } else {
-        [dataToSend appendData: [@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-    }
+    return dataToSend;
 
-    [self.connection.socket writeData:dataToSend withTimeout:config.CRHTTPConnectionWriteBodyTimeout tag:CRConnectionSocketTagFinishSendingResponse];
 }
 
 
