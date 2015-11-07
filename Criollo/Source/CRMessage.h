@@ -22,6 +22,8 @@
 @property (nonatomic, readonly) NSData* serializedData;
 @property (nonatomic, strong) NSData* body;
 
+@property (nonatomic, readonly) BOOL headersComplete;
+
 - (NSString *)valueForHTTPHeaderField:(NSString *)HTTPHeaderField;
 
 @end
