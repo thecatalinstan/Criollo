@@ -59,7 +59,7 @@
 {
     CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.connection.server.configuration;
 
-    NSMutableData* dataToSend = [NSMutableData dataWithCapacity:1024];
+    NSMutableData* dataToSend = [NSMutableData dataWithCapacity:CRResponseDataInitialCapacity];
 
     if ( !_alreadySentHeaders ) {
         [self buildHeaders];
@@ -96,7 +96,7 @@
 - (void)finish {
     CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.connection.server.configuration;
 
-    NSMutableData* dataToSend = [NSMutableData dataWithCapacity:1024];
+    NSMutableData* dataToSend = [NSMutableData dataWithCapacity:CRResponseDataInitialCapacity];
 
     if ( !_alreadySentHeaders ) {
         [self buildHeaders];

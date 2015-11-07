@@ -75,7 +75,7 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
 
     CRFCGIServerConfiguration* config = (CRFCGIServerConfiguration*)self.connection.server.configuration;
 
-    NSMutableData* dataToSend = [NSMutableData dataWithCapacity:1024];
+    NSMutableData* dataToSend = [NSMutableData dataWithCapacity:CRResponseDataInitialCapacity];
 
     if ( !_alreadySentHeaders ) {
         [self buildHeaders];
@@ -101,7 +101,7 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
 - (void)finish {
     CRFCGIServerConfiguration* config = (CRFCGIServerConfiguration*)self.connection.server.configuration;
 
-    NSMutableData* dataToSend = [NSMutableData dataWithCapacity:1024];
+    NSMutableData* dataToSend = [NSMutableData dataWithCapacity:CRResponseDataInitialCapacity];
 
     if ( !_alreadySentHeaders ) {
         [self buildHeaders];
