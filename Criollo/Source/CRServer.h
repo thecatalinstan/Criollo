@@ -6,14 +6,14 @@
 //  Copyright (c) 2015 Cătălin Stan. All rights reserved.
 //
 
+#import "CRRouter.h"
+
 @class CRServer, CRServerConfiguration, GCDAsyncSocket, CRConnection, CRRequest, CRResponse;
 
 FOUNDATION_EXPORT NSUInteger const CRErrorSocketError;
 
 FOUNDATION_EXPORT NSString* const CRRequestKey;
 FOUNDATION_EXPORT NSString* const CRResponseKey;
-
-typedef void(^CRServerOperationBlock)(CRRequest* request, CRResponse* response);
 
 @protocol CRServerDelegate <NSObject>
 
@@ -30,7 +30,7 @@ typedef void(^CRServerOperationBlock)(CRRequest* request, CRResponse* response);
 
 @end
 
-@interface CRServer : NSObject
+@interface CRServer : NSObject <CRRouter>
 
 @property (nonatomic, strong) id<CRServerDelegate> delegate;
 @property (nonatomic, strong) CRServerConfiguration* configuration;
@@ -48,7 +48,5 @@ typedef void(^CRServerOperationBlock)(CRRequest* request, CRResponse* response);
 
 - (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket;
 - (void)didCloseConnection:(CRConnection*)connection;
-
-- (BOOL)canHandleHTTPMethod:(NSString*)HTTPMethod forPath:(NSString*)path;
 
 @end

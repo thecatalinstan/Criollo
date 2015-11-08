@@ -11,7 +11,9 @@
 #define HTTPPortNumber 10782
 #define FCGIPortNumber 10781
 
-@interface AppDelegate () <CRServerDelegate>
+@interface AppDelegate () <CRServerDelegate> {
+    NSUInteger i;
+}
 
 @property (nonatomic, strong) CRHTTPServer* HTTPServer;
 @property (nonatomic, strong) CRFCGIServer* FCGIServer;
@@ -39,6 +41,29 @@
     } else {
         [CRApp logFormat:@"Running FCGI server on %@:%lu", self.FCGIServer.configuration.CRServerInterface.length == 0 ? @"127.0.0.1" : self.FCGIServer.configuration.CRServerInterface, self.FCGIServer.configuration.CRServerPort];
     }
+
+    CRRouteHandlerBlock block = ^(CRRequest* request, CRResponse* response, void(^completionHandler)()) {
+
+        [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+        [response sendFormat:@"Hello World - %lu", ++i];
+
+        //        NSDate* startTime = [NSDate date];
+        //
+        //        NSMutableString* responseString = [[NSMutableString alloc] init];
+        //        [responseString appendFormat:@"<h1>Hello world - %lu</h1>", ++i];
+        //        [responseString appendFormat:@"<h2>Connection:</h2><pre>%@</pre>", connection.requests];
+        //        [responseString appendFormat:@"<h2>Connections:</h2><pre>%lu</pre>", self.connections.count];
+        //        [responseString appendFormat:@"<h2>Request:</h2><pre>%@</pre>", request.allHTTPHeaderFields];
+        //        [responseString appendFormat:@"<h2>Environment:</h2><pre>%@</pre>", request.env];
+        //        [responseString appendString:@"<hr/>"];
+        //        [responseString appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
+        //
+        //        [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+        //        [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
+        //        [response sendString:responseString];
+    };
+
+    [self.HTTPServer addHandlerBlock:block];
 
     if ( HTTPServerError != nil  && FCGIServerError != nil ) {
         [CRApp logErrorFormat:@"%@", @"Neither the FCGI nor the HTTP server could be started. Exiting."];

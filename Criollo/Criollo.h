@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import <Criollo/CRApplication.h>
+#import <Criollo/CRRouter.h>
 #import <Criollo/CRServer.h>
 #import <Criollo/CRServerConfiguration.h>
 #import <Criollo/CRConnection.h>

@@ -18,9 +18,7 @@ NSUInteger const CRErrorSocketError = 2001;
 NSString* const CRRequestKey = @"CRRequest";
 NSString* const CRResponseKey = @"CRResponse";
 
-@interface CRServer () <GCDAsyncSocketDelegate, CRConnectionDelegate> {
-    NSUInteger i;
-}
+@interface CRServer () <GCDAsyncSocketDelegate, CRConnectionDelegate>
 
 @property (nonatomic, strong) dispatch_queue_t isolationQueue;
 @property (nonatomic, strong) dispatch_queue_t socketDelegateQueue;
@@ -48,8 +46,7 @@ NSString* const CRResponseKey = @"CRResponse";
 
 #pragma mark - KVO
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
-{
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
     NSLog(@"%@.%@ = %lu", object, keyPath, ((NSArray*)change[NSKeyValueChangeNewKey]).count);
 }
 
@@ -180,24 +177,56 @@ NSString* const CRResponseKey = @"CRResponse";
 - (void)connection:(CRConnection *)connection didReceiveRequest:(CRRequest *)request response:(CRResponse *)response {
 
     [self.workerQueue addOperation:[NSBlockOperation blockOperationWithBlock:^{
-        [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-        [response sendFormat:@"Hello World - %lu", ++i];
-
-//        NSDate* startTime = [NSDate date];
-//
-//        NSMutableString* responseString = [[NSMutableString alloc] init];
-//        [responseString appendFormat:@"<h1>Hello world - %lu</h1>", ++i];
-//        [responseString appendFormat:@"<h2>Connection:</h2><pre>%@</pre>", connection.requests];
-//        [responseString appendFormat:@"<h2>Connections:</h2><pre>%lu</pre>", self.connections.count];
-//        [responseString appendFormat:@"<h2>Request:</h2><pre>%@</pre>", request.allHTTPHeaderFields];
-//        [responseString appendFormat:@"<h2>Environment:</h2><pre>%@</pre>", request.env];
-//        [responseString appendString:@"<hr/>"];
-//        [responseString appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
-//
-//        [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-//        [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
-//        [response sendString:responseString];
     }]];
+    
+}
+
+#pragma mark - CRRouter
+
+- (void)addHandlerBlock:(CRRouteHandlerBlock)handlerBlock {
+    [self addHandlerBlock:handlerBlock forPath:nil HTTPMethod:nil];
+}
+
+- (void)addHandlerBlock:(CRRouteHandlerBlock)handlerBlock forPath:(NSString*)path {
+    [self addHandlerBlock:handlerBlock forPath:path HTTPMethod:nil];
+}
+
+- (void)addHandlerBlock:(CRRouteHandlerBlock)handlerBlock forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
+    
+}
+
+- (void)addHandlerBlockForGet:(CRRouteHandlerBlock)handlerBlock {
+    [self addHandlerBlock:handlerBlock forPath:nil HTTPMethod:@"GET"];
+}
+
+- (void)addHandlerBlockForGet:(CRRouteHandlerBlock)handlerBlock forPath:(NSString*)path {
+    [self addHandlerBlock:handlerBlock forPath:path HTTPMethod:@"GET"];
+}
+
+- (void)addHandlerBlockForPost:(CRRouteHandlerBlock)handlerBlock {
+    [self addHandlerBlock:handlerBlock forPath:nil HTTPMethod:@"POST"];
+}
+
+- (void)addHandlerBlockForPost:(CRRouteHandlerBlock)handlerBlock forPath:(NSString*)path {
+    [self addHandlerBlock:handlerBlock forPath:path HTTPMethod:@"POST"];
+}
+
+
+- (void)addHandlerBlockForPut:(CRRouteHandlerBlock)handlerBlock {
+    [self addHandlerBlock:handlerBlock forPath:nil HTTPMethod:@"PUT"];
+}
+
+- (void)addHandlerBlockForPut:(CRRouteHandlerBlock)handlerBlock forPath:(NSString*)path {
+    [self addHandlerBlock:handlerBlock forPath:path HTTPMethod:@"PUT"];
+}
+
+
+- (void)addHandlerBlockForDelete:(CRRouteHandlerBlock)handlerBlock {
+    [self addHandlerBlock:handlerBlock forPath:nil HTTPMethod:@"DELETE"];
+}
+
+- (void)addHandlerBlockForDelete:(CRRouteHandlerBlock)handlerBlock forPath:(NSString*)path {
+    [self addHandlerBlock:handlerBlock forPath:path HTTPMethod:@"DELETE"];
 }
 
 @end
