@@ -179,10 +179,12 @@ NSString* const CRResponseKey = @"CRResponse";
 #pragma mark - CRConnectionDelegate
 
 - (void)connection:(CRConnection *)connection didReceiveRequest:(CRRequest *)request response:(CRResponse *)response {
+    if ( [self.delegate respondsToSelector:@selector(server:didReceiveRequest:)] ) {
+        [self.delegate server:self didReceiveRequest:request];
+    }
 
     [self.workerQueue addOperation:[NSBlockOperation blockOperationWithBlock:^{
         NSArray<CRRoute*>* routes = [self routesForPath:request.URL.path HTTPMethod:request.method];
-//        NSLog(@"%@", routes);
         __block NSUInteger currentRouteIndex = 0;
         void(^completionHandler)(void) = ^{
             currentRouteIndex++;
@@ -193,6 +195,12 @@ NSString* const CRResponseKey = @"CRResponse";
         }
     }]];
 
+}
+
+- (void)connection:(CRConnection *)connection didFinishRequest:(CRRequest *)request response:(CRResponse *)response {
+    if ( [self.delegate respondsToSelector:@selector(server:didFinishRequest:)]  ) {
+        [self.delegate server:self didFinishRequest:request];
+    }
 }
 
 #pragma mark - CRRouter

@@ -28,6 +28,9 @@ FOUNDATION_EXPORT NSString* const CRResponseKey;
 - (void)server:(CRServer*)server didAcceptConnection:(CRConnection*)connection;
 - (void)server:(CRServer*)server didCloseConnection:(CRConnection*)connection;
 
+- (void)server:(CRServer*)server didReceiveRequest:(CRRequest*)request;
+- (void)server:(CRServer*)server didFinishRequest:(CRRequest*)request;
+
 @end
 
 @interface CRServer : NSObject

@@ -208,22 +208,18 @@ int CRApplicationMain(int argc, char * const argv[], id<CRApplicationDelegate> d
     [self terminate:nil];
 }
 
-- (void)stop:(id)sender
-{
+- (void)stop:(id)sender {
     [self stopRunLoop];
 }
 
-- (void)finishLaunching
-{
+- (void)finishLaunching {
 	// Let observers know that initialization is complete
 	[[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationWillFinishLaunchingNotification object:self];
 }
 
 #pragma mark - Output
 
-
-- (void)logErrorFormat:(NSString *)format, ...
-{
+- (void)logErrorFormat:(NSString *)format, ... {
     va_list args;
     va_start(args, format);
     NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
@@ -240,8 +236,7 @@ int CRApplicationMain(int argc, char * const argv[], id<CRApplicationDelegate> d
     }
 }
 
-- (void)logFormat:(NSString *)format, ...
-{
+- (void)logFormat:(NSString *)format, ... {
     va_list args;
     va_start(args, format);
     NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];

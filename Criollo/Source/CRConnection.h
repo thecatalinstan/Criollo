@@ -13,6 +13,7 @@
 @protocol CRConnectionDelegate <NSObject>
 
 - (void)connection:(CRConnection*)connection didReceiveRequest:(CRRequest*)request response:(CRResponse*)response;
+- (void)connection:(CRConnection*)connection didFinishRequest:(CRRequest*)request response:(CRResponse*)response;
 
 @end
 
@@ -27,6 +28,11 @@
 
 @property (nonatomic, strong) CRRequest* currentRequest;
 @property (nonatomic, strong) NSDate* requestTime;
+
+@property (nonatomic, readonly) NSString* remoteAddress;
+@property (nonatomic, readonly) NSUInteger remotePort;
+@property (nonatomic, readonly) NSString* localAddress;
+@property (nonatomic, readonly) NSUInteger localPort;
 
 + (NSData*)CRLFData;
 + (NSData*)CRLFCRLFData;
