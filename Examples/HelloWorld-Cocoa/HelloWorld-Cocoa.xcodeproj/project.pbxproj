@@ -13,6 +13,8 @@
 		AD9D832A1BEFA7DB002115DD /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD9D83281BEFA7DB002115DD /* MainMenu.xib */; };
 		AD9D83381BEFA82F002115DD /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD9D83361BEFA802002115DD /* Criollo.framework */; };
 		AD9D83391BEFA82F002115DD /* Criollo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AD9D83361BEFA802002115DD /* Criollo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		AD9D83451BEFCA55002115DD /* ConnectionInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = AD9D83441BEFCA55002115DD /* ConnectionInfo.m */; };
+		AD9D83481BEFCD7B002115DD /* RequestInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = AD9D83471BEFCD7B002115DD /* RequestInfo.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +57,10 @@
 		AD9D83291BEFA7DB002115DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		AD9D832B1BEFA7DB002115DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD9D83311BEFA802002115DD /* Criollo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Criollo.xcodeproj; path = ../../Criollo.xcodeproj; sourceTree = "<group>"; };
+		AD9D83431BEFCA55002115DD /* ConnectionInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectionInfo.h; sourceTree = "<group>"; };
+		AD9D83441BEFCA55002115DD /* ConnectionInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectionInfo.m; sourceTree = "<group>"; };
+		AD9D83461BEFCD7B002115DD /* RequestInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestInfo.h; sourceTree = "<group>"; };
+		AD9D83471BEFCD7B002115DD /* RequestInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestInfo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +101,10 @@
 				AD9D83281BEFA7DB002115DD /* MainMenu.xib */,
 				AD9D832B1BEFA7DB002115DD /* Info.plist */,
 				AD9D83231BEFA7DB002115DD /* Supporting Files */,
+				AD9D83431BEFCA55002115DD /* ConnectionInfo.h */,
+				AD9D83441BEFCA55002115DD /* ConnectionInfo.m */,
+				AD9D83461BEFCD7B002115DD /* RequestInfo.h */,
+				AD9D83471BEFCD7B002115DD /* RequestInfo.m */,
 			);
 			path = "HelloWorld-Cocoa";
 			sourceTree = "<group>";
@@ -203,6 +213,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD9D83251BEFA7DB002115DD /* main.m in Sources */,
+				AD9D83481BEFCD7B002115DD /* RequestInfo.m in Sources */,
+				AD9D83451BEFCA55002115DD /* ConnectionInfo.m in Sources */,
 				AD9D83221BEFA7DB002115DD /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

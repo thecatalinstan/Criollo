@@ -8,6 +8,8 @@
 
 #import <Criollo/Criollo.h>
 #import "AppDelegate.h"
+#import "ConnectionInfo.h"
+#import "RequestInfo.h"
 
 #define PortNumber 10782
 #define LogDebug 0
@@ -16,6 +18,11 @@
 
 @property (weak) IBOutlet NSWindow *window;
 @property (strong) IBOutlet NSTextView *logTextView;
+@property (weak) IBOutlet NSTreeController *treeController;
+
+@property (readonly) NSArray<ConnectionInfo*> *connections;
+
+- (void)updateConnectionInfo;
 
 - (void)logFormat:(NSString *)format, ...;
 - (void)logDebugFormat:(NSString *)format, ...;
@@ -90,6 +97,7 @@
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             [self.server closeAllConnections];
+            [NSApp terminate:nil];
         });
         return NSTerminateLater;
     } else {
@@ -103,7 +111,16 @@
     [self.server stopListening];
 }
 
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
+    return YES;
+}
+
 #pragma mark - CRServerDelegate
+
+// These methods are all optional and they are here only for updating the
+// user interface so that it reflects the current connections
+//
+// Calling any sort of logging or KVO operations SEVERLY impacts performance
 
 - (void)serverDidStartListening:(CRServer *)server {
     [self logDebugFormat:@" * Started listening on: %@:%lu", server.configuration.CRServerInterface, server.configuration.CRServerPort];
@@ -114,25 +131,23 @@
 }
 
 - (void)server:(CRServer *)server didAcceptConnection:(CRConnection *)connection {
-    [self.server didChangeValueForKey:@"connections"];
     [self logDebugFormat:@" * Connection from: %@:%lu", connection.remoteAddress, connection.remotePort];
+    [self updateConnectionInfo];
 }
 
 - (void)server:(CRServer *)server didCloseConnection:(CRConnection *)connection {
     [self logDebugFormat:@" * Disconnected."];
-    [self.server didChangeValueForKey:@"connections"];
+    [self updateConnectionInfo];
 }
 
 - (void)server:(CRServer *)server didReceiveRequest:(CRRequest *)request {
-    [self.server didChangeValueForKey:@"connections"];
-    [[self.server valueForKey:@"connections"] didChangeValueForKey:@"requests"];
     [self logDebugFormat:@" * Request: %@", request];
+    [self updateConnectionInfo];
 }
 
 - (void)server:(CRServer *)server didFinishRequest:(CRRequest *)request {
     [self logDebugFormat:@" * Finished: %@", request];
-    [self.server didChangeValueForKey:@"connections"];
-    [[self.server valueForKey:@"connections"] didChangeValueForKey:@"requests"];
+    [self updateConnectionInfo];
 }
 
 #pragma mark - Logging
@@ -231,6 +246,22 @@
         NSAttributedString* attributedString = [[NSAttributedString alloc] initWithString:[string stringByAppendingString:@"\n"] attributes:attributes];
         [self.logTextView.textStorage appendAttributedString:attributedString];
         [self.logTextView scrollRangeToVisible:NSMakeRange(self.logTextView.string.length, 0)];
+    });
+}
+
+#pragma mark - KVO
+
+- (void)updateConnectionInfo {
+    NSArray* serverConnections = self.server.connections.copy;
+    NSMutableArray* connections = [NSMutableArray arrayWithCapacity:serverConnections.count];
+    [serverConnections enumerateObjectsUsingBlock:^(CRConnection*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        ConnectionInfo* connectionInfo = [[ConnectionInfo alloc] initWithConnection:obj];
+        [connections addObject:connectionInfo];
+    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self willChangeValueForKey:@"connections"];
+        _connections = connections;
+        [self didChangeValueForKey:@"connections"];
     });
 }
 
