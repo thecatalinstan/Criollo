@@ -97,7 +97,7 @@
         [dataToSend appendData: [@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
     }
 
-    [self.connection sendData:dataToSend forResponse:self];
+    [self.connection sendDataToSocket:dataToSend forRequest:self.request];
 }
 
 - (NSMutableData*)initialResponseData {

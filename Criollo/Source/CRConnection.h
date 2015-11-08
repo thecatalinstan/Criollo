@@ -41,7 +41,7 @@
 - (void)didReceiveCompleteRequestHeaders;
 - (void)didReceiveRequestBody;
 - (void)didReceiveCompleteRequest;
-- (void)sendData:(NSData*)data forResponse:(CRResponse*)response;
-- (void)didFinishResponse:(CRResponse *)response;
+- (void)sendDataToSocket:(NSData*)data forRequest:(CRRequest*)request;
+- (void)didFinishResponseForRequest:(CRRequest*)request;
 
 @end

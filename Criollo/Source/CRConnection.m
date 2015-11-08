@@ -20,6 +20,8 @@
 
 @interface CRConnection () <GCDAsyncSocketDelegate> 
 
+- (void)bufferResponseData:(NSData*)data forRequest:(CRRequest*)request;
+
 @end
 
 @implementation CRConnection
@@ -99,28 +101,32 @@
     [self startReading];
 }
 
-- (void)sendData:(NSData *)data forResponse:(CRResponse *)response {
-    CRRequest* firstRequest = self.requests.firstObject;
-    if ( [firstRequest.response isEqual:response] ) {
-        [self.socket writeData:data withTimeout:self.server.configuration.CRConnectionWriteTimeout tag:CRConnectionSocketTagSendingResponse];
-        if ( response.request.shouldCloseConnection ) {
-            [self.socket disconnectAfterWriting];
-        }
-        if ( response.finished ) {
-            [self didFinishResponse:response];
-        }
+- (void)bufferResponseData:(NSData *)data forRequest:(CRRequest *)request {
+    if ( request.bufferedResponseData == nil ) {
+        request.bufferedResponseData = [[NSMutableData alloc] initWithData:data];
+    } else {
+        [request.bufferedResponseData appendData:data];
     }
 }
 
-- (void)didFinishResponse:(CRResponse *)response {
-    NSLog(@"%@", [self.requests valueForKeyPath:@"response"]);
-    [self.requests enumerateObjectsUsingBlock:^(CRRequest * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ( [obj.response isEqualTo:response] ) {
-            [self.requests removeObject:obj];
-            *stop = YES;
+- (void)sendDataToSocket:(NSData *)data forRequest:(CRRequest *)request {
+    CRRequest* firstRequest = self.requests.firstObject;
+    if ( [firstRequest isEqual:request] ) {
+        request.bufferedResponseData = nil;
+        [self.socket writeData:data withTimeout:self.server.configuration.CRConnectionWriteTimeout tag:CRConnectionSocketTagSendingResponse];
+        if ( request.shouldCloseConnection ) {
+            [self.socket disconnectAfterWriting];
         }
-    }];
-    NSLog(@"%@", self.requests);
+        if ( request.response.finished ) {
+            [self didFinishResponseForRequest:request];
+        }
+    } else {
+        [self bufferResponseData:data forRequest:request];
+    }
+}
+
+- (void)didFinishResponseForRequest:(CRRequest *)request {
+    [self.requests removeObject:request];
 }
 
 #pragma mark - State
@@ -130,6 +136,20 @@
 }
 
 #pragma mark - GCDAsyncSocketDelegate
+
+- (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
+    switch (tag) {
+        case CRConnectionSocketTagSendingResponse: {
+            CRRequest* request = (CRRequest*)self.requests.firstObject;
+            if ( request.bufferedResponseData.length > 0 ) {
+                [self sendDataToSocket:request.bufferedResponseData forRequest:request];
+            }
+        } break;
+
+        default:
+            break;
+    }
+}
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
     [self.server didCloseConnection:self];

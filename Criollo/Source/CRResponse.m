@@ -96,7 +96,7 @@
     if ( flag ) {
         _finished = YES;
     }
-    [self.connection sendData:data forResponse:self];
+    [self.connection sendDataToSocket:data forRequest:self.request];
 }
 
 - (void)buildHeaders {

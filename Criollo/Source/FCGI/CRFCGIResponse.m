@@ -99,7 +99,7 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
     // End request record
     [dataToSend appendData:self.endRequestRecordData];
 
-    [self.connection sendData:dataToSend forResponse:self];
+    [self.connection sendDataToSocket:dataToSend forRequest:self.request];
 }
 
 - (NSData*)FCGIRecordDataWithContentData:(NSData *)data {

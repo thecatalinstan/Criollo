@@ -178,24 +178,25 @@ NSString* const CRResponseKey = @"CRResponse";
 #pragma mark - CRConnectionDelegate
 
 - (void)connection:(CRConnection *)connection didReceiveRequest:(CRRequest *)request response:(CRResponse *)response {
-    //    [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-    //    [response sendFormat:@"Hello World - %lu\n", ++i];
 
     [self.workerQueue addOperation:[NSBlockOperation blockOperationWithBlock:^{
-        NSDate* startTime = [NSDate date];
+        [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+        [response sendFormat:@"Hello World - %lu", ++i];
 
-        NSMutableString* responseString = [[NSMutableString alloc] init];
-        [responseString appendFormat:@"<h1>Hello world - %lu</h1>", ++i];
-        [responseString appendFormat:@"<h2>Connection:</h2><pre>%@</pre>", connection.requests];
-        [responseString appendFormat:@"<h2>Connections:</h2><pre>%lu</pre>", self.connections.count];
-        [responseString appendFormat:@"<h2>Request:</h2><pre>%@</pre>", request.allHTTPHeaderFields];
-        [responseString appendFormat:@"<h2>Environment:</h2><pre>%@</pre>", request.env];
-        [responseString appendString:@"<hr/>"];
-        [responseString appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
-
-        [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-        [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
-        [response sendString:responseString];
+//        NSDate* startTime = [NSDate date];
+//
+//        NSMutableString* responseString = [[NSMutableString alloc] init];
+//        [responseString appendFormat:@"<h1>Hello world - %lu</h1>", ++i];
+//        [responseString appendFormat:@"<h2>Connection:</h2><pre>%@</pre>", connection.requests];
+//        [responseString appendFormat:@"<h2>Connections:</h2><pre>%lu</pre>", self.connections.count];
+//        [responseString appendFormat:@"<h2>Request:</h2><pre>%@</pre>", request.allHTTPHeaderFields];
+//        [responseString appendFormat:@"<h2>Environment:</h2><pre>%@</pre>", request.env];
+//        [responseString appendString:@"<hr/>"];
+//        [responseString appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
+//
+//        [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+//        [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
+//        [response sendString:responseString];
     }]];
 }
 

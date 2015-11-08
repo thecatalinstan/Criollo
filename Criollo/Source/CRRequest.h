@@ -22,6 +22,8 @@
 @property (nonatomic, readonly) NSDictionary<NSString*, NSString*>* env;
 @property (nonatomic, readonly) BOOL shouldCloseConnection;
 
+@property (nonatomic, strong) NSMutableData* bufferedResponseData;
+
 - (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version;
 - (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version env:(NSDictionary*)env NS_DESIGNATED_INITIALIZER;
 
