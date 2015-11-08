@@ -12,6 +12,11 @@
 
 @interface RequestInfo : NSObject
 
+@property (strong) NSString* localAddress;
+@property (assign) NSUInteger localPort;
+@property (strong) NSString* remoteAddress;
+@property (assign) NSUInteger remotePort;
+
 @property (strong) NSString* method;
 @property (strong) NSString* version;
 @property (strong) NSString* path;

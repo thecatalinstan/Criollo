@@ -8,7 +8,6 @@
 
 #import <Criollo/Criollo.h>
 #import "AppDelegate.h"
-#import "ConnectionInfo.h"
 #import "RequestInfo.h"
 
 #define PortNumber 10782
@@ -18,9 +17,8 @@
 
 @property (weak) IBOutlet NSWindow *window;
 @property (strong) IBOutlet NSTextView *logTextView;
-@property (weak) IBOutlet NSTreeController *treeController;
 
-@property (readonly) NSArray<ConnectionInfo*> *connections;
+@property (readonly) NSArray<RequestInfo*> *requests;
 
 - (void)updateConnectionInfo;
 
@@ -252,17 +250,37 @@
 #pragma mark - KVO
 
 - (void)updateConnectionInfo {
-    NSArray* serverConnections = self.server.connections.copy;
-    NSMutableArray* connections = [NSMutableArray arrayWithCapacity:serverConnections.count];
-    [serverConnections enumerateObjectsUsingBlock:^(CRConnection*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        ConnectionInfo* connectionInfo = [[ConnectionInfo alloc] initWithConnection:obj];
-        [connections addObject:connectionInfo];
-    }];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self willChangeValueForKey:@"connections"];
-        _connections = connections;
-        [self didChangeValueForKey:@"connections"];
-    });
+    NSMutableArray* requests = [NSMutableArray array];
+
+    @try {
+        @synchronized(self.server.connections) {
+
+            NSArray* serverConnections = self.server.connections.copy;
+
+            [serverConnections enumerateObjectsUsingBlock:^(CRConnection*  _Nonnull connection, NSUInteger idx, BOOL * _Nonnull stop) {
+                NSArray* connectionRequests = connection.requests.copy;
+                @synchronized(connectionRequests) {
+                    [connectionRequests enumerateObjectsUsingBlock:^(CRRequest*  _Nonnull request, NSUInteger idx, BOOL * _Nonnull stop) {
+                        RequestInfo* info = [[RequestInfo alloc] initWithRequest:request];
+                        [requests addObject:info];
+                    }];
+                }
+            }];
+        }
+
+    }
+    @catch (NSException *exception) {
+//        NSLog(@"%@", exception);
+    }
+    @finally {
+        @synchronized(_requests) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self willChangeValueForKey:@"requests"];
+                _requests = requests;
+                [self didChangeValueForKey:@"requests"];
+            });
+        }
+    }
 }
 
 @end
