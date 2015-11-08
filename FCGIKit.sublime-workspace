@@ -824,6 +824,15 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"CRServerOperationBlock",
+			"addDELETEHandlerBlock",
+			"addPUTHandlerBlock",
+			"addPOSTHandlerBlock",
+			"addGETHandlerBlock",
+			"- (void)add",
+			"GET",
+			"- (void)add",
+			"addHandlerBlock",
 			"machine",
 			"instancetype",
 			"recordHeaderData",
@@ -942,16 +951,7 @@
 			"to_state",
 			"discover",
 			"stateChangeStart",
-			"users_path",
-			"redirect",
-			"'navigation",
-			"discover",
-			"cz-expandable",
-			"|detectLinks",
-			"shouldShowDetails",
-			"isLoadedEvent",
-			"top_state",
-			"isLoadedEvent"
+			"users_path"
 		],
 		"highlight": true,
 		"in_selection": false,

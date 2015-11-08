@@ -27,6 +27,8 @@
 #import <Criollo/CRFCGIRequest.h>
 #import <Criollo/CRFCGIResponse.h>
 
+#import <Criollo/CRRoute.h>
+
 FOUNDATION_EXPORT NSString* const Criollo;
 FOUNDATION_EXPORT NSString* const CRErrorDomain;
 

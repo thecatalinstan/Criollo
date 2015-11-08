@@ -12,20 +12,21 @@
 #import "CRConnection.h"
 #import "CRRequest.h"
 #import "CRResponse.h"
+#import "CRRoute.h"
 
 NSUInteger const CRErrorSocketError = 2001;
 
 NSString* const CRRequestKey = @"CRRequest";
 NSString* const CRResponseKey = @"CRResponse";
 
-@interface CRServer () <GCDAsyncSocketDelegate, CRConnectionDelegate> {
-    NSUInteger i;
-}
+@interface CRServer () <GCDAsyncSocketDelegate, CRConnectionDelegate>
 
 @property (nonatomic, strong) dispatch_queue_t isolationQueue;
 @property (nonatomic, strong) dispatch_queue_t socketDelegateQueue;
 @property (nonatomic, strong) dispatch_queue_t acceptedSocketDelegateTargetQueue;
 @property (nonatomic, strong) dispatch_queue_t acceptedSocketSocketTargetQueue;
+
+@property (nonatomic, strong) NSMutableDictionary<NSString*, NSMutableArray<CRRoute*>*>* routes;
 
 @property (nonatomic, strong) NSOperationQueue* workerQueue;
 
@@ -42,14 +43,14 @@ NSString* const CRResponseKey = @"CRResponse";
     if ( self != nil ) {
         self.configuration = [[CRServerConfiguration alloc] init];
         self.delegate = delegate;
+        self.routes = [NSMutableDictionary dictionary];
     }
     return self;
 }
 
 #pragma mark - KVO
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
-{
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
     NSLog(@"%@.%@ = %lu", object, keyPath, ((NSArray*)change[NSKeyValueChangeNewKey]).count);
 }
 
@@ -180,24 +181,99 @@ NSString* const CRResponseKey = @"CRResponse";
 - (void)connection:(CRConnection *)connection didReceiveRequest:(CRRequest *)request response:(CRResponse *)response {
 
     [self.workerQueue addOperation:[NSBlockOperation blockOperationWithBlock:^{
-        [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-        [response sendFormat:@"Hello World - %lu", ++i];
-
-//        NSDate* startTime = [NSDate date];
-//
-//        NSMutableString* responseString = [[NSMutableString alloc] init];
-//        [responseString appendFormat:@"<h1>Hello world - %lu</h1>", ++i];
-//        [responseString appendFormat:@"<h2>Connection:</h2><pre>%@</pre>", connection.requests];
-//        [responseString appendFormat:@"<h2>Connections:</h2><pre>%lu</pre>", self.connections.count];
-//        [responseString appendFormat:@"<h2>Request:</h2><pre>%@</pre>", request.allHTTPHeaderFields];
-//        [responseString appendFormat:@"<h2>Environment:</h2><pre>%@</pre>", request.env];
-//        [responseString appendString:@"<hr/>"];
-//        [responseString appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
-//
-//        [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-//        [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
-//        [response sendString:responseString];
+        NSArray<CRRoute*>* routes = [self routesForPath:request.URL.path HTTPMethod:request.method];
+//        NSLog(@"%@", routes);
+        __block NSUInteger currentRouteIndex = 0;
+        void(^completionHandler)(void) = ^{
+            currentRouteIndex++;
+        };
+        while (currentRouteIndex < routes.count ) {
+            CRRouteHandlerBlock handlerBlock = routes[currentRouteIndex].handlerBlock;
+            handlerBlock(request, response, completionHandler);
+        }
     }]];
+
+}
+
+#pragma mark - CRRouter
+
+- (void)addHandlerBlock:(CRRouteHandlerBlock)handlerBlock {
+    [self addHandlerBlock:handlerBlock forPath:nil HTTPMethod:nil];
+}
+
+- (void)addHandlerBlock:(CRRouteHandlerBlock)handlerBlock forPath:(NSString*)path {
+    [self addHandlerBlock:handlerBlock forPath:path HTTPMethod:nil];
+}
+
+- (void)addHandlerBlock:(CRRouteHandlerBlock)handlerBlock forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
+    NSArray<NSString*>* methods;
+
+    if ( HTTPMethod == nil ) {
+        methods = @[@"GET", @"POST", @"PUT", @"DELETE"];
+    } else {
+        methods = @[HTTPMethod];
+    }
+
+    if ( path == nil ) {
+        path = @"";
+    }
+
+    if ( ![path hasSuffix:@"/"] ) {
+        path = [path stringByAppendingString:@"/"];
+    }
+
+    CRRoute* route = [CRRoute routeWithHandlerBlock:handlerBlock];
+
+    [methods enumerateObjectsUsingBlock:^(NSString * _Nonnull method, NSUInteger idx, BOOL * _Nonnull stop) {
+
+        NSString* routePath = [method stringByAppendingString:path];
+
+        if ( ![self.routes[routePath] isKindOfClass:[NSMutableArray class]] ) {
+            NSMutableArray<CRRoute*>* parentRoutes = [NSMutableArray array];
+
+            // Add all parent routes
+            __block NSString* parentPath = [method stringByAppendingString:@"/"];
+            [routePath.pathComponents enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if ( [parentPath isEqualToString:[method stringByAppendingString:@"/"]] ) {
+                    return;
+                }
+                if ( self.routes[parentPath] != nil ) {
+                    [parentRoutes addObjectsFromArray:self.routes[parentPath]];
+                }
+                parentPath = [parentPath stringByAppendingFormat:@"%@/", obj];
+            }];
+
+            self.routes[routePath] = parentRoutes;
+        }
+
+        // Add the route to all other descendant routes
+        NSArray<NSString*>* descendantRoutesKeys = [self.routes.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSString*  _Nonnull evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+            return [evaluatedObject hasPrefix:routePath];
+        }]];
+
+        [descendantRoutesKeys enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [self.routes[obj] addObject:route];
+        }];
+        
+    }];
+
+//    NSLog(@"%@", self.routes);
+}
+
+- (NSArray<CRRoute*>*)routesForPath:(NSString*)path {
+    return [self routesForPath:path HTTPMethod:nil];
+}
+
+- (NSArray<CRRoute*>*)routesForPath:(NSString*)path HTTPMethod:(NSString*)HTTPMethod {
+    if ( path == nil ) {
+        path = @"";
+    }
+    if ( ![path hasSuffix:@"/"] ) {
+        path = [path stringByAppendingString:@"/"];
+    }
+
+    NSString* routePath = [HTTPMethod stringByAppendingString:path];
+    return self.routes[routePath];
 }
 
 @end
