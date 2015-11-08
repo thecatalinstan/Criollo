@@ -43,8 +43,6 @@
 		ADA37C8E1BE3C7A0008D89CA /* CRFCGIServerConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA37C8C1BE3C7A0008D89CA /* CRFCGIServerConfiguration.m */; };
 		ADADAB5F1BEEF28E000FBE6B /* CRRoute.h in Headers */ = {isa = PBXBuildFile; fileRef = ADADAB5D1BEEF28E000FBE6B /* CRRoute.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ADADAB601BEEF28E000FBE6B /* CRRoute.m in Sources */ = {isa = PBXBuildFile; fileRef = ADADAB5E1BEEF28E000FBE6B /* CRRoute.m */; };
-		ADADAB651BEEFE5B000FBE6B /* CRRoutingCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = ADADAB631BEEFE5B000FBE6B /* CRRoutingCenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		ADADAB661BEEFE5B000FBE6B /* CRRoutingCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = ADADAB641BEEFE5B000FBE6B /* CRRoutingCenter.m */; };
 		ADB693001BE53FD400656BEC /* CRFCGIRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = ADB692FE1BE53FD400656BEC /* CRFCGIRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ADB693011BE53FD400656BEC /* CRFCGIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB692FF1BE53FD400656BEC /* CRFCGIRequest.m */; };
 		ADEDB37C1AEFC0B000A26AF1 /* Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB37B1AEFC0B000A26AF1 /* Criollo.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -91,8 +89,6 @@
 		ADA37C8C1BE3C7A0008D89CA /* CRFCGIServerConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRFCGIServerConfiguration.m; sourceTree = "<group>"; };
 		ADADAB5D1BEEF28E000FBE6B /* CRRoute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRoute.h; sourceTree = "<group>"; };
 		ADADAB5E1BEEF28E000FBE6B /* CRRoute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRoute.m; sourceTree = "<group>"; };
-		ADADAB631BEEFE5B000FBE6B /* CRRoutingCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRoutingCenter.h; sourceTree = "<group>"; };
-		ADADAB641BEEFE5B000FBE6B /* CRRoutingCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRoutingCenter.m; sourceTree = "<group>"; };
 		ADB692FE1BE53FD400656BEC /* CRFCGIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFCGIRequest.h; sourceTree = "<group>"; };
 		ADB692FF1BE53FD400656BEC /* CRFCGIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRFCGIRequest.m; sourceTree = "<group>"; };
 		ADEDB34E1AEFBD8800A26AF1 /* CRApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRApplication.h; sourceTree = "<group>"; };
@@ -221,8 +217,6 @@
 				AD61E98A1BDD8C8E00F5BD17 /* CRResponse.m */,
 				ADADAB5D1BEEF28E000FBE6B /* CRRoute.h */,
 				ADADAB5E1BEEF28E000FBE6B /* CRRoute.m */,
-				ADADAB631BEEFE5B000FBE6B /* CRRoutingCenter.h */,
-				ADADAB641BEEFE5B000FBE6B /* CRRoutingCenter.m */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -237,7 +231,6 @@
 				AD61E9831BDD880C00F5BD17 /* CRFCGIServer.h in Headers */,
 				AD61E9761BDD7FDF00F5BD17 /* CRHTTPServer.h in Headers */,
 				AD61E97A1BDD80C100F5BD17 /* CRHTTPConnection.h in Headers */,
-				ADADAB651BEEFE5B000FBE6B /* CRRoutingCenter.h in Headers */,
 				ADA37C741BE38E69008D89CA /* CRFCGIRecord.h in Headers */,
 				AD19695E1B626EF90098CA89 /* CRServer.h in Headers */,
 				AD61E98F1BDD8C8E00F5BD17 /* CRResponse.h in Headers */,
@@ -328,7 +321,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADADAB661BEEFE5B000FBE6B /* CRRoutingCenter.m in Sources */,
 				AD4AE76B1BDA7FF100B9F221 /* Criollo.m in Sources */,
 				AD61E9821BDD880C00F5BD17 /* CRFCGIConnection.m in Sources */,
 				ADEDB3A41AEFCC6400A26AF1 /* CRApplication.m in Sources */,

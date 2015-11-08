@@ -44,9 +44,10 @@
 
     CRRouteHandlerBlock helloBlock = ^(CRRequest* request, CRResponse* response, void(^completionHandler)()) {
         [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-        [response writeFormat:@"Hello World - %lu", i];
+        [response sendFormat:@"Hello World - %lu", ++i];
         completionHandler();
     };
+
     CRRouteHandlerBlock statusBlock = ^(CRRequest *request, CRResponse *response, void (^completionHandler)()) {
 
         NSDate* startTime = [NSDate date];
@@ -60,20 +61,14 @@
 
         [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
         [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
-        [response writeString:responseString];
+        [response sendString:responseString];
 
         completionHandler();
         
     };
 
-    CRRouteHandlerBlock finishBlock = ^(CRRequest *request, CRResponse *response, void (^completionHandler)()) {
-        [response finish];
-        completionHandler();
-    };
-
     [self.HTTPServer addHandlerBlock:helloBlock];
     [self.HTTPServer addHandlerBlock:statusBlock forPath:@"/status" HTTPMethod:@"GET"];
-    [self.HTTPServer addHandlerBlock:finishBlock];
 
     if ( HTTPServerError != nil  && FCGIServerError != nil ) {
         [CRApp logErrorFormat:@"%@", @"Neither the FCGI nor the HTTP server could be started. Exiting."];

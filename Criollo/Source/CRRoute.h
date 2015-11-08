@@ -6,7 +6,9 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRRoutingCenter.h"
+@class CRRequest, CRResponse;
+
+typedef void(^CRRouteHandlerBlock)(CRRequest* request, CRResponse* response, void(^completionHandler)(void));
 
 @interface CRRoute : NSObject
 

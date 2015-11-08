@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRRoutingCenter.h"
+#import "CRRoute.h"
 
 @class CRServer, CRServerConfiguration, GCDAsyncSocket, CRConnection, CRRequest, CRResponse;
 
@@ -49,10 +49,11 @@ FOUNDATION_EXPORT NSString* const CRResponseKey;
 - (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket;
 - (void)didCloseConnection:(CRConnection*)connection;
 
-- (BOOL)canHandleHTTPMethod:(NSString*)HTTPMethod forPath:(NSString*)path;
-
 - (void)addHandlerBlock:(CRRouteHandlerBlock)handlerBlock;
 - (void)addHandlerBlock:(CRRouteHandlerBlock)handlerBlock forPath:(NSString*)path;
 - (void)addHandlerBlock:(CRRouteHandlerBlock)handlerBlock forPath:(NSString*)path HTTPMethod:(NSString*)HTTPMethod;
+
+- (NSArray<CRRoute*>*)routesForPath:(NSString*)path;
+- (NSArray<CRRoute*>*)routesForPath:(NSString*)path HTTPMethod:(NSString*)HTTPMethod;
 
 @end
