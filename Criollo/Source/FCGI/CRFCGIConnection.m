@@ -81,6 +81,12 @@
 
     [self.currentRequest appendData:headersData];
     [self.currentRequest appendData:[CRConnection CRLFData]];
+
+    currentRequestBodyLength = [self.currentRequest.env[@"CONTENT_LENGTH"] integerValue];
+
+    CRFCGIServerConfiguration* config = (CRFCGIServerConfiguration*)self.server.configuration;
+    [self.socket readDataToLength:CRFCGIRecordHeaderLength withTimeout:config.CRFCGIConnectionReadRecordTimeout tag:CRFCGIConnectionSocketTagReadRecordHeader];
+
 }
 
 - (void)didReceivecurrentRequestBody {
@@ -215,13 +221,6 @@
                         self.currentRequest = request;
 
                         [self didReceiveCompleteRequestHeaders];
-
-                        currentRequestBodyLength = [self.currentRequest.env[@"CONTENT_LENGTH"] integerValue];
-                        if ( currentRequestBodyLength > 0 ) {
-                            [self.socket readDataToLength:CRFCGIRecordHeaderLength withTimeout:config.CRFCGIConnectionReadRecordTimeout tag:CRFCGIConnectionSocketTagReadRecordHeader];
-                        } else {
-                            [self didReceiveCompleteRequest];
-                        }
                     }
                         break;
 

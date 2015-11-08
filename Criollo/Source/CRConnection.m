@@ -93,6 +93,7 @@
 }
 
 - (void)didReceiveCompleteRequest {
+//    NSLog(@"%s", __PRETTY_FUNCTION__);
     CRResponse* response = [self responseWithHTTPStatusCode:200];
     [self.currentRequest setResponse:response];
     [response setRequest:self.currentRequest];
