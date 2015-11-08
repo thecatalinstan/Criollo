@@ -94,12 +94,12 @@
 			children = (
 				AD9D83201BEFA7DB002115DD /* AppDelegate.h */,
 				AD9D83211BEFA7DB002115DD /* AppDelegate.m */,
-				AD9D83261BEFA7DB002115DD /* Assets.xcassets */,
-				AD9D83281BEFA7DB002115DD /* MainMenu.xib */,
-				AD9D832B1BEFA7DB002115DD /* Info.plist */,
-				AD9D83231BEFA7DB002115DD /* Supporting Files */,
 				AD9D83461BEFCD7B002115DD /* RequestInfo.h */,
 				AD9D83471BEFCD7B002115DD /* RequestInfo.m */,
+				AD9D83281BEFA7DB002115DD /* MainMenu.xib */,
+				AD9D83261BEFA7DB002115DD /* Assets.xcassets */,
+				AD9D832B1BEFA7DB002115DD /* Info.plist */,
+				AD9D83231BEFA7DB002115DD /* Supporting Files */,
 			);
 			path = "HelloWorld-Cocoa";
 			sourceTree = "<group>";
