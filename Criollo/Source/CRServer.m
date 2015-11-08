@@ -12,6 +12,7 @@
 #import "CRConnection.h"
 #import "CRRequest.h"
 #import "CRResponse.h"
+#import "CRRoute.h"
 
 NSUInteger const CRErrorSocketError = 2001;
 
@@ -177,6 +178,18 @@ NSString* const CRResponseKey = @"CRResponse";
 - (void)connection:(CRConnection *)connection didReceiveRequest:(CRRequest *)request response:(CRResponse *)response {
 
     [self.workerQueue addOperation:[NSBlockOperation blockOperationWithBlock:^{
+
+        NSArray<CRRoute*>* routes = [[CRRoutingCenter defaultCenter] routesForPath:request.URL.path HTTPMethod:request.method];
+
+        __block NSUInteger currentRouteIndex = 0;
+        void(^completionHandler)(void) = ^{
+            currentRouteIndex++;
+        };
+        while (currentRouteIndex < routes.count ) {
+            CRRouteHandlerBlock handlerBlock = routes[currentRouteIndex].handlerBlock;
+            handlerBlock(request, response, completionHandler);
+        }
+
     }]];
     
 }
@@ -192,41 +205,7 @@ NSString* const CRResponseKey = @"CRResponse";
 }
 
 - (void)addHandlerBlock:(CRRouteHandlerBlock)handlerBlock forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
-    
-}
-
-- (void)addHandlerBlockForGet:(CRRouteHandlerBlock)handlerBlock {
-    [self addHandlerBlock:handlerBlock forPath:nil HTTPMethod:@"GET"];
-}
-
-- (void)addHandlerBlockForGet:(CRRouteHandlerBlock)handlerBlock forPath:(NSString*)path {
-    [self addHandlerBlock:handlerBlock forPath:path HTTPMethod:@"GET"];
-}
-
-- (void)addHandlerBlockForPost:(CRRouteHandlerBlock)handlerBlock {
-    [self addHandlerBlock:handlerBlock forPath:nil HTTPMethod:@"POST"];
-}
-
-- (void)addHandlerBlockForPost:(CRRouteHandlerBlock)handlerBlock forPath:(NSString*)path {
-    [self addHandlerBlock:handlerBlock forPath:path HTTPMethod:@"POST"];
-}
-
-
-- (void)addHandlerBlockForPut:(CRRouteHandlerBlock)handlerBlock {
-    [self addHandlerBlock:handlerBlock forPath:nil HTTPMethod:@"PUT"];
-}
-
-- (void)addHandlerBlockForPut:(CRRouteHandlerBlock)handlerBlock forPath:(NSString*)path {
-    [self addHandlerBlock:handlerBlock forPath:path HTTPMethod:@"PUT"];
-}
-
-
-- (void)addHandlerBlockForDelete:(CRRouteHandlerBlock)handlerBlock {
-    [self addHandlerBlock:handlerBlock forPath:nil HTTPMethod:@"DELETE"];
-}
-
-- (void)addHandlerBlockForDelete:(CRRouteHandlerBlock)handlerBlock forPath:(NSString*)path {
-    [self addHandlerBlock:handlerBlock forPath:path HTTPMethod:@"DELETE"];
+    [[CRRoutingCenter defaultCenter] addRouteWithHandlerBlock:handlerBlock forPath:path HTTPMethod:HTTPMethod];
 }
 
 @end

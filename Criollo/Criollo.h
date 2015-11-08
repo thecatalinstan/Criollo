@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 
 #import <Criollo/CRApplication.h>
-#import <Criollo/CRRouter.h>
 #import <Criollo/CRServer.h>
 #import <Criollo/CRServerConfiguration.h>
 #import <Criollo/CRConnection.h>
@@ -27,6 +26,9 @@
 #import <Criollo/CRFCGIConnection.h>
 #import <Criollo/CRFCGIRequest.h>
 #import <Criollo/CRFCGIResponse.h>
+
+#import <Criollo/CRRoutingCenter.h>
+#import <Criollo/CRRoute.h>
 
 FOUNDATION_EXPORT NSString* const Criollo;
 FOUNDATION_EXPORT NSString* const CRErrorDomain;
