@@ -14,6 +14,7 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
+                <outlet property="logTextView" destination="q8B-di-BWf" id="ylX-If-mau"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -670,13 +671,83 @@
         <window title="HelloWorld-Cocoa" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="335" y="390" width="480" height="360"/>
+            <rect key="contentRect" x="335" y="390" width="828" height="600"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
             <view key="contentView" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="360"/>
+                <rect key="frame" x="0.0" y="0.0" width="828" height="600"/>
                 <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <splitView dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="yQJ-rM-vVK">
+                        <rect key="frame" x="0.0" y="0.0" width="828" height="600"/>
+                        <subviews>
+                            <customView fixedFrame="YES" id="Tra-9a-qMy">
+                                <rect key="frame" x="0.0" y="0.0" width="828" height="347"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <animations/>
+                            </customView>
+                            <customView id="IkJ-kT-RB4">
+                                <rect key="frame" x="0.0" y="348" width="828" height="252"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <subviews>
+                                    <scrollView misplaced="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xxf-3x-Zuj">
+                                        <rect key="frame" x="0.0" y="1" width="828" height="252"/>
+                                        <clipView key="contentView" id="HN1-b1-qDq">
+                                            <rect key="frame" x="1" y="1" width="826" height="250"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <textView importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="q8B-di-BWf">
+                                                    <rect key="frame" x="0.0" y="0.0" width="826" height="250"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <animations/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <size key="minSize" width="826" height="250"/>
+                                                    <size key="maxSize" width="826" height="10000000"/>
+                                                    <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <size key="minSize" width="826" height="250"/>
+                                                    <size key="maxSize" width="826" height="10000000"/>
+                                                </textView>
+                                            </subviews>
+                                            <animations/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </clipView>
+                                        <animations/>
+                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="p0L-LZ-Qek">
+                                            <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <animations/>
+                                        </scroller>
+                                        <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="VhD-sB-J6H">
+                                            <rect key="frame" x="811" y="1" width="16" height="250"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <animations/>
+                                        </scroller>
+                                    </scrollView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="Xxf-3x-Zuj" firstAttribute="height" secondItem="IkJ-kT-RB4" secondAttribute="height" id="9dg-0b-sQI"/>
+                                    <constraint firstItem="Xxf-3x-Zuj" firstAttribute="centerY" secondItem="IkJ-kT-RB4" secondAttribute="centerY" id="grS-rs-kKb"/>
+                                    <constraint firstItem="Xxf-3x-Zuj" firstAttribute="centerX" secondItem="IkJ-kT-RB4" secondAttribute="centerX" id="iUl-ar-ugs"/>
+                                    <constraint firstItem="Xxf-3x-Zuj" firstAttribute="width" secondItem="IkJ-kT-RB4" secondAttribute="width" id="o1E-nf-ILh"/>
+                                </constraints>
+                                <animations/>
+                            </customView>
+                        </subviews>
+                        <animations/>
+                        <holdingPriorities>
+                            <real value="250"/>
+                            <real value="250"/>
+                        </holdingPriorities>
+                    </splitView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="yQJ-rM-vVK" firstAttribute="centerY" secondItem="EiT-Mj-1SZ" secondAttribute="centerY" id="1mE-92-NQe"/>
+                    <constraint firstItem="yQJ-rM-vVK" firstAttribute="width" secondItem="EiT-Mj-1SZ" secondAttribute="width" id="4Lu-CE-1wG"/>
+                    <constraint firstItem="yQJ-rM-vVK" firstAttribute="centerX" secondItem="EiT-Mj-1SZ" secondAttribute="centerX" id="MnM-xY-Bmg"/>
+                    <constraint firstItem="yQJ-rM-vVK" firstAttribute="height" secondItem="EiT-Mj-1SZ" secondAttribute="height" id="d2k-qm-Dby"/>
+                </constraints>
                 <animations/>
             </view>
+            <point key="canvasLocation" x="463" y="503"/>
         </window>
     </objects>
 </document>
