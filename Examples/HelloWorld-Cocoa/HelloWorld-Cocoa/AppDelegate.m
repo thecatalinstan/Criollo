@@ -117,7 +117,6 @@
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             [self.server closeAllConnections];
-            [NSApp terminate:nil];
         });
         return NSTerminateLater;
     } else {
