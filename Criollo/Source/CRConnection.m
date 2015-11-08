@@ -154,6 +154,7 @@
 }
 
 - (void)didFinishResponseForRequest:(CRRequest *)request {
+    [self.delegate connection:self didFinishRequest:request response:request.response];
     [self.requests removeObject:request];
 }
 

@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 
 #define PortNumber 10782
+#define LogDebug 0
 
 @interface AppDelegate () <CRServerDelegate>
 
@@ -104,6 +105,14 @@
 
 #pragma mark - CRServerDelegate
 
+- (void)serverDidStartListening:(CRServer *)server {
+    [self logDebugFormat:@" * Started listening on: %@:%lu", server.configuration.CRServerInterface, server.configuration.CRServerPort];
+}
+
+- (void)serverDidStopListening:(CRServer *)server {
+    [self logDebugFormat:@" * Stopped listening on: %@:%lu", server.configuration.CRServerInterface, server.configuration.CRServerPort];
+}
+
 - (void)server:(CRServer *)server didAcceptConnection:(CRConnection *)connection {
     [self logDebugFormat:@" * Connection from: %@:%lu", connection.remoteAddress, connection.remotePort];
 }
@@ -112,12 +121,12 @@
     [self logDebugFormat:@" * Disconnected."];
 }
 
-- (void)serverDidStartListening:(CRServer *)server {
-    [self logDebugFormat:@" * Started listening on: %@:%lu", server.configuration.CRServerInterface, server.configuration.CRServerPort];
+- (void)server:(CRServer *)server didReceiveRequest:(CRRequest *)request {
+    [self logDebugFormat:@" * Request: %@", request];
 }
 
-- (void)serverDidStopListening:(CRServer *)server {
-    [self logDebugFormat:@" * Stopped listening on: %@:%lu", server.configuration.CRServerInterface, server.configuration.CRServerPort];
+- (void)server:(CRServer *)server didFinishRequest:(CRRequest *)request {
+    [self logDebugFormat:@" * Finished: %@", request];
 }
 
 #pragma mark - Logging
@@ -192,7 +201,7 @@
 }
 
 - (void)logDebugFormat:(NSString *)format, ... {
-#if DEBUG
+#if LogDebug
     va_list args;
     va_start(args, format);
     NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];

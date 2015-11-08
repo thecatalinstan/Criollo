@@ -13,6 +13,7 @@
 @protocol CRConnectionDelegate <NSObject>
 
 - (void)connection:(CRConnection*)connection didReceiveRequest:(CRRequest*)request response:(CRResponse*)response;
+- (void)connection:(CRConnection*)connection didFinishRequest:(CRRequest*)request response:(CRResponse*)response;
 
 @end
 
