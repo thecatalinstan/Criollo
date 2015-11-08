@@ -11,15 +11,16 @@
 // Defaults
 NSString* const CRServerDefaultInterface = @"";
 NSUInteger const CRServerDefaultPort = 10781;
-NSUInteger const CRConnectionDefaultInitialReadTimeout = 5;
+NSUInteger const CRConnectionDefaultReadTimeout = 5;
+NSUInteger const CRConnectionDefaultWriteTimeout = 5;
 NSUInteger const CRConnectionDefaultKeepAliveTimeout = 15;
 NSUInteger const CRConnectionDefaultMaxKeepAliveConnections = 10;
-
 
 // Keys
 NSString* const CRServerInterfaceKey = @"CRServerInterface";
 NSString* const CRServerPortKey = @"CRServerPort";
-NSString* const CRConnectionInitialReadTimeoutKey = @"CRConnectionInitialReadTimeout";
+NSString* const CRConnectionReadTimeoutKey = @"CRConnectionReadTimeoutKey";
+NSString* const CRConnectionWriteTimeoutKey = @"CRConnectionWriteTimeoutKey";
 NSString* const CRConnectionKeepAliveTimeoutKey = @"CRConnectionKeepAliveTimeout";
 NSString* const CRConnectionMaxKeepAliveConnectionsKey = @"CRConnectionMaxKeepAliveConnections";
 
@@ -30,7 +31,8 @@ NSString* const CRConnectionMaxKeepAliveConnectionsKey = @"CRConnectionMaxKeepAl
     if ( self != nil ) {
         self.CRServerInterface = CRServerDefaultInterface;
         self.CRServerPort = CRServerDefaultPort;
-        self.CRConnectionInitialReadTimeout = CRConnectionDefaultInitialReadTimeout;
+        self.CRConnectionReadTimeout = CRConnectionDefaultReadTimeout;
+        self.CRConnectionWriteTimeout = CRConnectionDefaultWriteTimeout;
         [self readConfiguration];
     }
     return self;
@@ -66,11 +68,17 @@ NSString* const CRConnectionMaxKeepAliveConnectionsKey = @"CRConnectionMaxKeepAl
     }
 
     // Timeouts
-    if ( [mainBundle objectForInfoDictionaryKey:CRConnectionInitialReadTimeoutKey] ) {
-        self.CRConnectionInitialReadTimeout = [[mainBundle objectForInfoDictionaryKey:CRConnectionInitialReadTimeoutKey] integerValue];
+    if ( [mainBundle objectForInfoDictionaryKey:CRConnectionReadTimeoutKey] ) {
+        self.CRConnectionReadTimeout = [[mainBundle objectForInfoDictionaryKey:CRConnectionReadTimeoutKey] integerValue];
     } else {
-        self.CRConnectionInitialReadTimeout = CRConnectionDefaultInitialReadTimeout;
+        self.CRConnectionReadTimeout = CRConnectionDefaultReadTimeout;
     }
+    if ( [mainBundle objectForInfoDictionaryKey:CRConnectionWriteTimeoutKey] ) {
+        self.CRConnectionWriteTimeout = [[mainBundle objectForInfoDictionaryKey:CRConnectionWriteTimeoutKey] integerValue];
+    } else {
+        self.CRConnectionWriteTimeout = CRConnectionDefaultWriteTimeout;
+    }
+
 
     // Keep alive
     if ( [mainBundle objectForInfoDictionaryKey:CRConnectionKeepAliveTimeoutKey] ) {

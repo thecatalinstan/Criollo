@@ -10,20 +10,24 @@
 #import "CRServerConfiguration.h"
 #import "GCDAsyncSocket.h"
 #import "CRConnection.h"
+#import "CRRequest.h"
+#import "CRResponse.h"
 
 NSUInteger const CRErrorSocketError = 2001;
 
 NSString* const CRRequestKey = @"CRRequest";
 NSString* const CRResponseKey = @"CRResponse";
 
-@interface CRServer () {
-
+@interface CRServer () <GCDAsyncSocketDelegate, CRConnectionDelegate> {
+    NSUInteger i;
 }
 
 @property (nonatomic, strong) dispatch_queue_t isolationQueue;
 @property (nonatomic, strong) dispatch_queue_t socketDelegateQueue;
 @property (nonatomic, strong) dispatch_queue_t acceptedSocketDelegateTargetQueue;
 @property (nonatomic, strong) dispatch_queue_t acceptedSocketSocketTargetQueue;
+
+@property (nonatomic, strong) NSOperationQueue* workerQueue;
 
 @end
 
@@ -84,6 +88,10 @@ NSString* const CRResponseKey = @"CRResponse";
     self.acceptedSocketDelegateTargetQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"AcceptedSocketDelegateTargetQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
     dispatch_set_target_queue(self.acceptedSocketDelegateTargetQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0));
 
+    self.workerQueue = [[NSOperationQueue alloc] init];
+    self.workerQueue.qualityOfService = NSQualityOfServiceUserInitiated;
+    self.workerQueue.maxConcurrentOperationCount = NSOperationQueueDefaultMaxConcurrentOperationCount;
+
     self.connections = [NSMutableArray array];
     self.socket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:self.socketDelegateQueue];
 
@@ -105,6 +113,7 @@ NSString* const CRResponseKey = @"CRResponse";
         [self.delegate serverWillStopListening:self];
     }
 
+    [self.workerQueue cancelAllOperations];
     [self.socket disconnect];
 
     if ( [self.delegate respondsToSelector:@selector(serverDidStopListening:)] ) {
@@ -139,8 +148,7 @@ NSString* const CRResponseKey = @"CRResponse";
 
 #pragma mark - Routing
 
-- (BOOL)canHandleHTTPMethod:(NSString *)HTTPMethod forPath:(NSString *)path
-{
+- (BOOL)canHandleHTTPMethod:(NSString *)HTTPMethod forPath:(NSString *)path {
     return YES;
 }
 
@@ -154,9 +162,9 @@ NSString* const CRResponseKey = @"CRResponse";
     newSocket.delegateQueue = acceptedSocketDelegateQueue;
 
     CRConnection* connection = [self newConnectionWithSocket:newSocket];
+    connection.delegate = self;
     dispatch_async(self.isolationQueue, ^(){
         [self.connections addObject:connection];
-        connection.ignoreKeepAlive = self.connections.count >= self.configuration.CRConnectionMaxKeepAliveConnections;
     });
     if ( [self.delegate respondsToSelector:@selector(server:didAcceptConnection:)]) {
         [self.delegate server:self didAcceptConnection:connection];
@@ -165,6 +173,31 @@ NSString* const CRResponseKey = @"CRResponse";
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
+}
+
+#pragma mark - CRConnectionDelegate
+
+- (void)connection:(CRConnection *)connection didReceiveRequest:(CRRequest *)request response:(CRResponse *)response {
+
+    [self.workerQueue addOperation:[NSBlockOperation blockOperationWithBlock:^{
+        [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+        [response sendFormat:@"Hello World - %lu", ++i];
+
+//        NSDate* startTime = [NSDate date];
+//
+//        NSMutableString* responseString = [[NSMutableString alloc] init];
+//        [responseString appendFormat:@"<h1>Hello world - %lu</h1>", ++i];
+//        [responseString appendFormat:@"<h2>Connection:</h2><pre>%@</pre>", connection.requests];
+//        [responseString appendFormat:@"<h2>Connections:</h2><pre>%lu</pre>", self.connections.count];
+//        [responseString appendFormat:@"<h2>Request:</h2><pre>%@</pre>", request.allHTTPHeaderFields];
+//        [responseString appendFormat:@"<h2>Environment:</h2><pre>%@</pre>", request.env];
+//        [responseString appendString:@"<hr/>"];
+//        [responseString appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
+//
+//        [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+//        [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
+//        [response sendString:responseString];
+    }]];
 }
 
 @end

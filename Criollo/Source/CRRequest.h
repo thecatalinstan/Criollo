@@ -11,11 +11,18 @@
 #define CRErrorRequestMalformedRequest      3001
 #define    CRErrorRequestUnsupportedMethod  3002
 
+@class CRResponse;
+
 @interface CRRequest : CRMessage
+
+@property (nonatomic, weak) CRResponse* response;
 
 @property (nonatomic, readonly) NSURL* URL;
 @property (nonatomic, readonly) NSString* method;
 @property (nonatomic, readonly) NSDictionary<NSString*, NSString*>* env;
+@property (nonatomic, readonly) BOOL shouldCloseConnection;
+
+@property (nonatomic, strong) NSMutableData* bufferedResponseData;
 
 - (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version;
 - (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version env:(NSDictionary*)env NS_DESIGNATED_INITIALIZER;

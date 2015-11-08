@@ -6,23 +6,26 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#define CRConnectionSocketTagSendingResponse                    20
+#define CRConnectionSocketTagSendingResponse                        20
 
-#define CRConnectionSocketTagFinishSendingResponse                  90
+@class CRConnection, GCDAsyncSocket, CRServer, CRRequest, CRResponse;
 
-@class GCDAsyncSocket, CRServer, CRRequest, CRResponse;
+@protocol CRConnectionDelegate <NSObject>
+
+- (void)connection:(CRConnection*)connection didReceiveRequest:(CRRequest*)request response:(CRResponse*)response;
+
+@end
 
 @interface CRConnection : NSObject
 
-@property (nonatomic, weak) CRServer* server;
+@property (nonatomic, weak) id<CRConnectionDelegate> delegate;
+
 @property (nonatomic, strong) GCDAsyncSocket* socket;
+@property (nonatomic, weak) CRServer* server;
 
-@property (nonatomic, strong) CRRequest* request;
-@property (nonatomic, strong) CRResponse* response;
+@property (nonatomic, strong) NSMutableArray<CRRequest*>* requests;
 
-@property (nonatomic, assign) BOOL ignoreKeepAlive;
-@property (nonatomic, readonly) BOOL shouldClose;
-
+@property (nonatomic, strong) CRRequest* currentRequest;
 @property (nonatomic, strong) NSDate* requestTime;
 
 + (NSData*)CRLFData;
@@ -30,17 +33,15 @@
 
 - (instancetype)initWithSocket:(GCDAsyncSocket*)socket server:(CRServer*)server NS_DESIGNATED_INITIALIZER;
 
-- (void)startReading;
-
-- (void)didReceiveCompleteRequestHeaders;
-- (void)didReceiveRequestBody;
-- (void)didReceiveCompleteRequest;
-
-- (void)handleError:(NSUInteger)errorType object:(id)object;
-
 - (CRResponse*)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode;
 - (CRResponse*)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description;
 - (CRResponse*)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version;
 
+- (void)startReading;
+- (void)didReceiveCompleteRequestHeaders;
+- (void)didReceiveRequestBody;
+- (void)didReceiveCompleteRequest;
+- (void)sendDataToSocket:(NSData*)data forRequest:(CRRequest*)request;
+- (void)didFinishResponseForRequest:(CRRequest*)request;
 
 @end

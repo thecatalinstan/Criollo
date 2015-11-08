@@ -17,9 +17,6 @@
 
 @interface CRResponse ()
 
-- (void)buildHeaders;
-- (void)writeData:(NSData*)data finish:(BOOL)flag;
-
 @end
 
 @implementation CRResponse
@@ -94,9 +91,23 @@
     [self sendString:formattedString];
 }
 
-- (void)buildHeaders {}
-- (void)writeData:(NSData *)data finish:(BOOL)flag {}
-- (void)finish {}
 
+- (void)writeData:(NSData *)data finish:(BOOL)flag {
+    if ( flag ) {
+        _finished = YES;
+    }
+    [self.connection sendDataToSocket:data forRequest:self.request];
+}
+
+- (void)buildHeaders {
+}
+
+- (void)finish {
+    _finished = YES;
+}
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"%@ %lu %@ %@", self.version, self.statusCode, self.allHTTPHeaderFields[@"Content-type"], self.allHTTPHeaderFields[@"Content-length"]];
+}
 
 @end

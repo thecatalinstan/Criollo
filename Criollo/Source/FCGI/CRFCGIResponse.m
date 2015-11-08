@@ -74,7 +74,9 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
 
 - (void)writeData:(NSData *)data finish:(BOOL)flag {
 
-    CRFCGIServerConfiguration* config = (CRFCGIServerConfiguration*)self.connection.server.configuration;
+    if ( self.finished ) {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Response is already finished" userInfo:nil];
+    }
 
     NSMutableData* dataToSend = [self initialResponseData];
 
@@ -86,19 +88,18 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
         [dataToSend appendData:self.endRequestRecordData];
     }
 
-    long tag = flag ? CRConnectionSocketTagFinishSendingResponse : CRConnectionSocketTagSendingResponse;
-    [self.connection.socket writeData:dataToSend withTimeout:config.CRFCGIConnectionWriteRecordTimeout tag:tag];
+    [super writeData:dataToSend finish:flag];
 }
 
 - (void)finish {
-    CRFCGIServerConfiguration* config = (CRFCGIServerConfiguration*)self.connection.server.configuration;
+    [super finish];
 
     NSMutableData* dataToSend = [self initialResponseData];
 
     // End request record
     [dataToSend appendData:self.endRequestRecordData];
 
-    [self.connection.socket writeData:dataToSend withTimeout:config.CRFCGIConnectionWriteRecordTimeout tag:CRConnectionSocketTagFinishSendingResponse];
+    [self.connection sendDataToSocket:dataToSend forRequest:self.request];
 }
 
 - (NSData*)FCGIRecordDataWithContentData:(NSData *)data {
@@ -118,7 +119,7 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
         CRFCGIRecordType type = CRFCGIRecordTypeStdOut;
         [recordData appendBytes:&type length:1];
 
-        UInt16 requestID = CFSwapInt16HostToBig(((CRFCGIRequest*)self.connection.request).requestID);
+        UInt16 requestID = CFSwapInt16HostToBig(((CRFCGIRequest*)self.request).requestID);
         [recordData appendBytes:&requestID length:2];
 
         UInt16 contentLength = CFSwapInt16HostToBig(chunkSize);
@@ -151,7 +152,7 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
     CRFCGIRecordType type = CRFCGIRecordTypeEndRequest;
     [recordData appendBytes:&type length:1];
 
-    UInt16 requestID = CFSwapInt16HostToBig(((CRFCGIRequest*)self.connection.request).requestID);
+    UInt16 requestID = CFSwapInt16HostToBig(((CRFCGIRequest*)self.request).requestID);
     [recordData appendBytes:&requestID length:2];
 
     UInt16 contentLength = CFSwapInt16HostToBig(8);

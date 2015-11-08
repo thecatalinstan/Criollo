@@ -18,7 +18,9 @@
 #include <sys/sysctl.h>
 #import "NSDate+RFC1123.h"
 
-@interface CRConnection () <GCDAsyncSocketDelegate>
+@interface CRConnection () <GCDAsyncSocketDelegate> 
+
+- (void)bufferResponseData:(NSData*)data forRequest:(CRRequest*)request;
 
 @end
 
@@ -68,6 +70,7 @@
         self.server = server;
         self.socket = socket;
         self.socket.delegate = self;
+        self.requests = [NSMutableArray array];
     }
     return self;
 }
@@ -80,6 +83,7 @@
 #pragma mark - Data
 
 - (void)startReading {
+    self.currentRequest = nil;
 }
 
 - (void)didReceiveCompleteRequestHeaders {
@@ -89,50 +93,41 @@
 }
 
 - (void)didReceiveCompleteRequest {
-
-    self.response = [self responseWithHTTPStatusCode:200];
-    [self.response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-    [self.response sendString:@"Hello World\n"];
-
-//    NSDate* startTime = [NSDate date];
-//    NSUInteger statusCode = 200;
-//    NSMutableString* response = [[NSMutableString alloc] init];
-//    [response appendString:@"<h1>Hello world!</h1>"];
-//    [response appendFormat:@"<h2>Connection:</h2><pre>%@</pre>", self.className];
-//    [response appendFormat:@"<h2>Request:</h2><pre>%@</pre>", self.request.allHTTPHeaderFields];
-//    [response appendFormat:@"<h2>Environment:</h2><pre>%@</pre>", self.request.env];
-//    [response appendString:@"<hr/>"];
-//    [response appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
-//
-//    self.response = [self responseWithHTTPStatusCode:statusCode];
-//    [self.response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-//    [self.response setValue:@(response.length).stringValue forHTTPHeaderField:@"Content-Length"];
-//    [self.response sendString:response];
+//    NSLog(@"%s", __PRETTY_FUNCTION__);
+    CRResponse* response = [self responseWithHTTPStatusCode:200];
+    [self.currentRequest setResponse:response];
+    [response setRequest:self.currentRequest];
+    [self.requests addObject:self.currentRequest];
+    [self.delegate connection:self didReceiveRequest:self.currentRequest response:response];
+    [self startReading];
 }
 
-- (void)handleError:(NSUInteger)errorType object:(id)object {
-    NSUInteger statusCode = 500;
-
-    switch (errorType) {
-        case CRErrorRequestMalformedRequest:
-            statusCode = 400;
-            [CRApp logErrorFormat:@"Malformed request: %@", [[NSString alloc] initWithData:object encoding:NSUTF8StringEncoding] ];
-            break;
-
-        case CRErrorRequestUnsupportedMethod:
-            statusCode = 405;
-            [CRApp logErrorFormat:@"Cannot %@", object[CRRequestKey]];
-            break;
-
-        default:
-            break;
+- (void)bufferResponseData:(NSData *)data forRequest:(CRRequest *)request {
+    if ( request.bufferedResponseData == nil ) {
+        request.bufferedResponseData = [[NSMutableData alloc] initWithData:data];
+    } else {
+        [request.bufferedResponseData appendData:data];
     }
+}
 
-    self.response = [self responseWithHTTPStatusCode:statusCode];
-    [self.response setValue:@"close" forHTTPHeaderField:@"Connection"];
-    [self.response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
-    [self.response writeFormat:@"Cannot %@", object[CRRequestKey]];
-    [self.response finish];
+- (void)sendDataToSocket:(NSData *)data forRequest:(CRRequest *)request {
+    CRRequest* firstRequest = self.requests.firstObject;
+    if ( [firstRequest isEqual:request] ) {
+        request.bufferedResponseData = nil;
+        [self.socket writeData:data withTimeout:self.server.configuration.CRConnectionWriteTimeout tag:CRConnectionSocketTagSendingResponse];
+        if ( request.shouldCloseConnection ) {
+            [self.socket disconnectAfterWriting];
+        }
+        if ( request.response.finished ) {
+            [self didFinishResponseForRequest:request];
+        }
+    } else {
+        [self bufferResponseData:data forRequest:request];
+    }
+}
+
+- (void)didFinishResponseForRequest:(CRRequest *)request {
+    [self.requests removeObject:request];
 }
 
 #pragma mark - State
@@ -143,29 +138,22 @@
 
 #pragma mark - GCDAsyncSocketDelegate
 
-//- (void)socket:(GCDAsyncSocket *)sock didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag {
-//}
-
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
-    switch ( tag ) {
-        case CRConnectionSocketTagFinishSendingResponse:
-            if ( self.shouldClose ) {
-                [self.socket disconnectAfterWriting];
-            } else {
-                [self startReading];
+    switch (tag) {
+        case CRConnectionSocketTagSendingResponse: {
+            CRRequest* request = (CRRequest*)self.requests.firstObject;
+            if ( request.bufferedResponseData.length > 0 ) {
+                [self sendDataToSocket:request.bufferedResponseData forRequest:request];
             }
-            break;
+        } break;
 
         default:
             break;
     }
-
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
     [self.server didCloseConnection:self];
 }
-
-
 
 @end
