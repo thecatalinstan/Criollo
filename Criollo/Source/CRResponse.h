@@ -16,7 +16,7 @@
 
 @property (nonatomic, readonly) NSUInteger statusCode;
 @property (nonatomic, readonly) BOOL finished;
-@property (nonatomic, assign) CRConnection* connection;
+@property (nonatomic, weak) CRConnection* connection;
 
 - (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode;
 - (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description;

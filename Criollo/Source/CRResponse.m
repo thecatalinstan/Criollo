@@ -14,30 +14,25 @@
 #import "GCDAsyncSocket.h"
 #import "NSDate+RFC1123.h"
 
-
 @interface CRResponse ()
 
 @end
 
 @implementation CRResponse
 
-- (instancetype)init
-{
+- (instancetype)init {
     return [self initWithConnection:nil HTTPStatusCode:200 description:nil version:nil];
 }
 
-- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode
-{
+- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode {
     return [self initWithConnection:connection HTTPStatusCode:HTTPStatusCode description:nil version:nil];
 }
 
-- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description
-{
+- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description {
     return [self initWithConnection:connection HTTPStatusCode:HTTPStatusCode description:description version:nil];
 }
 
-- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version
-{
+- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version {
     self  = [super init];
     if ( self != nil ) {
         version = version == nil ? CRHTTP11 : version;
@@ -47,13 +42,11 @@
     return self;
 }
 
-- (NSUInteger)statusCode
-{
+- (NSUInteger)statusCode {
     return (NSUInteger)CFHTTPMessageGetResponseStatusCode((__bridge CFHTTPMessageRef _Nonnull)(self.message));
 }
 
-- (void)setValue:(NSString*)value forHTTPHeaderField:(NSString *)HTTPHeaderField
-{
+- (void)setValue:(NSString*)value forHTTPHeaderField:(NSString *)HTTPHeaderField {
     CFHTTPMessageSetHeaderFieldValue((__bridge CFHTTPMessageRef _Nonnull)(self.message), (__bridge CFStringRef)HTTPHeaderField, (__bridge CFStringRef)value);
 }
 

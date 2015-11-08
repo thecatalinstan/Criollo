@@ -153,6 +153,7 @@
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
+    [self.requests removeAllObjects];
     [self.server didCloseConnection:self];
 }
 
