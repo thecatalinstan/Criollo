@@ -10,8 +10,9 @@
 #import "AppDelegate.h"
 #import "RequestInfo.h"
 
-#define PortNumber 10782
-#define LogDebug 0
+#define PortNumber  10781   // HTTP server port
+#define LogDebug        0   // Debug logging
+#define KVO             1   // Update user interface with every request
 
 @interface AppDelegate () <CRServerDelegate>
 
@@ -119,7 +120,9 @@
 // user interface so that it reflects the current connections
 //
 // Calling any sort of logging or KVO operations SEVERLY impacts performance
+// Set KVO to 0 to disable
 
+#if KVO
 - (void)serverDidStartListening:(CRServer *)server {
     [self logDebugFormat:@" * Started listening on: %@:%lu", server.configuration.CRServerInterface, server.configuration.CRServerPort];
 }
@@ -144,9 +147,10 @@
 }
 
 - (void)server:(CRServer *)server didFinishRequest:(CRRequest *)request {
-    [self logDebugFormat:@" * Finished: %@", request];
+    [self logFormat:@" * Request: %@ - %lu", request, request.response.statusCode];
     [self updateConnectionInfo];
 }
+#endif
 
 #pragma mark - Logging
 
@@ -249,25 +253,30 @@
 
 #pragma mark - KVO
 
+// This whole KVO thing doesn't really perform that well under heavy usage
+// ab -c 100 -n 20000 -l -k http://127.0.0.1:10781/
+
 - (void)updateConnectionInfo {
     NSMutableArray* requests = [NSMutableArray array];
 
     @try {
         @synchronized(self.server.connections) {
-
             NSArray* serverConnections = self.server.connections.copy;
 
             [serverConnections enumerateObjectsUsingBlock:^(CRConnection*  _Nonnull connection, NSUInteger idx, BOOL * _Nonnull stop) {
-                NSArray* connectionRequests = connection.requests.copy;
-                @synchronized(connectionRequests) {
-                    [connectionRequests enumerateObjectsUsingBlock:^(CRRequest*  _Nonnull request, NSUInteger idx, BOOL * _Nonnull stop) {
-                        RequestInfo* info = [[RequestInfo alloc] initWithRequest:request];
-                        [requests addObject:info];
-                    }];
+                @synchronized(connection) {
+                    NSArray* connectionRequests = connection.requests.copy;
+                    @synchronized(connectionRequests) {
+                        [connectionRequests enumerateObjectsUsingBlock:^(CRRequest*  _Nonnull request, NSUInteger idx, BOOL * _Nonnull stop) {
+                            RequestInfo* info = [[RequestInfo alloc] initWithRequest:request];
+                            @synchronized(requests) {
+                                [requests addObject:info];
+                            }
+                        }];
+                    }
                 }
             }];
         }
-
     }
     @catch (NSException *exception) {
 //        NSLog(@"%@", exception);
