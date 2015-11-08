@@ -114,19 +114,25 @@
 }
 
 - (void)server:(CRServer *)server didAcceptConnection:(CRConnection *)connection {
+    [self.server didChangeValueForKey:@"connections"];
     [self logDebugFormat:@" * Connection from: %@:%lu", connection.remoteAddress, connection.remotePort];
 }
 
 - (void)server:(CRServer *)server didCloseConnection:(CRConnection *)connection {
     [self logDebugFormat:@" * Disconnected."];
+    [self.server didChangeValueForKey:@"connections"];
 }
 
 - (void)server:(CRServer *)server didReceiveRequest:(CRRequest *)request {
+    [self.server didChangeValueForKey:@"connections"];
+    [[self.server valueForKey:@"connections"] didChangeValueForKey:@"requests"];
     [self logDebugFormat:@" * Request: %@", request];
 }
 
 - (void)server:(CRServer *)server didFinishRequest:(CRRequest *)request {
     [self logDebugFormat:@" * Finished: %@", request];
+    [self.server didChangeValueForKey:@"connections"];
+    [[self.server valueForKey:@"connections"] didChangeValueForKey:@"requests"];
 }
 
 #pragma mark - Logging
