@@ -59,7 +59,9 @@
 
 - (void)writeData:(NSData *)data finish:(BOOL)flag
 {
-    CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.connection.server.configuration;
+    if ( self.finished ) {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Response is already finished" userInfo:nil];
+    }
 
     NSMutableData* dataToSend = [self initialResponseData];
 
@@ -73,7 +75,7 @@
     [dataToSend appendData:data];
 	
     if ( self.isChunked ) {
-				// Chunk termination
+        // Chunk termination
         [dataToSend appendData: [CRConnection CRLFData]];
     }
 
@@ -82,12 +84,11 @@
         [dataToSend appendData:[CRConnection CRLFCRLFData]];
     }
 
-    long tag = flag ? CRConnectionSocketTagFinishSendingResponse : CRConnectionSocketTagSendingResponse;
-    [self.connection.socket writeData:dataToSend withTimeout:config.CRHTTPConnectionWriteBodyTimeout tag:tag];
+    [super writeData:dataToSend finish:flag];
 }
 
 - (void)finish {
-    CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.connection.server.configuration;
+    [super finish];
 
     NSMutableData* dataToSend = [self initialResponseData];
     if ( self.isChunked ) {
@@ -96,7 +97,7 @@
         [dataToSend appendData: [@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
     }
 
-    [self.connection.socket writeData:dataToSend withTimeout:config.CRHTTPConnectionWriteBodyTimeout tag:CRConnectionSocketTagFinishSendingResponse];
+    [self.connection sendData:dataToSend forResponse:self];
 }
 
 - (NSMutableData*)initialResponseData {

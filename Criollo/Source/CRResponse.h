@@ -8,11 +8,14 @@
 
 #import "CRMessage.h"
 
-@class CRConnection;
+@class CRRequest, CRConnection;
 
 @interface CRResponse : CRMessage
 
+@property (nonatomic, weak) CRRequest* request;
+
 @property (nonatomic, readonly) NSUInteger statusCode;
+@property (nonatomic, readonly) BOOL finished;
 @property (nonatomic, assign) CRConnection* connection;
 
 - (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode;
@@ -30,6 +33,8 @@
 - (void)writeFormat:(NSString*)format, ...;
 - (void)sendFormat:(NSString*)format, ...;
 
+- (void)buildHeaders;
+- (void)writeData:(NSData*)data finish:(BOOL)flag;
 - (void)finish;
 
 @end

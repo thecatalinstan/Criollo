@@ -26,6 +26,8 @@ NSString* NSStringFromCRFCGIRequestRole(CRFCGIRequestRole requestRole) {
 
 @implementation CRFCGIRequest
 
-
+- (BOOL)shouldCloseConnection {
+    return (self.requestFlags & CRFCGIRequestFlagKeepAlive) == 0;
+}
 
 @end

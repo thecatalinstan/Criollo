@@ -6,12 +6,14 @@
 //  Copyright (c) 2015 Cătălin Stan. All rights reserved.
 //
 
-@class CRServer, CRServerConfiguration, GCDAsyncSocket, CRConnection, CRRequest;
+@class CRServer, CRServerConfiguration, GCDAsyncSocket, CRConnection, CRRequest, CRResponse;
 
 FOUNDATION_EXPORT NSUInteger const CRErrorSocketError;
 
 FOUNDATION_EXPORT NSString* const CRRequestKey;
 FOUNDATION_EXPORT NSString* const CRResponseKey;
+
+typedef void(^CRServerOperationBlock)(CRRequest* request, CRResponse* response);
 
 @protocol CRServerDelegate <NSObject>
 

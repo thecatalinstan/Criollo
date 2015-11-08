@@ -61,4 +61,22 @@
     [_env setObject:obj forKey:key];
 }
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"%@ %@ %@", self.method, self.URL.path, self.version];
+}
+
+- (BOOL)shouldCloseConnection {
+    BOOL shouldClose = NO;
+
+    NSString *connectionHeader = [self valueForHTTPHeaderField:@"Connection"];
+    if ( connectionHeader != nil ) {
+        shouldClose = [connectionHeader caseInsensitiveCompare:@"close"] == NSOrderedSame;
+    } else {
+        shouldClose = [self.version isEqualToString:CRHTTP10];
+    }
+
+    return shouldClose;
+}
+
+
 @end

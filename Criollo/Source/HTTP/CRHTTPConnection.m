@@ -27,13 +27,15 @@
 #pragma mark - Data
 
 - (void)startReading {
+    [super startReading];
+
     requestBodyLength = 0;
     requestBodyReceivedBytesLength = 0;
 
     CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.server.configuration;
 
     // Read the request headers
-    NSUInteger timeout = didPerformInitialRead ? config.CRConnectionKeepAliveTimeout : config.CRConnectionInitialReadTimeout + config.CRHTTPConnectionReadHeaderTimeout;
+    NSUInteger timeout = didPerformInitialRead ? config.CRConnectionKeepAliveTimeout : config.CRConnectionReadTimeout + config.CRHTTPConnectionReadHeaderTimeout;
     [self.socket readDataToData:[CRConnection CRLFCRLFData] withTimeout:timeout maxLength:config.CRRequestMaxHeaderLength tag:CRHTTPConnectionSocketTagBeginReadingRequest];
 }
 
@@ -42,7 +44,7 @@
 
     // Create ENV from HTTP headers
     NSMutableDictionary* env = [NSMutableDictionary dictionary];
-    [self.request.allHTTPHeaderFields enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+    [self.currentRequest.allHTTPHeaderFields enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         NSString* headerName = [@"HTTP_" stringByAppendingString:[key.uppercaseString stringByReplacingOccurrencesOfString:@"-" withString:@"_"]];
         [env setObject:obj forKey:headerName];
     }];
@@ -59,23 +61,23 @@
     }
 //    env[@"SERVER_SOFTWARE"] = @"";
 
-    env[@"REQUEST_METHOD"] = self.request.method;
-    env[@"SERVER_PROTOCOL"] = self.request.version;
-    env[@"REQUEST_URI"] = self.request.URL.absoluteString;
-    env[@"DOCUMENT_URI"] = self.request.URL.path;
-    env[@"SCRIPT_NAME"] = self.request.URL.path;
-    env[@"QUERY_STRING"] = self.request.URL.query;
+    env[@"REQUEST_METHOD"] = self.currentRequest.method;
+    env[@"SERVER_PROTOCOL"] = self.currentRequest.version;
+    env[@"REQUEST_URI"] = self.currentRequest.URL.absoluteString;
+    env[@"DOCUMENT_URI"] = self.currentRequest.URL.path;
+    env[@"SCRIPT_NAME"] = self.currentRequest.URL.path;
+    env[@"QUERY_STRING"] = self.currentRequest.URL.query;
 
     env[@"REMOTE_ADDR"] = self.socket.connectedHost;
     env[@"REMOTE_PORT"] = @(self.socket.connectedPort);
     env[@"SERVER_ADDR"] = self.socket.localHost;
     env[@"SERVER_PORT"] = @(self.socket.localPort);
 
-    [self.request setEnv:env];
+    [self.currentRequest setEnv:env];
 
     CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.server.configuration;
 
-    requestBodyLength = [self.request valueForHTTPHeaderField:@"Content-Length"].integerValue;
+    requestBodyLength = [self.currentRequest valueForHTTPHeaderField:@"Content-Length"].integerValue;
     if ( requestBodyLength > 0 ) {
         NSUInteger bytesToRead = requestBodyLength < config.CRRequestBodyBufferSize ? requestBodyLength : config.CRRequestBodyBufferSize;
         [self.socket readDataToLength:bytesToRead withTimeout:config.CRHTTPConnectionReadBodyTimeout tag:CRHTTPConnectionSocketTagReadingRequestBody];
@@ -92,33 +94,10 @@
     [super didReceiveCompleteRequest];
 }
 
-- (void)handleError:(NSUInteger)errorType object:(id)object {
-    [super handleError:errorType object:object];
-}
-
 #pragma mark - Responses
 
 - (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version {
     return [[CRHTTPResponse alloc] initWithConnection:self HTTPStatusCode:HTTPStatusCode description:description version:version];
-}
-
-#pragma mark - State
-
-- (BOOL)shouldClose {
-    if ( self.ignoreKeepAlive ) {
-        return YES;
-    }
-
-    BOOL shouldClose = NO;
-
-    NSString *connectionHeader = [self.request valueForHTTPHeaderField:@"Connection"];
-    if ( connectionHeader != nil ) {
-        shouldClose = [connectionHeader caseInsensitiveCompare:@"close"] == NSOrderedSame;
-    } else {
-        shouldClose = [self.request.version isEqualToString:CRHTTP10];
-    }
-
-    return shouldClose;
 }
 
 #pragma mark - GCDAsyncSocketDelegate
@@ -138,21 +117,15 @@
             NSString *method = decodedHeaderComponents[0];
             NSString *path = decodedHeaderComponents[1];
             NSString *version = decodedHeaderComponents[2];
-            if ( [self.server canHandleHTTPMethod:method forPath:path] ) {
-                self.request = [[CRRequest alloc] initWithMethod:method URL:[NSURL URLWithString:path] version:version];
-            } else {
-                [self handleError:CRErrorRequestUnsupportedMethod object:@{CRRequestKey:[NSString stringWithFormat:@"%@ %@", method, path]}];
-                return;
-            }
+            self.currentRequest = [[CRRequest alloc] initWithMethod:method URL:[NSURL URLWithString:path] version:version];
         } else {
-            [self handleError:CRErrorRequestMalformedRequest object:data];
-            return;
+            [self.socket disconnectAfterWriting];
         }
     }
 
-    BOOL result = [self.request appendData:data];
+    BOOL result = [self.currentRequest appendData:data];
     if (!result) {
-        [self handleError:CRErrorRequestMalformedRequest object:data];
+        [self.socket disconnectAfterWriting];
         return;
     }
 
@@ -162,7 +135,7 @@
         case CRHTTPConnectionSocketTagBeginReadingRequest:
             // We've read the first header line and it's ok.
             // Continue to read the rest of the headers if any
-            if ( self.request.headersComplete ) {
+            if ( self.currentRequest.headersComplete ) {
                 [self didReceiveCompleteRequestHeaders];
             } else {
                 [self.socket readDataToData:[CRConnection CRLFCRLFData] withTimeout:config.CRHTTPConnectionReadHeaderTimeout maxLength:config.CRRequestMaxHeaderLength tag:CRHTTPConnectionSocketTagReadingRequestHeader];
@@ -171,7 +144,7 @@
 
         case CRHTTPConnectionSocketTagReadingRequestHeader:
             // Continue to read the rest of the headers if any
-            if ( self.request.headersComplete ) {
+            if ( self.currentRequest.headersComplete ) {
                 [self didReceiveCompleteRequestHeaders];
             } else {
                 [self.socket readDataToData:[CRConnection CRLFCRLFData] withTimeout:config.CRHTTPConnectionReadHeaderTimeout maxLength:config.CRRequestMaxHeaderLength tag:CRHTTPConnectionSocketTagReadingRequestHeader];

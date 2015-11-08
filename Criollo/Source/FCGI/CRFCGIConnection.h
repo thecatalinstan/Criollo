@@ -13,8 +13,6 @@
 
 #define CRFCGIConnectionSocketTagSendingResponse                        20
 
-#define CRFCGIConnectionFlagKeepAlive   1
-
 @interface CRFCGIConnection : CRConnection
 
 @end
