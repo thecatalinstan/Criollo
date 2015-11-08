@@ -12,6 +12,11 @@ typedef NS_ENUM(NSUInteger, CRApplicationTerminateReply) {
     CRTerminateLater  = 2
 };
 
+FOUNDATION_EXPORT NSString* const Criollo;
+FOUNDATION_EXPORT NSString* const CRErrorDomain;
+
+typedef NSUInteger CRError;
+
 @class CRApplication;
 
 @protocol CRApplicationDelegate <NSObject>

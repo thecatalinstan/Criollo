@@ -8,6 +8,9 @@
 
 #import <Criollo/CRApplication.h>
 
+NSString* const Criollo = @"Criollo";
+NSString* const CRErrorDomain = @"CRErrorDomain";
+
 NSUInteger const CRErrorNone = 0;
 NSUInteger const CRErrorSigTERM = 1007;
 
