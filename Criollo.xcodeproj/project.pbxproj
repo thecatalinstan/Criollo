@@ -14,7 +14,7 @@
 		AD4AE76B1BDA7FF100B9F221 /* Criollo.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4AE76A1BDA7FF100B9F221 /* Criollo.m */; };
 		AD4AE7721BDAB1C300B9F221 /* CRConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = AD4AE7701BDAB1C300B9F221 /* CRConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD4AE7731BDAB1C300B9F221 /* CRConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4AE7711BDAB1C300B9F221 /* CRConnection.m */; };
-		AD609C5B1BDA661F0003E702 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = AD609C591BDA661F0003E702 /* GCDAsyncSocket.h */; };
+		AD609C5B1BDA661F0003E702 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = AD609C591BDA661F0003E702 /* GCDAsyncSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD609C5C1BDA661F0003E702 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD609C5A1BDA661F0003E702 /* GCDAsyncSocket.m */; };
 		AD609C5F1BDA7A4C0003E702 /* Criollo.podSpec in Resources */ = {isa = PBXBuildFile; fileRef = AD609C5E1BDA7A4C0003E702 /* Criollo.podSpec */; };
 		AD61E9761BDD7FDF00F5BD17 /* CRHTTPServer.h in Headers */ = {isa = PBXBuildFile; fileRef = AD61E9741BDD7FDF00F5BD17 /* CRHTTPServer.h */; settings = {ATTRIBUTES = (Public, ); }; };

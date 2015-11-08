@@ -689,13 +689,13 @@
                                 <rect key="frame" x="0.0" y="348" width="828" height="252"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <scrollView misplaced="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xxf-3x-Zuj">
-                                        <rect key="frame" x="0.0" y="1" width="828" height="252"/>
+                                    <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xxf-3x-Zuj">
+                                        <rect key="frame" x="0.0" y="0.0" width="828" height="252"/>
                                         <clipView key="contentView" id="HN1-b1-qDq">
                                             <rect key="frame" x="1" y="1" width="826" height="250"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <textView importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="q8B-di-BWf">
+                                                <textView editable="NO" importsGraphics="NO" findStyle="panel" incrementalSearchingEnabled="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" linkDetection="YES" id="q8B-di-BWf">
                                                     <rect key="frame" x="0.0" y="0.0" width="826" height="250"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <animations/>
@@ -747,7 +747,7 @@
                 </constraints>
                 <animations/>
             </view>
-            <point key="canvasLocation" x="463" y="503"/>
+            <point key="canvasLocation" x="154" y="382"/>
         </window>
     </objects>
 </document>

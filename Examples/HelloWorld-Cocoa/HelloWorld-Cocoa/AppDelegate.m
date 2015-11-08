@@ -16,11 +16,14 @@
 @property (weak) IBOutlet NSWindow *window;
 @property (strong) IBOutlet NSTextView *logTextView;
 
-- (void)logString:(NSString*)string error:(BOOL)flag;
 - (void)logFormat:(NSString *)format, ...;
+- (void)logDebugFormat:(NSString *)format, ...;
 - (void)logErrorFormat:(NSString *)format, ...;
 
+- (void)logString:(NSString*)string attributes:(NSDictionary*)attributes;
+
 - (NSDictionary*)logTextAtributes;
+- (NSDictionary*)logDebugAtributes;
 - (NSDictionary*)logErrorAtributes;
 - (NSDictionary*)linkTextAttributes;
 
@@ -77,12 +80,12 @@
     if ( serverError != nil ) {
         [self logErrorFormat:@"%@\n%@", @"The HTTP server could be started.", serverError.localizedDescription];
     }
-
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
     // Close connections so that we exit cleanly
     if ( self.server.connections.count > 0 ) {
+        [self logFormat:@"Closing all connections"];
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             [self.server closeAllConnections];
@@ -95,7 +98,26 @@
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     // Stop listening
+    [self logFormat:@"Exiting"];
     [self.server stopListening];
+}
+
+#pragma mark - CRServerDelegate
+
+- (void)server:(CRServer *)server didAcceptConnection:(CRConnection *)connection {
+    [self logDebugFormat:@" * Connection from: %@:%lu", connection.remoteAddress, connection.remotePort];
+}
+
+- (void)server:(CRServer *)server didCloseConnection:(CRConnection *)connection {
+    [self logDebugFormat:@" * Disconnected."];
+}
+
+- (void)serverDidStartListening:(CRServer *)server {
+    [self logDebugFormat:@" * Started listening on: %@:%lu", server.configuration.CRServerInterface, server.configuration.CRServerPort];
+}
+
+- (void)serverDidStopListening:(CRServer *)server {
+    [self logDebugFormat:@" * Stopped listening on: %@:%lu", server.configuration.CRServerInterface, server.configuration.CRServerPort];
 }
 
 #pragma mark - Logging
@@ -110,6 +132,22 @@
         _logTextAttributes = @{
                                NSFontAttributeName: [NSFont systemFontOfSize:12],
                                NSForegroundColorAttributeName: [NSColor darkGrayColor],
+                               NSParagraphStyleAttributeName: style,
+                               };
+    });
+    return _logTextAttributes;
+}
+
+- (NSDictionary *)logDebugAtributes {
+    static NSDictionary* _logTextAttributes;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSMutableParagraphStyle* style = [[NSMutableParagraphStyle alloc] init];
+        style.lineHeightMultiple = 1.1;
+        style.lineBreakMode = NSLineBreakByWordWrapping;
+        _logTextAttributes = @{
+                               NSFontAttributeName: [NSFont systemFontOfSize:12],
+                               NSForegroundColorAttributeName: [NSColor lightGrayColor],
                                NSParagraphStyleAttributeName: style,
                                };
     });
@@ -144,29 +182,41 @@
     return _linkTextAttributes;
 }
 
-- (void)logErrorFormat:(NSString *)format, ... {
-    va_list args;
-    va_start(args, format);
-    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
-    va_end(args);
-
-    [self logString:formattedString error:NO];
-}
-
 - (void)logFormat:(NSString *)format, ... {
     va_list args;
     va_start(args, format);
     NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
     va_end(args);
 
-    [self logString:formattedString error:NO];
+    [self logString:formattedString attributes:self.logTextAtributes];
 }
 
-- (void)logString:(NSString *)string error:(BOOL)flag {
-    NSAttributedString* attributedString = [[NSAttributedString alloc] initWithString:[string stringByAppendingString:@"\n"] attributes:(flag ? self.logErrorAtributes : self.logTextAtributes)];
+- (void)logDebugFormat:(NSString *)format, ... {
+#if DEBUG
+    va_list args;
+    va_start(args, format);
+    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
+    va_end(args);
 
-    [self.logTextView.textStorage appendAttributedString:attributedString];
-    [self.logTextView scrollRangeToVisible:NSMakeRange(self.logTextView.string.length, 0)];
+    [self logString:formattedString attributes:self.logDebugAtributes];
+#endif
+}
+
+- (void)logErrorFormat:(NSString *)format, ... {
+    va_list args;
+    va_start(args, format);
+    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
+    va_end(args);
+
+    [self logString:formattedString attributes:self.logErrorAtributes];
+}
+
+- (void)logString:(NSString *)string attributes:(NSDictionary *)attributes {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSAttributedString* attributedString = [[NSAttributedString alloc] initWithString:[string stringByAppendingString:@"\n"] attributes:attributes];
+        [self.logTextView.textStorage appendAttributedString:attributedString];
+        [self.logTextView scrollRangeToVisible:NSMakeRange(self.logTextView.string.length, 0)];
+    });
 }
 
 @end
