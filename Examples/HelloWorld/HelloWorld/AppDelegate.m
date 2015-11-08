@@ -64,11 +64,32 @@
         [response sendString:responseString];
 
         completionHandler();
-        
+
+    };
+
+    // Ablock that creates a screenshot and sends it to the clinet
+    CRRouteHandlerBlock screenshotBlock = ^(CRRequest *request, CRResponse *response, void (^completionHandler)()) {
+
+        NSMutableData* imageData = [NSMutableData data];
+
+        CGImageRef windowImage = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionOnScreenOnly, 0, kCGWindowImageBestResolution);
+        CGImageDestinationRef destination =  CGImageDestinationCreateWithData((CFMutableDataRef)imageData, kUTTypePNG, 1, NULL);
+        CGImageDestinationAddImage(destination, windowImage, nil);
+        CGImageDestinationFinalize(destination);
+
+        CFRelease(destination);
+        CFRelease(windowImage);
+
+        [response setValue:@"image/png" forHTTPHeaderField:@"Content-type"];
+        [response setValue:@(imageData.length).stringValue forHTTPHeaderField:@"Content-Length"];
+        [response sendData:imageData];
+
+        completionHandler();
     };
 
     [self.HTTPServer addHandlerBlock:helloBlock];
     [self.HTTPServer addHandlerBlock:statusBlock forPath:@"/status" HTTPMethod:@"GET"];
+    [self.HTTPServer addHandlerBlock:screenshotBlock forPath:@"/screenshot" HTTPMethod:@"GET"];
 
     if ( HTTPServerError != nil  && FCGIServerError != nil ) {
         [CRApp logErrorFormat:@"%@", @"Neither the FCGI nor the HTTP server could be started. Exiting."];
