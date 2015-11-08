@@ -76,6 +76,27 @@
     };
     [self.server addHandlerBlock:statusBlock forPath:@"/status" HTTPMethod:@"GET"];
 
+    // Ablock that creates a screenshot and sends it to the clinet
+    CRRouteHandlerBlock screenshotBlock = ^(CRRequest *request, CRResponse *response, void (^completionHandler)()) {
+
+        NSMutableData* imageData = [NSMutableData data];
+
+        CGImageRef windowImage = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionOnScreenOnly, (CGWindowID)self.window.windowNumber, kCGWindowImageBestResolution);
+        CGImageDestinationRef destination =  CGImageDestinationCreateWithData((CFMutableDataRef)imageData, kUTTypePNG, 1, NULL);
+        CGImageDestinationAddImage(destination, windowImage, nil);
+        CGImageDestinationFinalize(destination);
+
+        CFRelease(destination);
+        CFRelease(windowImage);
+
+        [response setValue:@"image/png" forHTTPHeaderField:@"Content-type"];
+        [response setValue:@(imageData.length).stringValue forHTTPHeaderField:@"Content-Length"];
+        [response sendData:imageData];
+
+        completionHandler();
+    };
+    [self.server addHandlerBlock:screenshotBlock forPath:@"/screenshot" HTTPMethod:@"GET"];
+
     // Start listening
     NSError* serverError;
     if ( ! [self.server startListeningOnPortNumber:PortNumber error:&serverError] ) {

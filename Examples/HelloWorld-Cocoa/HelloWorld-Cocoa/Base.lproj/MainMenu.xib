@@ -685,13 +685,13 @@
                     <splitView dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="yQJ-rM-vVK">
                         <rect key="frame" x="0.0" y="0.0" width="921" height="699"/>
                         <subviews>
-                            <customView id="Tra-9a-qMy">
-                                <rect key="frame" x="0.0" y="0.0" width="921" height="405"/>
+                            <customView ambiguous="YES" id="Tra-9a-qMy">
+                                <rect key="frame" x="0.0" y="0.0" width="921" height="404.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <scrollView misplaced="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="heg-rs-0xb">
+                                    <scrollView ambiguous="YES" misplaced="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="heg-rs-0xb">
                                         <rect key="frame" x="0.0" y="-1.5" width="921" height="406"/>
-                                        <clipView key="contentView" id="GlG-bD-8Mk">
+                                        <clipView key="contentView" ambiguous="YES" id="GlG-bD-8Mk">
                                             <rect key="frame" x="0.0" y="23" width="921" height="383"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
@@ -1037,17 +1037,17 @@
                                 </constraints>
                                 <animations/>
                             </customView>
-                            <customView id="IkJ-kT-RB4">
-                                <rect key="frame" x="0.0" y="406" width="921" height="293"/>
+                            <customView ambiguous="YES" id="IkJ-kT-RB4">
+                                <rect key="frame" x="0.0" y="405.5" width="921" height="293.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <scrollView misplaced="YES" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xxf-3x-Zuj">
+                                    <scrollView ambiguous="YES" misplaced="YES" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xxf-3x-Zuj">
                                         <rect key="frame" x="0.0" y="1.5" width="921" height="293"/>
-                                        <clipView key="contentView" id="HN1-b1-qDq">
+                                        <clipView key="contentView" ambiguous="YES" id="HN1-b1-qDq">
                                             <rect key="frame" x="0.0" y="0.0" width="921" height="293"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <textView editable="NO" importsGraphics="NO" findStyle="panel" incrementalSearchingEnabled="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" linkDetection="YES" id="q8B-di-BWf">
+                                                <textView ambiguous="YES" editable="NO" importsGraphics="NO" findStyle="panel" incrementalSearchingEnabled="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" linkDetection="YES" id="q8B-di-BWf">
                                                     <rect key="frame" x="0.0" y="0.0" width="921" height="293"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <animations/>
