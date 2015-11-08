@@ -20,6 +20,8 @@
 
 @interface CRConnection () <GCDAsyncSocketDelegate> 
 
+@property (nonatomic, readonly) BOOL willDisconnect;
+
 - (void)bufferResponseData:(NSData*)data forRequest:(CRRequest*)request;
 
 @end
@@ -93,7 +95,9 @@
 }
 
 - (void)didReceiveCompleteRequest {
-//    NSLog(@"%s", __PRETTY_FUNCTION__);
+    if ( self.willDisconnect ) {
+        return;
+    }
     CRResponse* response = [self responseWithHTTPStatusCode:200];
     [self.currentRequest setResponse:response];
     [response setRequest:self.currentRequest];
@@ -103,6 +107,9 @@
 }
 
 - (void)bufferResponseData:(NSData *)data forRequest:(CRRequest *)request {
+    if ( self.willDisconnect ) {
+        return;
+    }
     if ( request.bufferedResponseData == nil ) {
         request.bufferedResponseData = [[NSMutableData alloc] initWithData:data];
     } else {
@@ -111,11 +118,15 @@
 }
 
 - (void)sendDataToSocket:(NSData *)data forRequest:(CRRequest *)request {
+    if ( self.willDisconnect ) {
+        return;
+    }
     CRRequest* firstRequest = self.requests.firstObject;
     if ( [firstRequest isEqual:request] ) {
         request.bufferedResponseData = nil;
         [self.socket writeData:data withTimeout:self.server.configuration.CRConnectionWriteTimeout tag:CRConnectionSocketTagSendingResponse];
         if ( request.shouldCloseConnection ) {
+            _willDisconnect = YES;
             [self.socket disconnectAfterWriting];
         }
         if ( request.response.finished ) {

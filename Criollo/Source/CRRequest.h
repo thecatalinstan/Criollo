@@ -15,7 +15,7 @@
 
 @interface CRRequest : CRMessage
 
-@property (nonatomic, weak) CRResponse* response;
+@property (nonatomic, strong) CRResponse* response;
 
 @property (nonatomic, readonly) NSURL* URL;
 @property (nonatomic, readonly) NSString* method;
