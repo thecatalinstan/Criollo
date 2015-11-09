@@ -7,23 +7,48 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		ADF23F0D1AF025DD000F658D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADF23F0C1AF025DD000F658D /* AppDelegate.m */; };
-		ADF23F0F1AF025DD000F658D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADF23F0E1AF025DD000F658D /* main.m */; };
-		ADF23F2F1AF0262B000F658D /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADF23F2E1AF025E9000F658D /* Criollo.framework */; };
-		ADF23F301AF0262B000F658D /* Criollo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ADF23F2E1AF025E9000F658D /* Criollo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		ADC331E31BF0FF4100DFCF6B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC331E21BF0FF4100DFCF6B /* main.m */; };
+		ADC331E61BF0FF4100DFCF6B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC331E51BF0FF4100DFCF6B /* AppDelegate.m */; };
+		ADC331E91BF0FF4100DFCF6B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC331E81BF0FF4100DFCF6B /* ViewController.m */; };
+		ADC331EC1BF0FF4100DFCF6B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADC331EA1BF0FF4100DFCF6B /* Main.storyboard */; };
+		ADC331EE1BF0FF4100DFCF6B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADC331ED1BF0FF4100DFCF6B /* Assets.xcassets */; };
+		ADC331F11BF0FF4100DFCF6B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADC331EF1BF0FF4100DFCF6B /* LaunchScreen.storyboard */; };
+		ADC331FE1BF0FF6C00DFCF6B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC331FD1BF0FF6C00DFCF6B /* AppDelegate.m */; };
+		ADC332011BF0FF6C00DFCF6B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC332001BF0FF6C00DFCF6B /* main.m */; };
+		ADC332031BF0FF6C00DFCF6B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADC332021BF0FF6C00DFCF6B /* Assets.xcassets */; };
+		ADC332061BF0FF6C00DFCF6B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADC332041BF0FF6C00DFCF6B /* MainMenu.xib */; };
+		ADC332191BF100A600DFCF6B /* RequestInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC332181BF100A600DFCF6B /* RequestInfo.m */; };
+		ADC3321C1BF1015000DFCF6B /* CommonRequestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3321B1BF1015000DFCF6B /* CommonRequestHandler.m */; };
+		ADC3321D1BF1016000DFCF6B /* CommonRequestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3321B1BF1015000DFCF6B /* CommonRequestHandler.m */; };
+		ADC3321F1BF1016900DFCF6B /* RequestInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC332181BF100A600DFCF6B /* RequestInfo.m */; };
+		ADC332291BF1064700DFCF6B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC332281BF1064700DFCF6B /* AppDelegate.m */; };
+		ADC3322C1BF1064700DFCF6B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3322B1BF1064700DFCF6B /* main.m */; };
+		ADC332361BF1070D00DFCF6B /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D71BF0FF0200DFCF6B /* Criollo.framework */; };
+		ADC332371BF1070D00DFCF6B /* Criollo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D71BF0FF0200DFCF6B /* Criollo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		ADC3323D1BF107EF00DFCF6B /* CommonAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3323C1BF107EF00DFCF6B /* CommonAppDelegate.m */; };
+		ADC3323E1BF1099700DFCF6B /* CommonAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3323C1BF107EF00DFCF6B /* CommonAppDelegate.m */; };
+		ADC3323F1BF1099800DFCF6B /* CommonAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3323C1BF107EF00DFCF6B /* CommonAppDelegate.m */; };
+		ADC332401BF10FBA00DFCF6B /* CommonRequestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3321B1BF1015000DFCF6B /* CommonRequestHandler.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		ADF23F2D1AF025E9000F658D /* PBXContainerItemProxy */ = {
+		ADC331D61BF0FF0200DFCF6B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = ADF23F291AF025E9000F658D /* Criollo.xcodeproj */;
+			containerPortal = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = ADEDB3761AEFC0B000A26AF1;
 			remoteInfo = Criollo;
 		};
-		ADF23F311AF0262B000F658D /* PBXContainerItemProxy */ = {
+		ADC331D81BF0FF0200DFCF6B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = ADF23F291AF025E9000F658D /* Criollo.xcodeproj */;
+			containerPortal = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AD5FFFCC1BF0024D00A57FE9;
+			remoteInfo = CriolloiOS;
+		};
+		ADC332381BF1070D00DFCF6B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = ADEDB3751AEFC0B000A26AF1;
 			remoteInfo = Criollo;
@@ -31,13 +56,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		ADF23F331AF0262B000F658D /* Embed Frameworks */ = {
+		ADC3323A1BF1070D00DFCF6B /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				ADF23F301AF0262B000F658D /* Criollo.framework in Embed Frameworks */,
+				ADC332371BF1070D00DFCF6B /* Criollo.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -45,107 +70,247 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		ADF23F061AF025DD000F658D /* HelloWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		ADF23F0A1AF025DD000F658D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ADF23F0B1AF025DD000F658D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		ADF23F0C1AF025DD000F658D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		ADF23F0E1AF025DD000F658D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		ADF23F291AF025E9000F658D /* Criollo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Criollo.xcodeproj; path = ../../Criollo.xcodeproj; sourceTree = "<group>"; };
+		ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Criollo.xcodeproj; path = ../../Criollo.xcodeproj; sourceTree = "<group>"; };
+		ADC331DE1BF0FF4100DFCF6B /* HelloWorld-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HelloWorld-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ADC331E21BF0FF4100DFCF6B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		ADC331E41BF0FF4100DFCF6B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		ADC331E51BF0FF4100DFCF6B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		ADC331E71BF0FF4100DFCF6B /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		ADC331E81BF0FF4100DFCF6B /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		ADC331EB1BF0FF4100DFCF6B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		ADC331ED1BF0FF4100DFCF6B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		ADC331F01BF0FF4100DFCF6B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		ADC331F21BF0FF4100DFCF6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ADC331FA1BF0FF6C00DFCF6B /* HelloWorld-Cocoa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HelloWorld-Cocoa.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ADC331FC1BF0FF6C00DFCF6B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		ADC331FD1BF0FF6C00DFCF6B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		ADC332001BF0FF6C00DFCF6B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		ADC332021BF0FF6C00DFCF6B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		ADC332051BF0FF6C00DFCF6B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		ADC332071BF0FF6C00DFCF6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ADC332171BF100A600DFCF6B /* RequestInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestInfo.h; sourceTree = "<group>"; };
+		ADC332181BF100A600DFCF6B /* RequestInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestInfo.m; sourceTree = "<group>"; };
+		ADC3321A1BF1015000DFCF6B /* CommonRequestHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonRequestHandler.h; sourceTree = "<group>"; };
+		ADC3321B1BF1015000DFCF6B /* CommonRequestHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonRequestHandler.m; sourceTree = "<group>"; };
+		ADC332251BF1064600DFCF6B /* HelloWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ADC332271BF1064700DFCF6B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		ADC332281BF1064700DFCF6B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		ADC3322B1BF1064700DFCF6B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		ADC332321BF1064700DFCF6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ADC3323B1BF107EF00DFCF6B /* CommonAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonAppDelegate.h; sourceTree = "<group>"; };
+		ADC3323C1BF107EF00DFCF6B /* CommonAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonAppDelegate.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		ADF23F031AF025DD000F658D /* Frameworks */ = {
+		ADC331DB1BF0FF4100DFCF6B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADF23F2F1AF0262B000F658D /* Criollo.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ADC331F71BF0FF6C00DFCF6B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ADC332221BF1064600DFCF6B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ADC332361BF1070D00DFCF6B /* Criollo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		ADF23EFD1AF025DD000F658D = {
+		ADC331CA1BF0FEE300DFCF6B = {
 			isa = PBXGroup;
 			children = (
-				ADF23F291AF025E9000F658D /* Criollo.xcodeproj */,
-				ADF23F081AF025DD000F658D /* HelloWorld */,
-				ADF23F071AF025DD000F658D /* Products */,
+				ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */,
+				ADC332161BF100A600DFCF6B /* Shared */,
+				ADC332261BF1064700DFCF6B /* HelloWorld */,
+				ADC331E01BF0FF4100DFCF6B /* HelloWorld-iOS */,
+				ADC331FB1BF0FF6C00DFCF6B /* HelloWorld-Cocoa */,
+				ADC331DF1BF0FF4100DFCF6B /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		ADF23F071AF025DD000F658D /* Products */ = {
+		ADC331D21BF0FF0200DFCF6B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				ADF23F061AF025DD000F658D /* HelloWorld.app */,
+				ADC331D71BF0FF0200DFCF6B /* Criollo.framework */,
+				ADC331D91BF0FF0200DFCF6B /* CriolloiOS.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		ADF23F081AF025DD000F658D /* HelloWorld */ = {
+		ADC331DF1BF0FF4100DFCF6B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				ADF23F0B1AF025DD000F658D /* AppDelegate.h */,
-				ADF23F0C1AF025DD000F658D /* AppDelegate.m */,
-				ADF23F091AF025DD000F658D /* Supporting Files */,
+				ADC331DE1BF0FF4100DFCF6B /* HelloWorld-iOS.app */,
+				ADC331FA1BF0FF6C00DFCF6B /* HelloWorld-Cocoa.app */,
+				ADC332251BF1064600DFCF6B /* HelloWorld.app */,
 			);
-			path = HelloWorld;
+			name = Products;
 			sourceTree = "<group>";
 		};
-		ADF23F091AF025DD000F658D /* Supporting Files */ = {
+		ADC331E01BF0FF4100DFCF6B /* HelloWorld-iOS */ = {
 			isa = PBXGroup;
 			children = (
-				ADF23F0A1AF025DD000F658D /* Info.plist */,
-				ADF23F0E1AF025DD000F658D /* main.m */,
+				ADC331E41BF0FF4100DFCF6B /* AppDelegate.h */,
+				ADC331E51BF0FF4100DFCF6B /* AppDelegate.m */,
+				ADC331E71BF0FF4100DFCF6B /* ViewController.h */,
+				ADC331E81BF0FF4100DFCF6B /* ViewController.m */,
+				ADC331EA1BF0FF4100DFCF6B /* Main.storyboard */,
+				ADC331ED1BF0FF4100DFCF6B /* Assets.xcassets */,
+				ADC331EF1BF0FF4100DFCF6B /* LaunchScreen.storyboard */,
+				ADC331F21BF0FF4100DFCF6B /* Info.plist */,
+				ADC331E11BF0FF4100DFCF6B /* Supporting Files */,
+			);
+			path = "HelloWorld-iOS";
+			sourceTree = "<group>";
+		};
+		ADC331E11BF0FF4100DFCF6B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				ADC331E21BF0FF4100DFCF6B /* main.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		ADF23F2A1AF025E9000F658D /* Products */ = {
+		ADC331FB1BF0FF6C00DFCF6B /* HelloWorld-Cocoa */ = {
 			isa = PBXGroup;
 			children = (
-				ADF23F2E1AF025E9000F658D /* Criollo.framework */,
+				ADC331FC1BF0FF6C00DFCF6B /* AppDelegate.h */,
+				ADC331FD1BF0FF6C00DFCF6B /* AppDelegate.m */,
+				ADC332021BF0FF6C00DFCF6B /* Assets.xcassets */,
+				ADC332041BF0FF6C00DFCF6B /* MainMenu.xib */,
+				ADC332071BF0FF6C00DFCF6B /* Info.plist */,
+				ADC331FF1BF0FF6C00DFCF6B /* Supporting Files */,
 			);
-			name = Products;
+			path = "HelloWorld-Cocoa";
+			sourceTree = "<group>";
+		};
+		ADC331FF1BF0FF6C00DFCF6B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				ADC332001BF0FF6C00DFCF6B /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		ADC332161BF100A600DFCF6B /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				ADC332171BF100A600DFCF6B /* RequestInfo.h */,
+				ADC332181BF100A600DFCF6B /* RequestInfo.m */,
+				ADC3321A1BF1015000DFCF6B /* CommonRequestHandler.h */,
+				ADC3321B1BF1015000DFCF6B /* CommonRequestHandler.m */,
+				ADC3323B1BF107EF00DFCF6B /* CommonAppDelegate.h */,
+				ADC3323C1BF107EF00DFCF6B /* CommonAppDelegate.m */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		ADC332261BF1064700DFCF6B /* HelloWorld */ = {
+			isa = PBXGroup;
+			children = (
+				ADC332271BF1064700DFCF6B /* AppDelegate.h */,
+				ADC332281BF1064700DFCF6B /* AppDelegate.m */,
+				ADC3322A1BF1064700DFCF6B /* Supporting Files */,
+			);
+			path = HelloWorld;
+			sourceTree = "<group>";
+		};
+		ADC3322A1BF1064700DFCF6B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				ADC332321BF1064700DFCF6B /* Info.plist */,
+				ADC3322B1BF1064700DFCF6B /* main.m */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		ADF23F051AF025DD000F658D /* HelloWorld */ = {
+		ADC331DD1BF0FF4100DFCF6B /* HelloWorld-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = ADF23F231AF025DE000F658D /* Build configuration list for PBXNativeTarget "HelloWorld" */;
+			buildConfigurationList = ADC331F31BF0FF4100DFCF6B /* Build configuration list for PBXNativeTarget "HelloWorld-iOS" */;
 			buildPhases = (
-				ADF23F021AF025DD000F658D /* Sources */,
-				ADF23F031AF025DD000F658D /* Frameworks */,
-				ADF23F041AF025DD000F658D /* Resources */,
-				ADF23F331AF0262B000F658D /* Embed Frameworks */,
+				ADC331DA1BF0FF4100DFCF6B /* Sources */,
+				ADC331DB1BF0FF4100DFCF6B /* Frameworks */,
+				ADC331DC1BF0FF4100DFCF6B /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				ADF23F321AF0262B000F658D /* PBXTargetDependency */,
+			);
+			name = "HelloWorld-iOS";
+			productName = "HelloWorld-iOS";
+			productReference = ADC331DE1BF0FF4100DFCF6B /* HelloWorld-iOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		ADC331F91BF0FF6C00DFCF6B /* HelloWorld-Cocoa */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ADC332081BF0FF6C00DFCF6B /* Build configuration list for PBXNativeTarget "HelloWorld-Cocoa" */;
+			buildPhases = (
+				ADC331F61BF0FF6C00DFCF6B /* Sources */,
+				ADC331F71BF0FF6C00DFCF6B /* Frameworks */,
+				ADC331F81BF0FF6C00DFCF6B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "HelloWorld-Cocoa";
+			productName = "HelloWorld-Cocoa";
+			productReference = ADC331FA1BF0FF6C00DFCF6B /* HelloWorld-Cocoa.app */;
+			productType = "com.apple.product-type.application";
+		};
+		ADC332241BF1064600DFCF6B /* HelloWorld */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ADC332331BF1064700DFCF6B /* Build configuration list for PBXNativeTarget "HelloWorld" */;
+			buildPhases = (
+				ADC332211BF1064600DFCF6B /* Sources */,
+				ADC332221BF1064600DFCF6B /* Frameworks */,
+				ADC332231BF1064600DFCF6B /* Resources */,
+				ADC3323A1BF1070D00DFCF6B /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				ADC332391BF1070D00DFCF6B /* PBXTargetDependency */,
 			);
 			name = HelloWorld;
 			productName = HelloWorld;
-			productReference = ADF23F061AF025DD000F658D /* HelloWorld.app */;
+			productReference = ADC332251BF1064600DFCF6B /* HelloWorld.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		ADF23EFE1AF025DD000F658D /* Project object */ = {
+		ADC331CB1BF0FEE300DFCF6B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
-				ORGANIZATIONNAME = "Catalin Stan";
+				LastUpgradeCheck = 0710;
 				TargetAttributes = {
-					ADF23F051AF025DD000F658D = {
-						CreatedOnToolsVersion = 6.3.1;
+					ADC331DD1BF0FF4100DFCF6B = {
+						CreatedOnToolsVersion = 7.1;
+					};
+					ADC331F91BF0FF6C00DFCF6B = {
+						CreatedOnToolsVersion = 7.1;
+					};
+					ADC332241BF1064600DFCF6B = {
+						CreatedOnToolsVersion = 7.1;
 					};
 				};
 			};
-			buildConfigurationList = ADF23F011AF025DD000F658D /* Build configuration list for PBXProject "HelloWorld" */;
+			buildConfigurationList = ADC331CE1BF0FEE300DFCF6B /* Build configuration list for PBXProject "HelloWorld" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -153,34 +318,62 @@
 				en,
 				Base,
 			);
-			mainGroup = ADF23EFD1AF025DD000F658D;
-			productRefGroup = ADF23F071AF025DD000F658D /* Products */;
+			mainGroup = ADC331CA1BF0FEE300DFCF6B;
+			productRefGroup = ADC331DF1BF0FF4100DFCF6B /* Products */;
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = ADF23F2A1AF025E9000F658D /* Products */;
-					ProjectRef = ADF23F291AF025E9000F658D /* Criollo.xcodeproj */;
+					ProductGroup = ADC331D21BF0FF0200DFCF6B /* Products */;
+					ProjectRef = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
 				},
 			);
 			projectRoot = "";
 			targets = (
-				ADF23F051AF025DD000F658D /* HelloWorld */,
+				ADC331DD1BF0FF4100DFCF6B /* HelloWorld-iOS */,
+				ADC331F91BF0FF6C00DFCF6B /* HelloWorld-Cocoa */,
+				ADC332241BF1064600DFCF6B /* HelloWorld */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		ADF23F2E1AF025E9000F658D /* Criollo.framework */ = {
+		ADC331D71BF0FF0200DFCF6B /* Criollo.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Criollo.framework;
-			remoteRef = ADF23F2D1AF025E9000F658D /* PBXContainerItemProxy */;
+			remoteRef = ADC331D61BF0FF0200DFCF6B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		ADC331D91BF0FF0200DFCF6B /* CriolloiOS.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CriolloiOS.framework;
+			remoteRef = ADC331D81BF0FF0200DFCF6B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
-		ADF23F041AF025DD000F658D /* Resources */ = {
+		ADC331DC1BF0FF4100DFCF6B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ADC331F11BF0FF4100DFCF6B /* LaunchScreen.storyboard in Resources */,
+				ADC331EE1BF0FF4100DFCF6B /* Assets.xcassets in Resources */,
+				ADC331EC1BF0FF4100DFCF6B /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ADC331F81BF0FF6C00DFCF6B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ADC332031BF0FF6C00DFCF6B /* Assets.xcassets in Resources */,
+				ADC332061BF0FF6C00DFCF6B /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ADC332231BF1064600DFCF6B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -190,30 +383,97 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		ADF23F021AF025DD000F658D /* Sources */ = {
+		ADC331DA1BF0FF4100DFCF6B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADF23F0F1AF025DD000F658D /* main.m in Sources */,
-				ADF23F0D1AF025DD000F658D /* AppDelegate.m in Sources */,
+				ADC331E91BF0FF4100DFCF6B /* ViewController.m in Sources */,
+				ADC332191BF100A600DFCF6B /* RequestInfo.m in Sources */,
+				ADC331E61BF0FF4100DFCF6B /* AppDelegate.m in Sources */,
+				ADC3321C1BF1015000DFCF6B /* CommonRequestHandler.m in Sources */,
+				ADC331E31BF0FF4100DFCF6B /* main.m in Sources */,
+				ADC3323D1BF107EF00DFCF6B /* CommonAppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ADC331F61BF0FF6C00DFCF6B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ADC332011BF0FF6C00DFCF6B /* main.m in Sources */,
+				ADC3321F1BF1016900DFCF6B /* RequestInfo.m in Sources */,
+				ADC331FE1BF0FF6C00DFCF6B /* AppDelegate.m in Sources */,
+				ADC3321D1BF1016000DFCF6B /* CommonRequestHandler.m in Sources */,
+				ADC3323E1BF1099700DFCF6B /* CommonAppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ADC332211BF1064600DFCF6B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ADC3322C1BF1064700DFCF6B /* main.m in Sources */,
+				ADC332401BF10FBA00DFCF6B /* CommonRequestHandler.m in Sources */,
+				ADC332291BF1064700DFCF6B /* AppDelegate.m in Sources */,
+				ADC3323F1BF1099800DFCF6B /* CommonAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		ADF23F321AF0262B000F658D /* PBXTargetDependency */ = {
+		ADC332391BF1070D00DFCF6B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Criollo;
-			targetProxy = ADF23F311AF0262B000F658D /* PBXContainerItemProxy */;
+			targetProxy = ADC332381BF1070D00DFCF6B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		ADC331EA1BF0FF4100DFCF6B /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				ADC331EB1BF0FF4100DFCF6B /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		ADC331EF1BF0FF4100DFCF6B /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				ADC331F01BF0FF4100DFCF6B /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		ADC332041BF0FF6C00DFCF6B /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				ADC332051BF0FF6C00DFCF6B /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
-		ADF23F211AF025DD000F658D /* Debug */ = {
+		ADC331CF1BF0FEE300DFCF6B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		ADC331D01BF0FEE300DFCF6B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		ADC331F41BF0FF4100DFCF6B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -227,7 +487,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -240,21 +500,159 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				INFOPLIST_FILE = "HelloWorld-iOS/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.criolloframework.examples.HelloWorld-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		ADC331F51BF0FF4100DFCF6B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "HelloWorld-iOS/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.criolloframework.examples.HelloWorld-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		ADC332091BF0FF6C00DFCF6B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "HelloWorld-Cocoa/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.criolloframework.examples.HelloWorld-Cocoa";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
-		ADF23F221AF025DD000F658D /* Release */ = {
+		ADC3320A1BF0FF6C00DFCF6B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "HelloWorld-Cocoa/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.criolloframework.examples.HelloWorld-Cocoa";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		ADC332341BF1064700DFCF6B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -272,6 +670,56 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = HelloWorld/Info.plist;
+				INSTALL_PATH = /WebApplications;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.criolloframework.examples.HelloWorld;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		ADC332351BF1064700DFCF6B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -284,61 +732,54 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = HelloWorld/Info.plist;
+				INSTALL_PATH = /WebApplications;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = org.criolloframework.examples.HelloWorld;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-			};
-			name = Release;
-		};
-		ADF23F241AF025DE000F658D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = HelloWorld/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				LLVM_LTO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.criolloframework.examples.HelloWorld;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		ADF23F251AF025DE000F658D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_OPTIMIZATION_LEVEL = fast;
-				INFOPLIST_FILE = HelloWorld/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				LLVM_LTO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.criolloframework.examples.HelloWorld;
-				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		ADF23F011AF025DD000F658D /* Build configuration list for PBXProject "HelloWorld" */ = {
+		ADC331CE1BF0FEE300DFCF6B /* Build configuration list for PBXProject "HelloWorld" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				ADF23F211AF025DD000F658D /* Debug */,
-				ADF23F221AF025DD000F658D /* Release */,
+				ADC331CF1BF0FEE300DFCF6B /* Debug */,
+				ADC331D01BF0FEE300DFCF6B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		ADF23F231AF025DE000F658D /* Build configuration list for PBXNativeTarget "HelloWorld" */ = {
+		ADC331F31BF0FF4100DFCF6B /* Build configuration list for PBXNativeTarget "HelloWorld-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				ADF23F241AF025DE000F658D /* Debug */,
-				ADF23F251AF025DE000F658D /* Release */,
+				ADC331F41BF0FF4100DFCF6B /* Debug */,
+				ADC331F51BF0FF4100DFCF6B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+		};
+		ADC332081BF0FF6C00DFCF6B /* Build configuration list for PBXNativeTarget "HelloWorld-Cocoa" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ADC332091BF0FF6C00DFCF6B /* Debug */,
+				ADC3320A1BF0FF6C00DFCF6B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		ADC332331BF1064700DFCF6B /* Build configuration list for PBXNativeTarget "HelloWorld" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ADC332341BF1064700DFCF6B /* Debug */,
+				ADC332351BF1064700DFCF6B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = ADF23EFE1AF025DD000F658D /* Project object */;
+	rootObject = ADC331CB1BF0FEE300DFCF6B /* Project object */;
 }
