@@ -8,6 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
+#define PortNumber  10781   // HTTP server port
+#define LogDebug        0   // Debug logging
+#define KVO             1   // Update user interface with every request
+
 @class CRHTTPServer;
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>

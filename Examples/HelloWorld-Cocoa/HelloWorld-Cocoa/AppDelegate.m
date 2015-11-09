@@ -7,18 +7,17 @@
 //
 
 #import <Criollo/Criollo.h>
+#import <sys/utsname.h>
+
 #import "AppDelegate.h"
 #import "RequestInfo.h"
-
-#define PortNumber  10781   // HTTP server port
-#define LogDebug        0   // Debug logging
-#define KVO             1   // Update user interface with every request
 
 @interface AppDelegate () <CRServerDelegate>
 
 @property (weak) IBOutlet NSWindow *window;
 @property (strong) IBOutlet NSTextView *logTextView;
 
+@property (strong) NSString* uname;
 @property (readonly) NSArray<RequestInfo*> *requests;
 
 - (void)updateConnectionInfo;
@@ -41,6 +40,11 @@
 #pragma mark - NSApplicationDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+
+    // Get some info
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    _uname = [NSString stringWithFormat:@"%s %s %s %s %s", systemInfo.sysname, systemInfo.nodename, systemInfo.release, systemInfo.version, systemInfo.machine];
 
     // Eye-candy
     self.logTextView.linkTextAttributes = self.linkTextAttributes;
@@ -66,6 +70,7 @@
         [responseString appendFormat:@"<h2>Request:</h2><pre>%@</pre>", request.allHTTPHeaderFields];
         [responseString appendFormat:@"<h2>Environment:</h2><pre>%@</pre>", request.env];
         [responseString appendString:@"<hr/>"];
+        [responseString appendFormat:@"<small>%@</small><br/>", _uname];        
         [responseString appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
 
         [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];

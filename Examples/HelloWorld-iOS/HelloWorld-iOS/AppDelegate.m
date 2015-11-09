@@ -7,22 +7,16 @@
 //
 
 #import <CriolloiOS/CriolloiOS.h>
+#import <sys/utsname.h>
 
 #import "AppDelegate.h"
 #import "RequestInfo.h"
 
-#define PortNumber          5000   // HTTP server port
-#define Interface    @"127.0.0.1"   // HTTP server port
-#define LogDebug                0   // Debug logging
-#define KVO                     1   // Update user interface with every request
+@interface AppDelegate () <CRServerDelegate> {
+}
 
-@interface AppDelegate () <CRServerDelegate>
-
+@property (strong) NSString* uname;
 @property (readonly) NSArray<RequestInfo*> *requests;
-
-- (void)logFormat:(NSString *)format, ...;
-- (void)logDebugFormat:(NSString *)format, ...;
-- (void)logErrorFormat:(NSString *)format, ...;
 
 - (void)logString:(NSString*)string attributes:(NSDictionary*)attributes;
 
@@ -35,6 +29,11 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+
+    // Get some info
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    _uname = [NSString stringWithFormat:@"%s %s %s %s %s", systemInfo.sysname, systemInfo.nodename, systemInfo.release, systemInfo.version, systemInfo.machine];
 
     // Start a server
     self.server = [[CRHTTPServer alloc] initWithDelegate:self];
@@ -57,6 +56,7 @@
         [responseString appendFormat:@"<h2>Request:</h2><pre>%@</pre>", request.allHTTPHeaderFields];
         [responseString appendFormat:@"<h2>Environment:</h2><pre>%@</pre>", request.env];
         [responseString appendString:@"<hr/>"];
+        [responseString appendFormat:@"<small>%@</small><br/>", _uname];
         [responseString appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
 
         [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
@@ -86,45 +86,31 @@
     };
     [self.server addHandlerBlock:screenshotBlock forPath:@"/screenshot" HTTPMethod:@"GET"];
 
-    // Start listening
-    NSError* serverError;
-    if ( [self.server startListeningOnPortNumber:PortNumber interface:Interface  error:&serverError] ) {
-        [self logErrorFormat:@"Failed to start HTTP server. %@", serverError.localizedDescription];
-    }
-
-    if ( serverError != nil ) {
-        [self logErrorFormat:@"%@\n%@", @"The HTTP server could be started.", serverError.localizedDescription];
-    }
-
     return YES;
-}
-
-- (void)applicationWillResignActive:(UIApplication *)application {
-    [self.server stopListening];
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-    NSError* serverError;
-    if ( [self.server startListeningOnPortNumber:PortNumber interface:Interface error:&serverError] ) {
-        [self logErrorFormat:@"Failed to start HTTP server. %@", serverError.localizedDescription];
-    }
-
-    if ( serverError != nil ) {
-        [self logErrorFormat:@"%@\n%@", @"The HTTP server could be started.", serverError.localizedDescription];
-    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Stop listening
     [self logFormat:@"Exiting"];
     [self.server stopListening];
+}
+
+- (void)applicationWillResignActive:(UIApplication *)application {
+    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
+    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
+    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
 #pragma mark - CRServerDelegate
@@ -145,15 +131,15 @@
 }
 
 - (void)server:(CRServer *)server didAcceptConnection:(CRConnection *)connection {
-    [self logDebugFormat:@" * Connection from: %@:%lu", connection.remoteAddress, connection.remotePort];
+    [self logFormat:@" * Connection from: %@:%lu", connection.remoteAddress, connection.remotePort];
 }
 
 - (void)server:(CRServer *)server didCloseConnection:(CRConnection *)connection {
-    [self logDebugFormat:@" * Disconnected."];
+    [self logFormat:@" * Disconnected."];
 }
 
 - (void)server:(CRServer *)server didReceiveRequest:(CRRequest *)request {
-    [self logDebugFormat:@" * Request: %@", request];
+//    [self logDebugFormat:@" * Request: %@", request];
 }
 
 - (void)server:(CRServer *)server didFinishRequest:(CRRequest *)request {
@@ -171,8 +157,8 @@
         style.lineHeightMultiple = 1.1;
         style.lineBreakMode = NSLineBreakByWordWrapping;
         _logTextAttributes = @{
-                               NSFontAttributeName: [UIFont systemFontOfSize:12],
-                               NSForegroundColorAttributeName: [UIColor darkGrayColor],
+                               NSFontAttributeName: [UIFont systemFontOfSize:[UIFont systemFontSize]],
+                               NSForegroundColorAttributeName: [UIColor lightGrayColor],
                                NSParagraphStyleAttributeName: style,
                                };
     });
@@ -187,8 +173,8 @@
         style.lineHeightMultiple = 1.1;
         style.lineBreakMode = NSLineBreakByWordWrapping;
         _logTextAttributes = @{
-                               NSFontAttributeName: [UIFont systemFontOfSize:12],
-                               NSForegroundColorAttributeName: [UIColor lightGrayColor],
+                               NSFontAttributeName: [UIFont systemFontOfSize:[UIFont systemFontSize]],
+                               NSForegroundColorAttributeName: [UIColor grayColor],
                                NSParagraphStyleAttributeName: style,
                                };
     });
@@ -203,7 +189,7 @@
         style.lineHeightMultiple = 1.1;
         style.lineBreakMode = NSLineBreakByWordWrapping;
         _logTextAttributes = @{
-                               NSFontAttributeName: [UIFont systemFontOfSize:12],
+                               NSFontAttributeName: [UIFont systemFontOfSize:[UIFont systemFontSize]],
                                NSForegroundColorAttributeName: [UIColor redColor],
                                NSParagraphStyleAttributeName: style,
                                };
