@@ -100,7 +100,7 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ %lu %@ %@", self.version, self.statusCode, self.allHTTPHeaderFields[@"Content-type"], self.allHTTPHeaderFields[@"Content-length"]];
+    return [NSString stringWithFormat:@"%@ %lu %@ %@", self.version, (unsigned long)self.statusCode, self.allHTTPHeaderFields[@"Content-type"], self.allHTTPHeaderFields[@"Content-length"]];
 }
 
 @end

@@ -51,7 +51,7 @@ NSString* const CRResponseKey = @"CRResponse";
 #pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
-    NSLog(@"%@.%@ = %lu", object, keyPath, ((NSArray*)change[NSKeyValueChangeNewKey]).count);
+    NSLog(@"%@.%@ = %lu", object, keyPath, (unsigned long)((NSArray*)change[NSKeyValueChangeNewKey]).count);
 }
 
 #pragma mark - Listening
