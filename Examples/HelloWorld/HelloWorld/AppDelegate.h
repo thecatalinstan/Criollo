@@ -10,5 +10,7 @@
 
 @interface AppDelegate : CommonAppDelegate <CRApplicationDelegate>
 
+
+
 @end
 

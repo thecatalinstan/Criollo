@@ -6,10 +6,18 @@
 //
 //
 
-#import <Criollo/Criollo.h>
-
 #define PortNumber  10781
 #define LogDebug        1
+
+#define LogMessageNotificationName  @"LogMessageNotification"
+
+#if TARGET_OS_IPHONE || TARGET_OS_SIMULATOR
+#import <CriolloiOS/CriolloiOS.h>
+#import <UIKit/UIKit.h>
+#else
+#import <Criollo/Criollo.h>
+#import <Cocoa/Cocoa.h>
+#endif
 
 @interface CommonAppDelegate : NSObject <CRServerDelegate>
 
@@ -23,5 +31,16 @@
 
 - (void)serverDidFailToStartWithError:(NSError*)error;
 - (void)serverDidStartAtURL:(NSURL*)URL;
+
+- (NSDictionary*)logTextAtributes;
+- (NSDictionary*)logDebugAtributes;
+- (NSDictionary*)logErrorAtributes;
+- (NSDictionary*)linkTextAttributes;
+
+- (void)logFormat:(NSString *)format, ...;
+- (void)logDebugFormat:(NSString *)format, ...;
+- (void)logErrorFormat:(NSString *)format, ...;
+
+- (void)logString:(NSString*)string attributes:(NSDictionary*)attributes;
 
 @end

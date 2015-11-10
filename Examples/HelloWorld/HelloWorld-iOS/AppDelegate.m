@@ -8,6 +8,27 @@
 
 #import "AppDelegate.h"
 
+//// Ablock that creates a screenshot and sends it to the clinet
+//CRRouteHandlerBlock screenshotBlock = ^(CRRequest *request, CRResponse *response, void (^completionHandler)()) {
+//
+//    UIView* hostView = self.window.rootViewController.view;
+//
+//    UIGraphicsBeginImageContextWithOptions(hostView.bounds.size, hostView.opaque, 0.0);
+//    [hostView.layer renderInContext:UIGraphicsGetCurrentContext()];
+//    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+//
+//    NSData* imageData = UIImagePNGRepresentation(img);
+//    [response setValue:@"image/png" forHTTPHeaderField:@"Content-type"];
+//    [response setValue:@(imageData.length).stringValue forHTTPHeaderField:@"Content-Length"];
+//    [response sendData:imageData];
+//
+//    completionHandler();
+//};
+
+//NSFontAttributeName: [UIFont systemFontOfSize:[UIFont systemFontSize]],
+//NSForegroundColorAttributeName: [UIColor lightGrayColor],
+
 @interface AppDelegate ()
 
 @end

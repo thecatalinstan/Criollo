@@ -6,10 +6,11 @@
 //
 //
 
-#import <Cocoa/Cocoa.h>
+#import "CommonAppDelegate.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
+@interface AppDelegate : CommonAppDelegate <NSApplicationDelegate>
 
+@property (weak) IBOutlet NSWindow *window;
 
 @end
 

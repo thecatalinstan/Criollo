@@ -6,12 +6,11 @@
 //
 //
 
-#import <UIKit/UIKit.h>
+#import "CommonAppDelegate.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : CommonAppDelegate <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
 
 @end
 
