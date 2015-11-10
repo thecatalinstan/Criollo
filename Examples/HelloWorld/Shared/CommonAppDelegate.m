@@ -6,13 +6,14 @@
 //
 //
 
-#include <ifaddrs.h>
-#include <arpa/inet.h>
-
 #import "CommonAppDelegate.h"
 #import "CommonRequestHandler.h"
 
-@interface CommonAppDelegate ()
+#include <ifaddrs.h>
+#include <arpa/inet.h>
+
+
+@interface CommonAppDelegate ()  <CRServerDelegate>
 
 // see: http://stackoverflow.com/questions/6807788/how-to-get-ip-address-of-iphone-programatically
 - (BOOL)getIPAddress:(NSString**)address;
@@ -119,13 +120,7 @@
                 if([[NSString stringWithUTF8String:temp_addr->ifa_name] isEqualToString:@"en0"]) {
                     *address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)];
                     result = YES;
-#if TARGET_OS_IPHONE || TARGET_OS_SIMULATOR
-                } else if ([[NSString stringWithUTF8String:temp_addr->ifa_name] isEqualToString:@"pdp_ip0"]) {
-                    *address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)];
-                    result = YES;
-#endif
                 }
-
             }
             temp_addr = temp_addr->ifa_next;
         }

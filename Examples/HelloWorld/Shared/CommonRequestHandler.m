@@ -6,15 +6,15 @@
 //
 //
 
-#import <sys/utsname.h>
+#import "CommonRequestHandler.h"
 
-#if TARGET_OS_IPHONE || TARGET_OS_SIMULATOR
-#import <CriolloiOS/CriolloiOS.h>
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+    #import <CriolloiOS/CriolloiOS.h>
 #else
-#import <Criollo/Criollo.h>
+    #import <Criollo/Criollo.h>
 #endif
 
-#import "CommonRequestHandler.h"
+#import <sys/utsname.h>
 
 @interface CommonRequestHandler ()
 

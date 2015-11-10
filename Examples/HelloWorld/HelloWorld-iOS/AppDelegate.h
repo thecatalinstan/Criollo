@@ -6,6 +6,7 @@
 //
 //
 
+#import <UIKit/UIKit.h>
 #import "CommonAppDelegate.h"
 
 @interface AppDelegate : CommonAppDelegate <UIApplicationDelegate>

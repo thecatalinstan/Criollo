@@ -6,6 +6,7 @@
 //
 //
 
+#import <Cocoa/Cocoa.h>
 #import "CommonAppDelegate.h"
 
 @interface AppDelegate : CommonAppDelegate <NSApplicationDelegate>

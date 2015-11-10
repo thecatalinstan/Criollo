@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD04F4DF1BF249DB00456D38 /* CriolloiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D91BF0FF0200DFCF6B /* CriolloiOS.framework */; };
+		AD04F4E01BF249DB00456D38 /* CriolloiOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D91BF0FF0200DFCF6B /* CriolloiOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		ADC331E31BF0FF4100DFCF6B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC331E21BF0FF4100DFCF6B /* main.m */; };
 		ADC331E61BF0FF4100DFCF6B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC331E51BF0FF4100DFCF6B /* AppDelegate.m */; };
 		ADC331E91BF0FF4100DFCF6B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC331E81BF0FF4100DFCF6B /* ViewController.m */; };
@@ -17,10 +19,8 @@
 		ADC332011BF0FF6C00DFCF6B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC332001BF0FF6C00DFCF6B /* main.m */; };
 		ADC332031BF0FF6C00DFCF6B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADC332021BF0FF6C00DFCF6B /* Assets.xcassets */; };
 		ADC332061BF0FF6C00DFCF6B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADC332041BF0FF6C00DFCF6B /* MainMenu.xib */; };
-		ADC332191BF100A600DFCF6B /* RequestInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC332181BF100A600DFCF6B /* RequestInfo.m */; };
 		ADC3321C1BF1015000DFCF6B /* CommonRequestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3321B1BF1015000DFCF6B /* CommonRequestHandler.m */; };
 		ADC3321D1BF1016000DFCF6B /* CommonRequestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3321B1BF1015000DFCF6B /* CommonRequestHandler.m */; };
-		ADC3321F1BF1016900DFCF6B /* RequestInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC332181BF100A600DFCF6B /* RequestInfo.m */; };
 		ADC332291BF1064700DFCF6B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC332281BF1064700DFCF6B /* AppDelegate.m */; };
 		ADC3322C1BF1064700DFCF6B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3322B1BF1064700DFCF6B /* main.m */; };
 		ADC332361BF1070D00DFCF6B /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D71BF0FF0200DFCF6B /* Criollo.framework */; };
@@ -32,6 +32,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		AD04F4E11BF249DB00456D38 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AD5FFFCB1BF0024D00A57FE9;
+			remoteInfo = CriolloiOS;
+		};
 		ADC331D61BF0FF0200DFCF6B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
@@ -56,6 +63,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		AD04F4E31BF249DB00456D38 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				AD04F4E01BF249DB00456D38 /* CriolloiOS.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		ADC3323A1BF1070D00DFCF6B /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -88,8 +106,6 @@
 		ADC332021BF0FF6C00DFCF6B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ADC332051BF0FF6C00DFCF6B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		ADC332071BF0FF6C00DFCF6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ADC332171BF100A600DFCF6B /* RequestInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestInfo.h; sourceTree = "<group>"; };
-		ADC332181BF100A600DFCF6B /* RequestInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestInfo.m; sourceTree = "<group>"; };
 		ADC3321A1BF1015000DFCF6B /* CommonRequestHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonRequestHandler.h; sourceTree = "<group>"; };
 		ADC3321B1BF1015000DFCF6B /* CommonRequestHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonRequestHandler.m; sourceTree = "<group>"; };
 		ADC332251BF1064600DFCF6B /* HelloWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,6 +122,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD04F4DF1BF249DB00456D38 /* CriolloiOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,8 +223,6 @@
 		ADC332161BF100A600DFCF6B /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				ADC332171BF100A600DFCF6B /* RequestInfo.h */,
-				ADC332181BF100A600DFCF6B /* RequestInfo.m */,
 				ADC3321A1BF1015000DFCF6B /* CommonRequestHandler.h */,
 				ADC3321B1BF1015000DFCF6B /* CommonRequestHandler.m */,
 				ADC3323B1BF107EF00DFCF6B /* CommonAppDelegate.h */,
@@ -245,10 +260,12 @@
 				ADC331DA1BF0FF4100DFCF6B /* Sources */,
 				ADC331DB1BF0FF4100DFCF6B /* Frameworks */,
 				ADC331DC1BF0FF4100DFCF6B /* Resources */,
+				AD04F4E31BF249DB00456D38 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				AD04F4E21BF249DB00456D38 /* PBXTargetDependency */,
 			);
 			name = "HelloWorld-iOS";
 			productName = "HelloWorld-iOS";
@@ -388,7 +405,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADC331E91BF0FF4100DFCF6B /* ViewController.m in Sources */,
-				ADC332191BF100A600DFCF6B /* RequestInfo.m in Sources */,
 				ADC331E61BF0FF4100DFCF6B /* AppDelegate.m in Sources */,
 				ADC3321C1BF1015000DFCF6B /* CommonRequestHandler.m in Sources */,
 				ADC331E31BF0FF4100DFCF6B /* main.m in Sources */,
@@ -401,7 +417,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADC332011BF0FF6C00DFCF6B /* main.m in Sources */,
-				ADC3321F1BF1016900DFCF6B /* RequestInfo.m in Sources */,
 				ADC331FE1BF0FF6C00DFCF6B /* AppDelegate.m in Sources */,
 				ADC3321D1BF1016000DFCF6B /* CommonRequestHandler.m in Sources */,
 				ADC3323E1BF1099700DFCF6B /* CommonAppDelegate.m in Sources */,
@@ -422,6 +437,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		AD04F4E21BF249DB00456D38 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CriolloiOS;
+			targetProxy = AD04F4E11BF249DB00456D38 /* PBXContainerItemProxy */;
+		};
 		ADC332391BF1070D00DFCF6B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Criollo;
@@ -509,13 +529,14 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "HelloWorld-iOS/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.criolloframework.examples.HelloWorld-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -552,12 +573,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "HelloWorld-iOS/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.criolloframework.examples.HelloWorld-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};

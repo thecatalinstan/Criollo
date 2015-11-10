@@ -35,6 +35,11 @@
 
 @implementation AppDelegate
 
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    NSLog(@"TARGET_IPHONE_SIMULATOR: %d", TARGET_IPHONE_SIMULATOR);
+    NSLog(@"TARGET_OS_IPHONE: %d", TARGET_OS_IPHONE);
+    return YES;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.

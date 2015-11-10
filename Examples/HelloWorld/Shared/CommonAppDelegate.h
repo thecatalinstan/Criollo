@@ -6,20 +6,23 @@
 //
 //
 
+#import <Foundation/Foundation.h>
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#import <UIKit/UIKit.h>
+#import <CriolloiOS/CriolloiOS.h>
+#else
+#import <Cocoa/Cocoa.h>
+#import <Criollo/Criollo.h>
+#endif
+
 #define PortNumber  10781
 #define LogDebug        1
 
 #define LogMessageNotificationName  @"LogMessageNotification"
 
-#if TARGET_OS_IPHONE || TARGET_OS_SIMULATOR
-#import <CriolloiOS/CriolloiOS.h>
-#import <UIKit/UIKit.h>
-#else
-#import <Criollo/Criollo.h>
-#import <Cocoa/Cocoa.h>
-#endif
+@class CRHTTPServer;
 
-@interface CommonAppDelegate : NSObject <CRServerDelegate>
+@interface CommonAppDelegate : NSObject
 
 @property (nonatomic, strong) CRHTTPServer* server;
 
