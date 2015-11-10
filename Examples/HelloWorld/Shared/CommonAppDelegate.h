@@ -8,7 +8,8 @@
 
 #import <Criollo/Criollo.h>
 
-#define PortNumber 10781
+#define PortNumber  10781
+#define LogDebug        1
 
 @interface CommonAppDelegate : NSObject <CRServerDelegate>
 

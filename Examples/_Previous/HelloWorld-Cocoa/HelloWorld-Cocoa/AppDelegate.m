@@ -32,7 +32,7 @@
 - (NSDictionary*)logDebugAtributes;
 - (NSDictionary*)logErrorAtributes;
 - (NSDictionary*)linkTextAttributes;
-
+    
 @end
 
 @implementation AppDelegate
