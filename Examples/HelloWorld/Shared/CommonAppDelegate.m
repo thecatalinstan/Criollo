@@ -13,7 +13,8 @@
 #include <arpa/inet.h>
 
 
-@interface CommonAppDelegate ()  <CRServerDelegate>
+@interface CommonAppDelegate ()  <CRServerDelegate> {
+}
 
 // see: http://stackoverflow.com/questions/6807788/how-to-get-ip-address-of-iphone-programatically
 - (BOOL)getIPAddress:(NSString**)address;
@@ -34,9 +35,21 @@
 
     [self.server addHandlerBlock:helloBlock];
     [self.server addHandlerBlock:statusBlock forPath:@"/status" HTTPMethod:@"GET"];
+
+    [self willChangeValueForKey:@"isConnected"];
+    _isConnected = NO;
+    [self didChangeValueForKey:@"isConnected"];
+
+    [self willChangeValueForKey:@"isDisconnected"];
+    _isDisconnected = YES;
+    [self didChangeValueForKey:@"isDisconnected"];
 }
 
 - (void)startListening:(id)sender {
+    [self willChangeValueForKey:@"isDisconnected"];
+    _isDisconnected = NO;
+    [self didChangeValueForKey:@"isDisconnected"];    _isConnected = NO;
+
     NSError*serverError;
     if ( [self.server startListeningOnPortNumber:PortNumber error:&serverError] ) {
         NSString* address;
@@ -46,13 +59,42 @@
         }
         NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d/", address, PortNumber]];
         [self serverDidStartAtURL:URL];
+
+        [self willChangeValueForKey:@"isConnected"];
+        _isConnected = YES;
+        [self didChangeValueForKey:@"isConnected"];
+
+        [self willChangeValueForKey:@"isDisconnected"];
+        _isDisconnected = NO;
+        [self didChangeValueForKey:@"isDisconnected"];
     } else {
         [self serverDidFailToStartWithError:serverError];
+
+        [self willChangeValueForKey:@"isConnected"];
+        _isConnected = NO;
+        [self didChangeValueForKey:@"isConnected"];
+
+        [self willChangeValueForKey:@"isDisconnected"];
+        _isDisconnected = YES;
+        [self didChangeValueForKey:@"isDisconnected"];
     }
 }
 
 - (void)stopListening:(id)sender {
+    [self willChangeValueForKey:@"isDisconnected"];
+    _isDisconnected = NO;
+    [self didChangeValueForKey:@"isDisconnected"];
+
     [self.server stopListening];
+    
+    [self willChangeValueForKey:@"isConnected"];
+    _isConnected = NO;
+    [self didChangeValueForKey:@"isConnected"];
+
+    [self willChangeValueForKey:@"isDisconnected"];
+    _isDisconnected = YES;
+    [self didChangeValueForKey:@"isDisconnected"];
+
 }
 
 - (void)closeAllConnections {
@@ -79,9 +121,7 @@
 }
 
 - (void)serverDidStopListening:(CRServer *)server {
-#if LogDebug
-    [self logDebugFormat:@" * Stopped listening on: %@:%lu", server.configuration.CRServerInterface, server.configuration.CRServerPort];
-#endif
+    [self logFormat:@"Stopped listening."];
 }
 
 - (void)server:(CRServer *)server didAcceptConnection:(CRConnection *)connection {

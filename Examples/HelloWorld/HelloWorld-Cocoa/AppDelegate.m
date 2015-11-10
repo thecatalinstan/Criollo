@@ -44,15 +44,6 @@
     [self.windowController showWindow:nil];
 }
 
-- (NSApplicationTerminateReply)applicationShouldTerminate:(CRApplication *)sender {
-    if ( self.server.connections.count > 0 ) {
-        [self closeAllConnections];
-        return NSTerminateLater;
-    } else {
-        return NSTerminateNow;
-    }
-}
-
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     [self stopListening:nil];
 }

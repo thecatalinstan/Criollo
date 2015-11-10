@@ -27,6 +27,9 @@
 @property (nonatomic, strong) CRHTTPServer* server;
 @property (nonatomic, strong) dispatch_queue_t isolationQueue;
 
+@property (nonatomic, readonly) BOOL isConnected;
+@property (nonatomic, readonly) BOOL isDisconnected;
+
 - (void)setupServer;
 - (void)closeAllConnections;
 
