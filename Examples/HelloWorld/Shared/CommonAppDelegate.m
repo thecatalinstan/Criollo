@@ -23,6 +23,10 @@
 @implementation CommonAppDelegate
 
 - (void)setupServer {
+
+    self.isolationQueue = dispatch_queue_create("IsolationQueue", DISPATCH_QUEUE_SERIAL);
+    dispatch_set_target_queue(self.isolationQueue, dispatch_get_main_queue());
+
     self.server = [[CRHTTPServer alloc] initWithDelegate:self];
 
     CRRouteHandlerBlock helloBlock = [CommonRequestHandler defaultHandler].helloWorldBlock;
@@ -99,9 +103,7 @@
 }
 
 - (void)server:(CRServer *)server didFinishRequest:(CRRequest *)request {
-#if LogDebug
-    [self logFormat:@" * Finished request %@ - %lu", request, request.response.statusCode];
-#endif
+    [self logFormat:@" * %@ - %@ - %lu", request.response.connection.remoteAddress, request, request.response.statusCode];
 }
 
 #pragma mark - Utils

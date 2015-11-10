@@ -16,7 +16,7 @@
 #endif
 
 #define PortNumber  10781
-#define LogDebug        1
+#define LogDebug        0
 
 #define LogMessageNotificationName  @"LogMessageNotification"
 
@@ -25,6 +25,7 @@
 @interface CommonAppDelegate : NSObject
 
 @property (nonatomic, strong) CRHTTPServer* server;
+@property (nonatomic, strong) dispatch_queue_t isolationQueue;
 
 - (void)setupServer;
 - (void)closeAllConnections;

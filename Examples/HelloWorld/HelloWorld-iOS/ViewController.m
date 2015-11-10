@@ -7,8 +7,12 @@
 //
 
 #import "ViewController.h"
+#import "AppDelegate.h"
 
 @interface ViewController ()
+
+@property (weak) AppDelegate* appDelegate;
+
 
 @end
 
@@ -16,7 +20,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+
+    self.appDelegate = [[UIApplication sharedApplication] delegate];
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:LogMessageNotificationName object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        dispatch_async(self.appDelegate.isolationQueue, ^{
+            NSAttributedString* attributtedString = note.object;
+            [self.logTextView.textStorage appendAttributedString:attributtedString];
+            [self.logTextView.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
+            [self.logTextView scrollRangeToVisible:NSMakeRange(self.logTextView.text.length - 1, 0)];
+        });
+    }];
+
+    self.logTextView.linkTextAttributes = self.appDelegate.linkTextAttributes;
+
+    [self.appDelegate startListening:nil];
+
 }
 
 - (void)didReceiveMemoryWarning {

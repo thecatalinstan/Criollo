@@ -17,10 +17,13 @@
 @implementation AppDelegate
 
 - (void)applicationWillFinishLaunching:(NSNotification *)notification {
-    [[NSNotificationCenter defaultCenter] addObserverForName:LogMessageNotificationName object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-        NSAttributedString* attributtedString = note.object;
-        [self.logTextView.textStorage appendAttributedString:attributtedString];
-        [self.logTextView.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
+    [[NSNotificationCenter defaultCenter] addObserverForName:LogMessageNotificationName object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        dispatch_async(self.isolationQueue, ^{
+            NSAttributedString* attributtedString = note.object;
+            [self.logTextView.textStorage appendAttributedString:attributtedString];
+            [self.logTextView.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
+            [self.logTextView scrollRangeToVisible:NSMakeRange(self.logTextView.string.length - 1, 0)];
+        });
     }];
 }
 
