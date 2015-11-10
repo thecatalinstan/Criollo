@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		AD04F4DF1BF249DB00456D38 /* CriolloiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D91BF0FF0200DFCF6B /* CriolloiOS.framework */; };
 		AD04F4E01BF249DB00456D38 /* CriolloiOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D91BF0FF0200DFCF6B /* CriolloiOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		AD3BB7061BF27DAB002EA278 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3BB7041BF27DAB002EA278 /* WindowController.m */; };
+		AD3BB7071BF27DAB002EA278 /* WindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD3BB7051BF27DAB002EA278 /* WindowController.xib */; };
 		ADC331E31BF0FF4100DFCF6B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC331E21BF0FF4100DFCF6B /* main.m */; };
 		ADC331E61BF0FF4100DFCF6B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC331E51BF0FF4100DFCF6B /* AppDelegate.m */; };
 		ADC331E91BF0FF4100DFCF6B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC331E81BF0FF4100DFCF6B /* ViewController.m */; };
@@ -88,6 +90,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AD3BB7031BF27DAB002EA278 /* WindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowController.h; sourceTree = "<group>"; };
+		AD3BB7041BF27DAB002EA278 /* WindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindowController.m; sourceTree = "<group>"; };
+		AD3BB7051BF27DAB002EA278 /* WindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WindowController.xib; sourceTree = "<group>"; };
 		ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Criollo.xcodeproj; path = ../../Criollo.xcodeproj; sourceTree = "<group>"; };
 		ADC331DE1BF0FF4100DFCF6B /* HelloWorld-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HelloWorld-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADC331E21BF0FF4100DFCF6B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -207,6 +212,9 @@
 				ADC332021BF0FF6C00DFCF6B /* Assets.xcassets */,
 				ADC332041BF0FF6C00DFCF6B /* MainMenu.xib */,
 				ADC332071BF0FF6C00DFCF6B /* Info.plist */,
+				AD3BB7031BF27DAB002EA278 /* WindowController.h */,
+				AD3BB7041BF27DAB002EA278 /* WindowController.m */,
+				AD3BB7051BF27DAB002EA278 /* WindowController.xib */,
 				ADC331FF1BF0FF6C00DFCF6B /* Supporting Files */,
 			);
 			path = "HelloWorld-Cocoa";
@@ -386,6 +394,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADC332031BF0FF6C00DFCF6B /* Assets.xcassets in Resources */,
+				AD3BB7071BF27DAB002EA278 /* WindowController.xib in Resources */,
 				ADC332061BF0FF6C00DFCF6B /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -416,6 +425,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD3BB7061BF27DAB002EA278 /* WindowController.m in Sources */,
 				ADC332011BF0FF6C00DFCF6B /* main.m in Sources */,
 				ADC331FE1BF0FF6C00DFCF6B /* AppDelegate.m in Sources */,
 				ADC3321D1BF1016000DFCF6B /* CommonRequestHandler.m in Sources */,

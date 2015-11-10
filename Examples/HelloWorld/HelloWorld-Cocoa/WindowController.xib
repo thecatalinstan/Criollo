@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9060"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="WindowController">
+            <connections>
+                <outlet property="logTextView" destination="zr6-26-0l1" id="r0G-kN-bkR"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="HelloWorld" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="JXm-MF-TMa">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" unifiedTitleAndToolbar="YES" fullSizeContentView="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="335" y="390" width="655" height="624"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
+            <view key="contentView" id="aDo-k6-6aS">
+                <rect key="frame" x="0.0" y="0.0" width="655" height="624"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9ef-Hu-EhS">
+                        <rect key="frame" x="20" y="20" width="620" height="584"/>
+                        <clipView key="contentView" id="hoU-bv-Ka2">
+                            <rect key="frame" x="0.0" y="0.0" width="620" height="584"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textView editable="NO" importsGraphics="NO" findStyle="bar" incrementalSearchingEnabled="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" dataDetection="YES" spellingCorrection="YES" id="zr6-26-0l1">
+                                    <rect key="frame" x="0.0" y="0.0" width="620" height="584"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <animations/>
+                                    <color key="backgroundColor" red="0.086274509799999996" green="0.086274509799999996" blue="0.1019607843" alpha="1" colorSpace="calibratedRGB"/>
+                                    <size key="minSize" width="620" height="584"/>
+                                    <size key="maxSize" width="620" height="10000000"/>
+                                    <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <size key="minSize" width="620" height="584"/>
+                                    <size key="maxSize" width="620" height="10000000"/>
+                                </textView>
+                            </subviews>
+                            <animations/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </clipView>
+                        <animations/>
+                        <scroller key="horizontalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="pZv-Yj-W17">
+                            <rect key="frame" x="0.0" y="568" width="620" height="16"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <animations/>
+                        </scroller>
+                        <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="bfs-m0-YmS">
+                            <rect key="frame" x="604" y="0.0" width="16" height="584"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <animations/>
+                        </scroller>
+                    </scrollView>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="9ef-Hu-EhS" secondAttribute="bottom" constant="20" id="8qX-vk-taI"/>
+                    <constraint firstItem="9ef-Hu-EhS" firstAttribute="leading" secondItem="aDo-k6-6aS" secondAttribute="leading" constant="20" id="Fgt-2N-dcF"/>
+                    <constraint firstItem="9ef-Hu-EhS" firstAttribute="top" secondItem="aDo-k6-6aS" secondAttribute="top" constant="20" id="cMg-NA-wKs"/>
+                    <constraint firstAttribute="trailing" secondItem="9ef-Hu-EhS" secondAttribute="trailing" constant="15" id="gb4-av-tYc"/>
+                </constraints>
+                <animations/>
+            </view>
+            <point key="canvasLocation" x="367.5" y="323"/>
+        </window>
+    </objects>
+</document>

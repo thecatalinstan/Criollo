@@ -11,7 +11,5 @@
 
 @interface AppDelegate : CommonAppDelegate <NSApplicationDelegate>
 
-@property (weak) IBOutlet NSWindow *window;
-
 @end
 

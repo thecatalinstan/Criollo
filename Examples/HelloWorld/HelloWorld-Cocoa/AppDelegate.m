@@ -7,25 +7,15 @@
 //
 
 #import "AppDelegate.h"
+#import "WindowController.h"
 
 @interface AppDelegate ()
 
-@property (unsafe_unretained) IBOutlet NSTextView *logTextView;
+@property (nonatomic, strong) WindowController* windowController;
 
 @end
 
 @implementation AppDelegate
-
-- (void)applicationWillFinishLaunching:(NSNotification *)notification {
-    [[NSNotificationCenter defaultCenter] addObserverForName:LogMessageNotificationName object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-        dispatch_async(self.isolationQueue, ^{
-            NSAttributedString* attributtedString = note.object;
-            [self.logTextView.textStorage appendAttributedString:attributtedString];
-            [self.logTextView.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
-            [self.logTextView scrollRangeToVisible:NSMakeRange(self.logTextView.string.length - 1, 0)];
-        });
-    }];
-}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     [self setupServer];
@@ -35,7 +25,7 @@
     [self.server addHandlerBlock:^(CRRequest *request, CRResponse *response, void (^completionHandler)()) {
         NSMutableData* imageData = [NSMutableData data];
 
-        CGImageRef windowImage = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionOnScreenOnly, (CGWindowID)weakSelf.window.windowNumber, kCGWindowImageBestResolution);
+        CGImageRef windowImage = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionOnScreenOnly, (CGWindowID)weakSelf.windowController.window.windowNumber, kCGWindowImageBestResolution);
         CGImageDestinationRef destination =  CGImageDestinationCreateWithData((CFMutableDataRef)imageData, kUTTypePNG, 1, NULL);
         CGImageDestinationAddImage(destination, windowImage, nil);
         CGImageDestinationFinalize(destination);
@@ -50,7 +40,8 @@
         completionHandler();
     } forPath:@"/screenshot" HTTPMethod:@"GET"];
 
-    [self startListening:nil];
+    self.windowController = [[WindowController alloc] initWithWindowNibName:@"WindowController"];
+    [self.windowController showWindow:nil];
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(CRApplication *)sender {
