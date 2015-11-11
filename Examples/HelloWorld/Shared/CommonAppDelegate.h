@@ -17,7 +17,7 @@
 
 #define PortNumber          10781
 #define LogConnections          1
-#define LogRequests             0
+#define LogRequests             1
 
 #define LogMessageNotificationName  @"LogMessageNotification"
 

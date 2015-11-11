@@ -52,7 +52,7 @@
                             <animations/>
                         </scroller>
                         <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="bfs-m0-YmS">
-                            <rect key="frame" x="625" y="0.0" width="15" height="400"/>
+                            <rect key="frame" x="624" y="0.0" width="16" height="400"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <animations/>
                         </scroller>
@@ -117,7 +117,7 @@
                             <animations/>
                             <buttonCell key="cell" type="roundTextured" title="Press + to start listening" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingMiddle" continuous="YES" enabled="NO" refusesFirstResponder="YES" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="grr-hB-dyM">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system" size="9"/>
+                                <font key="font" metaFont="miniSystem"/>
                             </buttonCell>
                         </button>
                     </toolbarItem>

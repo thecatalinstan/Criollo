@@ -36,24 +36,26 @@
 
         completionHandler();
 
-
     } forPath:@"/screenshot" HTTPMethod:@"GET"];
 
     return YES;
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application {
-//    [self stopListening:nil];
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-}
+//- (void)applicationWillResignActive:(UIApplication *)application {
+//    [self logDebugFormat:@"Will resign active"];
+//}
+//
+//- (void)applicationDidEnterBackground:(UIApplication *)application {
+//    [self logDebugFormat:@"Entered background"];
+//}
+//
+//- (void)applicationWillEnterForeground:(UIApplication *)application {
+//    [self logDebugFormat:@"Will enter foreground"];
+//}
+//
+//- (void)applicationDidBecomeActive:(UIApplication *)application {
+//    [self logDebugFormat:@"Did become active"];
+//}
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     [self stopListening:nil];

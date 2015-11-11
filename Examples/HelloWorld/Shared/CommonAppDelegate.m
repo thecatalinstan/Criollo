@@ -116,8 +116,10 @@
         [paths addObject:[self.baseURL URLByAppendingPathComponent:path]];
     }];
 
+    NSArray<NSURL*>* sortedPaths =[paths sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"absoluteString" ascending:YES]]];
+
     [self logFormat:@"Available paths are:"];
-    [paths enumerateObjectsUsingBlock:^(NSURL * _Nonnull obj, BOOL * _Nonnull stop) {
+    [sortedPaths enumerateObjectsUsingBlock:^(NSURL * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [self logFormat:@" * %@", obj.absoluteString];
     }];
 

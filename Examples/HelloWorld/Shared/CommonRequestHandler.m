@@ -65,9 +65,11 @@
             NSDate* startTime = [NSDate date];
 
             NSMutableString* responseString = [[NSMutableString alloc] init];
-            [responseString appendFormat:@"<h1>Status</h1>"];
-            [responseString appendFormat:@"<h2>Request:</h2><pre>%@</pre>", request.allHTTPHeaderFields];
-            [responseString appendFormat:@"<h2>Environment:</h2><pre>%@</pre>", request.env];
+            [responseString appendFormat:@"<h1>%@</h1>", [NSBundle mainBundle].bundleIdentifier];
+            [responseString appendFormat:@"<h2>Version %@ build %@</h2>", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
+            [responseString appendFormat:@"<h3>Request:</h2><pre>%@</pre>", request.allHTTPHeaderFields];
+            [responseString appendFormat:@"<h3>Environment:</h2><pre>%@</pre>", request.env];
+            [responseString appendFormat:@"<h3>Stack Trace:</h2><pre>%@</pre>", [NSThread callStackSymbols]];
             [responseString appendString:@"<hr/>"];
             [responseString appendFormat:@"<small>%@</small><br/>", _uname];
             [responseString appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
