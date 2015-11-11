@@ -15,8 +15,9 @@
 #import <Criollo/Criollo.h>
 #endif
 
-#define PortNumber  10781
-#define LogDebug        0
+#define PortNumber          10781
+#define LogConnections          1
+#define LogRequests             0
 
 #define LogMessageNotificationName  @"LogMessageNotification"
 
@@ -26,6 +27,7 @@
 
 @property (nonatomic, strong) CRHTTPServer* server;
 @property (nonatomic, strong) dispatch_queue_t isolationQueue;
+@property (nonatomic, strong) NSURL* baseURL;
 
 @property (nonatomic, readonly) BOOL isConnected;
 @property (nonatomic, readonly) BOOL isDisconnected;
@@ -38,6 +40,7 @@
 
 - (void)serverDidFailToStartWithError:(NSError*)error;
 - (void)serverDidStartAtURL:(NSURL*)URL;
+- (void)serverDidStopListening;
 
 - (NSDictionary*)logTextAtributes;
 - (NSDictionary*)logDebugAtributes;

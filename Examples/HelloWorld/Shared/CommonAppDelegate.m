@@ -48,7 +48,7 @@
 - (void)startListening:(id)sender {
     [self willChangeValueForKey:@"isDisconnected"];
     _isDisconnected = NO;
-    [self didChangeValueForKey:@"isDisconnected"];    _isConnected = NO;
+    [self didChangeValueForKey:@"isDisconnected"];
 
     NSError*serverError;
     if ( [self.server startListeningOnPortNumber:PortNumber error:&serverError] ) {
@@ -57,8 +57,8 @@
         if ( !result ) {
             address = @"127.0.0.1";
         }
-        NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d/", address, PortNumber]];
-        [self serverDidStartAtURL:URL];
+        self.baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d/", address, PortNumber]];
+        [self serverDidStartAtURL:self.baseURL];
 
         [self willChangeValueForKey:@"isConnected"];
         _isConnected = YES;
@@ -95,6 +95,7 @@
     _isDisconnected = YES;
     [self didChangeValueForKey:@"isDisconnected"];
 
+    [self serverDidStopListening];
 }
 
 - (void)closeAllConnections {
@@ -106,45 +107,48 @@
 
 - (void)serverDidStartAtURL:(NSURL *)URL {
     [self logFormat:@"Started HTTP server at %@", URL.absoluteString];
+
+    // Get the list of paths
+    NSDictionary<NSString*, NSMutableArray<CRRoute*>*>* routes = [[self.server valueForKey:@"routes"] mutableCopy];
+    NSMutableSet<NSURL*>* paths = [NSMutableSet set];
+    [routes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<CRRoute *> * _Nonnull obj, BOOL * _Nonnull stop) {
+        NSString* path = [key substringFromIndex:[key rangeOfString:@"/"].location + 1];
+        [paths addObject:[self.baseURL URLByAppendingPathComponent:path]];
+    }];
+
+    [self logFormat:@"Available paths are:"];
+    [paths enumerateObjectsUsingBlock:^(NSURL * _Nonnull obj, BOOL * _Nonnull stop) {
+        [self logFormat:@" * %@", obj.absoluteString];
+    }];
+
 }
 
 - (void)serverDidFailToStartWithError:(NSError *)error {
     [self logErrorFormat:@"Failed to start HTTP server. %@", error.localizedDescription];
 }
 
+- (void)serverDidStopListening {
+    [self logFormat:@"Stopped listening"];
+}
+
 #pragma mark - CRServerDelegate
 
-- (void)serverDidStartListening:(CRServer *)server {
-#if LogDebug
-    [self logDebugFormat:@" * Started listening on %@:%lu", server.configuration.CRServerInterface.length == 0 ? @"*" : server.configuration.CRServerInterface, server.configuration.CRServerPort];
-#endif
-}
-
-- (void)serverDidStopListening:(CRServer *)server {
-    [self logFormat:@"Stopped listening."];
-}
-
+#if LogConnections
 - (void)server:(CRServer *)server didAcceptConnection:(CRConnection *)connection {
-#if LogDebug
-    [self logDebugFormat:@" * Connection from %@:%lu", connection.remoteAddress, connection.remotePort];
-#endif
+    [self logDebugFormat:@" * Accepted connection from %@:%lu", connection.remoteAddress, connection.remotePort];
 }
 
 - (void)server:(CRServer *)server didCloseConnection:(CRConnection *)connection {
-#if LogDebug
-    [self logDebugFormat:@" * Disconnected."];
-#endif
-}
+    [self logDebugFormat:@" * Disconnected %@:%lu", connection.remoteAddress, connection.remotePort];
 
-- (void)server:(CRServer *)server didReceiveRequest:(CRRequest *)request {
-#if LogDebug
-    [self logDebugFormat:@" * Received request %@", request];
-#endif
 }
+#endif
 
+#if LogRequests
 - (void)server:(CRServer *)server didFinishRequest:(CRRequest *)request {
-    [self logFormat:@" * %@ - %@ - %lu", request.response.connection.remoteAddress, request, request.response.statusCode];
+    [self logDebugFormat:@" * %@ %@ - %lu - %@", request.response.connection.remoteAddress, request, request.response.statusCode, request.env[@"HTTP_USER_AGENT"]];
 }
+#endif
 
 #pragma mark - Utils
 

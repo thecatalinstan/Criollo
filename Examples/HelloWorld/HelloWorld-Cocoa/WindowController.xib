@@ -30,14 +30,14 @@
                             <rect key="frame" x="0.0" y="0.0" width="640" height="400"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textView editable="NO" importsGraphics="NO" findStyle="bar" incrementalSearchingEnabled="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" dataDetection="YES" spellingCorrection="YES" id="zr6-26-0l1">
+                                <textView editable="NO" importsGraphics="NO" findStyle="bar" incrementalSearchingEnabled="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" id="zr6-26-0l1">
                                     <rect key="frame" x="0.0" y="0.0" width="640" height="400"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <animations/>
                                     <color key="backgroundColor" red="0.086274509799999996" green="0.086274509799999996" blue="0.1019607843" alpha="1" colorSpace="calibratedRGB"/>
                                     <size key="minSize" width="640" height="400"/>
                                     <size key="maxSize" width="800" height="10000000"/>
-                                    <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="insertionPointColor" name="alternateSelectedControlTextColor" catalog="System" colorSpace="catalog"/>
                                     <size key="minSize" width="640" height="400"/>
                                     <size key="maxSize" width="800" height="10000000"/>
                                 </textView>
