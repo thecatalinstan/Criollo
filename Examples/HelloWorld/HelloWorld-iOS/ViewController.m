@@ -29,6 +29,8 @@
 - (IBAction)startListening:(id)sender;
 - (IBAction)stopListening:(id)sender;
 
+- (void)adjustDetailsButtonSize;
+
 @end
 
 @implementation ViewController
@@ -44,7 +46,7 @@
     [newItems addObject:statusBarButtonItem];
     self.toolbar.items = newItems;
 
-    [self.statusDetailsButton sizeToFit];
+    [self adjustDetailsButtonSize];
 
     self.appDelegate = [[UIApplication sharedApplication] delegate];
     [self.appDelegate addObserver:self forKeyPath:@"isConnected" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
@@ -67,7 +69,7 @@
             [self.logTextView scrollRangeToVisible:NSMakeRange(self.logTextView.text.length, 0)];
 
             self.statusDetailsButton.text = attributtedString.string;
-            [self.statusDetailsButton sizeToFit];
+            [self adjustDetailsButtonSize];
         });
     }];
 
@@ -113,12 +115,12 @@
 
             dispatch_async(self.appDelegate.isolationQueue, ^{
                 self.statusDetailsButton.text = statusText;
-                [self.statusDetailsButton sizeToFit];
+                [self adjustDetailsButtonSize];
                 self.statusImageItem.image = [UIImage imageNamed:statusImageName];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), self.appDelegate.isolationQueue, ^{
                     dispatch_barrier_async(self.appDelegate.isolationQueue, ^{
                         self.statusDetailsButton.text = self.appDelegate.isDisconnected ? @"Press + to start listening" : @"";
-                        [self.statusDetailsButton sizeToFit];
+                        [self adjustDetailsButtonSize];
                     });
                 });
                 self.startItem.enabled = self.appDelegate.isDisconnected;
@@ -135,6 +137,7 @@
 }
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
+    NSLog(@"URL = %@", URL);
     if ( [SFSafariViewController class] != NULL ) {
         SFSafariViewController* safari = [[SFSafariViewController alloc] initWithURL:URL];
         safari.modalPresentationStyle = UIModalPresentationPageSheet;
@@ -144,6 +147,20 @@
     } else {
         return YES;
     }
+}
+
+- (void)adjustDetailsButtonSize {
+    CGFloat offset = 20;
+    CGFloat edgeOffset = CGRectGetMinX( [[self.startItem valueForKey:@"view"] frame] );
+    CGFloat toolbarWidth = CGRectGetWidth( self.toolbar.frame );
+    CGFloat stopButtonRightEdge = CGRectGetMaxX( [[self.stopItem valueForKey:@"view"] frame] );
+    CGFloat maxWidth = toolbarWidth - edgeOffset - offset - stopButtonRightEdge;
+
+    CGFloat newWidth = MIN(maxWidth, [self.statusDetailsButton sizeThatFits:CGSizeMake(maxWidth, CGRectGetHeight(self.statusDetailsButton.frame))].width);
+    CGRect newFrame = self.statusDetailsButton.frame;
+    newFrame.size.width = newWidth;
+    self.statusDetailsButton.frame = newFrame;
+
 }
 
 @end
