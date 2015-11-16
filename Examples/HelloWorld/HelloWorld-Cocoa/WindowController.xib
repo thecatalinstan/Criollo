@@ -52,7 +52,7 @@
                             <animations/>
                         </scroller>
                         <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="bfs-m0-YmS">
-                            <rect key="frame" x="624" y="0.0" width="16" height="400"/>
+                            <rect key="frame" x="625" y="0.0" width="15" height="400"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <animations/>
                         </scroller>

@@ -12,6 +12,18 @@
 @interface ViewController () <UITextViewDelegate>
 
 @property (weak) AppDelegate* appDelegate;
+@property (weak, nonatomic) IBOutlet UITextView *logTextView;
+
+@property (weak) IBOutlet UIBarButtonItem *statusImageItem;
+@property (weak) IBOutlet UIBarButtonItem *startItem;
+@property (weak) IBOutlet UIBarButtonItem *stopItem;
+
+@property (weak) IBOutlet UIBarButtonItem *statusDetailsButton;
+
+@property (strong) NSDataDetector* linkChecker;
+
+- (IBAction)startListening:(id)sender;
+- (IBAction)stopListening:(id)sender;
 
 @end
 
@@ -26,22 +38,29 @@
     [self.appDelegate addObserver:self forKeyPath:@"isConnected" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
     [self.appDelegate addObserver:self forKeyPath:@"isDisconnected" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
 
+    NSError* linkCheckerError;
+    self.linkChecker = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:&linkCheckerError];
+
     [[NSNotificationCenter defaultCenter] addObserverForName:LogMessageNotificationName object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
         dispatch_async(self.appDelegate.isolationQueue, ^{
-            NSAttributedString* attributtedString = note.object;
+            NSMutableAttributedString* attributtedString = [note.object mutableCopy];
+            NSRange attributedStringRange = NSMakeRange(self.logTextView.text.length, attributtedString.length);
+
+            NSArray<NSTextCheckingResult*>* matches = [self.linkChecker matchesInString:attributtedString.string options:0 range:NSMakeRange(0, attributtedString.length)];
+            [matches enumerateObjectsUsingBlock:^(NSTextCheckingResult * _Nonnull match, NSUInteger idx, BOOL * _Nonnull stop) {
+                [attributtedString addAttribute:NSLinkAttributeName value:match.URL range:match.range];
+            }];
 
             [self.logTextView.textStorage appendAttributedString:attributtedString];
             [self.logTextView.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
-            [self.logTextView scrollRangeToVisible:NSMakeRange(self.logTextView.text.length-1, 0)];
+            [self.logTextView scrollRangeToVisible:attributedStringRange];
 
-//            self.statusDetailsButton.title = attributtedString.string;
+            self.statusDetailsButton.title = attributtedString.string;
         });
     }];
 
     self.logTextView.linkTextAttributes = self.appDelegate.linkTextAttributes;
     [self.logTextView scrollRectToVisible:CGRectZero animated:NO];
-    [self.appDelegate startListening:nil];
-
 }
 
 - (void)didReceiveMemoryWarning {
@@ -51,6 +70,14 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
+}
+
+- (void)startListening:(id)sender {
+    [self.appDelegate startListening:sender];
+}
+
+- (void)stopListening:(id)sender {
+    [self.appDelegate stopListening:sender];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
@@ -73,13 +100,15 @@
             }
 
             dispatch_async(self.appDelegate.isolationQueue, ^{
-//                self.statusDetailsButton.title = statusText;
-//                self.statusImageItem.image = [NSImage imageNamed:statusImageName];
+                self.statusDetailsButton.title = statusText;
+                self.statusImageItem.image = [UIImage imageNamed:statusImageName];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), self.appDelegate.isolationQueue, ^{
                     dispatch_barrier_async(self.appDelegate.isolationQueue, ^{
-//                        self.statusDetailsButton.title = self.appDelegate.isDisconnected ? @"Press + to start listening" : @"";
+                        self.statusDetailsButton.title = self.appDelegate.isDisconnected ? @"Press + to start listening" : @"";
                     });
                 });
+                self.startItem.enabled = self.appDelegate.isDisconnected;
+                self.stopItem.enabled = self.appDelegate.isConnected;
             });
         }
     });

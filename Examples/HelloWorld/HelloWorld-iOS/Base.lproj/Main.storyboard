@@ -22,7 +22,19 @@
                                 <rect key="frame" x="0.0" y="556" width="600" height="44"/>
                                 <animations/>
                                 <items>
-                                    <barButtonItem title="Item" id="ReO-bU-Z9U"/>
+                                    <barButtonItem systemItem="play" id="ReO-bU-Z9U">
+                                        <connections>
+                                            <action selector="startListening:" destination="BYZ-38-t0r" id="Rlc-rl-ICB"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="tQ4-C0-lnk"/>
+                                    <barButtonItem enabled="NO" systemItem="pause" id="bva-Ra-oCG">
+                                        <connections>
+                                            <action selector="stopListening:" destination="BYZ-38-t0r" id="aWe-Yo-yEG"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="GAJ-7i-PDu"/>
+                                    <barButtonItem title="Item" id="zqw-6N-uNn"/>
                                 </items>
                             </toolbar>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" indicatorStyle="black" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="96O-sM-ysH">
@@ -31,7 +43,6 @@
                                 <color key="backgroundColor" red="0.086274509799999996" green="0.086274509799999996" blue="0.1019607843" alpha="1" colorSpace="calibratedRGB"/>
                                 <attributedString key="attributedText"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" enablesReturnKeyAutomatically="YES"/>
-                                <dataDetectorType key="dataDetectorTypes" link="YES"/>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="cGz-lv-DGp"/>
                                 </connections>
@@ -59,6 +70,9 @@
                     </view>
                     <connections>
                         <outlet property="logTextView" destination="96O-sM-ysH" id="Kjt-kW-YDL"/>
+                        <outlet property="startItem" destination="ReO-bU-Z9U" id="cgy-eC-hfh"/>
+                        <outlet property="statusImageItem" destination="zqw-6N-uNn" id="9XS-kf-vbG"/>
+                        <outlet property="stopItem" destination="bva-Ra-oCG" id="VE6-xq-LiC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
