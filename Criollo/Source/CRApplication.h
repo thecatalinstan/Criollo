@@ -60,11 +60,11 @@ FOUNDATION_EXPORT int CRApplicationMain(int argc, char * const argv[], id<CRAppl
 - (void)terminate:(id)sender;
 - (void)replyToApplicationShouldTerminate:(BOOL)shouldTerminate;
 
-- (void)logString:(NSString *)string;
+- (void)log:(NSString *)string;
 - (void)logFormat:(NSString *)format, ...;
 - (void)logFormat:(NSString *)format args:(va_list)args;
 
-- (void)logErrorString:(NSString *)string;
+- (void)logError:(NSString *)string;
 - (void)logErrorFormat:(NSString *)format, ...;
 - (void)logErrorFormat:(NSString *)format args:(va_list)args;
 

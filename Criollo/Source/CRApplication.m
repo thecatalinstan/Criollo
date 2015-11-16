@@ -222,7 +222,7 @@ int CRApplicationMain(int argc, char * const argv[], id<CRApplicationDelegate> d
 
 #pragma mark - Output
 
-- (void)logString:(NSString *)string {
+- (void)log:(NSString *)string {
     [self logFormat:string];
 }
 
@@ -246,7 +246,7 @@ int CRApplicationMain(int argc, char * const argv[], id<CRApplicationDelegate> d
     }
 }
 
-- (void)logErrorString:(NSString *)string {
+- (void)logError:(NSString *)string {
     [self logErrorFormat:string];
 }
 
