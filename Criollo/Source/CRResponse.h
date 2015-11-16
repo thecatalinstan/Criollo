@@ -31,7 +31,10 @@
 - (void)sendString:(NSString*)string;
 
 - (void)writeFormat:(NSString*)format, ...;
+- (void)writeFormat:(NSString*)format args:(va_list)args;
+
 - (void)sendFormat:(NSString*)format, ...;
+- (void)sendFormat:(NSString*)format args:(va_list)args;
 
 - (void)buildHeaders;
 - (void)writeData:(NSData*)data finish:(BOOL)flag;
