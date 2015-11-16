@@ -2,8 +2,8 @@
 //  main.m
 //  HelloWorld-Cocoa
 //
-//  Created by Cătălin Stan on 11/8/15.
-//  Copyright © 2015 Catalin Stan. All rights reserved.
+//  Created by Cătălin Stan on 11/9/15.
+//
 //
 
 #import <Cocoa/Cocoa.h>

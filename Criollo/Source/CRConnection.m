@@ -46,22 +46,6 @@
     return _CRLFData;
 }
 
-- (NSString *)remoteAddress {
-    return self.socket.connectedHost;
-}
-
-- (NSUInteger)remotePort {
-    return self.socket.connectedPort;
-}
-
-- (NSString *)localAddress {
-    return  self.socket.localHost;
-}
-
-- (NSUInteger)localPort {
-    return self.socket.localPort;
-}
-
 #pragma mark - Responses
 
 - (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode {
@@ -89,6 +73,10 @@
         self.socket = socket;
         self.socket.delegate = self;
         self.requests = [NSMutableArray array];
+        _remoteAddress = self.socket.connectedHost;
+        _remotePort = self.socket.connectedPort;
+        _localAddress = self.socket.localHost;
+        _localPort = self.socket.localPort;
     }
     return self;
 }

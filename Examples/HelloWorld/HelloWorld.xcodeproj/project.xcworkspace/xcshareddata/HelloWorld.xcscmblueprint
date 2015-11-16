@@ -7,10 +7,10 @@
     "1A1A47D5B86E7CE952A443F553C63A444BD2D339" : 0,
     "1C75F1C5CFCB95B3702F6F632FA05ED5244B519E" : 0
   },
-  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "3AF5D2C6-AB8A-41B5-A611-F8D921ECAC77",
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "6B441789-2AEF-4B27-8781-6DB38909C629",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "1A1A47D5B86E7CE952A443F553C63A444BD2D339" : "Criollo",
-    "1C75F1C5CFCB95B3702F6F632FA05ED5244B519E" : "CriolloLibraries\/CocoaAsyncSocket"
+    "1A1A47D5B86E7CE952A443F553C63A444BD2D339" : "Criollo\/",
+    "1C75F1C5CFCB95B3702F6F632FA05ED5244B519E" : "Criollo\/Libraries\/CocoaAsyncSocket\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "HelloWorld",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,

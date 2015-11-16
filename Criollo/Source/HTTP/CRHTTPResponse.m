@@ -67,7 +67,7 @@
 
     if ( self.isChunked ) {
         // Chunk size + CRLF
-        [dataToSend appendData: [[NSString stringWithFormat:@"%lx", data.length] dataUsingEncoding:NSUTF8StringEncoding]];
+        [dataToSend appendData: [[NSString stringWithFormat:@"%lx", (unsigned long)data.length] dataUsingEncoding:NSUTF8StringEncoding]];
         [dataToSend appendData: [CRConnection CRLFData]];
     }
 

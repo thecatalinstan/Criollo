@@ -6,9 +6,10 @@
 //  Copyright (c) 2015 Catalin Stan. All rights reserved.
 //
 
-#import <Criollo/Criollo.h>
+#import "CommonAppDelegate.h"
 
-@interface AppDelegate : NSObject <CRApplicationDelegate>
+@interface AppDelegate : CommonAppDelegate <CRApplicationDelegate>
+
 
 
 @end
