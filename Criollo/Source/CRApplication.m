@@ -225,9 +225,12 @@ int CRApplicationMain(int argc, char * const argv[], id<CRApplicationDelegate> d
 - (void)logErrorFormat:(NSString *)format, ... {
     va_list args;
     va_start(args, format);
-    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
+    [self logErrorFormat:format args:args];
     va_end(args);
-    
+}
+
+- (void)logErrorFormat:(NSString *)format args:(va_list)args {
+    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
     BOOL shouldLog = YES;
     
     if ( [self.delegate respondsToSelector:@selector(application:shouldLogError:)] ) {
@@ -242,15 +245,18 @@ int CRApplicationMain(int argc, char * const argv[], id<CRApplicationDelegate> d
 - (void)logFormat:(NSString *)format, ... {
     va_list args;
     va_start(args, format);
-    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
+    [self logFormat:format args:args];
     va_end(args);
-    
+}
+
+- (void)logFormat:(NSString *)format args:(va_list)args {
+    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
     BOOL shouldLog = YES;
-    
+
     if ( [self.delegate respondsToSelector:@selector(application:shouldLogString:)] ) {
         [self.delegate application:self shouldLogString:formattedString];
     }
-    
+
     if ( shouldLog ) {
         [[NSFileHandle fileHandleWithStandardOutput] writeData: [[formattedString stringByAppendingString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding]];
     }
