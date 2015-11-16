@@ -138,7 +138,6 @@
 }
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
-    NSLog(@"URL = %@", URL);
     if ( [SFSafariViewController class] != NULL ) {
         SFSafariViewController* safari = [[SFSafariViewController alloc] initWithURL:URL];
         safari.modalPresentationStyle = UIModalPresentationPageSheet;

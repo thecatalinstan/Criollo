@@ -11,7 +11,6 @@
 		AD04F4E01BF249DB00456D38 /* CriolloiOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D91BF0FF0200DFCF6B /* CriolloiOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AD3BB7061BF27DAB002EA278 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3BB7041BF27DAB002EA278 /* WindowController.m */; };
 		AD3BB7071BF27DAB002EA278 /* WindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD3BB7051BF27DAB002EA278 /* WindowController.xib */; };
-		ADA3C1DE1BFA1751005CA4CE /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADA3C1DD1BFA1751005CA4CE /* SafariServices.framework */; };
 		ADC331E31BF0FF4100DFCF6B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC331E21BF0FF4100DFCF6B /* main.m */; };
 		ADC331E61BF0FF4100DFCF6B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC331E51BF0FF4100DFCF6B /* AppDelegate.m */; };
 		ADC331E91BF0FF4100DFCF6B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC331E81BF0FF4100DFCF6B /* ViewController.m */; };
@@ -94,7 +93,6 @@
 		AD3BB7031BF27DAB002EA278 /* WindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowController.h; sourceTree = "<group>"; };
 		AD3BB7041BF27DAB002EA278 /* WindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindowController.m; sourceTree = "<group>"; };
 		AD3BB7051BF27DAB002EA278 /* WindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WindowController.xib; sourceTree = "<group>"; };
-		ADA3C1DD1BFA1751005CA4CE /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.1.sdk/System/Library/Frameworks/SafariServices.framework; sourceTree = DEVELOPER_DIR; };
 		ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Criollo.xcodeproj; path = ../../Criollo.xcodeproj; sourceTree = "<group>"; };
 		ADC331DE1BF0FF4100DFCF6B /* HelloWorld-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HelloWorld-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADC331E21BF0FF4100DFCF6B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -129,7 +127,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADA3C1DE1BFA1751005CA4CE /* SafariServices.framework in Frameworks */,
 				AD04F4DF1BF249DB00456D38 /* CriolloiOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -155,7 +152,6 @@
 		ADC331CA1BF0FEE300DFCF6B = {
 			isa = PBXGroup;
 			children = (
-				ADA3C1DD1BFA1751005CA4CE /* SafariServices.framework */,
 				ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */,
 				ADC332161BF100A600DFCF6B /* Shared */,
 				ADC332261BF1064700DFCF6B /* HelloWorld */,
