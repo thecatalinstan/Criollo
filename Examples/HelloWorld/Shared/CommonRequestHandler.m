@@ -56,6 +56,19 @@
     return _helloWorldBlock;
 }
 
+- (void (^)(CRRequest *, CRResponse *, void (^)()))jsonHelloWorldBlock {
+    __block void(^_jsonHelloWorldBlock)(CRRequest*, CRResponse*, void(^)());
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _jsonHelloWorldBlock = ^(CRRequest* request, CRResponse* response, void(^completionHandler)()) {
+            [response setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+            [response sendData:[NSJSONSerialization dataWithJSONObject:@{@"status": @YES, @"message": @"Hello World"} options:0 error:nil]];
+            completionHandler();
+        };
+    });
+    return _jsonHelloWorldBlock;
+}
+
 - (void (^)(CRRequest *, CRResponse *, void (^)()))statusBlock {
     __block void(^_statusBlock)(CRRequest*, CRResponse*, void(^)());
     static dispatch_once_t onceToken;
