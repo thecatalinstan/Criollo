@@ -222,24 +222,8 @@ int CRApplicationMain(int argc, char * const argv[], id<CRApplicationDelegate> d
 
 #pragma mark - Output
 
-- (void)logErrorFormat:(NSString *)format, ... {
-    va_list args;
-    va_start(args, format);
-    [self logErrorFormat:format args:args];
-    va_end(args);
-}
-
-- (void)logErrorFormat:(NSString *)format args:(va_list)args {
-    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
-    BOOL shouldLog = YES;
-    
-    if ( [self.delegate respondsToSelector:@selector(application:shouldLogError:)] ) {
-        [self.delegate application:self shouldLogError:formattedString];
-    }
-    
-    if ( shouldLog ) {
-        [[NSFileHandle fileHandleWithStandardError] writeData: [[formattedString stringByAppendingString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-    }
+- (void)logString:(NSString *)string {
+    [self logFormat:string];
 }
 
 - (void)logFormat:(NSString *)format, ... {
@@ -259,6 +243,30 @@ int CRApplicationMain(int argc, char * const argv[], id<CRApplicationDelegate> d
 
     if ( shouldLog ) {
         [[NSFileHandle fileHandleWithStandardOutput] writeData: [[formattedString stringByAppendingString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+}
+
+- (void)logErrorString:(NSString *)string {
+    [self logErrorFormat:string];
+}
+
+- (void)logErrorFormat:(NSString *)format, ... {
+    va_list args;
+    va_start(args, format);
+    [self logErrorFormat:format args:args];
+    va_end(args);
+}
+
+- (void)logErrorFormat:(NSString *)format args:(va_list)args {
+    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
+    BOOL shouldLog = YES;
+
+    if ( [self.delegate respondsToSelector:@selector(application:shouldLogError:)] ) {
+        [self.delegate application:self shouldLogError:formattedString];
+    }
+
+    if ( shouldLog ) {
+        [[NSFileHandle fileHandleWithStandardError] writeData: [[formattedString stringByAppendingString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding]];
     }
 }
 

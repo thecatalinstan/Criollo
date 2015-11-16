@@ -26,18 +26,17 @@
 
 - (void)writeData:(NSData*)data;
 - (void)sendData:(NSData*)data;
+- (void)writeData:(NSData*)data finish:(BOOL)flag;
 
 - (void)writeString:(NSString*)string;
-- (void)sendString:(NSString*)string;
-
 - (void)writeFormat:(NSString*)format, ...;
 - (void)writeFormat:(NSString*)format args:(va_list)args;
 
+- (void)sendString:(NSString*)string;
 - (void)sendFormat:(NSString*)format, ...;
 - (void)sendFormat:(NSString*)format args:(va_list)args;
 
 - (void)buildHeaders;
-- (void)writeData:(NSData*)data finish:(BOOL)flag;
 - (void)finish;
 
 @end
