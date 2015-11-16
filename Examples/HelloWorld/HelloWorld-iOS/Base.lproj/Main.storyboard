@@ -27,14 +27,12 @@
                                             <action selector="startListening:" destination="BYZ-38-t0r" id="Rlc-rl-ICB"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="tQ4-C0-lnk"/>
                                     <barButtonItem enabled="NO" systemItem="pause" id="bva-Ra-oCG">
                                         <connections>
                                             <action selector="stopListening:" destination="BYZ-38-t0r" id="aWe-Yo-yEG"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="GAJ-7i-PDu"/>
-                                    <barButtonItem title="Item" id="zqw-6N-uNn"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="DgZ-oT-oiH"/>
                                 </items>
                             </toolbar>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" indicatorStyle="black" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="96O-sM-ysH">
@@ -71,11 +69,20 @@
                     <connections>
                         <outlet property="logTextView" destination="96O-sM-ysH" id="Kjt-kW-YDL"/>
                         <outlet property="startItem" destination="ReO-bU-Z9U" id="cgy-eC-hfh"/>
-                        <outlet property="statusImageItem" destination="zqw-6N-uNn" id="9XS-kf-vbG"/>
+                        <outlet property="statusDetailsButton" destination="0Mj-vg-qtn" id="Pb5-rB-pqS"/>
                         <outlet property="stopItem" destination="bva-Ra-oCG" id="VE6-xq-LiC"/>
+                        <outlet property="toolbar" destination="cai-cz-FKy" id="v1w-NT-nG2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="999" text="Press + to start listening" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" id="0Mj-vg-qtn">
+                    <rect key="frame" x="0.0" y="0.0" width="42" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <animations/>
+                    <fontDescription key="fontDescription" type="system" weight="thin" pointSize="14"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </objects>
             <point key="canvasLocation" x="537" y="506"/>
         </scene>

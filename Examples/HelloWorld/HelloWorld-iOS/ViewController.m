@@ -18,7 +18,9 @@
 @property (weak) IBOutlet UIBarButtonItem *startItem;
 @property (weak) IBOutlet UIBarButtonItem *stopItem;
 
-@property (weak) IBOutlet UIBarButtonItem *statusDetailsButton;
+@property (weak) IBOutlet UIToolbar *toolbar;
+
+@property (weak) IBOutlet UILabel *statusDetailsButton;
 
 @property (strong) NSDataDetector* linkChecker;
 
@@ -33,6 +35,14 @@
     [super viewDidLoad];
 
     [self setNeedsStatusBarAppearanceUpdate];
+
+    UIBarButtonItem* statusBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.statusDetailsButton];
+
+    NSMutableArray* newItems = self.toolbar.items.mutableCopy;
+    [newItems addObject:statusBarButtonItem];
+    self.toolbar.items = newItems;
+
+    [self.statusDetailsButton sizeToFit];
 
     self.appDelegate = [[UIApplication sharedApplication] delegate];
     [self.appDelegate addObserver:self forKeyPath:@"isConnected" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
@@ -55,7 +65,8 @@
             [self.logTextView.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
             [self.logTextView scrollRangeToVisible:attributedStringRange];
 
-            self.statusDetailsButton.title = attributtedString.string;
+            self.statusDetailsButton.text = attributtedString.string;
+            [self.statusDetailsButton sizeToFit];
         });
     }];
 
@@ -100,11 +111,13 @@
             }
 
             dispatch_async(self.appDelegate.isolationQueue, ^{
-                self.statusDetailsButton.title = statusText;
+                self.statusDetailsButton.text = statusText;
+                [self.statusDetailsButton sizeToFit];
                 self.statusImageItem.image = [UIImage imageNamed:statusImageName];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), self.appDelegate.isolationQueue, ^{
                     dispatch_barrier_async(self.appDelegate.isolationQueue, ^{
-                        self.statusDetailsButton.title = self.appDelegate.isDisconnected ? @"Press + to start listening" : @"";
+                        self.statusDetailsButton.text = self.appDelegate.isDisconnected ? @"Press + to start listening" : @"";
+                        [self.statusDetailsButton sizeToFit];
                     });
                 });
                 self.startItem.enabled = self.appDelegate.isDisconnected;
