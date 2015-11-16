@@ -40,8 +40,9 @@
 
     [self setNeedsStatusBarAppearanceUpdate];
 
-    UIBarButtonItem* statusBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.statusDetailsButton];
+    self.toolbar.autoresizingMask = self.toolbar.autoresizingMask | UIViewAutoresizingFlexibleHeight;
 
+    UIBarButtonItem* statusBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.statusDetailsButton];
     NSMutableArray* newItems = self.toolbar.items.mutableCopy;
     [newItems addObject:statusBarButtonItem];
     self.toolbar.items = newItems;
@@ -150,6 +151,8 @@
 }
 
 - (void)adjustDetailsButtonSize {
+//    [self.statusDetailsButton invalidateIntrinsicContentSize];
+
     CGFloat offset = 20;
     CGFloat edgeOffset = CGRectGetMinX( [[self.startItem valueForKey:@"view"] frame] );
     CGFloat toolbarWidth = CGRectGetWidth( self.toolbar.frame );
@@ -160,7 +163,10 @@
     CGRect newFrame = self.statusDetailsButton.frame;
     newFrame.size.width = newWidth;
     self.statusDetailsButton.frame = newFrame;
+}
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [self.toolbar invalidateIntrinsicContentSize];
 }
 
 @end
