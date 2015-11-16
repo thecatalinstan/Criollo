@@ -19,7 +19,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
 
-        (CRApp as! CRApplication).logFormat("%s", "asdfasdfs");
+        let app:CRApplication! = CRApp as! CRApplication;
 
         // Create the server and add some handlers to do some work
         self.server = CRHTTPServer(delegate:self);
@@ -56,39 +56,31 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             }
 
             // Set the base url. This is only for logging
-            self.baseURL = NSURL(string: String(format: "http://%s:%d/", address, PortNumber))
+            self.baseURL = NSURL(string: String(format: "http://%@:%d/", address, PortNumber))
 
             // Log the paths we can handle
 
-//            // Get the list of paths
-//            NSDictionary<NSString*, NSMutableArray<CRRoute*>*>* routes = [[self.server valueForKey:@"routes"] mutableCopy];
-//            NSMutableSet<NSURL*>* paths = [NSMutableSet set];
-//            [routes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<CRRoute *> * _Nonnull obj, BOOL * _Nonnull stop) {
-//            NSString* path = [key substringFromIndex:[key rangeOfString:@"/"].location + 1];
-//            [paths addObject:[self.baseURL URLByAppendingPathComponent:path]];
-//            }];
-//
-//            NSArray<NSURL*>* sortedPaths =[paths sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"absoluteString" ascending:YES]]];
-//
-//            [self logFormat:@"Available paths are:"];
-//            [sortedPaths enumerateObjectsUsingBlock:^(NSURL * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//            [self logFormat:@" * %@", obj.absoluteString];
-//            }];
+            // Get the list of paths from the registered routes
+            let routes:NSDictionary!  = self.server.valueForKey("routes") as! NSDictionary;
+            let paths:NSMutableSet! = NSMutableSet();
+            routes.enumerateKeysAndObjectsUsingBlock({ (key:AnyObject,  object:AnyObject, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
+                let routeKey:NSString! = key as! NSString;
+                let path:String = routeKey.substringFromIndex(routeKey.rangeOfString("/").location + 1);
+                let pathURL:NSURL! = self.baseURL.URLByAppendingPathComponent(path);
+                paths.addObject(pathURL);
+            });
 
+            let sortedPaths:NSArray = paths.sortedArrayUsingDescriptors([NSSortDescriptor(key:"absoluteString", ascending:true)]);
 
+            app.log("Available paths are");
+            sortedPaths.enumerateObjectsUsingBlock({ (obj:AnyObject, idx:Int, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
+                app.log(String(format: " * %@", obj.absoluteString));
+            });
+
+        } else {
+            app.logError(String("Failed to start HTTP server. %@", serverError?.localizedDescription));
+            app .terminate(nil);
         }
-//            [self serverDidStartAtURL:self.baseURL];
-
-//            [self serverDidFailToStartWithError:serverError];
-//
-//            [self willChangeValueForKey:@"isConnected"];
-//            _isConnected = NO;
-//            [self didChangeValueForKey:@"isConnected"];
-//
-//            [self willChangeValueForKey:@"isDisconnected"];
-//            _isDisconnected = YES;
-//            [self didChangeValueForKey:@"isDisconnected"];
-//        }
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
