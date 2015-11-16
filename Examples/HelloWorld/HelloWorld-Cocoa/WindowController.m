@@ -35,7 +35,6 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:LogMessageNotificationName object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
         dispatch_async(self.appDelegate.isolationQueue, ^{
             NSMutableAttributedString* attributtedString = [note.object mutableCopy];
-            NSRange attributedStringRange = NSMakeRange(self.logTextView.string.length, attributtedString.length);
 
             self.statusDetailsButton.title = attributtedString.string;
 
