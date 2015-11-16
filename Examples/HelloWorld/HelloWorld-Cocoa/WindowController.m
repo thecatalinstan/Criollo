@@ -46,7 +46,7 @@
 
             [self.logTextView.textStorage appendAttributedString:attributtedString];
             [self.logTextView.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
-            [self.logTextView scrollRangeToVisible:attributedStringRange];
+            [self.logTextView scrollRangeToVisible:NSMakeRange(self.logTextView.string.length, 0)];
         });
     }];
 

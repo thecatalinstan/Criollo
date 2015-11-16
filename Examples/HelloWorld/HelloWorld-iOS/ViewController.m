@@ -6,6 +6,8 @@
 //
 //
 
+#import <SafariServices/SafariServices.h>
+
 #import "ViewController.h"
 #import "AppDelegate.h"
 
@@ -54,7 +56,6 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:LogMessageNotificationName object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
         dispatch_async(self.appDelegate.isolationQueue, ^{
             NSMutableAttributedString* attributtedString = [note.object mutableCopy];
-            NSRange attributedStringRange = NSMakeRange(self.logTextView.text.length, attributtedString.length);
 
             NSArray<NSTextCheckingResult*>* matches = [self.linkChecker matchesInString:attributtedString.string options:0 range:NSMakeRange(0, attributtedString.length)];
             [matches enumerateObjectsUsingBlock:^(NSTextCheckingResult * _Nonnull match, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -63,7 +64,7 @@
 
             [self.logTextView.textStorage appendAttributedString:attributtedString];
             [self.logTextView.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
-            [self.logTextView scrollRangeToVisible:attributedStringRange];
+            [self.logTextView scrollRangeToVisible:NSMakeRange(self.logTextView.text.length, 0)];
 
             self.statusDetailsButton.text = attributtedString.string;
             [self.statusDetailsButton sizeToFit];
@@ -134,8 +135,15 @@
 }
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    return YES;
+    if ( [SFSafariViewController class] != NULL ) {
+        SFSafariViewController* safari = [[SFSafariViewController alloc] initWithURL:URL];
+        safari.modalPresentationStyle = UIModalPresentationPageSheet;
+        safari.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+        [self presentViewController:safari animated:YES completion:^{}];
+        return NO;
+    } else {
+        return YES;
+    }
 }
 
 @end
