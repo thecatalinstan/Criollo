@@ -53,7 +53,7 @@
     [self didChangeValueForKey:@"isDisconnected"];
 
     NSError*serverError;
-    if ( [self.server startListeningOnPortNumber:PortNumber error:&serverError] ) {
+    if ( [self.server startListening:&serverError portNumber:PortNumber] ) {
         NSString* address;
         BOOL result = [self getIPAddress:&address];
         if ( !result ) {

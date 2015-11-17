@@ -32,7 +32,14 @@
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
-    [self stopListening:nil];
+    if (self.isConnected) {
+        [self stopListening:nil];
+    }
+}
+
+- (void)serverDidFailToStartWithError:(NSError *)error {
+    [super serverDidFailToStartWithError:error];
+    [CRApp terminate:nil];
 }
 
 @end

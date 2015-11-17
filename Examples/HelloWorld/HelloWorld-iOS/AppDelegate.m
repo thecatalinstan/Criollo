@@ -58,7 +58,9 @@
 //}
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    [self stopListening:nil];
+    if (self.isConnected) {
+        [self stopListening:nil];
+    }
 }
 
 #pragma mark - Logging

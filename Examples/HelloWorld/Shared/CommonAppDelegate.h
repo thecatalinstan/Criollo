@@ -15,7 +15,7 @@
 #import <Criollo/Criollo.h>
 #endif
 
-#define PortNumber          10781
+#define PortNumber          22
 #define LogConnections          1
 #define LogRequests             1
 
