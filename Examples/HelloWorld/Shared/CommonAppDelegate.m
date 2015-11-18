@@ -12,7 +12,6 @@
 #include <ifaddrs.h>
 #include <arpa/inet.h>
 
-
 @interface CommonAppDelegate ()  <CRServerDelegate> {
 }
 
