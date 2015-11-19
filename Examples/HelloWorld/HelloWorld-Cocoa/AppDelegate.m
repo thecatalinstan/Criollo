@@ -45,7 +45,9 @@
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
-    [self stopListening:nil];
+    if (self.isConnected) {
+        [self stopListening:nil];
+    }
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {

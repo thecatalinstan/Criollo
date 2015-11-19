@@ -18,5 +18,4 @@
 
 + (instancetype)defaultHandler;
 
-
 @end

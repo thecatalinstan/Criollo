@@ -71,19 +71,26 @@
 - (void)writeFormat:(NSString*)format, ... {
     va_list args;
     va_start(args, format);
-    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
+    [self writeFormat:format args:args];
     va_end(args);
+}
+
+- (void)writeFormat:(NSString *)format args:(va_list)args {
+    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
     [self writeString:formattedString];
 }
 
 - (void)sendFormat:(NSString*)format, ... {
     va_list args;
     va_start(args, format);
-    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
+    [self sendFormat:format args:args];
     va_end(args);
-    [self sendString:formattedString];
 }
 
+- (void)sendFormat:(NSString *)format args:(va_list)args {
+    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
+    [self sendString:formattedString];
+}
 
 - (void)writeData:(NSData *)data finish:(BOOL)flag {
     if ( flag ) {

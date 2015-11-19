@@ -378,6 +378,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = CR;
+				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Cătălin Stan";
 				TargetAttributes = {
@@ -533,6 +534,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 arm64";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -662,6 +664,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.criolloframework.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};

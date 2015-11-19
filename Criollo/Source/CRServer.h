@@ -44,8 +44,8 @@ FOUNDATION_EXPORT NSString* const CRResponseKey;
 
 - (BOOL)startListening;
 - (BOOL)startListening:(NSError**)error;
-- (BOOL)startListeningOnPortNumber:(NSUInteger)portNumber error:(NSError**)error;
-- (BOOL)startListeningOnPortNumber:(NSUInteger)portNumber interface:(NSString*)interface error:(NSError**)error;
+- (BOOL)startListening:(NSError**)error portNumber:(NSUInteger)portNumber;
+- (BOOL)startListening:(NSError**)error portNumber:(NSUInteger)portNumber interface:(NSString*)interface;
 - (void)stopListening;
 - (void)closeAllConnections;
 

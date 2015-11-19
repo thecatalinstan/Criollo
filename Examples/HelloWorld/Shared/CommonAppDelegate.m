@@ -12,7 +12,6 @@
 #include <ifaddrs.h>
 #include <arpa/inet.h>
 
-
 @interface CommonAppDelegate ()  <CRServerDelegate> {
 }
 
@@ -53,7 +52,7 @@
     [self didChangeValueForKey:@"isDisconnected"];
 
     NSError*serverError;
-    if ( [self.server startListeningOnPortNumber:PortNumber error:&serverError] ) {
+    if ( [self.server startListening:&serverError portNumber:PortNumber] ) {
         NSString* address;
         BOOL result = [self getIPAddress:&address];
         if ( !result ) {

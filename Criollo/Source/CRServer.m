@@ -57,18 +57,18 @@ NSString* const CRResponseKey = @"CRResponse";
 #pragma mark - Listening
 
 - (BOOL)startListening {
-    return [self startListeningOnPortNumber:0 interface:nil error:nil];
+    return [self startListening:nil portNumber:0 interface:nil];
 }
 
 - (BOOL)startListening:(NSError *__autoreleasing *)error {
-    return [self startListeningOnPortNumber:0 interface:nil error:error];
+    return [self startListening:error portNumber:0 interface:nil];
 }
 
-- (BOOL)startListeningOnPortNumber:(NSUInteger)portNumber error:(NSError *__autoreleasing *)error {
-    return [self startListeningOnPortNumber:portNumber interface:nil error:error];
+- (BOOL)startListening:(NSError *__autoreleasing *)error portNumber:(NSUInteger)portNumber {
+    return [self startListening:error portNumber:portNumber interface:nil];
 }
 
-- (BOOL)startListeningOnPortNumber:(NSUInteger)portNumber interface:(NSString *)interface error:(NSError *__autoreleasing *)error {
+- (BOOL)startListening:(NSError *__autoreleasing *)error portNumber:(NSUInteger)portNumber interface:(NSString *)interface {
 
     if ( portNumber != 0 ) {
         self.configuration.CRServerPort = portNumber;
