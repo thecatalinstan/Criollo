@@ -9,6 +9,6 @@
 #import <Criollo/Criollo.h>
 #import "AppDelegate.h"
 
-int main(int argc, char * const argv[]) {
+int main(int argc, const char * argv[]) {
     return CRApplicationMain(argc, argv, [AppDelegate new]);
 }
