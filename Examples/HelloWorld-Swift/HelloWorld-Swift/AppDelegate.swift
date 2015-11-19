@@ -30,6 +30,12 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
         // Add a header that says who we are :)
         let identifyBlock:CRRouteBlock = { (request:CRRequest, response:CRResponse, completionHandler:CRRouteCompletionBlock) -> Void in
             response.setValue("\(bundle.bundleIdentifier!), \(bundle.objectForInfoDictionaryKey("CFBundleShortVersionString") as! String) build \(bundle.objectForInfoDictionaryKey("CFBundleVersion") as! String)", forHTTPHeaderField: "Server");
+
+            if ( request.cookie["session_cookie"] == nil ) {
+                response.setCookie("session_cookie", value:NSUUID().UUIDString, path:"/", expires:nil, domain:nil, secure:false);
+            }
+            response.setCookie("persistant_cookie", value:NSUUID().UUIDString, path:"/", expires:NSDate.distantFuture(), domain:nil, secure:false);
+
             completionHandler();
         };
         self.server.addBlock(identifyBlock);
@@ -83,6 +89,21 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             env.enumerateKeysAndObjectsUsingBlock({ (key:AnyObject,  object:AnyObject, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
                 let envKey:String = key as! String;
                 responseString += "\(envKey): ";
+                if let value = object as? String {
+                    responseString += "\(value)";
+                } else if let value = object as? NSNumber {
+                    responseString += "\(value)";
+                }
+                responseString += "\n";
+            });
+            responseString += "</pre>";
+
+            // Cookies
+            let cookies:NSDictionary! = request.cookie as NSDictionary;
+            responseString += "<h3>Request Cookies:</h2><pre>";
+            cookies.enumerateKeysAndObjectsUsingBlock({ (key:AnyObject,  object:AnyObject, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
+                let cookieName:String = key as! String;
+                responseString += "\(cookieName): ";
                 if let value = object as? String {
                     responseString += "\(value)";
                 } else if let value = object as? NSNumber {

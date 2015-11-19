@@ -36,7 +36,6 @@
         if ( ! request.cookie[@"session_cookie"] ) {
             [response setCookie:@"session_cookie" value:[NSUUID UUID].UUIDString path:@"/" expires:nil domain:nil secure:NO];
         }
-
         [response setCookie:@"persistant_cookie" value:[NSUUID UUID].UUIDString path:@"/" expires:[NSDate distantFuture] domain:nil secure:NO];
 
         completionHandler();
