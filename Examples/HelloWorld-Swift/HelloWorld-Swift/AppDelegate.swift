@@ -16,10 +16,11 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
 
     var server:CRHTTPServer!;
     var baseURL:NSURL!;
+    var app:CRApplication!;
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
 
-        let app:CRApplication! = CRApp as! CRApplication;
+        self.app = CRApp as! CRApplication;
 
         // Create the server and add some handlers to do some work
         self.server = CRHTTPServer(delegate:self);
@@ -96,7 +97,6 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             responseString += "<small>\(uname)</small><br/>";
             responseString += String(format: "<small>Task took: %.4fms</small>", startTime.timeIntervalSinceNow * -1000);
 
-
             response.setValue("text/html; charset=utf-8", forHTTPHeaderField: "Content-type");
             response.setValue("\(responseString.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))", forHTTPHeaderField: "Content-Length");
             response.sendString(responseString);
@@ -120,7 +120,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             }
 
             // Set the base url. This is only for logging
-            self.baseURL = NSURL(string: String(format: "http://%@:%d/", address!, PortNumber))
+            self.baseURL = NSURL(string: "http://\(address!):\(PortNumber)")
 
             // Log the paths we can handle
 
@@ -136,20 +136,41 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
 
             let sortedPaths:NSArray = paths.sortedArrayUsingDescriptors([NSSortDescriptor(key:"absoluteString", ascending:true)]);
 
-            app.log("Available paths are");
+            self.app.log("Available paths are");
             sortedPaths.enumerateObjectsUsingBlock({ (obj:AnyObject, idx:Int, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
-                app.log(String(format: " * %@", obj.absoluteString));
+                self.app.log(" * \(obj.absoluteString )");
             });
 
         } else {
-            app.logError(String(format: "Failed to start HTTP server. %@", (serverError?.localizedDescription)!));
-            app .terminate(nil);
+            self.app.logError("Failed to start HTTP server. \(serverError?.localizedDescription)");
+            self.app.terminate(nil);
         }
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
-        // Insert code here to tear down your application
+        self.server.stopListening();
     }
+
+    func server(server: CRServer!, didAcceptConnection connection: CRConnection!) {
+        if ( LogConnections ) {
+            self.app.log(" * Accepted connection from \(connection.remoteAddress):\(connection.remotePort)");
+        }
+    }
+
+    func server(server: CRServer!, didCloseConnection connection: CRConnection!) {
+        if ( LogConnections ) {
+            self.app.log(" * Disconnected \(connection.remoteAddress):\(connection.remotePort)");
+        }
+    }
+
+
+    func server(server: CRServer!, didFinishRequest request: CRRequest!) {
+        if ( LogRequests ) {
+            let env:NSDictionary! = request.valueForKey("env") as! NSDictionary;
+            self.app.log(" * \(request.response.connection!.remoteAddress) \(request.description) - \(request.response.statusCode) - \(env["HTTP_USER_AGENT"])");
+        }
+    }
+
 
 
 }

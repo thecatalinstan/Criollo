@@ -4,5 +4,7 @@
 
 @import Foundation;
 
+// These are C functions because they use POSIX API's
+
 BOOL getIPAddress(NSString** address);
 NSString* systemInfo(void);
