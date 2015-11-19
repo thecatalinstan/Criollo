@@ -190,8 +190,8 @@ NSString* const CRResponseKey = @"CRResponse";
             currentRouteIndex++;
         };
         while (currentRouteIndex < routes.count ) {
-            CRRouteHandlerBlock handlerBlock = routes[currentRouteIndex].handlerBlock;
-            handlerBlock(request, response, completionHandler);
+            CRRouteBlock block = routes[currentRouteIndex].block;
+            block(request, response, completionHandler);
         }
     }]];
 
@@ -205,15 +205,15 @@ NSString* const CRResponseKey = @"CRResponse";
 
 #pragma mark - CRRouter
 
-- (void)addHandlerBlock:(CRRouteHandlerBlock)handlerBlock {
-    [self addHandlerBlock:handlerBlock forPath:nil HTTPMethod:nil];
+- (void)addBlock:(CRRouteBlock)block {
+    [self addBlock:block forPath:nil HTTPMethod:nil];
 }
 
-- (void)addHandlerBlock:(CRRouteHandlerBlock)handlerBlock forPath:(NSString*)path {
-    [self addHandlerBlock:handlerBlock forPath:path HTTPMethod:nil];
+- (void)addBlock:(CRRouteBlock)block forPath:(NSString*)path {
+    [self addBlock:block forPath:path HTTPMethod:nil];
 }
 
-- (void)addHandlerBlock:(CRRouteHandlerBlock)handlerBlock forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
+- (void)addBlock:(CRRouteBlock)block forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
     NSArray<NSString*>* methods;
 
     if ( HTTPMethod == nil ) {
@@ -230,7 +230,7 @@ NSString* const CRResponseKey = @"CRResponse";
         path = [path stringByAppendingString:@"/"];
     }
 
-    CRRoute* route = [CRRoute routeWithHandlerBlock:handlerBlock];
+    CRRoute* route = [CRRoute routeWithBlock:block];
 
     [methods enumerateObjectsUsingBlock:^(NSString * _Nonnull method, NSUInteger idx, BOOL * _Nonnull stop) {
 

@@ -52,9 +52,9 @@ FOUNDATION_EXPORT NSString* const CRResponseKey;
 - (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket;
 - (void)didCloseConnection:(CRConnection*)connection;
 
-- (void)addHandlerBlock:(CRRouteHandlerBlock)handlerBlock;
-- (void)addHandlerBlock:(CRRouteHandlerBlock)handlerBlock forPath:(NSString*)path;
-- (void)addHandlerBlock:(CRRouteHandlerBlock)handlerBlock forPath:(NSString*)path HTTPMethod:(NSString*)HTTPMethod;
+- (void)addBlock:(CRRouteBlock)block;
+- (void)addBlock:(CRRouteBlock)block forPath:(NSString*)path;
+- (void)addBlock:(CRRouteBlock)block forPath:(NSString*)path HTTPMethod:(NSString*)HTTPMethod;
 
 - (NSArray<CRRoute*>*)routesForPath:(NSString*)path;
 - (NSArray<CRRoute*>*)routesForPath:(NSString*)path HTTPMethod:(NSString*)HTTPMethod;

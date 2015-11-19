@@ -8,5 +8,5 @@
 
 import Criollo
 
-CRApplicationMain(Process.argc, Process.unsafeArgv, AppDelegate());
+CRApplicationMain(Process.argc, nil, AppDelegate());
 

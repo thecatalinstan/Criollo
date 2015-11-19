@@ -8,14 +8,14 @@
 
 @class CRRequest, CRResponse;
 
-typedef void(^CRRouteHandlerBlock)(CRRequest* request, CRResponse* response, void(^completionHandler)(void));
+typedef void(^CRRouteBlock)(CRRequest* request, CRResponse* response, void(^completionHandler)(void));
 
 @interface CRRoute : NSObject
 
-@property (nonatomic, strong) CRRouteHandlerBlock handlerBlock;
+@property (nonatomic, strong) CRRouteBlock block;
 
-+ (CRRoute*)routeWithHandlerBlock:(CRRouteHandlerBlock)handlerBlock;
++ (CRRoute*)routeWithBlock:(CRRouteBlock)block;
 
-- (instancetype)initWithHandlerBlock:(CRRouteHandlerBlock)handlerBlock NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithBlock:(CRRouteBlock)block NS_DESIGNATED_INITIALIZER;
 
 @end

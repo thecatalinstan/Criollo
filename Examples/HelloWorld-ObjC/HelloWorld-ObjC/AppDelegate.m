@@ -28,20 +28,20 @@
     self.server = [[CRHTTPServer alloc] initWithDelegate:self];
 
     // Prints a simple hello world as text/plain
-    CRRouteHandlerBlock helloBlock = ^(CRRequest *request, CRResponse *response, void (^completionHandler)(void) ) {
+    CRRouteBlock helloBlock = ^(CRRequest *request, CRResponse *response, void (^completionHandler)(void) ) {
         [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
         [response sendString:@"Hello World"];
         completionHandler();
     };
-    [self.server addHandlerBlock:helloBlock forPath:@"/"];
+    [self.server addBlock:helloBlock forPath:@"/"];
 
     // Prints a hello world JSON object as application/json
-    CRRouteHandlerBlock jsonHelloBlock = ^(CRRequest *request, CRResponse *response, void (^completionHandler)(void) ) {
+    CRRouteBlock jsonHelloBlock = ^(CRRequest *request, CRResponse *response, void (^completionHandler)(void) ) {
 
         NSError *jsonError;
         NSData* jsonData = [NSJSONSerialization dataWithJSONObject:@{@"status": @YES, @"message": @"Hello World"} options:NSJSONWritingPrettyPrinted error:&jsonError];
 
-        if ( jsonError != nil ) {
+        if ( jsonError == nil ) {
             [response setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-type"];
             [response sendData:jsonData];
         } else {
@@ -51,11 +51,11 @@
         completionHandler();
 
     };
-    [self.server addHandlerBlock:jsonHelloBlock forPath:@"/json"];
+    [self.server addBlock:jsonHelloBlock forPath:@"/json"];
 
     // Prints some more info as text/html
     NSString *uname = systemInfo();
-    CRRouteHandlerBlock statusBlock = ^(CRRequest *request, CRResponse *response, void (^completionHandler)(void) ) {
+    CRRouteBlock statusBlock = ^(CRRequest *request, CRResponse *response, void (^completionHandler)(void) ) {
 
         NSDate *startTime = [NSDate date];
 
@@ -99,7 +99,7 @@
         completionHandler();
 
     };
-    [self.server addHandlerBlock:statusBlock forPath:@"/status"];
+    [self.server addBlock:statusBlock forPath:@"/status"];
 
     // Start listening
     NSError *serverError;

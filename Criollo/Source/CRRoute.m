@@ -14,18 +14,19 @@
 
 @implementation CRRoute
 
-+ (CRRoute *)routeWithHandlerBlock:(CRRouteHandlerBlock)handlerBlock {
-    return [[CRRoute alloc] initWithHandlerBlock:handlerBlock];
++ (CRRoute *)routeWithBlock:(CRRouteBlock)block {
+    return [[CRRoute alloc] initWithBlock:block];
 }
 
 - (instancetype)init {
-    return [self initWithHandlerBlock:nil];
+    return [self initWithBlock:^(CRRequest *request, CRResponse *response, void (^completionHandler)(void)) {
+    }];
 }
 
-- (instancetype)initWithHandlerBlock:(CRRouteHandlerBlock)handlerBlock {
+- (instancetype)initWithBlock:(CRRouteBlock)block {
     self = [super init];
     if ( self != nil ) {
-        _handlerBlock = handlerBlock;
+        _block = block;
     }
     return self;
 }

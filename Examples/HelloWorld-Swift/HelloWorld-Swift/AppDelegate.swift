@@ -26,15 +26,15 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
         self.server = CRHTTPServer(delegate:self);
 
         // Prints a simple hello world as text/plain
-        let helloBlock:CRRouteHandlerBlock = { (request:CRRequest!, response:CRResponse!, completionHandler:((Void) -> Void)!) -> Void in
+        let helloBlock:CRRouteBlock = { (request:CRRequest!, response:CRResponse!, completionHandler:((Void) -> Void)!) -> Void in
             response.setValue("text/plain", forHTTPHeaderField: "Content-type");
             response.sendString("Hello World");
             completionHandler();
         };
-        self.server.addHandlerBlock(helloBlock, forPath: "/");
+        self.server.addBlock(helloBlock, forPath: "/");
 
         // Prints a hello world JSON object as application/json
-        let jsonHelloBlock:CRRouteHandlerBlock = { (request:CRRequest!, response:CRResponse!, completionHandler:((Void) -> Void)!) -> Void in
+        let jsonHelloBlock:CRRouteBlock = { (request:CRRequest!, response:CRResponse!, completionHandler:((Void) -> Void)!) -> Void in
             do {
                 response.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-type");
                 try response.sendData(NSJSONSerialization.dataWithJSONObject(["status": true, "message": "Hello World"], options:NSJSONWritingOptions.PrettyPrinted));
@@ -44,11 +44,11 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             }
             completionHandler();
         };
-        self.server.addHandlerBlock(jsonHelloBlock, forPath: "/json");
+        self.server.addBlock(jsonHelloBlock, forPath: "/json");
 
         // Prints some more info as text/html
         let uname = systemInfo();
-        let statusBlock:CRRouteHandlerBlock = { (request:CRRequest!, response:CRResponse!, completionHandler:((Void) -> Void)!) -> Void in
+        let statusBlock:CRRouteBlock = { (request:CRRequest!, response:CRResponse!, completionHandler:((Void) -> Void)!) -> Void in
 
             let startTime:NSDate! = NSDate();
 
@@ -105,7 +105,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             completionHandler();
 
         };
-        self.server.addHandlerBlock(statusBlock, forPath: "/status");
+        self.server.addBlock(statusBlock, forPath: "/status");
 
         // Start listening
         var serverError:NSError?;

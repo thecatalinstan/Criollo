@@ -20,7 +20,7 @@
     __weak AppDelegate* waakSelf = self;
 
     // Ablock that creates a screenshot and sends it to the clinet
-    [self.server addHandlerBlock:^(CRRequest *request, CRResponse *response, void (^completionHandler)()) {
+    [self.server addBlock:^(CRRequest *request, CRResponse *response, void (^completionHandler)()) {
 
         UIView* hostView = waakSelf.window.rootViewController.view;
 

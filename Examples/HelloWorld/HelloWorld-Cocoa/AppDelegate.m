@@ -22,7 +22,7 @@
 
     __weak AppDelegate* weakSelf = self;
     // A block that creates a screenshot and sends it to the clinet
-    [self.server addHandlerBlock:^(CRRequest *request, CRResponse *response, void (^completionHandler)()) {
+    [self.server addBlock:^(CRRequest *request, CRResponse *response, void (^completionHandler)()) {
         NSMutableData* imageData = [NSMutableData data];
 
         CGImageRef windowImage = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionOnScreenOnly, (CGWindowID)weakSelf.windowController.window.windowNumber, kCGWindowImageBestResolution);

@@ -29,13 +29,13 @@
 
     self.server = [[CRHTTPServer alloc] initWithDelegate:self];
 
-    CRRouteHandlerBlock helloBlock = [CommonRequestHandler defaultHandler].helloWorldBlock;
-    CRRouteHandlerBlock jsonHelloBlock = [CommonRequestHandler defaultHandler].jsonHelloWorldBlock;
-    CRRouteHandlerBlock statusBlock = [CommonRequestHandler defaultHandler].statusBlock;
+    CRRouteBlock helloBlock = [CommonRequestHandler defaultHandler].helloWorldBlock;
+    CRRouteBlock jsonHelloBlock = [CommonRequestHandler defaultHandler].jsonHelloWorldBlock;
+    CRRouteBlock statusBlock = [CommonRequestHandler defaultHandler].statusBlock;
 
-    [self.server addHandlerBlock:helloBlock forPath:@"/"];
-    [self.server addHandlerBlock:jsonHelloBlock forPath:@"/json"];
-    [self.server addHandlerBlock:statusBlock forPath:@"/status" HTTPMethod:@"GET"];
+    [self.server addBlock:helloBlock forPath:@"/"];
+    [self.server addBlock:jsonHelloBlock forPath:@"/json"];
+    [self.server addBlock:statusBlock forPath:@"/status" HTTPMethod:@"GET"];
 
     [self willChangeValueForKey:@"isConnected"];
     _isConnected = NO;
