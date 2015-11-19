@@ -185,11 +185,14 @@ NSString* const CRResponseKey = @"CRResponse";
 
     [self.workerQueue addOperation:[NSBlockOperation blockOperationWithBlock:^{
         NSArray<CRRoute*>* routes = [self routesForPath:request.URL.path HTTPMethod:request.method];
+        __block BOOL shouldStopExecutingBlocks = NO;
         __block NSUInteger currentRouteIndex = 0;
         void(^completionHandler)(void) = ^{
+            shouldStopExecutingBlocks = NO;
             currentRouteIndex++;
         };
-        while (currentRouteIndex < routes.count ) {
+        while (!shouldStopExecutingBlocks && currentRouteIndex < routes.count ) {
+            shouldStopExecutingBlocks = YES;
             CRRouteBlock block = routes[currentRouteIndex].block;
             block(request, response, completionHandler);
         }
@@ -223,15 +226,16 @@ NSString* const CRResponseKey = @"CRResponse";
     }
 
     if ( path == nil ) {
-        path = @"";
+        path = @"*";
     }
 
-    if ( ![path hasSuffix:@"/"] ) {
+    if ( ![path isEqualToString:@"*"] && ![path hasSuffix:@"/"] ) {
         path = [path stringByAppendingString:@"/"];
     }
 
     CRRoute* route = [CRRoute routeWithBlock:block];
 
+    // Add the
     [methods enumerateObjectsUsingBlock:^(NSString * _Nonnull method, NSUInteger idx, BOOL * _Nonnull stop) {
 
         NSString* routePath = [method stringByAppendingString:path];
@@ -239,16 +243,22 @@ NSString* const CRResponseKey = @"CRResponse";
         if ( ![self.routes[routePath] isKindOfClass:[NSMutableArray class]] ) {
             NSMutableArray<CRRoute*>* parentRoutes = [NSMutableArray array];
 
+            // Add the "*" routes
+            NSString* anyPathRoutePath = [method stringByAppendingString:@"*"];
+            if ( self.routes[anyPathRoutePath] != nil ) {
+                [parentRoutes addObjectsFromArray:self.routes[anyPathRoutePath]];
+            }
             // Add all parent routes
-            __block NSString* parentPath = [method stringByAppendingString:@"/"];
+            __block NSString* parentRoutePath = [method stringByAppendingString:@"/"];
             [routePath.pathComponents enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if ( [parentPath isEqualToString:[method stringByAppendingString:@"/"]] ) {
+                if ( [parentRoutePath isEqualToString:[method stringByAppendingString:@"/"]] ) {
                     return;
                 }
-                if ( self.routes[parentPath] != nil ) {
-                    [parentRoutes addObjectsFromArray:self.routes[parentPath]];
+
+                if ( self.routes[parentRoutePath] != nil ) {
+                    [parentRoutes addObjectsFromArray:self.routes[parentRoutePath]];
                 }
-                parentPath = [parentPath stringByAppendingFormat:@"%@/", obj];
+                parentRoutePath = [parentRoutePath stringByAppendingFormat:@"%@/", obj];
             }];
 
             self.routes[routePath] = parentRoutes;
@@ -262,10 +272,16 @@ NSString* const CRResponseKey = @"CRResponse";
         [descendantRoutesKeys enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [self.routes[obj] addObject:route];
         }];
+
+        if ( [path isEqualToString:@"*"] ) {
+            [self.routes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<CRRoute *> * _Nonnull obj, BOOL * _Nonnull stop) {
+                if ( ![obj.lastObject isEqual:route] ) {
+                    [obj addObject:route];
+                }
+            }];
+        }
         
     }];
-
-//    NSLog(@"%@", self.routes);
 }
 
 - (NSArray<CRRoute*>*)routesForPath:(NSString*)path {

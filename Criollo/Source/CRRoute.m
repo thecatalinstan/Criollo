@@ -19,7 +19,7 @@
 }
 
 - (instancetype)init {
-    return [self initWithBlock:^(CRRequest *request, CRResponse *response, void (^completionHandler)(void)) {
+    return [self initWithBlock:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
     }];
 }
 
