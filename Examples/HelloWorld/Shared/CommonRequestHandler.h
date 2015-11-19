@@ -8,13 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
-@class CRRequest, CRResponse;
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#import <CriolloiOS/CriolloiOS.h>
+#else
+#import <Criollo/Criollo.h>
+#endif
 
 @interface CommonRequestHandler : NSObject
 
-@property (nonatomic, readonly) void(^helloWorldBlock)(CRRequest*, CRResponse*, void(^)());
-@property (nonatomic, readonly) void(^jsonHelloWorldBlock)(CRRequest*, CRResponse*, void(^)());
-@property (nonatomic, readonly) void(^statusBlock)(CRRequest*, CRResponse*, void(^)());
+@property (nonatomic, readonly) CRRouteBlock identifyBlock;
+@property (nonatomic, readonly) CRRouteBlock helloWorldBlock;
+@property (nonatomic, readonly) CRRouteBlock jsonHelloWorldBlock;
+@property (nonatomic, readonly) CRRouteBlock statusBlock;
 
 + (instancetype)defaultHandler;
 

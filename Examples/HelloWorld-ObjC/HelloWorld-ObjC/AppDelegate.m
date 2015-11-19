@@ -27,8 +27,16 @@
     // Create the server and add some handlers to do some work
     self.server = [[CRHTTPServer alloc] initWithDelegate:self];
 
+    NSBundle *bundle = [NSBundle mainBundle];
+
+    // Add a header that says who we are :)
+    [self.server addBlock:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
+        [response setValue:[NSString stringWithFormat:@"%@, %@ build %@", bundle.bundleIdentifier, [bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [bundle objectForInfoDictionaryKey:@"CFBundleVersion"]] forHTTPHeaderField:@"Server"];
+        completionHandler();
+    }];
+
     // Prints a simple hello world as text/plain
-    CRRouteBlock helloBlock = ^(CRRequest *request, CRResponse *response, void (^completionHandler)(void) ) {
+    CRRouteBlock helloBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler ) {
         [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
         [response sendString:@"Hello World"];
         completionHandler();
@@ -36,7 +44,7 @@
     [self.server addBlock:helloBlock forPath:@"/"];
 
     // Prints a hello world JSON object as application/json
-    CRRouteBlock jsonHelloBlock = ^(CRRequest *request, CRResponse *response, void (^completionHandler)(void) ) {
+    CRRouteBlock jsonHelloBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler ) {
 
         NSError *jsonError;
         NSData* jsonData = [NSJSONSerialization dataWithJSONObject:@{@"status": @YES, @"message": @"Hello World"} options:NSJSONWritingPrettyPrinted error:&jsonError];
@@ -55,16 +63,15 @@
 
     // Prints some more info as text/html
     NSString *uname = systemInfo();
-    CRRouteBlock statusBlock = ^(CRRequest *request, CRResponse *response, void (^completionHandler)(void) ) {
+    CRRouteBlock statusBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler ) {
 
         NSDate *startTime = [NSDate date];
 
         NSMutableString *responseString = [NSMutableString string];
 
         // Bundle info
-        NSBundle *bundle= [NSBundle mainBundle];
         [responseString appendFormat:@"<h1>%@</h1>", bundle.bundleIdentifier ];
-        [responseString appendFormat:@"<h2>Version %@ build %@</h2>", [bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [bundle objectForInfoDictionaryKey:@"CFBundleVersion"]];
+        [responseString appendFormat:@"<h2>Version %@ build %@</h2>", bundleVersion, bundleBuild];
 
         // Headers
         [responseString appendString:@"<h3>Request Headers:</h2><pre>"];
@@ -123,6 +130,9 @@
         NSDictionary<NSString*, NSMutableArray<CRRoute*>*>* routes = [[self.server valueForKey:@"routes"] mutableCopy];
         NSMutableSet<NSURL*>* paths = [NSMutableSet set];
         [routes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<CRRoute *> * _Nonnull obj, BOOL * _Nonnull stop) {
+            if ( [key hasSuffix:@"*"] ) {
+                return;
+            }
             NSString* path = [key substringFromIndex:[key rangeOfString:@"/"].location + 1];
             [paths addObject:[self.baseURL URLByAppendingPathComponent:path]];
         }];
@@ -133,7 +143,7 @@
         [sortedPaths enumerateObjectsUsingBlock:^(NSURL * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [CRApp logFormat:@" * %@", obj.absoluteString];
         }];
-        
+
     } else {
         [CRApp logErrorFormat:@"Failed to start HTTP server. %@", serverError.localizedDescription];
         [CRApp terminate:nil];

@@ -29,10 +29,12 @@
 
     self.server = [[CRHTTPServer alloc] initWithDelegate:self];
 
+    CRRouteBlock identifyBlock = [CommonRequestHandler defaultHandler].identifyBlock;
     CRRouteBlock helloBlock = [CommonRequestHandler defaultHandler].helloWorldBlock;
     CRRouteBlock jsonHelloBlock = [CommonRequestHandler defaultHandler].jsonHelloWorldBlock;
     CRRouteBlock statusBlock = [CommonRequestHandler defaultHandler].statusBlock;
 
+    [self.server addBlock:identifyBlock];
     [self.server addBlock:helloBlock forPath:@"/"];
     [self.server addBlock:jsonHelloBlock forPath:@"/json"];
     [self.server addBlock:statusBlock forPath:@"/status" HTTPMethod:@"GET"];
@@ -113,6 +115,9 @@
     NSDictionary<NSString*, NSMutableArray<CRRoute*>*>* routes = [[self.server valueForKey:@"routes"] mutableCopy];
     NSMutableSet<NSURL*>* paths = [NSMutableSet set];
     [routes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<CRRoute *> * _Nonnull obj, BOOL * _Nonnull stop) {
+        if ( [key hasSuffix:@"*"] ) {
+            return;
+        }
         NSString* path = [key substringFromIndex:[key rangeOfString:@"/"].location + 1];
         [paths addObject:[self.baseURL URLByAppendingPathComponent:path]];
     }];

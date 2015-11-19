@@ -25,8 +25,17 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
         // Create the server and add some handlers to do some work
         self.server = CRHTTPServer(delegate:self);
 
+        let bundle:NSBundle! = NSBundle.mainBundle();
+
+        // Add a header that says who we are :)
+        let identifyBlock:CRRouteBlock = { (request:CRRequest, response:CRResponse, completionHandler:CRRouteCompletionBlock) -> Void in
+            response.setValue("\(bundle.bundleIdentifier!), \(bundle.objectForInfoDictionaryKey("CFBundleShortVersionString") as! String) build \(bundle.objectForInfoDictionaryKey("CFBundleVersion") as! String)", forHTTPHeaderField: "Server");
+            completionHandler();
+        };
+        self.server.addBlock(identifyBlock);
+
         // Prints a simple hello world as text/plain
-        let helloBlock:CRRouteBlock = { (request:CRRequest!, response:CRResponse!, completionHandler:((Void) -> Void)!) -> Void in
+        let helloBlock:CRRouteBlock = { (request:CRRequest, response:CRResponse, completionHandler:CRRouteCompletionBlock) -> Void in
             response.setValue("text/plain", forHTTPHeaderField: "Content-type");
             response.sendString("Hello World");
             completionHandler();
@@ -34,7 +43,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
         self.server.addBlock(helloBlock, forPath: "/");
 
         // Prints a hello world JSON object as application/json
-        let jsonHelloBlock:CRRouteBlock = { (request:CRRequest!, response:CRResponse!, completionHandler:((Void) -> Void)!) -> Void in
+        let jsonHelloBlock:CRRouteBlock = { (request:CRRequest, response:CRResponse, completionHandler:CRRouteCompletionBlock) -> Void in
             do {
                 response.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-type");
                 try response.sendData(NSJSONSerialization.dataWithJSONObject(["status": true, "message": "Hello World"], options:NSJSONWritingOptions.PrettyPrinted));
@@ -48,14 +57,13 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
 
         // Prints some more info as text/html
         let uname = systemInfo();
-        let statusBlock:CRRouteBlock = { (request:CRRequest!, response:CRResponse!, completionHandler:((Void) -> Void)!) -> Void in
+        let statusBlock:CRRouteBlock = { (request:CRRequest, response:CRResponse, completionHandler:CRRouteCompletionBlock) -> Void in
 
             let startTime:NSDate! = NSDate();
 
             var responseString:String = String();
 
             // Bundle info
-            let bundle:NSBundle! = NSBundle.mainBundle();
             responseString += "<h1>\(bundle.bundleIdentifier!)</h1>";
             responseString += "<h2>Version \(bundle.objectForInfoDictionaryKey("CFBundleShortVersionString") as! String) build \(bundle.objectForInfoDictionaryKey("CFBundleVersion") as! String)</h2>";
 
@@ -130,6 +138,9 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             let paths:NSMutableSet! = NSMutableSet();
             routes.enumerateKeysAndObjectsUsingBlock({ (key:AnyObject,  object:AnyObject, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
                 let routeKey:NSString! = key as! NSString;
+                if ( routeKey.hasSuffix("*") ) {
+                    return;
+                }
                 let path:String = routeKey.substringFromIndex(routeKey.rangeOfString("/").location + 1);
                 let pathURL:NSURL! = self.baseURL.URLByAppendingPathComponent(path);
                 paths.addObject(pathURL);

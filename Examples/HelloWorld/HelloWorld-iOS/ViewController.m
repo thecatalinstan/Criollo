@@ -76,6 +76,9 @@
 
     self.logTextView.linkTextAttributes = self.appDelegate.linkTextAttributes;
     [self.logTextView scrollRectToVisible:CGRectZero animated:NO];
+
+
+    [self.appDelegate startListening:nil];
 }
 
 - (void)didReceiveMemoryWarning {

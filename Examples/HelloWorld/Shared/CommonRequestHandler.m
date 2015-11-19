@@ -8,12 +8,6 @@
 
 #import "CommonRequestHandler.h"
 
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-    #import <CriolloiOS/CriolloiOS.h>
-#else
-    #import <Criollo/Criollo.h>
-#endif
-
 #import <sys/utsname.h>
 
 @interface CommonRequestHandler ()
@@ -43,11 +37,24 @@
     return self;
 }
 
-- (void (^)(CRRequest *, CRResponse *, void (^)()))helloWorldBlock {
-    __block void(^_helloWorldBlock)(CRRequest*, CRResponse*, void(^)());
+- (CRRouteBlock)identifyBlock {
+    __block CRRouteBlock _identifyBlock;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _helloWorldBlock = ^(CRRequest* request, CRResponse* response, void(^completionHandler)()) {
+        NSBundle *bundle = [NSBundle mainBundle];
+        _identifyBlock = ^(CRRequest* request, CRResponse* response, CRRouteCompletionBlock completionHandler) {
+            [response setValue:[NSString stringWithFormat:@"%@, %@ build %@", bundle.bundleIdentifier, [bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [bundle objectForInfoDictionaryKey:@"CFBundleVersion"]] forHTTPHeaderField:@"Server"];
+            completionHandler();
+        };
+    });
+    return _identifyBlock;
+}
+
+- (CRRouteBlock) helloWorldBlock {
+    __block CRRouteBlock _helloWorldBlock;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _helloWorldBlock = ^(CRRequest* request, CRResponse* response, CRRouteCompletionBlock completionHandler) {
             [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
             [response sendString:@"Hello World"];
             completionHandler();
@@ -56,11 +63,11 @@
     return _helloWorldBlock;
 }
 
-- (void (^)(CRRequest *, CRResponse *, void (^)()))jsonHelloWorldBlock {
-    __block void(^_jsonHelloWorldBlock)(CRRequest*, CRResponse*, void(^)());
+- (CRRouteBlock)jsonHelloWorldBlock {
+    __block CRRouteBlock _jsonHelloWorldBlock;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _jsonHelloWorldBlock = ^(CRRequest* request, CRResponse* response, void(^completionHandler)()) {
+        _jsonHelloWorldBlock = ^(CRRequest* request, CRResponse* response, CRRouteCompletionBlock completionHandler) {
             [response setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-type"];
             [response sendData:[NSJSONSerialization dataWithJSONObject:@{@"status": @YES, @"message": @"Hello World"} options:0 error:nil]];
             completionHandler();
@@ -69,11 +76,11 @@
     return _jsonHelloWorldBlock;
 }
 
-- (void (^)(CRRequest *, CRResponse *, void (^)()))statusBlock {
-    __block void(^_statusBlock)(CRRequest*, CRResponse*, void(^)());
+- (CRRouteBlock)statusBlock {
+    __block CRRouteBlock _statusBlock;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _statusBlock = ^(CRRequest *request, CRResponse *response, void (^completionHandler)()) {
+        _statusBlock = ^(CRRequest* request, CRResponse* response, CRRouteCompletionBlock completionHandler) {
 
             NSDate* startTime = [NSDate date];
 

@@ -20,7 +20,7 @@
     __weak AppDelegate* waakSelf = self;
 
     // Ablock that creates a screenshot and sends it to the clinet
-    [self.server addBlock:^(CRRequest *request, CRResponse *response, void (^completionHandler)()) {
+    [self.server addBlock:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
 
         UIView* hostView = waakSelf.window.rootViewController.view;
 
@@ -40,22 +40,6 @@
 
     return YES;
 }
-
-//- (void)applicationWillResignActive:(UIApplication *)application {
-//    [self logDebugFormat:@"Will resign active"];
-//}
-//
-//- (void)applicationDidEnterBackground:(UIApplication *)application {
-//    [self logDebugFormat:@"Entered background"];
-//}
-//
-//- (void)applicationWillEnterForeground:(UIApplication *)application {
-//    [self logDebugFormat:@"Will enter foreground"];
-//}
-//
-//- (void)applicationDidBecomeActive:(UIApplication *)application {
-//    [self logDebugFormat:@"Did become active"];
-//}
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     if (self.isConnected) {

@@ -53,6 +53,8 @@
     self.logTextView.linkTextAttributes = self.appDelegate.linkTextAttributes;
     self.logTextView.automaticLinkDetectionEnabled = YES;
     [self.logTextView scrollRectToVisible:NSZeroRect];
+
+    [self.appDelegate startListening:nil];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
