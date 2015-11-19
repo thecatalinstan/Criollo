@@ -45,7 +45,7 @@ FOUNDATION_EXPORT NSString* const CRApplicationDidFinishLaunchingNotification;
 FOUNDATION_EXPORT NSString* const CRApplicationWillTerminateNotification;
 
 FOUNDATION_EXPORT id CRApp;
-FOUNDATION_EXPORT int CRApplicationMain(int argc, char * const argv[], id<CRApplicationDelegate> delegate);
+FOUNDATION_EXPORT int CRApplicationMain(int argc, const char *argv[], id<CRApplicationDelegate> delegate);
 
 @interface CRApplication : NSObject
 

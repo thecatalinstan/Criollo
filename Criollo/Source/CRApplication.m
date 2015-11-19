@@ -43,7 +43,7 @@ static void installSIGTERMHandler(void) {
     });
 }
 
-int CRApplicationMain(int argc, char * const argv[], id<CRApplicationDelegate> delegate) {
+int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> delegate) {
     @autoreleasepool {
         installSIGTERMHandler();
         CRApplication* app = [[CRApplication alloc] initWithDelegate:delegate];

@@ -104,6 +104,7 @@
             }];
             [responseString appendString:@"</pre>"];
 
+            // System Info
             [responseString appendString:@"<hr/>"];
             [responseString appendFormat:@"<small>%@</small><br/>", _uname];
             [responseString appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];

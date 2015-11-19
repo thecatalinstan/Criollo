@@ -93,6 +93,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             });
             responseString += "</pre>";
 
+            // System Info
             responseString += "<hr/>";
             responseString += "<small>\(uname)</small><br/>";
             responseString += String(format: "<small>Task took: %.4fms</small>", startTime.timeIntervalSinceNow * -1000);
