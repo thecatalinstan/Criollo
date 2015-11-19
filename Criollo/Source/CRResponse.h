@@ -12,17 +12,22 @@
 
 @interface CRResponse : CRMessage
 
-@property (nonatomic, weak) CRRequest* request;
+@property (nonatomic, weak) CRRequest *request;
 
 @property (nonatomic, readonly) NSUInteger statusCode;
 @property (nonatomic, readonly) BOOL finished;
-@property (nonatomic, weak) CRConnection* connection;
+@property (nonatomic, weak) CRConnection *connection;
 
-- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode;
-- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description;
-- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithConnection:(CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode;
+- (instancetype)initWithConnection:(CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description;
+- (instancetype)initWithConnection:(CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version NS_DESIGNATED_INITIALIZER;
 
-- (void)setValue:(NSString*)value forHTTPHeaderField:(NSString *)HTTPHeaderField;
+- (void)setAllHTTPHeaderFields:(NSDictionary<NSString *, NSString *> *)headerFields;
+- (void)addValue:(NSString *)value forHTTPHeaderField:(NSString *)HTTPHeaderField;
+- (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)HTTPHeaderField;
+
+- (void)setCookie:(NSHTTPCookie *)cookie;
+- (NSHTTPCookie*)setCookie:(NSString *)name value:(NSString *)value path:(NSString *)path expires:(NSDate *)expires domain:(NSString *)domain secure:(BOOL)secure;
 
 - (void)writeData:(NSData*)data;
 - (void)sendData:(NSData*)data;

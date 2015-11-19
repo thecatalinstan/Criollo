@@ -86,6 +86,10 @@
 		ADADAB601BEEF28E000FBE6B /* CRRoute.m in Sources */ = {isa = PBXBuildFile; fileRef = ADADAB5E1BEEF28E000FBE6B /* CRRoute.m */; };
 		ADB693001BE53FD400656BEC /* CRFCGIRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = ADB692FE1BE53FD400656BEC /* CRFCGIRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ADB693011BE53FD400656BEC /* CRFCGIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB692FF1BE53FD400656BEC /* CRFCGIRequest.m */; };
+		ADD2B60C1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = ADD2B60A1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h */; };
+		ADD2B60D1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m in Sources */ = {isa = PBXBuildFile; fileRef = ADD2B60B1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m */; };
+		ADD2B60E1BFE70C300E2E632 /* NSHTTPCookie+Criollo.m in Sources */ = {isa = PBXBuildFile; fileRef = ADD2B60B1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m */; };
+		ADD2B60F1BFE70C900E2E632 /* NSHTTPCookie+Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = ADD2B60A1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h */; };
 		ADEDB37C1AEFC0B000A26AF1 /* Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB37B1AEFC0B000A26AF1 /* Criollo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ADEDB3A41AEFCC6400A26AF1 /* CRApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = ADEDB34F1AEFBD8800A26AF1 /* CRApplication.m */; };
 		ADEDB3A61AEFCC6400A26AF1 /* NSDate+RFC1123.m in Sources */ = {isa = PBXBuildFile; fileRef = ADEDB3601AEFBD8800A26AF1 /* NSDate+RFC1123.m */; };
@@ -134,6 +138,8 @@
 		ADADAB5E1BEEF28E000FBE6B /* CRRoute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRoute.m; sourceTree = "<group>"; };
 		ADB692FE1BE53FD400656BEC /* CRFCGIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFCGIRequest.h; sourceTree = "<group>"; };
 		ADB692FF1BE53FD400656BEC /* CRFCGIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRFCGIRequest.m; sourceTree = "<group>"; };
+		ADD2B60A1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSHTTPCookie+Criollo.h"; sourceTree = "<group>"; };
+		ADD2B60B1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSHTTPCookie+Criollo.m"; sourceTree = "<group>"; };
 		ADEDB34E1AEFBD8800A26AF1 /* CRApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRApplication.h; sourceTree = "<group>"; };
 		ADEDB34F1AEFBD8800A26AF1 /* CRApplication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRApplication.m; sourceTree = "<group>"; };
 		ADEDB35F1AEFBD8800A26AF1 /* NSDate+RFC1123.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSDate+RFC1123.h"; path = "Criollo/Source/NSDate+RFC1123.h"; sourceTree = "<group>"; };
@@ -269,6 +275,8 @@
 				AD61E98A1BDD8C8E00F5BD17 /* CRResponse.m */,
 				ADADAB5D1BEEF28E000FBE6B /* CRRoute.h */,
 				ADADAB5E1BEEF28E000FBE6B /* CRRoute.m */,
+				ADD2B60A1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h */,
+				ADD2B60B1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -282,6 +290,7 @@
 			files = (
 				AD5FFFFC1BF0032900A57FE9 /* NSDate+RFC1123.h in Headers */,
 				AD5FFFE01BF0030700A57FE9 /* CRHTTPServer.h in Headers */,
+				ADD2B60F1BFE70C900E2E632 /* NSHTTPCookie+Criollo.h in Headers */,
 				AD5FFFE61BF0030700A57FE9 /* CRHTTPResponse.h in Headers */,
 				AD5FFFD61BF0030000A57FE9 /* CRFCGIServerConfiguration.h in Headers */,
 				AD5FFFEC1BF0031E00A57FE9 /* CRServer.h in Headers */,
@@ -310,6 +319,7 @@
 			files = (
 				AD61E9831BDD880C00F5BD17 /* CRFCGIServer.h in Headers */,
 				AD61E9761BDD7FDF00F5BD17 /* CRHTTPServer.h in Headers */,
+				ADD2B60C1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h in Headers */,
 				AD61E97A1BDD80C100F5BD17 /* CRHTTPConnection.h in Headers */,
 				ADA37C741BE38E69008D89CA /* CRFCGIRecord.h in Headers */,
 				AD19695E1B626EF90098CA89 /* CRServer.h in Headers */,
@@ -451,6 +461,7 @@
 				AD5FFFFB1BF0032900A57FE9 /* GCDAsyncSocket.m in Sources */,
 				AD5FFFF91BF0031E00A57FE9 /* CRRoute.m in Sources */,
 				AD5FFFE71BF0030700A57FE9 /* CRHTTPResponse.m in Sources */,
+				ADD2B60E1BFE70C300E2E632 /* NSHTTPCookie+Criollo.m in Sources */,
 				AD5FFFEB1BF0031E00A57FE9 /* CRApplication.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -478,6 +489,7 @@
 				ADA37C751BE38E69008D89CA /* CRFCGIRecord.m in Sources */,
 				ADB693011BE53FD400656BEC /* CRFCGIRequest.m in Sources */,
 				AD19695F1B626EF90098CA89 /* CRServer.m in Sources */,
+				ADD2B60D1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m in Sources */,
 				ADA37C821BE3B86B008D89CA /* CRHTTPResponse.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

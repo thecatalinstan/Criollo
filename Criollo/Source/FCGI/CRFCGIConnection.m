@@ -213,8 +213,10 @@
                         NSString* method = currentRequestParams[@"REQUEST_METHOD"];
                         NSString* path = currentRequestParams[@"DOCUMENT_URI"];
                         NSString* version = currentRequestParams[@"SERVER_PROTOCOL"];
+                        NSString* host = currentRequestParams[@"HTTP_HOST"];
 
-                        CRFCGIRequest* request = [[CRFCGIRequest alloc] initWithMethod:method URL:[NSURL URLWithString:path] version:version env:currentRequestParams];
+                        NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", host, path]];
+                        CRFCGIRequest* request = [[CRFCGIRequest alloc] initWithMethod:method URL:URL version:version env:currentRequestParams];
                         request.requestID = currentRequestID;
                         request.requestRole = currentRequestRole;
                         request.requestFlags = currentRequestFlags;

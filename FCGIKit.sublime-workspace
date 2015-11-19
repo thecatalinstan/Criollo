@@ -631,6 +631,8 @@
 	},
 	"file_history":
 	[
+		"/Users/catalin/Documents/Criollo/FCGIKit/NSHTTPCookie+Criollo.h",
+		"/Users/catalin/Documents/Criollo/FCGIKit/NSHTTPCookie+Criollo.m",
 		"/Users/catalin/Documents/Criollo/FCGIKit/FCGIRequest.m",
 		"/Users/catalin/Documents/Criollo/FCGIKit/FKApplication.m",
 		"/Users/catalin/Documents/Criollo/FCGIKit/FCGITypes.h",
@@ -756,9 +758,7 @@
 		"/Users/catalin/Documents/Calendize/calendize-angular/app_mobile/scripts/directives/cz_suggestion_normal/cz_suggestion_normal.jade",
 		"/Users/catalin/Documents/Calendize/calendize-angular/app_mobile/scripts/directives/cz_suggestion_normal/cz_suggestion_normal.styl",
 		"/Users/catalin/Documents/Calendize/calendize-angular/app_mobile/views/suggestions_view/suggestions_view.jade",
-		"/Users/catalin/Documents/Calendize/calendize-angular/app_mobile/scripts/directives/cz_suggestion_small/cz_suggestion_small.styl",
-		"/Users/catalin/Documents/Calendize/calendize-angular/app_mobile/scripts/controllers/SuggestionsCtrl.js",
-		"/Users/catalin/Documents/Calendize/calendize-angular/app_desktop/scripts/controllers/SuggestionsViewController.js"
+		"/Users/catalin/Documents/Calendize/calendize-angular/app_mobile/scripts/directives/cz_suggestion_small/cz_suggestion_small.styl"
 	],
 	"find":
 	{
@@ -824,6 +824,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"FCGIKit",
 			"CRServerOperationBlock",
 			"addDELETEHandlerBlock",
 			"addPUTHandlerBlock",
@@ -950,8 +951,7 @@
 			"discover",
 			"to_state",
 			"discover",
-			"stateChangeStart",
-			"users_path"
+			"stateChangeStart"
 		],
 		"highlight": true,
 		"in_selection": false,

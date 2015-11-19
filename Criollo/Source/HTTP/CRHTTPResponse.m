@@ -54,6 +54,8 @@
         [self setValue:@"chunked" forHTTPHeaderField:@"Transfer-encoding"];
     }
 
+    [super buildHeaders];
+
     _alreadyBuiltHeaders = YES;
 }
 

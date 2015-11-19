@@ -32,6 +32,13 @@
     // Add a header that says who we are :)
     [self.server addBlock:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
         [response setValue:[NSString stringWithFormat:@"%@, %@ build %@", bundle.bundleIdentifier, [bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [bundle objectForInfoDictionaryKey:@"CFBundleVersion"]] forHTTPHeaderField:@"Server"];
+
+        if ( ! request.cookie[@"session_cookie"] ) {
+            [response setCookie:@"session_cookie" value:[NSUUID UUID].UUIDString path:@"/" expires:nil domain:nil secure:NO];
+        }
+
+        [response setCookie:@"persistant_cookie" value:[NSUUID UUID].UUIDString path:@"/" expires:[NSDate distantFuture] domain:nil secure:NO];
+
         completionHandler();
     }];
 
@@ -71,7 +78,7 @@
 
         // Bundle info
         [responseString appendFormat:@"<h1>%@</h1>", bundle.bundleIdentifier ];
-        [responseString appendFormat:@"<h2>Version %@ build %@</h2>", bundleVersion, bundleBuild];
+        [responseString appendFormat:@"<h2>Version %@ build %@</h2>", [bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [bundle objectForInfoDictionaryKey:@"CFBundleVersion"]];
 
         // Headers
         [responseString appendString:@"<h3>Request Headers:</h2><pre>"];
@@ -83,6 +90,13 @@
         // Request enviroment
         [responseString appendString:@"<h3>Request Enviroment:</h2><pre>"];
         [request.env enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+            [responseString appendFormat:@"%@: %@\n", key, obj];
+        }];
+        [responseString appendString:@"</pre>"];
+
+        // Cookies
+        [responseString appendString:@"<h3>Request Cookies:</h2><pre>"];
+        [request.cookie enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
             [responseString appendFormat:@"%@: %@\n", key, obj];
         }];
         [responseString appendString:@"</pre>"];

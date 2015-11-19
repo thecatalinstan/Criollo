@@ -55,6 +55,17 @@
     } else {
         _env = envDictionary.mutableCopy;
     }
+
+    // Parse request cookies
+    NSMutableDictionary<NSString *,NSString *> *cookie = [NSMutableDictionary dictionary];
+    if ( _env[@"HTTP_COOKIE"] != nil ) {
+        NSArray<NSString *> *cookies = [_env[@"HTTP_COOKIE"] componentsSeparatedByString:@";"];
+        [cookies enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSArray<NSString *> *cookieComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:@"="];
+            cookie[cookieComponents[0]] = cookieComponents.count > 1 ? cookieComponents[1] : @"";
+        }];
+        _cookie = cookie;
+    }
 }
 
 - (void)setEnv:(NSString *)obj forKey:(NSString *)key {

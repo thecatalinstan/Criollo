@@ -69,6 +69,8 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
         [self setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
     }
 
+    [super buildHeaders];
+
     _alreadyBuiltHeaders = YES;
 }
 

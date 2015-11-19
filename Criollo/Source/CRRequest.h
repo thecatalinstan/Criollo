@@ -15,11 +15,12 @@
 
 @interface CRRequest : CRMessage
 
-@property (nonatomic, strong) CRResponse* response;
+@property (nonatomic, strong) CRResponse *response;
 
-@property (nonatomic, readonly) NSURL* URL;
-@property (nonatomic, readonly) NSString* method;
-@property (nonatomic, readonly) NSDictionary<NSString*, NSString*>* env;
+@property (nonatomic, readonly) NSURL *URL;
+@property (nonatomic, readonly) NSString *method;
+@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *env;
+@property (nonatomic, readonly) NSDictionary *cookie;
 @property (nonatomic, readonly) BOOL shouldCloseConnection;
 
 @property (nonatomic, strong) NSMutableData* bufferedResponseData;

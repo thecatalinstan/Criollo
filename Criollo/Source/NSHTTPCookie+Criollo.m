@@ -1,22 +1,21 @@
 //
-//  NSHTTPCookie+FCGIKit.m
-//  FCGIKit
+//  NSHTTPCookie+Criollo.m
+//  Criollo
 //
 //  Created by Cătălin Stan on 5/17/14.
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-#import "NSHTTPCookie+FCGIKit.h"
+#import "NSHTTPCookie+Criollo.h"
 #import "NSDate+RFC1123.h"
 
-@implementation NSHTTPCookie (FCGIKit)
+@implementation NSHTTPCookie (Criollo)
 
-- (NSString *)HTTPHeaderField
-{
+- (NSString *)HTTPHeaderField {
     if ( self.name == nil ) {
         return nil;
     }
-    
+
     NSMutableArray* fields = [NSMutableArray array];
     [fields addObject:[NSString stringWithFormat:@"%@=%@", self.name, self.value]];
     if( ! self.isSessionOnly ) {
@@ -35,8 +34,7 @@
     return [fields componentsJoinedByString:@"; "];
 }
 
-+ (NSDictionary *)responseHeaderFieldsWithCookies:(NSArray *)cookies
-{
++ (NSDictionary *)responseHeaderFieldsWithCookies:(NSArray *)cookies {
     if ( cookies.count == 0 ) {
         return nil;
     }

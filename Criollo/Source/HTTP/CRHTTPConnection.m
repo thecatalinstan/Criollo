@@ -75,6 +75,8 @@
 
     [self.currentRequest setEnv:env];
 
+    // Parse HTTP cookies
+
     CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.server.configuration;
 
     requestBodyLength = [self.currentRequest valueForHTTPHeaderField:@"Content-Length"].integerValue;
@@ -110,14 +112,25 @@
 
         // Parse the first line of the header
         NSString* decodedHeaders = [[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(0, data.length - [CRConnection CRLFCRLFData].length)] encoding:NSUTF8StringEncoding];
-        NSString* decodedHeadersFirstLine = [decodedHeaders componentsSeparatedByString:@"\r\n"][0];
-        NSArray* decodedHeaderComponents = [decodedHeadersFirstLine componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        NSArray<NSString*>* decodedHeaderLines = [decodedHeaders componentsSeparatedByString:@"\r\n"];
+        NSString* decodedHeadersFirstLine = decodedHeaderLines[0];
+        NSArray<NSString*>* decodedHeaderComponents = [decodedHeadersFirstLine componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 
         if ( decodedHeaderComponents.count == 3 ) {
             NSString *method = decodedHeaderComponents[0];
             NSString *path = decodedHeaderComponents[1];
             NSString *version = decodedHeaderComponents[2];
-            self.currentRequest = [[CRRequest alloc] initWithMethod:method URL:[NSURL URLWithString:path] version:version];
+            __block NSString *host;
+
+            // Get the "Host" header
+            [decodedHeaderLines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if ( [obj hasPrefix:@"Host: "] ) {
+                    host = [[obj substringFromIndex:5] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                    *stop = YES;
+                }
+            }];
+            NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", host, path]];
+            self.currentRequest = [[CRRequest alloc] initWithMethod:method URL:URL version:version];
         } else {
             [self.socket disconnectAfterWriting];
         }

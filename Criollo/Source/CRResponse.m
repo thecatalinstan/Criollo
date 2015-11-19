@@ -11,10 +11,14 @@
 #import "CRServer.h"
 #import "CRServerConfiguration.h"
 #import "CRConnection.h"
+#import "CRRequest.h"
 #import "GCDAsyncSocket.h"
 #import "NSDate+RFC1123.h"
+#import "NSHTTPCookie+Criollo.h"
 
 @interface CRResponse ()
+
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSHTTPCookie *> *HTTPCookies;
 
 @end
 
@@ -38,6 +42,7 @@
         version = version == nil ? CRHTTP11 : version;
         self.message = CFBridgingRelease(CFHTTPMessageCreateResponse(NULL, (CFIndex)HTTPStatusCode, (__bridge CFStringRef)description, (__bridge CFStringRef) version));
         self.connection = connection;
+        self.HTTPCookies = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -46,8 +51,65 @@
     return (NSUInteger)CFHTTPMessageGetResponseStatusCode((__bridge CFHTTPMessageRef _Nonnull)(self.message));
 }
 
+- (void)setAllHTTPHeaderFields:(NSDictionary<NSString *, NSString *> *)headerFields
+{
+    [headerFields enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        if ( [key isKindOfClass:[NSString class]] && [obj isKindOfClass:[NSString class]] ) {
+            [self setValue:obj forHTTPHeaderField:key];
+        }
+    }];
+}
+
+- (void)addValue:(NSString *)value forHTTPHeaderField:(NSString *)HTTPHeaderField {
+    NSString *headerValue = [self valueForHTTPHeaderField:HTTPHeaderField];
+    if ( headerValue == nil ) {
+        headerValue = @"";
+    }
+    headerValue = [headerValue stringByAppendingFormat:@", %@", value];
+    [self setValue:headerValue forHTTPHeaderField:HTTPHeaderField];
+}
+
 - (void)setValue:(NSString*)value forHTTPHeaderField:(NSString *)HTTPHeaderField {
     CFHTTPMessageSetHeaderFieldValue((__bridge CFHTTPMessageRef _Nonnull)(self.message), (__bridge CFStringRef)HTTPHeaderField, (__bridge CFStringRef)value);
+}
+
+#pragma mark - Cookies
+
+- (void)setCookie:(NSHTTPCookie *)cookie {
+    if ( cookie != nil ) {
+        self.HTTPCookies[cookie.name] = cookie;
+    }
+}
+
+- (NSHTTPCookie *)setCookie:(NSString*)name value:(NSString*)value path:(NSString*)path expires:(NSDate*)expires domain:(NSString*)domain secure:(BOOL)secure {
+    NSMutableDictionary* cookieProperties = [[NSMutableDictionary alloc] init];
+    cookieProperties[NSHTTPCookieName] = name;
+    cookieProperties[NSHTTPCookieValue] = value;
+
+    if ( expires != nil ) {
+        cookieProperties[NSHTTPCookieExpires] = expires;
+    } else {
+        cookieProperties[NSHTTPCookieDiscard] = @"TRUE";
+    }
+
+    if ( path != nil ) {
+        cookieProperties[NSHTTPCookiePath] = path;
+    }
+
+    if ( domain != nil ) {
+        cookieProperties[NSHTTPCookieDomain] = domain;
+    } else {
+        cookieProperties[NSHTTPCookieOriginURL] = self.request.URL;        
+    }
+
+    if ( secure ) {
+        cookieProperties[NSHTTPCookieSecure] = @"TRUE";
+    }
+
+    NSHTTPCookie* cookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
+    [self setCookie:cookie];
+
+    return cookie;
 }
 
 #pragma mark - Write
@@ -100,6 +162,9 @@
 }
 
 - (void)buildHeaders {
+    // Add the cookie headers
+    NSDictionary * cookieHeaders = [NSHTTPCookie responseHeaderFieldsWithCookies:self.HTTPCookies.allValues];
+    [self setAllHTTPHeaderFields:cookieHeaders];
 }
 
 - (void)finish {
