@@ -19,12 +19,4 @@
 #import <CriolloiOS/CRResponse.h>
 
 #import <CriolloiOS/CRHTTPServer.h>
-#import <CriolloiOS/CRHTTPServerConfiguration.h>
-#import <CriolloiOS/CRHTTPConnection.h>
-#import <CriolloiOS/CRHTTPResponse.h>
-
 #import <CriolloiOS/CRFCGIServer.h>
-#import <CriolloiOS/CRFCGIServerConfiguration.h>
-#import <CriolloiOS/CRFCGIConnection.h>
-#import <CriolloiOS/CRFCGIRequest.h>
-#import <CriolloiOS/CRFCGIResponse.h>
