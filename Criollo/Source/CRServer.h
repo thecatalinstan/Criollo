@@ -12,9 +12,6 @@
 
 FOUNDATION_EXPORT NSUInteger const CRErrorSocketError;
 
-FOUNDATION_EXPORT NSString* const CRRequestKey;
-FOUNDATION_EXPORT NSString* const CRResponseKey;
-
 @protocol CRServerDelegate <NSObject>
 
 @optional
@@ -37,7 +34,6 @@ FOUNDATION_EXPORT NSString* const CRResponseKey;
 
 @property (nonatomic, strong) id<CRServerDelegate> delegate;
 @property (nonatomic, strong) CRServerConfiguration* configuration;
-@property (nonatomic, strong) GCDAsyncSocket* socket;
 @property (nonatomic, strong) NSMutableArray<CRConnection*>* connections;
 
 - (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate NS_DESIGNATED_INITIALIZER;
@@ -46,17 +42,12 @@ FOUNDATION_EXPORT NSString* const CRResponseKey;
 - (BOOL)startListening:(NSError**)error;
 - (BOOL)startListening:(NSError**)error portNumber:(NSUInteger)portNumber;
 - (BOOL)startListening:(NSError**)error portNumber:(NSUInteger)portNumber interface:(NSString*)interface;
+
 - (void)stopListening;
 - (void)closeAllConnections;
-
-- (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket;
-- (void)didCloseConnection:(CRConnection*)connection;
 
 - (void)addBlock:(CRRouteBlock)block;
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString*)path;
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString*)path HTTPMethod:(NSString*)HTTPMethod;
-
-- (NSArray<CRRoute*>*)routesForPath:(NSString*)path;
-- (NSArray<CRRoute*>*)routesForPath:(NSString*)path HTTPMethod:(NSString*)HTTPMethod;
 
 @end

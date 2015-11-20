@@ -16,11 +16,9 @@
 
 NSUInteger const CRErrorSocketError = 2001;
 
-NSString* const CRRequestKey = @"CRRequest";
-NSString* const CRResponseKey = @"CRResponse";
-
 @interface CRServer () <GCDAsyncSocketDelegate, CRConnectionDelegate>
 
+@property (nonatomic, strong) GCDAsyncSocket* socket;
 @property (nonatomic, strong) dispatch_queue_t isolationQueue;
 @property (nonatomic, strong) dispatch_queue_t socketDelegateQueue;
 @property (nonatomic, strong) dispatch_queue_t acceptedSocketDelegateTargetQueue;
@@ -29,6 +27,11 @@ NSString* const CRResponseKey = @"CRResponse";
 @property (nonatomic, strong) NSMutableDictionary<NSString*, NSMutableArray<CRRoute*>*>* routes;
 
 @property (nonatomic, strong) NSOperationQueue* workerQueue;
+
+- (NSArray<CRRoute*>*)routesForPath:(NSString*)path;
+- (NSArray<CRRoute*>*)routesForPath:(NSString*)path HTTPMethod:(NSString*)HTTPMethod;
+
+- (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket;
 
 @end
 
@@ -136,15 +139,6 @@ NSString* const CRResponseKey = @"CRResponse";
 
 - (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket {
     return [[CRConnection alloc] initWithSocket:socket server:self];
-}
-
-- (void)didCloseConnection:(CRConnection*)connection {
-    if ( [self.delegate respondsToSelector:@selector(server:didCloseConnection:)]) {
-        [self.delegate server:self didCloseConnection:connection];
-    }
-    dispatch_async(self.isolationQueue, ^(){
-        [self.connections removeObject:connection];
-    });
 }
 
 #pragma mark - Routing
