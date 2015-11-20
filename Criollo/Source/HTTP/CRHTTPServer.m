@@ -9,6 +9,7 @@
 #import "CRServer_Internal.h"
 #import "CRHTTPServer.h"
 #import "CRHTTPConnection.h"
+#import "CRConnection_Internal.h"
 #import "CRHTTPServerConfiguration.h"
 
 @implementation CRHTTPServer

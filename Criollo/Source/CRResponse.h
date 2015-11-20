@@ -15,12 +15,8 @@
 @property (nonatomic, weak) CRRequest *request;
 
 @property (nonatomic, readonly) NSUInteger statusCode;
-@property (nonatomic, readonly) BOOL finished;
 @property (nonatomic, weak) CRConnection *connection;
 
-- (instancetype)initWithConnection:(CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode;
-- (instancetype)initWithConnection:(CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description;
-- (instancetype)initWithConnection:(CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version NS_DESIGNATED_INITIALIZER;
 
 - (void)setAllHTTPHeaderFields:(NSDictionary<NSString *, NSString *> *)headerFields;
 - (void)addValue:(NSString *)value forHTTPHeaderField:(NSString *)HTTPHeaderField;
@@ -31,7 +27,6 @@
 
 - (void)writeData:(NSData*)data;
 - (void)sendData:(NSData*)data;
-- (void)writeData:(NSData*)data finish:(BOOL)flag;
 
 - (void)writeString:(NSString*)string;
 - (void)writeFormat:(NSString*)format, ...;
@@ -41,7 +36,6 @@
 - (void)sendFormat:(NSString*)format, ...;
 - (void)sendFormat:(NSString*)format args:(va_list)args;
 
-- (void)buildHeaders;
 - (void)finish;
 
 @end

@@ -6,7 +6,9 @@
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
+#import "CRMessage_Internal.h"
 #import "CRResponse.h"
+#import "CRResponse_Internal.h"
 #import "CRApplication.h"
 #import "CRServer.h"
 #import "CRServerConfiguration.h"

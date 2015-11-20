@@ -7,6 +7,7 @@
 //
 
 #import "CRMessage.h"
+#import "CRMessage_Internal.h"
 
 @implementation CRMessage
 

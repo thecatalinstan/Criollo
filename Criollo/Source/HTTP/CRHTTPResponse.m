@@ -6,8 +6,11 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
+#import "CRMessage_Internal.h"
+#import "CRResponse_Internal.h"
 #import "CRHTTPResponse.h"
 #import "CRHTTPConnection.h"
+#import "CRConnection_Internal.h"
 #import "CRHTTPServer.h"
 #import "CRHTTPServerConfiguration.h"
 #import "GCDAsyncSocket.h"

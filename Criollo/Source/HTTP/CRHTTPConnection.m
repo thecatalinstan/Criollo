@@ -7,12 +7,16 @@
 //
 
 #import "CRHTTPConnection.h"
+#import "CRConnection_Internal.h"
 #import "GCDAsyncSocket.h"
 #import "CRApplication.h"
 #import "CRHTTPServer.h"
 #import "CRServer_Internal.h"
 #import "CRHTTPServerConfiguration.h"
+#import "CRMessage_Internal.h"
 #import "CRRequest.h"
+#import "CRRequest_Internal.h"
+#import "CRResponse_Internal.h"
 #import "CRHTTPResponse.h"
 
 @interface CRHTTPConnection () {

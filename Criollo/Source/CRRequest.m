@@ -6,7 +6,9 @@
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
+#import "CRMessage_Internal.h"
 #import "CRRequest.h"
+#import "CRRequest_Internal.h"
 
 @implementation CRRequest {
     NSMutableDictionary* _env;

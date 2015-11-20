@@ -6,13 +6,16 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
+#import "CRResponse_Internal.h"
+#import "CRFCGIResponse.h"
 #import "CRFCGIConnection.h"
+#import "CRConnection_Internal.h"
 #import "CRApplication.h"
 #import "CRServer_Internal.h"
 #import "CRFCGIServer.h"
 #import "CRFCGIServerConfiguration.h"
 #import "CRFCGIRequest.h"
-#import "CRFCGIResponse.h"
+#import "CRRequest_Internal.h"
 #import "CRFCGIRecord.h"
 #import "GCDAsyncSocket.h"
 

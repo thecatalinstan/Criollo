@@ -21,16 +21,5 @@
 @property (nonatomic, readonly) NSString *method;
 @property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *env;
 @property (nonatomic, readonly) NSDictionary *cookie;
-@property (nonatomic, readonly) BOOL shouldCloseConnection;
-
-@property (nonatomic, strong) NSMutableData* bufferedResponseData;
-
-- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version;
-- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version env:(NSDictionary*)env NS_DESIGNATED_INITIALIZER;
-
-- (BOOL)appendData:(NSData *)data;
-
-- (void)setEnv:(NSDictionary<NSString*,NSString*>*)envDictionary;
-- (void)setEnv:(NSString*)obj forKey:(NSString*)key;
 
 @end

@@ -14,7 +14,9 @@
 #import "CRServerConfiguration.h"
 #import "GCDAsyncSocket.h"
 #import "CRRequest.h"
+#import "CRRequest_Internal.h"
 #import "CRResponse.h"
+#import "CRResponse_Internal.h"
 
 #include <sys/types.h>
 #include <sys/sysctl.h>

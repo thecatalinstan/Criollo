@@ -7,7 +7,6 @@
 //
 
 #import "CRConnection.h"
-#import "CRConnection_Internal.h"
 
 #define CRFCGIConnectionSocketTagReadRecordHeader                       11
 #define CRFCGIConnectionSocketTagReadRecordContent                      12
