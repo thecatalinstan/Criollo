@@ -6,10 +6,9 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-@class CRRequest, CRResponse;
+#import "CRTypes.h"
 
-typedef void(^CRRouteCompletionBlock)(void);
-typedef void(^CRRouteBlock)(CRRequest* _Nonnull request, CRResponse* _Nonnull response, CRRouteCompletionBlock _Nonnull completionHandler);
+@class CRRequest, CRResponse;
 
 @interface CRRoute : NSObject
 

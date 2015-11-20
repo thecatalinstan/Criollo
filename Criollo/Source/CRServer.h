@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRRoute.h"
+#import "CRTypes.h"
 
-@class CRServer, CRServerConfiguration, GCDAsyncSocket, CRConnection, CRRequest, CRResponse;
+@class CRServer, CRServerConfiguration, GCDAsyncSocket, CRConnection, CRRequest, CRResponse, CRRoute;
 
 FOUNDATION_EXPORT NSUInteger const CRErrorSocketError;
 

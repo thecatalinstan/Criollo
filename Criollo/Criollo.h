@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import <Criollo/CRTypes.h>
+
 #import <Criollo/CRApplication.h>
 #import <Criollo/CRServer.h>
 #import <Criollo/CRServerConfiguration.h>
@@ -26,7 +28,3 @@
 #import <Criollo/CRFCGIConnection.h>
 #import <Criollo/CRFCGIRequest.h>
 #import <Criollo/CRFCGIResponse.h>
-
-#import <Criollo/CRRoute.h>
-
-//#import <Criollo/NSHTTPCookie+Criollo.h>
