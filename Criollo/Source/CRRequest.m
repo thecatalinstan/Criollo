@@ -58,6 +58,17 @@
         _env = envDictionary.mutableCopy;
     }
 
+    // Parse request query string
+    NSMutableDictionary<NSString *,NSString *> *query = [NSMutableDictionary dictionary];
+    if ( _env[@"QUERY_STRING"] != nil ) {
+        NSArray<NSString *> *queryVars = [_env[@"QUERY_STRING"] componentsSeparatedByString:@"&"];
+        [queryVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSArray<NSString *> *queryVarComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:@"="];
+            query[queryVarComponents[0]] = queryVarComponents.count > 1 ? queryVarComponents[1] : @"";
+        }];
+    }
+    _query = query;
+
     // Parse request cookies
     NSMutableDictionary<NSString *,NSString *> *cookie = [NSMutableDictionary dictionary];
     if ( _env[@"HTTP_COOKIE"] != nil ) {
@@ -66,8 +77,8 @@
             NSArray<NSString *> *cookieComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:@"="];
             cookie[cookieComponents[0]] = cookieComponents.count > 1 ? cookieComponents[1] : @"";
         }];
-        _cookie = cookie;
     }
+    _cookie = cookie;
 }
 
 - (void)setEnv:(NSString *)obj forKey:(NSString *)key {

@@ -20,6 +20,7 @@
 @property (nonatomic, readonly) NSURL *URL;
 @property (nonatomic, readonly) NSString *method;
 @property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *env;
-@property (nonatomic, readonly) NSDictionary *cookie;
+@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *cookie;
+@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *query;
 
 @end

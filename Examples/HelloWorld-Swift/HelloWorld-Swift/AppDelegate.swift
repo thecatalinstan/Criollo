@@ -98,6 +98,20 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             });
             responseString += "</pre>";
 
+            // Query
+            let queryVars:NSDictionary! = request.query as NSDictionary;
+            responseString += "<h3>Request Query:</h2><pre>";
+            queryVars.enumerateKeysAndObjectsUsingBlock({ (key:AnyObject,  object:AnyObject, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
+                let queryVarName:String = key as! String;
+                responseString += "\(queryVarName): ";
+                if let value = object as? String {
+                    responseString += "\(value)";
+                } else if let value = object as? NSNumber {
+                    responseString += "\(value)";
+                }
+                responseString += "\n";
+            });
+            responseString += "</pre>";
             // Cookies
             let cookies:NSDictionary! = request.cookie as NSDictionary;
             responseString += "<h3>Request Cookies:</h2><pre>";

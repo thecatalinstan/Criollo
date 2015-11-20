@@ -93,6 +93,13 @@
         }];
         [responseString appendString:@"</pre>"];
 
+        // Query
+        [responseString appendString:@"<h3>Request Query:</h2><pre>"];
+        [request.query enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+            [responseString appendFormat:@"%@: %@\n", key, obj];
+        }];
+        [responseString appendString:@"</pre>"];
+
         // Cookies
         [responseString appendString:@"<h3>Request Cookies:</h2><pre>"];
         [request.cookie enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
