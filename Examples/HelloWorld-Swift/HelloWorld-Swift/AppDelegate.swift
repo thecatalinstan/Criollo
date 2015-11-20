@@ -112,6 +112,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
                 responseString += "\n";
             });
             responseString += "</pre>";
+            
             // Cookies
             let cookies:NSDictionary! = request.cookie as NSDictionary;
             responseString += "<h3>Request Cookies:</h2><pre>";
