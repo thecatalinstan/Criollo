@@ -121,7 +121,6 @@
 
         [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
         [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
-        [response setStatusCode:205 description:@"Some cool description"];
         [response sendString:responseString];
 
         completionHandler();
