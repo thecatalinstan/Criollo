@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import <Criollo/CRTypes.h>
+#import <CriolloiOS/CRTypes.h>
 
 #import <CriolloiOS/CRApplication.h>
 #import <CriolloiOS/CRServer.h>

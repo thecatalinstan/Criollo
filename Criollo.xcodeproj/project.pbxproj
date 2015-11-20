@@ -42,7 +42,7 @@
 		AD5FFFEF1BF0031E00A57FE9 /* CRServerConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = AD227F891BDC3F6000C23D52 /* CRServerConfiguration.m */; };
 		AD5FFFF01BF0031E00A57FE9 /* CRConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = AD4AE7701BDAB1C300B9F221 /* CRConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD5FFFF11BF0031E00A57FE9 /* CRConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4AE7711BDAB1C300B9F221 /* CRConnection.m */; };
-		AD5FFFF21BF0031E00A57FE9 /* CRMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = AD61E9851BDD8C8E00F5BD17 /* CRMessage.h */; };
+		AD5FFFF21BF0031E00A57FE9 /* CRMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = AD61E9851BDD8C8E00F5BD17 /* CRMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD5FFFF31BF0031E00A57FE9 /* CRMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = AD61E9861BDD8C8E00F5BD17 /* CRMessage.m */; };
 		AD5FFFF41BF0031E00A57FE9 /* CRRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = AD61E9871BDD8C8E00F5BD17 /* CRRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD5FFFF51BF0031E00A57FE9 /* CRRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = AD61E9881BDD8C8E00F5BD17 /* CRRequest.m */; };

@@ -22,15 +22,6 @@
     [self startListening:nil];
 }
 
-- (CRApplicationTerminateReply)applicationShouldTerminate:(CRApplication *)sender {
-    if ( self.server.connections.count > 0 ) {
-        [self closeAllConnections];
-        return CRTerminateLater;
-    } else {
-        return CRTerminateNow;
-    }
-}
-
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     if (self.isConnected) {
         [self stopListening:nil];
