@@ -49,6 +49,11 @@ NSUInteger const CRErrorSocketError = 2001;
         self.configuration = [[CRServerConfiguration alloc] init];
         self.delegate = delegate;
         self.routes = [NSMutableDictionary dictionary];
+        self.notFoundBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
+            [response setStatusCode:404 description:nil];
+            [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+            [response sendFormat:@"Cennot %@ %@", request.method, request.URL.path];
+        };
     }
     return self;
 }
@@ -181,6 +186,9 @@ NSUInteger const CRErrorSocketError = 2001;
 
     [self.workerQueue addOperation:[NSBlockOperation blockOperationWithBlock:^{
         NSArray<CRRoute*>* routes = [self routesForPath:request.URL.path HTTPMethod:request.method];
+        if ( routes == nil ) {
+            routes = @[[CRRoute routeWithBlock:self.notFoundBlock]];
+        }
         __block BOOL shouldStopExecutingBlocks = NO;
         __block NSUInteger currentRouteIndex = 0;
         void(^completionHandler)(void) = ^{

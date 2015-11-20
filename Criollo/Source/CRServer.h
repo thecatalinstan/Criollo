@@ -34,6 +34,8 @@ FOUNDATION_EXPORT NSUInteger const CRErrorSocketError;
 
 @property (nonatomic, strong) id<CRServerDelegate> delegate;
 
+@property (nonatomic, strong) CRRouteBlock notFoundBlock;
+
 - (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)startListening;
