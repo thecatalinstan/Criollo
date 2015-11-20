@@ -7,9 +7,10 @@
 //
 
 #import "CRConnection.h"
+#import "CRConnection_Internal.h"
 #import "CRApplication.h"
 #import "CRServer.h"
-#import "CRServer+Private.h"
+#import "CRServer_Internal.h"
 #import "CRServerConfiguration.h"
 #import "GCDAsyncSocket.h"
 #import "CRRequest.h"

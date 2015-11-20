@@ -7,6 +7,7 @@
 //
 
 #import "CRConnection.h"
+#import "CRConnection_Internal.h"
 
 @class CRRequest, CRResponse;
 

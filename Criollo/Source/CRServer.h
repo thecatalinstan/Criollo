@@ -33,8 +33,6 @@ FOUNDATION_EXPORT NSUInteger const CRErrorSocketError;
 @interface CRServer : NSObject
 
 @property (nonatomic, strong) id<CRServerDelegate> delegate;
-@property (nonatomic, strong) CRServerConfiguration* configuration;
-@property (nonatomic, strong) NSMutableArray<CRConnection*>* connections;
 
 - (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate NS_DESIGNATED_INITIALIZER;
 

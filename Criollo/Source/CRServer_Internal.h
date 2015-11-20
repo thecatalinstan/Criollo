@@ -1,5 +1,5 @@
 //
-//  CRServer+Private.h
+//  CRServer_Internal.h
 //  Criollo
 //
 //  Created by Cătălin Stan on 11/20/15.
@@ -10,7 +10,10 @@
 
 @class CRConnection;
 
-@interface CRServer (Private)
+@interface CRServer ()
+
+@property (nonatomic, strong) CRServerConfiguration* configuration;
+@property (nonatomic, strong) NSMutableArray<CRConnection*>* connections;
 
 - (void)didCloseConnection:(CRConnection*)connection;
 

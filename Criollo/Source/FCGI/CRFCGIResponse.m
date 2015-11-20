@@ -9,6 +9,7 @@
 #import "CRFCGIResponse.h"
 #import "CRApplication.h"
 #import "CRFCGIServer.h"
+#import "CRServer_Internal.h"
 #import "CRFCGIServerConfiguration.h"
 #import "CRFCGIConnection.h"
 #import "CRFCGIRequest.h"

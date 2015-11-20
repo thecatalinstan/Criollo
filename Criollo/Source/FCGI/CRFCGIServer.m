@@ -7,7 +7,9 @@
 //
 
 #import "CRFCGIServer.h"
+#import "CRServer_Internal.h"
 #import "CRFCGIConnection.h"
+#import "CRConnection_Internal.h"
 #import "CRFCGIServerConfiguration.h"
 
 @implementation CRFCGIServer

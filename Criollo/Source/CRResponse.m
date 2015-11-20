@@ -11,6 +11,7 @@
 #import "CRServer.h"
 #import "CRServerConfiguration.h"
 #import "CRConnection.h"
+#import "CRConnection_Internal.h"
 #import "CRRequest.h"
 #import "GCDAsyncSocket.h"
 #import "NSDate+RFC1123.h"

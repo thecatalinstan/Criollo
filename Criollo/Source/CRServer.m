@@ -7,9 +7,11 @@
 //
 
 #import "CRServer.h"
+#import "CRServer_Internal.h"
 #import "CRServerConfiguration.h"
 #import "GCDAsyncSocket.h"
 #import "CRConnection.h"
+#import "CRConnection_Internal.h"
 #import "CRRequest.h"
 #import "CRResponse.h"
 #import "CRRoute.h"
@@ -198,6 +200,15 @@ NSUInteger const CRErrorSocketError = 2001;
     if ( [self.delegate respondsToSelector:@selector(server:didFinishRequest:)]  ) {
         [self.delegate server:self didFinishRequest:request];
     }
+}
+
+- (void)didCloseConnection:(CRConnection*)connection {
+    if ( [self.delegate respondsToSelector:@selector(server:didCloseConnection:)]) {
+        [self.delegate server:self didCloseConnection:connection];
+    }
+    dispatch_async(self.isolationQueue, ^(){
+        [self.connections removeObject:connection];
+    });
 }
 
 #pragma mark - CRRouter
