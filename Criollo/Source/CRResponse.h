@@ -15,8 +15,11 @@
 @property (nonatomic, weak) CRRequest *request;
 
 @property (nonatomic, readonly) NSUInteger statusCode;
+@property (nonatomic, strong, readonly) NSString* statusDescription;
+
 @property (nonatomic, weak) CRConnection *connection;
 
+- (void)setStatusCode:(NSUInteger)statusCode description:(NSString*)description;
 
 - (void)setAllHTTPHeaderFields:(NSDictionary<NSString *, NSString *> *)headerFields;
 - (void)addValue:(NSString *)value forHTTPHeaderField:(NSString *)HTTPHeaderField;

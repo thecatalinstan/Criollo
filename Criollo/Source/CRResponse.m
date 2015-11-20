@@ -45,13 +45,18 @@
         version = version == nil ? CRHTTP11 : version;
         self.message = CFBridgingRelease(CFHTTPMessageCreateResponse(NULL, (CFIndex)HTTPStatusCode, (__bridge CFStringRef)description, (__bridge CFStringRef) version));
         self.connection = connection;
-        self.HTTPCookies = [NSMutableDictionary dictionary];
+        _statusDescription = description;
     }
     return self;
 }
 
 - (NSUInteger)statusCode {
     return (NSUInteger)CFHTTPMessageGetResponseStatusCode((__bridge CFHTTPMessageRef _Nonnull)(self.message));
+}
+
+- (void)setStatusCode:(NSUInteger)statusCode description:(NSString *)description {
+    self.proposedStatusCode = statusCode;
+    self.proposedStatusDescription = description;
 }
 
 - (void)setAllHTTPHeaderFields:(NSDictionary<NSString *, NSString *> *)headerFields
@@ -162,6 +167,32 @@
         _finished = YES;
     }
     [self.connection sendDataToSocket:data forRequest:self.request];
+}
+
+- (void)buildStatusLine {
+
+    // If there's no changes don't do anything
+    if ( (self.proposedStatusCode == 0 && self.proposedStatusDescription.length == 0) || ( self.proposedStatusCode == self.statusCode && [self.proposedStatusDescription isEqualToString:self.statusDescription] ) ) {
+        return;
+    }
+
+    // Compute the new status and description
+    if ( self.proposedStatusCode == 0 ) {
+        self.proposedStatusCode = self.statusCode;
+    }
+
+    if ( self.proposedStatusDescription.length == 0 ) {
+        self.proposedStatusDescription = self.statusDescription;
+    }
+
+    CFHTTPMessageRef newMessage = CFHTTPMessageCreateResponse(NULL, (CFIndex)self.proposedStatusCode, (__bridge CFStringRef)self.proposedStatusDescription, (__bridge CFStringRef) self.version);
+
+    NSData* currentMessageData = self.serializedData;
+    NSRange rangeOfFirstCRLF = [currentMessageData rangeOfData:[CRConnection CRLFData] options:0 range:NSMakeRange(0, currentMessageData.length)];
+    NSData* currentMessageDataExcludingFirstLine = [currentMessageData subdataWithRange:NSMakeRange(rangeOfFirstCRLF.location + [CRConnection CRLFData].length, currentMessageData.length - rangeOfFirstCRLF.location - [CRConnection CRLFData].length)];
+
+    self.message = CFBridgingRelease(newMessage);
+    CFHTTPMessageAppendBytes((__bridge CFHTTPMessageRef)self.message, currentMessageDataExcludingFirstLine.bytes, currentMessageDataExcludingFirstLine.length);
 }
 
 - (void)buildHeaders {

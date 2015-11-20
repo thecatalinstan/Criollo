@@ -41,10 +41,7 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
     return protocolStatusName;
 }
 
-@interface CRFCGIResponse ()  {
-    BOOL _alreadySentHeaders;
-    BOOL _alreadyBuiltHeaders;
-}
+@interface CRFCGIResponse () 
 
 @property (nonatomic, readonly) NSData* endRequestRecordData;
 
@@ -65,9 +62,11 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
 }
 
 - (void)buildHeaders {
-    if ( _alreadyBuiltHeaders ) {
+    if ( self.alreadyBuiltHeaders ) {
         return;
     }
+
+    [self buildStatusLine];
 
     if ( [self valueForHTTPHeaderField:@"Content-Type"] == nil ) {
         [self setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
@@ -75,7 +74,7 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
 
     [super buildHeaders];
 
-    _alreadyBuiltHeaders = YES;
+    self.alreadyBuiltHeaders = YES;
 }
 
 - (void)writeData:(NSData *)data finish:(BOOL)flag {
@@ -187,13 +186,13 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
 - (NSMutableData*)initialResponseData {
     NSMutableData* dataToSend = [NSMutableData dataWithCapacity:CRResponseDataInitialCapacity];
 
-    if ( !_alreadySentHeaders ) {
+    if ( !self.alreadySentHeaders ) {
         [self buildHeaders];
         [self setBody:nil];
         NSData* headersSerializedData = self.serializedData;
         NSData* headerData = [self FCGIRecordDataWithContentData:[NSData dataWithBytesNoCopy:(void*)headersSerializedData.bytes length:headersSerializedData.length freeWhenDone:NO]];
         [dataToSend appendData:headerData];
-        _alreadySentHeaders = YES;
+        self.alreadySentHeaders = YES;
     }
 
     return dataToSend;

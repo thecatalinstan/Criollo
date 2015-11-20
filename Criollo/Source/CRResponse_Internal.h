@@ -12,6 +12,11 @@
 
 @interface CRResponse ()
 
+@property (nonatomic, assign) NSUInteger proposedStatusCode;
+@property (nonatomic, strong) NSString* proposedStatusDescription;
+
+@property (nonatomic, assign) BOOL alreadySentHeaders;
+@property (nonatomic, assign) BOOL alreadyBuiltHeaders;
 @property (nonatomic, readonly) BOOL finished;
 
 - (instancetype)initWithConnection:(CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode;
@@ -20,6 +25,7 @@
 
 - (void)writeData:(NSData*)data finish:(BOOL)flag;
 
+- (void)buildStatusLine;
 - (void)buildHeaders;
 
 @end

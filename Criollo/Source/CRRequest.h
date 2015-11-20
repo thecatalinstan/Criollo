@@ -9,7 +9,7 @@
 #import "CRMessage.h"
 
 #define CRErrorRequestMalformedRequest      3001
-#define    CRErrorRequestUnsupportedMethod  3002
+#define CRErrorRequestUnsupportedMethod     3002
 
 @class CRResponse;
 

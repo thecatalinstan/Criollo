@@ -16,10 +16,7 @@
 #import "GCDAsyncSocket.h"
 #import "NSDate+RFC1123.h"
 
-@interface CRHTTPResponse () {
-    BOOL _alreadySentHeaders;
-    BOOL _alreadyBuiltHeaders;
-}
+@interface CRHTTPResponse ()
 
 - (NSMutableData*)initialResponseData;
 
@@ -33,9 +30,11 @@
 
 - (void)buildHeaders
 {
-    if ( _alreadyBuiltHeaders ) {
+    if ( self.alreadyBuiltHeaders ) {
         return;
     }
+
+    [self buildStatusLine];
 
     if ( [self valueForHTTPHeaderField:@"Date"] == nil ) {
         [self setValue:[NSDate date].rfc1123String forHTTPHeaderField:@"Date"];
@@ -59,7 +58,7 @@
 
     [super buildHeaders];
 
-    _alreadyBuiltHeaders = YES;
+    self.alreadyBuiltHeaders = YES;
 }
 
 - (void)writeData:(NSData *)data finish:(BOOL)flag
@@ -109,13 +108,13 @@
 
     NSMutableData* dataToSend = [NSMutableData dataWithCapacity:CRResponseDataInitialCapacity];
 
-    if ( !_alreadySentHeaders ) {
+    if ( !self.alreadySentHeaders ) {
         [self buildHeaders];
         [self setBody:nil];
         NSData* headersSerializedData = self.serializedData;
         NSData* headerData = [NSMutableData dataWithBytesNoCopy:(void*)headersSerializedData.bytes length:headersSerializedData.length freeWhenDone:NO];
         [dataToSend appendData:headerData];
-        _alreadySentHeaders = YES;
+        self.alreadySentHeaders = YES;
     }
 
     return dataToSend;
