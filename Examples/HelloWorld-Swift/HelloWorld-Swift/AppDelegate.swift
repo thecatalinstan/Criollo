@@ -9,8 +9,8 @@
 import Criollo
 
 let PortNumber:UInt = 10781;
-let LogConnections:Bool = true;
-let LogRequests:Bool = true;
+let LogConnections:Bool = false;
+let LogRequests:Bool = false;
 
 class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
 

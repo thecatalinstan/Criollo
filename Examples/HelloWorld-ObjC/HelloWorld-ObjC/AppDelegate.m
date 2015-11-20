@@ -10,8 +10,8 @@
 #import "utils.h"
 
 #define PortNumber          10781
-#define LogConnections          1
-#define LogRequests             1
+#define LogConnections          0
+#define LogRequests             0
 
 @interface AppDelegate () <CRServerDelegate>
 
