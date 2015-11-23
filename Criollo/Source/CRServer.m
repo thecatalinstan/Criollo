@@ -15,6 +15,7 @@
 #import "CRRequest.h"
 #import "CRResponse.h"
 #import "CRRoute.h"
+#import "CRViewController.h"
 
 NSUInteger const CRErrorSocketError = 2001;
 
@@ -230,6 +231,20 @@ NSUInteger const CRErrorSocketError = 2001;
 }
 
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
+    CRRoute* route = [CRRoute routeWithBlock:block];
+    [self addRoute:route forPath:path HTTPMethod:HTTPMethod];
+}
+
+- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path {
+    [self addController:controllerClass forPath:path HTTPMethod:nil];
+}
+
+- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
+    CRRoute* route = [CRRoute routeWithControllerClass:controllerClass];
+    [self addRoute:route forPath:path HTTPMethod:HTTPMethod];
+}
+
+- (void)addRoute:(CRRoute*)route forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
     NSArray<NSString*>* methods;
 
     if ( HTTPMethod == nil ) {
@@ -246,7 +261,6 @@ NSUInteger const CRErrorSocketError = 2001;
         path = [path stringByAppendingString:@"/"];
     }
 
-    CRRoute* route = [CRRoute routeWithBlock:block];
 
     // Add the
     [methods enumerateObjectsUsingBlock:^(NSString * _Nonnull method, NSUInteger idx, BOOL * _Nonnull stop) {

@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "utils.h"
+#import "HelloWorldViewController.h"
 
 #define PortNumber          10781
 #define LogConnections          0
@@ -127,6 +128,8 @@
 
     };
     [self.server addBlock:statusBlock forPath:@"/status"];
+
+    [self.server addController:[HelloWorldViewController class] forPath:@"/controller"];
 
     // Start listening
     NSError *serverError;

@@ -22,6 +22,8 @@
 @property (nonatomic, readonly) BOOL shouldFinishResponse;
 @property (nonatomic, readonly, nonnull) CRRouteBlock routeBlock;
 
++ (nonnull NSString*)defaultNibName;
+
 - (nonnull instancetype)initWithNibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil NS_DESIGNATED_INITIALIZER;
 
 - (nonnull NSString*)presentViewControllerWithRequest:(nonnull CRRequest*)request response:(nonnull CRResponse*)response;

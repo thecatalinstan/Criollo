@@ -18,3 +18,7 @@
 
 #import <CriolloiOS/CRHTTPServer.h>
 #import <CriolloiOS/CRFCGIServer.h>
+
+#import <CriolloiOS/CRNib.h>
+#import <CriolloiOS/CRView.h>
+#import <CriolloiOS/CRViewController.h>

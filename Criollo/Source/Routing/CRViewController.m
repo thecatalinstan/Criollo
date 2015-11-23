@@ -21,6 +21,10 @@
 
 @implementation CRViewController
 
++ (NSString *)defaultNibName {
+    return [self.className stringByReplacingOccurrencesOfString:@"Controller" withString:@""];
+}
+
 - (instancetype)init {
     return [self initWithNibName:nil bundle:nil];
 }
@@ -30,7 +34,7 @@
     if ( self != nil ) {
         _nibName = nibNameOrNil;
         if ( self.nibName == nil ) {
-            _nibName = [self.className stringByReplacingOccurrencesOfString:@"Controller" withString:@""];
+            _nibName = [self.class defaultNibName];
         }
         _nibBundle = nibBundleOrNil;
         _templateVariables = [NSMutableDictionary dictionary];
@@ -63,19 +67,21 @@
     return [self.view render:self.templateVariables];
 }
 
-- (BOOL)shouldFinishResponse {
-    return YES;
-}
-
 - (CRRouteBlock)routeBlock {
     return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
+        [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
         NSString* output = [self presentViewControllerWithRequest:request response:response];
         if ( self.shouldFinishResponse ) {
             [response sendString:output];
         } else {
             [response writeString:output];
         }
+        completionHandler();
     };
+}
+
+- (BOOL)shouldFinishResponse {
+    return YES;
 }
 
 @end

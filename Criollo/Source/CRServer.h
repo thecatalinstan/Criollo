@@ -50,4 +50,7 @@ FOUNDATION_EXPORT NSUInteger const CRErrorSocketError;
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString*)path;
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString*)path HTTPMethod:(NSString*)HTTPMethod;
 
+- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString*)path;
+- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString*)path HTTPMethod:(NSString*)HTTPMethod;
+
 @end

@@ -8,6 +8,8 @@
 
 #import "CRView.h"
 
+#define CRViewVariableFormat @"[%@]"
+
 @interface CRView ()
 
 @property (nonatomic, strong, nonnull) NSMutableString* mutableContents;
@@ -34,7 +36,7 @@
         return self.contents;
     } else {
         [templateVariables enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-            [self.mutableContents replaceOccurrencesOfString:key withString:obj options:0 range:NSMakeRange(0, self.mutableContents.length)];
+            [self.mutableContents replaceOccurrencesOfString:[NSString stringWithFormat:CRViewVariableFormat, key] withString:obj options:0 range:NSMakeRange(0, self.mutableContents.length)];
         }];
         return self.mutableContents;
     }

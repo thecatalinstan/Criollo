@@ -14,8 +14,9 @@
 
 @property (nonatomic, strong, nonnull) CRRouteBlock block;
 
-+ (CRRoute* _Nonnull)routeWithBlock:(CRRouteBlock _Nonnull)block;
++ (nonnull CRRoute *)routeWithBlock:(nonnull CRRouteBlock)block;
++ (nonnull CRRoute *)routeWithControllerClass:(nonnull __unsafe_unretained Class)controllerClass;
 
-- (instancetype _Nonnull)initWithBlock:(CRRouteBlock _Nonnull)block NS_DESIGNATED_INITIALIZER;
-
+- (nonnull instancetype)initWithBlock:(nonnull CRRouteBlock)block NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithControllerClass:(nonnull __unsafe_unretained Class)controllerClass;
 @end
