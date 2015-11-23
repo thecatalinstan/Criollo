@@ -27,8 +27,7 @@
         }
         NSString* path = [bundle pathForResource:self.name ofType:@"html"];
         if ( path != nil ) {
-            NSData* data = [NSData dataWithContentsOfFile:path options:NSDataReadingMapped error:nil];
-            _contents = [NSString stringWithUTF8String:data.bytes];
+            _data = [NSData dataWithContentsOfFile:path options:NSDataReadingMapped error:nil];
         }
     }
     return self;
