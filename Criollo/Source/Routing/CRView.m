@@ -12,8 +12,6 @@
 
 @interface CRView ()
 
-@property (nonatomic, strong, nonnull) NSMutableString* mutableContents;
-
 @end
 
 @implementation CRView
@@ -26,7 +24,6 @@
     self = [super init];
     if ( self != nil ) {
         _contents = contents == nil ? @"" : contents;
-        _mutableContents = _contents.mutableCopy;
     }
     return self;
 }
@@ -35,10 +32,11 @@
     if ( templateVariables == nil ) {
         return self.contents;
     } else {
+        NSMutableString* mutableContents = self.contents.mutableCopy;
         [templateVariables enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-            [self.mutableContents replaceOccurrencesOfString:[NSString stringWithFormat:CRViewVariableFormat, key] withString:obj options:0 range:NSMakeRange(0, self.mutableContents.length)];
+            [mutableContents replaceOccurrencesOfString:[NSString stringWithFormat:CRViewVariableFormat, key] withString:obj options:0 range:NSMakeRange(0, mutableContents.length)];
         }];
-        return self.mutableContents;
+        return mutableContents;
     }
 }
 
