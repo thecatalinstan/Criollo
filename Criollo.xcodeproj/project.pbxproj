@@ -58,6 +58,18 @@
 		AD609C5B1BDA661F0003E702 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = AD609C591BDA661F0003E702 /* GCDAsyncSocket.h */; };
 		AD609C5C1BDA661F0003E702 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = AD609C5A1BDA661F0003E702 /* GCDAsyncSocket.m */; };
 		AD609C5F1BDA7A4C0003E702 /* Criollo.podSpec in Resources */ = {isa = PBXBuildFile; fileRef = AD609C5E1BDA7A4C0003E702 /* Criollo.podSpec */; };
+		AD60BA3F1C0389F800118EED /* CRNib.h in Headers */ = {isa = PBXBuildFile; fileRef = AD60BA3D1C0389F800118EED /* CRNib.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AD60BA401C0389F800118EED /* CRNib.h in Headers */ = {isa = PBXBuildFile; fileRef = AD60BA3D1C0389F800118EED /* CRNib.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AD60BA411C0389F800118EED /* CRNib.m in Sources */ = {isa = PBXBuildFile; fileRef = AD60BA3E1C0389F800118EED /* CRNib.m */; };
+		AD60BA421C0389F800118EED /* CRNib.m in Sources */ = {isa = PBXBuildFile; fileRef = AD60BA3E1C0389F800118EED /* CRNib.m */; };
+		AD60BA451C03977300118EED /* CRView.h in Headers */ = {isa = PBXBuildFile; fileRef = AD60BA431C03977300118EED /* CRView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AD60BA461C03977300118EED /* CRView.h in Headers */ = {isa = PBXBuildFile; fileRef = AD60BA431C03977300118EED /* CRView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AD60BA471C03977300118EED /* CRView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD60BA441C03977300118EED /* CRView.m */; };
+		AD60BA481C03977300118EED /* CRView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD60BA441C03977300118EED /* CRView.m */; };
+		AD60BA4B1C03990500118EED /* CRViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = AD60BA491C03990500118EED /* CRViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AD60BA4C1C03990500118EED /* CRViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = AD60BA491C03990500118EED /* CRViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AD60BA4D1C03990500118EED /* CRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD60BA4A1C03990500118EED /* CRViewController.m */; };
+		AD60BA4E1C03990500118EED /* CRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD60BA4A1C03990500118EED /* CRViewController.m */; };
 		AD61E9761BDD7FDF00F5BD17 /* CRHTTPServer.h in Headers */ = {isa = PBXBuildFile; fileRef = AD61E9741BDD7FDF00F5BD17 /* CRHTTPServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD61E9771BDD7FDF00F5BD17 /* CRHTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = AD61E9751BDD7FDF00F5BD17 /* CRHTTPServer.m */; };
 		AD61E97A1BDD80C100F5BD17 /* CRHTTPConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = AD61E9781BDD80C100F5BD17 /* CRHTTPConnection.h */; };
@@ -122,6 +134,12 @@
 		AD609C591BDA661F0003E702 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = Libraries/CocoaAsyncSocket/Source/GCD/GCDAsyncSocket.h; sourceTree = "<group>"; };
 		AD609C5A1BDA661F0003E702 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = Libraries/CocoaAsyncSocket/Source/GCD/GCDAsyncSocket.m; sourceTree = "<group>"; };
 		AD609C5E1BDA7A4C0003E702 /* Criollo.podSpec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Criollo.podSpec; sourceTree = SOURCE_ROOT; };
+		AD60BA3D1C0389F800118EED /* CRNib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRNib.h; sourceTree = "<group>"; };
+		AD60BA3E1C0389F800118EED /* CRNib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRNib.m; sourceTree = "<group>"; };
+		AD60BA431C03977300118EED /* CRView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRView.h; sourceTree = "<group>"; };
+		AD60BA441C03977300118EED /* CRView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRView.m; sourceTree = "<group>"; };
+		AD60BA491C03990500118EED /* CRViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRViewController.h; sourceTree = "<group>"; };
+		AD60BA4A1C03990500118EED /* CRViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRViewController.m; sourceTree = "<group>"; };
 		AD61E9741BDD7FDF00F5BD17 /* CRHTTPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRHTTPServer.h; sourceTree = "<group>"; };
 		AD61E9751BDD7FDF00F5BD17 /* CRHTTPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPServer.m; sourceTree = "<group>"; };
 		AD61E9781BDD80C100F5BD17 /* CRHTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRHTTPConnection.h; sourceTree = "<group>"; };
@@ -186,6 +204,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AD60BA3C1C0389A400118EED /* Routing */ = {
+			isa = PBXGroup;
+			children = (
+				ADADAB5D1BEEF28E000FBE6B /* CRRoute.h */,
+				ADADAB5E1BEEF28E000FBE6B /* CRRoute.m */,
+				AD60BA3D1C0389F800118EED /* CRNib.h */,
+				AD60BA3E1C0389F800118EED /* CRNib.m */,
+				AD60BA431C03977300118EED /* CRView.h */,
+				AD60BA441C03977300118EED /* CRView.m */,
+				AD60BA491C03990500118EED /* CRViewController.h */,
+				AD60BA4A1C03990500118EED /* CRViewController.m */,
+			);
+			path = Routing;
+			sourceTree = "<group>";
+		};
 		AD61E9731BDD7F8000F5BD17 /* HTTP */ = {
 			isa = PBXGroup;
 			children = (
@@ -273,6 +306,7 @@
 		ADEDB3AB1AEFCCCD00A26AF1 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				AD60BA3C1C0389A400118EED /* Routing */,
 				AD61E97C1BDD880C00F5BD17 /* FCGI */,
 				AD61E9731BDD7F8000F5BD17 /* HTTP */,
 				ADEDB37B1AEFC0B000A26AF1 /* Criollo.h */,
@@ -297,8 +331,6 @@
 				AD61E9891BDD8C8E00F5BD17 /* CRResponse.h */,
 				AD61E98A1BDD8C8E00F5BD17 /* CRResponse.m */,
 				AD63F83B1BFEB114003815DC /* CRResponse_Internal.h */,
-				ADADAB5D1BEEF28E000FBE6B /* CRRoute.h */,
-				ADADAB5E1BEEF28E000FBE6B /* CRRoute.m */,
 				ADD2B60A1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h */,
 				ADD2B60B1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m */,
 			);
@@ -316,6 +348,7 @@
 				AD5FFFE01BF0030700A57FE9 /* CRHTTPServer.h in Headers */,
 				AD63F8371BFEAD08003815DC /* CRRequest_Internal.h in Headers */,
 				ADD2B60F1BFE70C900E2E632 /* NSHTTPCookie+Criollo.h in Headers */,
+				AD60BA461C03977300118EED /* CRView.h in Headers */,
 				AD5FFFE61BF0030700A57FE9 /* CRHTTPResponse.h in Headers */,
 				AD5FFFD61BF0030000A57FE9 /* CRFCGIServerConfiguration.h in Headers */,
 				AD5FFFEC1BF0031E00A57FE9 /* CRServer.h in Headers */,
@@ -327,8 +360,10 @@
 				AD5FFFD81BF0030000A57FE9 /* CRFCGIConnection.h in Headers */,
 				AD5FFFF01BF0031E00A57FE9 /* CRConnection.h in Headers */,
 				AD5FFFFA1BF0032900A57FE9 /* GCDAsyncSocket.h in Headers */,
+				AD60BA4C1C03990500118EED /* CRViewController.h in Headers */,
 				AD63F83A1BFEAE96003815DC /* CRMessage_Internal.h in Headers */,
 				AD5FFFF81BF0031E00A57FE9 /* CRRoute.h in Headers */,
+				AD60BA401C0389F800118EED /* CRNib.h in Headers */,
 				AD5FFFDE1BF0030000A57FE9 /* CRFCGIRecord.h in Headers */,
 				AD5FFFF61BF0031E00A57FE9 /* CRResponse.h in Headers */,
 				AD5F00021BF0054F00A57FE9 /* CriolloiOS.h in Headers */,
@@ -351,6 +386,7 @@
 				AD61E9761BDD7FDF00F5BD17 /* CRHTTPServer.h in Headers */,
 				AD63F8361BFEAD08003815DC /* CRRequest_Internal.h in Headers */,
 				ADD2B60C1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h in Headers */,
+				AD60BA451C03977300118EED /* CRView.h in Headers */,
 				AD61E97A1BDD80C100F5BD17 /* CRHTTPConnection.h in Headers */,
 				ADA37C741BE38E69008D89CA /* CRFCGIRecord.h in Headers */,
 				AD19695E1B626EF90098CA89 /* CRServer.h in Headers */,
@@ -362,8 +398,10 @@
 				AD609C5B1BDA661F0003E702 /* GCDAsyncSocket.h in Headers */,
 				AD61E98D1BDD8C8E00F5BD17 /* CRRequest.h in Headers */,
 				ADA37C811BE3B86B008D89CA /* CRHTTPResponse.h in Headers */,
+				AD60BA4B1C03990500118EED /* CRViewController.h in Headers */,
 				AD63F8391BFEAE96003815DC /* CRMessage_Internal.h in Headers */,
 				ADADAB5F1BEEF28E000FBE6B /* CRRoute.h in Headers */,
+				AD60BA3F1C0389F800118EED /* CRNib.h in Headers */,
 				AD61E9811BDD880C00F5BD17 /* CRFCGIConnection.h in Headers */,
 				ADB693001BE53FD400656BEC /* CRFCGIRequest.h in Headers */,
 				ADEDB3A71AEFCC8B00A26AF1 /* CRApplication.h in Headers */,
@@ -494,8 +532,11 @@
 				AD5FFFD71BF0030000A57FE9 /* CRFCGIServerConfiguration.m in Sources */,
 				AD5FFFDF1BF0030000A57FE9 /* CRFCGIRecord.m in Sources */,
 				AD5FFFD91BF0030000A57FE9 /* CRFCGIConnection.m in Sources */,
+				AD60BA481C03977300118EED /* CRView.m in Sources */,
+				AD60BA4E1C03990500118EED /* CRViewController.m in Sources */,
 				AD5FFFFB1BF0032900A57FE9 /* GCDAsyncSocket.m in Sources */,
 				AD5FFFF91BF0031E00A57FE9 /* CRRoute.m in Sources */,
+				AD60BA421C0389F800118EED /* CRNib.m in Sources */,
 				AD5FFFE71BF0030700A57FE9 /* CRHTTPResponse.m in Sources */,
 				ADD2B60E1BFE70C300E2E632 /* NSHTTPCookie+Criollo.m in Sources */,
 				AD5FFFEB1BF0031E00A57FE9 /* CRApplication.m in Sources */,
@@ -522,8 +563,11 @@
 				ADADAB601BEEF28E000FBE6B /* CRRoute.m in Sources */,
 				AD609C5C1BDA661F0003E702 /* GCDAsyncSocket.m in Sources */,
 				ADA37C8E1BE3C7A0008D89CA /* CRFCGIServerConfiguration.m in Sources */,
+				AD60BA471C03977300118EED /* CRView.m in Sources */,
+				AD60BA4D1C03990500118EED /* CRViewController.m in Sources */,
 				ADA37C751BE38E69008D89CA /* CRFCGIRecord.m in Sources */,
 				ADB693011BE53FD400656BEC /* CRFCGIRequest.m in Sources */,
+				AD60BA411C0389F800118EED /* CRNib.m in Sources */,
 				AD19695F1B626EF90098CA89 /* CRServer.m in Sources */,
 				ADD2B60D1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m in Sources */,
 				ADA37C821BE3B86B008D89CA /* CRHTTPResponse.m in Sources */,
