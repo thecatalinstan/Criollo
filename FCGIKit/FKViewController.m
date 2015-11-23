@@ -66,7 +66,6 @@
     // Determine the view class to use
     Class viewClass = NSClassFromString([self.className stringByReplacingOccurrencesOfString:@"Controller" withString:@""]);
 	
-	
     if ( viewClass == nil ) {
         viewClass = [FKView class];
     }

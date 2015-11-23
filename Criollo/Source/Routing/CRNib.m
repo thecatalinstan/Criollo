@@ -1,0 +1,37 @@
+//
+//  CRNib.m
+//  Criollo
+//
+//  Created by Cătălin Stan on 5/18/14.
+//  Copyright (c) 2014 Catalin Stan. All rights reserved.
+//
+
+#import "CRNib.h"
+
+@interface CRNib ()
+
+@end
+
+@implementation CRNib
+
+- (instancetype)init {
+    return [self initWithNibNamed:@"" bundle:nil];
+}
+
+- (instancetype)initWithNibNamed:(NSString *)nibName bundle:(NSBundle *)bundle {
+    self = [super init];
+    if ( self != nil ) {
+        _name = nibName;
+        if ( bundle == nil ) {
+            bundle = [NSBundle mainBundle];
+        }
+        NSString* path = [bundle pathForResource:self.name ofType:@"html"];
+        if ( path != nil ) {
+            NSData* data = [NSData dataWithContentsOfFile:path options:NSDataReadingMapped error:nil];
+            _contents = [NSString stringWithUTF8String:data.bytes];
+        }
+    }
+    return self;
+}
+
+@end

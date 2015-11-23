@@ -825,6 +825,8 @@
 		"find_history":
 		[
 			"FCGIKit",
+			"FKNib",
+			"FCGIKit",
 			"CRServerOperationBlock",
 			"addDELETEHandlerBlock",
 			"addPUTHandlerBlock",
@@ -949,9 +951,7 @@
 			" un-follow",
 			"map",
 			"discover",
-			"to_state",
-			"discover",
-			"stateChangeStart"
+			"to_state"
 		],
 		"highlight": true,
 		"in_selection": false,
