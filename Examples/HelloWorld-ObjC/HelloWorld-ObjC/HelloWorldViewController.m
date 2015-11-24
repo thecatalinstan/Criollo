@@ -10,8 +10,11 @@
 
 @implementation HelloWorldViewController
 
+- (void)viewDidLoad {
+}
+
 - (NSString *)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response {
-    self.templateVariables[@"TEXT"] = [NSString stringWithFormat:@"%@", request.env];
+    self.templateVariables[@"TEXT"] = [NSString stringWithFormat:@"%@", request.query];
     return [super presentViewControllerWithRequest:request response:response];
 }
 

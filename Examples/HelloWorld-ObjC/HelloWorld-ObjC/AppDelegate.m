@@ -48,7 +48,7 @@
         [response sendString:@"Hello World"];
         completionHandler();
     };
-    [self.server addBlock:helloBlock forPath:@"/"];
+    [self.server addBlock:helloBlock forPath:@"/" ];
 
     // Prints a hello world JSON object as application/json
     CRRouteBlock jsonHelloBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler ) {

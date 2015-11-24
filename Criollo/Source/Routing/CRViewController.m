@@ -19,7 +19,6 @@
 @property (nonatomic, readonly, strong, nonnull) dispatch_queue_t isolationQueue;
 
 - (void)loadView;
-- (void)viewDidLoad;
 
 @end
 
@@ -47,15 +46,10 @@
     static dispatch_queue_t isolationQueue;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        isolationQueue = dispatch_queue_create([[self.className stringByAppendingPathExtension:@"IsolationQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
+        isolationQueue = dispatch_queue_create([[NSStringFromClass(self.class) stringByAppendingPathExtension:@"IsolationQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
         dispatch_set_target_queue(isolationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
     });
     return isolationQueue;
-}
-
-
-+ (NSString *)defaultNibName {
-    return [self.className stringByReplacingOccurrencesOfString:@"Controller" withString:@""];
 }
 
 - (instancetype)init {
@@ -67,7 +61,7 @@
     if ( self != nil ) {
         _nibName = nibNameOrNil;
         if ( self.nibName == nil ) {
-            _nibName = [self.class defaultNibName];
+            _nibName = NSStringFromClass(self.class);
         }
         _nibBundle = nibBundleOrNil;
         if ( self.nibBundle == nil ) {
@@ -82,7 +76,7 @@
 - (void)loadView {
     CRView* view;
 
-    NSString* viewCacheKey = [NSString stringWithFormat:@"%@/%@@%@", self.nibBundle.bundleIdentifier, self.nibName, self.className];
+    NSString* viewCacheKey = [NSString stringWithFormat:@"%@/%@@%@", self.nibBundle.bundleIdentifier, self.nibName, NSStringFromClass(self.class)];
 
     if ( self.viewCache[viewCacheKey] != nil ) {
 
@@ -101,10 +95,10 @@
             });
         }
 
-        NSString *contents= [NSString stringWithUTF8String:nib.data.bytes];
+        NSString *contents = [NSString stringWithUTF8String:nib.data.bytes];
 
         // Determine the view class to use
-        Class viewClass = NSClassFromString([self.className stringByReplacingOccurrencesOfString:@"Controller" withString:@""]);
+        Class viewClass = NSClassFromString([NSStringFromClass(self.class) stringByReplacingOccurrencesOfString:@"Controller" withString:@""]);
         if ( viewClass == nil ) {
             viewClass = [CRView class];
         }

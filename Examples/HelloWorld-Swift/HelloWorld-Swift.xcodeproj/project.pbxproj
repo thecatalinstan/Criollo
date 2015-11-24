@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ADA0B5DA1C03E52C009259C5 /* HelloWorldViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = ADA0B5D91C03E52C009259C5 /* HelloWorldViewController.html */; };
+		ADA0B5DD1C03E55E009259C5 /* HelloWorldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0B5DC1C03E55E009259C5 /* HelloWorldViewController.swift */; };
 		ADAEE9B51BFA7AA00034819C /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D71BF0FF0200DFCF6B /* Criollo.framework */; };
 		ADAEE9B61BFA7AA00034819C /* Criollo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D71BF0FF0200DFCF6B /* Criollo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		ADAEE9BE1BFA80630034819C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD57A6F81BFA6E5300815942 /* AppDelegate.swift */; };
@@ -55,6 +57,8 @@
 /* Begin PBXFileReference section */
 		AD57A6F81BFA6E5300815942 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AD57A6FF1BFA6E5300815942 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ADA0B5D91C03E52C009259C5 /* HelloWorldViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = HelloWorldViewController.html; sourceTree = "<group>"; };
+		ADA0B5DC1C03E55E009259C5 /* HelloWorldViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelloWorldViewController.swift; sourceTree = "<group>"; };
 		ADAEE9A81BFA7A4B0034819C /* HelloWorld-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HelloWorld-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Criollo.xcodeproj; path = ../../Criollo.xcodeproj; sourceTree = "<group>"; };
 		ADDAE64E1BFCD81000E2A901 /* HelloWorld-Swift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HelloWorld-Swift-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -78,6 +82,8 @@
 			isa = PBXGroup;
 			children = (
 				AD57A6F81BFA6E5300815942 /* AppDelegate.swift */,
+				ADA0B5DC1C03E55E009259C5 /* HelloWorldViewController.swift */,
+				ADA0B5D91C03E52C009259C5 /* HelloWorldViewController.html */,
 				ADF1D88E1BFA6F17002CCFD6 /* main.swift */,
 				AD57A6FF1BFA6E5300815942 /* Info.plist */,
 				ADDAE64F1BFCD81000E2A901 /* utils.m */,
@@ -194,6 +200,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADA0B5DA1C03E52C009259C5 /* HelloWorldViewController.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,6 +211,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADA0B5DD1C03E55E009259C5 /* HelloWorldViewController.swift in Sources */,
 				ADAEE9BF1BFA80670034819C /* main.swift in Sources */,
 				ADDAE6501BFCD81000E2A901 /* utils.m in Sources */,
 				ADAEE9BE1BFA80630034819C /* AppDelegate.swift in Sources */,

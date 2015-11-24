@@ -84,6 +84,7 @@ NSUInteger const CRErrorSocketError = 2001;
     if ( portNumber != 0 ) {
         self.configuration.CRServerPort = portNumber;
     }
+
     if ( interface.length != 0 ) {
         self.configuration.CRServerInterface = interface;
     }

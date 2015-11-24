@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AD60BA521C03A6F200118EED /* HelloWorldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD60BA511C03A6F200118EED /* HelloWorldViewController.m */; };
-		AD60BA551C03A72200118EED /* HelloWorldView.html in Resources */ = {isa = PBXBuildFile; fileRef = AD60BA541C03A72200118EED /* HelloWorldView.html */; };
+		AD60BA551C03A72200118EED /* HelloWorldViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD60BA541C03A72200118EED /* HelloWorldViewController.html */; };
 		ADE3DDA91BFE003900844DC9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE3DDA81BFE003900844DC9 /* AppDelegate.m */; };
 		ADE3DDAC1BFE003900844DC9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE3DDAB1BFE003900844DC9 /* main.m */; };
 		ADE3DDC11BFE00EB00844DC9 /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADE3DDBE1BFE00DD00844DC9 /* Criollo.framework */; };
@@ -57,7 +57,7 @@
 /* Begin PBXFileReference section */
 		AD60BA501C03A6F200118EED /* HelloWorldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloWorldViewController.h; sourceTree = "<group>"; };
 		AD60BA511C03A6F200118EED /* HelloWorldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelloWorldViewController.m; sourceTree = "<group>"; };
-		AD60BA541C03A72200118EED /* HelloWorldView.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = HelloWorldView.html; sourceTree = "<group>"; };
+		AD60BA541C03A72200118EED /* HelloWorldViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = HelloWorldViewController.html; sourceTree = "<group>"; };
 		ADE3DDA41BFE003900844DC9 /* HelloWorld-ObjC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HelloWorld-ObjC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADE3DDA71BFE003900844DC9 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		ADE3DDA81BFE003900844DC9 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -104,7 +104,7 @@
 				ADE3DDA81BFE003900844DC9 /* AppDelegate.m */,
 				AD60BA501C03A6F200118EED /* HelloWorldViewController.h */,
 				AD60BA511C03A6F200118EED /* HelloWorldViewController.m */,
-				AD60BA541C03A72200118EED /* HelloWorldView.html */,
+				AD60BA541C03A72200118EED /* HelloWorldViewController.html */,
 				ADE3DDC91BFE055100844DC9 /* utils.h */,
 				ADE3DDCA1BFE055100844DC9 /* utils.m */,
 				ADE3DDAB1BFE003900844DC9 /* main.m */,
@@ -204,7 +204,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD60BA551C03A72200118EED /* HelloWorldView.html in Resources */,
+				AD60BA551C03A72200118EED /* HelloWorldViewController.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
