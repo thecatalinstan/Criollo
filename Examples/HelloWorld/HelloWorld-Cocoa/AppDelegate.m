@@ -21,7 +21,7 @@
     [self setupServer];
 
     __weak AppDelegate* weakSelf = self;
-    // A block that creates a screenshot and sends it to the clinet
+    // A block that creates a screenshot and sends it to the client
     [self.server addBlock:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
         NSMutableData* imageData = [NSMutableData data];
 
