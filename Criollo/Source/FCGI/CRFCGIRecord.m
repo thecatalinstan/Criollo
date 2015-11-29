@@ -60,7 +60,7 @@ NSString* NSStringFromCRFCGIRecordType(CRFCGIRecordType recordType) {
 
 @interface CRFCGIRecord ()
 
-@property (nonatomic, readonly, copy) NSData *headerProtocolData;
+@property (nonatomic, readonly, copy, nonnull) NSData *headerProtocolData;
 
 @end
 
@@ -71,7 +71,7 @@ NSString* NSStringFromCRFCGIRecordType(CRFCGIRecordType recordType) {
 }
 
 - (instancetype)init {
-    return [self initWithHeaderData:nil];
+    return [self initWithHeaderData:[NSData data]];
 }
 
 - (instancetype)initWithHeaderData:(NSData *)data {

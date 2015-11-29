@@ -43,10 +43,10 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
 
 @interface CRFCGIResponse () 
 
-@property (nonatomic, readonly) NSData* endRequestRecordData;
+@property (nonatomic, readonly, nonnull) NSData *endRequestRecordData;
 
-- (NSData*)FCGIRecordDataWithContentData:(NSData *)data;
-- (NSMutableData*)initialResponseData;
+- (nonnull NSData *)FCGIRecordDataWithContentData:(nullable NSData *)data;
+- (nonnull NSMutableData *)initialResponseData;
 
 @end
 

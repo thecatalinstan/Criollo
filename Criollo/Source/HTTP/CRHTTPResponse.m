@@ -18,7 +18,7 @@
 
 @interface CRHTTPResponse ()
 
-- (NSMutableData*)initialResponseData;
+- (nonnull NSMutableData *)initialResponseData;
 
 @end
 

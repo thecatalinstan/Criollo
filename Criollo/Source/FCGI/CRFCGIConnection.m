@@ -32,7 +32,7 @@
     NSMutableDictionary* currentRequestParams;
 }
 
-- (void)appendParamsFromData:(NSData*)paramsData length:(NSUInteger)dataLength;
+- (void)appendParamsFromData:(nonnull NSData *)paramsData length:(NSUInteger)dataLength;
 
 @end
 
