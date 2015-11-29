@@ -123,7 +123,7 @@
                 self.statusImageItem.image = [UIImage imageNamed:statusImageName];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), self.appDelegate.isolationQueue, ^{
                     dispatch_barrier_async(self.appDelegate.isolationQueue, ^{
-                        self.statusDetailsButton.text = self.appDelegate.isDisconnected ? @"Press + to start listening" : @"";
+                        self.statusDetailsButton.text = self.appDelegate.isDisconnected ? @"Press ▶︎ to start listening" : @"";
                         [self adjustDetailsButtonSize];
                     });
                 });
