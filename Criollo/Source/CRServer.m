@@ -236,12 +236,12 @@ NSUInteger const CRErrorSocketError = 2001;
     [self addRoute:route forPath:path HTTPMethod:HTTPMethod];
 }
 
-- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path {
-    [self addController:controllerClass forPath:path HTTPMethod:nil];
+- (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path {
+    [self addController:controllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path HTTPMethod:nil];
 }
 
-- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
-    CRRoute* route = [CRRoute routeWithControllerClass:controllerClass];
+- (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
+    CRRoute* route = [CRRoute routeWithControllerClass:controllerClass nibName:nibNameOrNil bundle:nibBundleOrNil];
     [self addRoute:route forPath:path HTTPMethod:HTTPMethod];
 }
 

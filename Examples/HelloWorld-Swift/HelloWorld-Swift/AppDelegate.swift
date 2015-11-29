@@ -152,7 +152,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
         self.server.addBlock(statusBlock, forPath: "/status");
 
         let controllerClass:AnyClass! = NSClassFromString(HelloWorldViewController.className());
-        self.server.addController(controllerClass, forPath: "/controller");
+        self.server.addController(controllerClass, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/controller");
 
         // Start listening
         var serverError:NSError?;

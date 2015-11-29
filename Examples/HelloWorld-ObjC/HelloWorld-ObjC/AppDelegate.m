@@ -129,7 +129,7 @@
     };
     [self.server addBlock:statusBlock forPath:@"/status"];
 
-    [self.server addController:[HelloWorldViewController class] forPath:@"/controller"];
+    [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller"];
 
     // Start listening
     NSError *serverError;

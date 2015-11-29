@@ -47,10 +47,11 @@ FOUNDATION_EXPORT NSUInteger const CRErrorSocketError;
 - (void)closeAllConnections;
 
 - (void)addBlock:(CRRouteBlock)block;
+
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString*)path;
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString*)path HTTPMethod:(NSString*)HTTPMethod;
 
-- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString*)path;
-- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString*)path HTTPMethod:(NSString*)HTTPMethod;
+- (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString*)path;
+- (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString*)path HTTPMethod:(NSString*)HTTPMethod;
 
 @end

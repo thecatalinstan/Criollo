@@ -15,6 +15,7 @@
 
 - (NSString *)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response {
     self.templateVariables[@"TEXT"] = [NSString stringWithFormat:@"%@", request.query];
+    self.templateVariables[@"TITLE"] = NSStringFromClass(self.class);
     return [super presentViewControllerWithRequest:request response:response];
 }
 

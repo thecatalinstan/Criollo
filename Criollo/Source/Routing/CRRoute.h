@@ -15,8 +15,9 @@
 @property (nonatomic, strong, nonnull) CRRouteBlock block;
 
 + (nonnull CRRoute *)routeWithBlock:(nonnull CRRouteBlock)block;
-+ (nonnull CRRoute *)routeWithControllerClass:(nonnull __unsafe_unretained Class)controllerClass;
++ (nonnull CRRoute *)routeWithControllerClass:(nonnull __unsafe_unretained Class)controllerClass nibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil;
 
 - (nonnull instancetype)initWithBlock:(nonnull CRRouteBlock)block NS_DESIGNATED_INITIALIZER;
-- (nonnull instancetype)initWithControllerClass:(nonnull __unsafe_unretained Class)controllerClass;
+- (nonnull instancetype)initWithControllerClass:(nonnull __unsafe_unretained Class)controllerClass nibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil;
+
 @end
