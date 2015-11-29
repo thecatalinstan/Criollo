@@ -30,7 +30,7 @@
     static dispatch_queue_t isolationQueue;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        isolationQueue = dispatch_queue_create([[self.className stringByAppendingPathExtension:@"IsolationQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
+        isolationQueue = dispatch_queue_create([[NSStringFromClass(self.class) stringByAppendingPathExtension:@"IsolationQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
         dispatch_set_target_queue(isolationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
     });
     return isolationQueue;
