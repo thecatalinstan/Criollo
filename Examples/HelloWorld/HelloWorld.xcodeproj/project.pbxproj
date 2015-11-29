@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		AD04F4DF1BF249DB00456D38 /* CriolloiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D91BF0FF0200DFCF6B /* CriolloiOS.framework */; };
 		AD04F4E01BF249DB00456D38 /* CriolloiOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D91BF0FF0200DFCF6B /* CriolloiOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		AD19E2371C0A7AC3004D16EB /* HelloWorldViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD19E2351C0A7AC3004D16EB /* HelloWorldViewController.html */; };
+		AD19E2381C0A7AC3004D16EB /* HelloWorldViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD19E2351C0A7AC3004D16EB /* HelloWorldViewController.html */; };
+		AD19E2391C0A7AC3004D16EB /* HelloWorldViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD19E2351C0A7AC3004D16EB /* HelloWorldViewController.html */; };
+		AD19E23A1C0A7AC3004D16EB /* HelloWorldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD19E2361C0A7AC3004D16EB /* HelloWorldViewController.m */; };
+		AD19E23B1C0A7AC3004D16EB /* HelloWorldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD19E2361C0A7AC3004D16EB /* HelloWorldViewController.m */; };
+		AD19E23C1C0A7AC3004D16EB /* HelloWorldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD19E2361C0A7AC3004D16EB /* HelloWorldViewController.m */; };
 		AD3BB7061BF27DAB002EA278 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3BB7041BF27DAB002EA278 /* WindowController.m */; };
 		AD3BB7071BF27DAB002EA278 /* WindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD3BB7051BF27DAB002EA278 /* WindowController.xib */; };
 		ADC331E31BF0FF4100DFCF6B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC331E21BF0FF4100DFCF6B /* main.m */; };
@@ -90,6 +96,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AD19E2341C0A7AC3004D16EB /* HelloWorldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloWorldViewController.h; sourceTree = "<group>"; };
+		AD19E2351C0A7AC3004D16EB /* HelloWorldViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = HelloWorldViewController.html; sourceTree = "<group>"; };
+		AD19E2361C0A7AC3004D16EB /* HelloWorldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelloWorldViewController.m; sourceTree = "<group>"; };
 		AD3BB7031BF27DAB002EA278 /* WindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowController.h; sourceTree = "<group>"; };
 		AD3BB7041BF27DAB002EA278 /* WindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindowController.m; sourceTree = "<group>"; };
 		AD3BB7051BF27DAB002EA278 /* WindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WindowController.xib; sourceTree = "<group>"; };
@@ -235,6 +244,9 @@
 				ADC3321B1BF1015000DFCF6B /* CommonRequestHandler.m */,
 				ADC3323B1BF107EF00DFCF6B /* CommonAppDelegate.h */,
 				ADC3323C1BF107EF00DFCF6B /* CommonAppDelegate.m */,
+				AD19E2341C0A7AC3004D16EB /* HelloWorldViewController.h */,
+				AD19E2361C0A7AC3004D16EB /* HelloWorldViewController.m */,
+				AD19E2351C0A7AC3004D16EB /* HelloWorldViewController.html */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -388,6 +400,7 @@
 				ADC331F11BF0FF4100DFCF6B /* LaunchScreen.storyboard in Resources */,
 				ADC331EE1BF0FF4100DFCF6B /* Assets.xcassets in Resources */,
 				ADC331EC1BF0FF4100DFCF6B /* Main.storyboard in Resources */,
+				AD19E2391C0A7AC3004D16EB /* HelloWorldViewController.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,6 +411,7 @@
 				ADC332031BF0FF6C00DFCF6B /* Assets.xcassets in Resources */,
 				AD3BB7071BF27DAB002EA278 /* WindowController.xib in Resources */,
 				ADC332061BF0FF6C00DFCF6B /* MainMenu.xib in Resources */,
+				AD19E2381C0A7AC3004D16EB /* HelloWorldViewController.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,6 +419,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD19E2371C0A7AC3004D16EB /* HelloWorldViewController.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,6 +434,7 @@
 				ADC331E61BF0FF4100DFCF6B /* AppDelegate.m in Sources */,
 				ADC3321C1BF1015000DFCF6B /* CommonRequestHandler.m in Sources */,
 				ADC331E31BF0FF4100DFCF6B /* main.m in Sources */,
+				AD19E23C1C0A7AC3004D16EB /* HelloWorldViewController.m in Sources */,
 				ADC3323D1BF107EF00DFCF6B /* CommonAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -431,6 +447,7 @@
 				ADC332011BF0FF6C00DFCF6B /* main.m in Sources */,
 				ADC331FE1BF0FF6C00DFCF6B /* AppDelegate.m in Sources */,
 				ADC3321D1BF1016000DFCF6B /* CommonRequestHandler.m in Sources */,
+				AD19E23B1C0A7AC3004D16EB /* HelloWorldViewController.m in Sources */,
 				ADC3323E1BF1099700DFCF6B /* CommonAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -441,6 +458,7 @@
 			files = (
 				ADC3322C1BF1064700DFCF6B /* main.m in Sources */,
 				ADC332401BF10FBA00DFCF6B /* CommonRequestHandler.m in Sources */,
+				AD19E23A1C0A7AC3004D16EB /* HelloWorldViewController.m in Sources */,
 				ADC332291BF1064700DFCF6B /* AppDelegate.m in Sources */,
 				ADC3323F1BF1099800DFCF6B /* CommonAppDelegate.m in Sources */,
 			);

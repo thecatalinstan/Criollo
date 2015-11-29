@@ -8,6 +8,7 @@
 
 #import "CommonAppDelegate.h"
 #import "CommonRequestHandler.h"
+#import "HelloWorldViewController.h"
 
 #include <ifaddrs.h>
 #include <arpa/inet.h>
@@ -38,6 +39,7 @@
     [self.server addBlock:helloBlock forPath:@"/"];
     [self.server addBlock:jsonHelloBlock forPath:@"/json"];
     [self.server addBlock:statusBlock forPath:@"/status" HTTPMethod:@"GET"];
+    [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller"];
 
     [self willChangeValueForKey:@"isConnected"];
     _isConnected = NO;
