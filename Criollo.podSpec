@@ -2,39 +2,38 @@ Pod::Spec.new do |s|
   
   s.name         =  "Criollo"
   s.version      =  "0.1.0"
-  s.summary      =  "A Cocoa framework for creating HTTP or FCGI web applications."
+  s.license      =  { :type => "public domain", :text => <<-LICENSE
 
+Public Domain License
+
+The Criollo project is in the public domain.
+Updated and maintained by Cătălin Stan.
+                    LICENSE
+                    }
+
+  s.summary      =  "A Cocoa framework for creating HTTP or FCGI web applications."
   s.description  =  <<-DESC
 
-                    Criollo helps create self-contained web applications that serve web content over the
-                    HTTP or FCGI protocols.
-                   
+Criollo helps create self-contained web applications that serve content
+over the HTTP or FCGI protocols.                   
                     DESC
 
-  s.homepage     =  "https://github.com/thecatalinstan/Criollo"
-
-  s.license  =  { :type => "public domain", :text => <<-LICENSE
-
-                    Public Domain License
-
-                    The Criollo project is in the public domain.
-
-                    Updated and maintained by Cătălin Stan.
-
-                    LICENSE
-                }
-
+  s.homepage     =  "https://criollo.io/"
   s.author             =    { "Cătălin Stan" => "catalin.stan@me.com" }
-  s.social_media_url   =    "http://twitter.com/catalinstan"
+  s.social_media_url   =    "http://twitter.com/criolloio"
 
-  s.source       =  { :git => "https://github.com/thecatalinstan/Criollo.git", :tag => s.version }
+  # s.source       =  { :git => "https://github.com/thecatalinstan/Criollo.git", :tag => s.version }
+  s.source       =  { :git => "https://github.com/thecatalinstan/Criollo.git", :branch => "develop" }
 
-  s.source_files  = "Criollo", "Criollo/Source/*.{h,m}", "Criollo/Source/HTTP/*.{h,m}", "Criollo/Source/FCGI/*.{h,m}", "Libraries/CocoaAsyncSocket/Source/GCD/GCDAsyncSocket.{h,m}"
-  s.public_header_files = "Criollo", "Criollo/Source/*.h", "Criollo/Source/HTTP/*.h", "Criollo/Source/FCGI/*.h", "Libraries/CocoaAsyncSocket/Source/GCD/GCDAsyncSocket.h"
-
-  s.osx.deployment_target = "10.10"
+  s.source_files  = "Criollo", "Criollo/Source/*.{h,m}", "Criollo/Source/{HTTP,FCGI,Routing,Extensions}/*.{h,m}"
+  s.public_header_files = "Criollo/Source/CRTypes.h", "Criollo/Source/CRApplication.h", "Criollo/Source/CRServer.h", "Criollo/Source/CRConnection.h", "Criollo/Source/CRRequest.h", "Criollo/Source/CRResponse.h", "Criollo/Source/HTTP/CRHTTPServer.h", "Criollo/Source/FCGI/CRFCGIServer.h", "Criollo/Source/Routing/CRNib.h", "Criollo/Source/Routing/CRView.h", "Criollo/Source/Routing/CRViewController.h"
+  
+  s.ios.deployment_target = '8.0'
+  s.osx.deployment_target = "10.9"
   s.osx.frameworks = "CFNetwork", "Foundation"
   
   s.requires_arc = true
+
+  s.dependency 		'CocoaAsyncSocket', '~> 7.4.2'
 
 end

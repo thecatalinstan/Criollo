@@ -32,12 +32,15 @@
 - (void)sendData:(nonnull NSData *)data;
 
 - (void)writeString:(nonnull NSString *)string;
-- (void)writeFormat:(nonnull NSString *)format, ...;
-- (void)writeFormat:(nonnull NSString *)format args:(va_list)args;
-
 - (void)sendString:(nonnull NSString *)string;
+
+- (void)writeFormat:(nonnull NSString *)format, ...;
 - (void)sendFormat:(nonnull NSString *)format, ...;
+
+NS_ASSUME_NONNULL_BEGIN
+- (void)writeFormat:(nonnull NSString *)format args:(va_list)args;
 - (void)sendFormat:(nonnull NSString *)format args:(va_list)args;
+NS_ASSUME_NONNULL_END
 
 - (void)finish;
 
