@@ -16,42 +16,42 @@ FOUNDATION_EXPORT NSUInteger const CRErrorSocketError;
 
 @optional
 
-- (void)serverWillStartListening:(CRServer*)server;
-- (void)serverDidStartListening:(CRServer*)server;
+- (void)serverWillStartListening:(nonnull CRServer *)server;
+- (void)serverDidStartListening:(nonnull CRServer *)server;
 
-- (void)serverWillStopListening:(CRServer*)server;
-- (void)serverDidStopListening:(CRServer*)server;
+- (void)serverWillStopListening:(nonnull CRServer *)server;
+- (void)serverDidStopListening:(nonnull CRServer *)server;
 
-- (void)server:(CRServer*)server didAcceptConnection:(CRConnection*)connection;
-- (void)server:(CRServer *)server didCloseConnection:(CRConnection*)connection;
+- (void)server:(nonnull CRServer *)server didAcceptConnection:(nonnull CRConnection *)connection;
+- (void)server:(nonnull CRServer  *)server didCloseConnection:(nonnull CRConnection *)connection;
 
-- (void)server:(CRServer*)server didReceiveRequest:(CRRequest*)request;
-- (void)server:(CRServer*)server didFinishRequest:(CRRequest*)request;
+- (void)server:(nonnull CRServer *)server didReceiveRequest:(nonnull CRRequest *)request;
+- (void)server:(nonnull CRServer *)server didFinishRequest:(nonnull CRRequest *)request;
 
 @end
 
 @interface CRServer : NSObject
 
-@property (nonatomic, strong) id<CRServerDelegate> delegate;
+@property (nonatomic, strong, nullable) id<CRServerDelegate> delegate;
 
-@property (nonatomic, strong) CRRouteBlock notFoundBlock;
+@property (nonatomic, strong, nonnull) CRRouteBlock notFoundBlock;
 
-- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithDelegate:(nullable id<CRServerDelegate>)delegate NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)startListening;
-- (BOOL)startListening:(NSError**)error;
-- (BOOL)startListening:(NSError**)error portNumber:(NSUInteger)portNumber;
-- (BOOL)startListening:(NSError**)error portNumber:(NSUInteger)portNumber interface:(NSString*)interface;
+- (BOOL)startListening:(NSError * __nullable __autoreleasing * __nullable)error;
+- (BOOL)startListening:(NSError * __nullable __autoreleasing * __nullable)error portNumber:(NSUInteger)portNumber;
+- (BOOL)startListening:(NSError * __nullable __autoreleasing * __nullable)error portNumber:(NSUInteger)portNumber interface:(nullable NSString *)interface;
 
 - (void)stopListening;
 - (void)closeAllConnections;
 
-- (void)addBlock:(CRRouteBlock)block;
+- (void)addBlock:(nonnull CRRouteBlock)block;
 
-- (void)addBlock:(CRRouteBlock)block forPath:(NSString*)path;
-- (void)addBlock:(CRRouteBlock)block forPath:(NSString*)path HTTPMethod:(NSString*)HTTPMethod;
+- (void)addBlock:(nonnull CRRouteBlock)block forPath:(nullable NSString*)path;
+- (void)addBlock:(nonnull CRRouteBlock)block forPath:(nullable NSString*)path HTTPMethod:(nullable NSString*)HTTPMethod;
 
-- (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString*)path;
-- (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString*)path HTTPMethod:(NSString*)HTTPMethod;
+- (void)addController:(nonnull __unsafe_unretained Class)controllerClass withNibName:(nullable NSString*)nibNameOrNil bundle:(nullable NSBundle*)nibBundleOrNil forPath:(nonnull NSString*)path;
+- (void)addController:(nonnull __unsafe_unretained Class)controllerClass withNibName:(nullable NSString*)nibNameOrNil bundle:(nullable NSBundle*)nibBundleOrNil forPath:(nonnull NSString*)path HTTPMethod:(nullable NSString*)HTTPMethod;
 
 @end

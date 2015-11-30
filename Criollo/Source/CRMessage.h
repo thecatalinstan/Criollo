@@ -14,11 +14,11 @@
 
 @interface CRMessage : NSObject
 
-@property (nonatomic, readonly) NSString* version;
-@property (nonatomic, readonly) NSDictionary<NSString*, NSString*>* allHTTPHeaderFields;
+@property (nonatomic, readonly, nonnull) NSString* version;
+@property (nonatomic, readonly, nonnull) NSDictionary<NSString*, NSString*>* allHTTPHeaderFields;
 
-@property (nonatomic, strong) NSData* body;
+@property (nonatomic, strong, nullable) NSData* body;
 
-- (NSString *)valueForHTTPHeaderField:(NSString *)HTTPHeaderField;
+- (nullable NSString *)valueForHTTPHeaderField:(nonnull NSString *)HTTPHeaderField;
 
 @end

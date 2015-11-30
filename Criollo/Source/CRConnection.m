@@ -26,7 +26,7 @@
 
 @property (nonatomic, readonly) BOOL willDisconnect;
 
-- (void)bufferResponseData:(NSData*)data forRequest:(CRRequest*)request;
+- (void)bufferResponseData:(nonnull NSData *)data forRequest:(nonnull CRRequest *)request;
 
 @end
 

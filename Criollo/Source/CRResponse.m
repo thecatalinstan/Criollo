@@ -21,7 +21,7 @@
 
 @interface CRResponse ()
 
-@property (nonatomic, strong) NSMutableDictionary<NSString *, NSHTTPCookie *> *HTTPCookies;
+@property (nonatomic, strong, nullable) NSMutableDictionary<NSString *, NSHTTPCookie *> *HTTPCookies;
 
 @end
 

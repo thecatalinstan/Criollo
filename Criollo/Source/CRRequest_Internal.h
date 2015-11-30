@@ -11,14 +11,14 @@
 @interface CRRequest ()
 
 @property (nonatomic, readonly) BOOL shouldCloseConnection;
-@property (nonatomic, strong) NSMutableData* bufferedResponseData;
+@property (nonatomic, strong, nullable) NSMutableData* bufferedResponseData;
 
-- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version;
-- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version env:(NSDictionary*)env NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithMethod:(nullable NSString *)method URL:(nullable NSURL *)URL version:(nullable NSString *)version;
+- (nonnull instancetype)initWithMethod:(nullable NSString *)method URL:(nullable NSURL *)URL version:(nullable NSString *)version env:(nullable NSDictionary*)env NS_DESIGNATED_INITIALIZER;
 
-- (BOOL)appendData:(NSData *)data;
+- (BOOL)appendData:(nonnull NSData *)data;
 
-- (void)setEnv:(NSDictionary<NSString*,NSString*>*)envDictionary;
-- (void)setEnv:(NSString*)obj forKey:(NSString*)key;
+- (void)setEnv:(nonnull NSDictionary<NSString*,NSString*>*)envDictionary;
+- (void)setEnv:(nonnull NSString*)obj forKey:(nonnull NSString*)key;
 
 @end

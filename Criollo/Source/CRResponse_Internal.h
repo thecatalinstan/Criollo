@@ -13,17 +13,17 @@
 @interface CRResponse ()
 
 @property (nonatomic, assign) NSUInteger proposedStatusCode;
-@property (nonatomic, strong) NSString* proposedStatusDescription;
+@property (nonatomic, strong, nullable) NSString* proposedStatusDescription;
 
 @property (nonatomic, assign) BOOL alreadySentHeaders;
 @property (nonatomic, assign) BOOL alreadyBuiltHeaders;
 @property (nonatomic, readonly) BOOL finished;
 
-- (instancetype)initWithConnection:(CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode;
-- (instancetype)initWithConnection:(CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description;
-- (instancetype)initWithConnection:(CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithConnection:(nullable CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode;
+- (nonnull instancetype)initWithConnection:(nullable CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(nullable NSString *)description;
+- (nonnull instancetype)initWithConnection:(nullable CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(nullable NSString *)description version:(nullable NSString *)version NS_DESIGNATED_INITIALIZER;
 
-- (void)writeData:(NSData*)data finish:(BOOL)flag;
+- (void)writeData:(nullable NSData*)data finish:(BOOL)flag;
 
 - (void)buildStatusLine;
 - (void)buildHeaders;

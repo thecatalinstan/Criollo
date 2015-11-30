@@ -12,9 +12,9 @@
 
 @interface CRServer ()
 
-@property (nonatomic, strong) CRServerConfiguration* configuration;
-@property (nonatomic, strong) NSMutableArray<CRConnection*>* connections;
+@property (nonatomic, strong, nonnull) CRServerConfiguration* configuration;
+@property (nonatomic, strong, nonnull) NSMutableArray<CRConnection*>* connections;
 
-- (void)didCloseConnection:(CRConnection*)connection;
+- (void)didCloseConnection:(nonnull CRConnection*)connection;
 
 @end

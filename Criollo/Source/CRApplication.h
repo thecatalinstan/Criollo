@@ -38,7 +38,7 @@ typedef NSUInteger CRError;
 FOUNDATION_EXPORT NSUInteger const CRErrorNone;
 FOUNDATION_EXPORT NSUInteger const CRErrorSigTERM;
 
-FOUNDATION_EXPORT  NSString * __nonnull const CRApplicationRunLoopMode;
+FOUNDATION_EXPORT NSString * __nonnull const CRApplicationRunLoopMode;
 
 FOUNDATION_EXPORT NSString * __nonnull const CRApplicationWillFinishLaunchingNotification;
 FOUNDATION_EXPORT NSString * __nonnull const CRApplicationDidFinishLaunchingNotification;

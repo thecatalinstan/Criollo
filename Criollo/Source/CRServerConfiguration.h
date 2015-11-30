@@ -10,7 +10,7 @@
 
 @interface CRServerConfiguration : NSObject
 
-@property (nonatomic, strong) NSString* CRServerInterface;
+@property (nonatomic, strong, nonnull) NSString* CRServerInterface;
 @property (nonatomic, assign) NSUInteger CRServerPort;
 
 @property (nonatomic, assign) NSUInteger CRConnectionReadTimeout;

@@ -21,20 +21,20 @@ NSUInteger const CRErrorSocketError = 2001;
 
 @interface CRServer () <GCDAsyncSocketDelegate, CRConnectionDelegate>
 
-@property (nonatomic, strong) GCDAsyncSocket* socket;
-@property (nonatomic, strong) dispatch_queue_t isolationQueue;
-@property (nonatomic, strong) dispatch_queue_t socketDelegateQueue;
-@property (nonatomic, strong) dispatch_queue_t acceptedSocketDelegateTargetQueue;
-@property (nonatomic, strong) dispatch_queue_t acceptedSocketSocketTargetQueue;
+@property (nonatomic, strong, nonnull) GCDAsyncSocket* socket;
+@property (nonatomic, strong, nonnull) dispatch_queue_t isolationQueue;
+@property (nonatomic, strong, nonnull) dispatch_queue_t socketDelegateQueue;
+@property (nonatomic, strong, nonnull) dispatch_queue_t acceptedSocketDelegateTargetQueue;
+@property (nonatomic, strong, nonnull) dispatch_queue_t acceptedSocketSocketTargetQueue;
 
-@property (nonatomic, strong) NSMutableDictionary<NSString*, NSMutableArray<CRRoute*>*>* routes;
+@property (nonatomic, strong, nonnull) NSMutableDictionary<NSString*, NSMutableArray<CRRoute*>*>* routes;
 
-@property (nonatomic, strong) NSOperationQueue* workerQueue;
+@property (nonatomic, strong, nonnull) NSOperationQueue* workerQueue;
 
-- (NSArray<CRRoute*>*)routesForPath:(NSString*)path;
-- (NSArray<CRRoute*>*)routesForPath:(NSString*)path HTTPMethod:(NSString*)HTTPMethod;
+- (nonnull NSArray<CRRoute*>*)routesForPath:(nonnull NSString*)path;
+- (nonnull NSArray<CRRoute*>*)routesForPath:(nonnull NSString*)path HTTPMethod:(nullable NSString*)HTTPMethod;
 
-- (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket;
+- (nonnull CRConnection*)newConnectionWithSocket:(nonnull GCDAsyncSocket*)socket;
 
 @end
 
