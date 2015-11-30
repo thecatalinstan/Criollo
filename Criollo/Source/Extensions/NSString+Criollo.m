@@ -1,14 +1,14 @@
 //
-//  NSString+FCGIKit.m
-//  FCGIKit
+//  NSString+Criollo.m
+//  Criollo
 //
 //  Created by Cătălin Stan on 4/12/14.
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-#import "NSString+FCGIKit.h"
+#import "NSString+Criollo.h"
 
-@implementation NSString (FCGIKit)
+@implementation NSString (Criollo)
 
 - (NSString *)stringByDecodingURLEncodedString
 {
