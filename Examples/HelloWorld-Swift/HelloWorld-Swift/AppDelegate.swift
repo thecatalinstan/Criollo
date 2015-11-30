@@ -15,6 +15,7 @@ let LogRequests:Bool = false;
 class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
 
     var server:CRHTTPServer!;
+//    var server:CRFCGIServer!;
     var baseURL:NSURL!;
     var app:CRApplication!;
 
@@ -24,6 +25,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
 
         // Create the server and add some handlers to do some work
         self.server = CRHTTPServer(delegate:self);
+//        self.server = CRFCGIServer(delegate:self);
 
         let bundle:NSBundle! = NSBundle.mainBundle();
 
@@ -202,20 +204,20 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
         self.server.stopListening();
     }
 
-    func server(server: CRServer!, didAcceptConnection connection: CRConnection!) {
+    func server(server: CRServer, didAcceptConnection connection: CRConnection) {
         if ( LogConnections ) {
             self.app.log(" * Accepted connection from \(connection.remoteAddress):\(connection.remotePort)");
         }
     }
 
-    func server(server: CRServer!, didCloseConnection connection: CRConnection!) {
+    func server(server: CRServer, didCloseConnection connection: CRConnection) {
         if ( LogConnections ) {
             self.app.log(" * Disconnected \(connection.remoteAddress):\(connection.remotePort)");
         }
     }
 
 
-    func server(server: CRServer!, didFinishRequest request: CRRequest!) {
+    func server(server: CRServer, didFinishRequest request: CRRequest) {
         if ( LogRequests ) {
             let env:NSDictionary! = request.valueForKey("env") as! NSDictionary;
             self.app.log(" * \(request.response.connection!.remoteAddress) \(request.description) - \(request.response.statusCode) - \(env["HTTP_USER_AGENT"])");

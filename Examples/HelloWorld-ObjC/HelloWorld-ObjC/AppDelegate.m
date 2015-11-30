@@ -17,6 +17,7 @@
 @interface AppDelegate () <CRServerDelegate>
 
 @property (nonatomic, strong) CRHTTPServer *server;
+//@property (nonatomic, strong) CRFCGIServer *server;
 @property (nonatomic, strong) NSURL *baseURL;
 
 @end
@@ -27,6 +28,7 @@
 
     // Create the server and add some handlers to do some work
     self.server = [[CRHTTPServer alloc] initWithDelegate:self];
+//    self.server = [[CRFCGIServer alloc] initWithDelegate:self];
 
     NSBundle *bundle = [NSBundle mainBundle];
 
