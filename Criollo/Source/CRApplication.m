@@ -23,29 +23,29 @@ NSString* const CRApplicationWillTerminateNotification = @"CRApplicationWillTerm
 @class CRApplication;
 CRApplication* CRApp;
 
-static void installSIGTERMHandler(void) {
-    static dispatch_once_t   sOnceToken;
-    static dispatch_source_t sSignalSource;
+static void installSignalHandlers(void) {
+    static dispatch_once_t   onceToken;
+    static dispatch_source_t signalSource;
 
-    dispatch_once(&sOnceToken, ^{
+    dispatch_once(&onceToken, ^{
         signal(SIGTERM, SIG_IGN);
 
-        sSignalSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, SIGTERM, 0, dispatch_get_main_queue());
-        assert(sSignalSource != NULL);
+        signalSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, SIGTERM, 0, dispatch_get_main_queue());
+        assert(signalSource != NULL);
 
-        dispatch_source_set_event_handler(sSignalSource, ^{
+        dispatch_source_set_event_handler(signalSource, ^{
             assert([NSThread isMainThread]);
             [CRApp logErrorFormat: @"Got SIGTERM."];
             [CRApp terminate:nil];
         });
 
-        dispatch_resume(sSignalSource);
+        dispatch_resume(signalSource);
     });
 }
 
 int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> delegate) {
     @autoreleasepool {
-        installSIGTERMHandler();
+        installSignalHandlers();
         CRApplication* app = [[CRApplication alloc] initWithDelegate:delegate];
         [app run];
     }

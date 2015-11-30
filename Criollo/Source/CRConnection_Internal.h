@@ -12,27 +12,27 @@
 
 @interface CRConnection ()
 
-@property (nonatomic, strong) GCDAsyncSocket* socket;
+@property (nonatomic, strong, nonnull) GCDAsyncSocket* socket;
 @property (nonatomic, weak) CRServer* server;
 
-@property (nonatomic, strong) NSMutableArray<CRRequest*>* requests;
+@property (nonatomic, strong, nonnull) NSMutableArray<CRRequest*>* requests;
 
-@property (nonatomic, strong) CRRequest* currentRequest;
+@property (nonatomic, strong, nullable) CRRequest* currentRequest;
 
-+ (NSData*)CRLFData;
-+ (NSData*)CRLFCRLFData;
++ (nonnull NSData *)CRLFData;
++ (nonnull NSData *)CRLFCRLFData;
 
-- (instancetype)initWithSocket:(GCDAsyncSocket*)socket server:(CRServer*)server NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithSocket:(nullable GCDAsyncSocket*)socket server:(nullable CRServer*)server NS_DESIGNATED_INITIALIZER;
 
-- (CRResponse*)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode;
-- (CRResponse*)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description;
-- (CRResponse*)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version;
+- (nonnull CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode;
+- (nonnull CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(nullable NSString *)description;
+- (nonnull CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(nullable NSString *)description version:(nullable NSString *)version;
 
 - (void)startReading;
 - (void)didReceiveCompleteRequestHeaders;
 - (void)didReceiveRequestBody;
 - (void)didReceiveCompleteRequest;
-- (void)sendDataToSocket:(NSData*)data forRequest:(CRRequest*)request;
-- (void)didFinishResponseForRequest:(CRRequest*)request;
+- (void)sendDataToSocket:(nonnull NSData *)data forRequest:(nonnull CRRequest *)request;
+- (void)didFinishResponseForRequest:(nonnull CRRequest *)request;
 
 @end

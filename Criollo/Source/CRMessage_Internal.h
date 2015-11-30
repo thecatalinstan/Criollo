@@ -10,8 +10,8 @@
 
 @interface CRMessage ()
 
-@property (nonatomic, readonly) NSData* serializedData;
-@property (nonatomic, strong) id message;
+@property (nonatomic, readonly, nonnull) NSData* serializedData;
+@property (nonatomic, strong, nonnull) id message;
 @property (nonatomic, readonly) BOOL headersComplete;
 
 @end

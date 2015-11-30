@@ -12,18 +12,18 @@
 
 @protocol CRConnectionDelegate <NSObject>
 
-- (void)connection:(CRConnection*)connection didReceiveRequest:(CRRequest*)request response:(CRResponse*)response;
-- (void)connection:(CRConnection*)connection didFinishRequest:(CRRequest*)request response:(CRResponse*)response;
+- (void)connection:(nonnull CRConnection *)connection didReceiveRequest:(nonnull CRRequest *)request response:(nonnull CRResponse *)response;
+- (void)connection:(nonnull CRConnection *)connection didFinishRequest:(nonnull CRRequest *)request response:(nonnull CRResponse *)response;
 
 @end
 
 @interface CRConnection : NSObject
 
-@property (nonatomic, weak) id<CRConnectionDelegate> delegate;
+@property (nonatomic, weak, nullable) id<CRConnectionDelegate> delegate;
 
-@property (nonatomic, readonly) NSString* remoteAddress;
+@property (nonatomic, readonly, nonnull) NSString* remoteAddress;
 @property (nonatomic, readonly) NSUInteger remotePort;
-@property (nonatomic, readonly) NSString* localAddress;
+@property (nonatomic, readonly, nonnull) NSString* localAddress;
 @property (nonatomic, readonly) NSUInteger localPort;
 
 @end
