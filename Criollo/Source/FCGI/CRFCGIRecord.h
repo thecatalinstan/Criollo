@@ -26,8 +26,8 @@ typedef NS_ENUM(UInt8, CRFCGIRecordType) {
     CRFCGIRecordTypeUnknown = 11
 };
 
-FOUNDATION_EXPORT NSString * __nonnull NSStringFromCRFCGIVersion(CRFCGIVersion version);
-FOUNDATION_EXPORT NSString * __nonnull NSStringFromCRFCGIRecordType(CRFCGIRecordType recordType);
+FOUNDATION_EXPORT NSString * _Nonnull NSStringFromCRFCGIVersion(CRFCGIVersion version);
+FOUNDATION_EXPORT NSString * _Nonnull NSStringFromCRFCGIRecordType(CRFCGIRecordType recordType);
 
 @interface CRFCGIRecord : NSObject
 

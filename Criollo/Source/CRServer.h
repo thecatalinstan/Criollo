@@ -39,9 +39,9 @@ FOUNDATION_EXPORT NSUInteger const CRErrorSocketError;
 - (nonnull instancetype)initWithDelegate:(nullable id<CRServerDelegate>)delegate NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)startListening;
-- (BOOL)startListening:(NSError * __nullable __autoreleasing * __nullable)error;
-- (BOOL)startListening:(NSError * __nullable __autoreleasing * __nullable)error portNumber:(NSUInteger)portNumber;
-- (BOOL)startListening:(NSError * __nullable __autoreleasing * __nullable)error portNumber:(NSUInteger)portNumber interface:(nullable NSString *)interface;
+- (BOOL)startListening:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (BOOL)startListening:(NSError * _Nullable __autoreleasing * _Nullable)error portNumber:(NSUInteger)portNumber;
+- (BOOL)startListening:(NSError * _Nullable __autoreleasing * _Nullable)error portNumber:(NSUInteger)portNumber interface:(nullable NSString *)interface;
 
 - (void)stopListening;
 - (void)closeAllConnections;

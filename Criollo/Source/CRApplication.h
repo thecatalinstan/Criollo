@@ -12,8 +12,8 @@ typedef NS_ENUM(NSUInteger, CRApplicationTerminateReply) {
     CRTerminateLater  = 2
 };
 
-FOUNDATION_EXPORT NSString * __nonnull const Criollo;
-FOUNDATION_EXPORT NSString * __nonnull const CRErrorDomain;
+FOUNDATION_EXPORT NSString * _Nonnull const Criollo;
+FOUNDATION_EXPORT NSString * _Nonnull const CRErrorDomain;
 
 typedef NSUInteger CRError;
 
@@ -38,14 +38,14 @@ typedef NSUInteger CRError;
 FOUNDATION_EXPORT NSUInteger const CRErrorNone;
 FOUNDATION_EXPORT NSUInteger const CRErrorSigTERM;
 
-FOUNDATION_EXPORT NSString * __nonnull const CRApplicationRunLoopMode;
+FOUNDATION_EXPORT NSString * _Nonnull const CRApplicationRunLoopMode;
 
-FOUNDATION_EXPORT NSString * __nonnull const CRApplicationWillFinishLaunchingNotification;
-FOUNDATION_EXPORT NSString * __nonnull const CRApplicationDidFinishLaunchingNotification;
-FOUNDATION_EXPORT NSString * __nonnull const CRApplicationWillTerminateNotification;
+FOUNDATION_EXPORT NSString * _Nonnull const CRApplicationWillFinishLaunchingNotification;
+FOUNDATION_EXPORT NSString * _Nonnull const CRApplicationDidFinishLaunchingNotification;
+FOUNDATION_EXPORT NSString * _Nonnull const CRApplicationWillTerminateNotification;
 
-FOUNDATION_EXPORT id __nonnull CRApp;
-FOUNDATION_EXPORT int CRApplicationMain(int argc, const char * __nullable argv[], id<CRApplicationDelegate> __nonnull delegate);
+FOUNDATION_EXPORT id _Nonnull CRApp;
+FOUNDATION_EXPORT int CRApplicationMain(int argc, const char * _Nullable argv[], id<CRApplicationDelegate> _Nonnull delegate);
 
 @interface CRApplication : NSObject
 
