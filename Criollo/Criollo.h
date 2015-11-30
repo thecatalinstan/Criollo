@@ -3,7 +3,7 @@
 //  Criollo
 //
 //  Created by Cătălin Stan on 28/04/15.
-//
+//  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
