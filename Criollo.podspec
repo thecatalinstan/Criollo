@@ -26,11 +26,11 @@ over the HTTP or FCGI protocols.
   # s.source       =  { :git => "https://github.com/thecatalinstan/Criollo.git", :branch => "develop" }
 
   s.source_files  = "Criollo/Source/*.{h,m}", "Criollo/Source/{HTTP,FCGI,Routing,Extensions}/*.{h,m}"
-  s.public_header_files = "Criollo/Source/Criollo.h", "Criollo/Source/CRTypes.h", "Criollo/Source/CRApplication.h", "Criollo/Source/CRServer.h", "Criollo/Source/CRConnection.h", "Criollo/Source/CRRequest.h", "Criollo/Source/CRResponse.h", "Criollo/Source/HTTP/CRHTTPServer.h", "Criollo/Source/FCGI/CRFCGIServer.h", "Criollo/Source/Routing/CRNib.h", "Criollo/Source/Routing/CRView.h", "Criollo/Source/Routing/CRViewController.h"
+  s.public_header_files = "Criollo/Source/CRTypes.h", "Criollo/Source/CRApplication.h", "Criollo/Source/CRServer.h", "Criollo/Source/CRConnection.h", "Criollo/Source/CRRequest.h", "Criollo/Source/CRResponse.h", "Criollo/Source/HTTP/CRHTTPServer.h", "Criollo/Source/FCGI/CRFCGIServer.h", "Criollo/Source/Routing/CRNib.h", "Criollo/Source/Routing/CRView.h", "Criollo/Source/Routing/CRViewController.h"
   
   s.ios.deployment_target = '8.0'
   s.osx.deployment_target = "10.9"
-  s.osx.frameworks = "CFNetwork", "Foundation"
+  s.osx.frameworks = "Foundation"
   
   s.requires_arc = true
 
