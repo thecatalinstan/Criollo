@@ -22,9 +22,9 @@
 - (void)setEnv:(nonnull NSString*)obj forKey:(nonnull NSString*)key;
 
 - (BOOL)parseBody:(NSError * _Nullable __autoreleasing * _Nullable)error;
-- (BOOL)parseJSONBody:(NSError * _Nullable __autoreleasing * _Nullable)error;
-- (BOOL)parseMultipartBody:(NSError * _Nullable __autoreleasing * _Nullable)error;
-- (BOOL)parseURLEncodedBody:(NSError * _Nullable __autoreleasing * _Nullable)error;
-- (BOOL)parseXMLBody:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (BOOL)parseJSONBodyData:(nonnull NSData *)bodyData error:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (BOOL)parseMultipartBodyData:(nonnull NSData *)bodyData error:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (BOOL)parseURLEncodedBodyData:(nonnull NSData *)bodyData error:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (BOOL)parseXMLBodyData:(nonnull NSData *)bodyData error:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
 @end

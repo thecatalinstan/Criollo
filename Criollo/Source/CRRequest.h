@@ -32,6 +32,6 @@
 @property (nonatomic, readonly, nonnull) NSDictionary<NSString *, NSString *> *env;
 @property (nonatomic, readonly, nonnull) NSDictionary<NSString *, NSString *> *cookie;
 @property (nonatomic, readonly, nonnull) NSDictionary<NSString *, NSString *> *query;
-@property (nonatomic, readonly, nonnull) NSDictionary<NSString *, id> *body;
+@property (nonatomic, readonly, nonnull) id body;
 
 @end

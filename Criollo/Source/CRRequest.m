@@ -95,36 +95,48 @@
         NSString* contentType = _env[@"HTTP_CONTENT_TYPE"];
         NSLog(@" * contentType = %@", contentType);
         if ([contentType isEqualToString:CRRequestTypeJSON]) {
-            result = [self parseJSONBody:error];
+            NSData* bodyData = self.bodyData;
+            result = [self parseJSONBodyData:bodyData error:error];
         } else if ([contentType isEqualToString:CRRequestTypeMultipart]) {
-            result = [self parseMultipartBody:error];
+            NSData* bodyData = self.bodyData;
+            result = [self parseMultipartBodyData:bodyData error:error];
         } else if ([contentType isEqualToString:CRRequestTypeURLEncoded]) {
-            result = [self parseURLEncodedBody:error];
+            NSData* bodyData = self.bodyData;
+            result = [self parseURLEncodedBodyData:bodyData error:error];
         } else if ([contentType isEqualToString:CRRequestTypeXML]) {
-            result = [self parseXMLBody:error];
+            NSData* bodyData = self.bodyData;
+            result = [self parseXMLBodyData:bodyData error:error];
         }
     }
 
     return result;
 }
 
-- (BOOL)parseJSONBody:(NSError *__autoreleasing  _Nullable *)error {
+- (BOOL)parseJSONBodyData:(NSData *)bodyData error:(NSError *__autoreleasing  _Nullable *)error {
+    BOOL result = NO;
+
+    NSError* jsonDecodingError;
+    id decodedBody = [NSJSONSerialization JSONObjectWithData:bodyData options:0 error:&jsonDecodingError];
+
+    if ( jsonDecodingError == nil ) {
+        _body = decodedBody;
+        result = YES;
+    } else {
+        *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Unable to parse JSON request.", NSUnderlyingErrorKey:jsonDecodingError}];
+    }
+
+    return result;
+}
+
+- (BOOL)parseMultipartBodyData:(NSData *)bodyData error:(NSError * _Nullable __autoreleasing *)error {
     BOOL result = NO;
     *error = [NSError errorWithDomain:CRRequestErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%s not implemented yet.", __PRETTY_FUNCTION__]}];
     return result;
 }
 
-- (BOOL)parseMultipartBody:(NSError * _Nullable __autoreleasing *)error {
-    BOOL result = NO;
-    *error = [NSError errorWithDomain:CRRequestErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%s not implemented yet.", __PRETTY_FUNCTION__]}];
-    return result;
-}
-
-- (BOOL)parseURLEncodedBody:(NSError * _Nullable __autoreleasing *)error {
-    BOOL result = NO;
-
+- (BOOL)parseURLEncodedBodyData:(NSData *)bodyData error:(NSError * _Nullable __autoreleasing *)error {
     NSMutableDictionary<NSString *,NSString *> *body = [NSMutableDictionary dictionary];
-    NSData* bodyData = self.bodyData;
+
     NSString* bodyString = [[NSString alloc] initWithData:bodyData encoding:NSUTF8StringEncoding];
     NSArray<NSString *> *bodyVars = [bodyString componentsSeparatedByString:@"&"];
     [bodyVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -132,11 +144,10 @@
         body[bodyVarComponents[0]] = bodyVarComponents.count > 1 ? bodyVarComponents[1] : @"";
     }];
     _body = body;
-
-    return result;
+    return YES;
 }
 
-- (BOOL)parseXMLBody:(NSError * _Nullable __autoreleasing *)error {
+- (BOOL)parseXMLBodyData:(NSData *)bodyData error:(NSError * _Nullable __autoreleasing *)error {
     BOOL result = NO;
     *error = [NSError errorWithDomain:CRRequestErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%s not implemented yet.", __PRETTY_FUNCTION__]}];
     return result;

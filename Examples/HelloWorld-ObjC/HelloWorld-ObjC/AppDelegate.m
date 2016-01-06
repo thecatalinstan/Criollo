@@ -106,9 +106,7 @@
         // Body
         if ( request.body != nil ) {
             [responseString appendString:@"<h3>Request Body:</h2><pre>"];
-            [request.body enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-                [responseString appendFormat:@"%@: %@\n", key, obj];
-            }];
+            [responseString appendFormat:@"%@", request.body];
             [responseString appendString:@"</pre>"];
         }
 
