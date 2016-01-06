@@ -234,7 +234,7 @@
                         // We have received the request body
                         [self didReceivecurrentRequestBody];
 
-                        if ( currentRequestBodyLength == self.currentRequest.body.length ) {
+                        if ( currentRequestBodyLength == self.currentRequest.bodyData.length ) {
                             [self didReceiveCompleteRequest];
                         } else {
                             [self.socket disconnectAfterWriting];

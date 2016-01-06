@@ -188,7 +188,7 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
 
     if ( !self.alreadySentHeaders ) {
         [self buildHeaders];
-        [self setBody:nil];
+        self.bodyData = nil;
         NSData* headersSerializedData = self.serializedData;
         NSData* headerData = [self FCGIRecordDataWithContentData:[NSData dataWithBytesNoCopy:(void*)headersSerializedData.bytes length:headersSerializedData.length freeWhenDone:NO]];
         [dataToSend appendData:headerData];

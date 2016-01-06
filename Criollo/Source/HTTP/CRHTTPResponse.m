@@ -110,7 +110,7 @@
 
     if ( !self.alreadySentHeaders ) {
         [self buildHeaders];
-        [self setBody:nil];
+        self.bodyData = nil;
         NSData* headersSerializedData = self.serializedData;
         NSData* headerData = [NSMutableData dataWithBytesNoCopy:(void*)headersSerializedData.bytes length:headersSerializedData.length freeWhenDone:NO];
         [dataToSend appendData:headerData];

@@ -17,7 +17,7 @@
 @property (nonatomic, readonly, nonnull) NSString* version;
 @property (nonatomic, readonly, nonnull) NSDictionary<NSString*, NSString*>* allHTTPHeaderFields;
 
-@property (nonatomic, strong, nullable) NSData* body;
+@property (nonatomic, strong, nullable) NSData* bodyData;
 
 - (nullable NSString *)valueForHTTPHeaderField:(nonnull NSString *)HTTPHeaderField;
 
