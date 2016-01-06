@@ -85,6 +85,63 @@
     [_env setObject:obj forKey:key];
 }
 
+- (BOOL)parseBody:(NSError *__autoreleasing  _Nullable *)error {
+    BOOL result = YES;
+
+    NSUInteger contentLength = [_env[@"HTTP_CONTENT_LENGTH"] integerValue];
+    NSLog(@" * contentLength = %lu", contentLength);
+
+    if ( contentLength > 0 ) {
+        NSString* contentType = _env[@"HTTP_CONTENT_TYPE"];
+        NSLog(@" * contentType = %@", contentType);
+        if ([contentType isEqualToString:CRRequestTypeJSON]) {
+            result = [self parseJSONBody:error];
+        } else if ([contentType isEqualToString:CRRequestTypeMultipart]) {
+            result = [self parseMultipartBody:error];
+        } else if ([contentType isEqualToString:CRRequestTypeURLEncoded]) {
+            result = [self parseURLEncodedBody:error];
+        } else if ([contentType isEqualToString:CRRequestTypeXML]) {
+            result = [self parseXMLBody:error];
+        }
+    }
+
+    return result;
+}
+
+- (BOOL)parseJSONBody:(NSError *__autoreleasing  _Nullable *)error {
+    BOOL result = NO;
+    *error = [NSError errorWithDomain:CRRequestErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%s not implemented yet.", __PRETTY_FUNCTION__]}];
+    return result;
+}
+
+- (BOOL)parseMultipartBody:(NSError * _Nullable __autoreleasing *)error {
+    BOOL result = NO;
+    *error = [NSError errorWithDomain:CRRequestErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%s not implemented yet.", __PRETTY_FUNCTION__]}];
+    return result;
+}
+
+- (BOOL)parseURLEncodedBody:(NSError * _Nullable __autoreleasing *)error {
+    BOOL result = NO;
+
+    NSMutableDictionary<NSString *,NSString *> *body = [NSMutableDictionary dictionary];
+    NSData* bodyData = self.bodyData;
+    NSString* bodyString = [[NSString alloc] initWithData:bodyData encoding:NSUTF8StringEncoding];
+    NSArray<NSString *> *bodyVars = [bodyString componentsSeparatedByString:@"&"];
+    [bodyVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSArray<NSString *> *bodyVarComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:@"="];
+        body[bodyVarComponents[0]] = bodyVarComponents.count > 1 ? bodyVarComponents[1] : @"";
+    }];
+    _body = body;
+
+    return result;
+}
+
+- (BOOL)parseXMLBody:(NSError * _Nullable __autoreleasing *)error {
+    BOOL result = NO;
+    *error = [NSError errorWithDomain:CRRequestErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%s not implemented yet.", __PRETTY_FUNCTION__]}];
+    return result;
+}
+
 - (NSString *)description {
     return [NSString stringWithFormat:@"%@ %@ %@", self.method, self.URL.path, self.version];
 }

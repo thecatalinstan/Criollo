@@ -8,8 +8,17 @@
 
 #import "CRMessage.h"
 
-#define CRErrorRequestMalformedRequest      3001
-#define CRErrorRequestUnsupportedMethod     3002
+// Mime types of the requests we support body parsing for
+#define CRRequestTypeJSON                   @"application/json"
+#define CRRequestTypeXML                    @"application/xml"
+#define CRRequestTypeURLEncoded             @"application/x-www-form-urlencoded"
+#define CRRequestTypeMultipart              @"multipart/form-data"
+
+// Errors
+#define CRRequestErrorDomain                @"CRRequestErrorDomain"
+//#define CRErrorRequestMalformedRequest      1001
+//#define CRErrorRequestUnsupportedMethod     1002
+#define CRRequestErrorMalformedBody         3001
 
 @class CRResponse;
 

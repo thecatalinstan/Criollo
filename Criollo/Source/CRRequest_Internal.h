@@ -21,4 +21,10 @@
 - (void)setEnv:(nonnull NSDictionary<NSString*,NSString*>*)envDictionary;
 - (void)setEnv:(nonnull NSString*)obj forKey:(nonnull NSString*)key;
 
+- (BOOL)parseBody:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (BOOL)parseJSONBody:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (BOOL)parseMultipartBody:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (BOOL)parseURLEncodedBody:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (BOOL)parseXMLBody:(NSError * _Nullable __autoreleasing * _Nullable)error;
+
 @end

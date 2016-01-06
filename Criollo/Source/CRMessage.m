@@ -38,12 +38,12 @@
     return (__bridge_transfer NSString *)CFHTTPMessageCopyHeaderFieldValue((__bridge CFHTTPMessageRef _Nonnull)(self.message), (__bridge CFStringRef)HTTPHeaderField);
 }
 
-- (NSData *)body {
+- (NSData *)bodyData {
     return (__bridge_transfer NSData *)CFHTTPMessageCopyBody((__bridge CFHTTPMessageRef _Nonnull)(self.message));
 }
 
-- (void)setBody:(NSData *)body {
-    CFHTTPMessageSetBody((__bridge CFHTTPMessageRef _Nonnull)(self.message), (__bridge CFDataRef)body);
+- (void)setBodyData:(NSData *)bodyData {
+    CFHTTPMessageSetBody((__bridge CFHTTPMessageRef _Nonnull)(self.message), (__bridge CFDataRef)bodyData);
 }
 
 - (BOOL)headersComplete {
