@@ -25,6 +25,6 @@
 - (BOOL)parseJSONBodyData:(nonnull NSData *)bodyData error:(NSError * _Nullable __autoreleasing * _Nullable)error;
 - (BOOL)parseMultipartBodyData:(nonnull NSData *)bodyData error:(NSError * _Nullable __autoreleasing * _Nullable)error;
 - (BOOL)parseURLEncodedBodyData:(nonnull NSData *)bodyData error:(NSError * _Nullable __autoreleasing * _Nullable)error;
-- (BOOL)parseXMLBodyData:(nonnull NSData *)bodyData error:(NSError * _Nullable __autoreleasing * _Nullable)error;
+//- (BOOL)parseXMLBodyData:(nonnull NSData *)bodyData error:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
 @end

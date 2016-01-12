@@ -103,10 +103,11 @@
         } else if ([contentType isEqualToString:CRRequestTypeURLEncoded]) {
             NSData* bodyData = self.bodyData;
             result = [self parseURLEncodedBodyData:bodyData error:error];
-        } else if ([contentType isEqualToString:CRRequestTypeXML]) {
-            NSData* bodyData = self.bodyData;
-            result = [self parseXMLBodyData:bodyData error:error];
         }
+//        } else if ([contentType isEqualToString:CRRequestTypeXML]) {
+//            NSData* bodyData = self.bodyData;
+//            result = [self parseXMLBodyData:bodyData error:error];
+//        }
     }
 
     return result;
@@ -147,11 +148,11 @@
     return YES;
 }
 
-- (BOOL)parseXMLBodyData:(NSData *)bodyData error:(NSError * _Nullable __autoreleasing *)error {
-    BOOL result = NO;
-    *error = [NSError errorWithDomain:CRRequestErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%s not implemented yet.", __PRETTY_FUNCTION__]}];
-    return result;
-}
+//- (BOOL)parseXMLBodyData:(NSData *)bodyData error:(NSError * _Nullable __autoreleasing *)error {
+//    BOOL result = NO;
+//    *error = [NSError errorWithDomain:CRRequestErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%s not implemented yet.", __PRETTY_FUNCTION__]}];
+//    return result;
+//}
 
 - (NSString *)description {
     return [NSString stringWithFormat:@"%@ %@ %@", self.method, self.URL.path, self.version];
