@@ -10,6 +10,9 @@
 #import "CRRequest.h"
 #import "CRRequest_Internal.h"
 
+#define CRRequestBoundaryParameter          @"boundary"
+#define CRRequestBoundaryPrefix             @"--"
+
 @implementation CRRequest {
     NSMutableDictionary* _env;
 }
@@ -94,17 +97,17 @@
     if ( contentLength > 0 ) {
         NSString* contentType = _env[@"HTTP_CONTENT_TYPE"];
         NSLog(@" * contentType = %@", contentType);
-        if ([contentType isEqualToString:CRRequestTypeJSON]) {
+        if ([contentType hasPrefix:CRRequestTypeJSON]) {
             NSData* bodyData = self.bodyData;
             result = [self parseJSONBodyData:bodyData error:error];
-        } else if ([contentType isEqualToString:CRRequestTypeMultipart]) {
+        } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
             NSData* bodyData = self.bodyData;
             result = [self parseMultipartBodyData:bodyData error:error];
-        } else if ([contentType isEqualToString:CRRequestTypeURLEncoded]) {
+        } else if ([contentType hasPrefix:CRRequestTypeURLEncoded]) {
             NSData* bodyData = self.bodyData;
             result = [self parseURLEncodedBodyData:bodyData error:error];
         }
-//        } else if ([contentType isEqualToString:CRRequestTypeXML]) {
+//        } else if ([contentType hasPrefix:CRRequestTypeXML]) {
 //            NSData* bodyData = self.bodyData;
 //            result = [self parseXMLBodyData:bodyData error:error];
 //        }
@@ -130,8 +133,60 @@
 }
 
 - (BOOL)parseMultipartBodyData:(NSData *)bodyData error:(NSError * _Nullable __autoreleasing *)error {
-    BOOL result = NO;
-    *error = [NSError errorWithDomain:CRRequestErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%s not implemented yet.", __PRETTY_FUNCTION__]}];
+    BOOL result = YES;
+
+    NSLog(@"%@", [[NSString alloc] initWithBytesNoCopy:(void*)bodyData.bytes length:bodyData.length encoding:NSUTF8StringEncoding freeWhenDone:NO]);
+
+    // Get the boundary
+    __block NSString* boundary;
+    NSString* contentType = _env[@"HTTP_CONTENT_TYPE"];
+    NSArray<NSString*>* headerComponents = [contentType componentsSeparatedByString:@";"];
+    [headerComponents enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj = [obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if ( ![obj hasPrefix:CRRequestBoundaryParameter] ) {
+            return;
+        }
+        boundary = [[obj componentsSeparatedByString:@"="][1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    }];
+
+    if ( boundary.length > 0 ) {
+        // Some stuff we'll use for parsing
+
+        NSString * boundaryPrefixString = CRRequestBoundaryPrefix;
+        const char * boundaryPrefixBytes = boundaryPrefixString.UTF8String;
+        NSData * boundaryPrefixData = [NSData dataWithBytesNoCopy:(void * )boundaryPrefixBytes length:boundaryPrefixString.length freeWhenDone:NO];
+
+        NSString * boundaryString = [NSString stringWithFormat:@"\r\n%@%@", boundaryPrefixString, boundary];
+        const char * boundaryBytes = boundaryString.UTF8String;
+        NSData * boundaryData = [NSData dataWithBytesNoCopy:(void *)boundaryBytes length:boundaryString.length freeWhenDone:NO];
+
+        // Validate the input
+        NSData* prefixData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes length:boundaryData.length freeWhenDone:NO];
+        if ( [prefixData isEqualToData:boundaryData] ) {
+            NSData* suffixData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes + bodyData.length - boundaryPrefixData.length - 2 length:boundaryPrefixData.length freeWhenDone:NO];
+            if ( [suffixData isEqualToData:boundaryPrefixData] ) {
+                NSData* lastBoundaryData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes + bodyData.length - boundaryPrefixData.length - boundaryData.length - 2 length:boundaryData.length freeWhenDone:NO];
+                if ( [lastBoundaryData isEqualToData:boundaryData] ) {
+
+                    
+
+                } else {
+                    result = NO;
+                    *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not end with %@%@", boundaryString, boundaryPrefixString]}];
+                }
+            } else {
+                result = NO;
+                *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not end with \"%@\"", boundaryPrefixString]}];
+            }
+        } else {
+            result = NO;
+            *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not start with the boundary. (%@)", boundaryString]}];
+        }
+    } else {
+        result = NO;
+        *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The Content-type header does not have a boundary parameter. (%@)", contentType]}];
+    }
+
     return result;
 }
 
