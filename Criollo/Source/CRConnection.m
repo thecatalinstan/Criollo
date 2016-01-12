@@ -109,11 +109,13 @@
 
     // Parse request body
     NSLog(@" * request.bodyData.length = %lu", self.currentRequest.bodyData.length);
-    NSError* bodyParsingError;
-    BOOL result = [self.currentRequest parseBody:&bodyParsingError];
-    if ( !result ) {
-        // TODO: Not sure yet how to behave if request body fails to parse
-        NSLog(@" * bodyParsingError = %@", bodyParsingError);
+    if ( self.currentRequest.bodyData.length > 0 ) {
+        NSError* bodyParsingError;
+        BOOL result = [self.currentRequest parseBody:&bodyParsingError];
+        if ( !result ) {
+            // TODO: Not sure yet how to behave if request body fails to parse
+            NSLog(@" * bodyParsingError = %@", bodyParsingError);
+        }
     }
 
     CRResponse* response = [self responseWithHTTPStatusCode:200];
