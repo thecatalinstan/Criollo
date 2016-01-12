@@ -168,7 +168,27 @@
                 NSData* lastBoundaryData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes + bodyData.length - boundaryPrefixData.length - boundaryData.length - 2 length:boundaryData.length freeWhenDone:NO];
                 if ( [lastBoundaryData isEqualToData:boundaryData] ) {
 
-                    
+                    NSMutableDictionary* body = [NSMutableDictionary dictionary];
+
+                    void(^parseMultipartPartData)(NSData * _Nonnull) = ^(NSData * multipartPartData) {
+                        NSLog(@" ** %s %lu", __PRETTY_FUNCTION__, multipartPartData.length);
+                    };
+
+                    NSUInteger offset = 0;
+                    do {
+                        offset += boundaryData.length;
+                        NSRange searchRange = NSMakeRange(offset, bodyData.length - offset);
+                        NSRange nextBoundaryRange = [bodyData rangeOfData:boundaryData options:0 range:searchRange];
+
+                        if ( nextBoundaryRange.location == NSNotFound ) {
+                            break;
+                        }
+
+                        NSData* multipartPartData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes + offset length:nextBoundaryRange.location - offset freeWhenDone:NO];
+                        parseMultipartPartData(multipartPartData);
+
+                        offset = nextBoundaryRange.location;
+                    } while (offset < bodyData.length );
 
                 } else {
                     result = NO;
