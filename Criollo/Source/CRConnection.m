@@ -22,10 +22,11 @@
 #include <sys/sysctl.h>
 #import "NSDate+RFC1123.h"
 
-@interface CRConnection () <GCDAsyncSocketDelegate> 
+@interface CRConnection () <GCDAsyncSocketDelegate>
 
 @property (nonatomic, readonly) BOOL willDisconnect;
 
+- (void)bufferRequestBodyData:(nonnull NSData *)data forRequest:(nonnull CRRequest *)request;
 - (void)bufferResponseData:(nonnull NSData *)data forRequest:(nonnull CRRequest *)request;
 
 @end
@@ -77,10 +78,15 @@
         self.socket = socket;
         self.socket.delegate = self;
         self.requests = [NSMutableArray array];
+
         _remoteAddress = self.socket.connectedHost;
         _remotePort = self.socket.connectedPort;
         _localAddress = self.socket.localHost;
         _localPort = self.socket.localPort;
+
+        _isolationQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:[NSString stringWithFormat:@"CRConnection-IsolationQueue-%lu", self.hash]] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
+        dispatch_set_target_queue(self.isolationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
+
     }
     return self;
 }
@@ -97,9 +103,26 @@
 }
 
 - (void)didReceiveCompleteRequestHeaders {
+    if (self.willDisconnect) {
+        return;
+    }
 }
 
-- (void)didReceiveRequestBody {
+- (void)didReceiveRequestBodyData:(NSData *)data {
+    if ( self.willDisconnect ) {
+        return;
+    }
+
+    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
+    NSString* contentType = self.currentRequest.env[@"HTTP_CONTENT_TYPE"];
+    if ([contentType hasPrefix:CRRequestTypeMultipart]) {
+        NSError* bodyParsingError;
+        if ( ![self.currentRequest parseMultipartBodyDataChunk:data error:&bodyParsingError] ) {
+            NSLog(@" * bodyParsingError = %@", bodyParsingError);
+        }
+    } else {
+        [self bufferRequestBodyData:data forRequest:self.currentRequest];
+    }
 }
 
 - (void)didReceiveCompleteRequest {
@@ -108,13 +131,27 @@
     }
 
     // Parse request body
-    NSLog(@" * request.bodyData.length = %lu", self.currentRequest.bodyData.length);
-    if ( self.currentRequest.bodyData.length > 0 ) {
+    NSUInteger contentLength = [self.currentRequest.env[@"HTTP_CONTENT_LENGTH"] integerValue];
+    if ( contentLength > 0 ) {
         NSError* bodyParsingError;
-        BOOL result = [self.currentRequest parseBody:&bodyParsingError];
+        NSString* contentType = self.currentRequest.env[@"HTTP_CONTENT_TYPE"];
+
+        BOOL result = YES;
+
+        if ([contentType hasPrefix:CRRequestTypeJSON]) {
+            result = [self.currentRequest parseJSONBodyData:&bodyParsingError];
+        } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
+        } else if ([contentType hasPrefix:CRRequestTypeURLEncoded]) {
+            result = [self.currentRequest parseURLEncodedBodyData:&bodyParsingError];
+        } else {
+            result = [self.currentRequest parseBufferedBodyData:&bodyParsingError];
+        }
+
         if ( !result ) {
-            // TODO: Not sure yet how to behave if request body fails to parse
             NSLog(@" * bodyParsingError = %@", bodyParsingError);
+        } else {
+            NSLog(@" * request.body = %@", self.currentRequest.body);
+            NSLog(@" * request.bufferedRequestBodyData = %lu bytes", self.currentRequest.bufferedRequestBodyData.length);
         }
     }
 
@@ -124,6 +161,18 @@
     [self.requests addObject:self.currentRequest];
     [self.delegate connection:self didReceiveRequest:self.currentRequest response:response];
     [self startReading];
+}
+
+- (void)bufferRequestBodyData:(NSData *)data forRequest:(CRRequest *)request {
+    if ( self.willDisconnect ) {
+        return;
+    }
+    if ( request.bufferedRequestBodyData == nil ) {
+        request.bufferedRequestBodyData = [[NSMutableData alloc] initWithData:data];
+    } else {
+        [request.bufferedRequestBodyData appendData:data];
+    }
+
 }
 
 - (void)bufferResponseData:(NSData *)data forRequest:(CRRequest *)request {

@@ -10,7 +10,6 @@
 
 // Mime types of the requests we support body parsing for
 #define CRRequestTypeJSON                   @"application/json"
-//#define CRRequestTypeXML                    @"application/xml"
 #define CRRequestTypeURLEncoded             @"application/x-www-form-urlencoded"
 #define CRRequestTypeMultipart              @"multipart/form-data"
 

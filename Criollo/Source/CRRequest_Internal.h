@@ -8,10 +8,23 @@
 
 #import "CRRequest.h"
 
+#define CRRequestHeaderSeparator            @";"
+#define CRRequestKeySeparator               @"&"
+#define CRRequestValueSeparator             @"="
+#define CRRequestBoundaryParameter          @"boundary"
+#define CRRequestBoundaryPrefix             @"--"
+
 @interface CRRequest ()
 
 @property (nonatomic, readonly) BOOL shouldCloseConnection;
-@property (nonatomic, strong, nullable) NSMutableData* bufferedResponseData;
+
+@property (nonatomic, strong, nullable) NSMutableData * bufferedRequestBodyData;
+@property (nonatomic, strong, nullable) NSMutableData * bufferedResponseData;
+
+@property (nonatomic, readonly, nullable) NSString * multipartBoundary;
+@property (nonatomic, readonly, nonnull) NSData * multipartBoundaryPrefixData;
+@property (nonatomic, readonly, nullable) NSString * multipartBoundaryPrefixedString;
+@property (nonatomic, readonly, nullable) NSData * multipartBoundaryPrefixedData;
 
 - (nonnull instancetype)initWithMethod:(nullable NSString *)method URL:(nullable NSURL *)URL version:(nullable NSString *)version;
 - (nonnull instancetype)initWithMethod:(nullable NSString *)method URL:(nullable NSURL *)URL version:(nullable NSString *)version env:(nullable NSDictionary*)env NS_DESIGNATED_INITIALIZER;
@@ -21,10 +34,9 @@
 - (void)setEnv:(nonnull NSDictionary<NSString*,NSString*>*)envDictionary;
 - (void)setEnv:(nonnull NSString*)obj forKey:(nonnull NSString*)key;
 
-- (BOOL)parseBody:(NSError * _Nullable __autoreleasing * _Nullable)error;
-- (BOOL)parseJSONBodyData:(nonnull NSData *)bodyData error:(NSError * _Nullable __autoreleasing * _Nullable)error;
-- (BOOL)parseMultipartBodyData:(nonnull NSData *)bodyData error:(NSError * _Nullable __autoreleasing * _Nullable)error;
-- (BOOL)parseURLEncodedBodyData:(nonnull NSData *)bodyData error:(NSError * _Nullable __autoreleasing * _Nullable)error;
-//- (BOOL)parseXMLBodyData:(nonnull NSData *)bodyData error:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (BOOL)parseJSONBodyData:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (BOOL)parseMultipartBodyDataChunk:(nonnull NSData *)data error:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (BOOL)parseURLEncodedBodyData:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (BOOL)parseBufferedBodyData:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
 @end
