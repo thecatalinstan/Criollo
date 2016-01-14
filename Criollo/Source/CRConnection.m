@@ -151,7 +151,7 @@
             NSLog(@" * bodyParsingError = %@", bodyParsingError);
         } else {
             NSLog(@" * request.body = %@", self.currentRequest.body);
-            NSLog(@" * request.bufferedRequestBodyData = %lu bytes", self.currentRequest.bufferedRequestBodyData.length);
+            NSLog(@" * bufferedBodyData = %lu bytes", self.currentRequest.bufferedBodyData.length);
         }
     }
 

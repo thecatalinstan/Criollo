@@ -26,8 +26,8 @@
     __block NSData * _multipartBoundaryPrefixedData;
     __block dispatch_once_t _multipartBoundaryPrefixedDataOnceToken;
 
-    NSUInteger bodyParsingOffset;
-    BOOL isReceivingFile;
+    NSString* currentMultipartBodyKey;
+    NSString* currentMultipartFileKey;
 }
 
 - (instancetype)init {
@@ -109,12 +109,12 @@
     BOOL result = NO;
 
     NSError* jsonDecodingError;
-    id decodedBody = [NSJSONSerialization JSONObjectWithData:self.bufferedRequestBodyData options:0 error:&jsonDecodingError];
+    id decodedBody = [NSJSONSerialization JSONObjectWithData:self.bufferedBodyData options:0 error:&jsonDecodingError];
 
     if ( jsonDecodingError == nil ) {
         _body = decodedBody;
         result = YES;
-        self.bufferedRequestBodyData = nil;
+        self.bufferedBodyData = nil;
     } else {
         *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Unable to parse JSON request.", NSUnderlyingErrorKey:jsonDecodingError}];
     }
@@ -126,80 +126,62 @@
     BOOL result = YES;
     NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
 
-    if ( !isReceivingFile ) {
+    // Search for a boundary
+    NSRange searchRange = NSMakeRange(0, data.length);
+    NSRange nextBoundaryRange = [data rangeOfData:self.multipartBoundaryPrefixedData options:0 range:searchRange];
 
-        // Check if there is anything left in the buffer
-        if ( self.bufferedResponseData.length == 0 ) {
-            bodyParsingOffset = self.multipartBoundaryPrefixedData.length;
-            NSRange searchRange = NSMakeRange(offset, bodyData.length - offset);
-            NSRange nextBoundaryRange = [bodyData rangeOfData:boundaryData options:0 range:searchRange];
+    if ( nextBoundaryRange.location != NSNotFound ) {       // We have a boundary
 
-            if ( nextBoundaryRange.location == NSNotFound ) {
-                // This is just a
+        // Check if we have something before the boundary
+        if ( nextBoundaryRange.location != 0 ) {            // There is an existing chunk
+
+            // Extract the piece
+
+            // Check if we have something buffered
+            if ( self.bufferedBodyData.length > 0 ) {       // This is part of a field that
+                                                            // was received previously and does not have
+                                                            // a full header
+
+                // Prepend the the buffered data to the one piece
+
+                // Flush the buffered data
+
+                // Call this method again with the combined data
             } else {
-                NSData* multipartPartData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes + offset length:nextBoundaryRange.location - offset freeWhenDone:NO];
-                parseMultipartPartData(multipartPartData);
+
+                // Append the piece to the target if there is one otherwise discard it
+                // (RFC says to discard anything before the first --boundary
+
             }
 
+            // Extract the remaining data
+
+            // Call this method again with the remaining data
+
+        } else {                                            // We are starting with a new field
+
+            // This is the start of a new field so start parsing
+
+
         }
 
-        if ( self.bufferedRequestBodyData == nil ) {
-            self.bufferedRequestBodyData = [NSMutableData dataWithData:data];
-        } else {
-            [self.bufferedResponseData appendData:data];
-        }
+
+    } else {                                                // This is just a chunk of something
+
+        // Append the data to the target if there is one otherwise discard it
+        // (RFC says to discard anything before the first --boundary
+
     }
-//    void(^parseMultipartPartData)(NSData * _Nonnull) = ^(NSData * multipartPartData) {
-//        NSLog(@" ** %s %lu", __PRETTY_FUNCTION__, multipartPartData.length);
-//    };
 
-//    if ( self.bufferedRequestBodyData == nil ) {
-//        self.bufferedRequestBodyData
-//    }
-//
-//    do {
-//        offset += boundaryData.length;
-//        NSRange searchRange = NSMakeRange(offset, bodyData.length - offset);
-//        NSRange nextBoundaryRange = [bodyData rangeOfData:boundaryData options:0 range:searchRange];
-//
-//        if ( nextBoundaryRange.location == NSNotFound ) {
-//            break;
-//        }
-//
-//        NSData* multipartPartData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes + offset length:nextBoundaryRange.location - offset freeWhenDone:NO];
-//        parseMultipartPartData(multipartPartData);
-//
-//        offset = nextBoundaryRange.location;
-//    } while (offset < bodyData.length );
-
-//    // Validate the input
-//    NSData* prefixData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes length:boundaryData.length freeWhenDone:NO];
-//    if ( [prefixData isEqualToData:boundaryData] ) {
-//        NSData* suffixData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes + bodyData.length - boundaryPrefixData.length - 2 length:boundaryPrefixData.length freeWhenDone:NO];
-//        if ( [suffixData isEqualToData:boundaryPrefixData] ) {
-//            NSData* lastBoundaryData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes + bodyData.length - boundaryPrefixData.length - boundaryData.length - 2 length:boundaryData.length freeWhenDone:NO];
-//            if ( [lastBoundaryData isEqualToData:boundaryData] ) {
-//            } else {
-//                result = NO;
-//                *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not end with %@%@", boundaryString, boundaryPrefixString]}];
-//            }
-//        } else {
-//            result = NO;
-//            *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not end with \"%@\"", boundaryPrefixString]}];
-//        }
-//    } else {
-//        result = NO;
-//        *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not start with the boundary. (%@)", boundaryString]}];
-//    }
 
     return result;
 }
 
 - (void)bufferBodyData:(NSData*)data {
-    if ( self.bufferedRequestBodyData == nil ) {
-        self.bufferedRequestBodyData = [NSMutableData dataWithData:data];
+    if ( self.bufferedBodyData == nil ) {
+        self.bufferedBodyData = [NSMutableData dataWithData:data];
     } else {
-        [self.bufferedRequestBodyData appendData:data];
+        [self.bufferedBodyData appendData:data];
     }
 }
 
@@ -236,19 +218,19 @@
 - (BOOL)parseURLEncodedBodyData:(NSError *__autoreleasing  _Nullable *)error {
     NSMutableDictionary<NSString *,NSString *> *body = [NSMutableDictionary dictionary];
 
-    NSString* bodyString = [[NSString alloc] initWithBytesNoCopy:(void *)self.bufferedRequestBodyData.bytes length:self.bufferedRequestBodyData.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
+    NSString* bodyString = [[NSString alloc] initWithBytesNoCopy:(void *)self.bufferedBodyData.bytes length:self.bufferedBodyData.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
     NSArray<NSString *> *bodyVars = [bodyString componentsSeparatedByString:CRRequestKeySeparator];
     [bodyVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSArray<NSString *> *bodyVarComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
         body[bodyVarComponents[0]] = bodyVarComponents.count > 1 ? bodyVarComponents[1] : @"";
     }];
     _body = body;
-    self.bufferedRequestBodyData = nil;
+    self.bufferedBodyData = nil;
     return YES;
 }
 
 - (BOOL)parseBufferedBodyData:(NSError *__autoreleasing  _Nullable *)error {
-    _body = [NSData dataWithBytesNoCopy:(void *)self.bufferedRequestBodyData.bytes length:self.bufferedRequestBodyData.length freeWhenDone:NO];
+    _body = [NSData dataWithBytesNoCopy:(void *)self.bufferedBodyData.bytes length:self.bufferedBodyData.length freeWhenDone:NO];
     return YES;
 }
 

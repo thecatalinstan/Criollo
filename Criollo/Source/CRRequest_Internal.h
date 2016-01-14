@@ -22,7 +22,7 @@
 
 @property (nonatomic, weak) CRConnection *connection;
 
-@property (nonatomic, strong, nullable) NSMutableData * bufferedRequestBodyData;
+@property (nonatomic, strong, nullable) NSMutableData * bufferedBodyData;
 @property (nonatomic, strong, nullable) NSMutableData * bufferedResponseData;
 
 @property (nonatomic, readonly, nullable) NSString * multipartBoundary;
