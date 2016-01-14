@@ -81,24 +81,24 @@
     // Parse request query string
     NSMutableDictionary<NSString *,NSString *> *query = [NSMutableDictionary dictionary];
     if ( _env[@"QUERY_STRING"] != nil ) {
-        NSArray<NSString *> *queryVars = [_env[@"QUERY_STRING"] componentsSeparatedByString:@"&"];
+        NSArray<NSString *> *queryVars = [_env[@"QUERY_STRING"] componentsSeparatedByString:CRRequestKeySeparator];
         [queryVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSArray<NSString *> *queryVarComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:@"="];
+            NSArray<NSString *> *queryVarComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
             query[queryVarComponents[0]] = queryVarComponents.count > 1 ? queryVarComponents[1] : @"";
         }];
     }
     _query = query;
 
     // Parse request cookies
-    NSMutableDictionary<NSString *,NSString *> *cookie = [NSMutableDictionary dictionary];
+    NSMutableDictionary<NSString *,NSString *> *cookies = [NSMutableDictionary dictionary];
     if ( _env[@"HTTP_COOKIE"] != nil ) {
-        NSArray<NSString *> *cookies = [_env[@"HTTP_COOKIE"] componentsSeparatedByString:@";"];
-        [cookies enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSArray<NSString *> *cookieComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:@"="];
-            cookie[cookieComponents[0]] = cookieComponents.count > 1 ? cookieComponents[1] : @"";
+        NSArray<NSString *> *cookieStrings = [_env[@"HTTP_COOKIE"] componentsSeparatedByString:CRRequestHeaderSeparator];
+        [cookieStrings enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSArray<NSString *> *cookieComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
+            cookies[cookieComponents[0]] = cookieComponents.count > 1 ? cookieComponents[1] : @"";
         }];
     }
-    _cookie = cookie;
+    _cookies = cookies;
 }
 
 - (void)setEnv:(NSString *)obj forKey:(NSString *)key {
