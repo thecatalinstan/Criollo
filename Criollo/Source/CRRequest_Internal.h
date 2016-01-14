@@ -35,6 +35,8 @@
 - (nonnull instancetype)initWithMethod:(nullable NSString *)method URL:(nullable NSURL *)URL version:(nullable NSString *)version connection:(nullable CRConnection*) connection env:(nullable NSDictionary*)env NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)appendData:(nonnull NSData *)data;
+- (void)bufferBodyData:(nonnull NSData *)data;
+- (void)bufferResponseData:(nonnull NSData *)data;
 
 - (void)setEnv:(nonnull NSDictionary<NSString*,NSString*>*)envDictionary;
 - (void)setEnv:(nonnull NSString*)obj forKey:(nonnull NSString*)key;

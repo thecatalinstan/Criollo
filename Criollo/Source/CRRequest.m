@@ -195,6 +195,44 @@
     return result;
 }
 
+- (void)bufferBodyData:(NSData*)data {
+    if ( self.bufferedRequestBodyData == nil ) {
+        self.bufferedRequestBodyData = [NSMutableData dataWithData:data];
+    } else {
+        [self.bufferedRequestBodyData appendData:data];
+    }
+}
+
+- (void)bufferResponseData:(NSData *)data {
+    if ( self.bufferedResponseData == nil ) {
+        self.bufferedResponseData = [NSMutableData dataWithData:data];
+    } else {
+        [self.bufferedResponseData appendData:data];
+    }
+}
+
+- (void)validateMultipartBody:(NSData*)bodyData {
+    //    // Validate the input
+    //    NSData* prefixData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes length:boundaryData.length freeWhenDone:NO];
+    //    if ( [prefixData isEqualToData:boundaryData] ) {
+    //        NSData* suffixData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes + bodyData.length - boundaryPrefixData.length - 2 length:boundaryPrefixData.length freeWhenDone:NO];
+    //        if ( [suffixData isEqualToData:boundaryPrefixData] ) {
+    //            NSData* lastBoundaryData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes + bodyData.length - boundaryPrefixData.length - boundaryData.length - 2 length:boundaryData.length freeWhenDone:NO];
+    //            if ( [lastBoundaryData isEqualToData:boundaryData] ) {
+    //            } else {
+    //                result = NO;
+    //                *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not end with %@%@", boundaryString, boundaryPrefixString]}];
+    //            }
+    //        } else {
+    //            result = NO;
+    //            *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not end with \"%@\"", boundaryPrefixString]}];
+    //        }
+    //    } else {
+    //        result = NO;
+    //        *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not start with the boundary. (%@)", boundaryString]}];
+    //    }
+}
+
 - (BOOL)parseURLEncodedBodyData:(NSError *__autoreleasing  _Nullable *)error {
     NSMutableDictionary<NSString *,NSString *> *body = [NSMutableDictionary dictionary];
 

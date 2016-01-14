@@ -26,7 +26,7 @@
 
 @property (nonatomic, readonly) BOOL willDisconnect;
 
-- (void)bufferRequestBodyData:(nonnull NSData *)data forRequest:(nonnull CRRequest *)request;
+- (void)bufferBodyData:(nonnull NSData *)data forRequest:(nonnull CRRequest *)request;
 - (void)bufferResponseData:(nonnull NSData *)data forRequest:(nonnull CRRequest *)request;
 
 @end
@@ -121,7 +121,7 @@
             NSLog(@" * bodyParsingError = %@", bodyParsingError);
         }
     } else {
-        [self bufferRequestBodyData:data forRequest:self.currentRequest];
+        [self bufferBodyData:data forRequest:self.currentRequest];
     }
 }
 
@@ -163,27 +163,18 @@
     [self startReading];
 }
 
-- (void)bufferRequestBodyData:(NSData *)data forRequest:(CRRequest *)request {
+- (void)bufferBodyData:(NSData *)data forRequest:(CRRequest *)request {
     if ( self.willDisconnect ) {
         return;
     }
-    if ( request.bufferedRequestBodyData == nil ) {
-        request.bufferedRequestBodyData = [[NSMutableData alloc] initWithData:data];
-    } else {
-        [request.bufferedRequestBodyData appendData:data];
-    }
-
+    [request bufferBodyData:data];
 }
 
 - (void)bufferResponseData:(NSData *)data forRequest:(CRRequest *)request {
     if ( self.willDisconnect ) {
         return;
     }
-    if ( request.bufferedResponseData == nil ) {
-        request.bufferedResponseData = [[NSMutableData alloc] initWithData:data];
-    } else {
-        [request.bufferedResponseData appendData:data];
-    }
+    [request bufferResponseData:data];
 }
 
 - (void)sendDataToSocket:(NSData *)data forRequest:(CRRequest *)request {
