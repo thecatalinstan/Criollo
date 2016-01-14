@@ -131,7 +131,7 @@
                 }
             }];
             NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", host, path]];
-            self.currentRequest = [[CRRequest alloc] initWithMethod:method URL:URL version:version];
+            self.currentRequest = [[CRRequest alloc] initWithMethod:method URL:URL version:version connection:self];
         } else {
             [self.socket disconnectAfterWriting];
         }
