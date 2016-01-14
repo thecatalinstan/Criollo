@@ -14,9 +14,13 @@
 #define CRRequestBoundaryParameter          @"boundary"
 #define CRRequestBoundaryPrefix             @"--"
 
+@class CRConnection;
+
 @interface CRRequest ()
 
 @property (nonatomic, readonly) BOOL shouldCloseConnection;
+
+@property (nonatomic, weak) CRConnection *connection;
 
 @property (nonatomic, strong, nullable) NSMutableData * bufferedRequestBodyData;
 @property (nonatomic, strong, nullable) NSMutableData * bufferedResponseData;
@@ -27,7 +31,8 @@
 @property (nonatomic, readonly, nullable) NSData * multipartBoundaryPrefixedData;
 
 - (nonnull instancetype)initWithMethod:(nullable NSString *)method URL:(nullable NSURL *)URL version:(nullable NSString *)version;
-- (nonnull instancetype)initWithMethod:(nullable NSString *)method URL:(nullable NSURL *)URL version:(nullable NSString *)version env:(nullable NSDictionary*)env NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithMethod:(nullable NSString *)method URL:(nullable NSURL *)URL version:(nullable NSString *)version connection:(nullable CRConnection*) connection;
+- (nonnull instancetype)initWithMethod:(nullable NSString *)method URL:(nullable NSURL *)URL version:(nullable NSString *)version connection:(nullable CRConnection*) connection env:(nullable NSDictionary*)env NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)appendData:(nonnull NSData *)data;
 

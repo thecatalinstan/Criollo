@@ -11,6 +11,8 @@
 #import "CRRequest_Internal.h"
 #import "CRConnection.h"
 #import "CRConnection_Internal.h"
+#import "CRServer.h"
+#import "CRServer_Internal.h"
 
 @implementation CRRequest {
     NSMutableDictionary* _env;
@@ -29,14 +31,17 @@
 }
 
 - (instancetype)init {
-    return [self initWithMethod:nil URL:nil version:nil env:nil];
+    return [self initWithMethod:nil URL:nil version:nil connection:nil env:nil];
 }
 
 - (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version {
-    return [self initWithMethod:method URL:URL version:version env:nil];
+    return [self initWithMethod:method URL:URL version:version connection:nil env:nil];
 }
 
-- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version env:(NSDictionary *)env {
+- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version connection:(nullable CRConnection *)connection {
+    return [self initWithMethod:method URL:URL version:version connection:connection env:nil];
+}
+- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version connection:(CRConnection *)connection env:(NSDictionary *)env {
     self = [super init];
     if ( self != nil ) {
         self.message = CFBridgingRelease( CFHTTPMessageCreateRequest(NULL, (__bridge CFStringRef)method, (__bridge CFURLRef)URL, (__bridge CFStringRef)version) );
@@ -45,6 +50,7 @@
         } else {
             [self setEnv:env];
         }
+        self.connection = connection;
     }
     return self;
 }
