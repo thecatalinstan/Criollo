@@ -38,6 +38,10 @@
 - (void)bufferBodyData:(nonnull NSData *)data;
 - (void)bufferResponseData:(nonnull NSData *)data;
 
+- (BOOL)appendBodyData:(nonnull NSData *)data forKey:(nonnull NSString *)key;
+- (BOOL)appendFileData:(nonnull NSData *)data forKey:(nonnull NSString *)key;
+
+
 - (void)setEnv:(nonnull NSDictionary<NSString*,NSString*>*)envDictionary;
 - (void)setEnv:(nonnull NSString*)obj forKey:(nonnull NSString*)key;
 
