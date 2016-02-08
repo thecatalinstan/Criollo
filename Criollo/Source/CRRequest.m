@@ -179,11 +179,9 @@
             NSData* CRLFData = [CRConnection CRLFData];
             NSData* CRLFCRLFData = [CRConnection CRLFCRLFData];
 
-            NSUInteger offset = 0;
-
             // Read the header (starts after the --boundary and a CRLF and ends with CRLFCRLF)
             NSUInteger headerStartLocation = nextBoundaryRange.location + nextBoundaryRange.length + CRLFData.length;
-            NSRange headerSearchRange = NSMakeRange(headerStartLocation, data.length);
+            NSRange headerSearchRange = NSMakeRange(headerStartLocation, data.length - headerStartLocation);
 
             NSRange headerRange = [data rangeOfData:CRLFCRLFData options:0 range:headerSearchRange];
 
