@@ -251,7 +251,7 @@ NSUInteger const CRErrorSocketError = 2001;
     NSArray<NSString*>* methods;
 
     if ( HTTPMethod == nil ) {
-        methods = @[@"GET", @"POST", @"PUT", @"DELETE"];
+        methods = CRHTTPAllMethods;
     } else {
         methods = @[HTTPMethod];
     }

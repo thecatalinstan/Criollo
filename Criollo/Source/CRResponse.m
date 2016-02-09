@@ -42,7 +42,7 @@
 - (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version {
     self  = [super init];
     if ( self != nil ) {
-        version = version == nil ? CRHTTP11 : version;
+        version = version == nil ? CRHTTPVersion1_1 : version;
         self.message = CFBridgingRelease(CFHTTPMessageCreateResponse(NULL, (CFIndex)HTTPStatusCode, (__bridge CFStringRef)description, (__bridge CFStringRef) version));
         self.connection = connection;
         _statusDescription = description;
