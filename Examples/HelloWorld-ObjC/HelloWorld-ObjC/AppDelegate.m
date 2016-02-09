@@ -83,21 +83,21 @@
         [responseString appendFormat:@"<h2>Version %@ build %@</h2>", [bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [bundle objectForInfoDictionaryKey:@"CFBundleVersion"]];
 
         // Headers
-        [responseString appendString:@"<h3>Request Headers:</h2><pre>"];
+        [responseString appendString:@"<h3>Request Headers:</h3><pre>"];
         [request.allHTTPHeaderFields enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
             [responseString appendFormat:@"%@: %@\n", key, obj];
         }];
         [responseString appendString:@"</pre>"];
 
         // Request enviroment
-        [responseString appendString:@"<h3>Request Enviroment:</h2><pre>"];
+        [responseString appendString:@"<h3>Request Enviroment:</h3><pre>"];
         [request.env enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
             [responseString appendFormat:@"%@: %@\n", key, obj];
         }];
         [responseString appendString:@"</pre>"];
 
         // Query
-        [responseString appendString:@"<h3>Request Query:</h2><pre>"];
+        [responseString appendString:@"<h3>Request Query:</h3><pre>"];
         [request.query enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
             [responseString appendFormat:@"%@: %@\n", key, obj];
         }];
@@ -105,20 +105,20 @@
 
         // Body
         if ( request.body != nil ) {
-            [responseString appendString:@"<h3>Request Body:</h2><pre>"];
+            [responseString appendString:@"<h3>Request Body:</h3><pre>"];
             [responseString appendFormat:@"%@", request.body];
             [responseString appendString:@"</pre>"];
         }
 
         // Cookies
-        [responseString appendString:@"<h3>Request Cookies:</h2><pre>"];
+        [responseString appendString:@"<h3>Request Cookies:</h3><pre>"];
         [request.cookies enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
             [responseString appendFormat:@"%@: %@\n", key, obj];
         }];
         [responseString appendString:@"</pre>"];
 
         // Stack trace
-        [responseString appendString:@"<h3>Stack Trace:</h2><pre>"];
+        [responseString appendString:@"<h3>Stack Trace:</h3><pre>"];
         [[NSThread callStackSymbols] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [responseString appendFormat:@"%@\n", obj];
         }];
