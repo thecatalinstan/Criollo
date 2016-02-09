@@ -28,8 +28,7 @@
     return [[self valueForHTTPHeaderField:@"Transfer-encoding"] isEqualToString:@"chunked"];
 }
 
-- (void)buildHeaders
-{
+- (void)buildHeaders {
     if ( self.alreadyBuiltHeaders ) {
         return;
     }
@@ -46,7 +45,7 @@
 
     if ( [self valueForHTTPHeaderField:@"Connection"] == nil ) {
         NSString* connectionHeader = @"keep-alive";
-        if ( [self.version isEqualToString:CRHTTP10] ) {
+        if ( [self.version isEqualToString:CRHTTPVersion1_0] ) {
             connectionHeader = @"close";
         }
         [self setValue:connectionHeader forHTTPHeaderField:@"Connection"];
@@ -61,8 +60,7 @@
     self.alreadyBuiltHeaders = YES;
 }
 
-- (void)writeData:(NSData *)data finish:(BOOL)flag
-{
+- (void)writeData:(NSData *)data finish:(BOOL)flag {
     if ( self.finished ) {
         @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Response is already finished" userInfo:nil];
     }
@@ -105,7 +103,6 @@
 }
 
 - (NSMutableData*)initialResponseData {
-
     NSMutableData* dataToSend = [NSMutableData dataWithCapacity:CRResponseDataInitialCapacity];
 
     if ( !self.alreadySentHeaders ) {
@@ -118,7 +115,6 @@
     }
 
     return dataToSend;
-
 }
 
 
