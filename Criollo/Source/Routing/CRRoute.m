@@ -8,6 +8,10 @@
 
 #import "CRRoute.h"
 #import "CRViewController.h"
+#import "CRRequest.h"
+#import "CRRequest_Internal.h"
+#import "CRResponse.h"
+#import "CRResponse_Internal.h"
 
 @interface CRRoute ()
 
@@ -21,6 +25,10 @@
 
 + (CRRoute *)routeWithControllerClass:(Class)controllerClass nibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     return [[CRRoute alloc] initWithControllerClass:controllerClass nibName:nibNameOrNil bundle:nibBundleOrNil];
+}
+
++ (CRRoute *)routeWithStaticFolder:(NSString *)folderPath options:(CRStaticFolderServingOptions)options {
+    return [[CRRoute alloc] initWithStaticFolder:folderPath options:options];
 }
 
 - (instancetype)init {
@@ -46,7 +54,23 @@
     return [self initWithBlock:block];
 }
 
+- (instancetype)initWithStaticFolder:(NSString *)folderPath options:(CRStaticFolderServingOptions)options {
 
+    BOOL shouldCache = @(options & CRStaticFolderServingOptionsCacheFiles).boolValue;
+    BOOL shouldGenerateIndex = @(options & CRStaticFolderServingOptionsAutoIndex).boolValue;
 
+    CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        NSLog(@"%s", __PRETTY_FUNCTION__);
+
+        NSString* filePath = [folderPath stringByAppendingPathComponent:request.env[@"REQUEST_FILENAME"]];
+        NSLog(@" * File: %@", filePath);
+        NSLog(@" * Should Cache: %hhd", shouldCache);
+        NSLog(@" * Should Generate Index: %hhd", shouldGenerateIndex);
+
+        [response sendString:filePath];
+    };
+    
+    return [self initWithBlock:block];
+}
 
 @end

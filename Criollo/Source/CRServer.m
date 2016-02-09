@@ -152,12 +152,6 @@ NSUInteger const CRErrorSocketError = 2001;
     return [[CRConnection alloc] initWithSocket:socket server:self];
 }
 
-#pragma mark - Routing
-
-- (BOOL)canHandleHTTPMethod:(NSString *)HTTPMethod forPath:(NSString *)path {
-    return YES;
-}
-
 #pragma mark - GCDAsyncSocketDelegate
 
 - (void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket {
@@ -223,7 +217,11 @@ NSUInteger const CRErrorSocketError = 2001;
     });
 }
 
-#pragma mark - CRRouter
+#pragma mark - Routing
+
+- (BOOL)canHandleHTTPMethod:(NSString *)HTTPMethod forPath:(NSString *)path {
+    return YES;
+}
 
 - (void)addBlock:(CRRouteBlock)block {
     [self addBlock:block forPath:nil HTTPMethod:nil];
@@ -245,6 +243,11 @@ NSUInteger const CRErrorSocketError = 2001;
 - (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
     CRRoute* route = [CRRoute routeWithControllerClass:controllerClass nibName:nibNameOrNil bundle:nibBundleOrNil];
     [self addRoute:route forPath:path HTTPMethod:HTTPMethod];
+}
+
+- (void)addStaticFolder:(NSString *)folderPath forPath:(NSString *)path options:(CRStaticFolderServingOptions)options {
+    CRRoute* route = [CRRoute routeWithStaticFolder:folderPath options:options];
+    [self addRoute:route forPath:path HTTPMethod:CRHTTPMethodGET];
 }
 
 - (void)addRoute:(CRRoute*)route forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
