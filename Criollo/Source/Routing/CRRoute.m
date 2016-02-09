@@ -27,8 +27,8 @@
     return [[CRRoute alloc] initWithControllerClass:controllerClass nibName:nibNameOrNil bundle:nibBundleOrNil];
 }
 
-+ (CRRoute *)routeWithStaticFolder:(NSString *)folderPath options:(CRStaticFolderServingOptions)options {
-    return [[CRRoute alloc] initWithStaticFolder:folderPath options:options];
++ (CRRoute *)routeWithStaticFolder:(NSString *)folderPath prefix:(NSString * _Nonnull)prefix options:(CRStaticFolderServingOptions)options {
+    return [[CRRoute alloc] initWithStaticFolder:folderPath prefix:prefix options:options];
 }
 
 - (instancetype)init {
@@ -54,7 +54,16 @@
     return [self initWithBlock:block];
 }
 
-- (instancetype)initWithStaticFolder:(NSString *)folderPath options:(CRStaticFolderServingOptions)options {
+- (instancetype)initWithStaticFolder:(NSString *)folderPath prefix:(NSString * _Nonnull)prefix options:(CRStaticFolderServingOptions)options {
+
+    folderPath = [folderPath stringByExpandingTildeInPath];
+    if ( [folderPath hasSuffix:CRPathSeparator] ) {
+        folderPath = [folderPath substringToIndex:folderPath.length - CRPathSeparator.length];
+    }
+
+    if ( [prefix hasSuffix:CRPathSeparator] ) {
+        prefix = [prefix substringToIndex:prefix.length - CRPathSeparator.length];
+    }
 
     BOOL shouldCache = @(options & CRStaticFolderServingOptionsCacheFiles).boolValue;
     BOOL shouldGenerateIndex = @(options & CRStaticFolderServingOptionsAutoIndex).boolValue;
@@ -62,12 +71,14 @@
     CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         NSLog(@"%s", __PRETTY_FUNCTION__);
 
-        NSString* filePath = [folderPath stringByAppendingPathComponent:request.env[@"REQUEST_FILENAME"]];
-        NSLog(@" * File: %@", filePath);
+        NSString* requestedRelativePath = [request.env[@"DOCUMENT_URI"] substringFromIndex:prefix.length];
+        NSString* requestedAbsolutePath = [folderPath stringByAppendingPathComponent:requestedRelativePath];
+
+        NSLog(@" * Absolute Path: %@", requestedAbsolutePath);
         NSLog(@" * Should Cache: %hhd", shouldCache);
         NSLog(@" * Should Generate Index: %hhd", shouldGenerateIndex);
 
-        [response sendString:filePath];
+        [response sendString:requestedAbsolutePath];
     };
     
     return [self initWithBlock:block];

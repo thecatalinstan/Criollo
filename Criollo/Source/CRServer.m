@@ -245,8 +245,12 @@ NSUInteger const CRErrorSocketError = 2001;
     [self addRoute:route forPath:path HTTPMethod:HTTPMethod];
 }
 
+- (void)addStaticFolder:(NSString *)folderPath forPath:(NSString *)path {
+    [self addStaticFolder:folderPath forPath:path options:0];
+}
+
 - (void)addStaticFolder:(NSString *)folderPath forPath:(NSString *)path options:(CRStaticFolderServingOptions)options {
-    CRRoute* route = [CRRoute routeWithStaticFolder:folderPath options:options];
+    CRRoute* route = [CRRoute routeWithStaticFolder:folderPath prefix:path options:options];
     [self addRoute:route forPath:path HTTPMethod:CRHTTPMethodGET];
 }
 
@@ -260,13 +264,12 @@ NSUInteger const CRErrorSocketError = 2001;
     }
 
     if ( path == nil ) {
-        path = @"*";
+        path = CRPathAnyPath;
     }
 
-    if ( ![path isEqualToString:@"*"] && ![path hasSuffix:@"/"] ) {
-        path = [path stringByAppendingString:@"/"];
+    if ( ![path isEqualToString:CRPathAnyPath] && ![path hasSuffix:CRPathSeparator] ) {
+        path = [path stringByAppendingString:CRPathSeparator];
     }
-
 
     // Add the
     [methods enumerateObjectsUsingBlock:^(NSString * _Nonnull method, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -277,14 +280,15 @@ NSUInteger const CRErrorSocketError = 2001;
             NSMutableArray<CRRoute*>* parentRoutes = [NSMutableArray array];
 
             // Add the "*" routes
-            NSString* anyPathRoutePath = [method stringByAppendingString:@"*"];
+            NSString* anyPathRoutePath = [method stringByAppendingString:CRPathAnyPath];
             if ( self.routes[anyPathRoutePath] != nil ) {
                 [parentRoutes addObjectsFromArray:self.routes[anyPathRoutePath]];
             }
+
             // Add all parent routes
-            __block NSString* parentRoutePath = [method stringByAppendingString:@"/"];
+            __block NSString* parentRoutePath = [method stringByAppendingString:CRPathSeparator];
             [routePath.pathComponents enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if ( [parentRoutePath isEqualToString:[method stringByAppendingString:@"/"]] ) {
+                if ( [parentRoutePath isEqualToString:[method stringByAppendingString:CRPathSeparator]] ) {
                     return;
                 }
 
@@ -306,7 +310,7 @@ NSUInteger const CRErrorSocketError = 2001;
             [self.routes[obj] addObject:route];
         }];
 
-        if ( [path isEqualToString:@"*"] ) {
+        if ( [path isEqualToString:CRPathAnyPath] ) {
             [self.routes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<CRRoute *> * _Nonnull obj, BOOL * _Nonnull stop) {
                 if ( ![obj.lastObject isEqual:route] ) {
                     [obj addObject:route];
@@ -326,16 +330,15 @@ NSUInteger const CRErrorSocketError = 2001;
         path = @"";
     }
 
-    NSString* pathSeparator = @"/";
-    if ( ![path hasSuffix:pathSeparator] ) {
-        path = [path stringByAppendingString:pathSeparator];
+    if ( ![path hasSuffix:CRPathSeparator] ) {
+        path = [path stringByAppendingString:CRPathSeparator];
     }
     path = [HTTPMethod stringByAppendingString:path];
 
     NSArray<CRRoute*>* routes;
     while ( routes.count == 0 ) {
         routes = self.routes[path];
-        path = [[path stringByDeletingLastPathComponent] stringByAppendingString:pathSeparator];
+        path = [[path stringByDeletingLastPathComponent] stringByAppendingString:CRPathSeparator];
     }
 
     return routes;
