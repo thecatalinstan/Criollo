@@ -9,20 +9,39 @@
 #import "CRMessage_Internal.h"
 #import "CRRequest.h"
 #import "CRRequest_Internal.h"
+#import "CRConnection.h"
+#import "CRConnection_Internal.h"
+#import "CRServer.h"
+#import "CRServer_Internal.h"
 
 @implementation CRRequest {
     NSMutableDictionary* _env;
+
+    __block NSString * _multipartBoundary;
+    __block dispatch_once_t _multipartBoundaryOnceToken;
+
+    __block NSString * _multipartBoundaryPrefixedString;
+    __block dispatch_once_t _multipartBoundaryPrefixedStringOnceToken;
+
+    __block NSData * _multipartBoundaryPrefixedData;
+    __block dispatch_once_t _multipartBoundaryPrefixedDataOnceToken;
+
+    NSString* currentMultipartBodyKey;
+    NSString* currentMultipartFileKey;
 }
 
 - (instancetype)init {
-    return [self initWithMethod:nil URL:nil version:nil env:nil];
+    return [self initWithMethod:nil URL:nil version:nil connection:nil env:nil];
 }
 
 - (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version {
-    return [self initWithMethod:method URL:URL version:version env:nil];
+    return [self initWithMethod:method URL:URL version:version connection:nil env:nil];
 }
 
-- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version env:(NSDictionary *)env {
+- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version connection:(nullable CRConnection *)connection {
+    return [self initWithMethod:method URL:URL version:version connection:connection env:nil];
+}
+- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version connection:(CRConnection *)connection env:(NSDictionary *)env {
     self = [super init];
     if ( self != nil ) {
         self.message = CFBridgingRelease( CFHTTPMessageCreateRequest(NULL, (__bridge CFStringRef)method, (__bridge CFURLRef)URL, (__bridge CFStringRef)version) );
@@ -31,6 +50,7 @@
         } else {
             [self setEnv:env];
         }
+        self.connection = connection;
     }
     return self;
 }
@@ -61,28 +81,157 @@
     // Parse request query string
     NSMutableDictionary<NSString *,NSString *> *query = [NSMutableDictionary dictionary];
     if ( _env[@"QUERY_STRING"] != nil ) {
-        NSArray<NSString *> *queryVars = [_env[@"QUERY_STRING"] componentsSeparatedByString:@"&"];
+        NSArray<NSString *> *queryVars = [_env[@"QUERY_STRING"] componentsSeparatedByString:CRRequestKeySeparator];
         [queryVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSArray<NSString *> *queryVarComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:@"="];
+            NSArray<NSString *> *queryVarComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
             query[queryVarComponents[0]] = queryVarComponents.count > 1 ? queryVarComponents[1] : @"";
         }];
     }
     _query = query;
 
     // Parse request cookies
-    NSMutableDictionary<NSString *,NSString *> *cookie = [NSMutableDictionary dictionary];
+    NSMutableDictionary<NSString *,NSString *> *cookies = [NSMutableDictionary dictionary];
     if ( _env[@"HTTP_COOKIE"] != nil ) {
-        NSArray<NSString *> *cookies = [_env[@"HTTP_COOKIE"] componentsSeparatedByString:@";"];
-        [cookies enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSArray<NSString *> *cookieComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:@"="];
-            cookie[cookieComponents[0]] = cookieComponents.count > 1 ? cookieComponents[1] : @"";
+        NSArray<NSString *> *cookieStrings = [_env[@"HTTP_COOKIE"] componentsSeparatedByString:CRRequestHeaderSeparator];
+        [cookieStrings enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSArray<NSString *> *cookieComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
+            cookies[cookieComponents[0]] = cookieComponents.count > 1 ? cookieComponents[1] : @"";
         }];
     }
-    _cookie = cookie;
+    _cookies = cookies;
 }
 
 - (void)setEnv:(NSString *)obj forKey:(NSString *)key {
     [_env setObject:obj forKey:key];
+}
+
+- (BOOL)parseJSONBodyData:(NSError *__autoreleasing  _Nullable *)error {
+    BOOL result = NO;
+
+    NSError* jsonDecodingError;
+    id decodedBody = [NSJSONSerialization JSONObjectWithData:self.bufferedBodyData options:0 error:&jsonDecodingError];
+
+    if ( jsonDecodingError == nil ) {
+        _body = decodedBody;
+        result = YES;
+        self.bufferedBodyData = nil;
+    } else {
+        *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Unable to parse JSON request.", NSUnderlyingErrorKey:jsonDecodingError}];
+    }
+
+    return result;
+}
+
+- (BOOL)parseMultipartBodyDataChunk:(NSData *)data error:(NSError *__autoreleasing  _Nullable * _Nullable)error {
+    BOOL result = YES;
+    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
+
+    // Search for a boundary
+    NSRange searchRange = NSMakeRange(0, data.length);
+    NSRange nextBoundaryRange = [data rangeOfData:self.multipartBoundaryPrefixedData options:0 range:searchRange];
+
+    if ( nextBoundaryRange.location != NSNotFound ) {       // We have a boundary
+
+        // Check if we have something before the boundary
+        if ( nextBoundaryRange.location != 0 ) {            // There is an existing chunk
+
+            // Extract the piece
+
+            // Check if we have something buffered
+            if ( self.bufferedBodyData.length > 0 ) {       // This is part of a field that
+                                                            // was received previously and does not have
+                                                            // a full header
+
+                // Prepend the the buffered data to the one piece
+
+                // Flush the buffered data
+
+                // Call this method again with the combined data
+            } else {
+
+                // Append the piece to the target if there is one otherwise discard it
+                // (RFC says to discard anything before the first --boundary
+
+            }
+
+            // Extract the remaining data
+
+            // Call this method again with the remaining data
+
+        } else {                                            // We are starting with a new field
+
+            // This is the start of a new field so start parsing
+
+
+        }
+
+
+    } else {                                                // This is just a chunk of something
+
+        // Append the data to the target if there is one otherwise discard it
+        // (RFC says to discard anything before the first --boundary
+
+    }
+
+
+    return result;
+}
+
+- (void)bufferBodyData:(NSData*)data {
+    if ( self.bufferedBodyData == nil ) {
+        self.bufferedBodyData = [NSMutableData dataWithData:data];
+    } else {
+        [self.bufferedBodyData appendData:data];
+    }
+}
+
+- (void)bufferResponseData:(NSData *)data {
+    if ( self.bufferedResponseData == nil ) {
+        self.bufferedResponseData = [NSMutableData dataWithData:data];
+    } else {
+        [self.bufferedResponseData appendData:data];
+    }
+}
+
+- (void)validateMultipartBody:(NSData*)bodyData {
+    //    // Validate the input
+    //    NSData* prefixData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes length:boundaryData.length freeWhenDone:NO];
+    //    if ( [prefixData isEqualToData:boundaryData] ) {
+    //        NSData* suffixData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes + bodyData.length - boundaryPrefixData.length - 2 length:boundaryPrefixData.length freeWhenDone:NO];
+    //        if ( [suffixData isEqualToData:boundaryPrefixData] ) {
+    //            NSData* lastBoundaryData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes + bodyData.length - boundaryPrefixData.length - boundaryData.length - 2 length:boundaryData.length freeWhenDone:NO];
+    //            if ( [lastBoundaryData isEqualToData:boundaryData] ) {
+    //            } else {
+    //                result = NO;
+    //                *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not end with %@%@", boundaryString, boundaryPrefixString]}];
+    //            }
+    //        } else {
+    //            result = NO;
+    //            *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not end with \"%@\"", boundaryPrefixString]}];
+    //        }
+    //    } else {
+    //        result = NO;
+    //        *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not start with the boundary. (%@)", boundaryString]}];
+    //    }
+}
+
+- (BOOL)parseURLEncodedBodyData:(NSError *__autoreleasing  _Nullable *)error {
+    NSMutableDictionary<NSString *,NSString *> *body = [NSMutableDictionary dictionary];
+
+    NSString* bodyString = [[NSString alloc] initWithBytesNoCopy:(void *)self.bufferedBodyData.bytes length:self.bufferedBodyData.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
+    NSArray<NSString *> *bodyVars = [bodyString componentsSeparatedByString:CRRequestKeySeparator];
+    [bodyVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSArray<NSString *> *bodyVarComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
+        body[bodyVarComponents[0]] = bodyVarComponents.count > 1 ? bodyVarComponents[1] : @"";
+    }];
+    _body = body;
+    self.bufferedBodyData = nil;
+    return YES;
+}
+
+- (BOOL)parseBufferedBodyData:(NSError *__autoreleasing  _Nullable *)error {
+    _body = [NSData dataWithBytesNoCopy:(void *)self.bufferedBodyData.bytes length:self.bufferedBodyData.length freeWhenDone:NO];
+    return YES;
 }
 
 - (NSString *)description {
@@ -102,5 +251,48 @@
     return shouldClose;
 }
 
+- (NSString *)multipartBoundary {
+    NSString* contentType = _env[@"HTTP_CONTENT_TYPE"];
+    if ([contentType hasPrefix:CRRequestTypeMultipart]) {
+        dispatch_once(&_multipartBoundaryOnceToken, ^{
+            NSArray<NSString*>* headerComponents = [contentType componentsSeparatedByString:CRRequestHeaderSeparator];
+            [headerComponents enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                obj = [obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                if ( ![obj hasPrefix:CRRequestBoundaryParameter] ) {
+                    return;
+                }
+                _multipartBoundary = [[obj componentsSeparatedByString:CRRequestValueSeparator][1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            }];
+        });
+    }
+    return _multipartBoundary;
+}
+
+- (NSData *)multipartBoundaryPrefixData {
+    static NSData * _multipartBoundaryPrefixData;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _multipartBoundaryPrefixData = [NSData dataWithBytesNoCopy:(void * )CRRequestBoundaryPrefix.UTF8String length:CRRequestBoundaryPrefix.length freeWhenDone:NO];
+    });
+    return _multipartBoundaryPrefixData;
+}
+
+- (NSString *)multipartBoundaryPrefixedString {
+    if ( self.multipartBoundary.length > 0 ) {
+        dispatch_once(&_multipartBoundaryPrefixedStringOnceToken, ^{
+            _multipartBoundaryPrefixedString = [NSString stringWithFormat:@"\r\n%@%@", CRRequestBoundaryPrefix, self.multipartBoundary];
+        });
+    }
+    return _multipartBoundaryPrefixedString;
+}
+
+- (NSData *)multipartBoundaryPrefixedData {
+    if ( self.multipartBoundaryPrefixedString.length > 0 ) {
+        dispatch_once(&_multipartBoundaryPrefixedDataOnceToken, ^{
+            _multipartBoundaryPrefixedData = [NSData dataWithBytesNoCopy:(void *)self.multipartBoundaryPrefixedString.UTF8String length:self.multipartBoundaryPrefixedString.length freeWhenDone:NO];
+        });
+    }
+    return _multipartBoundaryPrefixedData;
+}
 
 @end

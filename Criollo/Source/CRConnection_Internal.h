@@ -18,6 +18,7 @@
 @property (nonatomic, strong, nonnull) NSMutableArray<CRRequest*>* requests;
 
 @property (nonatomic, strong, nullable) CRRequest* currentRequest;
+@property (nonatomic, readonly, strong, nonnull) dispatch_queue_t isolationQueue;
 
 + (nonnull NSData *)CRLFData;
 + (nonnull NSData *)CRLFCRLFData;
@@ -30,8 +31,9 @@
 
 - (void)startReading;
 - (void)didReceiveCompleteRequestHeaders;
-- (void)didReceiveRequestBody;
+- (void)didReceiveRequestBodyData:(nonnull NSData *)data;
 - (void)didReceiveCompleteRequest;
+
 - (void)sendDataToSocket:(nonnull NSData *)data forRequest:(nonnull CRRequest *)request;
 - (void)didFinishResponseForRequest:(nonnull CRRequest *)request;
 

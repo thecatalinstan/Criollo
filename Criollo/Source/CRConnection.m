@@ -22,10 +22,11 @@
 #include <sys/sysctl.h>
 #import "NSDate+RFC1123.h"
 
-@interface CRConnection () <GCDAsyncSocketDelegate> 
+@interface CRConnection () <GCDAsyncSocketDelegate>
 
 @property (nonatomic, readonly) BOOL willDisconnect;
 
+- (void)bufferBodyData:(nonnull NSData *)data forRequest:(nonnull CRRequest *)request;
 - (void)bufferResponseData:(nonnull NSData *)data forRequest:(nonnull CRRequest *)request;
 
 @end
@@ -77,10 +78,15 @@
         self.socket = socket;
         self.socket.delegate = self;
         self.requests = [NSMutableArray array];
+
         _remoteAddress = self.socket.connectedHost;
         _remotePort = self.socket.connectedPort;
         _localAddress = self.socket.localHost;
         _localPort = self.socket.localPort;
+
+        _isolationQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:[NSString stringWithFormat:@"CRConnection-IsolationQueue-%lu", self.hash]] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
+        dispatch_set_target_queue(self.isolationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
+
     }
     return self;
 }
@@ -97,15 +103,58 @@
 }
 
 - (void)didReceiveCompleteRequestHeaders {
+    if (self.willDisconnect) {
+        return;
+    }
 }
 
-- (void)didReceiveRequestBody {
+- (void)didReceiveRequestBodyData:(NSData *)data {
+    if ( self.willDisconnect ) {
+        return;
+    }
+
+    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
+    NSString* contentType = self.currentRequest.env[@"HTTP_CONTENT_TYPE"];
+    if ([contentType hasPrefix:CRRequestTypeMultipart]) {
+        NSError* bodyParsingError;
+        if ( ![self.currentRequest parseMultipartBodyDataChunk:data error:&bodyParsingError] ) {
+            NSLog(@" * bodyParsingError = %@", bodyParsingError);
+        }
+    } else {
+        [self bufferBodyData:data forRequest:self.currentRequest];
+    }
 }
 
 - (void)didReceiveCompleteRequest {
     if ( self.willDisconnect ) {
         return;
     }
+
+    // Parse request body
+    NSUInteger contentLength = [self.currentRequest.env[@"HTTP_CONTENT_LENGTH"] integerValue];
+    if ( contentLength > 0 ) {
+        NSError* bodyParsingError;
+        NSString* contentType = self.currentRequest.env[@"HTTP_CONTENT_TYPE"];
+
+        BOOL result = YES;
+
+        if ([contentType hasPrefix:CRRequestTypeJSON]) {
+            result = [self.currentRequest parseJSONBodyData:&bodyParsingError];
+        } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
+        } else if ([contentType hasPrefix:CRRequestTypeURLEncoded]) {
+            result = [self.currentRequest parseURLEncodedBodyData:&bodyParsingError];
+        } else {
+            result = [self.currentRequest parseBufferedBodyData:&bodyParsingError];
+        }
+
+        if ( !result ) {
+            NSLog(@" * bodyParsingError = %@", bodyParsingError);
+        } else {
+            NSLog(@" * request.body = %@", self.currentRequest.body);
+            NSLog(@" * bufferedBodyData = %lu bytes", self.currentRequest.bufferedBodyData.length);
+        }
+    }
+
     CRResponse* response = [self responseWithHTTPStatusCode:200];
     [self.currentRequest setResponse:response];
     [response setRequest:self.currentRequest];
@@ -114,15 +163,18 @@
     [self startReading];
 }
 
+- (void)bufferBodyData:(NSData *)data forRequest:(CRRequest *)request {
+    if ( self.willDisconnect ) {
+        return;
+    }
+    [request bufferBodyData:data];
+}
+
 - (void)bufferResponseData:(NSData *)data forRequest:(CRRequest *)request {
     if ( self.willDisconnect ) {
         return;
     }
-    if ( request.bufferedResponseData == nil ) {
-        request.bufferedResponseData = [[NSMutableData alloc] initWithData:data];
-    } else {
-        [request.bufferedResponseData appendData:data];
-    }
+    [request bufferResponseData:data];
 }
 
 - (void)sendDataToSocket:(NSData *)data forRequest:(CRRequest *)request {

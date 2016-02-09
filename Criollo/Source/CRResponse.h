@@ -8,6 +8,9 @@
 
 #import "CRMessage.h"
 
+// Initial size of the response body data
+#define CRResponseDataInitialCapacity       1024
+
 @class CRRequest, CRConnection;
 
 @interface CRResponse : CRMessage
@@ -17,7 +20,6 @@
 @property (nonatomic, readonly) NSUInteger statusCode;
 @property (nonatomic, strong, readonly, nullable) NSString* statusDescription;
 
-@property (nonatomic, weak) CRConnection *connection;
 
 - (void)setStatusCode:(NSUInteger)statusCode description:(nullable NSString *)description;
 

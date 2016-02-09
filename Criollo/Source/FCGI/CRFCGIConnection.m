@@ -60,7 +60,6 @@
 }
 
 - (void)didReceiveCompleteRequestHeaders {
-    [super didReceiveCompleteRequestHeaders];
 
     // Create HTTP headers from FCGI Params
     NSMutableData* headersData = [NSMutableData data];
@@ -86,15 +85,15 @@
     [self.currentRequest appendData:headersData];
     [self.currentRequest appendData:[CRConnection CRLFData]];
 
-    currentRequestBodyLength = [self.currentRequest.env[@"CONTENT_LENGTH"] integerValue];
+    [super didReceiveCompleteRequestHeaders];
 
+    currentRequestBodyLength = [self.currentRequest.env[@"CONTENT_LENGTH"] integerValue];
     CRFCGIServerConfiguration* config = (CRFCGIServerConfiguration*)self.server.configuration;
     [self.socket readDataToLength:CRFCGIRecordHeaderLength withTimeout:config.CRFCGIConnectionReadRecordTimeout tag:CRFCGIConnectionSocketTagReadRecordHeader];
-
 }
 
-- (void)didReceivecurrentRequestBody {
-    [super didReceiveRequestBody];
+- (void)didReceiveRequestBodyData:(NSData *)data {
+    [super didReceiveRequestBodyData:data];
 }
 
 - (void)didReceiveCompleteRequest {
@@ -220,7 +219,7 @@
                         NSString* host = currentRequestParams[@"HTTP_HOST"];
 
                         NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", host, path]];
-                        CRFCGIRequest* request = [[CRFCGIRequest alloc] initWithMethod:method URL:URL version:version env:currentRequestParams];
+                        CRFCGIRequest* request = [[CRFCGIRequest alloc] initWithMethod:method URL:URL version:version connection:self env:currentRequestParams];
                         request.requestID = currentRequestID;
                         request.requestRole = currentRequestRole;
                         request.requestFlags = currentRequestFlags;
@@ -231,10 +230,8 @@
                         break;
 
                     case CRFCGIRecordTypeStdIn: {
-                        // We have received the request body
-                        [self didReceivecurrentRequestBody];
 
-                        if ( currentRequestBodyLength == self.currentRequest.bodyData.length ) {
+                        if ( currentRequestBodyLength == currentRequestBodyReceivedBytesLength ) {
                             [self didReceiveCompleteRequest];
                         } else {
                             [self.socket disconnectAfterWriting];
@@ -287,10 +284,10 @@
 
                 case CRFCGIRecordTypeStdIn: {
 
-                    NSData* currentRecordContentData = [data subdataWithRange:NSMakeRange(0, currentRecord.contentLength)];
-                    [self.currentRequest appendData:currentRecordContentData];
+                    NSData* currentRecordContentData = [NSData dataWithBytesNoCopy:(void *)data.bytes length:currentRecord.contentLength freeWhenDone:NO];
+                    [self didReceiveRequestBodyData:currentRecordContentData];
 
-                    currentRequestBodyReceivedBytesLength += currentRecordContentData.length;
+                    currentRequestBodyReceivedBytesLength += currentRecord.contentLength;
 
                     // Go on reaading the next record
                     [self.socket readDataToLength:CRFCGIRecordHeaderLength withTimeout:config.CRFCGIConnectionReadRecordTimeout tag:CRFCGIConnectionSocketTagReadRecordHeader];
