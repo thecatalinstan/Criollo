@@ -10,6 +10,4 @@
 
 @interface HelloWorldViewController : CRViewController
 
-
-
 @end
