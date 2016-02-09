@@ -7,6 +7,7 @@
 //
 
 #import "CRRoute.h"
+#import "CRServer_Internal.h"
 #import "CRViewController.h"
 #import "CRRequest.h"
 #import "CRRequest_Internal.h"
@@ -56,29 +57,70 @@
 
 - (instancetype)initWithStaticDirectory:(NSString *)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options {
 
-    directoryPath = [directoryPath stringByExpandingTildeInPath];
-    if ( [directoryPath hasSuffix:CRPathSeparator] ) {
-        directoryPath = [directoryPath substringToIndex:directoryPath.length - CRPathSeparator.length];
-    }
+    directoryPath = [directoryPath stringByStandardizingPath];
+    prefix = [prefix stringByStandardizingPath];
 
-    if ( [prefix hasSuffix:CRPathSeparator] ) {
-        prefix = [prefix substringToIndex:prefix.length - CRPathSeparator.length];
-    }
-
-    BOOL shouldCache = @(options & CRStaticDirectoryServingOptionsCacheFiles).boolValue;
-    BOOL shouldGenerateIndex = @(options & CRStaticDirectoryServingOptionsAutoIndex).boolValue;
+    BOOL shouldCache = options & CRStaticDirectoryServingOptionsCacheFiles;
+    BOOL shouldGenerateIndex = options & CRStaticDirectoryServingOptionsAutoIndex;
+    BOOL shouldFollowSymLinks = options & CRStaticDirectoryServingOptionsFollowSymlinks;
 
     CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+
         NSLog(@"%s", __PRETTY_FUNCTION__);
 
-        NSString* requestedRelativePath = [request.env[@"DOCUMENT_URI"] substringFromIndex:prefix.length];
-        NSString* requestedAbsolutePath = [directoryPath stringByAppendingPathComponent:requestedRelativePath];
+        NSString* requestedDocumentPath = request.env[@"DOCUMENT_URI"];
+        NSString* requestedRelativePath = [[requestedDocumentPath substringFromIndex:prefix.length] stringByStandardizingPath];
+        NSString* requestedAbsolutePath = [[directoryPath stringByAppendingPathComponent:requestedRelativePath] stringByStandardizingPath];
 
-        NSLog(@" * Absolute Path: %@", requestedAbsolutePath);
-        NSLog(@" * Should Cache: %hhd", shouldCache);
-        NSLog(@" * Should Generate Index: %hhd", shouldGenerateIndex);
+        // Expand symlinks if needed
+        if ( shouldFollowSymLinks ) {
+            requestedAbsolutePath = [requestedAbsolutePath stringByResolvingSymlinksInPath];
+        }
 
-        [response sendString:requestedAbsolutePath];
+        NSError * itemAttributesError;
+        NSDictionary * itemAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:requestedAbsolutePath error:&itemAttributesError];
+
+        if ( itemAttributes == nil && itemAttributesError != nil ) {
+
+//            NSLog(@"Error: %@\n", itemAttributesError);
+
+            NSUInteger statusCode = 500;
+            if ( [itemAttributesError.domain isEqualToString:NSCocoaErrorDomain] ) {
+                switch ( itemAttributesError.code ) {
+                    case NSFileReadNoSuchFileError:
+                        statusCode = 404;
+                        break;
+                    case NSFileReadNoPermissionError:
+                        statusCode = 403;
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+            }
+            [CRServer errorHandlingBlockWithStatus:statusCode](request, response, completionHandler);
+
+        } else {
+
+            if ( [itemAttributes.fileType isEqualToString:NSFileTypeDirectory] ) {
+                if ( shouldGenerateIndex ) {
+                    // Make the index
+
+                } else {
+                    // Forbidden
+                    [CRServer errorHandlingBlockWithStatus:403](request, response, completionHandler);
+                }
+            } else if ( [itemAttributes.fileType isEqualToString:NSFileTypeRegular] ) {
+
+                [response sendFormat:@"%@", itemAttributes];
+
+            } else {
+                // Forbidden
+                [CRServer errorHandlingBlockWithStatus:403](request, response, completionHandler);
+            }
+
+        }
+
     };
     
     return [self initWithBlock:block];

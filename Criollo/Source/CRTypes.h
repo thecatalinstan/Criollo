@@ -17,6 +17,7 @@ typedef void(^CRRouteBlock)(CRRequest* _Nonnull request, CRResponse* _Nonnull re
 typedef NS_OPTIONS(NSUInteger, CRStaticDirectoryServingOptions) {
     CRStaticDirectoryServingOptionsCacheFiles         = 1 <<   0,
     CRStaticDirectoryServingOptionsAutoIndex          = 1 <<   1,
+    CRStaticDirectoryServingOptionsFollowSymlinks     = 1 <<   2,
 };
 
 #endif /* CRTypes_h */
