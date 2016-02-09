@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		AD60BA521C03A6F200118EED /* HelloWorldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD60BA511C03A6F200118EED /* HelloWorldViewController.m */; };
 		AD60BA551C03A72200118EED /* HelloWorldViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD60BA541C03A72200118EED /* HelloWorldViewController.html */; };
+		ADD931EE1C6A0DD6005B98FD /* MultipartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADD931ED1C6A0DD6005B98FD /* MultipartViewController.m */; };
+		ADD931F11C6A0DEE005B98FD /* MultipartViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = ADD931F01C6A0DEE005B98FD /* MultipartViewController.html */; };
 		ADE3DDA91BFE003900844DC9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE3DDA81BFE003900844DC9 /* AppDelegate.m */; };
 		ADE3DDAC1BFE003900844DC9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE3DDAB1BFE003900844DC9 /* main.m */; };
 		ADE3DDC11BFE00EB00844DC9 /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADE3DDBE1BFE00DD00844DC9 /* Criollo.framework */; };
@@ -58,6 +60,9 @@
 		AD60BA501C03A6F200118EED /* HelloWorldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloWorldViewController.h; sourceTree = "<group>"; };
 		AD60BA511C03A6F200118EED /* HelloWorldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelloWorldViewController.m; sourceTree = "<group>"; };
 		AD60BA541C03A72200118EED /* HelloWorldViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = HelloWorldViewController.html; sourceTree = "<group>"; };
+		ADD931EC1C6A0DD6005B98FD /* MultipartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultipartViewController.h; sourceTree = "<group>"; };
+		ADD931ED1C6A0DD6005B98FD /* MultipartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultipartViewController.m; sourceTree = "<group>"; };
+		ADD931F01C6A0DEE005B98FD /* MultipartViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = MultipartViewController.html; sourceTree = "<group>"; };
 		ADE3DDA41BFE003900844DC9 /* HelloWorld-ObjC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HelloWorld-ObjC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADE3DDA71BFE003900844DC9 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		ADE3DDA81BFE003900844DC9 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -105,6 +110,9 @@
 				AD60BA501C03A6F200118EED /* HelloWorldViewController.h */,
 				AD60BA511C03A6F200118EED /* HelloWorldViewController.m */,
 				AD60BA541C03A72200118EED /* HelloWorldViewController.html */,
+				ADD931EC1C6A0DD6005B98FD /* MultipartViewController.h */,
+				ADD931ED1C6A0DD6005B98FD /* MultipartViewController.m */,
+				ADD931F01C6A0DEE005B98FD /* MultipartViewController.html */,
 				ADE3DDC91BFE055100844DC9 /* utils.h */,
 				ADE3DDCA1BFE055100844DC9 /* utils.m */,
 				ADE3DDAB1BFE003900844DC9 /* main.m */,
@@ -204,6 +212,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADD931F11C6A0DEE005B98FD /* MultipartViewController.html in Resources */,
 				AD60BA551C03A72200118EED /* HelloWorldViewController.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -215,6 +224,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADD931EE1C6A0DD6005B98FD /* MultipartViewController.m in Sources */,
 				AD60BA521C03A6F200118EED /* HelloWorldViewController.m in Sources */,
 				ADE3DDCB1BFE055100844DC9 /* utils.m in Sources */,
 				ADE3DDAC1BFE003900844DC9 /* main.m in Sources */,

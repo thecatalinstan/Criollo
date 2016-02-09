@@ -126,6 +126,7 @@
     BOOL result = YES;
 
     NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
+    NSLog(@"%@", [[NSString alloc] initWithBytesNoCopy:(void*)data.bytes length:data.length encoding:NSUTF8StringEncoding freeWhenDone:NO]);
 
     // Search for a boundary
     NSRange searchRange = NSMakeRange(0, data.length);
@@ -183,19 +184,26 @@
             NSUInteger headerStartLocation = nextBoundaryRange.location + nextBoundaryRange.length + CRLFData.length;
             NSRange headerSearchRange = NSMakeRange(headerStartLocation, data.length - headerStartLocation);
 
-            NSRange headerRange = [data rangeOfData:CRLFCRLFData options:0 range:headerSearchRange];
+            NSRange headerTerminatorRange = [data rangeOfData:CRLFCRLFData options:0 range:headerSearchRange];
 
-            if ( headerRange.location != NSNotFound ) {                                 // We have a header - all good
+            if ( headerTerminatorRange.location != NSNotFound ) {                                 // We have a header - all good
 
-                NSData* headerData = [NSData dataWithBytesNoCopy:(void *)data.bytes + headerSearchRange.length + headerRange.location length:headerRange.length freeWhenDone:NO];
-                NSLog(@"Header: %@", [[NSString alloc] initWithBytesNoCopy:(void *)headerData.bytes length:headerData.length encoding:NSUTF8StringEncoding freeWhenDone:NO] );
+                NSData* headerData = [NSData dataWithBytesNoCopy:(void *)data.bytes + headerSearchRange.location length:headerTerminatorRange.location - headerSearchRange.location freeWhenDone:NO];
+                NSLog(@" * Header:\n%@", [[NSString alloc] initWithBytesNoCopy:(void *)headerData.bytes length:headerData.length encoding:NSUTF8StringEncoding freeWhenDone:NO] );
 
+                // Parse the multipart header
+//                NSMutableDictionary* parsedHeaderFields = [NSMutableDictionary alloc]
+//                NSString* headerString = [[NSString alloc] initWithBytesNoCopy:(void *)headerData length:headerData.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
+//                NSArray<NSString *>* headerLines = [headerString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+//                [headerLines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//
+//                }];
             } else {                                                                    // There is no header something is very wrong
-
+                *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse multipart data.",)}];
+                return NO;
             }
 
         }
-
 
     } else {                                                                            // This is just a chunk of something
 

@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "utils.h"
 #import "HelloWorldViewController.h"
+#import "MultipartViewController.h"
 
 #define PortNumber          10781
 #define LogConnections          0
@@ -138,6 +139,12 @@
     };
     [self.server addBlock:statusBlock forPath:@"/status"];
 
+    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
+        [response sendString:[NSString stringWithFormat:@"%@\r\n\r\n--%@\r\n\r\n--", request, request.body]];
+    } forPath:@"/post" HTTPMethod:@"POST"];
+
+    [self.server addController:[MultipartViewController class] withNibName:@"MultipartViewController" bundle:nil forPath:@"/multipart"];
     [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller"];
 
     // Start listening
