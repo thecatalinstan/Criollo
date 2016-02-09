@@ -40,6 +40,14 @@ NSUInteger const CRErrorSocketError = 2001;
 
 @implementation CRServer
 
++ (CRRouteBlock)errorHandlingBlockWithStatus:(NSUInteger)statusCode {
+    return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
+        [response setStatusCode:statusCode description:nil];
+        [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+        [response sendFormat:@"Cennot %@ %@", request.method, request.URL.path];
+    };
+}
+
 - (instancetype)init {
     return [self initWithDelegate:nil];
 }
@@ -50,11 +58,7 @@ NSUInteger const CRErrorSocketError = 2001;
         self.configuration = [[CRServerConfiguration alloc] init];
         self.delegate = delegate;
         self.routes = [NSMutableDictionary dictionary];
-        self.notFoundBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
-            [response setStatusCode:404 description:nil];
-            [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-            [response sendFormat:@"Cennot %@ %@", request.method, request.URL.path];
-        };
+        self.notFoundBlock = [CRServer errorHandlingBlockWithStatus:404];
     }
     return self;
 }
