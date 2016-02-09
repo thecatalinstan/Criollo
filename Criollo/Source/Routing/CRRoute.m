@@ -27,8 +27,8 @@
     return [[CRRoute alloc] initWithControllerClass:controllerClass nibName:nibNameOrNil bundle:nibBundleOrNil];
 }
 
-+ (CRRoute *)routeWithStaticFolder:(NSString *)folderPath prefix:(NSString * _Nonnull)prefix options:(CRStaticFolderServingOptions)options {
-    return [[CRRoute alloc] initWithStaticFolder:folderPath prefix:prefix options:options];
++ (CRRoute *)routeWithStaticDirectory:(NSString *)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options {
+    return [[CRRoute alloc] initWithStaticDirectory:directoryPath prefix:prefix options:options];
 }
 
 - (instancetype)init {
@@ -54,25 +54,25 @@
     return [self initWithBlock:block];
 }
 
-- (instancetype)initWithStaticFolder:(NSString *)folderPath prefix:(NSString * _Nonnull)prefix options:(CRStaticFolderServingOptions)options {
+- (instancetype)initWithStaticDirectory:(NSString *)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options {
 
-    folderPath = [folderPath stringByExpandingTildeInPath];
-    if ( [folderPath hasSuffix:CRPathSeparator] ) {
-        folderPath = [folderPath substringToIndex:folderPath.length - CRPathSeparator.length];
+    directoryPath = [directoryPath stringByExpandingTildeInPath];
+    if ( [directoryPath hasSuffix:CRPathSeparator] ) {
+        directoryPath = [directoryPath substringToIndex:directoryPath.length - CRPathSeparator.length];
     }
 
     if ( [prefix hasSuffix:CRPathSeparator] ) {
         prefix = [prefix substringToIndex:prefix.length - CRPathSeparator.length];
     }
 
-    BOOL shouldCache = @(options & CRStaticFolderServingOptionsCacheFiles).boolValue;
-    BOOL shouldGenerateIndex = @(options & CRStaticFolderServingOptionsAutoIndex).boolValue;
+    BOOL shouldCache = @(options & CRStaticDirectoryServingOptionsCacheFiles).boolValue;
+    BOOL shouldGenerateIndex = @(options & CRStaticDirectoryServingOptionsAutoIndex).boolValue;
 
     CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         NSLog(@"%s", __PRETTY_FUNCTION__);
 
         NSString* requestedRelativePath = [request.env[@"DOCUMENT_URI"] substringFromIndex:prefix.length];
-        NSString* requestedAbsolutePath = [folderPath stringByAppendingPathComponent:requestedRelativePath];
+        NSString* requestedAbsolutePath = [directoryPath stringByAppendingPathComponent:requestedRelativePath];
 
         NSLog(@" * Absolute Path: %@", requestedAbsolutePath);
         NSLog(@" * Should Cache: %hhd", shouldCache);

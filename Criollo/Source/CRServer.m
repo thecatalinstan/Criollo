@@ -245,12 +245,12 @@ NSUInteger const CRErrorSocketError = 2001;
     [self addRoute:route forPath:path HTTPMethod:HTTPMethod];
 }
 
-- (void)addStaticFolder:(NSString *)folderPath forPath:(NSString *)path {
-    [self addStaticFolder:folderPath forPath:path options:0];
+- (void)addStaticDirectory:(NSString *)directoryPath forPath:(NSString *)path {
+    [self addStaticDirectory:directoryPath forPath:path options:0];
 }
 
-- (void)addStaticFolder:(NSString *)folderPath forPath:(NSString *)path options:(CRStaticFolderServingOptions)options {
-    CRRoute* route = [CRRoute routeWithStaticFolder:folderPath prefix:path options:options];
+- (void)addStaticDirectory:(NSString *)directoryPath forPath:(NSString *)path options:(CRStaticDirectoryServingOptions)options {
+    CRRoute* route = [CRRoute routeWithStaticDirectory:directoryPath prefix:path options:options];
     [self addRoute:route forPath:path HTTPMethod:CRHTTPMethodGET];
 }
 
