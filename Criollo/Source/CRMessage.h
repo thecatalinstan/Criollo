@@ -7,8 +7,19 @@
 //
 
 // HTTP Versions
-#define CRHTTP10  ((NSString *)kCFHTTPVersion1_0)
-#define CRHTTP11  ((NSString *)kCFHTTPVersion1_1)
+#define CRHTTPVersion1_0                    ((NSString *)kCFHTTPVersion1_0)
+#define CRHTTPVersion1_1                    ((NSString *)kCFHTTPVersion1_1)
+
+// HTTP Methods
+#define CRHTTPMethodGET                     @"GET"
+#define CRHTTPMethodPOST                    @"POST"
+#define CRHTTPMethodPUT                     @"PUT"
+#define CRHTTPMethodDELETE                  @"DELETE"
+#define CRHTTPMethodPATCH                   @"PATCH"
+#define CRHTTPMethodOPTIONS                 @"OPTIONS"
+
+#define CRHTTPAllMethods                    @[CRHTTPMethodGET, CRHTTPMethodPOST, CRHTTPMethodPUT, CRHTTPMethodDELETE, CRHTTPMethodPATCH, CRHTTPMethodOPTIONS]
+
 
 @interface CRMessage : NSObject
 

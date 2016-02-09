@@ -245,7 +245,7 @@
     if ( connectionHeader != nil ) {
         shouldClose = [connectionHeader caseInsensitiveCompare:@"close"] == NSOrderedSame;
     } else {
-        shouldClose = [self.version isEqualToString:CRHTTP10];
+        shouldClose = [self.version isEqualToString:CRHTTPVersion1_0];
     }
 
     return shouldClose;
