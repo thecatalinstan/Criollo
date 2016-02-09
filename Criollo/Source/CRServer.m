@@ -299,7 +299,7 @@ NSUInteger const CRErrorSocketError = 2001;
             return [evaluatedObject hasPrefix:routePath];
         }]];
 
-        [descendantRoutesKeys enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [descendantRoutesKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [self.routes[obj] addObject:route];
         }];
 
@@ -322,12 +322,20 @@ NSUInteger const CRErrorSocketError = 2001;
     if ( path == nil ) {
         path = @"";
     }
-    if ( ![path hasSuffix:@"/"] ) {
-        path = [path stringByAppendingString:@"/"];
+
+    NSString* pathSeparator = @"/";
+    if ( ![path hasSuffix:pathSeparator] ) {
+        path = [path stringByAppendingString:pathSeparator];
+    }
+    path = [HTTPMethod stringByAppendingString:path];
+
+    NSArray<CRRoute*>* routes;
+    while ( routes.count == 0 ) {
+        routes = self.routes[path];
+        path = [[path stringByDeletingLastPathComponent] stringByAppendingString:pathSeparator];
     }
 
-    NSString* routePath = [HTTPMethod stringByAppendingString:path];
-    return self.routes[routePath];
+    return routes;
 }
 
 @end
