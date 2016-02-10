@@ -21,6 +21,7 @@
 
 @property (nonatomic, readonly) BOOL shouldCacheFiles;
 @property (nonatomic, readonly) BOOL shouldGenerateDirectoryIndex;
+@property (nonatomic, readonly) BOOL shouldShowHiddenFilesInDirectoryIndex;
 @property (nonatomic, readonly) BOOL shouldFollowSymLinks;
 
 + (nonnull instancetype)managerWithDirectory:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix;

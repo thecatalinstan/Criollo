@@ -141,10 +141,9 @@
     [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller"];
 
     // Serve static files from "/Public" (relative to bundle)
-//    NSString* publicFilesPath = [[NSBundle mainBundle].bundlePath stringByAppendingPathComponent:@"Public"];
-    NSString* publicFilesPath = @"~";
-//    NSString* publicFilesPath = @"/dev";
-    [self.server addStaticDirectory:publicFilesPath forPath:@"/static/" options:CRStaticDirectoryServingOptionsFollowSymlinks|CRStaticDirectoryServingOptionsAutoIndex|CRStaticDirectoryServingOptionsCacheFiles];
+    NSString* publicFilesPath = @"/";
+    //    NSString* publicFilesPath = [[NSBundle mainBundle].bundlePath stringByAppendingPathComponent:@"Public"];
+    [self.server addStaticDirectory:publicFilesPath forPath:@"/static/" options:CRStaticDirectoryServingOptionsAutoIndex|CRStaticDirectoryServingOptionsCacheFiles];
 
     // Start listening
     NSError *serverError;

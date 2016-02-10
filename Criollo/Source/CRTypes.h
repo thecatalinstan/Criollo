@@ -15,9 +15,10 @@ typedef void(^CRRouteCompletionBlock)(void);
 typedef void(^CRRouteBlock)(CRRequest* _Nonnull request, CRResponse* _Nonnull response, CRRouteCompletionBlock _Nonnull completionHandler);
 
 typedef NS_OPTIONS(NSUInteger, CRStaticDirectoryServingOptions) {
-    CRStaticDirectoryServingOptionsCacheFiles         = 1 <<   0,
-    CRStaticDirectoryServingOptionsAutoIndex          = 1 <<   1,
-    CRStaticDirectoryServingOptionsFollowSymlinks     = 1 <<   2,
+    CRStaticDirectoryServingOptionsCacheFiles               = 1 <<   0,
+    CRStaticDirectoryServingOptionsAutoIndex                = 1 <<   1,
+    CRStaticDirectoryServingOptionsAutoIndexShowHidden      = 1 <<   2,
+    CRStaticDirectoryServingOptionsFollowSymlinks           = 1 <<   3,
 };
 
 #endif /* CRTypes_h */

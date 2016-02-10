@@ -62,6 +62,7 @@
         _options = options;
         _shouldCacheFiles = _options & CRStaticDirectoryServingOptionsCacheFiles;
         _shouldGenerateDirectoryIndex = _options & CRStaticDirectoryServingOptionsAutoIndex;
+        _shouldShowHiddenFilesInDirectoryIndex = _options & CRStaticDirectoryServingOptionsAutoIndexShowHidden;
         _shouldFollowSymLinks = _options & CRStaticDirectoryServingOptionsFollowSymlinks;
 
         // Create and configure queues
@@ -120,7 +121,7 @@
         [responseString appendString:@"<hr/>"];
 
         NSError *directoryListingError;
-        NSArray<NSString *> *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&directoryListingError];
+        NSArray<NSURL *> *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:[NSURL fileURLWithPath:path] includingPropertiesForKeys:nil options:(self.shouldShowHiddenFilesInDirectoryIndex ? 0 : NSDirectoryEnumerationSkipsHiddenFiles) error:&directoryListingError];
         if ( directoryContents == nil && directoryListingError != nil ) {
             [self errorHandlerBlockForError:directoryListingError](request, response, completionHandler);
             return;
@@ -131,15 +132,18 @@
             [responseString appendFormat:@"<a href=\"%@\">../</a>\n", requestedPath.stringByDeletingLastPathComponent];
         }
 
-        [directoryContents enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//        [responseString appendFormat:@"%@", directoryContents];
+
+        [directoryContents enumerateObjectsUsingBlock:^(NSURL * _Nonnull URL, NSUInteger idx, BOOL * _Nonnull stop) {
             NSError* attributesError;
-            NSDictionary* attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[path stringByAppendingPathComponent:obj] error:nil];
+            NSDictionary* attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:URL.path error:&attributesError];
             if ( attributes == nil && attributesError != nil ) {
+                NSLog(@"%@", attributesError);
                 return;
             }
 
             BOOL isDirectory = [attributes.fileType isEqualToString:NSFileTypeDirectory];
-            NSString* fileName = obj;
+            NSString* fileName = URL.lastPathComponent;
             if ( fileName.length > 50 ) {
                 fileName = [fileName substringToIndex:50];
             }
@@ -148,7 +152,7 @@
             NSString* fileSize = @(attributes.fileSize).stringValue;
             NSString* fileSizePadding = [@"" stringByPaddingToLength:16 - fileSize.length withString:@" " startingAtIndex:0];
 
-            [responseString appendFormat:@"<a href=\"%@/%@\">%@%@</a>%@ %@ %@%@\n", requestedPath, obj, fileName, isDirectory ? @"/" : @"", fileNamePadding, fileModificationDate, fileSizePadding, fileSize];
+            [responseString appendFormat:@"<a href=\"%@/%@\">%@%@</a>%@ %@ %@%@\n", requestedPath, URL.lastPathComponent, fileName, isDirectory ? @"/" : @"", fileNamePadding, fileModificationDate, fileSizePadding, fileSize];
         }];
         [responseString appendString:@"</pre>"];
 
