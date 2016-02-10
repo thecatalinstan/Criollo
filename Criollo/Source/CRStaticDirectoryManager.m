@@ -98,12 +98,14 @@
                 default:
                     break;
             }
-            [CRServer errorHandlingBlockWithStatus:statusCode](request, response, completionHandler);
         } else {
-            [response setValue:@"text-plain" forHTTPHeaderField:@"Content-type"];
-            [response sendFormat:@"%@", error];
         }
 
+//        [CRServer errorHandlingBlockWithStatus:statusCode](request, response, completionHandler);
+
+        [response setStatusCode:statusCode description:nil];
+        [response setValue:@"text-plain" forHTTPHeaderField:@"Content-type"];
+        [response sendFormat:@"%@ %lu\n%@\n\n%@\n\n%@", error.domain, error.code, error.localizedDescription, error.userInfo, [NSThread callStackSymbols]];
     };
     return block;
 }
@@ -116,7 +118,6 @@
         [responseString appendString:@"</head><body>"];
         [responseString appendFormat:@"<h1>Index of %@</h1>", requestedPath];
         [responseString appendString:@"<hr/>"];
-
 
         NSError *directoryListingError;
         NSArray<NSString *> *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&directoryListingError];
@@ -193,6 +194,7 @@
                     NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
                     userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"There was an error releasing the file read channel",);
                     userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
+                    userInfo[NSFilePathErrorKey] = path;
                     NSString* underlyingErrorDescription = [NSString stringWithCString:strerror(error) encoding:NSUTF8StringEncoding];
                     if ( underlyingErrorDescription.length > 0 ) {
                         NSError* underlyingError = [NSError errorWithDomain:NSPOSIXErrorDomain code:@(error).integerValue userInfo:@{NSLocalizedDescriptionKey: underlyingErrorDescription}];
@@ -212,6 +214,7 @@
                     NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
                     userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"There was an error releasing the file read channel",);
                     userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
+                    userInfo[NSFilePathErrorKey] = path;
                     NSString* underlyingErrorDescription = [NSString stringWithCString:strerror(error) encoding:NSUTF8StringEncoding];
                     if ( underlyingErrorDescription.length > 0 ) {
                         NSError* underlyingError = [NSError errorWithDomain:NSPOSIXErrorDomain code:@(error).integerValue userInfo:@{NSLocalizedDescriptionKey: underlyingErrorDescription}];
@@ -260,14 +263,24 @@
                     [self directoryIndexBlockForPath:requestedAbsolutePath requestedPath:requestedDocumentPath displayParentLink:requestedRelativePath.length != 0](request, response, completionHandler);
                 } else {
                     // Forbidden
-                    [CRServer errorHandlingBlockWithStatus:403](request, response, completionHandler);
+                    NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
+                    userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"Directory index auto-generation is disabled",);
+                    userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
+                    userInfo[NSFilePathErrorKey] = requestedAbsolutePath;                    
+                    NSError* directoryListingError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerDirectoryListingForbidden userInfo:userInfo];
+                    [self errorHandlerBlockForError:directoryListingError](request, response, completionHandler);
                 }
             } else if ( [itemAttributes.fileType isEqualToString:NSFileTypeRegular] ) {                             // Regular files
                 // Serve the file
                 [self servingBlockForPath:requestedAbsolutePath attributes:itemAttributes](request, response, completionHandler);
             } else {                                                                                                // Other types (socks, devices, etc)
                 // Forbidden
-                [CRServer errorHandlingBlockWithStatus:403](request, response, completionHandler);
+                NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
+                userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:NSLocalizedString(@"Files of type “%@” are restricted.",), itemAttributes.fileType];
+                userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
+                userInfo[NSFilePathErrorKey] = requestedAbsolutePath;
+                NSError* restrictedFileTypeError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerRestrictedFileType userInfo:userInfo];
+                [self errorHandlerBlockForError:restrictedFileTypeError](request, response, completionHandler);
             }
         }
     };
