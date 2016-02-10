@@ -41,17 +41,19 @@ FOUNDATION_EXPORT NSUInteger const CRErrorSocketError;
 - (BOOL)startListening;
 - (BOOL)startListening:(NSError * _Nullable __autoreleasing * _Nullable)error;
 - (BOOL)startListening:(NSError * _Nullable __autoreleasing * _Nullable)error portNumber:(NSUInteger)portNumber;
-- (BOOL)startListening:(NSError * _Nullable __autoreleasing * _Nullable)error portNumber:(NSUInteger)portNumber interface:(nullable NSString *)interface;
+- (BOOL)startListening:(NSError * _Nullable __autoreleasing * _Nullable)error portNumber:(NSUInteger)portNumber interface:(NSString * _Nullable)interface;
 
 - (void)stopListening;
 - (void)closeAllConnections;
 
-- (void)addBlock:(nonnull CRRouteBlock)block;
+- (void)addBlock:(CRRouteBlock _Nonnull)block;
+- (void)addBlock:(CRRouteBlock _Nonnull)block forPath:(NSString * _Nullable)path;
+- (void)addBlock:(CRRouteBlock _Nonnull)block forPath:(NSString * _Nullable)path HTTPMethod:(NSString * _Nullable)HTTPMethod;
 
-- (void)addBlock:(nonnull CRRouteBlock)block forPath:(nullable NSString*)path;
-- (void)addBlock:(nonnull CRRouteBlock)block forPath:(nullable NSString*)path HTTPMethod:(nullable NSString*)HTTPMethod;
+- (void)addController:(__unsafe_unretained Class _Nonnull)controllerClass withNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil forPath:(NSString * _Nonnull)path;
+- (void)addController:(__unsafe_unretained Class _Nonnull)controllerClass withNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil forPath:(NSString * _Nonnull)path HTTPMethod:(NSString * _Nullable)HTTPMethod;
 
-- (void)addController:(nonnull __unsafe_unretained Class)controllerClass withNibName:(nullable NSString*)nibNameOrNil bundle:(nullable NSBundle*)nibBundleOrNil forPath:(nonnull NSString*)path;
-- (void)addController:(nonnull __unsafe_unretained Class)controllerClass withNibName:(nullable NSString*)nibNameOrNil bundle:(nullable NSBundle*)nibBundleOrNil forPath:(nonnull NSString*)path HTTPMethod:(nullable NSString*)HTTPMethod;
+- (void)addStaticDirectoryAtPath:(NSString * _Nonnull)directoryPath forPath:(NSString * _Nonnull)path;
+- (void)addStaticDirectoryAtPath:(NSString * _Nonnull)directoryPath forPath:(NSString * _Nonnull)path options:(CRStaticDirectoryServingOptions)options;
 
 @end

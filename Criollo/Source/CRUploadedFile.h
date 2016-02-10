@@ -6,8 +6,6 @@
 //  Copyright © 2016 Cătălin Stan. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 @interface CRUploadedFile : NSObject
 
 @property (nonatomic, strong, nonnull) NSString * name;

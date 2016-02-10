@@ -40,6 +40,14 @@ NSUInteger const CRErrorSocketError = 2001;
 
 @implementation CRServer
 
++ (CRRouteBlock)errorHandlingBlockWithStatus:(NSUInteger)statusCode {
+    return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
+        [response setStatusCode:statusCode description:nil];
+        [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+        [response sendFormat:@"Cennot %@ %@", request.method, request.URL.path];
+    };
+}
+
 - (instancetype)init {
     return [self initWithDelegate:nil];
 }
@@ -50,11 +58,7 @@ NSUInteger const CRErrorSocketError = 2001;
         self.configuration = [[CRServerConfiguration alloc] init];
         self.delegate = delegate;
         self.routes = [NSMutableDictionary dictionary];
-        self.notFoundBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
-            [response setStatusCode:404 description:nil];
-            [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-            [response sendFormat:@"Cennot %@ %@", request.method, request.URL.path];
-        };
+        self.notFoundBlock = [CRServer errorHandlingBlockWithStatus:404];
     }
     return self;
 }
@@ -152,12 +156,6 @@ NSUInteger const CRErrorSocketError = 2001;
     return [[CRConnection alloc] initWithSocket:socket server:self];
 }
 
-#pragma mark - Routing
-
-- (BOOL)canHandleHTTPMethod:(NSString *)HTTPMethod forPath:(NSString *)path {
-    return YES;
-}
-
 #pragma mark - GCDAsyncSocketDelegate
 
 - (void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket {
@@ -222,7 +220,11 @@ NSUInteger const CRErrorSocketError = 2001;
     });
 }
 
-#pragma mark - CRRouter
+#pragma mark - Routing
+
+- (BOOL)canHandleHTTPMethod:(NSString *)HTTPMethod forPath:(NSString *)path {
+    return YES;
+}
 
 - (void)addBlock:(CRRouteBlock)block {
     [self addBlock:block forPath:nil HTTPMethod:nil];
@@ -246,6 +248,15 @@ NSUInteger const CRErrorSocketError = 2001;
     [self addRoute:route forPath:path HTTPMethod:HTTPMethod];
 }
 
+- (void)addStaticDirectoryAtPath:(NSString *)directoryPath forPath:(NSString *)path {
+    [self addStaticDirectoryAtPath:directoryPath forPath:path options:0];
+}
+
+- (void)addStaticDirectoryAtPath:(NSString *)directoryPath forPath:(NSString *)path options:(CRStaticDirectoryServingOptions)options {
+    CRRoute* route = [CRRoute routeWithStaticDirectoryAtPath:directoryPath prefix:path options:options];
+    [self addRoute:route forPath:path HTTPMethod:CRHTTPMethodGET];
+}
+
 - (void)addRoute:(CRRoute*)route forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
     NSArray<NSString*>* methods;
 
@@ -256,13 +267,12 @@ NSUInteger const CRErrorSocketError = 2001;
     }
 
     if ( path == nil ) {
-        path = @"*";
+        path = CRPathAnyPath;
     }
 
-    if ( ![path isEqualToString:@"*"] && ![path hasSuffix:@"/"] ) {
-        path = [path stringByAppendingString:@"/"];
+    if ( ![path isEqualToString:CRPathAnyPath] && ![path hasSuffix:CRPathSeparator] ) {
+        path = [path stringByAppendingString:CRPathSeparator];
     }
-
 
     // Add the
     [methods enumerateObjectsUsingBlock:^(NSString * _Nonnull method, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -273,14 +283,15 @@ NSUInteger const CRErrorSocketError = 2001;
             NSMutableArray<CRRoute*>* parentRoutes = [NSMutableArray array];
 
             // Add the "*" routes
-            NSString* anyPathRoutePath = [method stringByAppendingString:@"*"];
+            NSString* anyPathRoutePath = [method stringByAppendingString:CRPathAnyPath];
             if ( self.routes[anyPathRoutePath] != nil ) {
                 [parentRoutes addObjectsFromArray:self.routes[anyPathRoutePath]];
             }
+
             // Add all parent routes
-            __block NSString* parentRoutePath = [method stringByAppendingString:@"/"];
+            __block NSString* parentRoutePath = [method stringByAppendingString:CRPathSeparator];
             [routePath.pathComponents enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if ( [parentRoutePath isEqualToString:[method stringByAppendingString:@"/"]] ) {
+                if ( [parentRoutePath isEqualToString:[method stringByAppendingString:CRPathSeparator]] ) {
                     return;
                 }
 
@@ -302,7 +313,7 @@ NSUInteger const CRErrorSocketError = 2001;
             [self.routes[obj] addObject:route];
         }];
 
-        if ( [path isEqualToString:@"*"] ) {
+        if ( [path isEqualToString:CRPathAnyPath] ) {
             [self.routes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<CRRoute *> * _Nonnull obj, BOOL * _Nonnull stop) {
                 if ( ![obj.lastObject isEqual:route] ) {
                     [obj addObject:route];
@@ -322,16 +333,15 @@ NSUInteger const CRErrorSocketError = 2001;
         path = @"";
     }
 
-    NSString* pathSeparator = @"/";
-    if ( ![path hasSuffix:pathSeparator] ) {
-        path = [path stringByAppendingString:pathSeparator];
+    if ( ![path hasSuffix:CRPathSeparator] ) {
+        path = [path stringByAppendingString:CRPathSeparator];
     }
     path = [HTTPMethod stringByAppendingString:path];
 
     NSArray<CRRoute*>* routes;
     while ( routes.count == 0 ) {
         routes = self.routes[path];
-        path = [[path stringByDeletingLastPathComponent] stringByAppendingString:pathSeparator];
+        path = [[path stringByDeletingLastPathComponent] stringByAppendingString:CRPathSeparator];
     }
 
     return routes;
