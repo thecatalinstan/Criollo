@@ -145,7 +145,7 @@
     [self.server addStaticDirectoryAtPath:publicFilesPath forPath:@"/pub" options:CRStaticDirectoryServingOptionsAutoIndex|CRStaticDirectoryServingOptionsCacheFiles|CRStaticDirectoryServingOptionsFollowSymlinks];
 
     // Serve static files from "/Public" (relative to bundle)
-    NSString* staticFilesPath = [[NSBundle mainBundle].bundlePath stringByAppendingPathComponent:@"Public"];
+    NSString* staticFilesPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"];
     [self.server addStaticDirectoryAtPath:staticFilesPath forPath:@"/static" options:CRStaticDirectoryServingOptionsCacheFiles];
 
     // Start listening
