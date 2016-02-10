@@ -59,7 +59,7 @@
     return [self initWithBlock:block];
 }
 
-- (instancetype)initWithStaticDirectory:(NSString *)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options {
+- (instancetype)initWithStaticDirectory:(NSString *)directoryPath prefix:(NSString *)prefix options:(CRStaticDirectoryServingOptions)options {
 
     directoryPath = [directoryPath stringByStandardizingPath];
     prefix = [prefix stringByStandardizingPath];
