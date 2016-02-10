@@ -14,6 +14,9 @@
 #import "CRResponse.h"
 #import "CRResponse_Internal.h"
 
+#define CRStaticDirectoryServingReadBuffer          (8 * 1024 * 1024)
+#define CRStaticDirectoryServingReadThreshold       (8 * 64 * 1024)
+
 @interface CRRoute ()
 
 @end
@@ -66,8 +69,6 @@
 
     CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
 
-        NSLog(@"%s", __PRETTY_FUNCTION__);
-
         NSString* requestedDocumentPath = request.env[@"DOCUMENT_URI"];
         NSString* requestedRelativePath = [[requestedDocumentPath substringFromIndex:prefix.length] stringByStandardizingPath];
         NSString* requestedAbsolutePath = [[directoryPath stringByAppendingPathComponent:requestedRelativePath] stringByStandardizingPath];
@@ -81,9 +82,6 @@
         NSDictionary * itemAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:requestedAbsolutePath error:&itemAttributesError];
 
         if ( itemAttributes == nil && itemAttributesError != nil ) {
-
-//            NSLog(@"Error: %@\n", itemAttributesError);
-
             NSUInteger statusCode = 500;
             if ( [itemAttributesError.domain isEqualToString:NSCocoaErrorDomain] ) {
                 switch ( itemAttributesError.code ) {
@@ -96,9 +94,11 @@
                     default:
                         break;
                 }
+                [CRServer errorHandlingBlockWithStatus:statusCode](request, response, completionHandler);
             } else {
+                [response setValue:@"text-plain" forHTTPHeaderField:@"Content-type"];
+                [response sendFormat:@"%@", itemAttributesError];
             }
-            [CRServer errorHandlingBlockWithStatus:statusCode](request, response, completionHandler);
 
         } else {
 
@@ -110,9 +110,68 @@
                     // Forbidden
                     [CRServer errorHandlingBlockWithStatus:403](request, response, completionHandler);
                 }
+
             } else if ( [itemAttributes.fileType isEqualToString:NSFileTypeRegular] ) {
 
-                [response sendFormat:@"%@", itemAttributes];
+                // Set the Content-length header
+                [response setValue:@(itemAttributes.fileSize).stringValue forHTTPHeaderField:@"Content-length"];
+
+                // Get the mime type and set the Content-type header
+                NSString *fileExtension = requestedAbsolutePath.pathExtension;
+                NSString *UTI = (__bridge_transfer NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)fileExtension, NULL);
+                NSString *contentType = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)UTI, kUTTagClassMIMEType);
+                if ( contentType.length == 0 ) {
+                    contentType = @"application/octet-stream";
+                }
+                [response setValue:contentType forHTTPHeaderField:@"Content-type"];
+
+                // Read synchroniously if the file size is below threshold
+                if ( itemAttributes.fileSize <= CRStaticDirectoryServingReadThreshold ) {
+
+                    NSError* fileReadError;
+                    NSData* fileData = [NSData dataWithContentsOfFile:requestedAbsolutePath options:(shouldCache ? NSDataReadingMappedIfSafe : NSDataReadingUncached) error:&fileReadError];
+                    if ( fileData == nil && fileReadError != nil ) {
+                        [response setValue:@"text-plain" forHTTPHeaderField:@"Content-type"];
+                        [response sendFormat:@"%@", fileReadError];
+                    } else {
+                        [response sendData:fileData];
+                    }
+
+                } else {
+
+                    dispatch_queue_t fileReadQueue = dispatch_queue_create(requestedAbsolutePath.UTF8String, DISPATCH_QUEUE_SERIAL);
+                    dispatch_set_target_queue(fileReadQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0));
+
+                    dispatch_io_t fileReadChannel = dispatch_io_create_with_path(DISPATCH_IO_STREAM, requestedAbsolutePath.UTF8String, O_RDONLY, 0, fileReadQueue,  ^(int error) {
+                        NSLog(@"%s %d", __PRETTY_FUNCTION__, error);
+                        if ( !error ) {
+                            [response finish];
+                        } else {
+                            [response setValue:@"text-plain" forHTTPHeaderField:@"Content-type"];
+                            [response sendFormat:@"Error: %s", strerror(error)];
+                        }
+                    });
+
+                    dispatch_io_set_high_water(fileReadChannel, CRStaticDirectoryServingReadBuffer);
+                    dispatch_io_set_low_water(fileReadChannel, CRStaticDirectoryServingReadThreshold);
+
+                    dispatch_io_read(fileReadChannel, 0, SIZE_MAX, fileReadQueue, ^(bool done, dispatch_data_t data, int error) {
+                        NSLog(@" ** %s %zu bytes", __PRETTY_FUNCTION__, dispatch_data_get_size(data));
+
+                        if (error) {
+                            dispatch_io_close(fileReadChannel, 0);
+                            return;
+                        }
+
+                        if (data) {
+                            [response writeData:(NSData*)data];
+                        }
+                        
+                        if (done) {
+                            dispatch_io_close(fileReadChannel, 0);
+                        }
+                    });
+                }
 
             } else {
                 // Forbidden
