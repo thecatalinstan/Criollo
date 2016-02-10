@@ -53,7 +53,7 @@ FOUNDATION_EXPORT NSUInteger const CRErrorSocketError;
 - (void)addController:(__unsafe_unretained Class _Nonnull)controllerClass withNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil forPath:(NSString * _Nonnull)path;
 - (void)addController:(__unsafe_unretained Class _Nonnull)controllerClass withNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil forPath:(NSString * _Nonnull)path HTTPMethod:(NSString * _Nullable)HTTPMethod;
 
-- (void)addStaticDirectory:(NSString * _Nonnull)directoryPath forPath:(NSString * _Nonnull)path;
-- (void)addStaticDirectory:(NSString * _Nonnull)directoryPath forPath:(NSString * _Nonnull)path options:(CRStaticDirectoryServingOptions)options;
+- (void)addStaticDirectoryAtPath:(NSString * _Nonnull)directoryPath forPath:(NSString * _Nonnull)path;
+- (void)addStaticDirectoryAtPath:(NSString * _Nonnull)directoryPath forPath:(NSString * _Nonnull)path options:(CRStaticDirectoryServingOptions)options;
 
 @end

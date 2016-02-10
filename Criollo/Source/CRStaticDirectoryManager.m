@@ -25,8 +25,8 @@
 @property (nonatomic, readonly, strong, nonnull) dispatch_queue_t fileReadingQueue;
 
 - (nonnull CRRouteBlock)errorHandlerBlockForError:(NSError * _Nonnull)error;
-- (nonnull CRRouteBlock)servingBlockForPath:(NSString * _Nonnull)path attributes:(NSDictionary * _Nonnull)attributes;
-- (nonnull CRRouteBlock)directoryIndexBlockForPath:(NSString * _Nonnull)path requestedPath:(NSString * _Nonnull)requestedPath displayParentLink:(BOOL)flag;
+- (nonnull CRRouteBlock)servingBlockForFileAtPath:(NSString * _Nonnull)filePath attributes:(NSDictionary * _Nonnull)attributes;
+- (nonnull CRRouteBlock)indexBlockForDirectoryAtPath:(NSString * _Nonnull)directoryPath requestedPath:(NSString * _Nonnull)requestedPath displayParentLink:(BOOL)flag;
 
 - (nonnull NSString *)mimeTypeForFileAtPath:(NSString * _Nonnull)path;
 
@@ -36,23 +36,23 @@
 
 @implementation CRStaticDirectoryManager
 
-+ (instancetype)managerWithDirectory:(NSString *)directoryPath prefix:(NSString *)prefix {
-    return [[CRStaticDirectoryManager alloc] initWithDirectory:directoryPath prefix:prefix options:0];
++ (instancetype)managerWithDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix {
+    return [[CRStaticDirectoryManager alloc] initWithDirectoryAtPath:directoryPath prefix:prefix options:0];
 }
 
-+ (instancetype)managerWithDirectory:(NSString *)directoryPath prefix:(NSString *)prefix options:(CRStaticDirectoryServingOptions)options {
-    return [[CRStaticDirectoryManager alloc] initWithDirectory:directoryPath prefix:prefix options:options];
++ (instancetype)managerWithDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix options:(CRStaticDirectoryServingOptions)options {
+    return [[CRStaticDirectoryManager alloc] initWithDirectoryAtPath:directoryPath prefix:prefix options:options];
 }
 
 - (instancetype)init {
-    return  [self initWithDirectory:[NSBundle mainBundle].bundlePath prefix:@"/" options:0];
+    return  [self initWithDirectoryAtPath:[NSBundle mainBundle].bundlePath prefix:@"/" options:0];
 }
 
-- (instancetype)initWithDirectory:(NSString *)directoryPath prefix:(NSString *)prefix {
-    return [self initWithDirectory:directoryPath prefix:prefix options:0];
+- (instancetype)initWithDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix {
+    return [self initWithDirectoryAtPath:directoryPath prefix:prefix options:0];
 }
 
-- (instancetype)initWithDirectory:(NSString *)directoryPath prefix:(NSString *)prefix options:(CRStaticDirectoryServingOptions)options {
+- (instancetype)initWithDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix options:(CRStaticDirectoryServingOptions)options {
     self = [super init];
     if ( self != nil ) {
 
@@ -123,8 +123,9 @@
     return block;
 }
 
-- (CRRouteBlock)directoryIndexBlockForPath:(NSString *)path requestedPath:(NSString *)requestedPath displayParentLink:(BOOL)flag {
+- (CRRouteBlock)indexBlockForDirectoryAtPath:(NSString *)directoryPath requestedPath:(NSString *)requestedPath displayParentLink:(BOOL)flag {
     CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+
         NSMutableString* responseString = [NSMutableString string];
         [responseString appendString:@"<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"/><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>"];
         [responseString appendFormat:@"<title>%@</title>", requestedPath];
@@ -133,7 +134,7 @@
         [responseString appendString:@"<hr/>"];
 
         NSError *directoryListingError;
-        NSArray<NSURL *> *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:[NSURL fileURLWithPath:path] includingPropertiesForKeys:nil options:(self.shouldShowHiddenFilesInDirectoryIndex ? 0 : NSDirectoryEnumerationSkipsHiddenFiles) error:&directoryListingError];
+        NSArray<NSURL *> *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:[NSURL fileURLWithPath:directoryPath] includingPropertiesForKeys:nil options:(self.shouldShowHiddenFilesInDirectoryIndex ? 0 : NSDirectoryEnumerationSkipsHiddenFiles) error:&directoryListingError];
         if ( directoryContents == nil && directoryListingError != nil ) {
             [self errorHandlerBlockForError:directoryListingError](request, response, completionHandler);
             return;
@@ -176,20 +177,20 @@
     return block;
 }
 
-- (CRRouteBlock)servingBlockForPath:(NSString *)path attributes:(NSDictionary *)attributes {
+- (CRRouteBlock)servingBlockForFileAtPath:(NSString *)filePath attributes:(NSDictionary *)attributes {
     CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         // Set the Content-length header
         [response setValue:@(attributes.fileSize).stringValue forHTTPHeaderField:@"Content-length"];
 
         // Get the mime type and set the Content-type header
-        NSString* contentType = [self mimeTypeForFileAtPath:path];
+        NSString* contentType = [self mimeTypeForFileAtPath:filePath];
         [response setValue:contentType forHTTPHeaderField:@"Content-type"];
 
         // Read synchroniously if the file size is below threshold
         if ( attributes.fileSize <= CRStaticDirectoryServingReadThreshold ) {
 
             NSError* fileReadError;
-            NSData* fileData = [NSData dataWithContentsOfFile:path options:(self.shouldCacheFiles ? NSDataReadingMappedIfSafe : NSDataReadingUncached) error:&fileReadError];
+            NSData* fileData = [NSData dataWithContentsOfFile:filePath options:(self.shouldCacheFiles ? NSDataReadingMappedIfSafe : NSDataReadingUncached) error:&fileReadError];
             if ( fileData == nil && fileReadError != nil ) {
                 [self errorHandlerBlockForError:fileReadError](request, response, completionHandler);
             } else {
@@ -198,14 +199,14 @@
 
         } else {
 
-            dispatch_io_t fileReadChannel = dispatch_io_create_with_path(DISPATCH_IO_STREAM, path.UTF8String, O_RDONLY, 0, self.fileReadingQueue,  ^(int error) {
+            dispatch_io_t fileReadChannel = dispatch_io_create_with_path(DISPATCH_IO_STREAM, filePath.UTF8String, O_RDONLY, 0, self.fileReadingQueue,  ^(int error) {
                 if ( !error ) {
                     [response finish];
                 } else {
                     NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
                     userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"There was an error releasing the file read channel",);
                     userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
-                    userInfo[NSFilePathErrorKey] = path;
+                    userInfo[NSFilePathErrorKey] = filePath;
                     NSString* underlyingErrorDescription = [NSString stringWithCString:strerror(error) encoding:NSUTF8StringEncoding];
                     if ( underlyingErrorDescription.length > 0 ) {
                         NSError* underlyingError = [NSError errorWithDomain:NSPOSIXErrorDomain code:@(error).integerValue userInfo:@{NSLocalizedDescriptionKey: underlyingErrorDescription}];
@@ -225,7 +226,7 @@
                     NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
                     userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"There was an error releasing the file read channel",);
                     userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
-                    userInfo[NSFilePathErrorKey] = path;
+                    userInfo[NSFilePathErrorKey] = filePath;
                     NSString* underlyingErrorDescription = [NSString stringWithCString:strerror(error) encoding:NSUTF8StringEncoding];
                     if ( underlyingErrorDescription.length > 0 ) {
                         NSError* underlyingError = [NSError errorWithDomain:NSPOSIXErrorDomain code:@(error).integerValue userInfo:@{NSLocalizedDescriptionKey: underlyingErrorDescription}];
@@ -271,7 +272,7 @@
             if ( [itemAttributes.fileType isEqualToString:NSFileTypeDirectory] ) {                                  // Directories
                 if ( self.shouldGenerateDirectoryIndex ) {
                     // Make the index
-                    [self directoryIndexBlockForPath:requestedAbsolutePath requestedPath:requestedDocumentPath displayParentLink:requestedRelativePath.length != 0](request, response, completionHandler);
+                    [self indexBlockForDirectoryAtPath:requestedAbsolutePath requestedPath:requestedDocumentPath displayParentLink:requestedRelativePath.length != 0](request, response, completionHandler);
                 } else {
                     // Forbidden
                     NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
@@ -283,7 +284,7 @@
                 }
             } else if ( [itemAttributes.fileType isEqualToString:NSFileTypeRegular] ) {                             // Regular files
                 // Serve the file
-                [self servingBlockForPath:requestedAbsolutePath attributes:itemAttributes](request, response, completionHandler);
+                [self servingBlockForFileAtPath:requestedAbsolutePath attributes:itemAttributes](request, response, completionHandler);
             } else {                                                                                                // Other types (socks, devices, etc)
                 // Forbidden
                 NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];

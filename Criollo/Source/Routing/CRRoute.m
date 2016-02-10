@@ -29,8 +29,8 @@
     return [[CRRoute alloc] initWithControllerClass:controllerClass nibName:nibNameOrNil bundle:nibBundleOrNil];
 }
 
-+ (CRRoute *)routeWithStaticDirectory:(NSString *)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options {
-    return [[CRRoute alloc] initWithStaticDirectory:directoryPath prefix:prefix options:options];
++ (CRRoute *)routeWithStaticDirectoryAtPath:(NSString *)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options {
+    return [[CRRoute alloc] initWithStaticDirectoryAtPath:directoryPath prefix:prefix options:options];
 }
 
 - (instancetype)init {
@@ -55,8 +55,8 @@
     return [self initWithBlock:block];
 }
 
-- (instancetype)initWithStaticDirectory:(NSString *)directoryPath prefix:(NSString *)prefix options:(CRStaticDirectoryServingOptions)options {
-    CRRouteBlock block = [[CRStaticDirectoryManager alloc] initWithDirectory:directoryPath prefix:prefix options:options].routeBlock;
+- (instancetype)initWithStaticDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix options:(CRStaticDirectoryServingOptions)options {
+    CRRouteBlock block = [[CRStaticDirectoryManager alloc] initWithDirectoryAtPath:directoryPath prefix:prefix options:options].routeBlock;
     return [self initWithBlock:block];
 }
 

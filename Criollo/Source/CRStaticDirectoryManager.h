@@ -24,10 +24,10 @@
 @property (nonatomic, readonly) BOOL shouldShowHiddenFilesInDirectoryIndex;
 @property (nonatomic, readonly) BOOL shouldFollowSymLinks;
 
-+ (nonnull instancetype)managerWithDirectory:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix;
-+ (nonnull instancetype)managerWithDirectory:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options;
++ (nonnull instancetype)managerWithDirectoryAtPath:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix;
++ (nonnull instancetype)managerWithDirectoryAtPath:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options;
 
-- (nonnull instancetype)initWithDirectory:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix;
-- (nonnull instancetype)initWithDirectory:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithDirectoryAtPath:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix;
+- (nonnull instancetype)initWithDirectoryAtPath:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options NS_DESIGNATED_INITIALIZER;
 
 @end

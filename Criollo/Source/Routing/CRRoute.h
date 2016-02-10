@@ -19,10 +19,10 @@
 
 + (CRRoute * _Nonnull)routeWithBlock:(CRRouteBlock _Nonnull)block;
 + (CRRoute * _Nonnull)routeWithControllerClass:(__unsafe_unretained Class  _Nonnull)controllerClass nibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil;
-+ (CRRoute * _Nonnull)routeWithStaticDirectory:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options;
++ (CRRoute * _Nonnull)routeWithStaticDirectoryAtPath:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options;
 
 - (nonnull instancetype)initWithBlock:(CRRouteBlock _Nonnull)block NS_DESIGNATED_INITIALIZER;
 - (nonnull instancetype)initWithControllerClass:(__unsafe_unretained Class  _Nonnull)controllerClass nibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil;
-- (nonnull instancetype)initWithStaticDirectory:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options;
+- (nonnull instancetype)initWithStaticDirectoryAtPath:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options;
 
 @end
