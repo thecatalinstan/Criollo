@@ -22,6 +22,8 @@
 #include <sys/sysctl.h>
 #import "NSDate+RFC1123.h"
 
+#define CRConnectionSocketTagSendingResponse                        20
+
 @interface CRConnection () <GCDAsyncSocketDelegate>
 
 @property (nonatomic, readonly) BOOL willDisconnect;

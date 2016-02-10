@@ -6,8 +6,6 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#define CRConnectionSocketTagSendingResponse                        20
-
 @class CRConnection, GCDAsyncSocket, CRServer, CRRequest, CRResponse;
 
 @protocol CRConnectionDelegate <NSObject>

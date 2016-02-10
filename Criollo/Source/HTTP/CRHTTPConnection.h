@@ -10,7 +10,6 @@
 
 @class CRRequest, CRResponse;
 
-
 #define CRHTTPConnectionSocketTagBeginReadingRequest                  10
 #define CRHTTPConnectionSocketTagReadingRequestHeader                 11
 #define CRHTTPConnectionSocketTagReadingRequestBody                   12

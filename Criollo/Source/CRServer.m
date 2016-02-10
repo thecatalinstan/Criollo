@@ -184,11 +184,10 @@ NSUInteger const CRErrorSocketError = 2001;
 #pragma mark - CRConnectionDelegate
 
 - (void)connection:(CRConnection *)connection didReceiveRequest:(CRRequest *)request response:(CRResponse *)response {
-    if ( [self.delegate respondsToSelector:@selector(server:didReceiveRequest:)] ) {
-        [self.delegate server:self didReceiveRequest:request];
-    }
-
     [self.workerQueue addOperation:[NSBlockOperation blockOperationWithBlock:^{
+        if ( [self.delegate respondsToSelector:@selector(server:didReceiveRequest:)] ) {
+            [self.delegate server:self didReceiveRequest:request];
+        }
         NSArray<CRRoute*>* routes = [self routesForPath:request.URL.path HTTPMethod:request.method];
         if ( routes == nil ) {
             routes = @[[CRRoute routeWithBlock:self.notFoundBlock]];
