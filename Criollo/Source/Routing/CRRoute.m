@@ -13,6 +13,7 @@
 #import "CRRequest_Internal.h"
 #import "CRResponse.h"
 #import "CRResponse_Internal.h"
+#import "NSDate+RFC1123.h"
 
 #define CRStaticDirectoryServingReadBuffer          (8 * 1024 * 1024)
 #define CRStaticDirectoryServingReadThreshold       (8 * 64 * 1024)
@@ -105,7 +106,53 @@
             if ( [itemAttributes.fileType isEqualToString:NSFileTypeDirectory] ) {
                 if ( shouldGenerateIndex ) {
                     // Make the index
+                    NSMutableString* responseString = [NSMutableString string];
+                    [responseString appendString:@"<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"/><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>"];
+                    [responseString appendFormat:@"<title>%@</title>", requestedDocumentPath];
+                    [responseString appendString:@"</head><body>"];
+                    [responseString appendFormat:@"<h1>Index of %@</h1>", requestedDocumentPath];
+                    [responseString appendString:@"<hr/>"];
 
+
+                    NSError *directoryListingError;
+                    NSArray<NSString *> *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:requestedAbsolutePath error:&directoryListingError];
+                    if ( directoryContents == nil && directoryListingError != nil ) {
+                        [responseString appendFormat:@"<p>Unable to get the directory contents.</p><pre>%@</pre>", directoryListingError];
+                    } else {
+                        [responseString appendString:@"<pre>"];
+                        if ( requestedRelativePath.length != 0 ) {
+                            [responseString appendFormat:@"<a href=\"%@\">../</a>\n", requestedDocumentPath.stringByDeletingLastPathComponent];
+                        }
+
+                        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                        dateFormatter.dateFormat = @"dd-MMM-yyyy HH:mm:ss";
+
+                        [directoryContents enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                            NSError* attributesError;
+                            NSDictionary* attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[requestedAbsolutePath stringByAppendingPathComponent:obj] error:nil];
+                            if ( attributes == nil && attributesError != nil ) {
+                                return;
+                            }
+
+                            BOOL isDirectory = [attributes.fileType isEqualToString:NSFileTypeDirectory];
+                            NSString* fileName = obj;
+                            if ( fileName.length > 50 ) {
+                                fileName = [fileName substringToIndex:50];
+                            }
+                            NSString* fileNamePadding = [@"" stringByPaddingToLength:50 - fileName.length - (isDirectory ? 1 : 0) withString:@" " startingAtIndex:0];
+                            NSString* fileModificationDate = [dateFormatter stringFromDate:attributes.fileModificationDate];
+                            NSString* fileSize = @(attributes.fileSize).stringValue;
+                            NSString* fileSizePadding = [@"" stringByPaddingToLength:16 - fileSize.length withString:@" " startingAtIndex:0];
+
+                            [responseString appendFormat:@"<a href=\"%@/%@\">%@%@</a>%@ %@ %@%@\n", requestedDocumentPath, obj, fileName, isDirectory ? @"/" : @"", fileNamePadding, fileModificationDate, fileSizePadding, fileSize];
+                        }];
+                        [responseString appendString:@"</pre>"];
+                    }
+
+                    [responseString appendString:@"<hr/></body></html>"];
+
+                    [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+                    [response sendString:responseString];
                 } else {
                     // Forbidden
                     [CRServer errorHandlingBlockWithStatus:403](request, response, completionHandler);
@@ -143,7 +190,6 @@
                     dispatch_set_target_queue(fileReadQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0));
 
                     dispatch_io_t fileReadChannel = dispatch_io_create_with_path(DISPATCH_IO_STREAM, requestedAbsolutePath.UTF8String, O_RDONLY, 0, fileReadQueue,  ^(int error) {
-                        NSLog(@"%s %d", __PRETTY_FUNCTION__, error);
                         if ( !error ) {
                             [response finish];
                         } else {
@@ -156,7 +202,6 @@
                     dispatch_io_set_low_water(fileReadChannel, CRStaticDirectoryServingReadThreshold);
 
                     dispatch_io_read(fileReadChannel, 0, SIZE_MAX, fileReadQueue, ^(bool done, dispatch_data_t data, int error) {
-                        NSLog(@" ** %s %zu bytes", __PRETTY_FUNCTION__, dispatch_data_get_size(data));
 
                         if (error) {
                             dispatch_io_close(fileReadChannel, 0);
