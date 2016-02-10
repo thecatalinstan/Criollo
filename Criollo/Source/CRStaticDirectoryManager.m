@@ -92,7 +92,18 @@
     NSString *UTI = (__bridge_transfer NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)fileExtension, NULL);
     NSString *contentType = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)UTI, kUTTagClassMIMEType);
     if ( contentType.length == 0 ) {
-        contentType = @"application/octet-stream";
+        if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeText) ) {
+            contentType = @"text/plain; charset=utf-8";
+        } else if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeSourceCode) ) {
+            contentType = @"text/plain; charset=utf-8";
+        } else if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeXMLPropertyList) ) {
+            contentType = @"application/xml; charset=utf-8";
+        } else {
+            contentType = @"application/octet-stream; charset=binary";
+        }
+    }
+    if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeText) ) {
+        contentType = [contentType stringByAppendingString:@"; charset=utf-8"];
     }
     return contentType;
 }
