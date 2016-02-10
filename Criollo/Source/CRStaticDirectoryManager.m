@@ -28,6 +28,8 @@
 - (nonnull CRRouteBlock)servingBlockForPath:(NSString * _Nonnull)path attributes:(NSDictionary * _Nonnull)attributes;
 - (nonnull CRRouteBlock)directoryIndexBlockForPath:(NSString * _Nonnull)path requestedPath:(NSString * _Nonnull)requestedPath displayParentLink:(BOOL)flag;
 
+- (nonnull NSString *)mimeTypeForFileAtPath:(NSString * _Nonnull)path;
+
 + (nonnull NSDateFormatter *)dateFormatter;
 
 @end
@@ -83,6 +85,16 @@
         dateFormatter.dateFormat = @"dd-MMM-yyyy HH:mm:ss";
     });
     return dateFormatter;
+}
+
+- (NSString *)mimeTypeForFileAtPath:(NSString *)path {
+    NSString *fileExtension = path.pathExtension;
+    NSString *UTI = (__bridge_transfer NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)fileExtension, NULL);
+    NSString *contentType = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)UTI, kUTTagClassMIMEType);
+    if ( contentType.length == 0 ) {
+        contentType = @"application/octet-stream";
+    }
+    return contentType;
 }
 
 - (CRRouteBlock)errorHandlerBlockForError:(NSError *)error {
@@ -170,12 +182,7 @@
         [response setValue:@(attributes.fileSize).stringValue forHTTPHeaderField:@"Content-length"];
 
         // Get the mime type and set the Content-type header
-        NSString *fileExtension = path.pathExtension;
-        NSString *UTI = (__bridge_transfer NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)fileExtension, NULL);
-        NSString *contentType = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)UTI, kUTTagClassMIMEType);
-        if ( contentType.length == 0 ) {
-            contentType = @"application/octet-stream";
-        }
+        NSString* contentType = [self mimeTypeForFileAtPath:path];
         [response setValue:contentType forHTTPHeaderField:@"Content-type"];
 
         // Read synchroniously if the file size is below threshold
