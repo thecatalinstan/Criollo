@@ -12,6 +12,9 @@
 
 + (nonnull instancetype)sharedHelper;
 
+- (nullable NSString *)mimeTypeForExtension:(NSString * _Nonnull)extension;
+- (void)setMimeType:(NSString * _Nonnull)mimeType forExtension:(NSString * _Nonnull)extension;
+
 - (nonnull NSString *)mimeTypeForFileAtPath:(NSString * _Nonnull)path;
 
 @end
