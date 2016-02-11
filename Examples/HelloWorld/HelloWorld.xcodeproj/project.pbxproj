@@ -37,6 +37,9 @@
 		ADC3323E1BF1099700DFCF6B /* CommonAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3323C1BF107EF00DFCF6B /* CommonAppDelegate.m */; };
 		ADC3323F1BF1099800DFCF6B /* CommonAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3323C1BF107EF00DFCF6B /* CommonAppDelegate.m */; };
 		ADC332401BF10FBA00DFCF6B /* CommonRequestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3321B1BF1015000DFCF6B /* CommonRequestHandler.m */; };
+		ADD6801B1C6CC51300FC41EE /* style.css in Public Resources */ = {isa = PBXBuildFile; fileRef = ADD680161C6CC49700FC41EE /* style.css */; };
+		ADD6801D1C6CC52800FC41EE /* style.css in Public Resources */ = {isa = PBXBuildFile; fileRef = ADD680161C6CC49700FC41EE /* style.css */; };
+		ADD6801F1C6CC55600FC41EE /* style.css in Public Resources */ = {isa = PBXBuildFile; fileRef = ADD680161C6CC49700FC41EE /* style.css */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +96,39 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		ADD6801A1C6CC4FE00FC41EE /* Public Resources */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Public;
+			dstSubfolderSpec = 7;
+			files = (
+				ADD6801B1C6CC51300FC41EE /* style.css in Public Resources */,
+			);
+			name = "Public Resources";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ADD6801C1C6CC51A00FC41EE /* Public Resources */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Public;
+			dstSubfolderSpec = 7;
+			files = (
+				ADD6801D1C6CC52800FC41EE /* style.css in Public Resources */,
+			);
+			name = "Public Resources";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ADD6801E1C6CC54A00FC41EE /* Public Resources */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Public;
+			dstSubfolderSpec = 7;
+			files = (
+				ADD6801F1C6CC55600FC41EE /* style.css in Public Resources */,
+			);
+			name = "Public Resources";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -129,6 +165,7 @@
 		ADC332321BF1064700DFCF6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ADC3323B1BF107EF00DFCF6B /* CommonAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonAppDelegate.h; sourceTree = "<group>"; };
 		ADC3323C1BF107EF00DFCF6B /* CommonAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonAppDelegate.m; sourceTree = "<group>"; };
+		ADD680161C6CC49700FC41EE /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -240,6 +277,7 @@
 		ADC332161BF100A600DFCF6B /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				ADD680151C6CC49700FC41EE /* Public */,
 				ADC3321A1BF1015000DFCF6B /* CommonRequestHandler.h */,
 				ADC3321B1BF1015000DFCF6B /* CommonRequestHandler.m */,
 				ADC3323B1BF107EF00DFCF6B /* CommonAppDelegate.h */,
@@ -270,6 +308,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		ADD680151C6CC49700FC41EE /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				ADD680161C6CC49700FC41EE /* style.css */,
+			);
+			path = Public;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -281,6 +327,7 @@
 				ADC331DB1BF0FF4100DFCF6B /* Frameworks */,
 				ADC331DC1BF0FF4100DFCF6B /* Resources */,
 				AD04F4E31BF249DB00456D38 /* Embed Frameworks */,
+				ADD6801E1C6CC54A00FC41EE /* Public Resources */,
 			);
 			buildRules = (
 			);
@@ -299,6 +346,7 @@
 				ADC331F61BF0FF6C00DFCF6B /* Sources */,
 				ADC331F71BF0FF6C00DFCF6B /* Frameworks */,
 				ADC331F81BF0FF6C00DFCF6B /* Resources */,
+				ADD6801C1C6CC51A00FC41EE /* Public Resources */,
 			);
 			buildRules = (
 			);
@@ -317,6 +365,7 @@
 				ADC332221BF1064600DFCF6B /* Frameworks */,
 				ADC332231BF1064600DFCF6B /* Resources */,
 				ADC3323A1BF1070D00DFCF6B /* Embed Frameworks */,
+				ADD6801A1C6CC4FE00FC41EE /* Public Resources */,
 			);
 			buildRules = (
 			);

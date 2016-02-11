@@ -14,8 +14,16 @@
 }
 
 - (NSString *)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response {
-    self.templateVariables[@"TEXT"] = [NSString stringWithFormat:@"%@", request.query];
     self.templateVariables[@"TITLE"] = NSStringFromClass(self.class);
+
+    NSMutableString* text = [NSMutableString string];
+    [text appendString:@"<h3>Request Enviroment:</h3><pre>"];
+    [request.env enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        [text appendFormat:@"%@: %@\n", key, obj];
+    }];
+    [text appendString:@"</pre>"];
+    self.templateVariables[@"TEXT"] = text;
+
     return [super presentViewControllerWithRequest:request response:response];
 }
 
