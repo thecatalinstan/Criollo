@@ -15,10 +15,15 @@
 #define LogConnections          0
 #define LogRequests             0
 
+#define UseFCGI                 0
+
 @interface AppDelegate () <CRServerDelegate>
 
+#if UseFCGI
+@property (nonatomic, strong) CRFCGIServer *server;
+#else
 @property (nonatomic, strong) CRHTTPServer *server;
-//@property (nonatomic, strong) CRFCGIServer *server;
+#endif
 @property (nonatomic, strong) NSURL *baseURL;
 
 @end
@@ -28,8 +33,11 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
     // Create the server and add some handlers to do some work
+#if UseFCGI
+    self.server = [[CRFCGIServer alloc] initWithDelegate:self];
+#else
     self.server = [[CRHTTPServer alloc] initWithDelegate:self];
-//    self.server = [[CRFCGIServer alloc] initWithDelegate:self];
+#endif
 
     NSBundle *bundle = [NSBundle mainBundle];
 
