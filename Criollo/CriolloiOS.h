@@ -13,6 +13,7 @@
 #import <CriolloiOS/CRApplication.h>
 #import <CriolloiOS/CRServer.h>
 #import <CriolloiOS/CRConnection.h>
+#import <CriolloiOS/CRMessage.h>
 #import <CriolloiOS/CRRequest.h>
 #import <CriolloiOS/CRResponse.h>
 
