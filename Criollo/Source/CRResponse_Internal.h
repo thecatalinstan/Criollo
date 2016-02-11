@@ -8,11 +8,7 @@
 
 #import "CRResponse.h"
 
-@class CRConnection;
-
 @interface CRResponse ()
-
-@property (nonatomic, weak) CRConnection *connection;
 
 @property (nonatomic, assign) NSUInteger proposedStatusCode;
 @property (nonatomic, strong, nullable) NSString* proposedStatusDescription;

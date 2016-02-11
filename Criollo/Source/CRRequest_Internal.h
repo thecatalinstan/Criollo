@@ -14,13 +14,9 @@
 #define CRRequestBoundaryParameter          @"boundary"
 #define CRRequestBoundaryPrefix             @"--"
 
-@class CRConnection;
-
 @interface CRRequest ()
 
 @property (nonatomic, readonly) BOOL shouldCloseConnection;
-
-@property (nonatomic, weak) CRConnection *connection;
 
 @property (nonatomic, strong, nullable) NSMutableData * bufferedBodyData;
 @property (nonatomic, strong, nullable) NSMutableData * bufferedResponseData;
