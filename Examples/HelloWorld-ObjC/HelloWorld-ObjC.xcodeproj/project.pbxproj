@@ -1,0 +1,394 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AD60BA521C03A6F200118EED /* HelloWorldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD60BA511C03A6F200118EED /* HelloWorldViewController.m */; };
+		AD60BA551C03A72200118EED /* HelloWorldViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD60BA541C03A72200118EED /* HelloWorldViewController.html */; };
+		ADD931EE1C6A0DD6005B98FD /* MultipartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADD931ED1C6A0DD6005B98FD /* MultipartViewController.m */; };
+		ADD931F11C6A0DEE005B98FD /* MultipartViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = ADD931F01C6A0DEE005B98FD /* MultipartViewController.html */; };
+		ADE3DDA91BFE003900844DC9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE3DDA81BFE003900844DC9 /* AppDelegate.m */; };
+		ADE3DDAC1BFE003900844DC9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE3DDAB1BFE003900844DC9 /* main.m */; };
+		ADE3DDC11BFE00EB00844DC9 /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADE3DDBE1BFE00DD00844DC9 /* Criollo.framework */; };
+		ADE3DDC21BFE00EB00844DC9 /* Criollo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ADE3DDBE1BFE00DD00844DC9 /* Criollo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		ADE3DDCB1BFE055100844DC9 /* utils.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE3DDCA1BFE055100844DC9 /* utils.m */; };
+		ADE99FC01C6B83500080B1FA /* style.css in Copy Public Resources */ = {isa = PBXBuildFile; fileRef = ADE99FBB1C6B82850080B1FA /* style.css */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		ADE3DDBD1BFE00DD00844DC9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ADE3DDB81BFE00DD00844DC9 /* Criollo.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = ADEDB3761AEFC0B000A26AF1;
+			remoteInfo = Criollo;
+		};
+		ADE3DDBF1BFE00DD00844DC9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ADE3DDB81BFE00DD00844DC9 /* Criollo.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AD5FFFCC1BF0024D00A57FE9;
+			remoteInfo = CriolloiOS;
+		};
+		ADE3DDC31BFE00EB00844DC9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ADE3DDB81BFE00DD00844DC9 /* Criollo.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = ADEDB3751AEFC0B000A26AF1;
+			remoteInfo = Criollo;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		ADE3DDC51BFE00EB00844DC9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				ADE3DDC21BFE00EB00844DC9 /* Criollo.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ADE99FBE1C6B82B60080B1FA /* Copy Public Resources */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Public;
+			dstSubfolderSpec = 7;
+			files = (
+				ADE99FC01C6B83500080B1FA /* style.css in Copy Public Resources */,
+			);
+			name = "Copy Public Resources";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		AD60BA501C03A6F200118EED /* HelloWorldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloWorldViewController.h; sourceTree = "<group>"; };
+		AD60BA511C03A6F200118EED /* HelloWorldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelloWorldViewController.m; sourceTree = "<group>"; };
+		AD60BA541C03A72200118EED /* HelloWorldViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = HelloWorldViewController.html; sourceTree = "<group>"; };
+		ADD931EC1C6A0DD6005B98FD /* MultipartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultipartViewController.h; sourceTree = "<group>"; };
+		ADD931ED1C6A0DD6005B98FD /* MultipartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultipartViewController.m; sourceTree = "<group>"; };
+		ADD931F01C6A0DEE005B98FD /* MultipartViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = MultipartViewController.html; sourceTree = "<group>"; };
+		ADE3DDA41BFE003900844DC9 /* HelloWorld-ObjC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HelloWorld-ObjC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ADE3DDA71BFE003900844DC9 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		ADE3DDA81BFE003900844DC9 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		ADE3DDAB1BFE003900844DC9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		ADE3DDB21BFE003900844DC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ADE3DDB81BFE00DD00844DC9 /* Criollo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Criollo.xcodeproj; path = ../../Criollo.xcodeproj; sourceTree = "<group>"; };
+		ADE3DDC91BFE055100844DC9 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		ADE3DDCA1BFE055100844DC9 /* utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = utils.m; sourceTree = "<group>"; };
+		ADE99FBB1C6B82850080B1FA /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		ADE3DDA11BFE003900844DC9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ADE3DDC11BFE00EB00844DC9 /* Criollo.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		ADE3DD9B1BFE003900844DC9 = {
+			isa = PBXGroup;
+			children = (
+				ADE3DDB81BFE00DD00844DC9 /* Criollo.xcodeproj */,
+				ADE3DDA61BFE003900844DC9 /* HelloWorld-ObjC */,
+				ADE3DDA51BFE003900844DC9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		ADE3DDA51BFE003900844DC9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				ADE3DDA41BFE003900844DC9 /* HelloWorld-ObjC.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		ADE3DDA61BFE003900844DC9 /* HelloWorld-ObjC */ = {
+			isa = PBXGroup;
+			children = (
+				ADE3DDA71BFE003900844DC9 /* AppDelegate.h */,
+				ADE3DDA81BFE003900844DC9 /* AppDelegate.m */,
+				AD60BA501C03A6F200118EED /* HelloWorldViewController.h */,
+				AD60BA511C03A6F200118EED /* HelloWorldViewController.m */,
+				AD60BA541C03A72200118EED /* HelloWorldViewController.html */,
+				ADD931EC1C6A0DD6005B98FD /* MultipartViewController.h */,
+				ADD931ED1C6A0DD6005B98FD /* MultipartViewController.m */,
+				ADD931F01C6A0DEE005B98FD /* MultipartViewController.html */,
+				ADE3DDC91BFE055100844DC9 /* utils.h */,
+				ADE3DDCA1BFE055100844DC9 /* utils.m */,
+				ADE3DDAB1BFE003900844DC9 /* main.m */,
+				ADE3DDB21BFE003900844DC9 /* Info.plist */,
+				ADE99FBF1C6B82F10080B1FA /* Public */,
+			);
+			path = "HelloWorld-ObjC";
+			sourceTree = "<group>";
+		};
+		ADE3DDB91BFE00DD00844DC9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				ADE3DDBE1BFE00DD00844DC9 /* Criollo.framework */,
+				ADE3DDC01BFE00DD00844DC9 /* CriolloiOS.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		ADE99FBF1C6B82F10080B1FA /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				ADE99FBB1C6B82850080B1FA /* style.css */,
+			);
+			path = Public;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		ADE3DDA31BFE003900844DC9 /* HelloWorld-ObjC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ADE3DDB51BFE003900844DC9 /* Build configuration list for PBXNativeTarget "HelloWorld-ObjC" */;
+			buildPhases = (
+				ADE3DDA01BFE003900844DC9 /* Sources */,
+				ADE3DDA11BFE003900844DC9 /* Frameworks */,
+				ADE3DDA21BFE003900844DC9 /* Resources */,
+				ADE3DDC51BFE00EB00844DC9 /* Embed Frameworks */,
+				ADE99FBE1C6B82B60080B1FA /* Copy Public Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				ADE3DDC41BFE00EB00844DC9 /* PBXTargetDependency */,
+			);
+			name = "HelloWorld-ObjC";
+			productName = "HelloWorld-ObjC";
+			productReference = ADE3DDA41BFE003900844DC9 /* HelloWorld-ObjC.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		ADE3DD9C1BFE003900844DC9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0710;
+				ORGANIZATIONNAME = "Catalin Stan";
+				TargetAttributes = {
+					ADE3DDA31BFE003900844DC9 = {
+						CreatedOnToolsVersion = 7.1.1;
+					};
+				};
+			};
+			buildConfigurationList = ADE3DD9F1BFE003900844DC9 /* Build configuration list for PBXProject "HelloWorld-ObjC" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = ADE3DD9B1BFE003900844DC9;
+			productRefGroup = ADE3DDA51BFE003900844DC9 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = ADE3DDB91BFE00DD00844DC9 /* Products */;
+					ProjectRef = ADE3DDB81BFE00DD00844DC9 /* Criollo.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				ADE3DDA31BFE003900844DC9 /* HelloWorld-ObjC */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		ADE3DDBE1BFE00DD00844DC9 /* Criollo.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Criollo.framework;
+			remoteRef = ADE3DDBD1BFE00DD00844DC9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		ADE3DDC01BFE00DD00844DC9 /* CriolloiOS.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CriolloiOS.framework;
+			remoteRef = ADE3DDBF1BFE00DD00844DC9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		ADE3DDA21BFE003900844DC9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ADD931F11C6A0DEE005B98FD /* MultipartViewController.html in Resources */,
+				AD60BA551C03A72200118EED /* HelloWorldViewController.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		ADE3DDA01BFE003900844DC9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ADD931EE1C6A0DD6005B98FD /* MultipartViewController.m in Sources */,
+				AD60BA521C03A6F200118EED /* HelloWorldViewController.m in Sources */,
+				ADE3DDCB1BFE055100844DC9 /* utils.m in Sources */,
+				ADE3DDAC1BFE003900844DC9 /* main.m in Sources */,
+				ADE3DDA91BFE003900844DC9 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		ADE3DDC41BFE00EB00844DC9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Criollo;
+			targetProxy = ADE3DDC31BFE00EB00844DC9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		ADE3DDB31BFE003900844DC9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		ADE3DDB41BFE003900844DC9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		ADE3DDB61BFE003900844DC9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "HelloWorld-ObjC/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.criollo.examples.HelloWorld-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		ADE3DDB71BFE003900844DC9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "HelloWorld-ObjC/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.criollo.examples.HelloWorld-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		ADE3DD9F1BFE003900844DC9 /* Build configuration list for PBXProject "HelloWorld-ObjC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ADE3DDB31BFE003900844DC9 /* Debug */,
+				ADE3DDB41BFE003900844DC9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		ADE3DDB51BFE003900844DC9 /* Build configuration list for PBXNativeTarget "HelloWorld-ObjC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ADE3DDB61BFE003900844DC9 /* Debug */,
+				ADE3DDB71BFE003900844DC9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = ADE3DD9C1BFE003900844DC9 /* Project object */;
+}
