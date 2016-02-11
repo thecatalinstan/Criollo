@@ -16,6 +16,7 @@
 		ADE3DDC11BFE00EB00844DC9 /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADE3DDBE1BFE00DD00844DC9 /* Criollo.framework */; };
 		ADE3DDC21BFE00EB00844DC9 /* Criollo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ADE3DDBE1BFE00DD00844DC9 /* Criollo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		ADE3DDCB1BFE055100844DC9 /* utils.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE3DDCA1BFE055100844DC9 /* utils.m */; };
+		ADE99FC01C6B83500080B1FA /* style.css in Copy Public Resources */ = {isa = PBXBuildFile; fileRef = ADE99FBB1C6B82850080B1FA /* style.css */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,17 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		ADE99FBE1C6B82B60080B1FA /* Copy Public Resources */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Public;
+			dstSubfolderSpec = 7;
+			files = (
+				ADE99FC01C6B83500080B1FA /* style.css in Copy Public Resources */,
+			);
+			name = "Copy Public Resources";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -71,6 +83,7 @@
 		ADE3DDB81BFE00DD00844DC9 /* Criollo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Criollo.xcodeproj; path = ../../Criollo.xcodeproj; sourceTree = "<group>"; };
 		ADE3DDC91BFE055100844DC9 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		ADE3DDCA1BFE055100844DC9 /* utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = utils.m; sourceTree = "<group>"; };
+		ADE99FBB1C6B82850080B1FA /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +130,7 @@
 				ADE3DDCA1BFE055100844DC9 /* utils.m */,
 				ADE3DDAB1BFE003900844DC9 /* main.m */,
 				ADE3DDB21BFE003900844DC9 /* Info.plist */,
+				ADE99FBF1C6B82F10080B1FA /* Public */,
 			);
 			path = "HelloWorld-ObjC";
 			sourceTree = "<group>";
@@ -130,6 +144,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		ADE99FBF1C6B82F10080B1FA /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				ADE99FBB1C6B82850080B1FA /* style.css */,
+			);
+			path = Public;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -141,6 +163,7 @@
 				ADE3DDA11BFE003900844DC9 /* Frameworks */,
 				ADE3DDA21BFE003900844DC9 /* Resources */,
 				ADE3DDC51BFE00EB00844DC9 /* Embed Frameworks */,
+				ADE99FBE1C6B82B60080B1FA /* Copy Public Resources */,
 			);
 			buildRules = (
 			);
@@ -328,7 +351,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "HelloWorld-ObjC/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.criolloframework.examples.HelloWorld-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.criollo.examples.HelloWorld-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -339,7 +362,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "HelloWorld-ObjC/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.criolloframework.examples.HelloWorld-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.criollo.examples.HelloWorld-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

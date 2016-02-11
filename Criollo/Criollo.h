@@ -22,3 +22,5 @@
 #import <Criollo/CRNib.h>
 #import <Criollo/CRView.h>
 #import <Criollo/CRViewController.h>
+
+#import <Criollo/CRMimeTypeHelper.h>

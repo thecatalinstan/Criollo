@@ -7,7 +7,13 @@
 //
 
 #import "CRRoute.h"
+#import "CRServer_Internal.h"
 #import "CRViewController.h"
+#import "CRRequest.h"
+#import "CRRequest_Internal.h"
+#import "CRResponse.h"
+#import "CRResponse_Internal.h"
+#import "CRStaticDirectoryManager.h"
 
 @interface CRRoute ()
 
@@ -23,9 +29,12 @@
     return [[CRRoute alloc] initWithControllerClass:controllerClass nibName:nibNameOrNil bundle:nibBundleOrNil];
 }
 
++ (CRRoute *)routeWithStaticDirectoryAtPath:(NSString *)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options {
+    return [[CRRoute alloc] initWithStaticDirectoryAtPath:directoryPath prefix:prefix options:options];
+}
+
 - (instancetype)init {
-    return [self initWithBlock:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
-    }];
+    return [self initWithBlock:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {}];
 }
 
 - (instancetype)initWithBlock:(CRRouteBlock)block {
@@ -46,7 +55,9 @@
     return [self initWithBlock:block];
 }
 
-
-
+- (instancetype)initWithStaticDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix options:(CRStaticDirectoryServingOptions)options {
+    CRRouteBlock block = [[CRStaticDirectoryManager alloc] initWithDirectoryAtPath:directoryPath prefix:prefix options:options].routeBlock;
+    return [self initWithBlock:block];
+}
 
 @end

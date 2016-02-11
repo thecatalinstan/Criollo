@@ -8,16 +8,21 @@
 
 #import "CRTypes.h"
 
+#define CRPathSeparator                     @"/"
+#define CRPathAnyPath                       @"*"
+
 @class CRRequest, CRResponse;
 
 @interface CRRoute : NSObject
 
 @property (nonatomic, strong, nonnull) CRRouteBlock block;
 
-+ (nonnull CRRoute *)routeWithBlock:(nonnull CRRouteBlock)block;
-+ (nonnull CRRoute *)routeWithControllerClass:(nonnull __unsafe_unretained Class)controllerClass nibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil;
++ (CRRoute * _Nonnull)routeWithBlock:(CRRouteBlock _Nonnull)block;
++ (CRRoute * _Nonnull)routeWithControllerClass:(__unsafe_unretained Class  _Nonnull)controllerClass nibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil;
++ (CRRoute * _Nonnull)routeWithStaticDirectoryAtPath:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options;
 
-- (nonnull instancetype)initWithBlock:(nonnull CRRouteBlock)block NS_DESIGNATED_INITIALIZER;
-- (nonnull instancetype)initWithControllerClass:(nonnull __unsafe_unretained Class)controllerClass nibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil;
+- (nonnull instancetype)initWithBlock:(CRRouteBlock _Nonnull)block NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithControllerClass:(__unsafe_unretained Class  _Nonnull)controllerClass nibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil;
+- (nonnull instancetype)initWithStaticDirectoryAtPath:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options;
 
 @end
