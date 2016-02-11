@@ -19,10 +19,11 @@
 //#define CRErrorRequestUnsupportedMethod     1002
 #define CRRequestErrorMalformedBody         3001
 
-@class CRResponse, CRUploadedFile;
+@class CRResponse, CRUploadedFile, CRConnection;
 
 @interface CRRequest : CRMessage
 
+@property (nonatomic, weak) CRConnection *connection;
 @property (nonatomic, strong, nonnull) CRResponse * response;
 
 @property (nonatomic, readonly, nonnull) NSURL * URL;

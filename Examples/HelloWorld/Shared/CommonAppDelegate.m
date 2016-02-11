@@ -40,6 +40,7 @@
     [self.server addBlock:jsonHelloBlock forPath:@"/json"];
     [self.server addBlock:statusBlock forPath:@"/status" HTTPMethod:@"GET"];
     [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller"];
+    [self.server addStaticDirectoryAtPath:[[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"] forPath:@"/static" options:CRStaticDirectoryServingOptionsCacheFiles];
 
     [self willChangeValueForKey:@"isConnected"];
     _isConnected = NO;
@@ -156,7 +157,7 @@
 
 #if LogRequests
 - (void)server:(CRServer *)server didFinishRequest:(CRRequest *)request {
-    [self logDebugFormat:@" * %@ %@ - %lu - %@", request.response.connection.remoteAddress, request, request.response.statusCode, request.env[@"HTTP_USER_AGENT"]];
+    [self logDebugFormat:@" * %@ %@ - %lu - %@", request.connection.remoteAddress, request, request.response.statusCode, request.env[@"HTTP_USER_AGENT"]];
 }
 #endif
 

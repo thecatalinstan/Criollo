@@ -22,3 +22,5 @@
 #import <CriolloiOS/CRNib.h>
 #import <CriolloiOS/CRView.h>
 #import <CriolloiOS/CRViewController.h>
+
+#import <CriolloiOS/CRMimeTypeHelper.h>

@@ -15,11 +15,11 @@
 
 @interface CRResponse : CRMessage
 
+@property (nonatomic, weak) CRConnection *connection;
 @property (nonatomic, weak) CRRequest *request;
 
 @property (nonatomic, readonly) NSUInteger statusCode;
 @property (nonatomic, strong, readonly, nullable) NSString* statusDescription;
-
 
 - (void)setStatusCode:(NSUInteger)statusCode description:(nullable NSString *)description;
 

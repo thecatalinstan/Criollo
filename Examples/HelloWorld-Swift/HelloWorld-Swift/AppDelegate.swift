@@ -33,7 +33,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
         let identifyBlock:CRRouteBlock = { (request:CRRequest, response:CRResponse, completionHandler:CRRouteCompletionBlock) -> Void in
             response.setValue("\(bundle.bundleIdentifier!), \(bundle.objectForInfoDictionaryKey("CFBundleShortVersionString") as! String) build \(bundle.objectForInfoDictionaryKey("CFBundleVersion") as! String)", forHTTPHeaderField: "Server");
 
-            if ( request.cookie["session_cookie"] == nil ) {
+            if ( request.cookies["session_cookie"] == nil ) {
                 response.setCookie("session_cookie", value:NSUUID().UUIDString, path:"/", expires:nil, domain:nil, secure:false);
             }
             response.setCookie("persistant_cookie", value:NSUUID().UUIDString, path:"/", expires:NSDate.distantFuture(), domain:nil, secure:false);
@@ -70,6 +70,11 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             let startTime:NSDate! = NSDate();
 
             var responseString:String = String();
+
+            // HTML
+            responseString += "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"/><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>";
+            responseString += "<title>\(bundle.bundleIdentifier!)</title>";
+            responseString += "<link rel=\"stylesheet\" href=\"/static/style.css\"/><link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css\" integrity=\"sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7\" crossorigin=\"anonymous\"/><link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css\" integrity=\"sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r\" crossorigin=\"anonymous\"/></head><body>";
 
             // Bundle info
             responseString += "<h1>\(bundle.bundleIdentifier!)</h1>";
@@ -116,7 +121,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             responseString += "</pre>";
             
             // Cookies
-            let cookies:NSDictionary! = request.cookie as NSDictionary;
+            let cookies:NSDictionary! = request.cookies as NSDictionary;
             responseString += "<h3>Request Cookies:</h2><pre>";
             cookies.enumerateKeysAndObjectsUsingBlock({ (key:AnyObject,  object:AnyObject, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
                 let cookieName:String = key as! String;
@@ -144,6 +149,9 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             responseString += "<small>\(uname)</small><br/>";
             responseString += String(format: "<small>Task took: %.4fms</small>", startTime.timeIntervalSinceNow * -1000);
 
+            // HTML
+            responseString += "</body></html>";
+
             response.setValue("text/html; charset=utf-8", forHTTPHeaderField: "Content-type");
             response.setValue("\(responseString.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))", forHTTPHeaderField: "Content-Length");
             response.sendString(responseString);
@@ -155,6 +163,11 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
 
         let controllerClass:AnyClass! = NSClassFromString(HelloWorldViewController.className());
         self.server.addController(controllerClass, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/controller");
+
+        // Serve static files from "/Public" (relative to bundle)
+//        NSString* staticFilesPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"];
+        let staticFilePath:String = (NSBundle.mainBundle().resourcePath?.stringByAppendingString("/Public"))!;
+        self.server.addStaticDirectoryAtPath(staticFilePath, forPath: "/static", options: CRStaticDirectoryServingOptions.FollowSymlinks)
 
         // Start listening
         var serverError:NSError?;

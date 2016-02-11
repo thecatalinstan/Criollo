@@ -86,7 +86,7 @@
         _localAddress = self.socket.localHost;
         _localPort = self.socket.localPort;
 
-        _isolationQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:[NSString stringWithFormat:@"CRConnection-IsolationQueue-%lu", self.hash]] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
+        _isolationQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:[NSString stringWithFormat:@"CRConnection-IsolationQueue-%lu", (unsigned long)self.hash]] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
         dispatch_set_target_queue(self.isolationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
 
     }
@@ -115,7 +115,7 @@
         return;
     }
 
-    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
+    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, (unsigned long)data.length);
     NSString* contentType = self.currentRequest.env[@"HTTP_CONTENT_TYPE"];
     if ([contentType hasPrefix:CRRequestTypeMultipart]) {
         NSError* bodyParsingError;
@@ -153,7 +153,7 @@
             NSLog(@" * bodyParsingError = %@", bodyParsingError);
         } else {
             NSLog(@" * request.body = %@", self.currentRequest.body);
-            NSLog(@" * bufferedBodyData = %lu bytes", self.currentRequest.bufferedBodyData.length);
+            NSLog(@" * bufferedBodyData = %lu bytes", (unsigned long)self.currentRequest.bufferedBodyData.length);
         }
     }
 
