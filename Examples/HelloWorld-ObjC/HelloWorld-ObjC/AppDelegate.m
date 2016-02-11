@@ -155,13 +155,6 @@
     [self.server addController:[MultipartViewController class] withNibName:@"MultipartViewController" bundle:nil forPath:@"/multipart"];
     [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller"];
 
-    // Testing
-
-    [[CRMimeTypeHelper sharedHelper] setMimeType:@"application/xml; charset=utf-8" forExtension:@"config"];
-
-    NSString* publicFilesPath = @"/";
-    [self.server addStaticDirectoryAtPath:publicFilesPath forPath:@"/pub" options:CRStaticDirectoryServingOptionsAutoIndex|CRStaticDirectoryServingOptionsCacheFiles|CRStaticDirectoryServingOptionsFollowSymlinks];
-
     // Serve static files from "/Public" (relative to bundle)
     NSString* staticFilesPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"];
     [self.server addStaticDirectoryAtPath:staticFilesPath forPath:@"/static" options:CRStaticDirectoryServingOptionsCacheFiles];
