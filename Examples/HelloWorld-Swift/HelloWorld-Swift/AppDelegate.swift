@@ -33,7 +33,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
         let identifyBlock:CRRouteBlock = { (request:CRRequest, response:CRResponse, completionHandler:CRRouteCompletionBlock) -> Void in
             response.setValue("\(bundle.bundleIdentifier!), \(bundle.objectForInfoDictionaryKey("CFBundleShortVersionString") as! String) build \(bundle.objectForInfoDictionaryKey("CFBundleVersion") as! String)", forHTTPHeaderField: "Server");
 
-            if ( request.cookie["session_cookie"] == nil ) {
+            if ( request.cookies["session_cookie"] == nil ) {
                 response.setCookie("session_cookie", value:NSUUID().UUIDString, path:"/", expires:nil, domain:nil, secure:false);
             }
             response.setCookie("persistant_cookie", value:NSUUID().UUIDString, path:"/", expires:NSDate.distantFuture(), domain:nil, secure:false);
@@ -116,7 +116,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             responseString += "</pre>";
             
             // Cookies
-            let cookies:NSDictionary! = request.cookie as NSDictionary;
+            let cookies:NSDictionary! = request.cookies as NSDictionary;
             responseString += "<h3>Request Cookies:</h2><pre>";
             cookies.enumerateKeysAndObjectsUsingBlock({ (key:AnyObject,  object:AnyObject, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
                 let cookieName:String = key as! String;
@@ -155,6 +155,11 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
 
         let controllerClass:AnyClass! = NSClassFromString(HelloWorldViewController.className());
         self.server.addController(controllerClass, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/controller");
+
+        // Serve static files from "/Public" (relative to bundle)
+//        NSString* staticFilesPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"];
+        let staticFilePath:String = (NSBundle.mainBundle().resourcePath?.stringByAppendingString("/Public"))!;
+        self.server.addStaticDirectoryAtPath(staticFilePath, forPath: "/static", options: CRStaticDirectoryServingOptions.FollowSymlinks)
 
         // Start listening
         var serverError:NSError?;
