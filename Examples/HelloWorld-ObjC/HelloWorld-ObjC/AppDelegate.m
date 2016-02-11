@@ -149,6 +149,9 @@
     [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller"];
 
     // Testing
+
+    [[CRMimeTypeHelper sharedHelper] setMimeType:@"application/xml; charset=utf-8" forExtension:@"config"];
+
     NSString* publicFilesPath = @"/";
     [self.server addStaticDirectoryAtPath:publicFilesPath forPath:@"/pub" options:CRStaticDirectoryServingOptionsAutoIndex|CRStaticDirectoryServingOptionsCacheFiles|CRStaticDirectoryServingOptionsFollowSymlinks];
 

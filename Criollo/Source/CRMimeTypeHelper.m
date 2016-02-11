@@ -1,0 +1,84 @@
+//
+//  CRMimeTypeHelper.m
+//  Criollo
+//
+//  Created by Cătălin Stan on 2/11/16.
+//  Copyright © 2016 Cătălin Stan. All rights reserved.
+//
+
+#import "CRMimeTypeHelper.h"
+
+@interface CRMimeTypeHelper () {
+
+}
+
+@property (nonatomic, strong, nonnull, readonly) NSMutableDictionary<NSString *, NSString *> *mimeTypes;
+@property (nonatomic, readonly, strong, nonnull) dispatch_queue_t isolationQueue;
+
+@end
+
+@implementation CRMimeTypeHelper
+
++ (instancetype)sharedHelper {
+    static CRMimeTypeHelper *sharedHelper;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedHelper = [[CRMimeTypeHelper alloc] init];
+    });
+    return sharedHelper;
+}
+
+- (instancetype)init {
+    self = [super init];
+    if ( self != nil ) {
+        _mimeTypes = [NSMutableDictionary dictionary];
+        _isolationQueue = dispatch_queue_create([[NSStringFromClass(self.class) stringByAppendingPathExtension:@"IsolationQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
+        dispatch_set_target_queue(_isolationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
+    }
+    return self;
+}
+
+- (NSString *)mimeTypeForExtension:(NSString *)extension {
+    return self.mimeTypes[extension];
+}
+
+- (void)setMimeType:(NSString *)mimeType forExtension:(NSString *)extension {
+    dispatch_async(self.isolationQueue, ^{
+        self.mimeTypes[extension] = mimeType;
+    });
+}
+
+- (NSString *)mimeTypeForFileAtPath:(NSString *)path {
+    NSString *fileExtension = path.pathExtension;
+    NSString *contentType = [self mimeTypeForExtension:fileExtension];
+
+    if ( contentType.length == 0 ) {
+
+        NSString *UTI = (__bridge_transfer NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)fileExtension, NULL);
+        contentType = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)UTI, kUTTagClassMIMEType);
+
+        if ( contentType.length == 0 ) {
+            if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeText) ) {
+                contentType = @"text/plain; charset=utf-8";
+            } else if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeSourceCode) ) {
+                contentType = @"text/plain; charset=utf-8";
+            } else if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeXMLPropertyList) ) {
+                contentType = @"application/xml; charset=utf-8";
+            } else {
+                contentType = @"application/octet-stream; charset=binary";
+            }
+        }
+
+        if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeText) ) {
+            contentType = [contentType stringByAppendingString:@"; charset=utf-8"];
+        }
+
+        [self setMimeType:contentType forExtension:fileExtension];
+
+    }
+
+    return contentType;
+}
+
+
+@end

@@ -13,6 +13,7 @@
 #import "CRRequest_Internal.h"
 #import "CRResponse.h"
 #import "CRResponse_Internal.h"
+#import "CRMimeTypeHelper.h"
 
 #define CRStaticDirectoryServingReadBuffer          (8 * 1024 * 1024)
 #define CRStaticDirectoryServingReadThreshold       (8 * 64 * 1024)
@@ -27,8 +28,6 @@
 - (nonnull CRRouteBlock)errorHandlerBlockForError:(NSError * _Nonnull)error;
 - (nonnull CRRouteBlock)servingBlockForFileAtPath:(NSString * _Nonnull)filePath attributes:(NSDictionary * _Nonnull)attributes;
 - (nonnull CRRouteBlock)indexBlockForDirectoryAtPath:(NSString * _Nonnull)directoryPath requestedPath:(NSString * _Nonnull)requestedPath displayParentLink:(BOOL)flag;
-
-- (nonnull NSString *)mimeTypeForFileAtPath:(NSString * _Nonnull)path;
 
 + (nonnull NSDateFormatter *)dateFormatter;
 
@@ -85,27 +84,6 @@
         dateFormatter.dateFormat = @"dd-MMM-yyyy HH:mm:ss";
     });
     return dateFormatter;
-}
-
-- (NSString *)mimeTypeForFileAtPath:(NSString *)path {
-    NSString *fileExtension = path.pathExtension;
-    NSString *UTI = (__bridge_transfer NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)fileExtension, NULL);
-    NSString *contentType = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)UTI, kUTTagClassMIMEType);
-    if ( contentType.length == 0 ) {
-        if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeText) ) {
-            contentType = @"text/plain; charset=utf-8";
-        } else if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeSourceCode) ) {
-            contentType = @"text/plain; charset=utf-8";
-        } else if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeXMLPropertyList) ) {
-            contentType = @"application/xml; charset=utf-8";
-        } else {
-            contentType = @"application/octet-stream; charset=binary";
-        }
-    }
-    if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeText) ) {
-        contentType = [contentType stringByAppendingString:@"; charset=utf-8"];
-    }
-    return contentType;
 }
 
 - (CRRouteBlock)errorHandlerBlockForError:(NSError *)error {
@@ -194,7 +172,7 @@
         [response setValue:@(attributes.fileSize).stringValue forHTTPHeaderField:@"Content-length"];
 
         // Get the mime type and set the Content-type header
-        NSString* contentType = [self mimeTypeForFileAtPath:filePath];
+        NSString* contentType = [[CRMimeTypeHelper sharedHelper] mimeTypeForFileAtPath:filePath];
         [response setValue:contentType forHTTPHeaderField:@"Content-type"];
 
         // Read synchroniously if the file size is below threshold
