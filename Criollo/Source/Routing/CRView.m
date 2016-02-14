@@ -8,7 +8,7 @@
 
 #import "CRView.h"
 
-#define CRViewVariableFormat @"[%@]"
+#define CRViewVariableFormat @"{{%@}}"
 
 @interface CRView ()
 
