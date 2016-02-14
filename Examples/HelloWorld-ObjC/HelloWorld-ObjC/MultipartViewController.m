@@ -15,7 +15,7 @@
 }
 
 - (NSString *)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response {
-    self.templateVariables[@"TITLE"] = NSStringFromClass(self.class);
+    self.templateVariables[@"title"] = NSStringFromClass(self.class);
 
     return [super presentViewControllerWithRequest:request response:response];
 }
