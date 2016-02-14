@@ -11,7 +11,7 @@ import Criollo
 class HelloWorldViewController: CRViewController {
 
     override func presentViewControllerWithRequest(request: CRRequest, response: CRResponse) -> String {
-        self.templateVariables["TITLE"] = self.className;
+        self.templateVariables["title"] = self.className;
 
         var text:String = String();
         // Request Enviroment
@@ -29,7 +29,7 @@ class HelloWorldViewController: CRViewController {
         });
         text += "</pre>";
 
-        self.templateVariables["TEXT"] = text;
+        self.templateVariables["text"] = text;
         return super.presentViewControllerWithRequest(request, response: response);
     }
 
