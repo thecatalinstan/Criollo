@@ -19,3 +19,4 @@ DerivedData
 
 .DS_Store
 Criollo.xcodeproj/project.xcworkspace/xcshareddata
+*.min.*
