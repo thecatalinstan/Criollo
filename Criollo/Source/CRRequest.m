@@ -84,7 +84,7 @@
         NSArray<NSString *> *queryVars = [_env[@"QUERY_STRING"] componentsSeparatedByString:CRRequestKeySeparator];
         [queryVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSArray<NSString *> *queryVarComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
-            query[queryVarComponents[0]] = queryVarComponents.count > 1 ? queryVarComponents[1] : @"";
+            query[queryVarComponents[0].stringByRemovingPercentEncoding] = queryVarComponents.count > 1 ? queryVarComponents[1].stringByRemovingPercentEncoding : @"";
         }];
     }
     _query = query;
@@ -293,7 +293,7 @@
     NSArray<NSString *> *bodyVars = [bodyString componentsSeparatedByString:CRRequestKeySeparator];
     [bodyVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSArray<NSString *> *bodyVarComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
-        body[bodyVarComponents[0]] = bodyVarComponents.count > 1 ? bodyVarComponents[1] : @"";
+        body[bodyVarComponents[0].stringByRemovingPercentEncoding] = bodyVarComponents.count > 1 ? bodyVarComponents[1].stringByRemovingPercentEncoding : @"";
     }];
     _body = body;
     self.bufferedBodyData = nil;
