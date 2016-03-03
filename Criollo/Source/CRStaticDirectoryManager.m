@@ -162,6 +162,8 @@
 
         [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
         [response sendString:responseString];
+
+        completionHandler();
     };
     return block;
 }
