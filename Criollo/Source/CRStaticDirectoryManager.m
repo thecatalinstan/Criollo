@@ -108,6 +108,8 @@
         [response setStatusCode:statusCode description:nil];
         [response setValue:@"text-plain" forHTTPHeaderField:@"Content-type"];
         [response sendFormat:@"%@ %lu\n%@\n\n%@\n\n%@", error.domain, error.code, error.localizedDescription, error.userInfo, [NSThread callStackSymbols]];
+
+        completionHandler();
     };
     return block;
 }
