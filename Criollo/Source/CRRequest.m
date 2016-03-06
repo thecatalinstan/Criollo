@@ -13,6 +13,7 @@
 #import "CRConnection_Internal.h"
 #import "CRServer.h"
 #import "CRServer_Internal.h"
+#import "CRRequestRange.h"
 
 @implementation CRRequest {
     NSMutableDictionary* _env;
@@ -44,13 +45,13 @@
 - (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version connection:(CRConnection *)connection env:(NSDictionary *)env {
     self = [super init];
     if ( self != nil ) {
+        self.connection = connection;
         self.message = CFBridgingRelease( CFHTTPMessageCreateRequest(NULL, (__bridge CFStringRef)method, (__bridge CFURLRef)URL, (__bridge CFStringRef)version) );
         if ( env == nil ) {
             _env = [NSMutableDictionary dictionary];
         } else {
             [self setEnv:env];
         }
-        self.connection = connection;
     }
     return self;
 }
@@ -99,6 +100,11 @@
         }];
     }
     _cookies = cookies;
+
+    // Parse Range header
+    if ( _env[@"HTTP_RANGE"] != nil ) {
+        _range = [CRRequestRange reuestRangeWithRangesSpecifier:_env[@"HTTP_RANGE"]];
+    }
 }
 
 - (void)setEnv:(NSString *)obj forKey:(NSString *)key {
