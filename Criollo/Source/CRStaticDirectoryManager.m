@@ -13,10 +13,15 @@
 #import "CRRequest_Internal.h"
 #import "CRResponse.h"
 #import "CRResponse_Internal.h"
+#import "CRConnection.h"
+#import "CRConnection_Internal.h"
 #import "CRMimeTypeHelper.h"
 
 #define CRStaticDirectoryServingReadBuffer          (8 * 1024 * 1024)
 #define CRStaticDirectoryServingReadThreshold       (8 * 64 * 1024)
+
+#define CRStaticDirectoryIndexFileNameLength        70
+#define CRStaticDirectoryIndexFileSizeLength        20
 
 @interface CRStaticDirectoryManager ()
 
@@ -104,10 +109,10 @@
         }
 
 //        [CRServer errorHandlingBlockWithStatus:statusCode](request, response, completionHandler);
-
         [response setStatusCode:statusCode description:nil];
         [response setValue:@"text-plain" forHTTPHeaderField:@"Content-type"];
         [response sendFormat:@"%@ %lu\n%@\n\n%@\n\n%@", error.domain, error.code, error.localizedDescription, error.userInfo, [NSThread callStackSymbols]];
+        completionHandler();
     };
     return block;
 }
@@ -130,11 +135,10 @@
         }
 
         [responseString appendString:@"<pre>"];
+
         if ( flag ) {
             [responseString appendFormat:@"<a href=\"%@\">../</a>\n", requestedPath.stringByDeletingLastPathComponent];
         }
-
-//        [responseString appendFormat:@"%@", directoryContents];
 
         [directoryContents enumerateObjectsUsingBlock:^(NSURL * _Nonnull URL, NSUInteger idx, BOOL * _Nonnull stop) {
             NSError* attributesError;
@@ -145,16 +149,27 @@
             }
 
             BOOL isDirectory = [attributes.fileType isEqualToString:NSFileTypeDirectory];
+            NSString* fullName = [URL.lastPathComponent stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
             NSString* fileName = URL.lastPathComponent;
-            if ( fileName.length > 50 ) {
-                fileName = [fileName substringToIndex:50];
+            NSString* fileNamePadding;
+            if ( fileName.length > CRStaticDirectoryIndexFileNameLength ) {
+                fileName = [fileName substringToIndex:CRStaticDirectoryIndexFileNameLength - (isDirectory ? 1 : 0)];
+                fileNamePadding = @"";
+            } else {
+                fileNamePadding = [@"" stringByPaddingToLength:CRStaticDirectoryIndexFileNameLength - fileName.length - (isDirectory ? 1 : 0) withString:@" " startingAtIndex:0];
             }
-            NSString* fileNamePadding = [@"" stringByPaddingToLength:50 - fileName.length - (isDirectory ? 1 : 0) withString:@" " startingAtIndex:0];
+
             NSString* fileModificationDate = [[CRStaticDirectoryManager dateFormatter] stringFromDate:attributes.fileModificationDate];
             NSString* fileSize = @(attributes.fileSize).stringValue;
-            NSString* fileSizePadding = [@"" stringByPaddingToLength:16 - fileSize.length withString:@" " startingAtIndex:0];
+            NSString* fileSizePadding;
+            if ( fileSize.length > CRStaticDirectoryIndexFileSizeLength ) {
+                fileSize =  [fileSize substringToIndex:CRStaticDirectoryIndexFileSizeLength];
+                fileSizePadding = @"";
+            } else {
+                fileSizePadding = [@"" stringByPaddingToLength:CRStaticDirectoryIndexFileSizeLength - fileSize.length withString:@" " startingAtIndex:0];
+            }
 
-            [responseString appendFormat:@"<a href=\"%@/%@\">%@%@</a>%@ %@ %@%@\n", requestedPath, URL.lastPathComponent, fileName, isDirectory ? @"/" : @"", fileNamePadding, fileModificationDate, fileSizePadding, fileSize];
+            [responseString appendFormat:@"<a href=\"%@/%@\" title=\"%@\">%@%@</a>%@ %@ %@%@\n", requestedPath, URL.lastPathComponent, fullName, fileName, isDirectory ? @"/" : @"", fileNamePadding, fileModificationDate, fileSizePadding, fileSize];
         }];
         [responseString appendString:@"</pre>"];
 
@@ -162,6 +177,7 @@
 
         [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
         [response sendString:responseString];
+        completionHandler();
     };
     return block;
 }
@@ -184,6 +200,7 @@
                 [self errorHandlerBlockForError:fileReadError](request, response, completionHandler);
             } else {
                 [response sendData:fileData];
+                completionHandler();
             }
 
         } else {
@@ -202,7 +219,7 @@
                         userInfo[NSUnderlyingErrorKey] = underlyingError;
                     }
                     NSError* channelReleaseError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerReleaseFailed userInfo:userInfo];
-                    [self errorHandlerBlockForError:channelReleaseError](request, response, completionHandler);
+                    [self errorHandlerBlockForError:channelReleaseError](request, response, ^{});
                 }
             });
 
@@ -210,19 +227,8 @@
             dispatch_io_set_low_water(fileReadChannel, CRStaticDirectoryServingReadThreshold);
 
             dispatch_io_read(fileReadChannel, 0, SIZE_MAX, self.fileReadingQueue, ^(bool done, dispatch_data_t data, int error) {
-                if (error) {
+                if (error || request.connection == nil || response.connection == nil) {
                     dispatch_io_close(fileReadChannel, DISPATCH_IO_STOP);
-                    NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
-                    userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"There was an error releasing the file read channel",);
-                    userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
-                    userInfo[NSFilePathErrorKey] = filePath;
-                    NSString* underlyingErrorDescription = [NSString stringWithCString:strerror(error) encoding:NSUTF8StringEncoding];
-                    if ( underlyingErrorDescription.length > 0 ) {
-                        NSError* underlyingError = [NSError errorWithDomain:NSPOSIXErrorDomain code:@(error).integerValue userInfo:@{NSLocalizedDescriptionKey: underlyingErrorDescription}];
-                        userInfo[NSUnderlyingErrorKey] = underlyingError;
-                    }
-                    NSError* channelReleaseError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerReleaseFailed userInfo:userInfo];
-                    [self errorHandlerBlockForError:channelReleaseError](request, response, completionHandler);
                     return;
                 }
 
@@ -234,6 +240,8 @@
                     dispatch_io_close(fileReadChannel, 0);
                 }
             });
+
+            completionHandler();
         }
     };
     return block;
