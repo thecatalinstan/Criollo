@@ -24,6 +24,16 @@
 #define CRStaticDirectoryIndexFileNameLength        70
 #define CRStaticDirectoryIndexFileSizeLength        20
 
+#define CRStaticDirectoryManagerErrorDomain                         @"CRStaticDirectoryManagerErrorDomain"
+
+#define CRStaticDirectoryManagerReleaseFailedError                       101
+#define CRStaticDirectoryManagerDirectoryListingForbiddenError           102
+#define CRStaticDirectoryManagerRestrictedFileTypeError                  103
+
+#define CRStaticDirectoryManagerRangeNotSatisfiableError                 201
+
+#define CRStaticDirectoryManagerNotImplementedError                      999
+
 @interface CRStaticDirectoryManager ()
 
 @property (nonatomic, nonnull, readonly) NSString * prefix;

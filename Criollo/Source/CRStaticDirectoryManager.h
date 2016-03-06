@@ -8,16 +8,6 @@
 
 #import "CRTypes.h"
 
-#define CRStaticDirectoryManagerErrorDomain                         @"CRStaticDirectoryManagerErrorDomain"
-
-#define CRStaticDirectoryManagerReleaseFailedError                       101
-#define CRStaticDirectoryManagerDirectoryListingForbiddenError           102
-#define CRStaticDirectoryManagerRestrictedFileTypeError                  103
-
-#define CRStaticDirectoryManagerRangeNotSatisfiableError                 201
-
-#define CRStaticDirectoryManagerNotImplementedError                      999
-
 @interface CRStaticDirectoryManager : NSObject
 
 @property (nonatomic, nonnull, readonly) NSString * directoryPath;
