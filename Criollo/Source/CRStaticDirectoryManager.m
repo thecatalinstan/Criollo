@@ -107,7 +107,6 @@
         }
 
 //        [CRServer errorHandlingBlockWithStatus:statusCode](request, response, completionHandler);
-
         [response setStatusCode:statusCode description:nil];
         [response setValue:@"text-plain" forHTTPHeaderField:@"Content-type"];
         [response sendFormat:@"%@ %lu\n%@\n\n%@\n\n%@", error.domain, error.code, error.localizedDescription, error.userInfo, [NSThread callStackSymbols]];
@@ -199,6 +198,7 @@
                 [self errorHandlerBlockForError:fileReadError](request, response, completionHandler);
             } else {
                 [response sendData:fileData];
+                completionHandler();
             }
 
         } else {
@@ -217,7 +217,7 @@
                         userInfo[NSUnderlyingErrorKey] = underlyingError;
                     }
                     NSError* channelReleaseError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerReleaseFailed userInfo:userInfo];
-                    [self errorHandlerBlockForError:channelReleaseError](request, response, completionHandler);
+                    [self errorHandlerBlockForError:channelReleaseError](request, response, ^{});
                 }
             });
 
@@ -237,7 +237,7 @@
                         userInfo[NSUnderlyingErrorKey] = underlyingError;
                     }
                     NSError* channelReleaseError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerReleaseFailed userInfo:userInfo];
-                    [self errorHandlerBlockForError:channelReleaseError](request, response, completionHandler);
+                    [self errorHandlerBlockForError:channelReleaseError](request, response, ^{});
                     return;
                 }
 
@@ -249,6 +249,8 @@
                     dispatch_io_close(fileReadChannel, 0);
                 }
             });
+
+            completionHandler();
         }
     };
     return block;
