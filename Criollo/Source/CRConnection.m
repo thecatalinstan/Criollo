@@ -26,8 +26,6 @@
 
 @interface CRConnection () <GCDAsyncSocketDelegate>
 
-@property (nonatomic, readonly) BOOL willDisconnect;
-
 - (void)bufferBodyData:(nonnull NSData *)data forRequest:(nonnull CRRequest *)request;
 - (void)bufferResponseData:(nonnull NSData *)data forRequest:(nonnull CRRequest *)request;
 
