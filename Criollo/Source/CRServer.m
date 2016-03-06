@@ -17,8 +17,6 @@
 #import "CRRoute.h"
 #import "CRViewController.h"
 
-NSUInteger const CRErrorSocketError = 2001;
-
 @interface CRServer () <GCDAsyncSocketDelegate, CRConnectionDelegate>
 
 @property (nonatomic, strong, nonnull) GCDAsyncSocket* socket;
@@ -40,11 +38,47 @@ NSUInteger const CRErrorSocketError = 2001;
 
 @implementation CRServer
 
-+ (CRRouteBlock)errorHandlingBlockWithStatus:(NSUInteger)statusCode {
++ (CRRouteBlock)errorHandlingBlockWithStatus:(NSUInteger)statusCode error:(NSError *)error {
     return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
         [response setStatusCode:statusCode description:nil];
         [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-        [response sendFormat:@"Cennot %@ %@", request.method, request.URL.path];
+
+        NSMutableString* responseString = [NSMutableString string];
+#if DEBUG
+
+        NSError* err;
+        if (error == nil) {
+            NSMutableDictionary* mutableUserInfo = [NSMutableDictionary dictionaryWithCapacity:2];
+            mutableUserInfo[NSURLErrorFailingURLErrorKey] = request.URL;
+            err = [NSError errorWithDomain:CRServerErrorDomain code:statusCode userInfo:mutableUserInfo];
+        } else {
+            err = error;
+        }
+
+        // Error details
+        [responseString appendFormat:@"%@ %lu\n%@\n", err.domain, err.code, err.localizedDescription];
+
+        // Error user-info
+        if ( err.userInfo.count > 0 ) {
+            [responseString appendString:@"\nUser Info\n"];
+            [err.userInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                [responseString appendFormat:@"%@: %@\n", key, obj];
+            }];
+        }
+
+        // Stack trace
+        [responseString appendString:@"\nStack Trace\n"];
+        [[NSThread callStackSymbols] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [responseString appendFormat:@"%@\n", obj];
+        }];
+#else
+        [responseString appendFormat:@"Cennot %@ %@", request.method, request.URL.path];
+#endif
+
+        [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
+        [response sendString:responseString];
+
+        completionHandler();
     };
 }
 

@@ -8,9 +8,10 @@
 
 #import "CRTypes.h"
 
-@class CRServer, CRServerConfiguration, GCDAsyncSocket, CRConnection, CRRequest, CRResponse, CRRoute;
+#define CRServerErrorDomain                   @"CRServerErrorDomain"
+#define CRServerSocketError                   2001
 
-FOUNDATION_EXPORT NSUInteger const CRErrorSocketError;
+@class CRServer, CRServerConfiguration, GCDAsyncSocket, CRConnection, CRRequest, CRResponse, CRRoute;
 
 @protocol CRServerDelegate <NSObject>
 
