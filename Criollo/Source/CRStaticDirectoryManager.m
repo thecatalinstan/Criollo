@@ -13,6 +13,8 @@
 #import "CRRequest_Internal.h"
 #import "CRResponse.h"
 #import "CRResponse_Internal.h"
+#import "CRConnection.h"
+#import "CRConnection_Internal.h"
 #import "CRMimeTypeHelper.h"
 
 #define CRStaticDirectoryServingReadBuffer          (8 * 1024 * 1024)
@@ -225,19 +227,8 @@
             dispatch_io_set_low_water(fileReadChannel, CRStaticDirectoryServingReadThreshold);
 
             dispatch_io_read(fileReadChannel, 0, SIZE_MAX, self.fileReadingQueue, ^(bool done, dispatch_data_t data, int error) {
-                if (error) {
+                if (error || request.connection == nil || response.connection == nil) {
                     dispatch_io_close(fileReadChannel, DISPATCH_IO_STOP);
-                    NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
-                    userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"There was an error releasing the file read channel",);
-                    userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
-                    userInfo[NSFilePathErrorKey] = filePath;
-                    NSString* underlyingErrorDescription = [NSString stringWithCString:strerror(error) encoding:NSUTF8StringEncoding];
-                    if ( underlyingErrorDescription.length > 0 ) {
-                        NSError* underlyingError = [NSError errorWithDomain:NSPOSIXErrorDomain code:@(error).integerValue userInfo:@{NSLocalizedDescriptionKey: underlyingErrorDescription}];
-                        userInfo[NSUnderlyingErrorKey] = underlyingError;
-                    }
-                    NSError* channelReleaseError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerReleaseFailed userInfo:userInfo];
-                    [self errorHandlerBlockForError:channelReleaseError](request, response, ^{});
                     return;
                 }
 
