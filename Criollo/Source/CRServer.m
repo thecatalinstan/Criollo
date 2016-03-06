@@ -50,6 +50,15 @@
         NSError* err;
         if (error == nil) {
             NSMutableDictionary* mutableUserInfo = [NSMutableDictionary dictionaryWithCapacity:2];
+            NSString* errorDescription;
+            switch (statusCode) {
+                case 404:
+                    errorDescription = [NSString stringWithFormat:NSLocalizedString(@"No routes defined for “%@%@%@”",), request.method, request.URL.path, [request.URL.path hasSuffix:CRPathSeparator] ? @"" : CRPathSeparator];
+                    break;
+            }
+            if ( errorDescription ) {
+                mutableUserInfo[NSLocalizedDescriptionKey] = errorDescription;
+            }
             mutableUserInfo[NSURLErrorFailingURLErrorKey] = request.URL;
             err = [NSError errorWithDomain:CRServerErrorDomain code:statusCode userInfo:mutableUserInfo];
         } else {
