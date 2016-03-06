@@ -171,8 +171,7 @@
     // Debugging
     [self.server addStaticDirectoryAtPath:@"~" forPath:@"/pub" options:CRStaticDirectoryServingOptionsAutoIndex];
     [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-        NSLog(@"%@", request.allHTTPHeaderFields);
-        NSLog(@"%@", request.range);
+//        NSLog(@"\n------------\n%@\n%@\n%@\n\n", CFHTTPMessageCopyAllHeaderFields((__bridge CFHTTPMessageRef _Nullable)[request valueForKey:@"message"]), CFHTTPMessageCopyResponseStatusLine((__bridge CFHTTPMessageRef _Nullable)[response valueForKey:@"message"]), CFHTTPMessageCopyAllHeaderFields((__bridge CFHTTPMessageRef _Nullable)[response valueForKey:@"message"]));
     }];
 #endif
 
@@ -235,7 +234,8 @@
 
 #if LogRequests
 - (void)server:(CRServer *)server didFinishRequest:(CRRequest *)request {
-    [CRApp logFormat:@" * %@ %@ - %lu - %@", request.response.connection.remoteAddress, request, request.response.statusCode, request.env[@"HTTP_USER_AGENT"]];
+    NSString* contentLength = [request.response valueForHTTPHeaderField:@"Content-Length"];
+    [CRApp logFormat:@" * %@ %@ - %lu %@ - %@", request.response.connection.remoteAddress, request, request.response.statusCode, contentLength ? : @"-", request.env[@"HTTP_USER_AGENT"]];
 }
 #endif
 

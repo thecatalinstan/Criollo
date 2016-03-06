@@ -45,8 +45,8 @@
         [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
 
         NSMutableString* responseString = [NSMutableString string];
-#if DEBUG
 
+#if DEBUG
         NSError* err;
         if (error == nil) {
             NSMutableDictionary* mutableUserInfo = [NSMutableDictionary dictionaryWithCapacity:2];
