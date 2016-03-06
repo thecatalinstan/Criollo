@@ -18,6 +18,9 @@
 #define CRStaticDirectoryServingReadBuffer          (8 * 1024 * 1024)
 #define CRStaticDirectoryServingReadThreshold       (8 * 64 * 1024)
 
+#define CRStaticDirectoryIndexFileNameLength        70
+#define CRStaticDirectoryIndexFileSizeLength        20
+
 @interface CRStaticDirectoryManager ()
 
 @property (nonatomic, nonnull, readonly) NSString * prefix;
@@ -108,7 +111,6 @@
         [response setStatusCode:statusCode description:nil];
         [response setValue:@"text-plain" forHTTPHeaderField:@"Content-type"];
         [response sendFormat:@"%@ %lu\n%@\n\n%@\n\n%@", error.domain, error.code, error.localizedDescription, error.userInfo, [NSThread callStackSymbols]];
-
         completionHandler();
     };
     return block;
@@ -132,11 +134,10 @@
         }
 
         [responseString appendString:@"<pre>"];
+
         if ( flag ) {
             [responseString appendFormat:@"<a href=\"%@\">../</a>\n", requestedPath.stringByDeletingLastPathComponent];
         }
-
-//        [responseString appendFormat:@"%@", directoryContents];
 
         [directoryContents enumerateObjectsUsingBlock:^(NSURL * _Nonnull URL, NSUInteger idx, BOOL * _Nonnull stop) {
             NSError* attributesError;
@@ -147,16 +148,27 @@
             }
 
             BOOL isDirectory = [attributes.fileType isEqualToString:NSFileTypeDirectory];
+            NSString* fullName = [URL.lastPathComponent stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
             NSString* fileName = URL.lastPathComponent;
-            if ( fileName.length > 50 ) {
-                fileName = [fileName substringToIndex:50];
+            NSString* fileNamePadding;
+            if ( fileName.length > CRStaticDirectoryIndexFileNameLength ) {
+                fileName = [fileName substringToIndex:CRStaticDirectoryIndexFileNameLength - (isDirectory ? 1 : 0)];
+                fileNamePadding = @"";
+            } else {
+                fileNamePadding = [@"" stringByPaddingToLength:CRStaticDirectoryIndexFileNameLength - fileName.length - (isDirectory ? 1 : 0) withString:@" " startingAtIndex:0];
             }
-            NSString* fileNamePadding = [@"" stringByPaddingToLength:50 - fileName.length - (isDirectory ? 1 : 0) withString:@" " startingAtIndex:0];
+
             NSString* fileModificationDate = [[CRStaticDirectoryManager dateFormatter] stringFromDate:attributes.fileModificationDate];
             NSString* fileSize = @(attributes.fileSize).stringValue;
-            NSString* fileSizePadding = [@"" stringByPaddingToLength:16 - fileSize.length withString:@" " startingAtIndex:0];
+            NSString* fileSizePadding;
+            if ( fileSize.length > CRStaticDirectoryIndexFileSizeLength ) {
+                fileSize =  [fileSize substringToIndex:CRStaticDirectoryIndexFileSizeLength];
+                fileSizePadding = @"";
+            } else {
+                fileSizePadding = [@"" stringByPaddingToLength:CRStaticDirectoryIndexFileSizeLength - fileSize.length withString:@" " startingAtIndex:0];
+            }
 
-            [responseString appendFormat:@"<a href=\"%@/%@\">%@%@</a>%@ %@ %@%@\n", requestedPath, URL.lastPathComponent, fileName, isDirectory ? @"/" : @"", fileNamePadding, fileModificationDate, fileSizePadding, fileSize];
+            [responseString appendFormat:@"<a href=\"%@/%@\" title=\"%@\">%@%@</a>%@ %@ %@%@\n", requestedPath, URL.lastPathComponent, fullName, fileName, isDirectory ? @"/" : @"", fileNamePadding, fileModificationDate, fileSizePadding, fileSize];
         }];
         [responseString appendString:@"</pre>"];
 
@@ -164,7 +176,6 @@
 
         [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
         [response sendString:responseString];
-
         completionHandler();
     };
     return block;
