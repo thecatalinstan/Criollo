@@ -62,6 +62,30 @@
     return dataRange.length > 0 && dataRange.location != NSNotFound && dataRange.location + dataRange.length <= fileSize;
 }
 
+- (NSString *)contentRangeSpecForFileSize:(NSUInteger)fileSize {
+    NSString* contentRangeSpec;
+    NSString* fileSizeString = fileSize == UINT_MAX ? @"*" : @(fileSize).stringValue;
+    if ([self isSatisfiableForFileSize:fileSize] ) {
+        NSRange dataRange = [self dataRangeForFileSize:fileSize];
+        contentRangeSpec = [NSString stringWithFormat:@"%lu-%lu/%@", dataRange.location, dataRange.length - 1, fileSizeString];
+    } else {
+        contentRangeSpec = [NSString stringWithFormat:@"*/%@", fileSizeString];
+    }
+    return contentRangeSpec;
+}
+
+- (NSString *)contentLengthSpecForFileSize:(NSUInteger)fileSize {
+    NSString* contentLengthSpec;
+    if ([self isSatisfiableForFileSize:fileSize] ) {
+        NSRange dataRange = [self dataRangeForFileSize:fileSize];
+        contentLengthSpec = @(dataRange.length - dataRange.location).stringValue;
+    } else {
+        contentLengthSpec = @(fileSize).stringValue;
+    }
+    return contentLengthSpec;
+}
+
+
 @end
 
 @implementation CRRequestRange

@@ -106,7 +106,17 @@
                 default:
                     break;
             }
-        } else {
+        } else if ([error.domain isEqualToString:CRStaticDirectoryManagerErrorDomain] ) {
+            switch ( error.code ) {
+                case CRStaticDirectoryManagerNotImplementedError:
+                    statusCode = 501;
+                    break;
+                case CRStaticDirectoryManagerRangeNotSatisfiableError:
+                    statusCode = 416;
+                    break;
+                default:
+                    break;
+            }
         }
 
 //        [CRServer errorHandlingBlockWithStatus:statusCode](request, response, completionHandler);
@@ -185,20 +195,48 @@
 
 - (CRRouteBlock)servingBlockForFileAtPath:(NSString *)filePath attributes:(NSDictionary *)attributes {
     CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+
+        // Send an unimplemented error if we are being requested to serve multipart byte-ranges
+        if ( request.range.byteRangeSet.count > 1 ) {
+            NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
+            userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"multipart/byte-range requests are not implemented",);
+            userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
+            userInfo[NSFilePathErrorKey] = filePath;
+            NSError* rangeError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerNotImplementedError userInfo:userInfo];
+            [self errorHandlerBlockForError:rangeError](request, response, completionHandler);
+            return;
+        }
+
         // Set the Content-length and Content-range headers
-        if ( [request.range isSatisfiableForFileSize:attributes.fileSize ] ) {
-            [response setStatusCode:206 description:nil];
-//            NSString* contentRangeHeader = [NSString stringWithFormat:@"%@ %lu-%lu/%llu", request.rangeUnits, request.range.location, request.range.length - 1, attributes.fileSize];
-//            [response setValue:contentRangeHeader forHTTPHeaderField:@"Content-Range"];
-//            NSString* conentRangeHeader = 
-//            [response setValue:contentRangeHeader forHTTPHeaderField:@"Content-length"];
+        if ( request.range.byteRangeSet.count > 0 ) {
+
+            NSString* contentRangeSpec = [request.range.byteRangeSet[0] contentRangeSpecForFileSize:attributes.fileSize];
+            [response setValue:contentRangeSpec forHTTPHeaderField:@"Content-Range"];
+
+            if ( [request.range isSatisfiableForFileSize:attributes.fileSize ] ) {
+                // Set partial content response header
+                [response setStatusCode:206 description:nil];
+                NSString* conentLengthSpec = [request.range.byteRangeSet[0] contentLengthSpecForFileSize:attributes.fileSize];
+                [response setValue:conentLengthSpec forHTTPHeaderField:@"Content-Length"];
+            } else {
+                NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
+                userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:NSLocalizedString(@"The requested byte-range %@-%@ / %lu could not be satisfied",), request.range.byteRangeSet[0].firstBytePos, request.range.byteRangeSet[0].lastBytePos, attributes.fileSize];
+                userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
+                userInfo[NSFilePathErrorKey] = filePath;
+                NSError* rangeError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerRangeNotSatisfiableError userInfo:userInfo];
+                [self errorHandlerBlockForError:rangeError](request, response, completionHandler);
+                return;
+            }
+
         } else {
-            [response setValue:@(attributes.fileSize).stringValue forHTTPHeaderField:@"Content-length"];
+            [response setValue:@(attributes.fileSize).stringValue forHTTPHeaderField:@"Content-Length"];
         }
 
         // Get the mime type and set the Content-type header
         NSString* contentType = [[CRMimeTypeHelper sharedHelper] mimeTypeForFileAtPath:filePath];
         [response setValue:contentType forHTTPHeaderField:@"Content-type"];
+
+        [response writeString:@""];
 
         // Read synchroniously if the file size is below threshold
         if ( attributes.fileSize <= CRStaticDirectoryServingReadThreshold ) {
@@ -232,7 +270,7 @@
                         NSError* underlyingError = [NSError errorWithDomain:NSPOSIXErrorDomain code:@(error).integerValue userInfo:@{NSLocalizedDescriptionKey: underlyingErrorDescription}];
                         userInfo[NSUnderlyingErrorKey] = underlyingError;
                     }
-                    NSError* channelReleaseError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerReleaseFailed userInfo:userInfo];
+                    NSError* channelReleaseError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerReleaseFailedError userInfo:userInfo];
                     [self errorHandlerBlockForError:channelReleaseError](request, response, ^{});
                 }
             });
@@ -290,7 +328,7 @@
                     userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"Directory index auto-generation is disabled",);
                     userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
                     userInfo[NSFilePathErrorKey] = requestedAbsolutePath;                    
-                    NSError* directoryListingError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerDirectoryListingForbidden userInfo:userInfo];
+                    NSError* directoryListingError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerDirectoryListingForbiddenError userInfo:userInfo];
                     [self errorHandlerBlockForError:directoryListingError](request, response, completionHandler);
                 }
             } else if ( [itemAttributes.fileType isEqualToString:NSFileTypeRegular] ) {                             // Regular files
@@ -302,7 +340,7 @@
                 userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:NSLocalizedString(@"Files of type “%@” are restricted.",), itemAttributes.fileType];
                 userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
                 userInfo[NSFilePathErrorKey] = requestedAbsolutePath;
-                NSError* restrictedFileTypeError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerRestrictedFileType userInfo:userInfo];
+                NSError* restrictedFileTypeError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerRestrictedFileTypeError userInfo:userInfo];
                 [self errorHandlerBlockForError:restrictedFileTypeError](request, response, completionHandler);
             }
         }

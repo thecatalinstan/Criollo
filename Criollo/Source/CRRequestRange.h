@@ -16,6 +16,9 @@
 - (NSRange)dataRangeForFileSize:(NSUInteger)fileSize;
 - (BOOL)isSatisfiableForFileSize:(NSUInteger)fileSize;
 
+- (nonnull NSString *)contentRangeSpecForFileSize:(NSUInteger)fileSize;
+- (nonnull NSString *)contentLengthSpecForFileSize:(NSUInteger)fileSize;
+
 @end
 
 @interface CRRequestRange : NSObject
