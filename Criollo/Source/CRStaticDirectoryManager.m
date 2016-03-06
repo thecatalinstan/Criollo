@@ -130,9 +130,12 @@
         }
 
 //        [CRServer errorHandlingBlockWithStatus:statusCode](request, response, completionHandler);
+
+        NSString* responseString = [NSString stringWithFormat:@"%@ %lu\n%@\n\n%@\n\n%@", error.domain, error.code, error.localizedDescription, error.userInfo, [NSThread callStackSymbols]];
         [response setStatusCode:statusCode description:nil];
-        [response setValue:@"text-plain" forHTTPHeaderField:@"Content-type"];
-        [response sendFormat:@"%@ %lu\n%@\n\n%@\n\n%@", error.domain, error.code, error.localizedDescription, error.userInfo, [NSThread callStackSymbols]];
+        [response setValue:@"text-plain" forHTTPHeaderField:@"Content-Type"];
+        [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
+        [response sendString:responseString];
         completionHandler();
     };
     return block;
