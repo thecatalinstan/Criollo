@@ -264,25 +264,33 @@
 }
 
 - (void)addBlock:(CRRouteBlock)block {
-    [self addBlock:block forPath:nil HTTPMethod:nil];
+    [self addBlock:block forPath:nil HTTPMethod:nil recursive:NO];
 }
 
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString*)path {
-    [self addBlock:block forPath:path HTTPMethod:nil];
+    [self addBlock:block forPath:path HTTPMethod:nil recursive:NO];
 }
 
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
+    [self addBlock:block forPath:path HTTPMethod:HTTPMethod recursive:NO];
+}
+
+- (void)addBlock:(CRRouteBlock)block forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod recursive:(BOOL)recursive {
     CRRoute* route = [CRRoute routeWithBlock:block];
-    [self addRoute:route forPath:path HTTPMethod:HTTPMethod recursive:NO];
+    [self addRoute:route forPath:path HTTPMethod:HTTPMethod recursive:recursive];
 }
 
 - (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path {
-    [self addController:controllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path HTTPMethod:nil];
+    [self addController:controllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path HTTPMethod:nil recursive:NO];
 }
 
 - (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
+    [self addController:controllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path HTTPMethod:HTTPMethod recursive:NO];
+}
+
+- (void)addController:(Class  _Nonnull __unsafe_unretained)controllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod recursive:(BOOL)recursive {
     CRRoute* route = [CRRoute routeWithControllerClass:controllerClass nibName:nibNameOrNil bundle:nibBundleOrNil];
-    [self addRoute:route forPath:path HTTPMethod:HTTPMethod recursive:NO];
+    [self addRoute:route forPath:path HTTPMethod:HTTPMethod recursive:recursive];
 }
 
 - (void)addStaticDirectoryAtPath:(NSString *)directoryPath forPath:(NSString *)path {
@@ -305,6 +313,7 @@
 
     if ( path == nil ) {
         path = CRPathAnyPath;
+        recursive = NO;
     }
 
     if ( ![path isEqualToString:CRPathAnyPath] && ![path hasSuffix:CRPathSeparator] ) {
