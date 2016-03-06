@@ -18,21 +18,21 @@
 #import "CRMimeTypeHelper.h"
 #import "CRRequestRange.h"
 
-#define CRStaticDirectoryServingReadBuffer          (8 * 1024 * 1024)
-#define CRStaticDirectoryServingReadThreshold       (8 * 64 * 1024)
+#define CRStaticDirectoryServingReadBuffer                              (8 * 1024 * 1024)
+#define CRStaticDirectoryServingReadThreshold                           (8 * 64 * 1024)
 
-#define CRStaticDirectoryIndexFileNameLength        70
-#define CRStaticDirectoryIndexFileSizeLength        20
+#define CRStaticDirectoryIndexFileNameLength                            70
+#define CRStaticDirectoryIndexFileSizeLength                            20
 
-#define CRStaticDirectoryManagerErrorDomain                         @"CRStaticDirectoryManagerErrorDomain"
+#define CRStaticDirectoryManagerErrorDomain                             @"CRStaticDirectoryManagerErrorDomain"
 
-#define CRStaticDirectoryManagerReleaseFailedError                       101
-#define CRStaticDirectoryManagerDirectoryListingForbiddenError           102
-#define CRStaticDirectoryManagerRestrictedFileTypeError                  103
+#define CRStaticDirectoryManagerReleaseFailedError                      101
+#define CRStaticDirectoryManagerDirectoryListingForbiddenError          102
+#define CRStaticDirectoryManagerRestrictedFileTypeError                 103
 
-#define CRStaticDirectoryManagerRangeNotSatisfiableError                 201
+#define CRStaticDirectoryManagerRangeNotSatisfiableError                201
 
-#define CRStaticDirectoryManagerNotImplementedError                      999
+#define CRStaticDirectoryManagerNotImplementedError                     999
 
 @interface CRStaticDirectoryManager ()
 
@@ -256,11 +256,12 @@
             if ( fileData == nil && fileReadError != nil ) {
                 [self errorHandlerBlockForError:fileReadError](request, response, completionHandler);
             } else {
-                if ( !request.range ) {
+                if ( request.range.byteRangeSet.count == 0 ) {
                     [response sendData:fileData];
                 } else {
-//                    NSData* requestedRangeData = [NSData dataWithBytesNoCopy:(void *)fileData.bytes + request.range.location length:request.range.length freeWhenDone:NO];
-//                    [response sendData:requestedRangeData];
+                    NSRange byteRangeDataRange = [request.range.byteRangeSet[0] dataRangeForFileSize:attributes.fileSize];
+                    NSData* requestedRangeData = [NSData dataWithBytesNoCopy:(void *)fileData.bytes + byteRangeDataRange.location length:byteRangeDataRange.length freeWhenDone:NO];
+                    [response sendData:requestedRangeData];
                 }
                 completionHandler();
             }
