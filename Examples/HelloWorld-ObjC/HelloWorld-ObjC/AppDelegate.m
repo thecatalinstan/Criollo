@@ -171,9 +171,8 @@
     // Debugging
     [self.server addStaticDirectoryAtPath:@"~" forPath:@"/pub" options:CRStaticDirectoryServingOptionsAutoIndex];
     [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-        [request.allHTTPHeaderFields enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-            NSLog(@" ** %@: %@", key, obj);
-        }];
+        NSLog(@"%@", request.allHTTPHeaderFields);
+        NSLog(@"%@", request.range);
     }];
 #endif
 

@@ -21,19 +21,48 @@
     if ( self != nil ) {
         NSArray<NSString *>* byteRangeSpecComponents = [byteRangeSpec componentsSeparatedByString:@"-"];
         if( byteRangeSpecComponents.count == 2 ) {
-            if (byteRangeSpecComponents[0].length > 0) {
-                _firstBytePos = byteRangeSpecComponents[0];
-            }
-            if (byteRangeSpecComponents[1].length > 0) {
-                _lastBytePos = byteRangeSpecComponents[1];
-            }
+            _firstBytePos = byteRangeSpecComponents[0];
+            _lastBytePos = byteRangeSpecComponents[1];
         }
     }
     return self;
 }
 
-@end
+- (NSString *)description {
+    NSMutableString* description = [super description].mutableCopy;
+    [description appendFormat:@" firstBytePos: %@, lastBytePos: %@", _firstBytePos, _lastBytePos];
+    return description;
+}
 
+// Parse a requested byte range (see: https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.1)
+- (NSRange)dataRangeForFileSize:(NSUInteger)fileSize {
+    NSRange dataRange;
+
+    if ( self.firstBytePos.length > 0 ) {
+        // byte-range
+        dataRange.location = self.firstBytePos.integerValue;
+        if ( self.lastBytePos.length > 0 ) {
+            dataRange.length = self.lastBytePos.integerValue - self.firstBytePos.integerValue + 1;
+        } else {
+            dataRange.length = fileSize - dataRange.location;
+        }
+    } else {
+        // suffix-range
+        dataRange.length = self.lastBytePos.integerValue;
+        if ( fileSize >= dataRange.length ) {
+            dataRange.location = fileSize - dataRange.length;
+        }
+    }
+
+    return dataRange;
+}
+
+- (BOOL)isSatisfiableForFileSize:(NSUInteger)fileSize {
+    NSRange dataRange = [self dataRangeForFileSize:fileSize];
+    return dataRange.length > 0 && dataRange.location != NSNotFound && dataRange.location + dataRange.length <= fileSize;
+}
+
+@end
 
 @implementation CRRequestRange
 
@@ -72,8 +101,19 @@
 
 - (NSString *)description {
     NSMutableString* description = [super description].mutableCopy;
-    
+    [description appendFormat:@" bytesUnit: %@, byteRangeSet: %@", _bytesUnit, _byteRangeSet];
     return description;
+}
+
+- (BOOL)isSatisfiableForFileSize:(NSUInteger)fileSize {
+    __block BOOL isSatisfiable = self.byteRangeSet.count > 0;
+    [self.byteRangeSet enumerateObjectsUsingBlock:^(CRRequestByteRange * _Nonnull byteRange, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ( ![byteRange isSatisfiableForFileSize:fileSize] ) {
+            isSatisfiable = NO;
+            *stop = YES;
+        }
+    }];
+    return isSatisfiable;
 }
 
 @end

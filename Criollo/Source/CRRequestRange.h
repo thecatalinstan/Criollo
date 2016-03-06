@@ -6,13 +6,15 @@
 //  Copyright © 2016 Cătălin Stan. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
+#import "CRTypes.h"
 
 @interface CRRequestByteRange : NSObject
 
 @property (nonatomic, readonly, nullable) NSString *firstBytePos;
 @property (nonatomic, readonly, nullable) NSString *lastBytePos;
+
+- (NSRange)dataRangeForFileSize:(NSUInteger)fileSize;
+- (BOOL)isSatisfiableForFileSize:(NSUInteger)fileSize;
 
 @end
 
@@ -22,5 +24,7 @@
 @property (nonatomic, readonly, strong, nonnull) NSString *bytesUnit;
 
 + (nonnull instancetype)reuestRangeWithRangesSpecifier:(NSString * _Nonnull)rangesSpecifier;
+
+- (BOOL)isSatisfiableForFileSize:(NSUInteger)fileSize;
 
 @end

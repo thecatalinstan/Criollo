@@ -16,6 +16,7 @@
 #import "CRConnection.h"
 #import "CRConnection_Internal.h"
 #import "CRMimeTypeHelper.h"
+#import "CRRequestRange.h"
 
 #define CRStaticDirectoryServingReadBuffer          (8 * 1024 * 1024)
 #define CRStaticDirectoryServingReadThreshold       (8 * 64 * 1024)
@@ -184,8 +185,16 @@
 
 - (CRRouteBlock)servingBlockForFileAtPath:(NSString *)filePath attributes:(NSDictionary *)attributes {
     CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-        // Set the Content-length header
-        [response setValue:@(attributes.fileSize).stringValue forHTTPHeaderField:@"Content-length"];
+        // Set the Content-length and Content-range headers
+        if ( [request.range isSatisfiableForFileSize:attributes.fileSize ] ) {
+            [response setStatusCode:206 description:nil];
+//            NSString* contentRangeHeader = [NSString stringWithFormat:@"%@ %lu-%lu/%llu", request.rangeUnits, request.range.location, request.range.length - 1, attributes.fileSize];
+//            [response setValue:contentRangeHeader forHTTPHeaderField:@"Content-Range"];
+//            NSString* conentRangeHeader = 
+//            [response setValue:contentRangeHeader forHTTPHeaderField:@"Content-length"];
+        } else {
+            [response setValue:@(attributes.fileSize).stringValue forHTTPHeaderField:@"Content-length"];
+        }
 
         // Get the mime type and set the Content-type header
         NSString* contentType = [[CRMimeTypeHelper sharedHelper] mimeTypeForFileAtPath:filePath];
@@ -199,7 +208,12 @@
             if ( fileData == nil && fileReadError != nil ) {
                 [self errorHandlerBlockForError:fileReadError](request, response, completionHandler);
             } else {
-                [response sendData:fileData];
+                if ( !request.range ) {
+                    [response sendData:fileData];
+                } else {
+//                    NSData* requestedRangeData = [NSData dataWithBytesNoCopy:(void *)fileData.bytes + request.range.location length:request.range.length freeWhenDone:NO];
+//                    [response sendData:requestedRangeData];
+                }
                 completionHandler();
             }
 
