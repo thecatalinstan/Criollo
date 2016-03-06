@@ -196,7 +196,8 @@
 
         [responseString appendString:@"<hr/></body></html>"];
 
-        [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+        [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+        [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
         [response sendString:responseString];
         completionHandler();
     };
