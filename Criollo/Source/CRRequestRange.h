@@ -28,7 +28,7 @@
 @property (nonatomic, readonly, strong, nonnull) NSString *bytesUnit;
 
 + (nonnull instancetype)reuestRangeWithRangesSpecifier:(NSString * _Nonnull)rangesSpecifier;
-+ (nonnull NSString *)acceptRangesHeader;
++ (nonnull NSString *)acceptRangesSpec;
 
 - (BOOL)isSatisfiableForFileSize:(NSUInteger)fileSize;
 

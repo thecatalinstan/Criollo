@@ -217,7 +217,7 @@
         }
 
         // We are accepting byte ranges
-        [response setValue:[CRRequestRange acceptRangesHeader] forHTTPHeaderField:@"Accept-Ranges"];
+        [response setValue:[CRRequestRange acceptRangesSpec] forHTTPHeaderField:@"Accept-Ranges"];
 
         NSRange byteRangeDataRange;
 

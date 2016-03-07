@@ -99,16 +99,16 @@
     return acceptedRangeUnits;
 }
 
-+ (NSString *)acceptRangesHeader {
-    static NSString *acceptRangesHeader;
++ (NSString *)acceptRangesSpec {
+    static NSString *acceptRangesSpec;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        acceptRangesHeader = [[CRRequestRange acceptedRangeUnits] componentsJoinedByString:CRRequestHeaderSeparator];
-        if ( acceptRangesHeader.length == 0 ) {
-            acceptRangesHeader = @"none";
+        acceptRangesSpec = [[CRRequestRange acceptedRangeUnits] componentsJoinedByString:CRRequestHeaderSeparator];
+        if ( acceptRangesSpec.length == 0 ) {
+            acceptRangesSpec = @"none";
         }
     });
-    return acceptRangesHeader;
+    return acceptRangesSpec;
 }
 
 + (instancetype)reuestRangeWithRangesSpecifier:(NSString *)rangesSpecifier {
