@@ -167,14 +167,6 @@
     NSString* staticFilesPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"];
     [self.server addStaticDirectoryAtPath:staticFilesPath forPath:@"/static" options:CRStaticDirectoryServingOptionsCacheFiles];
 
-#if DEBUG
-    // Debugging
-    [self.server addStaticDirectoryAtPath:@"~" forPath:@"/pub" options:CRStaticDirectoryServingOptionsAutoIndex];
-    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-//        NSLog(@"\n------------\n%@\n%@\n%@\n\n", CFHTTPMessageCopyAllHeaderFields((__bridge CFHTTPMessageRef _Nullable)[request valueForKey:@"message"]), CFHTTPMessageCopyResponseStatusLine((__bridge CFHTTPMessageRef _Nullable)[response valueForKey:@"message"]), CFHTTPMessageCopyAllHeaderFields((__bridge CFHTTPMessageRef _Nullable)[response valueForKey:@"message"]));
-    }];
-#endif
-
     // Start listening
     NSError *serverError;
     if ( [self.server startListening:&serverError portNumber:PortNumber] ) {
