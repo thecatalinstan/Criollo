@@ -36,7 +36,7 @@
 
 // Parse a requested byte range (see: https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.1)
 - (NSRange)dataRangeForFileSize:(NSUInteger)fileSize {
-    NSRange dataRange;
+    NSRange dataRange = NSMakeRange(NSNotFound, 0);
 
     if ( self.firstBytePos.length > 0 ) {
         // byte-range
@@ -67,7 +67,7 @@
     NSString* fileSizeString = fileSize == UINT_MAX ? @"*" : @(fileSize).stringValue;
     if ([self isSatisfiableForFileSize:fileSize] ) {
         NSRange dataRange = [self dataRangeForFileSize:fileSize];
-        contentRangeSpec = [NSString stringWithFormat:@"%lu-%lu/%@", dataRange.location, dataRange.location + dataRange.length - 1, fileSizeString];
+        contentRangeSpec = [NSString stringWithFormat:@"%lu-%lu/%@", (unsigned long)dataRange.location, (unsigned long)(dataRange.location + dataRange.length - 1), fileSizeString];
     } else {
         contentRangeSpec = [NSString stringWithFormat:@"*/%@", fileSizeString];
     }

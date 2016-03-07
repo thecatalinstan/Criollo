@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
-  
+
   s.name         =  "Criollo"
-  s.version      =  "0.1.5"
+  s.version      =  "0.1.6"
   s.license      =  { :type => "public domain", :text => <<-LICENSE
 
 Public Domain License
@@ -11,11 +11,12 @@ Updated and maintained by Cătălin Stan.
                     LICENSE
                     }
 
-  s.summary      =  "A Cocoa framework for creating HTTP or FCGI web applications."
+  s.summary      =  "A powerful Cocoa based web application framework for OS X and iOS."
   s.description  =  <<-DESC
 
-Criollo helps create self-contained web applications that serve content
-over the HTTP or FCGI protocols.                   
+Criollo helps create self-contained web applications that deliver content directly over HTTP
+or behind a web server (through FastCGI) all the while leveraging the technologies you know
+and love: GCD, NSURLSession, CoreImage etc.
                     DESC
 
   s.homepage     			 =  "https://github.com/thecatalinstan/Criollo"
@@ -23,17 +24,16 @@ over the HTTP or FCGI protocols.
   s.social_media_url   =   "http://twitter.com/criolloio"
 
   s.source       =  { :git => "https://github.com/thecatalinstan/Criollo.git", :tag => s.version }
-  # s.source       =  { :git => "https://github.com/thecatalinstan/Criollo.git", :branch => "develop" }
 
   s.module_name         = "Criollo"
 
   s.source_files        = "Criollo/Criollo.h", "Criollo/Source/*.{h,m}", "Criollo/Source/{HTTP,FCGI,Routing,Extensions}/*.{h,m}"
   s.public_header_files = "Criollo/Criollo.h", "Criollo/Source/CRTypes.h", "Criollo/Source/CRApplication.h", "Criollo/Source/CRServer.h", "Criollo/Source/CRConnection.h", "Criollo/Source/CRMessage.h", "Criollo/Source/CRRequest.h", "Criollo/Source/CRRequestRange.h", "Criollo/Source/CRResponse.h", "Criollo/Source/HTTP/CRHTTPServer.h", "Criollo/Source/FCGI/CRFCGIServer.h", "Criollo/Source/Routing/CRNib.h", "Criollo/Source/Routing/CRView.h", "Criollo/Source/Routing/CRViewController.h", "Criollo/Source/CRMimeTypeHelper.h"
-  
+
   s.ios.deployment_target = '8.0'
   s.osx.deployment_target = "10.9"
   s.osx.frameworks = "Foundation"
-  
+
   s.requires_arc = true
 
   s.dependency 		'CocoaAsyncSocket', '~> 7.4.2'

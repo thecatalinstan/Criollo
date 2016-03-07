@@ -142,7 +142,6 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
         self.server.addController(controllerClass, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/controller");
 
         // Serve static files from "/Public" (relative to bundle)
-//        NSString* staticFilesPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"];
         let staticFilePath:String = (NSBundle.mainBundle().resourcePath?.stringByAppendingString("/Public"))!;
         self.server.addStaticDirectoryAtPath(staticFilePath, forPath: "/static", options: CRStaticDirectoryServingOptions.FollowSymlinks)
 
