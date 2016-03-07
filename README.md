@@ -33,9 +33,11 @@ The preferred way of installing Criollo is through [CocoaPods](http://cocoapods.
 pod 'Criollo', '~> 0.1.7’
 ```
 3. Run `pod install`
+
 Please note that Criollo will download [CocoaAsyncSocket](https://github.com/robbiehanson/CocoaAsyncSocket) as a dependency.
+
 # Getting Started
-This section covers creating a standalone background app (a launchd [daemon](https://developer.apple.com/library/mac/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html)) using Criollo. Should you just be looking to embed it in your existing app, just skip steps 1 through 3.
+This section covers creating a standalone background app (a launchd [daemon](https://developer.apple.com/library/mac/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html)) using Criollo.
 ## Step 1: The Project
 **TL;DR**; You can just proceed to get the skeleton project from here.
 Since the final build product is an OS X application, we will start with a Cocoa Application template project.[^An Xcode project template is in the pipeline, but I really haven’t gotten around to it.] The demo below is in Objective-C but it applies to Swift as well. 
