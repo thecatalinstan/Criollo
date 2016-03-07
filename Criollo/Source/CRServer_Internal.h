@@ -15,7 +15,7 @@
 @property (nonatomic, strong, nonnull) CRServerConfiguration * configuration;
 @property (nonatomic, strong, nonnull) NSMutableArray<CRConnection *> * connections;
 
-+ (CRRouteBlock _Nonnull)errorHandlingBlockWithStatus:(NSUInteger)statusCode;
++ (nonnull CRRouteBlock)errorHandlingBlockWithStatus:(NSUInteger)statusCode error:(NSError * _Nullable)error;
 
 - (void)didCloseConnection:(CRConnection * _Nonnull)connection;
 
