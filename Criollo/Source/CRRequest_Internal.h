@@ -9,6 +9,7 @@
 #import "CRRequest.h"
 
 #define CRRequestHeaderSeparator            @";"
+#define CRRequestHeaderArraySeparator       @","
 #define CRRequestKeySeparator               @"&"
 #define CRRequestValueSeparator             @"="
 #define CRRequestBoundaryParameter          @"boundary"

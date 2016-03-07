@@ -16,12 +16,25 @@
 #import "CRConnection.h"
 #import "CRConnection_Internal.h"
 #import "CRMimeTypeHelper.h"
+#import "CRRequestRange.h"
 
-#define CRStaticDirectoryServingReadBuffer          (8 * 1024 * 1024)
-#define CRStaticDirectoryServingReadThreshold       (8 * 64 * 1024)
+#define CRStaticDirectoryServingReadBuffer                              (8 * 1024 * 1024)
+#define CRStaticDirectoryServingReadThreshold                           (8 * 64 * 1024)
 
-#define CRStaticDirectoryIndexFileNameLength        70
-#define CRStaticDirectoryIndexFileSizeLength        20
+#define CRStaticDirectoryIndexFileNameLength                            70
+#define CRStaticDirectoryIndexFileSizeLength                            20
+
+#define CRStaticDirectoryManagerErrorDomain                             @"CRStaticDirectoryManagerErrorDomain"
+
+#define CRStaticDirectoryManagerReleaseFailedError                      101
+#define CRStaticDirectoryManagerFileReadError                           102
+
+#define CRStaticDirectoryManagerDirectoryListingForbiddenError          201
+#define CRStaticDirectoryManagerRestrictedFileTypeError                 202
+
+#define CRStaticDirectoryManagerRangeNotSatisfiableError                201
+
+#define CRStaticDirectoryManagerNotImplementedError                     999
 
 @interface CRStaticDirectoryManager ()
 
@@ -105,14 +118,20 @@
                 default:
                     break;
             }
-        } else {
+        } else if ([error.domain isEqualToString:CRStaticDirectoryManagerErrorDomain] ) {
+            switch ( error.code ) {
+                case CRStaticDirectoryManagerNotImplementedError:
+                    statusCode = 501;
+                    break;
+                case CRStaticDirectoryManagerRangeNotSatisfiableError:
+                    statusCode = 416;
+                    break;
+                default:
+                    break;
+            }
         }
 
-//        [CRServer errorHandlingBlockWithStatus:statusCode](request, response, completionHandler);
-        [response setStatusCode:statusCode description:nil];
-        [response setValue:@"text-plain" forHTTPHeaderField:@"Content-type"];
-        [response sendFormat:@"%@ %lu\n%@\n\n%@\n\n%@", error.domain, error.code, error.localizedDescription, error.userInfo, [NSThread callStackSymbols]];
-        completionHandler();
+        [CRServer errorHandlingBlockWithStatus:statusCode error:error](request, response, completionHandler);
     };
     return block;
 }
@@ -175,7 +194,8 @@
 
         [responseString appendString:@"<hr/></body></html>"];
 
-        [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+        [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+        [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
         [response sendString:responseString];
         completionHandler();
     };
@@ -184,12 +204,59 @@
 
 - (CRRouteBlock)servingBlockForFileAtPath:(NSString *)filePath attributes:(NSDictionary *)attributes {
     CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-        // Set the Content-length header
-        [response setValue:@(attributes.fileSize).stringValue forHTTPHeaderField:@"Content-length"];
+
+        // Send an unimplemented error if we are being requested to serve multipart byte-ranges
+        if ( request.range.byteRangeSet.count > 1 ) {
+            NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
+            userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"Multiple range (multipart/byte-range) responses are not implemented.",);
+            userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
+            userInfo[NSFilePathErrorKey] = filePath;
+            NSError* rangeError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerNotImplementedError userInfo:userInfo];
+            [self errorHandlerBlockForError:rangeError](request, response, completionHandler);
+            return;
+        }
+
+        // We are accepting byte ranges
+        [response setValue:[CRRequestRange acceptRangesSpec] forHTTPHeaderField:@"Accept-Ranges"];
+
+        CRRequestByteRange* requestByteRange;
+        NSRange byteRangeDataRange;
+
+        // Set the Content-length and Content-range headers
+        if ( request.range.byteRangeSet.count > 0 ) {
+
+            requestByteRange = request.range.byteRangeSet[0];
+            byteRangeDataRange = [requestByteRange dataRangeForFileSize:attributes.fileSize];
+
+            NSString* contentRangeSpec = [requestByteRange contentRangeSpecForFileSize:attributes.fileSize];
+            contentRangeSpec = [NSString stringWithFormat:@"%@ %@", request.range.bytesUnit, contentRangeSpec];
+            [response setValue:contentRangeSpec forHTTPHeaderField:@"Content-Range"];
+
+            if ( [request.range isSatisfiableForFileSize:attributes.fileSize ] ) {                                // Set partial content response header
+                if ( byteRangeDataRange.location == 0 && byteRangeDataRange.length == attributes.fileSize ) {
+                    [response setStatusCode:200 description:nil];
+                } else {
+                    [response setStatusCode:206 description:nil];
+                }
+                NSString* conentLengthSpec = [requestByteRange contentLengthSpecForFileSize:attributes.fileSize];
+                [response setValue:conentLengthSpec forHTTPHeaderField:@"Content-Length"];
+            } else {
+                NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
+                userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:NSLocalizedString(@"The requested byte-range %@-%@ / %lu could not be satisfied.",), requestByteRange.firstBytePos, requestByteRange.lastBytePos, attributes.fileSize];
+                userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
+                userInfo[NSFilePathErrorKey] = filePath;
+                NSError* rangeError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerRangeNotSatisfiableError userInfo:userInfo];
+                [self errorHandlerBlockForError:rangeError](request, response, completionHandler);
+                return;
+            }
+
+        } else {
+            [response setValue:@(attributes.fileSize).stringValue forHTTPHeaderField:@"Content-Length"];
+        }
 
         // Get the mime type and set the Content-type header
         NSString* contentType = [[CRMimeTypeHelper sharedHelper] mimeTypeForFileAtPath:filePath];
-        [response setValue:contentType forHTTPHeaderField:@"Content-type"];
+        [response setValue:contentType forHTTPHeaderField:@"Content-Type"];
 
         // Read synchroniously if the file size is below threshold
         if ( attributes.fileSize <= CRStaticDirectoryServingReadThreshold ) {
@@ -199,18 +266,21 @@
             if ( fileData == nil && fileReadError != nil ) {
                 [self errorHandlerBlockForError:fileReadError](request, response, completionHandler);
             } else {
-                [response sendData:fileData];
+                if ( request.range.byteRangeSet.count == 0 ) {
+                    [response sendData:fileData];
+                } else {
+                    NSData* requestedRangeData = [NSData dataWithBytesNoCopy:(void *)fileData.bytes + byteRangeDataRange.location length:byteRangeDataRange.length freeWhenDone:NO];
+                    [response sendData:requestedRangeData];
+                }
                 completionHandler();
             }
 
         } else {
 
-            dispatch_io_t fileReadChannel = dispatch_io_create_with_path(DISPATCH_IO_STREAM, filePath.UTF8String, O_RDONLY, 0, self.fileReadingQueue,  ^(int error) {
-                if ( !error ) {
-                    [response finish];
-                } else {
+            dispatch_io_t fileReadChannel = dispatch_io_create_with_path(DISPATCH_IO_RANDOM, filePath.UTF8String, O_RDONLY, 0, self.fileReadingQueue,  ^(int error) {
+                if ( error ) {
                     NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
-                    userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"There was an error releasing the file read channel",);
+                    userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"There was an error releasing the file read channel.",);
                     userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
                     userInfo[NSFilePathErrorKey] = filePath;
                     NSString* underlyingErrorDescription = [NSString stringWithCString:strerror(error) encoding:NSUTF8StringEncoding];
@@ -218,17 +288,42 @@
                         NSError* underlyingError = [NSError errorWithDomain:NSPOSIXErrorDomain code:@(error).integerValue userInfo:@{NSLocalizedDescriptionKey: underlyingErrorDescription}];
                         userInfo[NSUnderlyingErrorKey] = underlyingError;
                     }
-                    NSError* channelReleaseError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerReleaseFailed userInfo:userInfo];
+                    NSError* channelReleaseError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerFileReadError userInfo:userInfo];
                     [self errorHandlerBlockForError:channelReleaseError](request, response, ^{});
+                    return;
                 }
+
+                [response finish];
             });
 
             dispatch_io_set_high_water(fileReadChannel, CRStaticDirectoryServingReadBuffer);
             dispatch_io_set_low_water(fileReadChannel, CRStaticDirectoryServingReadThreshold);
 
-            dispatch_io_read(fileReadChannel, 0, SIZE_MAX, self.fileReadingQueue, ^(bool done, dispatch_data_t data, int error) {
-                if (error || request.connection == nil || response.connection == nil) {
+            off_t offset = 0;
+            size_t length = attributes.fileSize;
+            if ( request.range.byteRangeSet.count > 0 ) {
+                offset = byteRangeDataRange.location;
+                length = byteRangeDataRange.length;
+            }
+
+            dispatch_io_read(fileReadChannel, offset, length, self.fileReadingQueue, ^(bool done, dispatch_data_t data, int error) {
+                if (request.connection == nil || response.connection == nil) {
                     dispatch_io_close(fileReadChannel, DISPATCH_IO_STOP);
+                    return;
+                }
+
+                if ( error ) {
+                    NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
+                    userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"There was an error releasing the file read channel.",);
+                    userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
+                    userInfo[NSFilePathErrorKey] = filePath;
+                    NSString* underlyingErrorDescription = [NSString stringWithCString:strerror(error) encoding:NSUTF8StringEncoding];
+                    if ( underlyingErrorDescription.length > 0 ) {
+                        NSError* underlyingError = [NSError errorWithDomain:NSPOSIXErrorDomain code:@(error).integerValue userInfo:@{NSLocalizedDescriptionKey: underlyingErrorDescription}];
+                        userInfo[NSUnderlyingErrorKey] = underlyingError;
+                    }
+                    NSError* fileReadError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerReleaseFailedError userInfo:userInfo];
+                    [self errorHandlerBlockForError:fileReadError](request, response, ^{});
                     return;
                 }
 
@@ -276,7 +371,7 @@
                     userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"Directory index auto-generation is disabled",);
                     userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
                     userInfo[NSFilePathErrorKey] = requestedAbsolutePath;                    
-                    NSError* directoryListingError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerDirectoryListingForbidden userInfo:userInfo];
+                    NSError* directoryListingError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerDirectoryListingForbiddenError userInfo:userInfo];
                     [self errorHandlerBlockForError:directoryListingError](request, response, completionHandler);
                 }
             } else if ( [itemAttributes.fileType isEqualToString:NSFileTypeRegular] ) {                             // Regular files
@@ -288,7 +383,7 @@
                 userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:NSLocalizedString(@"Files of type “%@” are restricted.",), itemAttributes.fileType];
                 userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
                 userInfo[NSFilePathErrorKey] = requestedAbsolutePath;
-                NSError* restrictedFileTypeError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerRestrictedFileType userInfo:userInfo];
+                NSError* restrictedFileTypeError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerRestrictedFileTypeError userInfo:userInfo];
                 [self errorHandlerBlockForError:restrictedFileTypeError](request, response, completionHandler);
             }
         }
