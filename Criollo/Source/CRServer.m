@@ -342,30 +342,10 @@
                 [parentRoutes addObjectsFromArray:self.routes[anyPathRoutePath]];
             }
 
-            // Add all parent routes
-            __block NSString* parentRoutePath = [method stringByAppendingString:CRPathSeparator];
-            [routePath.pathComponents enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if ( [parentRoutePath isEqualToString:[method stringByAppendingString:CRPathSeparator]] ) {
-                    return;
-                }
-
-                if ( self.routes[parentRoutePath] != nil ) {
-                    [parentRoutes addObjectsFromArray:self.routes[parentRoutePath]];
-                }
-                parentRoutePath = [parentRoutePath stringByAppendingFormat:@"%@/", obj];
-            }];
-
             self.routes[routePath] = parentRoutes;
         }
 
-        // Add the route to all other descendant routes
-        NSArray<NSString*>* descendantRoutesKeys = [self.routes.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSString*  _Nonnull evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
-            return [evaluatedObject hasPrefix:routePath];
-        }]];
-
-        [descendantRoutesKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [self.routes[obj] addObject:route];
-        }];
+        [self.routes[routePath] addObject:route];
 
         // If the route should be executed on all paths, add it accordingly
         if ( [path isEqualToString:CRPathAnyPath] ) {
@@ -380,7 +360,6 @@
         if ( recursive ) {
             [self.recursiveMatchRoutePathPrefixes addObject:routePath];
         }
-        
     }];
 }
 
