@@ -84,9 +84,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             let headers:NSDictionary! = request.allHTTPHeaderFields;
             responseString += "<h3>Request Headers:</h2><pre>";
             headers.enumerateKeysAndObjectsUsingBlock({ (key:AnyObject,  object:AnyObject, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
-                let header:String = key as! String;
-                let value:String = object as! String;
-                responseString += "\(header): \(value)\n";
+                responseString += "\(key): \(object)\n";
             });
             responseString += "</pre>";
 
@@ -94,14 +92,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             let env:NSDictionary! = request.valueForKey("env") as! NSDictionary;
             responseString += "<h3>Request Environment:</h2><pre>";
             env.enumerateKeysAndObjectsUsingBlock({ (key:AnyObject,  object:AnyObject, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
-                let envKey:String = key as! String;
-                responseString += "\(envKey): ";
-                if let value = object as? String {
-                    responseString += "\(value)";
-                } else if let value = object as? NSNumber {
-                    responseString += "\(value)";
-                }
-                responseString += "\n";
+                responseString += "\(key): \(object)\n";
             });
             responseString += "</pre>";
 
@@ -109,14 +100,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             let queryVars:NSDictionary! = request.query as NSDictionary;
             responseString += "<h3>Request Query:</h2><pre>";
             queryVars.enumerateKeysAndObjectsUsingBlock({ (key:AnyObject,  object:AnyObject, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
-                let queryVarName:String = key as! String;
-                responseString += "\(queryVarName): ";
-                if let value = object as? String {
-                    responseString += "\(value)";
-                } else if let value = object as? NSNumber {
-                    responseString += "\(value)";
-                }
-                responseString += "\n";
+                responseString += "\(key): \(object)\n";
             });
             responseString += "</pre>";
             
@@ -124,14 +108,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             let cookies:NSDictionary! = request.cookies as NSDictionary;
             responseString += "<h3>Request Cookies:</h2><pre>";
             cookies.enumerateKeysAndObjectsUsingBlock({ (key:AnyObject,  object:AnyObject, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
-                let cookieName:String = key as! String;
-                responseString += "\(cookieName): ";
-                if let value = object as? String {
-                    responseString += "\(value)";
-                } else if let value = object as? NSNumber {
-                    responseString += "\(value)";
-                }
-                responseString += "\n";
+                responseString += "\(key): \(object)\n";
             });
             responseString += "</pre>";
 

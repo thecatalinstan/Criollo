@@ -17,8 +17,6 @@
 #import "CRRoute.h"
 #import "CRViewController.h"
 
-NSUInteger const CRErrorSocketError = 2001;
-
 @interface CRServer () <GCDAsyncSocketDelegate, CRConnectionDelegate>
 
 @property (nonatomic, strong, nonnull) GCDAsyncSocket* socket;
@@ -27,7 +25,8 @@ NSUInteger const CRErrorSocketError = 2001;
 @property (nonatomic, strong, nonnull) dispatch_queue_t acceptedSocketDelegateTargetQueue;
 @property (nonatomic, strong, nonnull) dispatch_queue_t acceptedSocketSocketTargetQueue;
 
-@property (nonatomic, strong, nonnull) NSMutableDictionary<NSString*, NSMutableArray<CRRoute*>*>* routes;
+@property (nonatomic, strong, nonnull, readonly) NSMutableDictionary<NSString*, NSMutableArray<CRRoute*>*>* routes;
+@property (nonatomic, strong, nonnull, readonly) NSMutableArray<NSString *> * recursiveMatchRoutePathPrefixes;
 
 @property (nonatomic, strong, nonnull) NSOperationQueue* workerQueue;
 
@@ -40,11 +39,56 @@ NSUInteger const CRErrorSocketError = 2001;
 
 @implementation CRServer
 
-+ (CRRouteBlock)errorHandlingBlockWithStatus:(NSUInteger)statusCode {
++ (CRRouteBlock)errorHandlingBlockWithStatus:(NSUInteger)statusCode error:(NSError *)error {
     return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
         [response setStatusCode:statusCode description:nil];
         [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-        [response sendFormat:@"Cennot %@ %@", request.method, request.URL.path];
+
+        NSMutableString* responseString = [NSMutableString string];
+
+#if DEBUG
+        NSError* err;
+        if (error == nil) {
+            NSMutableDictionary* mutableUserInfo = [NSMutableDictionary dictionaryWithCapacity:2];
+            NSString* errorDescription;
+            switch (statusCode) {
+                case 404:
+                    errorDescription = [NSString stringWithFormat:NSLocalizedString(@"No routes defined for “%@%@%@”",), request.method, request.URL.path, [request.URL.path hasSuffix:CRPathSeparator] ? @"" : CRPathSeparator];
+                    break;
+            }
+            if ( errorDescription ) {
+                mutableUserInfo[NSLocalizedDescriptionKey] = errorDescription;
+            }
+            mutableUserInfo[NSURLErrorFailingURLErrorKey] = request.URL;
+            err = [NSError errorWithDomain:CRServerErrorDomain code:statusCode userInfo:mutableUserInfo];
+        } else {
+            err = error;
+        }
+
+        // Error details
+        [responseString appendFormat:@"%@ %lu\n%@\n", err.domain, err.code, err.localizedDescription];
+
+        // Error user-info
+        if ( err.userInfo.count > 0 ) {
+            [responseString appendString:@"\nUser Info\n"];
+            [err.userInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                [responseString appendFormat:@"%@: %@\n", key, obj];
+            }];
+        }
+
+        // Stack trace
+        [responseString appendString:@"\nStack Trace\n"];
+        [[NSThread callStackSymbols] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [responseString appendFormat:@"%@\n", obj];
+        }];
+#else
+        [responseString appendFormat:@"Cennot %@ %@", request.method, request.URL.path];
+#endif
+
+        [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
+        [response sendString:responseString];
+
+        completionHandler();
     };
 }
 
@@ -57,8 +101,10 @@ NSUInteger const CRErrorSocketError = 2001;
     if ( self != nil ) {
         self.configuration = [[CRServerConfiguration alloc] init];
         self.delegate = delegate;
-        self.routes = [NSMutableDictionary dictionary];
-        self.notFoundBlock = [CRServer errorHandlingBlockWithStatus:404];
+        _routes = [NSMutableDictionary dictionary];
+        _recursiveMatchRoutePathPrefixes = [NSMutableArray array];
+
+        self.notFoundBlock = [CRServer errorHandlingBlockWithStatus:404 error:nil];
     }
     return self;
 }
@@ -187,7 +233,7 @@ NSUInteger const CRErrorSocketError = 2001;
             [self.delegate server:self didReceiveRequest:request];
         }
         NSArray<CRRoute*>* routes = [self routesForPath:request.URL.path HTTPMethod:request.method];
-        if ( routes == nil ) {
+        if ( routes.count == 0 ) {
             routes = @[[CRRoute routeWithBlock:self.notFoundBlock]];
         }
         __block BOOL shouldStopExecutingBlocks = NO;
@@ -227,25 +273,33 @@ NSUInteger const CRErrorSocketError = 2001;
 }
 
 - (void)addBlock:(CRRouteBlock)block {
-    [self addBlock:block forPath:nil HTTPMethod:nil];
+    [self addBlock:block forPath:nil HTTPMethod:nil recursive:NO];
 }
 
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString*)path {
-    [self addBlock:block forPath:path HTTPMethod:nil];
+    [self addBlock:block forPath:path HTTPMethod:nil recursive:NO];
 }
 
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
+    [self addBlock:block forPath:path HTTPMethod:HTTPMethod recursive:NO];
+}
+
+- (void)addBlock:(CRRouteBlock)block forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod recursive:(BOOL)recursive {
     CRRoute* route = [CRRoute routeWithBlock:block];
-    [self addRoute:route forPath:path HTTPMethod:HTTPMethod];
+    [self addRoute:route forPath:path HTTPMethod:HTTPMethod recursive:recursive];
 }
 
 - (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path {
-    [self addController:controllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path HTTPMethod:nil];
+    [self addController:controllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path HTTPMethod:nil recursive:NO];
 }
 
 - (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
+    [self addController:controllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path HTTPMethod:HTTPMethod recursive:NO];
+}
+
+- (void)addController:(Class  _Nonnull __unsafe_unretained)controllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod recursive:(BOOL)recursive {
     CRRoute* route = [CRRoute routeWithControllerClass:controllerClass nibName:nibNameOrNil bundle:nibBundleOrNil];
-    [self addRoute:route forPath:path HTTPMethod:HTTPMethod];
+    [self addRoute:route forPath:path HTTPMethod:HTTPMethod recursive:recursive];
 }
 
 - (void)addStaticDirectoryAtPath:(NSString *)directoryPath forPath:(NSString *)path {
@@ -254,10 +308,10 @@ NSUInteger const CRErrorSocketError = 2001;
 
 - (void)addStaticDirectoryAtPath:(NSString *)directoryPath forPath:(NSString *)path options:(CRStaticDirectoryServingOptions)options {
     CRRoute* route = [CRRoute routeWithStaticDirectoryAtPath:directoryPath prefix:path options:options];
-    [self addRoute:route forPath:path HTTPMethod:CRHTTPMethodGET];
+    [self addRoute:route forPath:path HTTPMethod:CRHTTPMethodGET recursive:YES];
 }
 
-- (void)addRoute:(CRRoute*)route forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
+- (void)addRoute:(CRRoute*)route forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod recursive:(BOOL)recursive {
     NSArray<NSString*>* methods;
 
     if ( HTTPMethod == nil ) {
@@ -268,13 +322,13 @@ NSUInteger const CRErrorSocketError = 2001;
 
     if ( path == nil ) {
         path = CRPathAnyPath;
+        recursive = NO;
     }
 
     if ( ![path isEqualToString:CRPathAnyPath] && ![path hasSuffix:CRPathSeparator] ) {
         path = [path stringByAppendingString:CRPathSeparator];
     }
 
-    // Add the
     [methods enumerateObjectsUsingBlock:^(NSString * _Nonnull method, NSUInteger idx, BOOL * _Nonnull stop) {
 
         NSString* routePath = [method stringByAppendingString:path];
@@ -313,12 +367,18 @@ NSUInteger const CRErrorSocketError = 2001;
             [self.routes[obj] addObject:route];
         }];
 
+        // If the route should be executed on all paths, add it accordingly
         if ( [path isEqualToString:CRPathAnyPath] ) {
             [self.routes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<CRRoute *> * _Nonnull obj, BOOL * _Nonnull stop) {
                 if ( ![obj.lastObject isEqual:route] ) {
                     [obj addObject:route];
                 }
             }];
+        }
+
+        // If the route is recursive add it to the array
+        if ( recursive ) {
+            [self.recursiveMatchRoutePathPrefixes addObject:routePath];
         }
         
     }];
@@ -338,9 +398,20 @@ NSUInteger const CRErrorSocketError = 2001;
     }
     path = [HTTPMethod stringByAppendingString:path];
 
+    __block BOOL shouldRecursivelyMatchRoutePathPrefix = NO;
+    [self.recursiveMatchRoutePathPrefixes enumerateObjectsUsingBlock:^(NSString * _Nonnull recursiveMatchRoutePathPrefix, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ( [path hasPrefix:recursiveMatchRoutePathPrefix] ) {
+            shouldRecursivelyMatchRoutePathPrefix = YES;
+            *stop = YES;
+        }
+    }];
+
     NSArray<CRRoute*>* routes;
     while ( routes.count == 0 ) {
         routes = self.routes[path];
+        if ( !shouldRecursivelyMatchRoutePathPrefix) {
+            break;
+        }
         path = [[path stringByDeletingLastPathComponent] stringByAppendingString:CRPathSeparator];
     }
 

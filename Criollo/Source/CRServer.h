@@ -8,9 +8,10 @@
 
 #import "CRTypes.h"
 
-@class CRServer, CRServerConfiguration, GCDAsyncSocket, CRConnection, CRRequest, CRResponse, CRRoute;
+#define CRServerErrorDomain                   @"CRServerErrorDomain"
+#define CRServerSocketError                   2001
 
-FOUNDATION_EXPORT NSUInteger const CRErrorSocketError;
+@class CRServer, CRServerConfiguration, GCDAsyncSocket, CRConnection, CRRequest, CRResponse, CRRoute;
 
 @protocol CRServerDelegate <NSObject>
 
@@ -49,9 +50,11 @@ FOUNDATION_EXPORT NSUInteger const CRErrorSocketError;
 - (void)addBlock:(CRRouteBlock _Nonnull)block;
 - (void)addBlock:(CRRouteBlock _Nonnull)block forPath:(NSString * _Nullable)path;
 - (void)addBlock:(CRRouteBlock _Nonnull)block forPath:(NSString * _Nullable)path HTTPMethod:(NSString * _Nullable)HTTPMethod;
+- (void)addBlock:(CRRouteBlock _Nonnull)block forPath:(NSString * _Nullable)path HTTPMethod:(NSString * _Nullable)HTTPMethod recursive:(BOOL)recursive;
 
 - (void)addController:(__unsafe_unretained Class _Nonnull)controllerClass withNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil forPath:(NSString * _Nonnull)path;
 - (void)addController:(__unsafe_unretained Class _Nonnull)controllerClass withNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil forPath:(NSString * _Nonnull)path HTTPMethod:(NSString * _Nullable)HTTPMethod;
+- (void)addController:(__unsafe_unretained Class _Nonnull)controllerClass withNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil forPath:(NSString * _Nonnull)path HTTPMethod:(NSString * _Nullable)HTTPMethod recursive:(BOOL)recursive;
 
 - (void)addStaticDirectoryAtPath:(NSString * _Nonnull)directoryPath forPath:(NSString * _Nonnull)path;
 - (void)addStaticDirectoryAtPath:(NSString * _Nonnull)directoryPath forPath:(NSString * _Nonnull)path options:(CRStaticDirectoryServingOptions)options;

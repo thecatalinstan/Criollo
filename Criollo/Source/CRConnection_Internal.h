@@ -20,6 +20,8 @@
 @property (nonatomic, strong, nullable) CRRequest* currentRequest;
 @property (nonatomic, readonly, strong, nonnull) dispatch_queue_t isolationQueue;
 
+@property (nonatomic, readonly) BOOL willDisconnect;
+
 + (nonnull NSData *)CRLFData;
 + (nonnull NSData *)CRLFCRLFData;
 

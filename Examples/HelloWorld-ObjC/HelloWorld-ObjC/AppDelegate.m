@@ -13,7 +13,7 @@
 
 #define PortNumber          10781
 #define LogConnections          0
-#define LogRequests             0
+#define LogRequests             1
 
 #define UseFCGI                 0
 
@@ -161,7 +161,7 @@
     } forPath:@"/post" HTTPMethod:@"POST"];
 
     [self.server addController:[MultipartViewController class] withNibName:@"MultipartViewController" bundle:nil forPath:@"/multipart"];
-    [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller"];
+    [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" HTTPMethod:nil recursive:YES];
 
     // Serve static files from "/Public" (relative to bundle)
     NSString* staticFilesPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"];
@@ -226,7 +226,8 @@
 
 #if LogRequests
 - (void)server:(CRServer *)server didFinishRequest:(CRRequest *)request {
-    [CRApp logFormat:@" * %@ %@ - %lu - %@", request.response.connection.remoteAddress, request, request.response.statusCode, request.env[@"HTTP_USER_AGENT"]];
+    NSString* contentLength = [request.response valueForHTTPHeaderField:@"Content-Length"];
+    [CRApp logFormat:@" * %@ %@ - %lu %@ - %@", request.response.connection.remoteAddress, request, request.response.statusCode, contentLength ? : @"-", request.env[@"HTTP_USER_AGENT"]];
 }
 #endif
 
