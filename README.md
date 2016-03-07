@@ -28,10 +28,7 @@ See the [Hello World examples](https://github.com/thecatalinstan/Criollo/tree/ma
 The preferred way of installing Criollo is through [CocoaPods](http://cocoapods.org). However, you can also embed the framework in your projects manually.
 ## Installing with CocoaPods
 1. Create the Podfile if you don’t already have one. You can do so by running `pod init` in the folder of the project.
-2. Add Criollo to your Podfile.   
-```ruby
-pod 'Criollo', '~> 0.1.7’
-```
+2. Add Criollo to your Podfile. `pod 'Criollo', '~> 0.1.7’`
 3. Run `pod install`
 
 Please note that Criollo will download [CocoaAsyncSocket](https://github.com/robbiehanson/CocoaAsyncSocket) as a dependency.
@@ -57,19 +54,24 @@ This will create a file called `Podfile`. Open it in your favourite text editor 
 platform :osx, '10.9'
 use_frameworks!
 target ‘HelloWorld’ do
-        pod 'Criollo', '~> 0.1.7’
+    pod 'Criollo', '~> 0.1.7’
 end
 ```
 After that is done, in Terminal, run:
 `pod install`.
 This will install Criollo and its dependencies and create a `.xcworkspace` bundle. You should use this file and not the `.xcodeproj` file. 
 Open the workspace in Xcode, and build.
+
 ### Principal Class - Info.plist
+
 We have to make a small change to the `info.plist` file. Normally, the `Principal Class` of a Cocoa application is `NSApplication`. NSApplication takes care of a bunch of stuff like setting up a `RunLoop`, connecting to the graphics server, handling application events etc.
+
 In the case of a Criollo application, this task is performed by the `CRApplication` class. We must *tell* the bundle that its `Principal Class` is `CRApplication`. Here’s how to do that:
+
 1. Open `HelloWorld.xcworkspace` in Xcode, then locate and select the `Info.plist` file, in the Project navigator.
 2. In the editor window, locate the key labeled `Principal class` (or `NSPrincipalClass` if you’re showing raw key/values).
 3. Replace `NSApplication` with `CRApplication`.
+
 ### CRApplicationMain - The Entry Point
 A typical Cocoa application will call the `NSApplicationMain` function to set everything up. A Criollo application does this with the `CRApplicationMain` function. This is located in the `main.m` file. 
 A typical `main.m` file looks like this:
