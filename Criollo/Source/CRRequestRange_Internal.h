@@ -16,6 +16,8 @@
 
 @interface CRRequestRange ()
 
++ (nonnull NSArray<NSString *>*)acceptedRangeUnits;
+
 - (nonnull instancetype)initWithRangesSpecifier:(NSString * _Nonnull)rangesSpecifier NS_DESIGNATED_INITIALIZER;
 
 @end

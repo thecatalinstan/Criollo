@@ -21,12 +21,14 @@
 
 @end
 
+
 @interface CRRequestRange : NSObject
 
 @property (nonatomic, readonly, strong, nonnull) NSArray<CRRequestByteRange *> *byteRangeSet;
 @property (nonatomic, readonly, strong, nonnull) NSString *bytesUnit;
 
 + (nonnull instancetype)reuestRangeWithRangesSpecifier:(NSString * _Nonnull)rangesSpecifier;
++ (nonnull NSString *)acceptRangesHeader;
 
 - (BOOL)isSatisfiableForFileSize:(NSUInteger)fileSize;
 

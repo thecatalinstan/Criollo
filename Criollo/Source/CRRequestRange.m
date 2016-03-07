@@ -90,6 +90,27 @@
 
 @implementation CRRequestRange
 
++ (NSArray<NSString *> *)acceptedRangeUnits {
+    static NSArray<NSString *> *acceptedRangeUnits;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        acceptedRangeUnits = @[@"bytes"];
+    });
+    return acceptedRangeUnits;
+}
+
++ (NSString *)acceptRangesHeader {
+    static NSString *acceptRangesHeader;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        acceptRangesHeader = [[CRRequestRange acceptedRangeUnits] componentsJoinedByString:CRRequestHeaderSeparator];
+        if ( acceptRangesHeader.length == 0 ) {
+            acceptRangesHeader = @"none";
+        }
+    });
+    return acceptRangesHeader;
+}
+
 + (instancetype)reuestRangeWithRangesSpecifier:(NSString *)rangesSpecifier {
     CRRequestRange* requestRange = [[CRRequestRange alloc] initWithRangesSpecifier:rangesSpecifier];
     return requestRange;
@@ -130,7 +151,7 @@
 }
 
 - (BOOL)isSatisfiableForFileSize:(NSUInteger)fileSize {
-    __block BOOL isSatisfiable = self.byteRangeSet.count > 0;
+    __block BOOL isSatisfiable = [[CRRequestRange acceptedRangeUnits] containsObject:self.bytesUnit] && self.byteRangeSet.count > 0;
     [self.byteRangeSet enumerateObjectsUsingBlock:^(CRRequestByteRange * _Nonnull byteRange, NSUInteger idx, BOOL * _Nonnull stop) {
         if ( ![byteRange isSatisfiableForFileSize:fileSize] ) {
             isSatisfiable = NO;
