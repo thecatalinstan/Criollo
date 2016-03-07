@@ -254,8 +254,3 @@ The existing features and APIs are stable and are unlikely to change dramaticall
 ## Get in Touch
 If you have any **questions** regarding the project or **how to** do anything with it, please feel free to get in touch either on Twitter [@criolloio](https://twitter.com/criolloio) or by plain old email [criollo@criollo.io](mailto:criollo@criollo.io).
 I really encourage you to [submit an issue](https://github.com/thecatalinstan/Criollo/issues/new), as your input is really really appreciated.
-
-
-
-
-
