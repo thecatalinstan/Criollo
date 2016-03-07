@@ -22,15 +22,15 @@ server.startListening()
 Criollo was created in order to take advantage of the truly awesome tools and APIs that OS X and iOS provide and serve content produced with them over the web. 
 It incorporates an HTTP web server and a [FastCGI](http://fastcgi.com) application server that are used to deliver content. The server is built on Grand Central Dispatch and designed for *speed*.
 ## How to Use.
-Criollo can easily be embedded as a web-server inside your OS X or iOS app, should you be in need of such a feature, however it was designed to create standalone, long-running daemon style apps. Is fully [launchd](http://launchd.info/) compatible and replicates the lifecycle and behaviour of `NSApplication`, so that the learning curve should be as smooth as possible. 
-See the Hello World examples for a demo of the two usage patterns.
+Criollo can easily be embedded as a web-server inside your OS X or iOS app, should you be in need of such a feature, however it was designed to create standalone, long-running daemon style apps. It is fully [`launchd`](http://launchd.info/) compatible and replicates the lifecycle and behaviour of `NSApplication`, so that the learning curve should be as smooth as possible. 
+See the [Hello World examples](https://github.com/thecatalinstan/Criollo/tree/master/Examples/HelloWorld) for a demo of the two usage patterns.
 # Installing
 The preferred way of installing Criollo is through [CocoaPods](http://cocoapods.org). However, you can also embed the framework in your projects manually.
 ## Installing with CocoaPods
 1. Create the Podfile if you don’t already have one. You can do so by running `pod init` in the folder of the project.
 2. Add Criollo to your Podfile.   
 ```ruby
-pod 'Criollo', '~> 0.1.7
+pod 'Criollo', '~> 0.1.7’
 ```
 3. Run `pod install`
 Please note that Criollo will download [CocoaAsyncSocket](https://github.com/robbiehanson/CocoaAsyncSocket) as a dependency.
@@ -142,16 +142,110 @@ self.server = [[CRHTTPServer alloc] init];
 ```
 Criollo will start an HTTP server that is bound to all interfaces on port `10781`.
 The server is accessible at [http://localhost:10781/](http://localhost:10781/). At this point, the server will return a 404 Not Found response, because there are no routes defined as yet. The info displayed to the client is provided by the built-in error handling block. The [code](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/CRServer.m#L42) for this is found [here](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/CRServer.m#L42).
+### CRRouteBlock
+The basic building block of Criollo’s touring system is a [`CRRouteBlock`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/CRTypes.h#L15).
+```objective-c
+typedef void(^CRRouteBlock)(CRRequest* _Nonnull request, CRResponse* _Nonnull response, CRRouteCompletionBlock _Nonnull completionHandler);
+```
+These blocks are added to paths and HTTP request methods and they get executed in the order in which they are added to the route.
 ### Adding a route
+[`CRServer`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/CRServer.h) offers several ways of adding a `CRRouteBlock` to a route:
+```objective-c
+- (void)addBlock:(CRRouteBlock _Nonnull)block;
+- (void)addBlock:(CRRouteBlock _Nonnull)block forPath:(NSString * _Nullable)path;
+- (void)addBlock:(CRRouteBlock _Nonnull)block forPath:(NSString * _Nullable)path HTTPMethod:(NSString * _Nullable)HTTPMethod;
+- (void)addBlock:(CRRouteBlock _Nonnull)block forPath:(NSString * _Nullable)path HTTPMethod:(NSString * _Nullable)HTTPMethod recursive:(BOOL)recursive;
+```
+For the purpose of this we will add a block that says “Hello World” to the path `/` for the HTTP method `GET`.
+```objective-c
+[self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+    [response sendString:@"Hello world!"];
+    completionHandler();
+} forPath:@"/" HTTPMethod:CRHTTPMethodGET];
+```
+Using `sendString:` and the `send` family of functions causes the response to end. Subsequent calls to the `write` or `send` family of functions with throw an `NSInternalInconsistencyException`. Check out the rest of the [CRResponse API](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/CRResponse.h).
+At the end of the work that this block will perform, call `completionHandler()` in order to proceed with the execution of the rest of the blocks.
+### Adding a “middleware” block
+Typically a middleware is a block that gets executed on a series of paths and is not the end-point of the route.
+```objective-c
+- (void)addBlock:(CRRouteBlock _Nonnull)block;
+```
+Calling this method of [`CRServer`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/CRServer.h) will cause the route to be added to all paths on all HTTP methods. Of course the same result could be achieved by calling any other versions of this method with the `path` and `HTTPMethod` parameters set to `nil`.
+Let’s add a middleware that will set the `Server` HTTP header on all responses. Useful for bragging rights. 
+We will add this before the “Hello world” block, as that one finishes the response.
+```objective-c
+[self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+    [response setValue:[NSBundle mainBundle].bundleIdentifier forHTTPHeaderField:@"Server"];		
+    completionHandler();
+}];
+```
+### Adding Some Logging
+Even though the “Hello world” block finishes the response, additional blocks can be added to the route. The only restriction is that they cannot alter the response. It has already been sent.
+Let’s add a block that simply does some `NSLog`-ing.
+```objective-c
+[self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+    NSUInteger statusCode = request.response.statusCode;
+    NSString* contentLength = [request.response valueForHTTPHeaderField:@"Content-Length"];
+    NSString* userAgent = request.env[@"HTTP_USER_AGENT"];
+    NSString* remoteAddress = request.connection.remoteAddress;
+    NSLog(@"%@ %@ - %lu %@ - %@", remoteAddress, request, statusCode, contentLength ? : @"-", userAgent);
+}];
+```
+All this block does is log some nice info about the request and response to the console.
+### To Sum it Up
+By this point we have a running server running at [http://localhost:10781/]([http://localhost:10781/]), that sets a `Server` header on all responses, says “Hello world” and then `NSLog`s what it has just done.
+The **AppDelegate.m** file should look like this:
+```objective-c
+#import "AppDelegate.h"
 
+@interface AppDelegate () <CRServerDelegate>
+
+@property (nonatomic, strong, nonnull) CRServer* server;
+
+@end
+
+@implementation AppDelegate
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    self.server = [[CRHTTPServer alloc] init];
+
+    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        [response setValue:[NSBundle mainBundle].bundleIdentifier forHTTPHeaderField:@"Server"];
+        completionHandler();
+    }];
+
+    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        [response sendString:@"Hello world!"];
+        completionHandler();
+    } forPath:@"/" HTTPMethod:CRHTTPMethodGET];
+
+    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        NSUInteger statusCode = request.response.statusCode;
+        NSString* contentLength = [request.response valueForHTTPHeaderField:@"Content-Length"];
+        NSString* userAgent = request.env[@"HTTP_USER_AGENT"];
+        NSString* remoteAddress = request.connection.remoteAddress;
+        NSLog(@"%@ %@ - %lu %@ - %@", remoteAddress, request, statusCode, contentLength ? : @"-", userAgent);
+    }];
+
+    [self.server startListening];
+}
+
+- (void)applicationWillTerminate:(NSNotification *)aNotification {
+    // Insert code here to tear down your application
+}
+
+@end
+```
 # Doing More Stuff
+
 ## Serving Static Files
 ## Cookies
 ## Setting up a View Controller
 ## Logging
+## Proper Start and Shutdown
 # Deploy
 # Work in Progress
-Criollo is still work in progress and not ready for the wild yet. The reason for this is mainly missing functionality and sheer lack of documentation[^It is also very high on my list of priorities, but sadly still a “to-do” item].
+Criollo is work in progress and not ready for the wild yet. The reason for this is mainly missing functionality and sheer lack of documentation[^It is also very high on my list of priorities, but sadly still a “to-do” item].
 The existing features and APIs are stable and are unlikely to change dramatically. 
 ## Missing Biggies
 1. **Multipart request body parsing**. Criollo can handle JSON and URL-encoded bodies for now. Upcoming and in progress is the `multipart/form-data` request parsing.
