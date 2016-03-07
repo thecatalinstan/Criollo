@@ -3,7 +3,7 @@ A powerful Cocoa based web application framework for OS X and iOS.
 Criollo helps create self-contained web applications that deliver content directly over HTTP or behind a web server (through FastCGI) - all the while leveraging the technologies you know and love: GCD, NSURLSession, CoreImage etc.
 You can write code in either Objective-C or Swift, however know that the framework itself is written in Objective-C. 
 ## Here’s a simple HelloWorld:
-```
+```objective-c
 CRServer* server = [[CRHTTPServer alloc] init];
 [server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
     [response sendString:@"Hello world!"];
@@ -11,7 +11,7 @@ CRServer* server = [[CRHTTPServer alloc] init];
 [server startListening];
 ```
 and in Swift:
-```
+```swift
 let server:CRServer = CRHTTPServer()
 server.addBlock({ (request:CRRequest, response:CRResponse, completionHandler:CRRouteCompletionBlock) -> Void in
 	response.sendString("Hello world!")
@@ -79,7 +79,7 @@ int main(int argc, const char * argv[]) {
 }
 ```
 In a Criollo app, the main.m file should look like this, assuming that `AppDelegate` is the application delegate class.
-```
+```objective-c
 #import <Criollo/Criollo.h>
 #import "AppDelegate.h"
 
@@ -94,7 +94,7 @@ At this point Xcode will display a warning about assigning `AppDelegate *` to `i
 As in the case of Cocoa, Criollo defines the [`CRApplicationDelegate`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/CRApplication.h#L22) protocol[^Again apologies for the lack of documentation].
 #### AppDelegate.h
 The file should look like this:
-```
+```objective-c
 #import <Criollo/Criollo.h>
 
 @interface AppDelegate : NSObject <CRApplicationDelegate>
@@ -105,7 +105,7 @@ The only two changes should be importing the Criollo header and conforming to `C
 #### AppDelegate.m
 Cocoa apps do more than we need. The main thing is to remove the  `IBOutlet` declaration, since we are not using Interface Builder to design our UI (if any). 
 Look for the line `@property (weak) IBOutlet NSWindow *window;` and remove it. Everything else stays the same. The file should look like this:
-```
+```objective-c
 #import "AppDelegate.h"
 
 @interface AppDelegate ()
@@ -132,11 +132,11 @@ The next step is to spin-up a server and start serving some content.
 ### CRHTTPServer/CRFCGIServer
 Depending on which way you need to go with your project, you can use either of the two (HTTP/FastCGI). This is not a decision you have to make at the start of development since the two classes are perfectly compatible. In case you need to switch just change the class you are instantiating.
 First, let’s declare the server object as a property of the AppDelegate, for the purposes of retaining a strong reference to it.
-```
+```objective-c
 @property (nonatomic, strong, nonnull) CRServer* server;
 ```
 After that, inside `applicationDidFinishLaunching:` we initialize the server and start listening.
-```
+```objective-c
 self.server = [[CRHTTPServer alloc] init];
 [self.server startListening];
 ```
