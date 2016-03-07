@@ -15,6 +15,7 @@
 #import <Criollo/CRConnection.h>
 #import <Criollo/CRMessage.h>
 #import <Criollo/CRRequest.h>
+#import <Criollo/CRRequestRange.h>
 #import <Criollo/CRResponse.h>
 
 #import <Criollo/CRHTTPServer.h>

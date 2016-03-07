@@ -15,6 +15,7 @@
 #import <CriolloiOS/CRConnection.h>
 #import <CriolloiOS/CRMessage.h>
 #import <CriolloiOS/CRRequest.h>
+#import <CriolloiOS/CRRequestRange.h>
 #import <CriolloiOS/CRResponse.h>
 
 #import <CriolloiOS/CRHTTPServer.h>
