@@ -220,29 +220,31 @@
         [response setValue:[CRRequestRange acceptRangesSpec] forHTTPHeaderField:@"Accept-Ranges"];
 
         CRRequestByteRange* requestByteRange;
-        NSRange byteRangeDataRange;
+        NSRange byteRangeDataRange = NSMakeRange(NSNotFound, 0);
+
+        NSUInteger fileSize = @(attributes.fileSize).integerValue;
 
         // Set the Content-length and Content-range headers
         if ( request.range.byteRangeSet.count > 0 ) {
 
             requestByteRange = request.range.byteRangeSet[0];
-            byteRangeDataRange = [requestByteRange dataRangeForFileSize:attributes.fileSize];
+            byteRangeDataRange = [requestByteRange dataRangeForFileSize:fileSize];
 
-            NSString* contentRangeSpec = [requestByteRange contentRangeSpecForFileSize:attributes.fileSize];
+            NSString* contentRangeSpec = [requestByteRange contentRangeSpecForFileSize:fileSize];
             contentRangeSpec = [NSString stringWithFormat:@"%@ %@", request.range.bytesUnit, contentRangeSpec];
             [response setValue:contentRangeSpec forHTTPHeaderField:@"Content-Range"];
 
-            if ( [request.range isSatisfiableForFileSize:attributes.fileSize ] ) {                                // Set partial content response header
-                if ( byteRangeDataRange.location == 0 && byteRangeDataRange.length == attributes.fileSize ) {
+            if ( [request.range isSatisfiableForFileSize:fileSize ] ) {                                // Set partial content response header
+                if ( byteRangeDataRange.location == 0 && byteRangeDataRange.length == fileSize ) {
                     [response setStatusCode:200 description:nil];
                 } else {
                     [response setStatusCode:206 description:nil];
                 }
-                NSString* conentLengthSpec = [requestByteRange contentLengthSpecForFileSize:attributes.fileSize];
+                NSString* conentLengthSpec = [requestByteRange contentLengthSpecForFileSize:fileSize];
                 [response setValue:conentLengthSpec forHTTPHeaderField:@"Content-Length"];
             } else {
                 NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
-                userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:NSLocalizedString(@"The requested byte-range %@-%@ / %lu could not be satisfied.",), requestByteRange.firstBytePos, requestByteRange.lastBytePos, attributes.fileSize];
+                userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:NSLocalizedString(@"The requested byte-range %@-%@ / %lu could not be satisfied.",), requestByteRange.firstBytePos, requestByteRange.lastBytePos, fileSize];
                 userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
                 userInfo[NSFilePathErrorKey] = filePath;
                 NSError* rangeError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerRangeNotSatisfiableError userInfo:userInfo];
@@ -251,7 +253,7 @@
             }
 
         } else {
-            [response setValue:@(attributes.fileSize).stringValue forHTTPHeaderField:@"Content-Length"];
+            [response setValue:@(fileSize).stringValue forHTTPHeaderField:@"Content-Length"];
         }
 
         // Get the mime type and set the Content-type header
@@ -259,7 +261,7 @@
         [response setValue:contentType forHTTPHeaderField:@"Content-Type"];
 
         // Read synchroniously if the file size is below threshold
-        if ( attributes.fileSize <= CRStaticDirectoryServingReadThreshold ) {
+        if ( fileSize <= CRStaticDirectoryServingReadThreshold ) {
 
             NSError* fileReadError;
             NSData* fileData = [NSData dataWithContentsOfFile:filePath options:(self.shouldCacheFiles ? NSDataReadingMappedIfSafe : NSDataReadingUncached) error:&fileReadError];
@@ -300,7 +302,7 @@
             dispatch_io_set_low_water(fileReadChannel, CRStaticDirectoryServingReadThreshold);
 
             off_t offset = 0;
-            size_t length = attributes.fileSize;
+            size_t length = fileSize;
             if ( request.range.byteRangeSet.count > 0 ) {
                 offset = byteRangeDataRange.location;
                 length = byteRangeDataRange.length;

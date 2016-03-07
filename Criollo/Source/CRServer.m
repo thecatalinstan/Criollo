@@ -66,7 +66,7 @@
         }
 
         // Error details
-        [responseString appendFormat:@"%@ %lu\n%@\n", err.domain, err.code, err.localizedDescription];
+        [responseString appendFormat:@"%@ %lu\n%@\n", err.domain, (long)err.code, err.localizedDescription];
 
         // Error user-info
         if ( err.userInfo.count > 0 ) {
