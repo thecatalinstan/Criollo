@@ -344,7 +344,19 @@ The **AppDelegate.m** file should look like this:
 
 # Doing More Stuff
 
+Our app is now able to perform a basic set of functions but it is far from being ready for deployment in the wilderness of “hello World!”-craving enthusiasts.
+
+Let’s look at some other real world scenarios.
+
 ## Serving Static Files
+
+It is conceivable that you will need to serve a file from disk at some point.
+
+```objective-c
+
+```
+
+### MIME-Type Hinting
 
 ## Cookies
 

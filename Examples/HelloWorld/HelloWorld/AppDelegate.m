@@ -2,35 +2,46 @@
 //  AppDelegate.m
 //  HelloWorld
 //
-//  Created by Cătălin Stan on 28/04/15.
-//  Copyright (c) 2015 Catalin Stan. All rights reserved.
+//  Created by Cătălin Stan on 07/03/16.
+//  Copyright © 2016 Criollo.io. All rights reserved.
 //
 
 #import "AppDelegate.h"
 
+@interface AppDelegate () <CRServerDelegate>
+
+@property (nonatomic, strong, nonnull) CRServer* server;
+
+@end
+
 @implementation AppDelegate
 
-- (void)applicationWillFinishLaunching:(NSNotification *)notification {
-    [[NSNotificationCenter defaultCenter] addObserverForName:LogMessageNotificationName object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-        NSAttributedString* attributtedString = note.object;
-        [CRApp logFormat:@"%@", attributtedString.string];
-    }];
-}
-
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    [self setupServer];
-    [self startListening:nil];
+    self.server = [[CRHTTPServer alloc] init];
+
+    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        [response setValue:[NSBundle mainBundle].bundleIdentifier forHTTPHeaderField:@"Server"];
+        completionHandler();
+    }];
+
+    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        [response sendString:@"Hello world!"];
+        completionHandler();
+    } forPath:@"/" HTTPMethod:CRHTTPMethodGET];
+
+    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        NSUInteger statusCode = request.response.statusCode;
+        NSString* contentLength = [request.response valueForHTTPHeaderField:@"Content-Length"];
+        NSString* userAgent = request.env[@"HTTP_USER_AGENT"];
+        NSString* remoteAddress = request.connection.remoteAddress;
+        NSLog(@"%@ %@ - %lu %@ - %@", remoteAddress, request, statusCode, contentLength ? : @"-", userAgent);
+    }];
+
+    [self.server startListening];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
-    if (self.isConnected) {
-        [self stopListening:nil];
-    }
-}
-
-- (void)serverDidFailToStartWithError:(NSError *)error {
-    [super serverDidFailToStartWithError:error];
-    [CRApp terminate:nil];
+    // Insert code here to tear down your application
 }
 
 @end
