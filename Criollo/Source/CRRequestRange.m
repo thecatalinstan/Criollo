@@ -67,7 +67,7 @@
     NSString* fileSizeString = fileSize == UINT_MAX ? @"*" : @(fileSize).stringValue;
     if ([self isSatisfiableForFileSize:fileSize] ) {
         NSRange dataRange = [self dataRangeForFileSize:fileSize];
-        contentRangeSpec = [NSString stringWithFormat:@"%lu-%lu/%@", dataRange.location, dataRange.length - 1, fileSizeString];
+        contentRangeSpec = [NSString stringWithFormat:@"%lu-%lu/%@", dataRange.location, dataRange.location + dataRange.length - 1, fileSizeString];
     } else {
         contentRangeSpec = [NSString stringWithFormat:@"*/%@", fileSizeString];
     }
@@ -78,7 +78,7 @@
     NSString* contentLengthSpec;
     if ([self isSatisfiableForFileSize:fileSize] ) {
         NSRange dataRange = [self dataRangeForFileSize:fileSize];
-        contentLengthSpec = @(dataRange.length - dataRange.location).stringValue;
+        contentLengthSpec = @(dataRange.length).stringValue;
     } else {
         contentLengthSpec = @(fileSize).stringValue;
     }

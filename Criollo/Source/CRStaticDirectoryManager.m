@@ -227,6 +227,7 @@
             byteRangeDataRange = [request.range.byteRangeSet[0] dataRangeForFileSize:attributes.fileSize];
 
             NSString* contentRangeSpec = [request.range.byteRangeSet[0] contentRangeSpecForFileSize:attributes.fileSize];
+            contentRangeSpec = [NSString stringWithFormat:@"%@ %@", request.range.bytesUnit, contentRangeSpec];
             [response setValue:contentRangeSpec forHTTPHeaderField:@"Content-Range"];
 
             if ( [request.range isSatisfiableForFileSize:attributes.fileSize ] ) {                                // Set partial content response header
