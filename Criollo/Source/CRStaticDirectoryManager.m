@@ -219,14 +219,16 @@
         // We are accepting byte ranges
         [response setValue:[CRRequestRange acceptRangesSpec] forHTTPHeaderField:@"Accept-Ranges"];
 
+        CRRequestByteRange* requestByteRange;
         NSRange byteRangeDataRange;
 
         // Set the Content-length and Content-range headers
         if ( request.range.byteRangeSet.count > 0 ) {
 
-            byteRangeDataRange = [request.range.byteRangeSet[0] dataRangeForFileSize:attributes.fileSize];
+            requestByteRange = request.range.byteRangeSet[0];
+            byteRangeDataRange = [requestByteRange dataRangeForFileSize:attributes.fileSize];
 
-            NSString* contentRangeSpec = [request.range.byteRangeSet[0] contentRangeSpecForFileSize:attributes.fileSize];
+            NSString* contentRangeSpec = [requestByteRange contentRangeSpecForFileSize:attributes.fileSize];
             contentRangeSpec = [NSString stringWithFormat:@"%@ %@", request.range.bytesUnit, contentRangeSpec];
             [response setValue:contentRangeSpec forHTTPHeaderField:@"Content-Range"];
 
@@ -236,11 +238,11 @@
                 } else {
                     [response setStatusCode:206 description:nil];
                 }
-                NSString* conentLengthSpec = [request.range.byteRangeSet[0] contentLengthSpecForFileSize:attributes.fileSize];
+                NSString* conentLengthSpec = [requestByteRange contentLengthSpecForFileSize:attributes.fileSize];
                 [response setValue:conentLengthSpec forHTTPHeaderField:@"Content-Length"];
             } else {
                 NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
-                userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:NSLocalizedString(@"The requested byte-range %@-%@ / %lu could not be satisfied.",), request.range.byteRangeSet[0].firstBytePos, request.range.byteRangeSet[0].lastBytePos, attributes.fileSize];
+                userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:NSLocalizedString(@"The requested byte-range %@-%@ / %lu could not be satisfied.",), requestByteRange.firstBytePos, requestByteRange.lastBytePos, attributes.fileSize];
                 userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
                 userInfo[NSFilePathErrorKey] = filePath;
                 NSError* rangeError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerRangeNotSatisfiableError userInfo:userInfo];
@@ -254,9 +256,7 @@
 
         // Get the mime type and set the Content-type header
         NSString* contentType = [[CRMimeTypeHelper sharedHelper] mimeTypeForFileAtPath:filePath];
-        [response setValue:contentType forHTTPHeaderField:@"Content-type"];
-
-        [response writeString:@""];
+        [response setValue:contentType forHTTPHeaderField:@"Content-Type"];
 
         // Read synchroniously if the file size is below threshold
         if ( attributes.fileSize <= CRStaticDirectoryServingReadThreshold ) {
@@ -277,7 +277,7 @@
 
         } else {
 
-            dispatch_io_t fileReadChannel = dispatch_io_create_with_path(DISPATCH_IO_STREAM, filePath.UTF8String, O_RDONLY, 0, self.fileReadingQueue,  ^(int error) {
+            dispatch_io_t fileReadChannel = dispatch_io_create_with_path(DISPATCH_IO_RANDOM, filePath.UTF8String, O_RDONLY, 0, self.fileReadingQueue,  ^(int error) {
                 if ( error ) {
                     NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
                     userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"There was an error releasing the file read channel.",);
