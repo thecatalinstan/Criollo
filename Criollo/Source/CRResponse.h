@@ -15,34 +15,31 @@
 
 @interface CRResponse : CRMessage
 
-@property (nonatomic, weak) CRConnection *connection;
-@property (nonatomic, weak) CRRequest *request;
+NS_ASSUME_NONNULL_BEGIN
+@property (nonatomic, weak, nullable) CRConnection *connection;
+@property (nonatomic, weak, nullable) CRRequest *request;
 
 @property (nonatomic, readonly) NSUInteger statusCode;
 @property (nonatomic, strong, readonly, nullable) NSString* statusDescription;
 
-- (void)setStatusCode:(NSUInteger)statusCode description:(nullable NSString *)description;
+- (void)setStatusCode:(NSUInteger)statusCode description:(NSString * _Nullable)description;
 
-- (void)setAllHTTPHeaderFields:(nonnull NSDictionary<NSString *, NSString *> *)headerFields;
-- (void)addValue:(nonnull NSString *)value forHTTPHeaderField:(nonnull NSString *)HTTPHeaderField;
-- (void)setValue:(nonnull NSString *)value forHTTPHeaderField:(nonnull NSString *)HTTPHeaderField;
+- (void)setAllHTTPHeaderFields:(NSDictionary<NSString *, NSString *> *)headerFields;
+- (void)addValue:(NSString *)value forHTTPHeaderField:(NSString *)HTTPHeaderField;
+- (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)HTTPHeaderField;
 
-- (void)setCookie:(nonnull NSHTTPCookie *)cookie;
-- (nonnull NSHTTPCookie*)setCookie:(nonnull NSString *)name value:(nonnull NSString *)value path:(nonnull NSString *)path expires:(nullable NSDate *)expires domain:(nullable NSString *)domain secure:(BOOL)secure;
+- (void)setCookie:(NSHTTPCookie *)cookie;
+- (NSHTTPCookie*)setCookie:(NSString *)name value:(NSString *)value path:(NSString *)path expires:(NSDate *)expires domain:(NSString *)domain secure:(BOOL)secure;
 
-- (void)writeData:(nonnull NSData *)data;
-- (void)sendData:(nonnull NSData *)data;
+- (void)writeData:(NSData *)data;
+- (void)sendData:(NSData *)data;
 
-- (void)writeString:(nonnull NSString *)string;
-- (void)sendString:(nonnull NSString *)string;
+- (void)writeString:(NSString *)string;
+- (void)sendString:(NSString *)string;
 
-- (void)writeFormat:(nonnull NSString *)format, ...;
-- (void)sendFormat:(nonnull NSString *)format, ...;
+- (void)writeFormat:(NSString *)format, ...;
+- (void)sendFormat:(NSString *)format, ...;
 
-NS_ASSUME_NONNULL_BEGIN
-- (void)writeFormat:(nonnull NSString *)format args:(va_list)args;
-- (void)sendFormat:(nonnull NSString *)format args:(va_list)args;
-NS_ASSUME_NONNULL_END
 
 - (void)writeFormat:(NSString *)format args:(va_list)args;
 - (void)sendFormat:(NSString *)format args:(va_list)args;
@@ -56,3 +53,5 @@ NS_ASSUME_NONNULL_END
 - (void)finish;
 
 @end
+
+NS_ASSUME_NONNULL_END
