@@ -44,6 +44,15 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)sendFormat:(nonnull NSString *)format args:(va_list)args;
 NS_ASSUME_NONNULL_END
 
+- (void)writeFormat:(NSString *)format args:(va_list)args;
+- (void)sendFormat:(NSString *)format args:(va_list)args;
+
+- (void)redirectToURL:(NSURL *)URL;
+- (void)redirectToURL:(NSURL *)URL statusCode:(NSUInteger)statusCode;
+
+- (void)redirectToLocation:(NSString *)location;
+- (void)redirectToLocation:(NSString *)location statusCode:(NSUInteger)statusCode;
+
 - (void)finish;
 
 @end
