@@ -347,9 +347,7 @@ The **AppDelegate.m** file should look like this:
 
 # Doing More Stuff
 
-Our app is now able to perform a basic set of functions but it is far from being ready for deployment in the wilderness of “hello World!”-craving enthusiasts.
-
-Let’s look at some other real world scenarios.
+Our app is now able to perform a basic set of functions but it is far from being ready for deployment in the wilderness of “Hello World!”-craving enthusiasts. Let’s look at some other real world scenarios.
 
 ## Serving Static Files
 
@@ -374,7 +372,7 @@ We will add a route that serves everything in the current user’s home director
 [self.server addStaticDirectoryAtPath:@"~" forPath:@"/pub" options:CRStaticDirectoryServingOptionsCacheFiles|CRStaticDirectoryServingOptionsAutoIndex];
 ```
 
-You should be able to see the file list at [http://localhost:10781/pub].
+You should be able to see the file list at [http://localhost:10781/pub](http://localhost:10781/pub).
 
 #### CRStaticDirectoryManager
 
