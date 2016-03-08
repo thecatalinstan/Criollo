@@ -1,6 +1,6 @@
 # Criollo
 
-A powerful Cocoa based web application framework for OS X and iOS.
+#### A powerful Cocoa based web application framework for OS X and iOS.
 
 Criollo helps create self-contained web applications that deliver content directly over HTTP or behind a web server (through FastCGI) - all the while leveraging the technologies you know and love: GCD, NSURLSession, CoreImage etc.
 
@@ -49,10 +49,6 @@ The preferred way of installing Criollo is through [CocoaPods](http://cocoapods.
 3. Run `pod install`
 
 Please note that Criollo will download [CocoaAsyncSocket](https://github.com/robbiehanson/CocoaAsyncSocket) as a dependency.
-
-# Table of Contents
-
-{{TOC}}
 
 # Getting Started
 
