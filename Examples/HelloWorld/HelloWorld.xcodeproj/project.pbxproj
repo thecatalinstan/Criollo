@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		161465C8A01CB23E991ACB69 /* Pods_HelloWorld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98FCFB4BC4F80A6B71F1494F /* Pods_HelloWorld.framework */; };
+		AD977C101C8E5827007A0A7E /* io.criollo.HelloWorld.plist in Resources */ = {isa = PBXBuildFile; fileRef = AD977C0F1C8E5827007A0A7E /* io.criollo.HelloWorld.plist */; };
 		ADA039E11C8DDDFA004B452D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA039E01C8DDDFA004B452D /* AppDelegate.m */; };
 		ADA039E41C8DDDFA004B452D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA039E31C8DDDFA004B452D /* main.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		98FCFB4BC4F80A6B71F1494F /* Pods_HelloWorld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HelloWorld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD977C0F1C8E5827007A0A7E /* io.criollo.HelloWorld.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = io.criollo.HelloWorld.plist; sourceTree = "<group>"; };
 		ADA039DC1C8DDDFA004B452D /* HelloWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADA039DF1C8DDDFA004B452D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		ADA039E01C8DDDFA004B452D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 		ADA039E21C8DDDFA004B452D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				AD977C0F1C8E5827007A0A7E /* io.criollo.HelloWorld.plist */,
 				ADA039E31C8DDDFA004B452D /* main.m */,
 			);
 			name = "Supporting Files";
@@ -149,6 +152,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD977C101C8E5827007A0A7E /* io.criollo.HelloWorld.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
