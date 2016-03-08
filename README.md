@@ -35,7 +35,7 @@ It incorporates an HTTP web server and a [FastCGI](http://fastcgi.com) applicati
 
 Criollo can easily be embedded as a web-server inside your OS X or iOS app, should you be in need of such a feature, however it was designed to create standalone, long-lived daemon style apps. It is fully [`launchd`](http://launchd.info/) compatible and replicates the lifecycle and behaviour of `NSApplication`, so that the learning curve should be as smooth as possible. 
 
-See the [Hello World examples](https://github.com/thecatalinstan/Criollo/tree/master/Examples/HelloWorld) for a demo of the two usage patterns.
+See the [Hello World Multi Target example](https://github.com/thecatalinstan/Criollo/tree/master/Examples/HelloWorld-MultiTarget) for a demo of the two usage patterns.
 
 # Installing
 
@@ -48,6 +48,10 @@ The preferred way of installing Criollo is through [CocoaPods](http://cocoapods.
 3. Run `pod install`
 
 Please note that Criollo will download [CocoaAsyncSocket](https://github.com/robbiehanson/CocoaAsyncSocket) as a dependency.
+
+# Table of Contents
+
+{{TOC}}
 
 # Getting Started
 
@@ -289,6 +293,7 @@ Let’s add a block that simply does some `NSLog`-ing.
     NSString* userAgent = request.env[@"HTTP_USER_AGENT"];
     NSString* remoteAddress = request.connection.remoteAddress;
     NSLog(@"%@ %@ - %lu %@ - %@", remoteAddress, request, statusCode, contentLength ? : @"-", userAgent);
+    completionHandler();
 }];
 ```
 
@@ -330,6 +335,7 @@ The **AppDelegate.m** file should look like this:
         NSString* userAgent = request.env[@"HTTP_USER_AGENT"];
         NSString* remoteAddress = request.connection.remoteAddress;
         NSLog(@"%@ %@ - %lu %@ - %@", remoteAddress, request, statusCode, contentLength ? : @"-", userAgent);
+        completionHandler();
     }];
 
     [self.server startListening];
@@ -353,20 +359,159 @@ Let’s look at some other real world scenarios.
 It is conceivable that you will need to serve a file from disk at some point.
 
 ```objective-c
-
+- (void)addStaticDirectoryAtPath:(NSString * _Nonnull)directoryPath forPath:(NSString * _Nonnull)path options:(CRStaticDirectoryServingOptions)options;
 ```
+
+This method allows “mounting” directories as static file serving  points. The `options` parameter is an bitwise-or’ed list of [`CRStaticDirectoryServingOptions`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/CRTypes.h#L17-L22) values.
+
+- `CRStaticDirectoryServingOptionsCacheFiles` - use the OS’s disk cache when serving files. (this only applies to files smaller that 512K).
+- `CRStaticDirectoryServingOptionsFollowSymlinks` - follow symbolic-links.
+- `CRStaticDirectoryServingOptionsAutoIndex` - generates a clickable HTML index of the directory’s contents.
+- `CRStaticDirectoryServingOptionsAutoIndexShowHidden` - show hidden files in the auto-generated index.
+
+### Mounting the Directory
+
+We will add a route that serves everything in the current user’s home directory as an auto-generated index, with caching. We’ll add this block before the logging block, in order to give it a chance to set the response headers before we try to log them.
+
+```objective-c
+[self.server addStaticDirectoryAtPath:@"~" forPath:@"/pub" options:CRStaticDirectoryServingOptionsCacheFiles|CRStaticDirectoryServingOptionsAutoIndex];
+```
+
+You should be able to see the file list at [http://localhost:10781/pub].
+
+#### CRStaticDirectoryManager
+
+The class responsible for serving the files is [`CRStaticDirectoryManager`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/CRStaticDirectoryManager.h). 
+
+Static files **under [512K](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/CRStaticDirectoryManager.m#L22)** are read entirely in memory - using or not the OS disk cache, depending on the `CRStaticDirectoryServingOptionsCacheFiles` flag - synchronously within the same context of the route blocks.
+
+Static files **over that threshold** are read in chunks using the [Dispatch I/O Channel API](https://developer.apple.com/library/ios/documentation/Performance/Reference/GCD_libdispatch_Ref/#//apple_ref/doc/uid/TP40008079-CH2-SW73) on a completely separate queue. `CRStaticDirectoryManager`’s route block will call its `completionHandler()` as soon as the I/O channel has been opened and the reading has been queued. In our case, if you are serving a large file, the logging block will be executed before the reading of the file is completed. 
 
 ### MIME-Type Hinting
 
+`CRStaticDirectoryManager` uses [`CRMimeTypeHelper`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/CRMimeTypeHelper.h) in order to determine the value of the `Content-type` [HTTP header](https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17). It uses the files [UTI](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/CRMimeTypeHelper.m#L56-L86) in order to determine the appropriate value. 
+
+While this algorithm is evolving, you may also specify an explicit value you want to set for a specific extension. 
+
+Let’s specify that `.nfo` files will have the `Content-Type` HTTP header set to `text/plain; charset-utf-8`.
+
+```objective-c
+[[CRMimeTypeHelper sharedHelper] setMimeType:@"text/plain; charset=utf-8" forExtension:@"nfo"];
+```
+
 ## Cookies
+
+Criollo uses [`NSHTTPCookie`](https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSHTTPCookie_Class/) class to encapsulate HTTP cookies.   Criollo adds a [category](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/Extensions/NSHTTPCookie%2BCriollo.h) to the `NSHTTPCookie` class, that defines the method `responseHeaderFieldsWithCookies:` in order to create the appropriate response headers.
+
+Criollo manages the cookie store for you, so you don’t have to worry about persisting, deleting expired cookies, etc.
+
+We will create two cookies.
+- a session cookie called `session`, which will contain a UUID
+- a long lived cookie called `token`, which will expire a long way into the future
+
+For simplicity, we will add this code to the block that sets the `Server` HTTP header.
+
+```objective-c
+if ( !request.cookies[@"session"] ) {
+	[response setCookie:@"session" value:[NSUUID UUID].UUIDString path:@"/" expires:nil domain:nil secure:NO];
+}
+[response setCookie:@"token" value:[NSUUID UUID].UUIDString path:@"/" expires:[NSDate distantFuture] domain:nil secure:NO];
+```
+
+The [`CRRequest`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/CRRequest.h#L34) and [`CRResponse`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/CRResponse.h#L30-L31) cookie APIs are straight-forward.
+
+```objective-c
+@property (nonatomic, readonly, nonnull) NSDictionary<NSString *, NSString *> * cookies;
+```
+
+```objective-c
+- (void)setCookie:(nonnull NSHTTPCookie *)cookie;
+- (nonnull NSHTTPCookie*)setCookie:(nonnull NSString *)name value:(nonnull NSString *)value path:(nonnull NSString *)path expires:(nullable NSDate *)expires domain:(nullable NSString *)domain secure:(BOOL)secure;
+```
 
 ## Setting up a View Controller
 
-## Logging
+*(to be continued)*
 
-## Proper Start and Shutdown
+## Logging and CRServerDelegate
 
-# Deploy
+*(to be continued)*
+
+## Clean Start and Shutdown
+
+*(to be continued)*
+
+# Deployment
+
+Criollo is meant to run on OS X. I have no plans for the near future to make it run on Linux. That being said, there seems to be a sustained effort from the community to port OS X APIs to Linux. As this becomes mature I will look into it.
+
+## Deploying to the Server
+
+The final product will always be an [application bundle](https://developer.apple.com/library/mac/documentation/CoreFoundation/Conceptual/CFBundles/BundleTypes/BundleTypes.html#//apple_ref/doc/uid/10000123i-CH101-SW13), which can be simply deployed to the target server as any other application would be.
+
+A more elegant solution would be deploying from source, using a git hook on the target machine. A deployment script is coming. 
+
+*(to be continued)*
+
+## Integrating with launchd
+
+The only thing that you need to make your Criollo application start and stop on launchd commands is to create a [`launchd.plist`](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man5/launchd.plist.5.html) file and place it in `/Library/LaunchDaemons/`. 
+
+Here is an example file for the HelloWorld project described above is this:
+
+**io.criollo.HelloWorld.plist**
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Disabled</key>
+	<false/>
+	<key>KeepAlive</key>
+	<true/>
+	<key>Label</key>
+	<string>io.criollo.HelloWorld</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/WebApplications/HelloWorld.app/Contents/MacOS/HelloWorld</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>ServiceDescription</key>
+	<string>The criollo.io website https://criollo.io/</string>
+	<key>StandardErrorPath</key>
+	<string>/var/log/io.criollo.HelloWorld.log</string>
+	<key>StandardOutPath</key>
+	<string>/var/log/io.criollo.HelloWorld.log</string>
+</dict>
+</plist>
+```
+
+The example above assumes the app will be deployed at `/WebApplications/HelloWorld.app`.
+
+Read more about launchd plists in the `launchd.plist(5)` man page.
+
+## Starting and Stopping
+
+You can then start and stop the app using [`launchctl`](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/launchctl.1.html) as follows.
+
+```bash
+sudo launchctl load /Library/LaunchDaemons/io.criollo.HelloWorld.plist
+
+sudo launchctl unload /Library/LaunchDaemons/io.criollo.HelloWorld.plist
+```
+
+Read more about launchctl in the `launchctl(1)` man page.
+
+# Examples
+
+There following examples are available:
+
+[**HelloWorld**](https://github.com/thecatalinstan/Criollo/tree/master/Examples/HelloWorld). The full code of the example developed in this primer.
+
+[**HelloWorld-ObjC**](https://github.com/thecatalinstan/Criollo/tree/master/Examples/HelloWorld-ObjC) and [**HelloWorld-Swift**](https://github.com/thecatalinstan/Criollo/tree/master/Examples/HelloWorld-Swift). Two standalone launchd daemons. The same exact functionality is replicated in Objective-C and Swift.
+
+[**HelloWorld-MultiTarget**](https://github.com/thecatalinstan/Criollo/tree/master/Examples/HelloWorld-MultiTarget). This example creates a launchd daemon app, an iOS app and an OS X app, using a shared code-base. 
 
 # Work in Progress
 
