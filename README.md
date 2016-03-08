@@ -473,7 +473,7 @@ Here is an example file for the HelloWorld project described above is this:
 	<key>RunAtLoad</key>
 	<true/>
 	<key>ServiceDescription</key>
-	<string>The criollo.io website https://criollo.io/</string>
+	<string>A simple "Hello World" serving app</string>
 	<key>StandardErrorPath</key>
 	<string>/var/log/io.criollo.HelloWorld.log</string>
 	<key>StandardOutPath</key>
