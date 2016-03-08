@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Disabled</key>
+	<false/>
+	<key>KeepAlive</key>
+	<true/>
+	<key>Label</key>
+	<string>io.criollo.HelloWorld</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>&quot;/WebApplications/HelloWorld.app/Contents/MacOS/HelloWorld&quot;</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>ServiceDescription</key>
+	<string>The criollo.io website https://criollo.io/</string>
+	<key>StandardErrorPath</key>
+	<string>/var/log/io.criollo.HelloWorld.log</string>
+	<key>StandardOutPath</key>
+	<string>/var/log/io.criollo.HelloWorld.log</string>
+</dict>
+</plist>
