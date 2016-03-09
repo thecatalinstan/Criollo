@@ -450,6 +450,10 @@ A more elegant solution would be deploying from source, using a git hook on the 
 
 ## Integrating with launchd
 
+Launchd is OS X’s builtin process manager. [Wikipedia](http://en.wikipedia.org/wiki/Launchd) defines it as
+
+> a unified, open-source service management framework for starting, stopping and managing daemons, applications, processes, and scripts. Written and designed by Dave Zarzycki at Apple, it was introduced with Mac OS X Tiger and is licensed under the Apache License.
+
 The only thing that you need to make your Criollo application start and stop on launchd commands is to create a [`launchd.plist`](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man5/launchd.plist.5.html) file and place it in `/Library/LaunchDaemons/`. 
 
 Here is an example file for the HelloWorld project described above is this:
