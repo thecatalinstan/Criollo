@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)HTTPHeaderField;
 
 - (void)setCookie:(NSHTTPCookie *)cookie;
-- (NSHTTPCookie*)setCookie:(NSString *)name value:(NSString *)value path:(NSString *)path expires:(NSDate *)expires domain:(NSString *)domain secure:(BOOL)secure;
+- (NSHTTPCookie*)setCookie:(NSString *)name value:(NSString *)value path:(NSString *)path expires:(NSDate * _Nullable)expires domain:(NSString * _Nullable)domain secure:(BOOL)secure;
 
 - (void)writeData:(NSData *)data;
 - (void)sendData:(NSData *)data;
