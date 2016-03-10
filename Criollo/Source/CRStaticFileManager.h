@@ -8,9 +8,13 @@
 
 #import "CRTypes.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
+FOUNDATION_EXPORT NSString * NSStringFromCRStaticFileContentDisposition(CRStaticFileContentDisposition contentDisposition);
+FOUNDATION_EXPORT CRStaticFileContentDisposition CRStaticFileContentDispositionMake(NSString * contentDispositionName);
+
 @interface CRStaticFileManager : NSObject
 
-NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSString * filePath;
 @property (nonatomic, readonly) NSDictionary * attributes;
@@ -22,15 +26,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSString* fileName;
 @property (nonatomic, strong) NSString* contentType;
-@property (nonatomic, strong) NSString* contentDisposition;
+@property (nonatomic) CRStaticFileContentDisposition contentDisposition;
 
 + (instancetype)managerWithFileAtPath:(NSString *)filePath;
 + (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options;
-+ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options attributes:(NSDictionary * _Nullable)attributes;
++ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options contentType:(NSString * _Nullable)contentType;
++ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
++ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition attributes:(NSDictionary * _Nullable)attributes;
 
 - (instancetype)initWithFileAtPath:(NSString *)filePath;
 - (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options;
-- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options attributes:(NSDictionary * _Nullable)attributes NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options contentType:(NSString * _Nullable)contentType;
+- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
+- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition attributes:(NSDictionary * _Nullable)attributes;
 
 NS_ASSUME_NONNULL_END
 

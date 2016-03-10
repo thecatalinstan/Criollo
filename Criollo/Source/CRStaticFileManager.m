@@ -32,9 +32,39 @@
 
 #define CRStaticFileManagerNotImplementedError                     999
 
+NS_ASSUME_NONNULL_BEGIN
+
+static NSString * CRStaticFileContentDispositionNoneValue = @"none";
+static NSString * CRStaticFileContentDispositionInlineValue = @"inline";
+static NSString * CRStaticFileContentDispositionAttachmentValue = @"attachment";
+
+NSString * NSStringFromCRStaticFileContentDisposition(CRStaticFileContentDisposition contentDisposition) {
+    switch (contentDisposition) {
+        case CRStaticFileContentDispositionNone:
+            return CRStaticFileContentDispositionNoneValue;
+        case CRStaticFileContentDispositionInline:
+            return CRStaticFileContentDispositionInlineValue;
+        case CRStaticFileContentDispositionAttachment:
+            return CRStaticFileContentDispositionAttachmentValue;
+    }
+}
+
+CRStaticFileContentDisposition CRStaticFileContentDispositionMake(NSString * contentDispositionName) {
+    CRStaticFileContentDisposition contentDisposition;
+    if ( [contentDispositionName isEqualToString:CRStaticFileContentDispositionInlineValue] ) {
+        contentDisposition = CRStaticFileContentDispositionInline;
+    } else if ( [contentDispositionName isEqualToString:CRStaticFileContentDispositionAttachmentValue] ) {
+        contentDisposition = CRStaticFileContentDispositionAttachment;
+    } else {
+        contentDisposition = CRStaticFileContentDispositionNone;
+    }
+    return contentDisposition;
+}
+
+
+
 @interface CRStaticFileManager ()
 
-NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) CRStaticFileServingOptions options;
 @property (nonatomic, readonly, strong) dispatch_queue_t fileReadingQueue;
@@ -49,30 +79,47 @@ NS_ASSUME_NONNULL_END
 @implementation CRStaticFileManager
 
 + (instancetype)managerWithFileAtPath:(NSString *)filePath {
-    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:0 attributes:nil];
+    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:0 contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
 }
 
 + (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options {
-    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:options attributes:nil];
+    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:options contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
 }
 
-+ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options attributes:(NSDictionary *)attributes {
-    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:options attributes:attributes];
++ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options contentType:(NSString * _Nullable)contentType {
+    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:options contentType:contentType contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
+}
+
++ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition {
+    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:options contentType:contentType contentDisposition:contentDisposition attributes:nil];
+}
+
++ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition attributes:(NSDictionary * _Nullable)attributes {
+    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:options contentType:contentType contentDisposition:contentDisposition attributes:attributes];
 }
 
 - (instancetype)init {
-    return  [self initWithFileAtPath:@"" options:0 attributes:nil];
+    return  [self initWithFileAtPath:@"" options:0 contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
 }
 
 - (instancetype)initWithFileAtPath:(NSString *)filePath {
-    return [self initWithFileAtPath:filePath options:0 attributes:nil];
+    return [self initWithFileAtPath:filePath options:0 contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
 }
 
 - (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options {
-    return [self initWithFileAtPath:filePath options:options attributes:nil];
+    return [self initWithFileAtPath:filePath options:options contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
 }
 
-- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options attributes:(NSDictionary *)attributes {
+- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options contentType:(NSString * _Nullable)contentType {
+    return [self initWithFileAtPath:filePath options:options contentType:contentType contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
+}
+
+- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition {
+    return [self initWithFileAtPath:filePath options:options contentType:contentType contentDisposition:contentDisposition attributes:nil];
+}
+
+- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options contentType:(NSString *)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition attributes:(NSDictionary *)attributes {
+
     self = [super init];
     if ( self != nil ) {
 
@@ -90,8 +137,18 @@ NS_ASSUME_NONNULL_END
         }
 
         _fileName = filePath.lastPathComponent;
-        _contentType = [[CRMimeTypeHelper sharedHelper] mimeTypeForFileAtPath:_filePath];
-        _contentDisposition = [_contentType isEqualToString:@"application/octet-stream"] ? @"attachment" : @"inline";
+
+        if ( contentType ) {
+            _contentType = contentType;
+        } else {
+            _contentType = [[CRMimeTypeHelper sharedHelper] mimeTypeForFileAtPath:_filePath];
+        }
+
+        if ( contentDisposition != CRStaticFileContentDispositionNone ) {
+            _contentDisposition = contentDisposition;
+        } else {
+            _contentDisposition = [_contentType isEqualToString:@"application/octet-stream"] ? CRStaticFileContentDispositionAttachment : CRStaticFileContentDispositionInline;
+        }
 
         // Initialize the attributes
         if ( attributes ) {
