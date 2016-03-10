@@ -236,7 +236,6 @@
 				ADC331EA1BF0FF4100DFCF6B /* Main.storyboard */,
 				ADC331ED1BF0FF4100DFCF6B /* Assets.xcassets */,
 				ADC331EF1BF0FF4100DFCF6B /* LaunchScreen.storyboard */,
-				ADC331F21BF0FF4100DFCF6B /* Info.plist */,
 				ADC331E11BF0FF4100DFCF6B /* Supporting Files */,
 			);
 			path = "HelloWorld-iOS";
@@ -245,6 +244,7 @@
 		ADC331E11BF0FF4100DFCF6B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				ADC331F21BF0FF4100DFCF6B /* Info.plist */,
 				ADC331E21BF0FF4100DFCF6B /* main.m */,
 			);
 			name = "Supporting Files";
@@ -257,7 +257,6 @@
 				ADC331FD1BF0FF6C00DFCF6B /* AppDelegate.m */,
 				ADC332021BF0FF6C00DFCF6B /* Assets.xcassets */,
 				ADC332041BF0FF6C00DFCF6B /* MainMenu.xib */,
-				ADC332071BF0FF6C00DFCF6B /* Info.plist */,
 				AD3BB7031BF27DAB002EA278 /* WindowController.h */,
 				AD3BB7041BF27DAB002EA278 /* WindowController.m */,
 				AD3BB7051BF27DAB002EA278 /* WindowController.xib */,
@@ -269,6 +268,7 @@
 		ADC331FF1BF0FF6C00DFCF6B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				ADC332071BF0FF6C00DFCF6B /* Info.plist */,
 				ADC332001BF0FF6C00DFCF6B /* main.m */,
 			);
 			name = "Supporting Files";

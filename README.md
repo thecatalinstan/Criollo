@@ -2,11 +2,9 @@
 
 #### A powerful Cocoa based web application framework for OS X and iOS.
 
-Criollo helps create self-contained web applications that deliver content directly over HTTP or behind a web server (through FastCGI) - all the while leveraging the technologies you know and love: GCD, NSURLSession, CoreImage etc.
+Criollo helps create standalone web apps that deliver content directly over HTTP or FastCGI. You can write code in Objective-C or Swift. And you can use technologies you know and love: Grand Central Dispatch, NSURLSession, CoreImage and many more. 
 
-You can write code in either Objective-C or Swift, however know that the framework itself is written in Objective-C. 
-
-## Here’s a simple HelloWorld:
+It's as easy as this:
 
 ```objective-c
 CRServer* server = [[CRHTTPServer alloc] init];
@@ -106,7 +104,7 @@ Open the workspace in Xcode, and build.
 
 We have to make a small change to the `info.plist` file. Normally, the `Principal Class` of a Cocoa application is `NSApplication`. NSApplication takes care of a bunch of stuff like setting up a `RunLoop`, connecting to the graphics server, handling application events etc.
 
-In the case of a Criollo application, this task is performed by the `CRApplication` class. We must *tell* the bundle that its `Principal Class` is `CRApplication`. 
+In the case of a Criollo application, these tasks are performed by the `CRApplication` class. We must *tell* the bundle that its `Principal Class` is `CRApplication`. 
 
 Here’s how to do that:
 
@@ -449,6 +447,10 @@ A more elegant solution would be deploying from source, using a git hook on the 
 *(to be continued)*
 
 ## Integrating with launchd
+
+Launchd is OS X’s builtin process manager. [Wikipedia](http://en.wikipedia.org/wiki/Launchd) defines it as
+
+> a unified, open-source service management framework for starting, stopping and managing daemons, applications, processes, and scripts. Written and designed by Dave Zarzycki at Apple, it was introduced with Mac OS X Tiger and is licensed under the Apache License.
 
 The only thing that you need to make your Criollo application start and stop on launchd commands is to create a [`launchd.plist`](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man5/launchd.plist.5.html) file and place it in `/Library/LaunchDaemons/`. 
 
