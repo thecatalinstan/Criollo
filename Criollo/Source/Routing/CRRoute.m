@@ -14,6 +14,7 @@
 #import "CRResponse.h"
 #import "CRResponse_Internal.h"
 #import "CRStaticDirectoryManager.h"
+#import "CRStaticFileManager.h"
 
 @interface CRRoute ()
 
@@ -58,15 +59,12 @@
 }
 
 - (instancetype)initWithStaticDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix options:(CRStaticDirectoryServingOptions)options {
-    CRRouteBlock block = [[CRStaticDirectoryManager alloc] initWithDirectoryAtPath:directoryPath prefix:prefix options:options].routeBlock;
+    CRRouteBlock block = [CRStaticDirectoryManager managerWithDirectoryAtPath:directoryPath prefix:prefix options:options].routeBlock;
     return [self initWithBlock:block];
 }
 
 - (instancetype)initWithStaticFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options {
-    CRRouteBlock block = ^(CRRequest * request, CRResponse * response, CRRouteCompletionBlock completionHandler) {
-        [response sendFormat:@"%s", __PRETTY_FUNCTION__];
-        completionHandler();
-    };
+    CRRouteBlock block = [CRStaticFileManager managerWithFileAtPath:filePath options:options].routeBlock;
     return [self initWithBlock:block];
 }
 
