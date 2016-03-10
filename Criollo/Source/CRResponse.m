@@ -201,6 +201,24 @@
     [self setAllHTTPHeaderFields:cookieHeaders];
 }
 
+- (void)redirectToURL:(NSURL *)URL {
+    [self redirectToURL:URL statusCode:301];
+}
+
+- (void)redirectToURL:(NSURL *)URL statusCode:(NSUInteger)statusCode {
+    [self redirectToLocation:URL.absoluteString statusCode:statusCode];
+}
+
+- (void)redirectToLocation:(NSString *)location {
+    [self redirectToLocation:location statusCode:301];
+}
+
+- (void)redirectToLocation:(NSString *)location statusCode:(NSUInteger)statusCode {
+    [self setStatusCode:statusCode description:nil];
+    [self setValue:location forHTTPHeaderField:@"Location"];
+    [self finish];
+}
+
 - (void)finish {
     _finished = YES;
 }
