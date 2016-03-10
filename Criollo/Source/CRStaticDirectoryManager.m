@@ -195,35 +195,33 @@ NS_ASSUME_NONNULL_END
         // stat() the file
         NSError * itemAttributesError;
         NSDictionary * itemAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:requestedAbsolutePath error:&itemAttributesError];
-        if ( itemAttributes == nil && itemAttributesError != nil ) {
+        if ( itemAttributes == nil || itemAttributesError != nil ) {
             // Unable to stat() the file
             [self errorHandlerBlockForError:itemAttributesError](request, response, completionHandler);
-        } else {
-            if ( [itemAttributes.fileType isEqualToString:NSFileTypeDirectory] ) {                                  // Directories
-                if ( self.shouldGenerateDirectoryIndex ) {
-                    // Make the index
-                    [self indexBlockForDirectoryAtPath:requestedAbsolutePath requestedPath:requestedDocumentPath displayParentLink:requestedRelativePath.length != 0](request, response, completionHandler);
-                } else {
-                    // Forbidden
-                    NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
-                    userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"Directory index auto-generation is disabled",);
-                    userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
-                    userInfo[NSFilePathErrorKey] = requestedAbsolutePath;                    
-                    NSError* directoryListingError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerDirectoryListingForbiddenError userInfo:userInfo];
-                    [self errorHandlerBlockForError:directoryListingError](request, response, completionHandler);
-                }
+        } else if ( [itemAttributes.fileType isEqualToString:NSFileTypeDirectory] ) {
+            if ( self.shouldGenerateDirectoryIndex ) {
+                // Make the index
+                [self indexBlockForDirectoryAtPath:requestedAbsolutePath requestedPath:requestedDocumentPath displayParentLink:requestedRelativePath.length != 0](request, response, completionHandler);
             } else {
-                // Serve the file through the StaticFileManager
-                CRStaticFileServingOptions options;
-                if ( self.shouldCacheFiles ) {
-                    options |= CRStaticFileServingOptionsCache;
-                }
-                if ( self.shouldFollowSymLinks ) {
-                    options |= CRStaticFileServingOptionsFollowSymlinks;
-                }
-                CRStaticFileManager* staticFileManager = [CRStaticFileManager managerWithFileAtPath:requestedAbsolutePath options:options attributes:itemAttributes];
-                staticFileManager.routeBlock(request, response, completionHandler);
+                // Forbidden
+                NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
+                userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"Directory index auto-generation is disabled",);
+                userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
+                userInfo[NSFilePathErrorKey] = requestedAbsolutePath;                    
+                NSError* directoryListingError = [NSError errorWithDomain:CRStaticDirectoryManagerErrorDomain code:CRStaticDirectoryManagerDirectoryListingForbiddenError userInfo:userInfo];
+                [self errorHandlerBlockForError:directoryListingError](request, response, completionHandler);
             }
+        } else {
+            // Serve the file through the StaticFileManager
+            CRStaticFileServingOptions options;
+            if ( self.shouldCacheFiles ) {
+                options |= CRStaticFileServingOptionsCache;
+            }
+            if ( self.shouldFollowSymLinks ) {
+                options |= CRStaticFileServingOptionsFollowSymlinks;
+            }
+            CRStaticFileManager* staticFileManager = [CRStaticFileManager managerWithFileAtPath:requestedAbsolutePath options:options attributes:itemAttributes];
+            staticFileManager.routeBlock(request, response, completionHandler);
         }
     };
 
