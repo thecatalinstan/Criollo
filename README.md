@@ -106,7 +106,7 @@ Open the workspace in Xcode, and build.
 
 We have to make a small change to the `info.plist` file. Normally, the `Principal Class` of a Cocoa application is `NSApplication`. NSApplication takes care of a bunch of stuff like setting up a `RunLoop`, connecting to the graphics server, handling application events etc.
 
-In the case of a Criollo application, this task is performed by the `CRApplication` class. We must *tell* the bundle that its `Principal Class` is `CRApplication`. 
+In the case of a Criollo application, these tasks are performed by the `CRApplication` class. We must *tell* the bundle that its `Principal Class` is `CRApplication`. 
 
 Here’s how to do that:
 
