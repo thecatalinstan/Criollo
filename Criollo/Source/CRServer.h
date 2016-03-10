@@ -61,5 +61,8 @@
 
 - (void)mountStaticFileAtPath:(NSString * _Nonnull)filePath forPath:(NSString * _Nonnull)path;
 - (void)mountStaticFileAtPath:(NSString * _Nonnull)filePath forPath:(NSString * _Nonnull)path options:(CRStaticFileServingOptions)options;
+- (void)mountStaticFileAtPath:(NSString * _Nonnull)filePath forPath:(NSString * _Nonnull)path options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName;
+- (void)mountStaticFileAtPath:(NSString * _Nonnull)filePath forPath:(NSString * _Nonnull)path options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType;
+- (void)mountStaticFileAtPath:(NSString * _Nonnull)filePath forPath:(NSString * _Nonnull)path options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
 
 @end

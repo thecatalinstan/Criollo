@@ -220,7 +220,7 @@ NS_ASSUME_NONNULL_END
             if ( self.shouldFollowSymLinks ) {
                 options |= CRStaticFileServingOptionsFollowSymlinks;
             }
-            CRStaticFileManager* staticFileManager = [CRStaticFileManager managerWithFileAtPath:requestedAbsolutePath options:options attributes:itemAttributes];
+            CRStaticFileManager* staticFileManager = [CRStaticFileManager managerWithFileAtPath:requestedAbsolutePath options:options fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone];
             staticFileManager.routeBlock(request, response, completionHandler);
         }
     };

@@ -79,46 +79,54 @@ NS_ASSUME_NONNULL_END
 @implementation CRStaticFileManager
 
 + (instancetype)managerWithFileAtPath:(NSString *)filePath {
-    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:0 contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
+    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:0 fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
 }
 
 + (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options {
-    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:options contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
+    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:options fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
 }
 
-+ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options contentType:(NSString * _Nullable)contentType {
-    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:options contentType:contentType contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
++ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName {
+    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:options fileName:fileName contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
 }
 
-+ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition {
-    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:options contentType:contentType contentDisposition:contentDisposition attributes:nil];
++ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType {
+    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
 }
 
-+ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition attributes:(NSDictionary * _Nullable)attributes {
-    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:options contentType:contentType contentDisposition:contentDisposition attributes:attributes];
++ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition {
+    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition attributes:nil];
+}
+
++ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition attributes:(NSDictionary * _Nullable)attributes {
+    return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition attributes:attributes];
 }
 
 - (instancetype)init {
-    return  [self initWithFileAtPath:@"" options:0 contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
+    return  [self initWithFileAtPath:@"" options:0 fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
 }
 
 - (instancetype)initWithFileAtPath:(NSString *)filePath {
-    return [self initWithFileAtPath:filePath options:0 contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
+    return [self initWithFileAtPath:filePath options:0 fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
 }
 
 - (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options {
-    return [self initWithFileAtPath:filePath options:options contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
+    return [self initWithFileAtPath:filePath options:options fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
 }
 
-- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options contentType:(NSString * _Nullable)contentType {
-    return [self initWithFileAtPath:filePath options:options contentType:contentType contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
+- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName {
+    return [self initWithFileAtPath:filePath options:options fileName:fileName contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
 }
 
-- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition {
-    return [self initWithFileAtPath:filePath options:options contentType:contentType contentDisposition:contentDisposition attributes:nil];
+- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType {
+    return [self initWithFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
 }
 
-- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options contentType:(NSString *)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition attributes:(NSDictionary *)attributes {
+- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition {
+    return [self initWithFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition attributes:nil];
+}
+
+- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString *)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition attributes:(NSDictionary *)attributes {
 
     self = [super init];
     if ( self != nil ) {
@@ -136,7 +144,11 @@ NS_ASSUME_NONNULL_END
             _filePath = [_filePath stringByResolvingSymlinksInPath];
         }
 
-        _fileName = filePath.lastPathComponent;
+        if ( fileName ) {
+            _fileName = fileName;
+        } else {
+            _fileName = filePath.lastPathComponent;
+        }
 
         if ( contentType ) {
             _contentType = contentType;
