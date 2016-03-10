@@ -59,4 +59,7 @@
 - (void)mountStaticDirectoryAtPath:(NSString * _Nonnull)directoryPath forPath:(NSString * _Nonnull)path;
 - (void)mountStaticDirectoryAtPath:(NSString * _Nonnull)directoryPath forPath:(NSString * _Nonnull)path options:(CRStaticDirectoryServingOptions)options;
 
+- (void)mountStaticFileAtPath:(NSString * _Nonnull)filePath forPath:(NSString * _Nonnull)path;
+- (void)mountStaticFileAtPath:(NSString * _Nonnull)filePath forPath:(NSString * _Nonnull)path options:(CRStaticFileServingOptions)options;
+
 @end

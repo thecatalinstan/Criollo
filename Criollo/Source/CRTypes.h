@@ -21,4 +21,10 @@ typedef NS_OPTIONS(NSUInteger, CRStaticDirectoryServingOptions) {
     CRStaticDirectoryServingOptionsFollowSymlinks           = 1 <<   3,
 };
 
+typedef NS_OPTIONS(NSUInteger, CRStaticFileServingOptions) {
+    CRStaticFileServingOptionsCache             = 1 <<   0,
+    CRStaticFileServingOptionsFollowSymlinks    = 1 <<   3,
+};
+
+
 #endif /* CRTypes_h */

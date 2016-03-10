@@ -311,6 +311,15 @@
     [self addRoute:route forPath:path HTTPMethod:CRHTTPMethodGET recursive:YES];
 }
 
+- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path {
+    [self mountStaticFileAtPath:filePath forPath:path options:0];
+}
+
+- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options {
+    CRRoute* route = [CRRoute routeWithStaticFileAtPath:filePath options:options];
+    [self addRoute:route forPath:path HTTPMethod:CRHTTPMethodGET recursive:NO];
+}
+
 - (void)addRoute:(CRRoute*)route forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod recursive:(BOOL)recursive {
     NSArray<NSString*>* methods;
 

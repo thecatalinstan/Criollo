@@ -172,6 +172,9 @@
         completionHandler();
     } forPath:@"/redirect" HTTPMethod:CRHTTPMethodGET];
 
+    // Serve /static/mapped as a mapped file
+    NSString* mappedFilePath = @"~/Downloads/Schitts.Creek.S02E10.HDTV.x264-CROOKS/schitts.creek.s02e10.hdtv.x264-crooks.mp4";
+    [self.server mountStaticFileAtPath:mappedFilePath forPath:@"/static/mapped" options:CRStaticFileServingOptionsCache|CRStaticFileServingOptionsFollowSymlinks];
 
     // Start listening
     NSError *serverError;
@@ -213,7 +216,6 @@
         [CRApp logErrorFormat:@"Failed to start HTTP server. %@", serverError.localizedDescription];
         [CRApp terminate:nil];
     }
-
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
