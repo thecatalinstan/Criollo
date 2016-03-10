@@ -9,8 +9,16 @@
 #ifndef CRTypes_h
 #define CRTypes_h
 
-@class CRRequest, CRResponse;
+typedef NS_ENUM(NSUInteger, CRHTTPMethod) {
+    CRHTTPMethodGet     = 0,
+    CRHTTPMethodPost    = 1,
+    CRHTTPMethodPut     = 2,
+    CRHTTPMethodDelete  = 3,
+    CRHTTPMethodPatch   = 4,
+    CRHTTPMethodOptions = 5,
+};
 
+@class CRRequest, CRResponse;
 typedef void(^CRRouteCompletionBlock)(void);
 typedef void(^CRRouteBlock)(CRRequest* _Nonnull request, CRResponse* _Nonnull response, CRRouteCompletionBlock _Nonnull completionHandler);
 

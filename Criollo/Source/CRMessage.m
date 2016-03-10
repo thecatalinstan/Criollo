@@ -9,6 +9,49 @@
 #import "CRMessage.h"
 #import "CRMessage_Internal.h"
 
+NSString * const CRHTTPMethodGetValue = @"GET";
+NSString * const CRHTTPMethodPostValue = @"POST";
+NSString * const CRHTTPMethodPutValue = @"PUT";
+NSString * const CRHTTPMethodDeleteValue = @"DELETE";
+NSString * const CRHTTPMethodPatchValue = @"PATCH";
+NSString * const CRHTTPMethodOptionsValue = @"OPTIONS";
+
+NSString * NSStringFromCRHTTPMethod(CRHTTPMethod HTTPMethod) {
+    switch (HTTPMethod) {
+        case CRHTTPMethodGet:
+            return CRHTTPMethodGetValue;
+        case CRHTTPMethodPost:
+            return CRHTTPMethodPostValue;
+        case CRHTTPMethodPut:
+            return CRHTTPMethodPutValue;
+        case CRHTTPMethodDelete:
+            return CRHTTPMethodDeleteValue;
+        case CRHTTPMethodPatch:
+            return CRHTTPMethodPatchValue;
+        case CRHTTPMethodOptions:
+            return CRHTTPMethodOptionsValue;
+    }
+}
+
+CRHTTPMethod CRHTTMethodMake(NSString * HTTPMethodName) {
+    CRHTTPMethod HTTPMethod;
+    if ( [HTTPMethodName isEqualToString:CRHTTPMethodGetValue] ) {
+        HTTPMethod = CRHTTPMethodGet;
+    } else if ( [HTTPMethodName isEqualToString:CRHTTPMethodPostValue] ) {
+        HTTPMethod = CRHTTPMethodPost;
+    } else if ( [HTTPMethodName isEqualToString:CRHTTPMethodPutValue] ) {
+        HTTPMethod = CRHTTPMethodPut;
+    } else if ( [HTTPMethodName isEqualToString:CRHTTPMethodDeleteValue] ) {
+        HTTPMethod = CRHTTPMethodDelete;
+    } else if ( [HTTPMethodName isEqualToString:CRHTTPMethodPatchValue] ) {
+        HTTPMethod = CRHTTPMethodPatch;
+    } else if ( [HTTPMethodName isEqualToString:CRHTTPMethodOptionsValue] ) {
+        HTTPMethod = CRHTTPMethodOptions;
+    }
+    return HTTPMethod;
+}
+
+
 @implementation CRMessage
 
 - (instancetype)init {
