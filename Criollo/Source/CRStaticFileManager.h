@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL shouldFollowSymLinks;
 
 @property (nonatomic, strong) NSString* fileName;
+@property (nonatomic, strong) NSString* contentType;
+@property (nonatomic, strong) NSString* contentDisposition;
 
 + (instancetype)managerWithFileAtPath:(NSString *)filePath;
 + (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options;

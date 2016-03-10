@@ -90,6 +90,8 @@ NS_ASSUME_NONNULL_END
         }
 
         _fileName = filePath.lastPathComponent;
+        _contentType = [[CRMimeTypeHelper sharedHelper] mimeTypeForFileAtPath:_filePath];
+        _contentDisposition = [_contentType isEqualToString:@"application/octet-stream"] ? @"attachment" : @"inline";
 
         // Initialize the attributes
         if ( attributes ) {
@@ -196,9 +198,10 @@ NS_ASSUME_NONNULL_END
             [response setValue:@(fileSize).stringValue forHTTPHeaderField:@"Content-Length"];
         }
 
-        // Get the mime type and set the Content-type header
-        NSString* contentType = [[CRMimeTypeHelper sharedHelper] mimeTypeForFileAtPath:filePath];
-        [response setValue:contentType forHTTPHeaderField:@"Content-Type"];
+        // Set Content-Type and Content-Disposition
+        [response setValue:self.contentType forHTTPHeaderField:@"Content-Type"];
+        NSString* contentDispositionSpec = [NSString stringWithFormat:@"%@; filename=\"%@\"", self.contentType, [self.fileName stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""]];
+        [response setValue:contentDispositionSpec forHTTPHeaderField:@"Content-Disposition"];
 
         // Read synchroniously if the file size is below threshold
         if ( fileSize <= CRStaticFileServingReadThreshold ) {
