@@ -19,12 +19,8 @@
 
 @interface AppDelegate () <CRServerDelegate>
 
-#if UseFCGI
-@property (nonatomic, strong) CRFCGIServer *server;
-#else
-@property (nonatomic, strong) CRHTTPServer *server;
-#endif
-@property (nonatomic, strong) NSURL *baseURL;
+@property (nonatomic, strong, nonnull) CRServer *server;
+@property (nonatomic, strong, nonnull) NSURL *baseURL;
 
 @end
 
@@ -167,6 +163,16 @@
     NSString* staticFilesPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"];
     [self.server addStaticDirectoryAtPath:staticFilesPath forPath:@"/static" options:CRStaticDirectoryServingOptionsCacheFiles];
 
+    // Redirecter
+    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        NSURL* redirectURL = [NSURL URLWithString:(request.query[@"redirect"] ? : @"")];
+        if ( redirectURL ) {
+            [response redirectToURL:redirectURL];
+        }
+        completionHandler();
+    } forPath:@"/redirect" HTTPMethod:CRHTTPMethodGET];
+
+
     // Start listening
     NSError *serverError;
     if ( [self.server startListening:&serverError portNumber:PortNumber] ) {
@@ -188,6 +194,7 @@
         // Get the list of paths
         NSDictionary<NSString*, NSMutableArray<CRRoute*>*>* routes = [[self.server valueForKey:@"routes"] mutableCopy];
         NSMutableSet<NSURL*>* paths = [NSMutableSet set];
+
         [routes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<CRRoute *> * _Nonnull obj, BOOL * _Nonnull stop) {
             if ( [key hasSuffix:@"*"] ) {
                 return;
@@ -197,7 +204,6 @@
         }];
 
         NSArray<NSURL*>* sortedPaths =[paths sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"absoluteString" ascending:YES]]];
-
         [CRApp logFormat:@"Available paths are:"];
         [sortedPaths enumerateObjectsUsingBlock:^(NSURL * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [CRApp logFormat:@" * %@", obj.absoluteString];
