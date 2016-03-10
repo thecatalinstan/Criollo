@@ -312,11 +312,23 @@
 }
 
 - (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path {
-    [self mountStaticFileAtPath:filePath forPath:path options:0];
+    [self mountStaticFileAtPath:filePath forPath:path options:0 fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone];
 }
 
 - (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options {
-    CRRoute* route = [CRRoute routeWithStaticFileAtPath:filePath options:options];
+    [self mountStaticFileAtPath:filePath forPath:path options:options fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone];
+}
+
+- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString *)fileName {
+    [self mountStaticFileAtPath:filePath forPath:path options:options fileName:fileName contentType:nil contentDisposition:CRStaticFileContentDispositionNone];
+}
+
+- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString *)fileName contentType:(NSString *)contentType {
+    [self mountStaticFileAtPath:filePath forPath:path options:options fileName:fileName contentType:contentType contentDisposition:CRStaticFileContentDispositionNone];
+}
+
+- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString *)fileName contentType:(NSString *)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition {
+    CRRoute* route = [CRRoute routeWithStaticFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition];
     [self addRoute:route forPath:path HTTPMethod:CRHTTPMethodGET recursive:NO];
 }
 
