@@ -36,7 +36,7 @@
 
         completionHandler();
 
-    } forPath:@"/screenshot" HTTPMethod:@"GET"];
+    } forPath:@"/screenshot" HTTPMethod:CRHTTPMethodGET];
 
     return YES;
 }

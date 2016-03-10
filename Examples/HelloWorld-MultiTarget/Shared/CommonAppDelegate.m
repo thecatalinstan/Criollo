@@ -34,13 +34,15 @@
     CRRouteBlock helloBlock = [CommonRequestHandler defaultHandler].helloWorldBlock;
     CRRouteBlock jsonHelloBlock = [CommonRequestHandler defaultHandler].jsonHelloWorldBlock;
     CRRouteBlock statusBlock = [CommonRequestHandler defaultHandler].statusBlock;
+    CRRouteBlock redirectBlock = [CommonRequestHandler defaultHandler].redirectBlock;
 
     [self.server addBlock:identifyBlock];
     [self.server addBlock:helloBlock forPath:@"/"];
     [self.server addBlock:jsonHelloBlock forPath:@"/json"];
-    [self.server addBlock:statusBlock forPath:@"/status" HTTPMethod:@"GET"];
+    [self.server addBlock:statusBlock forPath:@"/status" HTTPMethod:CRHTTPMethodGET];
     [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller"];
     [self.server addStaticDirectoryAtPath:[[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"] forPath:@"/static" options:CRStaticDirectoryServingOptionsCacheFiles];
+    [self.server addBlock:redirectBlock forPath:@"/redirect" HTTPMethod:CRHTTPMethodGET];
 
     [self willChangeValueForKey:@"isConnected"];
     _isConnected = NO;
@@ -157,7 +159,8 @@
 
 #if LogRequests
 - (void)server:(CRServer *)server didFinishRequest:(CRRequest *)request {
-    [self logDebugFormat:@" * %@ %@ - %lu - %@", request.connection.remoteAddress, request, request.response.statusCode, request.env[@"HTTP_USER_AGENT"]];
+    NSString* contentLength = [request.response valueForHTTPHeaderField:@"Content-Length"];
+    [self logDebugFormat:@" * %@ %@ - %lu %@ - %@", request.response.connection.remoteAddress, request, request.response.statusCode, contentLength ? : @"-", request.env[@"HTTP_USER_AGENT"]];
 }
 #endif
 

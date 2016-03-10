@@ -10,7 +10,13 @@
 
 #import <sys/utsname.h>
 
-@interface CommonRequestHandler ()
+@interface CommonRequestHandler () {
+    __block dispatch_once_t identifyBlockOnceToken;
+    __block dispatch_once_t helloWorldBlockOnceToken;
+    __block dispatch_once_t jsonHelloWorldBlockOnceToken;
+    __block dispatch_once_t statusBlockOnceToken;
+    __block dispatch_once_t redirectBlockOnceToken;
+}
 
 @property (strong) NSString* uname;
 
@@ -39,8 +45,7 @@
 
 - (CRRouteBlock)identifyBlock {
     __block CRRouteBlock _identifyBlock;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    dispatch_once(&identifyBlockOnceToken, ^{
         NSBundle *bundle = [NSBundle mainBundle];
         _identifyBlock = ^(CRRequest* request, CRResponse* response, CRRouteCompletionBlock completionHandler) {
             [response setValue:[NSString stringWithFormat:@"%@, %@ build %@", bundle.bundleIdentifier, [bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [bundle objectForInfoDictionaryKey:@"CFBundleVersion"]] forHTTPHeaderField:@"Server"];
@@ -58,8 +63,7 @@
 
 - (CRRouteBlock) helloWorldBlock {
     __block CRRouteBlock _helloWorldBlock;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    dispatch_once(&helloWorldBlockOnceToken, ^{
         _helloWorldBlock = ^(CRRequest* request, CRResponse* response, CRRouteCompletionBlock completionHandler) {
             [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
             [response sendString:@"Hello World"];
@@ -71,8 +75,7 @@
 
 - (CRRouteBlock)jsonHelloWorldBlock {
     __block CRRouteBlock _jsonHelloWorldBlock;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    dispatch_once(&jsonHelloWorldBlockOnceToken, ^{
         _jsonHelloWorldBlock = ^(CRRequest* request, CRResponse* response, CRRouteCompletionBlock completionHandler) {
             [response setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-type"];
             [response sendData:[NSJSONSerialization dataWithJSONObject:@{@"status": @YES, @"message": @"Hello World"} options:0 error:nil]];
@@ -84,8 +87,7 @@
 
 - (CRRouteBlock)statusBlock {
     __block CRRouteBlock _statusBlock;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    dispatch_once(&statusBlockOnceToken, ^{
         _statusBlock = ^(CRRequest* request, CRResponse* response, CRRouteCompletionBlock completionHandler) {
 
             NSDate *startTime = [NSDate date];
@@ -160,6 +162,20 @@
         };
     });
     return _statusBlock;
+}
+
+- (CRRouteBlock)redirectBlock {
+    __block CRRouteBlock _redirectBlock;
+    dispatch_once(&redirectBlockOnceToken, ^{
+        _redirectBlock = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+            NSURL* redirectURL = [NSURL URLWithString:(request.query[@"redirect"] ? : @"")];
+            if ( redirectURL ) {
+                [response redirectToURL:redirectURL];
+            }
+            completionHandler();
+        };
+    });
+    return _redirectBlock;
 }
 
 @end

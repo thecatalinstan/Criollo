@@ -20,6 +20,7 @@
 @property (nonatomic, readonly) CRRouteBlock helloWorldBlock;
 @property (nonatomic, readonly) CRRouteBlock jsonHelloWorldBlock;
 @property (nonatomic, readonly) CRRouteBlock statusBlock;
+@property (nonatomic, readonly) CRRouteBlock redirectBlock;
 
 + (instancetype)defaultHandler;
 
