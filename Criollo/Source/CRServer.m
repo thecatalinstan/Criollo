@@ -302,11 +302,11 @@
     [self addRoute:route forPath:path HTTPMethod:HTTPMethod recursive:recursive];
 }
 
-- (void)addStaticDirectoryAtPath:(NSString *)directoryPath forPath:(NSString *)path {
-    [self addStaticDirectoryAtPath:directoryPath forPath:path options:0];
+- (void)mountStaticDirectoryAtPath:(NSString *)directoryPath forPath:(NSString *)path {
+    [self mountStaticDirectoryAtPath:directoryPath forPath:path options:0];
 }
 
-- (void)addStaticDirectoryAtPath:(NSString *)directoryPath forPath:(NSString *)path options:(CRStaticDirectoryServingOptions)options {
+- (void)mountStaticDirectoryAtPath:(NSString *)directoryPath forPath:(NSString *)path options:(CRStaticDirectoryServingOptions)options {
     CRRoute* route = [CRRoute routeWithStaticDirectoryAtPath:directoryPath prefix:path options:options];
     [self addRoute:route forPath:path HTTPMethod:CRHTTPMethodGET recursive:YES];
 }

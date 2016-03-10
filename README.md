@@ -352,7 +352,7 @@ Our app is now able to perform a basic set of functions but it is far from being
 It is conceivable that you will need to serve a file from disk at some point.
 
 ```objective-c
-- (void)addStaticDirectoryAtPath:(NSString * _Nonnull)directoryPath forPath:(NSString * _Nonnull)path options:(CRStaticDirectoryServingOptions)options;
+- (void)mountStaticDirectoryAtPath:(NSString * _Nonnull)directoryPath forPath:(NSString * _Nonnull)path options:(CRStaticDirectoryServingOptions)options;
 ```
 
 This method allows “mounting” directories as static file serving  points. The `options` parameter is an bitwise-or’ed list of [`CRStaticDirectoryServingOptions`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/CRTypes.h#L17-L22) values.
@@ -367,7 +367,7 @@ This method allows “mounting” directories as static file serving  points. Th
 We will add a route that serves everything in the current user’s home directory as an auto-generated index, with caching. We’ll add this block before the logging block, in order to give it a chance to set the response headers before we try to log them.
 
 ```objective-c
-[self.server addStaticDirectoryAtPath:@"~" forPath:@"/pub" options:CRStaticDirectoryServingOptionsCacheFiles|CRStaticDirectoryServingOptionsAutoIndex];
+[self.server mountStaticDirectoryAtPath:@"~" forPath:@"/pub" options:CRStaticDirectoryServingOptionsCacheFiles|CRStaticDirectoryServingOptionsAutoIndex];
 ```
 
 You should be able to see the file list at [http://localhost:10781/pub](http://localhost:10781/pub).

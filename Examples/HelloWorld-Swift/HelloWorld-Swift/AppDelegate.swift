@@ -141,7 +141,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
 
         // Serve static files from "/Public" (relative to bundle)
         let staticFilePath:String = (NSBundle.mainBundle().resourcePath?.stringByAppendingString("/Public"))!;
-        self.server.addStaticDirectoryAtPath(staticFilePath, forPath: "/static", options: CRStaticDirectoryServingOptions.FollowSymlinks)
+        self.server.mountStaticDirectoryAtPath(staticFilePath, forPath: "/static", options: CRStaticDirectoryServingOptions.FollowSymlinks)
 
         // Redirecter
         self.server.addBlock({ (request, response, completionHandler) -> Void in
