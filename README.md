@@ -2,11 +2,9 @@
 
 #### A powerful Cocoa based web application framework for OS X and iOS.
 
-Criollo helps create self-contained web applications that deliver content directly over HTTP or behind a web server (through FastCGI) - all the while leveraging the technologies you know and love: GCD, NSURLSession, CoreImage etc.
+Criollo helps create standalone web apps that deliver content directly over HTTP or FastCGI. You can write code in Objective-C or Swift. And you can use technologies you know and love: Grand Central Dispatch, NSURLSession, CoreImage and many more. 
 
-You can write code in either Objective-C or Swift, however know that the framework itself is written in Objective-C. 
-
-## Here’s a simple HelloWorld:
+It's as easy as this:
 
 ```objective-c
 CRServer* server = [[CRHTTPServer alloc] init];
