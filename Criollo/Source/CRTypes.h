@@ -26,5 +26,10 @@ typedef NS_OPTIONS(NSUInteger, CRStaticFileServingOptions) {
     CRStaticFileServingOptionsFollowSymlinks    = 1 <<   3,
 };
 
+typedef NS_ENUM(NSUInteger, CRStaticFileContentDisposition) {
+    CRStaticFileContentDispositionNone,
+    CRStaticFileContentDispositionInline,
+    CRStaticFileContentDispositionAttachment
+};
 
 #endif /* CRTypes_h */
