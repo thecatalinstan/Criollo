@@ -269,7 +269,7 @@ NS_ASSUME_NONNULL_END
 
         // Set Content-Type and Content-Disposition
         [response setValue:self.contentType forHTTPHeaderField:@"Content-Type"];
-        NSString* contentDispositionSpec = [NSString stringWithFormat:@"%@; filename=\"%@\"", self.contentType, [self.fileName stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""]];
+        NSString* contentDispositionSpec = [NSString stringWithFormat:@"%@; filename=\"%@\"", NSStringFromCRStaticFileContentDisposition(self.contentDisposition), [self.fileName stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""]];
         [response setValue:contentDispositionSpec forHTTPHeaderField:@"Content-Disposition"];
 
         // Read synchroniously if the file size is below threshold
