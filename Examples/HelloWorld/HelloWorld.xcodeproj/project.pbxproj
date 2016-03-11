@@ -7,398 +7,129 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AD04F4DF1BF249DB00456D38 /* CriolloiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D91BF0FF0200DFCF6B /* CriolloiOS.framework */; };
-		AD04F4E01BF249DB00456D38 /* CriolloiOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D91BF0FF0200DFCF6B /* CriolloiOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		AD19E2371C0A7AC3004D16EB /* HelloWorldViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD19E2351C0A7AC3004D16EB /* HelloWorldViewController.html */; };
-		AD19E2381C0A7AC3004D16EB /* HelloWorldViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD19E2351C0A7AC3004D16EB /* HelloWorldViewController.html */; };
-		AD19E2391C0A7AC3004D16EB /* HelloWorldViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD19E2351C0A7AC3004D16EB /* HelloWorldViewController.html */; };
-		AD19E23A1C0A7AC3004D16EB /* HelloWorldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD19E2361C0A7AC3004D16EB /* HelloWorldViewController.m */; };
-		AD19E23B1C0A7AC3004D16EB /* HelloWorldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD19E2361C0A7AC3004D16EB /* HelloWorldViewController.m */; };
-		AD19E23C1C0A7AC3004D16EB /* HelloWorldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD19E2361C0A7AC3004D16EB /* HelloWorldViewController.m */; };
-		AD3BB7061BF27DAB002EA278 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3BB7041BF27DAB002EA278 /* WindowController.m */; };
-		AD3BB7071BF27DAB002EA278 /* WindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD3BB7051BF27DAB002EA278 /* WindowController.xib */; };
-		ADC331E31BF0FF4100DFCF6B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC331E21BF0FF4100DFCF6B /* main.m */; };
-		ADC331E61BF0FF4100DFCF6B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC331E51BF0FF4100DFCF6B /* AppDelegate.m */; };
-		ADC331E91BF0FF4100DFCF6B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC331E81BF0FF4100DFCF6B /* ViewController.m */; };
-		ADC331EC1BF0FF4100DFCF6B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADC331EA1BF0FF4100DFCF6B /* Main.storyboard */; };
-		ADC331EE1BF0FF4100DFCF6B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADC331ED1BF0FF4100DFCF6B /* Assets.xcassets */; };
-		ADC331F11BF0FF4100DFCF6B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADC331EF1BF0FF4100DFCF6B /* LaunchScreen.storyboard */; };
-		ADC331FE1BF0FF6C00DFCF6B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC331FD1BF0FF6C00DFCF6B /* AppDelegate.m */; };
-		ADC332011BF0FF6C00DFCF6B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC332001BF0FF6C00DFCF6B /* main.m */; };
-		ADC332031BF0FF6C00DFCF6B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADC332021BF0FF6C00DFCF6B /* Assets.xcassets */; };
-		ADC332061BF0FF6C00DFCF6B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADC332041BF0FF6C00DFCF6B /* MainMenu.xib */; };
-		ADC3321C1BF1015000DFCF6B /* CommonRequestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3321B1BF1015000DFCF6B /* CommonRequestHandler.m */; };
-		ADC3321D1BF1016000DFCF6B /* CommonRequestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3321B1BF1015000DFCF6B /* CommonRequestHandler.m */; };
-		ADC332291BF1064700DFCF6B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC332281BF1064700DFCF6B /* AppDelegate.m */; };
-		ADC3322C1BF1064700DFCF6B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3322B1BF1064700DFCF6B /* main.m */; };
-		ADC332361BF1070D00DFCF6B /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D71BF0FF0200DFCF6B /* Criollo.framework */; };
-		ADC332371BF1070D00DFCF6B /* Criollo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D71BF0FF0200DFCF6B /* Criollo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		ADC3323D1BF107EF00DFCF6B /* CommonAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3323C1BF107EF00DFCF6B /* CommonAppDelegate.m */; };
-		ADC3323E1BF1099700DFCF6B /* CommonAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3323C1BF107EF00DFCF6B /* CommonAppDelegate.m */; };
-		ADC3323F1BF1099800DFCF6B /* CommonAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3323C1BF107EF00DFCF6B /* CommonAppDelegate.m */; };
-		ADC332401BF10FBA00DFCF6B /* CommonRequestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3321B1BF1015000DFCF6B /* CommonRequestHandler.m */; };
-		ADD6801B1C6CC51300FC41EE /* style.css in Public Resources */ = {isa = PBXBuildFile; fileRef = ADD680161C6CC49700FC41EE /* style.css */; };
-		ADD6801D1C6CC52800FC41EE /* style.css in Public Resources */ = {isa = PBXBuildFile; fileRef = ADD680161C6CC49700FC41EE /* style.css */; };
-		ADD6801F1C6CC55600FC41EE /* style.css in Public Resources */ = {isa = PBXBuildFile; fileRef = ADD680161C6CC49700FC41EE /* style.css */; };
+		161465C8A01CB23E991ACB69 /* Pods_HelloWorld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98FCFB4BC4F80A6B71F1494F /* Pods_HelloWorld.framework */; };
+		AD977C101C8E5827007A0A7E /* io.criollo.HelloWorld.plist in Resources */ = {isa = PBXBuildFile; fileRef = AD977C0F1C8E5827007A0A7E /* io.criollo.HelloWorld.plist */; };
+		ADA039E11C8DDDFA004B452D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA039E01C8DDDFA004B452D /* AppDelegate.m */; };
+		ADA039E41C8DDDFA004B452D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA039E31C8DDDFA004B452D /* main.m */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		AD04F4E11BF249DB00456D38 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = AD5FFFCB1BF0024D00A57FE9;
-			remoteInfo = CriolloiOS;
-		};
-		ADC331D61BF0FF0200DFCF6B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = ADEDB3761AEFC0B000A26AF1;
-			remoteInfo = Criollo;
-		};
-		ADC331D81BF0FF0200DFCF6B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = AD5FFFCC1BF0024D00A57FE9;
-			remoteInfo = CriolloiOS;
-		};
-		ADC332381BF1070D00DFCF6B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = ADEDB3751AEFC0B000A26AF1;
-			remoteInfo = Criollo;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		AD04F4E31BF249DB00456D38 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				AD04F4E01BF249DB00456D38 /* CriolloiOS.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		ADC3323A1BF1070D00DFCF6B /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				ADC332371BF1070D00DFCF6B /* Criollo.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		ADD6801A1C6CC4FE00FC41EE /* Public Resources */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = Public;
-			dstSubfolderSpec = 7;
-			files = (
-				ADD6801B1C6CC51300FC41EE /* style.css in Public Resources */,
-			);
-			name = "Public Resources";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		ADD6801C1C6CC51A00FC41EE /* Public Resources */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = Public;
-			dstSubfolderSpec = 7;
-			files = (
-				ADD6801D1C6CC52800FC41EE /* style.css in Public Resources */,
-			);
-			name = "Public Resources";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		ADD6801E1C6CC54A00FC41EE /* Public Resources */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = Public;
-			dstSubfolderSpec = 7;
-			files = (
-				ADD6801F1C6CC55600FC41EE /* style.css in Public Resources */,
-			);
-			name = "Public Resources";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		AD19E2341C0A7AC3004D16EB /* HelloWorldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloWorldViewController.h; sourceTree = "<group>"; };
-		AD19E2351C0A7AC3004D16EB /* HelloWorldViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = HelloWorldViewController.html; sourceTree = "<group>"; };
-		AD19E2361C0A7AC3004D16EB /* HelloWorldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelloWorldViewController.m; sourceTree = "<group>"; };
-		AD3BB7031BF27DAB002EA278 /* WindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowController.h; sourceTree = "<group>"; };
-		AD3BB7041BF27DAB002EA278 /* WindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindowController.m; sourceTree = "<group>"; };
-		AD3BB7051BF27DAB002EA278 /* WindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WindowController.xib; sourceTree = "<group>"; };
-		ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Criollo.xcodeproj; path = ../../Criollo.xcodeproj; sourceTree = "<group>"; };
-		ADC331DE1BF0FF4100DFCF6B /* HelloWorld-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HelloWorld-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		ADC331E21BF0FF4100DFCF6B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		ADC331E41BF0FF4100DFCF6B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		ADC331E51BF0FF4100DFCF6B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		ADC331E71BF0FF4100DFCF6B /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		ADC331E81BF0FF4100DFCF6B /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		ADC331EB1BF0FF4100DFCF6B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		ADC331ED1BF0FF4100DFCF6B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		ADC331F01BF0FF4100DFCF6B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		ADC331F21BF0FF4100DFCF6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ADC331FA1BF0FF6C00DFCF6B /* HelloWorld-Cocoa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HelloWorld-Cocoa.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		ADC331FC1BF0FF6C00DFCF6B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		ADC331FD1BF0FF6C00DFCF6B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		ADC332001BF0FF6C00DFCF6B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		ADC332021BF0FF6C00DFCF6B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		ADC332051BF0FF6C00DFCF6B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		ADC332071BF0FF6C00DFCF6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ADC3321A1BF1015000DFCF6B /* CommonRequestHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonRequestHandler.h; sourceTree = "<group>"; };
-		ADC3321B1BF1015000DFCF6B /* CommonRequestHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonRequestHandler.m; sourceTree = "<group>"; };
-		ADC332251BF1064600DFCF6B /* HelloWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		ADC332271BF1064700DFCF6B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		ADC332281BF1064700DFCF6B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		ADC3322B1BF1064700DFCF6B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		ADC332321BF1064700DFCF6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ADC3323B1BF107EF00DFCF6B /* CommonAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonAppDelegate.h; sourceTree = "<group>"; };
-		ADC3323C1BF107EF00DFCF6B /* CommonAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonAppDelegate.m; sourceTree = "<group>"; };
-		ADD680161C6CC49700FC41EE /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
+		98FCFB4BC4F80A6B71F1494F /* Pods_HelloWorld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HelloWorld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD977C0F1C8E5827007A0A7E /* io.criollo.HelloWorld.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = io.criollo.HelloWorld.plist; sourceTree = "<group>"; };
+		ADA039DC1C8DDDFA004B452D /* HelloWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ADA039DF1C8DDDFA004B452D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		ADA039E01C8DDDFA004B452D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		ADA039E31C8DDDFA004B452D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		ADA039EA1C8DDDFA004B452D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E9D7D9C53B804775D42BB4F5 /* Pods-HelloWorld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloWorld.release.xcconfig"; path = "Pods/Target Support Files/Pods-HelloWorld/Pods-HelloWorld.release.xcconfig"; sourceTree = "<group>"; };
+		FEF72EE5D162F3BF7DBC5361 /* Pods-HelloWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloWorld.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HelloWorld/Pods-HelloWorld.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		ADC331DB1BF0FF4100DFCF6B /* Frameworks */ = {
+		ADA039D91C8DDDFA004B452D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD04F4DF1BF249DB00456D38 /* CriolloiOS.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		ADC331F71BF0FF6C00DFCF6B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		ADC332221BF1064600DFCF6B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				ADC332361BF1070D00DFCF6B /* Criollo.framework in Frameworks */,
+				161465C8A01CB23E991ACB69 /* Pods_HelloWorld.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		ADC331CA1BF0FEE300DFCF6B = {
+		083BE7B5B59F9B9E75F58F94 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */,
-				ADC332161BF100A600DFCF6B /* Shared */,
-				ADC332261BF1064700DFCF6B /* HelloWorld */,
-				ADC331E01BF0FF4100DFCF6B /* HelloWorld-iOS */,
-				ADC331FB1BF0FF6C00DFCF6B /* HelloWorld-Cocoa */,
-				ADC331DF1BF0FF4100DFCF6B /* Products */,
+				FEF72EE5D162F3BF7DBC5361 /* Pods-HelloWorld.debug.xcconfig */,
+				E9D7D9C53B804775D42BB4F5 /* Pods-HelloWorld.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		310FE65FBBAD6A7B667D61C0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				98FCFB4BC4F80A6B71F1494F /* Pods_HelloWorld.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		ADA039D31C8DDDFA004B452D = {
+			isa = PBXGroup;
+			children = (
+				ADA039DE1C8DDDFA004B452D /* HelloWorld */,
+				ADA039DD1C8DDDFA004B452D /* Products */,
+				083BE7B5B59F9B9E75F58F94 /* Pods */,
+				310FE65FBBAD6A7B667D61C0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
-		ADC331D21BF0FF0200DFCF6B /* Products */ = {
+		ADA039DD1C8DDDFA004B452D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				ADC331D71BF0FF0200DFCF6B /* Criollo.framework */,
-				ADC331D91BF0FF0200DFCF6B /* CriolloiOS.framework */,
+				ADA039DC1C8DDDFA004B452D /* HelloWorld.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		ADC331DF1BF0FF4100DFCF6B /* Products */ = {
+		ADA039DE1C8DDDFA004B452D /* HelloWorld */ = {
 			isa = PBXGroup;
 			children = (
-				ADC331DE1BF0FF4100DFCF6B /* HelloWorld-iOS.app */,
-				ADC331FA1BF0FF6C00DFCF6B /* HelloWorld-Cocoa.app */,
-				ADC332251BF1064600DFCF6B /* HelloWorld.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		ADC331E01BF0FF4100DFCF6B /* HelloWorld-iOS */ = {
-			isa = PBXGroup;
-			children = (
-				ADC331E41BF0FF4100DFCF6B /* AppDelegate.h */,
-				ADC331E51BF0FF4100DFCF6B /* AppDelegate.m */,
-				ADC331E71BF0FF4100DFCF6B /* ViewController.h */,
-				ADC331E81BF0FF4100DFCF6B /* ViewController.m */,
-				ADC331EA1BF0FF4100DFCF6B /* Main.storyboard */,
-				ADC331ED1BF0FF4100DFCF6B /* Assets.xcassets */,
-				ADC331EF1BF0FF4100DFCF6B /* LaunchScreen.storyboard */,
-				ADC331F21BF0FF4100DFCF6B /* Info.plist */,
-				ADC331E11BF0FF4100DFCF6B /* Supporting Files */,
-			);
-			path = "HelloWorld-iOS";
-			sourceTree = "<group>";
-		};
-		ADC331E11BF0FF4100DFCF6B /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				ADC331E21BF0FF4100DFCF6B /* main.m */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		ADC331FB1BF0FF6C00DFCF6B /* HelloWorld-Cocoa */ = {
-			isa = PBXGroup;
-			children = (
-				ADC331FC1BF0FF6C00DFCF6B /* AppDelegate.h */,
-				ADC331FD1BF0FF6C00DFCF6B /* AppDelegate.m */,
-				ADC332021BF0FF6C00DFCF6B /* Assets.xcassets */,
-				ADC332041BF0FF6C00DFCF6B /* MainMenu.xib */,
-				ADC332071BF0FF6C00DFCF6B /* Info.plist */,
-				AD3BB7031BF27DAB002EA278 /* WindowController.h */,
-				AD3BB7041BF27DAB002EA278 /* WindowController.m */,
-				AD3BB7051BF27DAB002EA278 /* WindowController.xib */,
-				ADC331FF1BF0FF6C00DFCF6B /* Supporting Files */,
-			);
-			path = "HelloWorld-Cocoa";
-			sourceTree = "<group>";
-		};
-		ADC331FF1BF0FF6C00DFCF6B /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				ADC332001BF0FF6C00DFCF6B /* main.m */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		ADC332161BF100A600DFCF6B /* Shared */ = {
-			isa = PBXGroup;
-			children = (
-				ADD680151C6CC49700FC41EE /* Public */,
-				ADC3321A1BF1015000DFCF6B /* CommonRequestHandler.h */,
-				ADC3321B1BF1015000DFCF6B /* CommonRequestHandler.m */,
-				ADC3323B1BF107EF00DFCF6B /* CommonAppDelegate.h */,
-				ADC3323C1BF107EF00DFCF6B /* CommonAppDelegate.m */,
-				AD19E2341C0A7AC3004D16EB /* HelloWorldViewController.h */,
-				AD19E2361C0A7AC3004D16EB /* HelloWorldViewController.m */,
-				AD19E2351C0A7AC3004D16EB /* HelloWorldViewController.html */,
-			);
-			path = Shared;
-			sourceTree = "<group>";
-		};
-		ADC332261BF1064700DFCF6B /* HelloWorld */ = {
-			isa = PBXGroup;
-			children = (
-				ADC332271BF1064700DFCF6B /* AppDelegate.h */,
-				ADC332281BF1064700DFCF6B /* AppDelegate.m */,
-				ADC3322A1BF1064700DFCF6B /* Supporting Files */,
+				ADA039DF1C8DDDFA004B452D /* AppDelegate.h */,
+				ADA039E01C8DDDFA004B452D /* AppDelegate.m */,
+				ADA039EA1C8DDDFA004B452D /* Info.plist */,
+				ADA039E21C8DDDFA004B452D /* Supporting Files */,
 			);
 			path = HelloWorld;
 			sourceTree = "<group>";
 		};
-		ADC3322A1BF1064700DFCF6B /* Supporting Files */ = {
+		ADA039E21C8DDDFA004B452D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				ADC332321BF1064700DFCF6B /* Info.plist */,
-				ADC3322B1BF1064700DFCF6B /* main.m */,
+				AD977C0F1C8E5827007A0A7E /* io.criollo.HelloWorld.plist */,
+				ADA039E31C8DDDFA004B452D /* main.m */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		ADD680151C6CC49700FC41EE /* Public */ = {
-			isa = PBXGroup;
-			children = (
-				ADD680161C6CC49700FC41EE /* style.css */,
-			);
-			path = Public;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		ADC331DD1BF0FF4100DFCF6B /* HelloWorld-iOS */ = {
+		ADA039DB1C8DDDFA004B452D /* HelloWorld */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = ADC331F31BF0FF4100DFCF6B /* Build configuration list for PBXNativeTarget "HelloWorld-iOS" */;
+			buildConfigurationList = ADA039ED1C8DDDFA004B452D /* Build configuration list for PBXNativeTarget "HelloWorld" */;
 			buildPhases = (
-				ADC331DA1BF0FF4100DFCF6B /* Sources */,
-				ADC331DB1BF0FF4100DFCF6B /* Frameworks */,
-				ADC331DC1BF0FF4100DFCF6B /* Resources */,
-				AD04F4E31BF249DB00456D38 /* Embed Frameworks */,
-				ADD6801E1C6CC54A00FC41EE /* Public Resources */,
+				D09C1BB1F7F6BB2DCC1D01A4 /* Check Pods Manifest.lock */,
+				ADA039D81C8DDDFA004B452D /* Sources */,
+				ADA039D91C8DDDFA004B452D /* Frameworks */,
+				ADA039DA1C8DDDFA004B452D /* Resources */,
+				2343BE4CEC425837C77BE15F /* Embed Pods Frameworks */,
+				1333B25163B69156B6FC5397 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				AD04F4E21BF249DB00456D38 /* PBXTargetDependency */,
-			);
-			name = "HelloWorld-iOS";
-			productName = "HelloWorld-iOS";
-			productReference = ADC331DE1BF0FF4100DFCF6B /* HelloWorld-iOS.app */;
-			productType = "com.apple.product-type.application";
-		};
-		ADC331F91BF0FF6C00DFCF6B /* HelloWorld-Cocoa */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = ADC332081BF0FF6C00DFCF6B /* Build configuration list for PBXNativeTarget "HelloWorld-Cocoa" */;
-			buildPhases = (
-				ADC331F61BF0FF6C00DFCF6B /* Sources */,
-				ADC331F71BF0FF6C00DFCF6B /* Frameworks */,
-				ADC331F81BF0FF6C00DFCF6B /* Resources */,
-				ADD6801C1C6CC51A00FC41EE /* Public Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "HelloWorld-Cocoa";
-			productName = "HelloWorld-Cocoa";
-			productReference = ADC331FA1BF0FF6C00DFCF6B /* HelloWorld-Cocoa.app */;
-			productType = "com.apple.product-type.application";
-		};
-		ADC332241BF1064600DFCF6B /* HelloWorld */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = ADC332331BF1064700DFCF6B /* Build configuration list for PBXNativeTarget "HelloWorld" */;
-			buildPhases = (
-				ADC332211BF1064600DFCF6B /* Sources */,
-				ADC332221BF1064600DFCF6B /* Frameworks */,
-				ADC332231BF1064600DFCF6B /* Resources */,
-				ADC3323A1BF1070D00DFCF6B /* Embed Frameworks */,
-				ADD6801A1C6CC4FE00FC41EE /* Public Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				ADC332391BF1070D00DFCF6B /* PBXTargetDependency */,
 			);
 			name = HelloWorld;
 			productName = HelloWorld;
-			productReference = ADC332251BF1064600DFCF6B /* HelloWorld.app */;
+			productReference = ADA039DC1C8DDDFA004B452D /* HelloWorld.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		ADC331CB1BF0FEE300DFCF6B /* Project object */ = {
+		ADA039D41C8DDDFA004B452D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0710;
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = Criollo.io;
 				TargetAttributes = {
-					ADC331DD1BF0FF4100DFCF6B = {
-						CreatedOnToolsVersion = 7.1;
-						DevelopmentTeam = H32HC7Z268;
-					};
-					ADC331F91BF0FF6C00DFCF6B = {
-						CreatedOnToolsVersion = 7.1;
-					};
-					ADC332241BF1064600DFCF6B = {
-						CreatedOnToolsVersion = 7.1;
+					ADA039DB1C8DDDFA004B452D = {
+						CreatedOnToolsVersion = 7.2.1;
 					};
 				};
 			};
-			buildConfigurationList = ADC331CE1BF0FEE300DFCF6B /* Build configuration list for PBXProject "HelloWorld" */;
+			buildConfigurationList = ADA039D71C8DDDFA004B452D /* Build configuration list for PBXProject "HelloWorld" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -406,273 +137,92 @@
 				en,
 				Base,
 			);
-			mainGroup = ADC331CA1BF0FEE300DFCF6B;
-			productRefGroup = ADC331DF1BF0FF4100DFCF6B /* Products */;
+			mainGroup = ADA039D31C8DDDFA004B452D;
+			productRefGroup = ADA039DD1C8DDDFA004B452D /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = ADC331D21BF0FF0200DFCF6B /* Products */;
-					ProjectRef = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
-				ADC332241BF1064600DFCF6B /* HelloWorld */,
-				ADC331F91BF0FF6C00DFCF6B /* HelloWorld-Cocoa */,
-				ADC331DD1BF0FF4100DFCF6B /* HelloWorld-iOS */,
+				ADA039DB1C8DDDFA004B452D /* HelloWorld */,
 			);
 		};
 /* End PBXProject section */
 
-/* Begin PBXReferenceProxy section */
-		ADC331D71BF0FF0200DFCF6B /* Criollo.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Criollo.framework;
-			remoteRef = ADC331D61BF0FF0200DFCF6B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		ADC331D91BF0FF0200DFCF6B /* CriolloiOS.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = CriolloiOS.framework;
-			remoteRef = ADC331D81BF0FF0200DFCF6B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
-
 /* Begin PBXResourcesBuildPhase section */
-		ADC331DC1BF0FF4100DFCF6B /* Resources */ = {
+		ADA039DA1C8DDDFA004B452D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADC331F11BF0FF4100DFCF6B /* LaunchScreen.storyboard in Resources */,
-				ADC331EE1BF0FF4100DFCF6B /* Assets.xcassets in Resources */,
-				ADC331EC1BF0FF4100DFCF6B /* Main.storyboard in Resources */,
-				AD19E2391C0A7AC3004D16EB /* HelloWorldViewController.html in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		ADC331F81BF0FF6C00DFCF6B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				ADC332031BF0FF6C00DFCF6B /* Assets.xcassets in Resources */,
-				AD3BB7071BF27DAB002EA278 /* WindowController.xib in Resources */,
-				ADC332061BF0FF6C00DFCF6B /* MainMenu.xib in Resources */,
-				AD19E2381C0A7AC3004D16EB /* HelloWorldViewController.html in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		ADC332231BF1064600DFCF6B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				AD19E2371C0A7AC3004D16EB /* HelloWorldViewController.html in Resources */,
+				AD977C101C8E5827007A0A7E /* io.criollo.HelloWorld.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		1333B25163B69156B6FC5397 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld/Pods-HelloWorld-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2343BE4CEC425837C77BE15F /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld/Pods-HelloWorld-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D09C1BB1F7F6BB2DCC1D01A4 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
-		ADC331DA1BF0FF4100DFCF6B /* Sources */ = {
+		ADA039D81C8DDDFA004B452D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADC331E91BF0FF4100DFCF6B /* ViewController.m in Sources */,
-				ADC331E61BF0FF4100DFCF6B /* AppDelegate.m in Sources */,
-				ADC3321C1BF1015000DFCF6B /* CommonRequestHandler.m in Sources */,
-				ADC331E31BF0FF4100DFCF6B /* main.m in Sources */,
-				AD19E23C1C0A7AC3004D16EB /* HelloWorldViewController.m in Sources */,
-				ADC3323D1BF107EF00DFCF6B /* CommonAppDelegate.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		ADC331F61BF0FF6C00DFCF6B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				AD3BB7061BF27DAB002EA278 /* WindowController.m in Sources */,
-				ADC332011BF0FF6C00DFCF6B /* main.m in Sources */,
-				ADC331FE1BF0FF6C00DFCF6B /* AppDelegate.m in Sources */,
-				ADC3321D1BF1016000DFCF6B /* CommonRequestHandler.m in Sources */,
-				AD19E23B1C0A7AC3004D16EB /* HelloWorldViewController.m in Sources */,
-				ADC3323E1BF1099700DFCF6B /* CommonAppDelegate.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		ADC332211BF1064600DFCF6B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				ADC3322C1BF1064700DFCF6B /* main.m in Sources */,
-				ADC332401BF10FBA00DFCF6B /* CommonRequestHandler.m in Sources */,
-				AD19E23A1C0A7AC3004D16EB /* HelloWorldViewController.m in Sources */,
-				ADC332291BF1064700DFCF6B /* AppDelegate.m in Sources */,
-				ADC3323F1BF1099800DFCF6B /* CommonAppDelegate.m in Sources */,
+				ADA039E41C8DDDFA004B452D /* main.m in Sources */,
+				ADA039E11C8DDDFA004B452D /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		AD04F4E21BF249DB00456D38 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = CriolloiOS;
-			targetProxy = AD04F4E11BF249DB00456D38 /* PBXContainerItemProxy */;
-		};
-		ADC332391BF1070D00DFCF6B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Criollo;
-			targetProxy = ADC332381BF1070D00DFCF6B /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		ADC331EA1BF0FF4100DFCF6B /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				ADC331EB1BF0FF4100DFCF6B /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		ADC331EF1BF0FF4100DFCF6B /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				ADC331F01BF0FF4100DFCF6B /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		ADC332041BF0FF6C00DFCF6B /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				ADC332051BF0FF6C00DFCF6B /* Base */,
-			);
-			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
-
 /* Begin XCBuildConfiguration section */
-		ADC331CF1BF0FEE300DFCF6B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ENABLE_TESTABILITY = YES;
-				ONLY_ACTIVE_ARCH = YES;
-			};
-			name = Debug;
-		};
-		ADC331D01BF0FEE300DFCF6B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-			};
-			name = Release;
-		};
-		ADC331F41BF0FF4100DFCF6B /* Debug */ = {
+		ADA039EB1C8DDDFA004B452D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Catalin Stan (84QEN4RQP2)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Catalin Stan (84QEN4RQP2)";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "HelloWorld-iOS/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.criollo.examples.HelloWorld-iOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		ADC331F51BF0FF4100DFCF6B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Catalin Stan (84QEN4RQP2)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Catalin Stan (84QEN4RQP2)";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "HelloWorld-iOS/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.criollo.examples.HelloWorld-iOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		ADC332091BF0FF6C00DFCF6B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -687,7 +237,6 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
-				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -706,22 +255,17 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "HelloWorld-Cocoa/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.criollo.examples.HelloWorld-Cocoa";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
-		ADC3320A1BF0FF6C00DFCF6B /* Release */ = {
+		ADA039EC1C8DDDFA004B452D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -736,7 +280,6 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
-				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -749,147 +292,60 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "HelloWorld-Cocoa/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.criollo.examples.HelloWorld-Cocoa";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 			};
 			name = Release;
 		};
-		ADC332341BF1064700DFCF6B /* Debug */ = {
+		ADA039EE1C8DDDFA004B452D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FEF72EE5D162F3BF7DBC5361 /* Pods-HelloWorld.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = HelloWorld/Info.plist;
-				INSTALL_PATH = /WebApplications;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.examples.HelloWorld;
+				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.HelloWorld;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
-		ADC332351BF1064700DFCF6B /* Release */ = {
+		ADA039EF1C8DDDFA004B452D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E9D7D9C53B804775D42BB4F5 /* Pods-HelloWorld.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = HelloWorld/Info.plist;
-				INSTALL_PATH = /WebApplications;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.examples.HelloWorld;
+				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.HelloWorld;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		ADC331CE1BF0FEE300DFCF6B /* Build configuration list for PBXProject "HelloWorld" */ = {
+		ADA039D71C8DDDFA004B452D /* Build configuration list for PBXProject "HelloWorld" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				ADC331CF1BF0FEE300DFCF6B /* Debug */,
-				ADC331D01BF0FEE300DFCF6B /* Release */,
+				ADA039EB1C8DDDFA004B452D /* Debug */,
+				ADA039EC1C8DDDFA004B452D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		ADC331F31BF0FF4100DFCF6B /* Build configuration list for PBXNativeTarget "HelloWorld-iOS" */ = {
+		ADA039ED1C8DDDFA004B452D /* Build configuration list for PBXNativeTarget "HelloWorld" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				ADC331F41BF0FF4100DFCF6B /* Debug */,
-				ADC331F51BF0FF4100DFCF6B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		ADC332081BF0FF6C00DFCF6B /* Build configuration list for PBXNativeTarget "HelloWorld-Cocoa" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				ADC332091BF0FF6C00DFCF6B /* Debug */,
-				ADC3320A1BF0FF6C00DFCF6B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		ADC332331BF1064700DFCF6B /* Build configuration list for PBXNativeTarget "HelloWorld" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				ADC332341BF1064700DFCF6B /* Debug */,
-				ADC332351BF1064700DFCF6B /* Release */,
+				ADA039EE1C8DDDFA004B452D /* Debug */,
+				ADA039EF1C8DDDFA004B452D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = ADC331CB1BF0FEE300DFCF6B /* Project object */;
+	rootObject = ADA039D41C8DDDFA004B452D /* Project object */;
 }

@@ -2,8 +2,8 @@
 //  main.m
 //  HelloWorld
 //
-//  Created by Cătălin Stan on 07/03/16.
-//  Copyright © 2016 Criollo.io. All rights reserved.
+//  Created by Cătălin Stan on 11/9/15.
+//
 //
 
 #import <Criollo/Criollo.h>

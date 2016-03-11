@@ -21,21 +21,22 @@
 
 @class CRResponse, CRUploadedFile, CRConnection, CRRequestRange;
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRRequest : CRMessage
 
 @property (nonatomic, weak) CRConnection *connection;
-@property (nonatomic, strong, nonnull) CRResponse * response;
+@property (nonatomic, strong) CRResponse * response;
 
-@property (nonatomic, readonly, nonnull) NSURL * URL;
-@property (nonatomic, readonly, nonnull) NSString * method;
+@property (nonatomic, readonly) NSURL * URL;
+@property (nonatomic, readonly) CRHTTPMethod method;
 
-
-@property (nonatomic, readonly, nonnull) NSDictionary<NSString *, NSString *> * env;
-@property (nonatomic, readonly, nonnull) NSDictionary<NSString *, NSString *> * cookies;
-@property (nonatomic, readonly, nonnull) NSDictionary<NSString *, NSString *> * query;
-@property (nonatomic, readonly, nonnull) id body;
-@property (nonatomic, readonly, nonnull) NSDictionary<NSString *, CRUploadedFile *> * files;
+@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> * env;
+@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> * cookies;
+@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> * query;
+@property (nonatomic, readonly) id body;
+@property (nonatomic, readonly) NSDictionary<NSString *, CRUploadedFile *> * files;
 
 @property (nonatomic, readonly, nullable) CRRequestRange * range;
 
 @end
+NS_ASSUME_NONNULL_END

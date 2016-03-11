@@ -12,8 +12,10 @@ typedef NS_ENUM(NSUInteger, CRApplicationTerminateReply) {
     CRTerminateLater  = 2
 };
 
-FOUNDATION_EXPORT NSString * _Nonnull const Criollo;
-FOUNDATION_EXPORT NSString * _Nonnull const CRErrorDomain;
+NS_ASSUME_NONNULL_BEGIN
+
+FOUNDATION_EXPORT NSString * const Criollo;
+FOUNDATION_EXPORT NSString * const CRErrorDomain;
 
 typedef NSUInteger CRError;
 
@@ -22,53 +24,51 @@ typedef NSUInteger CRError;
 @protocol CRApplicationDelegate <NSObject>
 
 @required
-- (void)applicationDidFinishLaunching:(nonnull NSNotification *)notification;
+- (void)applicationDidFinishLaunching:(NSNotification *)notification;
 
 @optional
-- (void)applicationWillFinishLaunching:(nonnull NSNotification *)notification;
+- (void)applicationWillFinishLaunching:(NSNotification *)notification;
 
-- (CRApplicationTerminateReply)applicationShouldTerminate:(nonnull CRApplication *)sender;
-- (void)applicationWillTerminate:(nonnull NSNotification *)notification;
+- (CRApplicationTerminateReply)applicationShouldTerminate:(CRApplication *)sender;
+- (void)applicationWillTerminate:(NSNotification *)notification;
 
-- (BOOL)application:(nonnull CRApplication *)application shouldLogError:(nonnull NSString*)errorString;
-- (BOOL)application:(nonnull CRApplication *)application shouldLogString:(nonnull NSString*)string;
+- (BOOL)application:(CRApplication *)application shouldLogError:(NSString*)errorString;
+- (BOOL)application:(CRApplication *)application shouldLogString:(NSString*)string;
 
 @end
 
 FOUNDATION_EXPORT NSUInteger const CRErrorNone;
 FOUNDATION_EXPORT NSUInteger const CRErrorSigTERM;
 
-FOUNDATION_EXPORT NSString * _Nonnull const CRApplicationRunLoopMode;
+FOUNDATION_EXPORT NSString * const CRApplicationRunLoopMode;
 
-FOUNDATION_EXPORT NSString * _Nonnull const CRApplicationWillFinishLaunchingNotification;
-FOUNDATION_EXPORT NSString * _Nonnull const CRApplicationDidFinishLaunchingNotification;
-FOUNDATION_EXPORT NSString * _Nonnull const CRApplicationWillTerminateNotification;
+FOUNDATION_EXPORT NSString * const CRApplicationWillFinishLaunchingNotification;
+FOUNDATION_EXPORT NSString * const CRApplicationDidFinishLaunchingNotification;
+FOUNDATION_EXPORT NSString * const CRApplicationWillTerminateNotification;
 
-FOUNDATION_EXPORT id _Nonnull CRApp;
-FOUNDATION_EXPORT int CRApplicationMain(int argc, const char * _Nullable argv[], id<CRApplicationDelegate> _Nonnull delegate);
+FOUNDATION_EXPORT id CRApp;
+FOUNDATION_EXPORT int CRApplicationMain(int argc, const char * _Nullable argv[], id<CRApplicationDelegate> delegate);
 
 @interface CRApplication : NSObject
 
-@property (nonatomic, assign, nonnull) id<CRApplicationDelegate> delegate;
+@property (nonatomic, assign) id<CRApplicationDelegate> delegate;
 
-+ (nonnull CRApplication *)sharedApplication;
++ (CRApplication *)sharedApplication;
 
-- (nonnull instancetype)initWithDelegate:(nullable id<CRApplicationDelegate>)delegate;
+- (instancetype)initWithDelegate:(id<CRApplicationDelegate> _Nullable)delegate;
 
 - (void)run;
-- (void)stop:(nullable id)sender;
-- (void)terminate:(nullable id)sender;
+- (void)stop:(id _Nullable)sender;
+- (void)terminate:(id _Nullable)sender;
 - (void)replyToApplicationShouldTerminate:(BOOL)shouldTerminate;
 
-- (void)log:(nonnull NSString *)string;
-- (void)logError:(nonnull NSString *)string;
+- (void)log:(NSString *)string;
+- (void)logFormat:(NSString *)format, ...;
+- (void)logFormat:(NSString *)format args:(va_list)args;
 
-- (void)logFormat:(nonnull NSString *)format, ...;
-- (void)logErrorFormat:(nonnull NSString *)format, ...;
-
-NS_ASSUME_NONNULL_BEGIN
-- (void)logFormat:(nonnull NSString *)format args:(va_list)args;
-- (void)logErrorFormat:(nonnull NSString *)format args:(va_list)args;
-NS_ASSUME_NONNULL_END
+- (void)logError:(NSString *)string;
+- (void)logErrorFormat:(NSString *)format, ...;
+- (void)logErrorFormat:(NSString *)format args:(va_list)args;
 
 @end
+NS_ASSUME_NONNULL_END

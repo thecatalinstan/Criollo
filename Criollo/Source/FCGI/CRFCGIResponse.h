@@ -17,7 +17,8 @@ typedef NS_ENUM(UInt8, CRFCGIProtocolStatus) {
     CRFCGIProtocolStatusUnknownRole = 3,
 };
 
-FOUNDATION_EXPORT NSString * _Nonnull NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus);
+NS_ASSUME_NONNULL_BEGIN
+FOUNDATION_EXPORT NSString * NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus);
 
 @interface CRFCGIResponse : CRResponse
 
@@ -25,3 +26,4 @@ FOUNDATION_EXPORT NSString * _Nonnull NSStringFromCRFCGIProtocolStatus(CRFCGIPro
 @property (nonatomic, assign) CRFCGIProtocolStatus protocolStatus;
 
 @end
+NS_ASSUME_NONNULL_END

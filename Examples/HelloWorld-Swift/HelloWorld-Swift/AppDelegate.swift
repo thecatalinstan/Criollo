@@ -10,12 +10,11 @@ import Criollo
 
 let PortNumber:UInt = 10781;
 let LogConnections:Bool = false;
-let LogRequests:Bool = false;
+let LogRequests:Bool = true;
 
 class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
 
-    var server:CRHTTPServer!;
-//    var server:CRFCGIServer!;
+    var server:CRServer!;
     var baseURL:NSURL!;
     var app:CRApplication!;
 
@@ -25,12 +24,11 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
 
         // Create the server and add some handlers to do some work
         self.server = CRHTTPServer(delegate:self);
-//        self.server = CRFCGIServer(delegate:self);
 
         let bundle:NSBundle! = NSBundle.mainBundle();
 
         // Add a header that says who we are :)
-        let identifyBlock:CRRouteBlock = { (request:CRRequest, response:CRResponse, completionHandler:CRRouteCompletionBlock) -> Void in
+        let identifyBlock:CRRouteBlock = { (request, response, completionHandler) -> Void in
             response.setValue("\(bundle.bundleIdentifier!), \(bundle.objectForInfoDictionaryKey("CFBundleShortVersionString") as! String) build \(bundle.objectForInfoDictionaryKey("CFBundleVersion") as! String)", forHTTPHeaderField: "Server");
 
             if ( request.cookies["session_cookie"] == nil ) {
@@ -43,29 +41,24 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
         self.server.addBlock(identifyBlock);
 
         // Prints a simple hello world as text/plain
-        let helloBlock:CRRouteBlock = { (request:CRRequest, response:CRResponse, completionHandler:CRRouteCompletionBlock) -> Void in
+        let helloBlock:CRRouteBlock = { (request, response, completionHandler) -> Void in
             response.setValue("text/plain", forHTTPHeaderField: "Content-type");
-            response.sendString("Hello World");
+            response.send("Hello World");
             completionHandler();
         };
         self.server.addBlock(helloBlock, forPath: "/");
 
         // Prints a hello world JSON object as application/json
-        let jsonHelloBlock:CRRouteBlock = { (request:CRRequest, response:CRResponse, completionHandler:CRRouteCompletionBlock) -> Void in
-            do {
-                response.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-type");
-                try response.sendData(NSJSONSerialization.dataWithJSONObject(["status": true, "message": "Hello World"], options:NSJSONWritingOptions.PrettyPrinted));
-            } catch let jsonError as NSError {
-                response.setValue("text/plain; charset=utf-8", forHTTPHeaderField: "Content-type");
-                response.sendString("\(jsonError)")
-            }
+        let jsonHelloBlock:CRRouteBlock = { (request, response, completionHandler) -> Void in
+            response.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-type");
+            response.send(["status": true, "message": "Hello World"]);
             completionHandler();
         };
         self.server.addBlock(jsonHelloBlock, forPath: "/json");
 
         // Prints some more info as text/html
         let uname = systemInfo();
-        let statusBlock:CRRouteBlock = { (request:CRRequest, response:CRResponse, completionHandler:CRRouteCompletionBlock) -> Void in
+        let statusBlock:CRRouteBlock = { (request, response, completionHandler) -> Void in
 
             let startTime:NSDate! = NSDate();
 
@@ -83,7 +76,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             // Headers
             let headers:NSDictionary! = request.allHTTPHeaderFields;
             responseString += "<h3>Request Headers:</h2><pre>";
-            headers.enumerateKeysAndObjectsUsingBlock({ (key:AnyObject,  object:AnyObject, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
+            headers.enumerateKeysAndObjectsUsingBlock({ (key,  object, stop) -> Void in
                 responseString += "\(key): \(object)\n";
             });
             responseString += "</pre>";
@@ -91,7 +84,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             // Request Enviroment
             let env:NSDictionary! = request.valueForKey("env") as! NSDictionary;
             responseString += "<h3>Request Environment:</h2><pre>";
-            env.enumerateKeysAndObjectsUsingBlock({ (key:AnyObject,  object:AnyObject, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
+            env.enumerateKeysAndObjectsUsingBlock({ (key,  object, stop) -> Void in
                 responseString += "\(key): \(object)\n";
             });
             responseString += "</pre>";
@@ -99,15 +92,15 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             // Query
             let queryVars:NSDictionary! = request.query as NSDictionary;
             responseString += "<h3>Request Query:</h2><pre>";
-            queryVars.enumerateKeysAndObjectsUsingBlock({ (key:AnyObject,  object:AnyObject, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
+            queryVars.enumerateKeysAndObjectsUsingBlock({ (key,  object, stop) -> Void in
                 responseString += "\(key): \(object)\n";
             });
             responseString += "</pre>";
-            
+
             // Cookies
             let cookies:NSDictionary! = request.cookies as NSDictionary;
             responseString += "<h3>Request Cookies:</h2><pre>";
-            cookies.enumerateKeysAndObjectsUsingBlock({ (key:AnyObject,  object:AnyObject, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
+            cookies.enumerateKeysAndObjectsUsingBlock({ (key,  object, stop) -> Void in
                 responseString += "\(key): \(object)\n";
             });
             responseString += "</pre>";
@@ -143,7 +136,22 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
 
         // Serve static files from "/Public" (relative to bundle)
         let staticFilePath:String = (NSBundle.mainBundle().resourcePath?.stringByAppendingString("/Public"))!;
-        self.server.addStaticDirectoryAtPath(staticFilePath, forPath: "/static", options: CRStaticDirectoryServingOptions.FollowSymlinks)
+        self.server.mountStaticDirectoryAtPath(staticFilePath, forPath: "/static", options: CRStaticDirectoryServingOptions.FollowSymlinks)
+
+
+        self.server.addBlock ( { (request, response, next) -> Void in
+            self.app.log("\(request.URL.path)");
+            next();
+        });
+
+        // Redirecter
+        self.server.addBlock({ (request, response, completionHandler) -> Void in
+            let redirectURL:NSURL! = NSURL(string: request.query["redirect"]!);
+            if ( redirectURL != nil ) {
+                response.redirectToURL(redirectURL);
+            }
+            completionHandler();
+        }, forPath: "/redirect", HTTPMethod:CRHTTPMethod.Get);
 
         // Start listening
         var serverError:NSError?;
@@ -166,7 +174,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             // Get the list of paths from the registered routes
             let routes:NSDictionary!  = self.server.valueForKey("routes") as! NSDictionary;
             let paths:NSMutableSet! = NSMutableSet();
-            routes.enumerateKeysAndObjectsUsingBlock({ (key:AnyObject,  object:AnyObject, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
+            routes.enumerateKeysAndObjectsUsingBlock({ (key,  object, stop) -> Void in
                 let routeKey:NSString! = key as! NSString;
                 if ( routeKey.hasSuffix("*") ) {
                     return;
@@ -204,8 +212,8 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             self.app.log(" * Disconnected \(connection.remoteAddress):\(connection.remotePort)");
         }
     }
-
-
+    
+    
     func server(server: CRServer, didFinishRequest request: CRRequest) {
         if ( LogRequests ) {
             let env:NSDictionary! = request.valueForKey("env") as! NSDictionary;
@@ -213,7 +221,4 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
         }
     }
 
-
-
 }
-

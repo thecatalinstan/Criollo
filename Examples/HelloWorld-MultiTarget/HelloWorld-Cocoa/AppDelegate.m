@@ -1,50 +1,57 @@
 //
 //  AppDelegate.m
-//  HelloWorld-iOS
+//  HelloWorld-Cocoa
 //
 //  Created by Cătălin Stan on 11/9/15.
 //
 //
 
 #import "AppDelegate.h"
+#import "WindowController.h"
 
 @interface AppDelegate ()
+
+@property (nonatomic, strong) WindowController* windowController;
 
 @end
 
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     [self setupServer];
 
-    __weak AppDelegate* waakSelf = self;
-
-    // Ablock that creates a screenshot and sends it to the clinet
+    __weak AppDelegate* weakSelf = self;
+    // A block that creates a screenshot and sends it to the client
     [self.server addBlock:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
+        NSMutableData* imageData = [NSMutableData data];
 
-        UIView* hostView = waakSelf.window.rootViewController.view;
+        CGImageRef windowImage = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionOnScreenOnly, (CGWindowID)weakSelf.windowController.window.windowNumber, kCGWindowImageBestResolution);
+        CGImageDestinationRef destination =  CGImageDestinationCreateWithData((CFMutableDataRef)imageData, kUTTypePNG, 1, NULL);
+        CGImageDestinationAddImage(destination, windowImage, nil);
+        CGImageDestinationFinalize(destination);
 
-        UIGraphicsBeginImageContextWithOptions(hostView.bounds.size, hostView.opaque, 0.0);
-        [hostView.layer renderInContext:UIGraphicsGetCurrentContext()];
-        UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
+        CFRelease(destination);
+        CFRelease(windowImage);
 
-        NSData* imageData = UIImagePNGRepresentation(img);
         [response setValue:@"image/png" forHTTPHeaderField:@"Content-type"];
         [response setValue:@(imageData.length).stringValue forHTTPHeaderField:@"Content-Length"];
         [response sendData:imageData];
 
         completionHandler();
+    } forPath:@"/screenshot" HTTPMethod:CRHTTPMethodGet];
 
-    } forPath:@"/screenshot" HTTPMethod:@"GET"];
-
-    return YES;
+    self.windowController = [[WindowController alloc] initWithWindowNibName:@"WindowController"];
+    [self.windowController showWindow:nil];
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application {
+- (void)applicationWillTerminate:(NSNotification *)aNotification {
     if (self.isConnected) {
         [self stopListening:nil];
     }
+}
+
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
+    return YES;
 }
 
 #pragma mark - Logging
@@ -54,8 +61,8 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSMutableDictionary* tempDictionary = [NSMutableDictionary dictionaryWithDictionary:super.logDebugAtributes];
-        tempDictionary[NSFontAttributeName] = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-        tempDictionary[NSForegroundColorAttributeName] = [UIColor lightGrayColor];
+        tempDictionary[NSFontAttributeName] = [NSFont systemFontOfSize:[NSFont systemFontSize]];
+        tempDictionary[NSForegroundColorAttributeName] = [NSColor lightGrayColor];
         _logTextAtributes = tempDictionary.copy;
     });
     return _logTextAtributes;
@@ -66,8 +73,8 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSMutableDictionary* tempDictionary = [NSMutableDictionary dictionaryWithDictionary:super.logDebugAtributes];
-        tempDictionary[NSFontAttributeName] = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-        tempDictionary[NSForegroundColorAttributeName] = [UIColor grayColor];
+        tempDictionary[NSFontAttributeName] = [NSFont systemFontOfSize:[NSFont systemFontSize]];
+        tempDictionary[NSForegroundColorAttributeName] = [NSColor grayColor];
         _logDebugAtributes = tempDictionary.copy;
     });
     return _logDebugAtributes;
@@ -78,8 +85,8 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSMutableDictionary* tempDictionary = [NSMutableDictionary dictionaryWithDictionary:super.logDebugAtributes];
-        tempDictionary[NSFontAttributeName] = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-        tempDictionary[NSForegroundColorAttributeName] = [UIColor redColor];
+        tempDictionary[NSFontAttributeName] = [NSFont systemFontOfSize:[NSFont systemFontSize]];
+        tempDictionary[NSForegroundColorAttributeName] = [NSColor redColor];
         _logErrorAtributes = tempDictionary.copy;
     });
     return _logErrorAtributes;
@@ -90,7 +97,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSMutableDictionary* tempDictionary = [NSMutableDictionary dictionaryWithDictionary:super.linkTextAttributes];
-        tempDictionary[NSForegroundColorAttributeName] = [UIColor whiteColor];
+        tempDictionary[NSForegroundColorAttributeName] = [NSColor whiteColor];
         _linkTextAttributes = tempDictionary.copy;
     });
     return _linkTextAttributes;

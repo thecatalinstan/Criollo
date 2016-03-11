@@ -32,21 +32,22 @@
 }
 
 - (instancetype)init {
-    return [self initWithMethod:nil URL:nil version:nil connection:nil env:nil];
+    return [self initWithMethod:CRHTTPMethodGet URL:nil version:CRHTTPVersion1_1 connection:nil env:nil];
 }
 
-- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version {
+- (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL *)URL version:(CRHTTPVersion)version {
     return [self initWithMethod:method URL:URL version:version connection:nil env:nil];
 }
 
-- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version connection:(nullable CRConnection *)connection {
+- (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL *)URL version:(CRHTTPVersion)version connection:(CRConnection * _Nullable)connection {
     return [self initWithMethod:method URL:URL version:version connection:connection env:nil];
 }
-- (instancetype)initWithMethod:(NSString *)method URL:(NSURL *)URL version:(NSString *)version connection:(CRConnection *)connection env:(NSDictionary *)env {
+- (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL *)URL version:(CRHTTPVersion)version connection:(CRConnection *)connection env:(NSDictionary *)env {
     self = [super init];
     if ( self != nil ) {
-        self.connection = connection;
-        self.message = CFBridgingRelease( CFHTTPMessageCreateRequest(NULL, (__bridge CFStringRef)method, (__bridge CFURLRef)URL, (__bridge CFStringRef)version) );
+        _connection = connection;
+        _method = method;
+        self.message = CFBridgingRelease( CFHTTPMessageCreateRequest(NULL, (__bridge CFStringRef)NSStringFromCRHTTPMethod(_method), (__bridge CFURLRef)URL, (__bridge CFStringRef)NSStringFromCRHTTPVersion(version)) );
         if ( env == nil ) {
             _env = [NSMutableDictionary dictionary];
         } else {
@@ -62,10 +63,6 @@
 
 - (BOOL)appendData:(NSData *)data {
     return CFHTTPMessageAppendBytes((__bridge CFHTTPMessageRef)self.message, data.bytes, data.length);
-}
-
-- (NSString *)method {
-	return (__bridge_transfer NSString *)CFHTTPMessageCopyRequestMethod((__bridge CFHTTPMessageRef _Nonnull)(self.message));
 }
 
 - (NSDictionary<NSString *,NSString *> *)env {
@@ -312,7 +309,7 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ %@ %@", self.method, self.URL.path, self.version];
+    return [NSString stringWithFormat:@"%@ %@ %@", NSStringFromCRHTTPMethod(self.method), self.URL.path, NSStringFromCRHTTPVersion(self.version)];
 }
 
 - (BOOL)shouldCloseConnection {
@@ -322,7 +319,7 @@
     if ( connectionHeader != nil ) {
         shouldClose = [connectionHeader caseInsensitiveCompare:@"close"] == NSOrderedSame;
     } else {
-        shouldClose = [self.version isEqualToString:CRHTTPVersion1_0];
+        shouldClose = self.version == CRHTTPVersion1_0;
     }
 
     return shouldClose;

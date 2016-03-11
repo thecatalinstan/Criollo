@@ -8,8 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
 @interface NSHTTPCookie (Criollo)
 
-+ (nullable NSDictionary*)responseHeaderFieldsWithCookies:(nonnull NSArray *)cookies;
++ (nullable NSDictionary*)responseHeaderFieldsWithCookies:(NSArray<NSHTTPCookie *> *)cookies;
 
 @end
+NS_ASSUME_NONNULL_END

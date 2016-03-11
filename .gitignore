@@ -18,5 +18,5 @@ DerivedData
 *.xcuserstate
 
 .DS_Store
-Criollo.xcodeproj/project.xcworkspace/xcshareddata
-*.min.*
+Examples/HelloWorld/HelloWorld.xcworkspace
+Examples/HelloWorld/Pods

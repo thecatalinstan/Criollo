@@ -28,22 +28,21 @@
 @implementation CRResponse
 
 - (instancetype)init {
-    return [self initWithConnection:nil HTTPStatusCode:200 description:nil version:nil];
+    return [self initWithConnection:[CRConnection new] HTTPStatusCode:200 description:nil version:CRHTTPVersion1_1];
 }
 
 - (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode {
-    return [self initWithConnection:connection HTTPStatusCode:HTTPStatusCode description:nil version:nil];
+    return [self initWithConnection:connection HTTPStatusCode:HTTPStatusCode description:nil version:CRHTTPVersion1_1];
 }
 
 - (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description {
-    return [self initWithConnection:connection HTTPStatusCode:HTTPStatusCode description:description version:nil];
+    return [self initWithConnection:connection HTTPStatusCode:HTTPStatusCode description:description version:CRHTTPVersion1_1];
 }
 
-- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version {
+- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(CRHTTPVersion)version {
     self  = [super init];
     if ( self != nil ) {
-        version = version == nil ? CRHTTPVersion1_1 : version;
-        self.message = CFBridgingRelease(CFHTTPMessageCreateResponse(NULL, (CFIndex)HTTPStatusCode, (__bridge CFStringRef)description, (__bridge CFStringRef) version));
+        self.message = CFBridgingRelease(CFHTTPMessageCreateResponse(NULL, (CFIndex)HTTPStatusCode, (__bridge CFStringRef)description, (__bridge CFStringRef)NSStringFromCRHTTPVersion(version)));
         self.connection = connection;
         _statusDescription = description;
     }
@@ -122,6 +121,16 @@
 
 #pragma mark - Write
 
+- (void)write:(id)obj {
+    NSData* data = [self serializeOutputObject:obj error:nil];
+    [self writeData:data finish:NO];
+}
+
+- (void)send:(id)obj {
+    NSData* data = [self serializeOutputObject:obj error:nil];
+    [self writeData:data finish:YES];
+}
+
 - (void)writeData:(NSData*)data {
     [self writeData:data finish:NO];
 }
@@ -131,11 +140,14 @@
 }
 
 - (void)writeString:(NSString*)string {
-    [self writeData:[string dataUsingEncoding:NSUTF8StringEncoding]];
+    NSData* data = [self serializeOutputObject:string error:nil];
+    [self writeData:data finish:NO];
 }
 
 - (void)sendString:(NSString*)string {
-    [self sendData:[string dataUsingEncoding:NSUTF8StringEncoding]];
+    NSData* data = [self serializeOutputObject:string error:nil];
+    [self writeData:data finish:YES];
+
 }
 
 - (void)writeFormat:(NSString*)format, ... {
@@ -145,11 +157,6 @@
     va_end(args);
 }
 
-- (void)writeFormat:(NSString *)format args:(va_list)args {
-    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
-    [self writeString:formattedString];
-}
-
 - (void)sendFormat:(NSString*)format, ... {
     va_list args;
     va_start(args, format);
@@ -157,9 +164,16 @@
     va_end(args);
 }
 
+- (void)writeFormat:(NSString *)format args:(va_list)args {
+    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
+    NSData* data = [self serializeOutputObject:formattedString error:nil];
+    [self writeData:data finish:NO];
+}
+
 - (void)sendFormat:(NSString *)format args:(va_list)args {
     NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
-    [self sendString:formattedString];
+    NSData* data = [self serializeOutputObject:formattedString error:nil];
+    [self writeData:data finish:YES];
 }
 
 - (void)writeData:(NSData *)data finish:(BOOL)flag {
@@ -167,6 +181,26 @@
         _finished = YES;
     }
     [self.connection sendDataToSocket:data forRequest:self.request];
+}
+
+#pragma mark - Output processing
+
+- (NSData *)serializeOutputObject:(id)obj error:(NSError *__autoreleasing  _Nullable *)error {
+    NSData* outputData;
+
+    if ( [obj isKindOfClass:[NSString class]] ) {
+        outputData = [obj dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    } else if ( [obj isKindOfClass:[NSDictionary class]] || [obj isKindOfClass:[NSArray class]] ) {
+        outputData = [NSJSONSerialization dataWithJSONObject:obj options:0 error:error];
+    } else {
+        outputData = [[obj description] dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    }
+
+    if ( outputData == nil ) {
+        outputData = [NSData data];
+    }
+
+    return outputData;
 }
 
 - (void)buildStatusLine {
@@ -185,7 +219,7 @@
         self.proposedStatusDescription = self.statusDescription;
     }
 
-    CFHTTPMessageRef newMessage = CFHTTPMessageCreateResponse(NULL, (CFIndex)self.proposedStatusCode, (__bridge CFStringRef)self.proposedStatusDescription, (__bridge CFStringRef) self.version);
+    CFHTTPMessageRef newMessage = CFHTTPMessageCreateResponse(NULL, (CFIndex)self.proposedStatusCode, (__bridge CFStringRef)self.proposedStatusDescription, (__bridge CFStringRef) NSStringFromCRHTTPVersion(self.version));
 
     NSData* currentMessageData = self.serializedData;
     NSRange rangeOfFirstCRLF = [currentMessageData rangeOfData:[CRConnection CRLFData] options:0 range:NSMakeRange(0, currentMessageData.length)];
@@ -201,12 +235,32 @@
     [self setAllHTTPHeaderFields:cookieHeaders];
 }
 
+#pragma mark - Redirect
+
+- (void)redirectToURL:(NSURL *)URL {
+    [self redirectToURL:URL statusCode:301];
+}
+
+- (void)redirectToURL:(NSURL *)URL statusCode:(NSUInteger)statusCode {
+    [self redirectToLocation:URL.absoluteString statusCode:statusCode];
+}
+
+- (void)redirectToLocation:(NSString *)location {
+    [self redirectToLocation:location statusCode:301];
+}
+
+- (void)redirectToLocation:(NSString *)location statusCode:(NSUInteger)statusCode {
+    [self setStatusCode:statusCode description:nil];
+    [self setValue:location forHTTPHeaderField:@"Location"];
+    [self finish];
+}
+
 - (void)finish {
     _finished = YES;
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ %lu %@ %@", self.version, (unsigned long)self.statusCode, self.allHTTPHeaderFields[@"Content-type"], self.allHTTPHeaderFields[@"Content-length"]];
+    return [NSString stringWithFormat:@"%@ %lu %@ %@", NSStringFromCRHTTPVersion(self.version), (unsigned long)self.statusCode, self.allHTTPHeaderFields[@"Content-type"], self.allHTTPHeaderFields[@"Content-length"]];
 }
 
 @end

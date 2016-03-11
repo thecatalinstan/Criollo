@@ -19,12 +19,8 @@
 
 @interface AppDelegate () <CRServerDelegate>
 
-#if UseFCGI
-@property (nonatomic, strong) CRFCGIServer *server;
-#else
-@property (nonatomic, strong) CRHTTPServer *server;
-#endif
-@property (nonatomic, strong) NSURL *baseURL;
+@property (nonatomic, strong, nonnull) CRServer *server;
+@property (nonatomic, strong, nonnull) NSURL *baseURL;
 
 @end
 
@@ -56,26 +52,16 @@
     // Prints a simple hello world as text/plain
     CRRouteBlock helloBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler ) {
         [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
-        [response sendString:@"Hello World"];
+        [response send:@"Hello World"];
         completionHandler();
     };
     [self.server addBlock:helloBlock forPath:@"/"];
 
     // Prints a hello world JSON object as application/json
     CRRouteBlock jsonHelloBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler ) {
-
-        NSError *jsonError;
-        NSData* jsonData = [NSJSONSerialization dataWithJSONObject:@{@"status": @YES, @"message": @"Hello World"} options:NSJSONWritingPrettyPrinted error:&jsonError];
-
-        if ( jsonError == nil ) {
-            [response setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-            [response sendData:jsonData];
-        } else {
-            [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-            [response sendString:jsonError.localizedDescription];
-        }
+        [response setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+        [response send:@{@"status":@(YES), @"mesage": @"Hello world"}];
         completionHandler();
-
     };
     [self.server addBlock:jsonHelloBlock forPath:@"/json"];
 
@@ -158,14 +144,25 @@
     [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
         [response sendString:[NSString stringWithFormat:@"%@\r\n\r\n--%@\r\n\r\n--", request, request.body]];
-    } forPath:@"/post" HTTPMethod:@"POST"];
+    } forPath:@"/post" HTTPMethod:CRHTTPMethodPost];
 
     [self.server addController:[MultipartViewController class] withNibName:@"MultipartViewController" bundle:nil forPath:@"/multipart"];
-    [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" HTTPMethod:nil recursive:YES];
+    [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" HTTPMethod:CRHTTPMethodAll recursive:YES];
 
     // Serve static files from "/Public" (relative to bundle)
     NSString* staticFilesPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"];
-    [self.server addStaticDirectoryAtPath:staticFilesPath forPath:@"/static" options:CRStaticDirectoryServingOptionsCacheFiles];
+    [self.server mountStaticDirectoryAtPath:staticFilesPath forPath:@"/static" options:CRStaticDirectoryServingOptionsCacheFiles];
+
+    // Redirecter
+    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        NSURL* redirectURL = [NSURL URLWithString:(request.query[@"redirect"] ? : @"")];
+        if ( redirectURL ) {
+            [response redirectToURL:redirectURL];
+        }
+        completionHandler();
+    } forPath:@"/redirect" HTTPMethod:CRHTTPMethodGet];
+
+    [self.server mountStaticDirectoryAtPath:@"~" forPath:@"/pub" options:CRStaticDirectoryServingOptionsAutoIndex];
 
     // Start listening
     NSError *serverError;
@@ -188,6 +185,7 @@
         // Get the list of paths
         NSDictionary<NSString*, NSMutableArray<CRRoute*>*>* routes = [[self.server valueForKey:@"routes"] mutableCopy];
         NSMutableSet<NSURL*>* paths = [NSMutableSet set];
+
         [routes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<CRRoute *> * _Nonnull obj, BOOL * _Nonnull stop) {
             if ( [key hasSuffix:@"*"] ) {
                 return;
@@ -197,7 +195,6 @@
         }];
 
         NSArray<NSURL*>* sortedPaths =[paths sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"absoluteString" ascending:YES]]];
-
         [CRApp logFormat:@"Available paths are:"];
         [sortedPaths enumerateObjectsUsingBlock:^(NSURL * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [CRApp logFormat:@" * %@", obj.absoluteString];
@@ -207,7 +204,6 @@
         [CRApp logErrorFormat:@"Failed to start HTTP server. %@", serverError.localizedDescription];
         [CRApp terminate:nil];
     }
-
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {

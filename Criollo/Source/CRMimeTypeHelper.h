@@ -8,13 +8,15 @@
 
 #import "CRTypes.h"
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRMimeTypeHelper : NSObject
 
-+ (nonnull instancetype)sharedHelper;
++ (instancetype)sharedHelper;
 
-- (nullable NSString *)mimeTypeForExtension:(NSString * _Nonnull)extension;
-- (void)setMimeType:(NSString * _Nonnull)mimeType forExtension:(NSString * _Nonnull)extension;
+- (nullable NSString *)mimeTypeForExtension:(NSString *)extension;
+- (void)setMimeType:(NSString *)mimeType forExtension:(NSString *)extension;
 
-- (nonnull NSString *)mimeTypeForFileAtPath:(NSString * _Nonnull)path;
+- (NSString *)mimeTypeForFileAtPath:(NSString *)path;
 
 @end
+NS_ASSUME_NONNULL_END
