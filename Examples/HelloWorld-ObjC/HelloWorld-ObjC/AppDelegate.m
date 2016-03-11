@@ -52,26 +52,16 @@
     // Prints a simple hello world as text/plain
     CRRouteBlock helloBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler ) {
         [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
-        [response sendString:@"Hello World"];
+        [response send:@"Hello World"];
         completionHandler();
     };
     [self.server addBlock:helloBlock forPath:@"/"];
 
     // Prints a hello world JSON object as application/json
     CRRouteBlock jsonHelloBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler ) {
-
-        NSError *jsonError;
-        NSData* jsonData = [NSJSONSerialization dataWithJSONObject:@{@"status": @YES, @"message": @"Hello World"} options:NSJSONWritingPrettyPrinted error:&jsonError];
-
-        if ( jsonError == nil ) {
-            [response setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-            [response sendData:jsonData];
-        } else {
-            [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-            [response sendString:jsonError.localizedDescription];
-        }
+        [response setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+        [response send:@{@"status":@(YES), @"mesage": @"Hello world"}];
         completionHandler();
-
     };
     [self.server addBlock:jsonHelloBlock forPath:@"/json"];
 

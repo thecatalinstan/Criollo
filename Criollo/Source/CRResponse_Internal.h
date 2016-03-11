@@ -8,6 +8,7 @@
 
 #import "CRResponse.h"
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRResponse ()
 
 @property (nonatomic, assign) NSUInteger proposedStatusCode;
@@ -17,13 +18,14 @@
 @property (nonatomic, assign) BOOL alreadyBuiltHeaders;
 @property (nonatomic, readonly) BOOL finished;
 
-- (nonnull instancetype)initWithConnection:(nullable CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode;
-- (nonnull instancetype)initWithConnection:(nullable CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(nullable NSString *)description;
-- (nonnull instancetype)initWithConnection:(nullable CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(nullable NSString *)description version:(nullable NSString *)version NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithConnection:(CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode;
+- (instancetype)initWithConnection:(CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString * _Nullable)description;
+- (instancetype)initWithConnection:(CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString * _Nullable)description version:(NSString * _Nullable)version NS_DESIGNATED_INITIALIZER;
 
-- (void)writeData:(nullable NSData*)data finish:(BOOL)flag;
+- (void)writeData:(NSData *)data finish:(BOOL)flag;
 
 - (void)buildStatusLine;
 - (void)buildHeaders;
 
 @end
+NS_ASSUME_NONNULL_END
