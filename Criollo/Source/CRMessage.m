@@ -16,7 +16,6 @@ NSString * const CRHTTPMethodPutValue = @"PUT";
 NSString * const CRHTTPMethodDeleteValue = @"DELETE";
 NSString * const CRHTTPMethodPatchValue = @"PATCH";
 NSString * const CRHTTPMethodOptionsValue = @"OPTIONS";
-NSString * const CRHTTPMethodAnyValue = @"ANY";
 NSString * const CRHTTPMethodAllValue = @"ALL";
 
 NSString * NSStringFromCRHTTPMethod(CRHTTPMethod HTTPMethod) {
@@ -33,8 +32,6 @@ NSString * NSStringFromCRHTTPMethod(CRHTTPMethod HTTPMethod) {
             return CRHTTPMethodPatchValue;
         case CRHTTPMethodOptions:
             return CRHTTPMethodOptionsValue;
-        case CRHTTPMethodAny:
-            return CRHTTPMethodAnyValue;
         case CRHTTPMethodAll:
             return CRHTTPMethodAllValue;
         case CRHTTPMethodNone:
@@ -56,8 +53,6 @@ CRHTTPMethod CRHTTPMethodMake(NSString * HTTPMethodName) {
         HTTPMethod = CRHTTPMethodPatch;
     } else if ( [HTTPMethodName isEqualToString:CRHTTPMethodOptionsValue] ) {
         HTTPMethod = CRHTTPMethodOptions;
-    } else if ( [HTTPMethodName isEqualToString:CRHTTPMethodAnyValue] ) {
-        HTTPMethod = CRHTTPMethodAny;
     } else if ( [HTTPMethodName isEqualToString:CRHTTPMethodAllValue] ) {
         HTTPMethod = CRHTTPMethodAll;
     } else {
@@ -66,8 +61,16 @@ CRHTTPMethod CRHTTPMethodMake(NSString * HTTPMethodName) {
     return HTTPMethod;
 }
 
-
 @implementation CRMessage
+
++ (NSArray<NSString *> *)acceptedHTTPMethods {
+    static NSArray<NSString *> *acceptedHTTPMethods;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        acceptedHTTPMethods = @[CRHTTPMethodGetValue, CRHTTPMethodPostValue, CRHTTPMethodPutValue, CRHTTPMethodDeleteValue, CRHTTPMethodPatchValue, CRHTTPMethodOptionsValue];
+    });
+    return acceptedHTTPMethods;
+}
 
 - (instancetype)init {
     self = [super init];

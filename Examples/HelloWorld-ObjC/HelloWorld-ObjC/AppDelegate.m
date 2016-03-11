@@ -144,10 +144,10 @@
     [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
         [response sendString:[NSString stringWithFormat:@"%@\r\n\r\n--%@\r\n\r\n--", request, request.body]];
-    } forPath:@"/post" HTTPMethod:@"POST"];
+    } forPath:@"/post" HTTPMethod:CRHTTPMethodPost];
 
     [self.server addController:[MultipartViewController class] withNibName:@"MultipartViewController" bundle:nil forPath:@"/multipart"];
-    [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" HTTPMethod:nil recursive:YES];
+    [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" HTTPMethod:CRHTTPMethodAll recursive:YES];
 
     // Serve static files from "/Public" (relative to bundle)
     NSString* staticFilesPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"];
@@ -160,7 +160,9 @@
             [response redirectToURL:redirectURL];
         }
         completionHandler();
-    } forPath:@"/redirect" HTTPMethod:CRHTTPMethodGET];
+    } forPath:@"/redirect" HTTPMethod:CRHTTPMethodGet];
+
+    [self.server mountStaticDirectoryAtPath:@"~" forPath:@"/pub" options:CRStaticDirectoryServingOptionsAutoIndex];
 
     // Start listening
     NSError *serverError;

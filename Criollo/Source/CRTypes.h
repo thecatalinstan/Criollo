@@ -10,12 +10,14 @@
 #define CRTypes_h
 
 typedef NS_ENUM(NSUInteger, CRHTTPMethod) {
-    CRHTTPMethodGet     = 0,
-    CRHTTPMethodPost    = 1,
-    CRHTTPMethodPut     = 2,
-    CRHTTPMethodDelete  = 3,
-    CRHTTPMethodPatch   = 4,
-    CRHTTPMethodOptions = 5,
+    CRHTTPMethodNone,
+    CRHTTPMethodGet,
+    CRHTTPMethodPost,
+    CRHTTPMethodPut,
+    CRHTTPMethodDelete,
+    CRHTTPMethodPatch,
+    CRHTTPMethodOptions,
+    CRHTTPMethodAll,
 };
 
 @class CRRequest, CRResponse;

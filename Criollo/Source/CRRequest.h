@@ -28,8 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) CRResponse * response;
 
 @property (nonatomic, readonly) NSURL * URL;
-@property (nonatomic, readonly) NSString * method;
-
+@property (nonatomic, readonly) CRHTTPMethod method;
 
 @property (nonatomic, readonly) NSDictionary<NSString *, NSString *> * env;
 @property (nonatomic, readonly) NSDictionary<NSString *, NSString *> * cookies;
@@ -40,5 +39,4 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, nullable) CRRequestRange * range;
 
 @end
-
 NS_ASSUME_NONNULL_END

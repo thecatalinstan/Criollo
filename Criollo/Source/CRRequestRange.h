@@ -21,7 +21,6 @@
 
 @end
 
-
 @interface CRRequestRange : NSObject
 
 @property (nonatomic, readonly, strong, nonnull) NSArray<CRRequestByteRange *> *byteRangeSet;

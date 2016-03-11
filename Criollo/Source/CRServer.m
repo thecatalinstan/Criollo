@@ -12,30 +12,34 @@
 #import "GCDAsyncSocket.h"
 #import "CRConnection.h"
 #import "CRConnection_Internal.h"
+#import "CRMessage_Internal.h"
 #import "CRRequest.h"
 #import "CRResponse.h"
 #import "CRRoute.h"
 #import "CRViewController.h"
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRServer () <GCDAsyncSocketDelegate, CRConnectionDelegate>
 
-@property (nonatomic, strong, nonnull) GCDAsyncSocket* socket;
-@property (nonatomic, strong, nonnull) dispatch_queue_t isolationQueue;
-@property (nonatomic, strong, nonnull) dispatch_queue_t socketDelegateQueue;
-@property (nonatomic, strong, nonnull) dispatch_queue_t acceptedSocketDelegateTargetQueue;
-@property (nonatomic, strong, nonnull) dispatch_queue_t acceptedSocketSocketTargetQueue;
+@property (nonatomic, strong) GCDAsyncSocket* socket;
+@property (nonatomic, strong) dispatch_queue_t isolationQueue;
+@property (nonatomic, strong) dispatch_queue_t socketDelegateQueue;
+@property (nonatomic, strong) dispatch_queue_t acceptedSocketDelegateTargetQueue;
+@property (nonatomic, strong) dispatch_queue_t acceptedSocketSocketTargetQueue;
 
-@property (nonatomic, strong, nonnull, readonly) NSMutableDictionary<NSString*, NSMutableArray<CRRoute*>*>* routes;
-@property (nonatomic, strong, nonnull, readonly) NSMutableArray<NSString *> * recursiveMatchRoutePathPrefixes;
+@property (nonatomic, strong, readonly) NSMutableDictionary<NSString*, NSMutableArray<CRRoute *> *> * routes;
+@property (nonatomic, strong, readonly) NSMutableArray<NSString *> * recursiveMatchRoutePathPrefixes;
 
-@property (nonatomic, strong, nonnull) NSOperationQueue* workerQueue;
+@property (nonatomic, strong) NSOperationQueue* workerQueue;
 
-- (nonnull NSArray<CRRoute*>*)routesForPath:(nonnull NSString*)path;
-- (nonnull NSArray<CRRoute*>*)routesForPath:(nonnull NSString*)path HTTPMethod:(nullable NSString*)HTTPMethod;
+- (NSArray<CRRoute *> *)routesForPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method;
 
-- (nonnull CRConnection*)newConnectionWithSocket:(nonnull GCDAsyncSocket*)socket;
+- (CRConnection *)newConnectionWithSocket:(GCDAsyncSocket *)socket;
+
+- (void)addRoute:(CRRoute *)route forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive;
 
 @end
+NS_ASSUME_NONNULL_END
 
 @implementation CRServer
 
@@ -268,38 +272,34 @@
 
 #pragma mark - Routing
 
-- (BOOL)canHandleHTTPMethod:(NSString *)HTTPMethod forPath:(NSString *)path {
-    return YES;
-}
-
 - (void)addBlock:(CRRouteBlock)block {
-    [self addBlock:block forPath:nil HTTPMethod:nil recursive:NO];
+    [self addBlock:block forPath:nil HTTPMethod:CRHTTPMethodAll recursive:NO];
 }
 
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString*)path {
-    [self addBlock:block forPath:path HTTPMethod:nil recursive:NO];
+    [self addBlock:block forPath:path HTTPMethod:CRHTTPMethodAll recursive:NO];
 }
 
-- (void)addBlock:(CRRouteBlock)block forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
-    [self addBlock:block forPath:path HTTPMethod:HTTPMethod recursive:NO];
+- (void)addBlock:(CRRouteBlock)block forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method {
+    [self addBlock:block forPath:path HTTPMethod:method recursive:NO];
 }
 
-- (void)addBlock:(CRRouteBlock)block forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod recursive:(BOOL)recursive {
+- (void)addBlock:(CRRouteBlock)block forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive {
     CRRoute* route = [CRRoute routeWithBlock:block];
-    [self addRoute:route forPath:path HTTPMethod:HTTPMethod recursive:recursive];
+    [self addRoute:route forPath:path HTTPMethod:method recursive:recursive];
 }
 
 - (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path {
-    [self addController:controllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path HTTPMethod:nil recursive:NO];
+    [self addController:controllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path HTTPMethod:CRHTTPMethodAll recursive:NO];
 }
 
-- (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod {
-    [self addController:controllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path HTTPMethod:HTTPMethod recursive:NO];
+- (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method {
+    [self addController:controllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path HTTPMethod:method recursive:NO];
 }
 
-- (void)addController:(Class  _Nonnull __unsafe_unretained)controllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod recursive:(BOOL)recursive {
+- (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive {
     CRRoute* route = [CRRoute routeWithControllerClass:controllerClass nibName:nibNameOrNil bundle:nibBundleOrNil];
-    [self addRoute:route forPath:path HTTPMethod:HTTPMethod recursive:recursive];
+    [self addRoute:route forPath:path HTTPMethod:method recursive:recursive];
 }
 
 - (void)mountStaticDirectoryAtPath:(NSString *)directoryPath forPath:(NSString *)path {
@@ -308,7 +308,7 @@
 
 - (void)mountStaticDirectoryAtPath:(NSString *)directoryPath forPath:(NSString *)path options:(CRStaticDirectoryServingOptions)options {
     CRRoute* route = [CRRoute routeWithStaticDirectoryAtPath:directoryPath prefix:path options:options];
-    [self addRoute:route forPath:path HTTPMethod:CRHTTPMethodGET recursive:YES];
+    [self addRoute:route forPath:path HTTPMethod:CRHTTPMethodGet recursive:YES];
 }
 
 - (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path {
@@ -329,16 +329,16 @@
 
 - (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString *)fileName contentType:(NSString *)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition {
     CRRoute* route = [CRRoute routeWithStaticFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition];
-    [self addRoute:route forPath:path HTTPMethod:CRHTTPMethodGET recursive:NO];
+    [self addRoute:route forPath:path HTTPMethod:CRHTTPMethodGet recursive:NO];
 }
 
-- (void)addRoute:(CRRoute*)route forPath:(NSString *)path HTTPMethod:(NSString *)HTTPMethod recursive:(BOOL)recursive {
+- (void)addRoute:(CRRoute*)route forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive {
     NSArray<NSString*>* methods;
 
-    if ( HTTPMethod == nil ) {
-        methods = CRHTTPAllMethods;
+    if ( method == CRHTTPMethodAll ) {
+        methods = [CRMessage acceptedHTTPMethods];
     } else {
-        methods = @[HTTPMethod];
+        methods = @[NSStringFromCRHTTPMethod(method)];
     }
 
     if ( path == nil ) {
@@ -384,11 +384,7 @@
     }];
 }
 
-- (NSArray<CRRoute*>*)routesForPath:(NSString*)path {
-    return [self routesForPath:path HTTPMethod:nil];
-}
-
-- (NSArray<CRRoute*>*)routesForPath:(NSString*)path HTTPMethod:(NSString*)HTTPMethod {
+- (NSArray<CRRoute*>*)routesForPath:(NSString*)path HTTPMethod:(CRHTTPMethod)method {
     if ( path == nil ) {
         path = @"";
     }
@@ -396,7 +392,7 @@
     if ( ![path hasSuffix:CRPathSeparator] ) {
         path = [path stringByAppendingString:CRPathSeparator];
     }
-    path = [HTTPMethod stringByAppendingString:path];
+    path = [NSStringFromCRHTTPMethod(method) stringByAppendingString:path];
 
     __block BOOL shouldRecursivelyMatchRoutePathPrefix = NO;
     [self.recursiveMatchRoutePathPrefixes enumerateObjectsUsingBlock:^(NSString * _Nonnull recursiveMatchRoutePathPrefix, NSUInteger idx, BOOL * _Nonnull stop) {

@@ -16,7 +16,6 @@
 #define CRRequestBoundaryPrefix             @"--"
 
 NS_ASSUME_NONNULL_BEGIN
-
 @interface CRRequest ()
 
 @property (nonatomic, readonly) BOOL shouldCloseConnection;
@@ -29,9 +28,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, nullable) NSString * multipartBoundaryPrefixedString;
 @property (nonatomic, readonly, nullable) NSData * multipartBoundaryPrefixedData;
 
-- (instancetype)initWithMethod:(NSString * _Nullable)method URL:(NSURL * _Nullable)URL version:(NSString * _Nullable)version;
-- (instancetype)initWithMethod:(NSString * _Nullable)method URL:(NSURL * _Nullable)URL version:(NSString * _Nullable)version connection:(CRConnection* _Nullable) connection;
-- (instancetype)initWithMethod:(NSString * _Nullable)method URL:(NSURL * _Nullable)URL version:(NSString * _Nullable)version connection:(CRConnection* _Nullable) connection env:(NSDictionary* _Nullable)env NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL * _Nullable)URL version:(NSString * _Nullable)version;
+- (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL * _Nullable)URL version:(NSString * _Nullable)version connection:(CRConnection* _Nullable) connection;
+- (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL * _Nullable)URL version:(NSString * _Nullable)version connection:(CRConnection* _Nullable) connection env:(NSDictionary* _Nullable)env NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)appendData:(NSData *)data;
 - (void)bufferBodyData:(NSData *)data;
@@ -39,7 +38,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)appendBodyData:(NSData *)data forKey:(NSString *)key;
 - (BOOL)appendFileData:(NSData *)data forKey:(NSString *)key;
-
 
 - (void)setEnv:(NSDictionary<NSString*,NSString*>*)envDictionary;
 - (void)setEnv:(NSString*)obj forKey:(NSString*)key;
@@ -50,5 +48,4 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)parseBufferedBodyData:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
 @end
-
 NS_ASSUME_NONNULL_END
