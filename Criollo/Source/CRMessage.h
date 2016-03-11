@@ -8,14 +8,13 @@
 
 #import "CRTypes.h"
 
-// HTTP Versions
-#define CRHTTPVersion1_0                    ((NSString *)kCFHTTPVersion1_0)
-#define CRHTTPVersion1_1                    ((NSString *)kCFHTTPVersion1_1)
-
 NS_ASSUME_NONNULL_BEGIN
 
-FOUNDATION_EXTERN NSString * NSStringFromCRHTTPMethod(CRHTTPMethod HTTPMethod);
-FOUNDATION_EXTERN CRHTTPMethod CRHTTPMethodMake(NSString * HTTPMethodName);
+FOUNDATION_EXTERN NSString * NSStringFromCRHTTPVersion(CRHTTPVersion version);
+FOUNDATION_EXTERN CRHTTPVersion CRHTTPVersionMake(NSString * versionSpec);
+
+FOUNDATION_EXTERN NSString * NSStringFromCRHTTPMethod(CRHTTPMethod method);
+FOUNDATION_EXTERN CRHTTPMethod CRHTTPMethodMake(NSString * methodSpec);
 
 @interface CRMessage : NSObject
 
