@@ -10,6 +10,6 @@
 
 @interface NSHTTPCookie (Criollo)
 
-+ (nullable NSDictionary*)responseHeaderFieldsWithCookies:(nonnull NSArray *)cookies;
++ (nullable NSDictionary*)responseHeaderFieldsWithCookies:(NSArray<NSHTTPCookie *> * _Nonnull)cookies;
 
 @end

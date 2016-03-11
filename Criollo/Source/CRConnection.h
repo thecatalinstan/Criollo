@@ -10,10 +10,11 @@
 
 @class CRConnection, GCDAsyncSocket, CRServer, CRRequest, CRResponse;
 
+NS_ASSUME_NONNULL_BEGIN
 @protocol CRConnectionDelegate <NSObject>
 
-- (void)connection:(nonnull CRConnection *)connection didReceiveRequest:(nonnull CRRequest *)request response:(nonnull CRResponse *)response;
-- (void)connection:(nonnull CRConnection *)connection didFinishRequest:(nonnull CRRequest *)request response:(nonnull CRResponse *)response;
+- (void)connection:(CRConnection *)connection didReceiveRequest:(CRRequest *)request response:(CRResponse *)response;
+- (void)connection:(CRConnection *)connection didFinishRequest:(CRRequest *)request response:(CRResponse *)response;
 
 @end
 
@@ -21,9 +22,10 @@
 
 @property (nonatomic, weak, nullable) id<CRConnectionDelegate> delegate;
 
-@property (nonatomic, readonly, nonnull) NSString* remoteAddress;
+@property (nonatomic, readonly) NSString* remoteAddress;
 @property (nonatomic, readonly) NSUInteger remotePort;
-@property (nonatomic, readonly, nonnull) NSString* localAddress;
+@property (nonatomic, readonly) NSString* localAddress;
 @property (nonatomic, readonly) NSUInteger localPort;
 
 @end
+NS_ASSUME_NONNULL_END

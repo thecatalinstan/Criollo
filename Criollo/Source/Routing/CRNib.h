@@ -11,6 +11,6 @@
 @property (nonatomic, strong, nullable, readonly) NSData *data;
 @property (nonatomic, strong, nonnull, readonly) NSString *name;
 
-- (nonnull instancetype)initWithNibNamed:(nonnull NSString *)nibName bundle:(nullable NSBundle *)bundle NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithNibNamed:(NSString * _Nonnull)nibName bundle:(NSBundle * _Nullable)bundle NS_DESIGNATED_INITIALIZER;
 
 @end

@@ -24,12 +24,14 @@
 
 #define CRConnectionSocketTagSendingResponse                        20
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRConnection () <GCDAsyncSocketDelegate>
 
-- (void)bufferBodyData:(nonnull NSData *)data forRequest:(nonnull CRRequest *)request;
-- (void)bufferResponseData:(nonnull NSData *)data forRequest:(nonnull CRRequest *)request;
+- (void)bufferBodyData:(NSData *)data forRequest:(CRRequest *)request;
+- (void)bufferResponseData:(NSData *)data forRequest:(CRRequest *)request;
 
 @end
+NS_ASSUME_NONNULL_END
 
 @implementation CRConnection
 
