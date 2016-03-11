@@ -28,22 +28,21 @@
 @implementation CRResponse
 
 - (instancetype)init {
-    return [self initWithConnection:[CRConnection new] HTTPStatusCode:200 description:nil version:nil];
+    return [self initWithConnection:[CRConnection new] HTTPStatusCode:200 description:nil version:CRHTTPVersion1_1];
 }
 
 - (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode {
-    return [self initWithConnection:connection HTTPStatusCode:HTTPStatusCode description:nil version:nil];
+    return [self initWithConnection:connection HTTPStatusCode:HTTPStatusCode description:nil version:CRHTTPVersion1_1];
 }
 
 - (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description {
-    return [self initWithConnection:connection HTTPStatusCode:HTTPStatusCode description:description version:nil];
+    return [self initWithConnection:connection HTTPStatusCode:HTTPStatusCode description:description version:CRHTTPVersion1_1];
 }
 
-- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version {
+- (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(CRHTTPVersion)version {
     self  = [super init];
     if ( self != nil ) {
-        version = version == nil ? CRHTTPVersion1_1 : version;
-        self.message = CFBridgingRelease(CFHTTPMessageCreateResponse(NULL, (CFIndex)HTTPStatusCode, (__bridge CFStringRef)description, (__bridge CFStringRef) version));
+        self.message = CFBridgingRelease(CFHTTPMessageCreateResponse(NULL, (CFIndex)HTTPStatusCode, (__bridge CFStringRef)description, (__bridge CFStringRef)NSStringFromCRHTTPVersion(version)));
         self.connection = connection;
         _statusDescription = description;
     }
@@ -220,7 +219,7 @@
         self.proposedStatusDescription = self.statusDescription;
     }
 
-    CFHTTPMessageRef newMessage = CFHTTPMessageCreateResponse(NULL, (CFIndex)self.proposedStatusCode, (__bridge CFStringRef)self.proposedStatusDescription, (__bridge CFStringRef) self.version);
+    CFHTTPMessageRef newMessage = CFHTTPMessageCreateResponse(NULL, (CFIndex)self.proposedStatusCode, (__bridge CFStringRef)self.proposedStatusDescription, (__bridge CFStringRef) NSStringFromCRHTTPVersion(self.version));
 
     NSData* currentMessageData = self.serializedData;
     NSRange rangeOfFirstCRLF = [currentMessageData rangeOfData:[CRConnection CRLFData] options:0 range:NSMakeRange(0, currentMessageData.length)];
@@ -261,7 +260,7 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ %lu %@ %@", self.version, (unsigned long)self.statusCode, self.allHTTPHeaderFields[@"Content-type"], self.allHTTPHeaderFields[@"Content-length"]];
+    return [NSString stringWithFormat:@"%@ %lu %@ %@", NSStringFromCRHTTPVersion(self.version), (unsigned long)self.statusCode, self.allHTTPHeaderFields[@"Content-type"], self.allHTTPHeaderFields[@"Content-length"]];
 }
 
 @end

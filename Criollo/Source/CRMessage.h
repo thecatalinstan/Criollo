@@ -18,7 +18,7 @@ FOUNDATION_EXTERN CRHTTPMethod CRHTTPMethodMake(NSString * methodSpec);
 
 @interface CRMessage : NSObject
 
-@property (nonatomic, readonly) NSString* version;
+@property (nonatomic, readonly) CRHTTPVersion version;
 @property (nonatomic, readonly) NSDictionary<NSString*, NSString*>* allHTTPHeaderFields;
 
 @property (nonatomic, copy, nullable) NSData* bodyData;

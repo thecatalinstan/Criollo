@@ -102,7 +102,7 @@
 
 #pragma mark - Responses
 
-- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version {
+- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(CRHTTPVersion)version {
     return [[CRFCGIResponse alloc] initWithConnection:self HTTPStatusCode:HTTPStatusCode description:description version:version];
 }
 
@@ -213,13 +213,13 @@
                 switch (currentRecord.type) {
                     case CRFCGIRecordTypeParams: {
                         // We've finished reading the parameters
-                        NSString* method = currentRequestParams[@"REQUEST_METHOD"];
+                        NSString* methodSpec = currentRequestParams[@"REQUEST_METHOD"];
                         NSString* path = currentRequestParams[@"DOCUMENT_URI"];
-                        NSString* version = currentRequestParams[@"SERVER_PROTOCOL"];
+                        NSString* versionSpec = currentRequestParams[@"SERVER_PROTOCOL"];
                         NSString* host = currentRequestParams[@"HTTP_HOST"];
 
                         NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", host, path]];
-                        CRFCGIRequest* request = [[CRFCGIRequest alloc] initWithMethod:CRHTTPMethodMake(method) URL:URL version:version connection:self env:currentRequestParams];
+                        CRFCGIRequest* request = [[CRFCGIRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self env:currentRequestParams];
                         request.requestID = currentRequestID;
                         request.requestRole = currentRequestRole;
                         request.requestFlags = currentRequestFlags;

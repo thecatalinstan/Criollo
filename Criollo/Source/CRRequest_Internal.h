@@ -28,9 +28,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, nullable) NSString * multipartBoundaryPrefixedString;
 @property (nonatomic, readonly, nullable) NSData * multipartBoundaryPrefixedData;
 
-- (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL * _Nullable)URL version:(NSString * _Nullable)version;
-- (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL * _Nullable)URL version:(NSString * _Nullable)version connection:(CRConnection* _Nullable) connection;
-- (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL * _Nullable)URL version:(NSString * _Nullable)version connection:(CRConnection* _Nullable) connection env:(NSDictionary* _Nullable)env NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL * _Nullable)URL version:(CRHTTPVersion)version;
+- (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL * _Nullable)URL version:(CRHTTPVersion)version connection:(CRConnection* _Nullable) connection;
+- (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL * _Nullable)URL version:(CRHTTPVersion)version connection:(CRConnection* _Nullable) connection env:(NSDictionary* _Nullable)env NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)appendData:(NSData *)data;
 - (void)bufferBodyData:(NSData *)data;
