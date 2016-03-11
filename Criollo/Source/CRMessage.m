@@ -9,12 +9,15 @@
 #import "CRMessage.h"
 #import "CRMessage_Internal.h"
 
+NSString * const CRHTTPMethodNoneValue = @"NONE";
 NSString * const CRHTTPMethodGetValue = @"GET";
 NSString * const CRHTTPMethodPostValue = @"POST";
 NSString * const CRHTTPMethodPutValue = @"PUT";
 NSString * const CRHTTPMethodDeleteValue = @"DELETE";
 NSString * const CRHTTPMethodPatchValue = @"PATCH";
 NSString * const CRHTTPMethodOptionsValue = @"OPTIONS";
+NSString * const CRHTTPMethodAnyValue = @"ANY";
+NSString * const CRHTTPMethodAllValue = @"ALL";
 
 NSString * NSStringFromCRHTTPMethod(CRHTTPMethod HTTPMethod) {
     switch (HTTPMethod) {
@@ -30,10 +33,16 @@ NSString * NSStringFromCRHTTPMethod(CRHTTPMethod HTTPMethod) {
             return CRHTTPMethodPatchValue;
         case CRHTTPMethodOptions:
             return CRHTTPMethodOptionsValue;
+        case CRHTTPMethodAny:
+            return CRHTTPMethodAnyValue;
+        case CRHTTPMethodAll:
+            return CRHTTPMethodAllValue;
+        case CRHTTPMethodNone:
+            return CRHTTPMethodNoneValue;
     }
 }
 
-CRHTTPMethod CRHTTMethodMake(NSString * HTTPMethodName) {
+CRHTTPMethod CRHTTPMethodMake(NSString * HTTPMethodName) {
     CRHTTPMethod HTTPMethod;
     if ( [HTTPMethodName isEqualToString:CRHTTPMethodGetValue] ) {
         HTTPMethod = CRHTTPMethodGet;
@@ -47,6 +56,12 @@ CRHTTPMethod CRHTTMethodMake(NSString * HTTPMethodName) {
         HTTPMethod = CRHTTPMethodPatch;
     } else if ( [HTTPMethodName isEqualToString:CRHTTPMethodOptionsValue] ) {
         HTTPMethod = CRHTTPMethodOptions;
+    } else if ( [HTTPMethodName isEqualToString:CRHTTPMethodAnyValue] ) {
+        HTTPMethod = CRHTTPMethodAny;
+    } else if ( [HTTPMethodName isEqualToString:CRHTTPMethodAllValue] ) {
+        HTTPMethod = CRHTTPMethodAll;
+    } else {
+        HTTPMethod = CRHTTPMethodNone;
     }
     return HTTPMethod;
 }

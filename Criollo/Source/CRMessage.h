@@ -12,14 +12,10 @@
 #define CRHTTPVersion1_0                    ((NSString *)kCFHTTPVersion1_0)
 #define CRHTTPVersion1_1                    ((NSString *)kCFHTTPVersion1_1)
 
-// HTTP Methods
-
-#define CRHTTPAllMethods                    @[CRHTTPMethodGET, CRHTTPMethodPOST, CRHTTPMethodPUT, CRHTTPMethodDELETE, CRHTTPMethodPATCH, CRHTTPMethodOPTIONS]
-
 NS_ASSUME_NONNULL_BEGIN
 
-FOUNDATION_EXPORT NSString * NSStringFromCRHTTPMethod(CRHTTPMethod HTTPMethod);
-FOUNDATION_EXPORT CRHTTPMethod CRHTTMethodMake(NSString * HTTPMethodName);
+FOUNDATION_EXTERN NSString * NSStringFromCRHTTPMethod(CRHTTPMethod HTTPMethod);
+FOUNDATION_EXTERN CRHTTPMethod CRHTTPMethodMake(NSString * HTTPMethodName);
 
 @interface CRMessage : NSObject
 
