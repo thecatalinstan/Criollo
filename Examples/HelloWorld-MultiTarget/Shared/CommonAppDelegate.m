@@ -39,10 +39,10 @@
     [self.server addBlock:identifyBlock];
     [self.server addBlock:helloBlock forPath:@"/"];
     [self.server addBlock:jsonHelloBlock forPath:@"/json"];
-    [self.server addBlock:statusBlock forPath:@"/status" HTTPMethod:CRHTTPMethodGET];
+    [self.server addBlock:statusBlock forPath:@"/status" HTTPMethod:CRHTTPMethodGet];
     [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller"];
     [self.server mountStaticDirectoryAtPath:[[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"] forPath:@"/static" options:CRStaticDirectoryServingOptionsCacheFiles];
-    [self.server addBlock:redirectBlock forPath:@"/redirect" HTTPMethod:CRHTTPMethodGET];
+    [self.server addBlock:redirectBlock forPath:@"/redirect" HTTPMethod:CRHTTPMethodGet];
 
     [self willChangeValueForKey:@"isConnected"];
     _isConnected = NO;
