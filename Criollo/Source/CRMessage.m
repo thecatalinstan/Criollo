@@ -62,9 +62,6 @@ CRHTTPMethod CRHTTMethodMake(NSString * HTTPMethodName) {
     return self;
 }
 
-- (void)dealloc {
-}
-
 - (NSString *)version {
     return (__bridge_transfer NSString *)CFHTTPMessageCopyVersion((__bridge CFHTTPMessageRef _Nonnull)(self.message));
 }
