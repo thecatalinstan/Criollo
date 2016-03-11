@@ -39,7 +39,7 @@
     return [self initWithMethod:method URL:URL version:version connection:nil env:nil];
 }
 
-- (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL *)URL version:(CRHTTPVersion)version connection:(nullable CRConnection *)connection {
+- (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL *)URL version:(CRHTTPVersion)version connection:(CRConnection * _Nullable)connection {
     return [self initWithMethod:method URL:URL version:version connection:connection env:nil];
 }
 - (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL *)URL version:(CRHTTPVersion)version connection:(CRConnection *)connection env:(NSDictionary *)env {

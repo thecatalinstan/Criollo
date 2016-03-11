@@ -51,15 +51,15 @@ FOUNDATION_EXPORT int CRApplicationMain(int argc, const char * _Nullable argv[],
 
 @interface CRApplication : NSObject
 
-@property (nonatomic, assign, nonnull) id<CRApplicationDelegate> delegate;
+@property (nonatomic, assign) id<CRApplicationDelegate> delegate;
 
 + (CRApplication *)sharedApplication;
 
-- (instancetype)initWithDelegate:(nullable id<CRApplicationDelegate>)delegate;
+- (instancetype)initWithDelegate:(id<CRApplicationDelegate> _Nullable)delegate;
 
 - (void)run;
-- (void)stop:(nullable id)sender;
-- (void)terminate:(nullable id)sender;
+- (void)stop:(id _Nullable)sender;
+- (void)terminate:(id _Nullable)sender;
 - (void)replyToApplicationShouldTerminate:(BOOL)shouldTerminate;
 
 - (void)log:(NSString *)string;

@@ -45,7 +45,7 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
 
 @property (nonatomic, readonly, nonnull) NSData *endRequestRecordData;
 
-- (nonnull NSData *)FCGIRecordDataWithContentData:(nullable NSData *)data;
+- (nonnull NSData *)FCGIRecordDataWithContentData:(NSData * _Nullable)data;
 - (nonnull NSMutableData *)initialResponseData;
 
 @end
