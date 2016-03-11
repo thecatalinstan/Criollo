@@ -145,7 +145,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
                 response.redirectToURL(redirectURL);
             }
             completionHandler();
-        }, forPath: "/redirect", HTTPMethod: CRHTTPMethodGET);
+        }, forPath: "/redirect", HTTPMethod:CRHTTPMethod.Get);
 
         // Start listening
         var serverError:NSError?;

@@ -13,6 +13,7 @@
 #import "CRHTTPServer.h"
 #import "CRServer_Internal.h"
 #import "CRHTTPServerConfiguration.h"
+#import "CRMessage.h"
 #import "CRMessage_Internal.h"
 #import "CRRequest.h"
 #import "CRRequest_Internal.h"
@@ -63,7 +64,7 @@
         env[@"SERVER_NAME"] = env[@"HTTP_HOST"];
     }
 //    env[@"SERVER_SOFTWARE"] = @"";
-    env[@"REQUEST_METHOD"] = self.currentRequest.method;
+    env[@"REQUEST_METHOD"] = NSStringFromCRHTTPMethod(self.currentRequest.method);
     env[@"SERVER_PROTOCOL"] = self.currentRequest.version;
     env[@"REQUEST_URI"] = self.currentRequest.URL.absoluteString;
     env[@"DOCUMENT_URI"] = self.currentRequest.URL.path;
@@ -131,7 +132,7 @@
                 }
             }];
             NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", host, path]];
-            self.currentRequest = [[CRRequest alloc] initWithMethod:method URL:URL version:version connection:self];
+            self.currentRequest = [[CRRequest alloc] initWithMethod:CRHTTPMethodMake(method) URL:URL version:version connection:self];
         } else {
             [self.socket disconnectAfterWriting];
         }

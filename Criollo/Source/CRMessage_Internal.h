@@ -8,10 +8,14 @@
 
 #import "CRMessage.h"
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRMessage ()
 
-@property (nonatomic, readonly, nonnull) NSData* serializedData;
-@property (nonatomic, strong, nonnull) id message;
+@property (nonatomic, readonly) NSData* serializedData;
+@property (nonatomic, strong) id message;
 @property (nonatomic, readonly) BOOL headersComplete;
 
++ (NSArray<NSString *>*)acceptedHTTPMethods;
+
 @end
+NS_ASSUME_NONNULL_END

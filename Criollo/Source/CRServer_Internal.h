@@ -10,13 +10,15 @@
 
 @class CRConnection;
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRServer ()
 
-@property (nonatomic, strong, nonnull) CRServerConfiguration * configuration;
-@property (nonatomic, strong, nonnull) NSMutableArray<CRConnection *> * connections;
+@property (nonatomic, strong) CRServerConfiguration * configuration;
+@property (nonatomic, strong) NSMutableArray<CRConnection *> * connections;
 
-+ (nonnull CRRouteBlock)errorHandlingBlockWithStatus:(NSUInteger)statusCode error:(NSError * _Nullable)error;
++ (CRRouteBlock)errorHandlingBlockWithStatus:(NSUInteger)statusCode error:(NSError * _Nullable)error;
 
 - (void)didCloseConnection:(CRConnection * _Nonnull)connection;
 
 @end
+NS_ASSUME_NONNULL_END

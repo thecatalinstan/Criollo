@@ -47,7 +47,7 @@
 
         // Call the next block
         completionHandler();
-    } forPath:@"/" HTTPMethod:CRHTTPMethodGET];
+    } forPath:@"/" HTTPMethod:CRHTTPMethodGet];
 
     // Send MIME Type for .nfo files
     [[CRMimeTypeHelper sharedHelper] setMimeType:@"text/plain; charset=utf-8" forExtension:@"nfo"];
