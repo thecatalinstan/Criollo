@@ -43,20 +43,15 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
         // Prints a simple hello world as text/plain
         let helloBlock:CRRouteBlock = { (request, response, completionHandler) -> Void in
             response.setValue("text/plain", forHTTPHeaderField: "Content-type");
-            response.sendString("Hello World");
+            response.send("Hello World");
             completionHandler();
         };
         self.server.addBlock(helloBlock, forPath: "/");
 
         // Prints a hello world JSON object as application/json
         let jsonHelloBlock:CRRouteBlock = { (request, response, completionHandler) -> Void in
-            do {
-                response.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-type");
-                try response.sendData(NSJSONSerialization.dataWithJSONObject(["status": true, "message": "Hello World"], options:NSJSONWritingOptions.PrettyPrinted));
-            } catch let jsonError as NSError {
-                response.setValue("text/plain; charset=utf-8", forHTTPHeaderField: "Content-type");
-                response.sendString("\(jsonError)")
-            }
+            response.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-type");
+            response.send(["status": true, "message": "Hello World"]);
             completionHandler();
         };
         self.server.addBlock(jsonHelloBlock, forPath: "/json");

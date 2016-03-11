@@ -28,7 +28,7 @@
 @implementation CRResponse
 
 - (instancetype)init {
-    return [self initWithConnection:nil HTTPStatusCode:200 description:nil version:nil];
+    return [self initWithConnection:[CRConnection new] HTTPStatusCode:200 description:nil version:nil];
 }
 
 - (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode {
@@ -122,6 +122,16 @@
 
 #pragma mark - Write
 
+- (void)write:(id)obj {
+    NSData* data = [self serializeOutputObject:obj error:nil];
+    [self writeData:data finish:NO];
+}
+
+- (void)send:(id)obj {
+    NSData* data = [self serializeOutputObject:obj error:nil];
+    [self writeData:data finish:YES];
+}
+
 - (void)writeData:(NSData*)data {
     [self writeData:data finish:NO];
 }
@@ -131,11 +141,14 @@
 }
 
 - (void)writeString:(NSString*)string {
-    [self writeData:[string dataUsingEncoding:NSUTF8StringEncoding]];
+    NSData* data = [self serializeOutputObject:string error:nil];
+    [self writeData:data finish:NO];
 }
 
 - (void)sendString:(NSString*)string {
-    [self sendData:[string dataUsingEncoding:NSUTF8StringEncoding]];
+    NSData* data = [self serializeOutputObject:string error:nil];
+    [self writeData:data finish:YES];
+
 }
 
 - (void)writeFormat:(NSString*)format, ... {
@@ -145,11 +158,6 @@
     va_end(args);
 }
 
-- (void)writeFormat:(NSString *)format args:(va_list)args {
-    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
-    [self writeString:formattedString];
-}
-
 - (void)sendFormat:(NSString*)format, ... {
     va_list args;
     va_start(args, format);
@@ -157,9 +165,16 @@
     va_end(args);
 }
 
+- (void)writeFormat:(NSString *)format args:(va_list)args {
+    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
+    NSData* data = [self serializeOutputObject:formattedString error:nil];
+    [self writeData:data finish:NO];
+}
+
 - (void)sendFormat:(NSString *)format args:(va_list)args {
     NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
-    [self sendString:formattedString];
+    NSData* data = [self serializeOutputObject:formattedString error:nil];
+    [self writeData:data finish:YES];
 }
 
 - (void)writeData:(NSData *)data finish:(BOOL)flag {
@@ -167,6 +182,26 @@
         _finished = YES;
     }
     [self.connection sendDataToSocket:data forRequest:self.request];
+}
+
+#pragma mark - Output processing
+
+- (NSData *)serializeOutputObject:(id)obj error:(NSError *__autoreleasing  _Nullable *)error {
+    NSData* outputData;
+
+    if ( [obj isKindOfClass:[NSString class]] ) {
+        outputData = [obj dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    } else if ( [obj isKindOfClass:[NSDictionary class]] || [obj isKindOfClass:[NSArray class]] ) {
+        outputData = [NSJSONSerialization dataWithJSONObject:obj options:0 error:error];
+    } else {
+        outputData = [[obj description] dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    }
+
+    if ( outputData == nil ) {
+        outputData = [NSData data];
+    }
+
+    return outputData;
 }
 
 - (void)buildStatusLine {
@@ -200,6 +235,8 @@
     NSDictionary * cookieHeaders = [NSHTTPCookie responseHeaderFieldsWithCookies:self.HTTPCookies.allValues];
     [self setAllHTTPHeaderFields:cookieHeaders];
 }
+
+#pragma mark - Redirect
 
 - (void)redirectToURL:(NSURL *)URL {
     [self redirectToURL:URL statusCode:301];

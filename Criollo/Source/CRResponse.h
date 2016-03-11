@@ -8,8 +8,8 @@
 
 #import "CRMessage.h"
 
-// Initial size of the response body data
-#define CRResponseDataInitialCapacity       1024
+// Initial size of the response body data object
+#define CRResponseDataInitialCapacity       (1 * 64 * 1024)
 
 @class CRRequest, CRConnection;
 
@@ -29,19 +29,20 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)HTTPHeaderField;
 
 - (void)setCookie:(NSHTTPCookie *)cookie;
-- (NSHTTPCookie*)setCookie:(NSString *)name value:(NSString *)value path:(NSString *)path expires:(NSDate * _Nullable)expires domain:(NSString * _Nullable)domain secure:(BOOL)secure;
+- (NSHTTPCookie *)setCookie:(NSString *)name value:(NSString *)value path:(NSString *)path expires:(NSDate * _Nullable)expires domain:(NSString * _Nullable)domain secure:(BOOL)secure;
 
+- (NSData *)serializeOutputObject:(id)obj error:(NSError * _Nullable __autoreleasing * _Nullable)error;
+
+- (void)write:(id)obj;
 - (void)writeData:(NSData *)data;
-- (void)sendData:(NSData *)data;
-
 - (void)writeString:(NSString *)string;
-- (void)sendString:(NSString *)string;
-
 - (void)writeFormat:(NSString *)format, ...;
-- (void)sendFormat:(NSString *)format, ...;
-
-
 - (void)writeFormat:(NSString *)format args:(va_list)args;
+
+- (void)send:(id)obj;
+- (void)sendData:(NSData *)data;
+- (void)sendString:(NSString *)string;
+- (void)sendFormat:(NSString *)format, ...;
 - (void)sendFormat:(NSString *)format args:(va_list)args;
 
 - (void)redirectToURL:(NSURL *)URL;

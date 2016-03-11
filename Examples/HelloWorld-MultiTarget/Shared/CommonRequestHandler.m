@@ -78,7 +78,7 @@
     dispatch_once(&jsonHelloWorldBlockOnceToken, ^{
         _jsonHelloWorldBlock = ^(CRRequest* request, CRResponse* response, CRRouteCompletionBlock completionHandler) {
             [response setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-            [response sendData:[NSJSONSerialization dataWithJSONObject:@{@"status": @YES, @"message": @"Hello World"} options:0 error:nil]];
+            [response send:@{@"status": @YES, @"message": @"Hello World"}];
             completionHandler();
         };
     });
