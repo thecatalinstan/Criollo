@@ -6,25 +6,27 @@
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-@class CRView, CRRequest, CRResponse;
-
 #import "CRTypes.h"
 
+@class CRView, CRRequest, CRResponse;
+
+NS_ASSUME_NONNULL_BEGIN
 @interface CRViewController : NSObject
 
-@property (nonatomic, strong, nullable) IBOutlet CRView* view;
+@property (nonatomic, strong, nullable) CRView* view;
 
-@property (nonatomic, strong, nonnull) NSMutableDictionary<NSString*, NSString*> *templateVariables;
+@property (nonatomic, strong) NSMutableDictionary<NSString*, NSString*> *templateVariables;
 
-@property (nonatomic, readonly, nonnull) NSString *nibName;
+@property (nonatomic, readonly) NSString *nibName;
 @property (nonatomic, readonly, nullable) NSBundle *nibBundle;
 
 @property (nonatomic, readonly) BOOL shouldFinishResponse;
-@property (nonatomic, readonly, nonnull) CRRouteBlock routeBlock;
+@property (nonatomic, readonly) CRRouteBlock routeBlock;
 
-- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil NS_DESIGNATED_INITIALIZER;
 
 - (void)viewDidLoad;
-- (nonnull NSString*)presentViewControllerWithRequest:(CRRequest * _Nonnull)request response:(CRResponse * _Nonnull)response;
+- (NSString*)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response;
 
 @end
+NS_ASSUME_NONNULL_END

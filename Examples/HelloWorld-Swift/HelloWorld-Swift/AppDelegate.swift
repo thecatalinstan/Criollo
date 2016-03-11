@@ -138,6 +138,12 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
         let staticFilePath:String = (NSBundle.mainBundle().resourcePath?.stringByAppendingString("/Public"))!;
         self.server.mountStaticDirectoryAtPath(staticFilePath, forPath: "/static", options: CRStaticDirectoryServingOptions.FollowSymlinks)
 
+
+        self.server.addBlock ( { (request, response, next) -> Void in
+            self.app.log("\(request.URL.path)");
+            next();
+        });
+
         // Redirecter
         self.server.addBlock({ (request, response, completionHandler) -> Void in
             let redirectURL:NSURL! = NSURL(string: request.query["redirect"]!);

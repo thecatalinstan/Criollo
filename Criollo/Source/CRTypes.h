@@ -6,8 +6,7 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#ifndef CRTypes_h
-#define CRTypes_h
+NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, CRHTTPVersion) {
     CRHTTPVersion1_0,
@@ -28,7 +27,7 @@ typedef NS_ENUM(NSUInteger, CRHTTPMethod) {
 
 @class CRRequest, CRResponse;
 typedef void(^CRRouteCompletionBlock)(void);
-typedef void(^CRRouteBlock)(CRRequest* _Nonnull request, CRResponse* _Nonnull response, CRRouteCompletionBlock _Nonnull completionHandler);
+typedef void(^CRRouteBlock)(CRRequest * request, CRResponse * response, CRRouteCompletionBlock completionHandler);
 
 typedef NS_OPTIONS(NSUInteger, CRStaticDirectoryServingOptions) {
     CRStaticDirectoryServingOptionsCacheFiles               = 1 <<   0,
@@ -48,4 +47,4 @@ typedef NS_ENUM(NSUInteger, CRStaticFileContentDisposition) {
     CRStaticFileContentDispositionAttachment
 };
 
-#endif /* CRTypes_h */
+NS_ASSUME_NONNULL_END

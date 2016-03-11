@@ -18,7 +18,9 @@ typedef NS_ENUM(UInt8, CRFCGIRequestRole) {
 
 typedef UInt8  CRFCGIRequestFlags;
 
-FOUNDATION_EXPORT  NSString* _Nonnull NSStringFromCRFCGIRequestRole(CRFCGIRequestRole requestRole);
+NS_ASSUME_NONNULL_BEGIN
+
+FOUNDATION_EXPORT  NSString * NSStringFromCRFCGIRequestRole(CRFCGIRequestRole requestRole);
 
 @interface CRFCGIRequest : CRRequest
 
@@ -27,3 +29,4 @@ FOUNDATION_EXPORT  NSString* _Nonnull NSStringFromCRFCGIRequestRole(CRFCGIReques
 @property (nonatomic, assign) CRFCGIRequestFlags requestFlags;
 
 @end
+NS_ASSUME_NONNULL_END

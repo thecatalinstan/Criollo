@@ -41,14 +41,16 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
     return protocolStatusName;
 }
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRFCGIResponse () 
 
-@property (nonatomic, readonly, nonnull) NSData *endRequestRecordData;
+@property (nonatomic, readonly) NSData *endRequestRecordData;
 
-- (nonnull NSData *)FCGIRecordDataWithContentData:(NSData * _Nullable)data;
-- (nonnull NSMutableData *)initialResponseData;
+- (NSData *)FCGIRecordDataWithContentData:(NSData * _Nullable)data;
+- (NSMutableData *)initialResponseData;
 
 @end
+NS_ASSUME_NONNULL_END
 
 @implementation CRFCGIResponse
 

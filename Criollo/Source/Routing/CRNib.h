@@ -6,11 +6,13 @@
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRNib : NSObject
 
 @property (nonatomic, strong, nullable, readonly) NSData *data;
-@property (nonatomic, strong, nonnull, readonly) NSString *name;
+@property (nonatomic, strong, readonly) NSString *name;
 
-- (nonnull instancetype)initWithNibNamed:(NSString * _Nonnull)nibName bundle:(NSBundle * _Nullable)bundle NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithNibNamed:(NSString *)nibName bundle:(NSBundle * _Nullable)bundle NS_DESIGNATED_INITIALIZER;
 
 @end
+NS_ASSUME_NONNULL_END

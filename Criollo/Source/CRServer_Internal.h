@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (CRRouteBlock)errorHandlingBlockWithStatus:(NSUInteger)statusCode error:(NSError * _Nullable)error;
 
-- (void)didCloseConnection:(CRConnection * _Nonnull)connection;
+- (void)didCloseConnection:(CRConnection *)connection;
 
 @end
 NS_ASSUME_NONNULL_END

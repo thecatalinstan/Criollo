@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRServerConfiguration : NSObject
 
-@property (nonatomic, strong, nonnull) NSString* CRServerInterface;
+@property (nonatomic, strong) NSString* CRServerInterface;
 @property (nonatomic, assign) NSUInteger CRServerPort;
 
 @property (nonatomic, assign) NSUInteger CRConnectionReadTimeout;
@@ -22,3 +23,4 @@
 - (void)readConfiguration;
 
 @end
+NS_ASSUME_NONNULL_END
