@@ -65,7 +65,7 @@
     }
 //    env[@"SERVER_SOFTWARE"] = @"";
     env[@"REQUEST_METHOD"] = NSStringFromCRHTTPMethod(self.currentRequest.method);
-    env[@"SERVER_PROTOCOL"] = self.currentRequest.version;
+    env[@"SERVER_PROTOCOL"] = NSStringFromCRHTTPVersion(self.currentRequest.version);
     env[@"REQUEST_URI"] = self.currentRequest.URL.absoluteString;
     env[@"DOCUMENT_URI"] = self.currentRequest.URL.path;
     env[@"SCRIPT_NAME"] = self.currentRequest.URL.path;
@@ -99,7 +99,7 @@
 
 #pragma mark - Responses
 
-- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version {
+- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(CRHTTPVersion)version {
     return [[CRHTTPResponse alloc] initWithConnection:self HTTPStatusCode:HTTPStatusCode description:description version:version];
 }
 
@@ -119,9 +119,9 @@
         NSArray<NSString*>* decodedHeaderComponents = [decodedHeadersFirstLine componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 
         if ( decodedHeaderComponents.count == 3 ) {
-            NSString *method = decodedHeaderComponents[0];
+            NSString *methodSpec = decodedHeaderComponents[0];
             NSString *path = decodedHeaderComponents[1];
-            NSString *version = decodedHeaderComponents[2];
+            NSString *versionSpec = decodedHeaderComponents[2];
             __block NSString *host;
 
             // Get the "Host" header
@@ -132,7 +132,7 @@
                 }
             }];
             NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", host, path]];
-            self.currentRequest = [[CRRequest alloc] initWithMethod:CRHTTPMethodMake(method) URL:URL version:version connection:self];
+            self.currentRequest = [[CRRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self];
         } else {
             [self.socket disconnectAfterWriting];
         }

@@ -54,14 +54,14 @@
 #pragma mark - Responses
 
 - (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode {
-    return [self responseWithHTTPStatusCode:HTTPStatusCode description:nil version:nil];
+    return [self responseWithHTTPStatusCode:HTTPStatusCode description:nil version:CRHTTPVersion1_1];
 }
 
 - (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description {
-    return [self responseWithHTTPStatusCode:HTTPStatusCode description:description version:nil];
+    return [self responseWithHTTPStatusCode:HTTPStatusCode description:description version:CRHTTPVersion1_1];
 }
 
-- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version {
+- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(CRHTTPVersion)version {
     return [[CRResponse alloc] initWithConnection:self HTTPStatusCode:HTTPStatusCode description:description version:version];
 }
 

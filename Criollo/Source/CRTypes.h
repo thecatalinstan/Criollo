@@ -9,6 +9,12 @@
 #ifndef CRTypes_h
 #define CRTypes_h
 
+typedef NS_ENUM(NSUInteger, CRHTTPVersion) {
+    CRHTTPVersion1_0,
+    CRHTTPVersion1_1,
+//    CRHTTPVersion2_0,
+};
+
 typedef NS_ENUM(NSUInteger, CRHTTPMethod) {
     CRHTTPMethodNone,
     CRHTTPMethodGet,
