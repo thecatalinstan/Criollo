@@ -152,6 +152,7 @@
 		AD227F891BDC3F6000C23D52 /* CRServerConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRServerConfiguration.m; sourceTree = "<group>"; };
 		AD2A35471C47FA8000E30387 /* CRUploadedFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUploadedFile.h; sourceTree = "<group>"; };
 		AD2A35481C47FA8000E30387 /* CRUploadedFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRUploadedFile.m; sourceTree = "<group>"; };
+		AD3798DE1C9580F100AA9C34 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		AD4AE7701BDAB1C300B9F221 /* CRConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRConnection.h; sourceTree = "<group>"; };
 		AD4AE7711BDAB1C300B9F221 /* CRConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRConnection.m; sourceTree = "<group>"; };
 		AD5F00001BF0052F00A57FE9 /* CriolloiOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CriolloiOS.h; path = Criollo/CriolloiOS.h; sourceTree = SOURCE_ROOT; };
@@ -347,6 +348,7 @@
 				ADEDB36D1AEFBEF400A26AF1 /* Criollo-Prefix.pch */,
 				ADEDB37A1AEFC0B000A26AF1 /* Criollo-Info.plist */,
 				AD5FFFFE1BF003B700A57FE9 /* CriolloiOS-Info.plist */,
+				AD3798DE1C9580F100AA9C34 /* README.md */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
