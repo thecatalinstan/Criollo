@@ -38,7 +38,7 @@
         [response sendData:imageData];
 
         completionHandler();
-    } forPath:@"/screenshot" HTTPMethod:@"GET"];
+    } forPath:@"/screenshot" HTTPMethod:CRHTTPMethodGet];
 
     self.windowController = [[WindowController alloc] initWithWindowNibName:@"WindowController"];
     [self.windowController showWindow:nil];

@@ -34,14 +34,14 @@
     return [fields componentsJoinedByString:@"; "];
 }
 
-+ (NSDictionary *)responseHeaderFieldsWithCookies:(NSArray *)cookies {
++ (NSDictionary *)responseHeaderFieldsWithCookies:(NSArray<NSHTTPCookie *> *)cookies {
     if ( cookies.count == 0 ) {
         return nil;
     }
     NSString* key = @"Set-Cookie";
     NSMutableArray* headerFields = [NSMutableArray arrayWithCapacity:cookies.count];
-    [cookies enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSString* headerField = [obj HTTPHeaderField];
+    [cookies enumerateObjectsUsingBlock:^(NSHTTPCookie* obj, NSUInteger idx, BOOL *stop) {
+        NSString* headerField = obj.HTTPHeaderField;
         if ( headerField != nil ) {
             [headerFields addObject:headerField];
         }

@@ -8,6 +8,7 @@
 
 #import "CRTypes.h"
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRRequestByteRange : NSObject
 
 @property (nonatomic, readonly, nullable) NSString *firstBytePos;
@@ -16,20 +17,20 @@
 - (NSRange)dataRangeForFileSize:(NSUInteger)fileSize;
 - (BOOL)isSatisfiableForFileSize:(NSUInteger)fileSize;
 
-- (nonnull NSString *)contentRangeSpecForFileSize:(NSUInteger)fileSize;
-- (nonnull NSString *)contentLengthSpecForFileSize:(NSUInteger)fileSize;
+- (NSString *)contentRangeSpecForFileSize:(NSUInteger)fileSize;
+- (NSString *)contentLengthSpecForFileSize:(NSUInteger)fileSize;
 
 @end
 
-
 @interface CRRequestRange : NSObject
 
-@property (nonatomic, readonly, strong, nonnull) NSArray<CRRequestByteRange *> *byteRangeSet;
-@property (nonatomic, readonly, strong, nonnull) NSString *bytesUnit;
+@property (nonatomic, readonly, strong) NSArray<CRRequestByteRange *> *byteRangeSet;
+@property (nonatomic, readonly, strong) NSString *bytesUnit;
 
-+ (nonnull instancetype)reuestRangeWithRangesSpecifier:(NSString * _Nonnull)rangesSpecifier;
-+ (nonnull NSString *)acceptRangesSpec;
++ (instancetype)reuestRangeWithRangesSpecifier:(NSString *)rangesSpecifier;
++ (NSString *)acceptRangesSpec;
 
 - (BOOL)isSatisfiableForFileSize:(NSUInteger)fileSize;
 
 @end
+NS_ASSUME_NONNULL_END

@@ -12,15 +12,17 @@
 #import "CRRequest.h"
 #import "CRResponse.h"
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRViewController ()
 
-@property (nonatomic, readonly, strong, nonnull) NSMutableDictionary<NSString*, CRNib*> *nibCache;
-@property (nonatomic, readonly, strong, nonnull) NSMutableDictionary<NSString*, CRView*> *viewCache;
-@property (nonatomic, readonly, strong, nonnull) dispatch_queue_t isolationQueue;
+@property (nonatomic, readonly, strong) NSMutableDictionary<NSString*, CRNib*> *nibCache;
+@property (nonatomic, readonly, strong) NSMutableDictionary<NSString*, CRView*> *viewCache;
+@property (nonatomic, readonly, strong) dispatch_queue_t isolationQueue;
 
 - (void)loadView;
 
 @end
+NS_ASSUME_NONNULL_END
 
 @implementation CRViewController
 
@@ -124,7 +126,12 @@
 - (CRRouteBlock)routeBlock {
     return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
         [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+
         NSString* output = [self presentViewControllerWithRequest:request response:response];
+        if ( ![response valueForHTTPHeaderField:@"Content-Length"] ) {
+            [response setValue:@(output.length).stringValue forHTTPHeaderField:@"Content-Length"];
+        }
+
         if ( self.shouldFinishResponse ) {
             [response sendString:output];
         } else {

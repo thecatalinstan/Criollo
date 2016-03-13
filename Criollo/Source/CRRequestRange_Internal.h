@@ -8,16 +8,18 @@
 
 #import "CRRequestRange.h"
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRRequestByteRange ()
 
-- (nonnull instancetype)initWithByteRangeSpec:(NSString * _Nonnull)byteRangeSpec NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithByteRangeSpec:(NSString *)byteRangeSpec NS_DESIGNATED_INITIALIZER;
 
 @end
 
 @interface CRRequestRange ()
 
-+ (nonnull NSArray<NSString *>*)acceptedRangeUnits;
++ (NSArray<NSString *> *)acceptedRangeUnits;
 
-- (nonnull instancetype)initWithRangesSpecifier:(NSString * _Nonnull)rangesSpecifier NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithRangesSpecifier:(NSString *)rangesSpecifier NS_DESIGNATED_INITIALIZER;
 
 @end
+NS_ASSUME_NONNULL_END

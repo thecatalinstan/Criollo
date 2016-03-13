@@ -13,14 +13,14 @@
 #import <CoreServices/CoreServices.h>
 #endif
 
-@interface CRMimeTypeHelper () {
+NS_ASSUME_NONNULL_BEGIN
+@interface CRMimeTypeHelper ()
 
-}
-
-@property (nonatomic, strong, nonnull, readonly) NSMutableDictionary<NSString *, NSString *> *mimeTypes;
-@property (nonatomic, readonly, strong, nonnull) dispatch_queue_t isolationQueue;
+@property (nonatomic, strong, readonly) NSMutableDictionary<NSString *, NSString *> *mimeTypes;
+@property (nonatomic, strong, readonly) dispatch_queue_t isolationQueue;
 
 @end
+NS_ASSUME_NONNULL_END
 
 @implementation CRMimeTypeHelper
 

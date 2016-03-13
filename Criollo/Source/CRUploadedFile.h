@@ -6,11 +6,13 @@
 //  Copyright © 2016 Cătălin Stan. All rights reserved.
 //
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRUploadedFile : NSObject
 
-@property (nonatomic, strong, nonnull) NSString * name;
-@property (nonatomic, strong, nonnull) NSString * path;
-@property (nonatomic, strong, nonnull) NSString * size;
-@property (nonatomic, strong, nonnull) NSString * type;
+@property (nonatomic, strong) NSString * name;
+@property (nonatomic, strong) NSString * path;
+@property (nonatomic, strong) NSString * size;
+@property (nonatomic, strong) NSString * type;
 
 @end
+NS_ASSUME_NONNULL_END

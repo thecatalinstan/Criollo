@@ -10,33 +10,35 @@
 
 @class GCDAsyncSocket, CRServer, CRRequest;
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRConnection ()
 
-@property (nonatomic, strong, nonnull) GCDAsyncSocket* socket;
+@property (nonatomic, strong) GCDAsyncSocket* socket;
 @property (nonatomic, weak) CRServer* server;
 
-@property (nonatomic, strong, nonnull) NSMutableArray<CRRequest*>* requests;
+@property (nonatomic, strong) NSMutableArray<CRRequest*>* requests;
 
 @property (nonatomic, strong, nullable) CRRequest* currentRequest;
-@property (nonatomic, readonly, strong, nonnull) dispatch_queue_t isolationQueue;
+@property (nonatomic, readonly, strong) dispatch_queue_t isolationQueue;
 
 @property (nonatomic, readonly) BOOL willDisconnect;
 
-+ (nonnull NSData *)CRLFData;
-+ (nonnull NSData *)CRLFCRLFData;
++ (NSData *)CRLFData;
++ (NSData *)CRLFCRLFData;
 
-- (nonnull instancetype)initWithSocket:(nullable GCDAsyncSocket*)socket server:(nullable CRServer*)server NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithSocket:(GCDAsyncSocket * _Nullable)socket server:(CRServer * _Nullable)server NS_DESIGNATED_INITIALIZER;
 
-- (nonnull CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode;
-- (nonnull CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(nullable NSString *)description;
-- (nonnull CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(nullable NSString *)description version:(nullable NSString *)version;
+- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode;
+- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString * _Nullable)description;
+- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString * _Nullable)description version:(CRHTTPVersion)version;
 
 - (void)startReading;
 - (void)didReceiveCompleteRequestHeaders;
-- (void)didReceiveRequestBodyData:(nonnull NSData *)data;
+- (void)didReceiveRequestBodyData:(NSData *)data;
 - (void)didReceiveCompleteRequest;
 
-- (void)sendDataToSocket:(nonnull NSData *)data forRequest:(nonnull CRRequest *)request;
-- (void)didFinishResponseForRequest:(nonnull CRRequest *)request;
+- (void)sendDataToSocket:(NSData *)data forRequest:(CRRequest *)request;
+- (void)didFinishResponseForRequest:(CRRequest *)request;
 
 @end
+NS_ASSUME_NONNULL_END

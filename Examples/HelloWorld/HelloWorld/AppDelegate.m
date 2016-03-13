@@ -47,13 +47,13 @@
 
         // Call the next block
         completionHandler();
-    } forPath:@"/" HTTPMethod:CRHTTPMethodGET];
+    } forPath:@"/" HTTPMethod:CRHTTPMethodGet];
 
     // Send MIME Type for .nfo files
     [[CRMimeTypeHelper sharedHelper] setMimeType:@"text/plain; charset=utf-8" forExtension:@"nfo"];
 
     // Expose the contents of the home dir "~" at "/pub"
-    [self.server addStaticDirectoryAtPath:@"~" forPath:@"/pub" options:CRStaticDirectoryServingOptionsCacheFiles|CRStaticDirectoryServingOptionsAutoIndex];
+    [self.server mountStaticDirectoryAtPath:@"~" forPath:@"/pub" options:CRStaticDirectoryServingOptionsCacheFiles|CRStaticDirectoryServingOptionsAutoIndex];
 
     [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         NSUInteger statusCode = request.response.statusCode;

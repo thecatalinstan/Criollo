@@ -8,12 +8,14 @@
 
 #import "CRNib.h"
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRNib ()
 
-@property (nonatomic, readonly, strong, nonnull) NSMutableDictionary<NSString*, NSData*> *cache;
-@property (nonatomic, readonly, strong, nonnull) dispatch_queue_t isolationQueue;
+@property (nonatomic, readonly, strong) NSMutableDictionary<NSString*, NSData*> *cache;
+@property (nonatomic, readonly, strong) dispatch_queue_t isolationQueue;
 
 @end
+NS_ASSUME_NONNULL_END
 
 @implementation CRNib
 

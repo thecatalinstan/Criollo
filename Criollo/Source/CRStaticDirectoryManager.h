@@ -10,18 +10,22 @@
 
 @interface CRStaticDirectoryManager : NSObject
 
-@property (nonatomic, nonnull, readonly) NSString * directoryPath;
-@property (nonatomic, nonnull, readonly) CRRouteBlock routeBlock;
+NS_ASSUME_NONNULL_BEGIN
+
+@property (nonatomic, readonly) NSString * directoryPath;
+@property (nonatomic, readonly) CRRouteBlock routeBlock;
 
 @property (nonatomic, readonly) BOOL shouldCacheFiles;
 @property (nonatomic, readonly) BOOL shouldGenerateDirectoryIndex;
 @property (nonatomic, readonly) BOOL shouldShowHiddenFilesInDirectoryIndex;
 @property (nonatomic, readonly) BOOL shouldFollowSymLinks;
 
-+ (nonnull instancetype)managerWithDirectoryAtPath:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix;
-+ (nonnull instancetype)managerWithDirectoryAtPath:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options;
++ (instancetype)managerWithDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix;
++ (instancetype)managerWithDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix options:(CRStaticDirectoryServingOptions)options;
 
-- (nonnull instancetype)initWithDirectoryAtPath:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix;
-- (nonnull instancetype)initWithDirectoryAtPath:(NSString * _Nonnull)directoryPath prefix:(NSString * _Nonnull)prefix options:(CRStaticDirectoryServingOptions)options NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix;
+- (instancetype)initWithDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix options:(CRStaticDirectoryServingOptions)options NS_DESIGNATED_INITIALIZER;
+
+NS_ASSUME_NONNULL_END
 
 @end

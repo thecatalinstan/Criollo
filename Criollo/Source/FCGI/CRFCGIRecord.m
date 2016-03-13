@@ -58,11 +58,13 @@ NSString* NSStringFromCRFCGIRecordType(CRFCGIRecordType recordType) {
     return recordTypeName;
 }
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRFCGIRecord ()
 
-@property (nonatomic, readonly, copy, nonnull) NSData *headerProtocolData;
+@property (nonatomic, readonly, copy) NSData *headerProtocolData;
 
 @end
+NS_ASSUME_NONNULL_END
 
 @implementation CRFCGIRecord
 

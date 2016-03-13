@@ -44,11 +44,11 @@
     }
 
     if ( [self valueForHTTPHeaderField:@"Connection"] == nil ) {
-        NSString* connectionHeader = @"keep-alive";
-        if ( [self.version isEqualToString:CRHTTPVersion1_0] ) {
-            connectionHeader = @"close";
+        NSString* connectionSpec = @"keep-alive";
+        if ( self.version == CRHTTPVersion1_0 ) {
+            connectionSpec = @"close";
         }
-        [self setValue:connectionHeader forHTTPHeaderField:@"Connection"];
+        [self setValue:connectionSpec forHTTPHeaderField:@"Connection"];
     }
 
     if ( [self valueForHTTPHeaderField:@"Content-length"] == nil ) {

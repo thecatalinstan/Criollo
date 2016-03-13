@@ -9,7 +9,92 @@
 #import "CRMessage.h"
 #import "CRMessage_Internal.h"
 
+NSString * NSStringFromCRHTTPVersion(CRHTTPVersion version) {
+    switch (version) {
+        case CRHTTPVersion1_0:
+            return (__bridge NSString*)kCFHTTPVersion1_0;
+        case CRHTTPVersion1_1:
+            return (__bridge NSString*)kCFHTTPVersion1_1;
+//        case CRHTTPVersion2_0:
+//            return (__bridge NSString*)kCFHTTPVersion2_0;
+    }
+}
+
+CRHTTPVersion CRHTTPVersionMake(NSString * versionSpec) {
+    CRHTTPVersion version = CRHTTPVersion1_1;
+    if ( [versionSpec isEqualToString:(__bridge NSString*)kCFHTTPVersion1_1] ) {
+        version = CRHTTPVersion1_1;
+//    } else if ( [versionSpec isEqualToString:(__bridge NSString*)kCFHTTPVersion2_0] ) {    }
+//        version = CRHTTPVersion2_0;
+    } else if ( [versionSpec isEqualToString:(__bridge NSString*)kCFHTTPVersion1_0] ) {
+        version = CRHTTPVersion1_0;
+    }
+    return version;
+}
+
+
+NSString * const CRHTTPMethodNoneValue = @"NONE";
+NSString * const CRHTTPMethodGetValue = @"GET";
+NSString * const CRHTTPMethodPostValue = @"POST";
+NSString * const CRHTTPMethodPutValue = @"PUT";
+NSString * const CRHTTPMethodDeleteValue = @"DELETE";
+NSString * const CRHTTPMethodPatchValue = @"PATCH";
+NSString * const CRHTTPMethodOptionsValue = @"OPTIONS";
+NSString * const CRHTTPMethodAllValue = @"ALL";
+
+NSString * NSStringFromCRHTTPMethod(CRHTTPMethod method) {
+    switch (method) {
+        case CRHTTPMethodGet:
+            return CRHTTPMethodGetValue;
+        case CRHTTPMethodPost:
+            return CRHTTPMethodPostValue;
+        case CRHTTPMethodPut:
+            return CRHTTPMethodPutValue;
+        case CRHTTPMethodDelete:
+            return CRHTTPMethodDeleteValue;
+        case CRHTTPMethodPatch:
+            return CRHTTPMethodPatchValue;
+        case CRHTTPMethodOptions:
+            return CRHTTPMethodOptionsValue;
+        case CRHTTPMethodAll:
+            return CRHTTPMethodAllValue;
+        case CRHTTPMethodNone:
+            return CRHTTPMethodNoneValue;
+    }
+}
+
+CRHTTPMethod CRHTTPMethodMake(NSString * methodSpec) {
+    CRHTTPMethod HTTPMethod;
+    if ( [methodSpec isEqualToString:CRHTTPMethodGetValue] ) {
+        HTTPMethod = CRHTTPMethodGet;
+    } else if ( [methodSpec isEqualToString:CRHTTPMethodPostValue] ) {
+        HTTPMethod = CRHTTPMethodPost;
+    } else if ( [methodSpec isEqualToString:CRHTTPMethodPutValue] ) {
+        HTTPMethod = CRHTTPMethodPut;
+    } else if ( [methodSpec isEqualToString:CRHTTPMethodDeleteValue] ) {
+        HTTPMethod = CRHTTPMethodDelete;
+    } else if ( [methodSpec isEqualToString:CRHTTPMethodPatchValue] ) {
+        HTTPMethod = CRHTTPMethodPatch;
+    } else if ( [methodSpec isEqualToString:CRHTTPMethodOptionsValue] ) {
+        HTTPMethod = CRHTTPMethodOptions;
+    } else if ( [methodSpec isEqualToString:CRHTTPMethodAllValue] ) {
+        HTTPMethod = CRHTTPMethodAll;
+    } else {
+        HTTPMethod = CRHTTPMethodNone;
+    }
+    return HTTPMethod;
+}
+
 @implementation CRMessage
+
++ (NSArray<NSString *> *)acceptedHTTPMethods {
+    static NSArray<NSString *> *acceptedHTTPMethods;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        acceptedHTTPMethods = @[CRHTTPMethodGetValue, CRHTTPMethodPostValue, CRHTTPMethodPutValue, CRHTTPMethodDeleteValue, CRHTTPMethodPatchValue, CRHTTPMethodOptionsValue];
+    });
+    return acceptedHTTPMethods;
+}
 
 - (instancetype)init {
     self = [super init];
@@ -19,11 +104,8 @@
     return self;
 }
 
-- (void)dealloc {
-}
-
-- (NSString *)version {
-    return (__bridge_transfer NSString *)CFHTTPMessageCopyVersion((__bridge CFHTTPMessageRef _Nonnull)(self.message));
+- (CRHTTPVersion)version {
+    return CRHTTPVersionMake((__bridge_transfer NSString *)CFHTTPMessageCopyVersion((__bridge CFHTTPMessageRef _Nonnull)(self.message)));
 }
 
 - (NSData *)serializedData {

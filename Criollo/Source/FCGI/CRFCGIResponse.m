@@ -41,18 +41,20 @@ NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) 
     return protocolStatusName;
 }
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRFCGIResponse () 
 
-@property (nonatomic, readonly, nonnull) NSData *endRequestRecordData;
+@property (nonatomic, readonly) NSData *endRequestRecordData;
 
-- (nonnull NSData *)FCGIRecordDataWithContentData:(nullable NSData *)data;
-- (nonnull NSMutableData *)initialResponseData;
+- (NSData *)FCGIRecordDataWithContentData:(NSData * _Nullable)data;
+- (NSMutableData *)initialResponseData;
 
 @end
+NS_ASSUME_NONNULL_END
 
 @implementation CRFCGIResponse
 
-- (instancetype)initWithConnection:(CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(NSString *)version {
+- (instancetype)initWithConnection:(CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(CRHTTPVersion)version {
     self = [super initWithConnection:connection HTTPStatusCode:HTTPStatusCode description:description version:version];
     if ( self != nil ) {
         self.protocolStatus = CRFCGIProtocolStatusRequestComplete;

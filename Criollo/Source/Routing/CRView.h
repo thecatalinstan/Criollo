@@ -6,12 +6,14 @@
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
+NS_ASSUME_NONNULL_BEGIN
 @interface CRView : NSObject 
 
-@property (nonatomic, readonly, strong, nonnull) NSString *contents;
+@property (nonatomic, readonly, strong) NSString *contents;
 
-- (nonnull instancetype)initWithContents:(nullable NSString *)contents NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithContents:(NSString * _Nullable)contents NS_DESIGNATED_INITIALIZER;
 
-- (nonnull NSString*)render:(nullable NSDictionary *)templateVariables;
+- (NSString*)render:(NSDictionary * _Nullable)templateVariables;
 
 @end
+NS_ASSUME_NONNULL_END

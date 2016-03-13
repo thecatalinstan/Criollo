@@ -26,8 +26,10 @@ typedef NS_ENUM(UInt8, CRFCGIRecordType) {
     CRFCGIRecordTypeUnknown = 11
 };
 
-FOUNDATION_EXPORT NSString * _Nonnull NSStringFromCRFCGIVersion(CRFCGIVersion version);
-FOUNDATION_EXPORT NSString * _Nonnull NSStringFromCRFCGIRecordType(CRFCGIRecordType recordType);
+NS_ASSUME_NONNULL_BEGIN
+
+FOUNDATION_EXPORT NSString * NSStringFromCRFCGIVersion(CRFCGIVersion version);
+FOUNDATION_EXPORT NSString * NSStringFromCRFCGIRecordType(CRFCGIRecordType recordType);
 
 @interface CRFCGIRecord : NSObject
 
@@ -40,11 +42,11 @@ FOUNDATION_EXPORT NSString * _Nonnull NSStringFromCRFCGIRecordType(CRFCGIRecordT
 @property (nonatomic, strong, nullable) NSData *contentData;
 @property (nonatomic, strong, nullable) NSData *paddingData;
 
-@property (nonatomic, readonly, nonnull) NSData *FCGIRecordData;
+@property (nonatomic, readonly) NSData *FCGIRecordData;
 
-+ (nonnull CRFCGIRecord*)recordWithHeaderData:(nonnull NSData *)data;
++ (CRFCGIRecord*)recordWithHeaderData:(NSData *)data;
 
-- (nonnull instancetype)initWithHeaderData:(nonnull NSData *)data NS_DESIGNATED_INITIALIZER;
-
+- (instancetype)initWithHeaderData:(NSData *)data NS_DESIGNATED_INITIALIZER;
 
 @end
+NS_ASSUME_NONNULL_END
