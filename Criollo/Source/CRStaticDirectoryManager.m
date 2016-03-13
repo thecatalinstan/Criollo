@@ -213,7 +213,7 @@ NS_ASSUME_NONNULL_END
             }
         } else {
             // Serve the file through the StaticFileManager
-            CRStaticFileServingOptions options;
+            CRStaticFileServingOptions options = 0;
             if ( self.shouldCacheFiles ) {
                 options |= CRStaticFileServingOptionsCache;
             }
