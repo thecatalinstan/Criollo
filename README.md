@@ -1,6 +1,6 @@
 
 
-[![Criollo](https://criollo.io/res/doc/images/criollo.png)](https://criollo.io/)
+[![Criollo](https://criollo.io/res/doc/images/criollo-github.png)](https://criollo.io/)
 
 A powerful Cocoa based web application framework for OS X and iOS.
 
