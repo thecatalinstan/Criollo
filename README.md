@@ -2,7 +2,7 @@
 
 [![Criollo](https://criollo.io/res/doc/images/criollo-github.png)](https://criollo.io/)
 
-A powerful Cocoa based web application framework for OS X and iOS.
+#### A powerful Cocoa based web application framework for OS X and iOS.
 
 [![Version Status](https://img.shields.io/cocoapods/v/Criollo.svg?style=flat)](http://cocoadocs.org/docsets/Criollo)  [![Platform](http://img.shields.io/cocoapods/p/Criollo.svg?style=flat)](http://cocoapods.org/?q=Criollo) [![license Public Domain](https://img.shields.io/badge/license-Public%20Domain-orange.svg?style=flat)](https://en.wikipedia.org/wiki/Public_domain) [![Twitter](https://img.shields.io/badge/twitter-@Criolloio-orange.svg?style=flat)](http://twitter.com/Criolloio)
 
