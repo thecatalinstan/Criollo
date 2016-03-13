@@ -8,6 +8,14 @@ This file includes all notable changes to Criollo.
 
 ## [0.1.18](https://github.com/thecatalinstan/Criollo/releases/tag/0.1.18) (03/13/2016)
 
+**Released on Sunday, March 13, 2016**. This is just a hotfix release.
+
+### Fixed
+
+* Fixed potential crash in the builtin server error handling block, due to [incorrect format string](https://github.com/thecatalinstan/Criollo/commit/6c3a0be15e8819cc3a29348e8e1b661ea5674512). 
+
+## [0.1.18](https://github.com/thecatalinstan/Criollo/releases/tag/0.1.18) (03/13/2016)
+
 **Released on Sunday, March 13, 2016**. This release is meant to increase the “real-world” usage karma and to stabilize and extend some existing APIs.
 
 #### Changed APIs
