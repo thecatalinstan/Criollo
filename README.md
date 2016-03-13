@@ -1,7 +1,6 @@
 
-<p align="center" >
-  <img src="https://criollo.io/res/doc/images/criollo.png" alt="Criollo" title="Criollo"/>
-</p>
+
+[![Criollo](https://criollo.io/res/doc/images/criollo.png)](https://criollo.io/)
 
 A powerful Cocoa based web application framework for OS X and iOS.
 
