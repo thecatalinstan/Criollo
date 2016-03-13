@@ -86,7 +86,7 @@ NS_ASSUME_NONNULL_END
             [responseString appendFormat:@"%@\n", obj];
         }];
 #else
-        [responseString appendFormat:@"Cennot %@ %@", request.method, request.URL.path];
+        [responseString appendFormat:@"Cennot %@ %@", NSStringFromCRHTTPMethod(request.method), request.URL.path];
 #endif
 
         [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
