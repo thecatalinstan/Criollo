@@ -46,8 +46,8 @@ See the [Hello World Multi Target example](https://github.com/thecatalinstan/Cri
 
 - [Download Criollo](https://github.com/thecatalinstan/Criollo/archive/master.zip) and try out the included OSX and iOS example apps
 - Read the [“Getting Started” guide](https://github.com/thecatalinstan/Criollo/wiki/Getting-Started) and move further with the [“Doing More Stuff” guide](https://github.com/thecatalinstan/Criollo/wiki/Doing-More-Stuff)
-- Learn how to deploy your Criollo apps in the [“Deployment” guide](https://guthub.com/thecatalinstan/Criollo/wiki/Deployment)
 - Check out the [documentation](http://cocoadocs.org/docsets/Criollo/) for a look at the APIs available
+- Learn how to deploy your Criollo apps in the [“Deployment” guide](https://guthub.com/thecatalinstan/Criollo/wiki/Deployment)
 
 ## Installing
 
