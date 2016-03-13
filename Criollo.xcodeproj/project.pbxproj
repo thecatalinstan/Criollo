@@ -146,6 +146,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AD11F4F61C95A81F007DC2FF /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
+		AD11F4F71C95A81F007DC2FF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		AD19695C1B626EF90098CA89 /* CRServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRServer.h; sourceTree = "<group>"; };
 		AD19695D1B626EF90098CA89 /* CRServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRServer.m; sourceTree = "<group>"; };
 		AD227F881BDC3F6000C23D52 /* CRServerConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRServerConfiguration.h; sourceTree = "<group>"; };
@@ -347,6 +349,8 @@
 				ADEDB36D1AEFBEF400A26AF1 /* Criollo-Prefix.pch */,
 				ADEDB37A1AEFC0B000A26AF1 /* Criollo-Info.plist */,
 				AD5FFFFE1BF003B700A57FE9 /* CriolloiOS-Info.plist */,
+				AD11F4F61C95A81F007DC2FF /* CHANGELOG.md */,
+				AD11F4F71C95A81F007DC2FF /* README.md */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";

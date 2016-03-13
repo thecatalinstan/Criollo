@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         =  "Criollo"
-  s.version      =  "0.1.7"
+  s.version      =  "0.1.9"
   s.license      =  { :type => "public domain", :text => <<-LICENSE
 
 Public Domain License
@@ -30,6 +30,6 @@ Updated and maintained by Cătălin Stan.
 
   s.requires_arc            = true
 
-  s.dependency              'CocoaAsyncSocket', '~> 7.4.2'
+  s.dependency              'CocoaAsyncSocket', '~> 7.4'
 
 end
