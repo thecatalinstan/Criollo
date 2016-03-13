@@ -1,8 +1,9 @@
+
+[![Criollo.io](https://criollo.io/res/doc/images/idea.svg)](https://criollo.io)
+
+A powerful Cocoa based web application framework for OS X and iOS.
+
 [![Version Status](https://img.shields.io/cocoapods/v/Criollo.svg?style=flat)](http://cocoadocs.org/docsets/Criollo)  [![Platform](http://img.shields.io/cocoapods/p/Criollo.svg?style=flat)](http://cocoapods.org/?q=Criollo) [![license Public Domain](https://img.shields.io/badge/license-Public%20Domain-orange.svg?style=flat)](https://en.wikipedia.org/wiki/Public_domain) [![Twitter](https://img.shields.io/badge/twitter-@Criolloio-orange.svg?style=flat)](http://twitter.com/Criolloio)
-
-# Criollo
-
-#### A powerful Cocoa based web application framework for OS X and iOS.
 
 Criollo helps create standalone web apps that deliver content directly over HTTP or FastCGI. You can write code in Objective-C or Swift. And you can use technologies you know and love: Grand Central Dispatch, NSURLSession, CoreImage and many more. 
 
@@ -41,8 +42,7 @@ See the [Hello World Multi Target example](https://github.com/thecatalinstan/Cri
 ## Getting Started
 
 - [Download Criollo](https://github.com/thecatalinstan/Criollo/archive/master.zip) and try out the included OSX and iOS example apps
-- Read the [“Getting Started” guide](https://github.com/thecatalinstan/Criollo/wiki/Getting-Started)
-- Move further with the [“Doing More Stuff” guide](https://github.com/thecatalinstan/Criollo/wiki/Doing-More-Stuff)
+- Read the [“Getting Started” guide](https://github.com/thecatalinstan/Criollo/wiki/Getting-Started) and move further with the [“Doing More Stuff” guide](https://github.com/thecatalinstan/Criollo/wiki/Doing-More-Stuff)
 - Learn how to deploy your Criollo apps in the [“Deployment” guide](https://guthub.com/thecatalinstan/Criollo/wiki/Deployment)
 - Check out the [documentation](http://cocoadocs.org/docsets/Criollo/) for a look at the APIs available
 
