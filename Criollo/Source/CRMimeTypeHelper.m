@@ -48,9 +48,11 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)setMimeType:(NSString *)mimeType forExtension:(NSString *)extension {
-    dispatch_async(self.isolationQueue, ^{
-        self.mimeTypes[extension] = mimeType;
-    });
+    if ( mimeType != nil ) {
+        dispatch_async(self.isolationQueue, ^{
+            self.mimeTypes[extension] = mimeType;
+        });
+    }
 }
 
 - (NSString *)mimeTypeForFileAtPath:(NSString *)path {
