@@ -35,8 +35,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nullable) id<CRServerDelegate> delegate;
 @property (nonatomic, strong) CRRouteBlock notFoundBlock;
+@property (nonatomic, strong, nullable) dispatch_queue_t delegateQueue;
 
-- (instancetype)initWithDelegate:(id<CRServerDelegate> _Nullable)delegate NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithDelegate:(id<CRServerDelegate> _Nullable)delegate;
+- (instancetype)initWithDelegate:(id<CRServerDelegate> _Nullable)delegate delegateQueue:(dispatch_queue_t _Nullable)delegateQueue NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)startListening;
 - (BOOL)startListening:(NSError * _Nullable __autoreleasing * _Nullable)error;

@@ -14,8 +14,8 @@
 
 @implementation CRHTTPServer
 
-- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate {
-    self = [super initWithDelegate:delegate];
+- (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate delegateQueue:(dispatch_queue_t)delegateQueue {
+    self = [super initWithDelegate:delegate delegateQueue:delegateQueue];
     if ( self != nil ) {
         self.configuration = [[CRHTTPServerConfiguration alloc] init];
     }
