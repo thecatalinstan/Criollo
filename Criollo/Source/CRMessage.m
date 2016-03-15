@@ -40,6 +40,7 @@ NSString * const CRHTTPMethodPutValue = @"PUT";
 NSString * const CRHTTPMethodDeleteValue = @"DELETE";
 NSString * const CRHTTPMethodPatchValue = @"PATCH";
 NSString * const CRHTTPMethodOptionsValue = @"OPTIONS";
+NSString * const CRHTTPMethodHeadValue = @"HEAD";
 NSString * const CRHTTPMethodAllValue = @"ALL";
 
 NSString * NSStringFromCRHTTPMethod(CRHTTPMethod method) {
@@ -56,6 +57,8 @@ NSString * NSStringFromCRHTTPMethod(CRHTTPMethod method) {
             return CRHTTPMethodPatchValue;
         case CRHTTPMethodOptions:
             return CRHTTPMethodOptionsValue;
+        case CRHTTPMethodHead:
+            return CRHTTPMethodHeadValue;
         case CRHTTPMethodAll:
             return CRHTTPMethodAllValue;
         case CRHTTPMethodNone:
@@ -77,6 +80,8 @@ CRHTTPMethod CRHTTPMethodMake(NSString * methodSpec) {
         HTTPMethod = CRHTTPMethodPatch;
     } else if ( [methodSpec isEqualToString:CRHTTPMethodOptionsValue] ) {
         HTTPMethod = CRHTTPMethodOptions;
+    } else if ( [methodSpec isEqualToString:CRHTTPMethodHeadValue] ) {
+        HTTPMethod = CRHTTPMethodHead;
     } else if ( [methodSpec isEqualToString:CRHTTPMethodAllValue] ) {
         HTTPMethod = CRHTTPMethodAll;
     } else {

@@ -22,6 +22,7 @@ typedef NS_ENUM(NSUInteger, CRHTTPMethod) {
     CRHTTPMethodDelete,
     CRHTTPMethodPatch,
     CRHTTPMethodOptions,
+    CRHTTPMethodHead,
     CRHTTPMethodAll,
 };
 
