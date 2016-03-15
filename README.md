@@ -16,7 +16,7 @@ It's as easy as this:
 ```objective-c
 CRServer* server = [[CRHTTPServer alloc] init];
 [server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-    [response sendString:@"Hello world!"];
+    [response send:@"Hello world!"];
 } forPath:@"/"];
 [server startListening];
 ```
@@ -26,7 +26,7 @@ and in Swift:
 ```swift
 let server:CRServer = CRHTTPServer()
 server.addBlock({ (request:CRRequest, response:CRResponse, completionHandler:CRRouteCompletionBlock) -> Void in
-	response.sendString("Hello world!")
+	response.send("Hello world!")
 }, forPath: "/")
 server.startListening()
 ```
@@ -61,6 +61,14 @@ The preferred way of installing Criollo is through [CocoaPods](http://cocoapods.
 3. Run `pod install`
 
 Please note that Criollo will download [CocoaAsyncSocket](https://github.com/robbiehanson/CocoaAsyncSocket) as a dependency.
+
+### Cloning the repo
+
+Criollo uses [CocoaAsyncSocket](https://github.com/robbiehanson/CocoaAsyncSocket) which is included as a git submodule
+
+```bashh
+git clone --recursive https://github.com/thecatalinstan/Criollo.git
+```
 
 ## Work in Progress
 
