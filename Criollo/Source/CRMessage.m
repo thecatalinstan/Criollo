@@ -96,7 +96,7 @@ CRHTTPMethod CRHTTPMethodMake(NSString * methodSpec) {
     static NSArray<NSString *> *acceptedHTTPMethods;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        acceptedHTTPMethods = @[CRHTTPMethodGetValue, CRHTTPMethodPostValue, CRHTTPMethodPutValue, CRHTTPMethodDeleteValue, CRHTTPMethodPatchValue, CRHTTPMethodOptionsValue];
+        acceptedHTTPMethods = @[CRHTTPMethodGetValue, CRHTTPMethodPostValue, CRHTTPMethodPutValue, CRHTTPMethodDeleteValue, CRHTTPMethodPatchValue, CRHTTPMethodOptionsValue, CRHTTPMethodHeadValue];
     });
     return acceptedHTTPMethods;
 }

@@ -57,7 +57,7 @@ NS_ASSUME_NONNULL_END
             NSString* errorDescription;
             switch (statusCode) {
                 case 404:
-                    errorDescription = [NSString stringWithFormat:NSLocalizedString(@"No routes defined for “%@%@%@”",), request.method, request.URL.path, [request.URL.path hasSuffix:CRPathSeparator] ? @"" : CRPathSeparator];
+                    errorDescription = [NSString stringWithFormat:NSLocalizedString(@"No routes defined for “%@%@%@”",), NSStringFromCRHTTPMethod(request.method), request.URL.path, [request.URL.path hasSuffix:CRPathSeparator] ? @"" : CRPathSeparator];
                     break;
             }
             if ( errorDescription ) {
@@ -364,7 +364,7 @@ NS_ASSUME_NONNULL_END
     if ( method == CRHTTPMethodAll ) {
         methods = [CRMessage acceptedHTTPMethods];
     } else {
-        methods = @[NSStringFromCRHTTPMethod(method)];
+        methods = @[NSStringFromCRHTTPMethod(method), NSStringFromCRHTTPMethod(CRHTTPMethodHead)];
     }
 
     if ( path == nil ) {
