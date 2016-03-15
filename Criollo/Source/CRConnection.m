@@ -93,11 +93,6 @@ NS_ASSUME_NONNULL_END
     return self;
 }
 
-- (void)dealloc {
-    [self.socket setDelegate:nil delegateQueue:NULL];
-    [self.socket disconnect];
-}
-
 #pragma mark - Data
 
 - (void)startReading {
