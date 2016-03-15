@@ -45,6 +45,7 @@
         self.message = CFBridgingRelease(CFHTTPMessageCreateResponse(NULL, (CFIndex)HTTPStatusCode, (__bridge CFStringRef)description, (__bridge CFStringRef)NSStringFromCRHTTPVersion(version)));
         self.connection = connection;
         _statusDescription = description;
+        _HTTPCookies = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -58,8 +59,7 @@
     self.proposedStatusDescription = description;
 }
 
-- (void)setAllHTTPHeaderFields:(NSDictionary<NSString *, NSString *> *)headerFields
-{
+- (void)setAllHTTPHeaderFields:(NSDictionary<NSString *, NSString *> *)headerFields {
     [headerFields enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if ( [key isKindOfClass:[NSString class]] && [obj isKindOfClass:[NSString class]] ) {
             [self setValue:obj forHTTPHeaderField:key];

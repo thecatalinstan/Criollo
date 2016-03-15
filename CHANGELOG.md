@@ -6,9 +6,20 @@ This file includes all notable changes to Criollo.
 
 ---
 
-## [0.1.10](https://github.com/thecatalinstan/Criollo/releases/tag/0.1.10) (03/13/2016)
+## [0.1.11](https://github.com/thecatalinstan/Criollo/releases/tag/0.1.11) (03/15/2016)
 
-**Released on Sunday, March 14, 2016**. 
+**Released on Tuesday, March 15, 2016**. 
+
+### Fixed
+
+* Potential crash when `CRConnection` is deallocated. [`a052003`](https://github.com/thecatalinstan/Criollo/commit/a05200328e98c81d1455a4536cc9c832518c68af)
+* `response.HTTPCookie` dictionary was not initialized so no cookies were being sent. [`809334a`](https://github.com/thecatalinstan/Criollo/commit/809334acf0ec3ad9f5fe48e62daf7200e92ea4fe)
+* `CRViewController` does not set `Ccontent-length` header. This is temoporary. [`11c2236`](https://github.com/thecatalinstan/Criollo/commit/11c22365c29efd96787302d4e65a5eec8cc303bb)
+
+
+## [0.1.10](https://github.com/thecatalinstan/Criollo/releases/tag/0.1.10) (03/14/2016)
+
+**Released on Monday, March 14, 2016**. 
 
 ### Added
 
@@ -50,5 +61,5 @@ This file includes all notable changes to Criollo.
 **Released on Monday, March 7, 2016**. This is the first stable and real-world-ready release.
 
 
- 
+
 
