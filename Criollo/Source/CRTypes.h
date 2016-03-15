@@ -63,6 +63,10 @@ typedef NS_ENUM(NSUInteger, CRHTTPMethod) {
      */
     CRHTTPMethodOptions,
     /**
+     *  The HEAD HTTP request method. (HEAD)
+     */
+    CRHTTPMethodHead,
+    /**
      *  An abstraction for all/any HTTP request method. (ALL)
      */
     CRHTTPMethodAll,
