@@ -16,7 +16,7 @@
 @interface CRResponse : CRMessage
 
 NS_ASSUME_NONNULL_BEGIN
-@property (nonatomic, weak, nullable) CRConnection *connection;
+@property (nonatomic, strong, nullable) CRConnection *connection;
 @property (nonatomic, weak, nullable) CRRequest *request;
 
 @property (nonatomic, readonly) NSUInteger statusCode;

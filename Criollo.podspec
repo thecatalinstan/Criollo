@@ -1,19 +1,12 @@
 Pod::Spec.new do |s|
 
-  s.name         =  "Criollo"
-  s.version      =  "0.1.9"
-  s.license      =  { :type => "public domain", :text => <<-LICENSE
+  s.name                    =  "Criollo"
+  s.version                 =  "0.1.11"
+  s.license                 =  "MIT"
 
-Public Domain License
+  s.summary                 =  "A powerful Cocoa based web application framework for OS X and iOS."
 
-The Criollo project is in the public domain.
-Updated and maintained by Cătălin Stan.
-                    LICENSE
-                    }
-
-  s.summary      =  "A powerful Cocoa based web application framework for OS X and iOS."
-
-  s.homepage                =  "https://github.com/thecatalinstan/Criollo"
+  s.homepage                =  "https://criollo.io/"
   s.author                  =   { "Cătălin Stan" => "catalin.stan@me.com" }
   s.social_media_url        =   "http://twitter.com/criolloio"
 

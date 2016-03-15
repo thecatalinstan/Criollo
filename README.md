@@ -4,18 +4,19 @@
 
 #### A powerful Cocoa based web application framework for OS X and iOS.
 
-[![Version Status](https://img.shields.io/cocoapods/v/Criollo.svg?style=flat)](http://cocoadocs.org/docsets/Criollo)  [![Platform](http://img.shields.io/cocoapods/p/Criollo.svg?style=flat)](http://cocoapods.org/?q=Criollo) [![license Public Domain](https://img.shields.io/badge/license-Public%20Domain-orange.svg?style=flat)](https://en.wikipedia.org/wiki/Public_domain) [![Twitter](https://img.shields.io/badge/twitter-@Criolloio-orange.svg?style=flat)](http://twitter.com/Criolloio)
+[![Version Status](https://img.shields.io/cocoapods/v/Criollo.svg?style=flat)](http://cocoadocs.org/docsets/Criollo)  [![Platform](http://img.shields.io/cocoapods/p/Criollo.svg?style=flat)](http://cocoapods.org/?q=Criollo) [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+ [![MIT License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat)](https://opensource.org/licenses/MIT) [![Twitter](https://img.shields.io/badge/twitter-@Criolloio-orange.svg?style=flat)](http://twitter.com/Criolloio)
 
 
 
-Criollo helps create standalone web apps that deliver content directly over HTTP or FastCGI. You can write code in Objective-C or Swift. And you can use technologies you know and love: Grand Central Dispatch, NSURLSession, CoreImage and many more. 
+Criollo helps create really fast standalone web apps that deliver content directly over HTTP or FastCGI. You can write code in Objective-C or Swift. And you can use technologies you know and love: Grand Central Dispatch, NSURLSession, CoreImage and many more. 
 
 It's as easy as this:
 
 ```objective-c
 CRServer* server = [[CRHTTPServer alloc] init];
 [server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-    [response sendString:@"Hello world!"];
+    [response send:@"Hello world!"];
 } forPath:@"/"];
 [server startListening];
 ```
@@ -25,7 +26,7 @@ and in Swift:
 ```swift
 let server:CRServer = CRHTTPServer()
 server.addBlock({ (request:CRRequest, response:CRResponse, completionHandler:CRRouteCompletionBlock) -> Void in
-	response.sendString("Hello world!")
+	response.send("Hello world!")
 }, forPath: "/")
 server.startListening()
 ```
@@ -56,10 +57,18 @@ The preferred way of installing Criollo is through [CocoaPods](http://cocoapods.
 ### Installing with CocoaPods
 
 1. Create the Podfile if you don’t already have one. You can do so by running `pod init` in the folder of the project.
-2. Add Criollo to your Podfile. `pod 'Criollo', '~> 0.1.7’`
+2. Add Criollo to your Podfile. `pod 'Criollo', '~> 0.1’`
 3. Run `pod install`
 
 Please note that Criollo will download [CocoaAsyncSocket](https://github.com/robbiehanson/CocoaAsyncSocket) as a dependency.
+
+### Cloning the repo
+
+Criollo uses [CocoaAsyncSocket](https://github.com/robbiehanson/CocoaAsyncSocket) which is included as a git submodule
+
+```bashh
+git clone --recursive https://github.com/thecatalinstan/Criollo.git
+```
 
 ## Work in Progress
 
