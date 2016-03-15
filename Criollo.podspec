@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
 
   s.summary                 =  "A powerful Cocoa based web application framework for OS X and iOS."
 
-  s.homepage                =  "https://github.com/thecatalinstan/Criollo"
+  s.homepage                =  "https://criollo.io/"
   s.author                  =   { "Cătălin Stan" => "catalin.stan@me.com" }
   s.social_media_url        =   "http://twitter.com/criolloio"
 
