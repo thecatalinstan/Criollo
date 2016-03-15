@@ -128,9 +128,9 @@ NS_ASSUME_NONNULL_END
         [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
 
         NSString* output = [self presentViewControllerWithRequest:request response:response];
-        if ( ![response valueForHTTPHeaderField:@"Content-Length"] ) {
-            [response setValue:@(output.length).stringValue forHTTPHeaderField:@"Content-Length"];
-        }
+//        if ( ![response valueForHTTPHeaderField:@"Content-Length"] ) {
+//            [response setValue:@(output.length).stringValue forHTTPHeaderField:@"Content-Length"];
+//        }
 
         if ( self.shouldFinishResponse ) {
             [response sendString:output];
