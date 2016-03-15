@@ -6,6 +6,15 @@ This file includes all notable changes to Criollo.
 
 ---
 
+## [0.1.12](https://github.com/thecatalinstan/Criollo/releases/tag/0.1.12) (03/15/2016)
+
+**Released on Tuesday, March 15, 2016**. 
+
+### Fixed
+
+* Missing support for the `HEAD` HTTP request method. [`dbdbe30`](https://github.com/thecatalinstan/Criollo/commit/dbdbe3047d9d374f9ef69869b1903876cb67dab8)
+
+
 ## [0.1.11](https://github.com/thecatalinstan/Criollo/releases/tag/0.1.11) (03/15/2016)
 
 **Released on Tuesday, March 15, 2016**. 

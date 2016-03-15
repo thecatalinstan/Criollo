@@ -15,7 +15,7 @@ It's as easy as this:
 
 ```objective-c
 CRServer* server = [[CRHTTPServer alloc] init];
-[server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+[server addBlock:^(CRRequest * request, CRResponse * response, CRRouteCompletionBlock completionHandler) {
     [response send:@"Hello world!"];
 } forPath:@"/"];
 [server startListening];
@@ -25,7 +25,7 @@ and in Swift:
 
 ```swift
 let server:CRServer = CRHTTPServer()
-server.addBlock({ (request:CRRequest, response:CRResponse, completionHandler:CRRouteCompletionBlock) -> Void in
+server.addBlock({ (request, response, completionHandler) -> Void in
 	response.send("Hello world!")
 }, forPath: "/")
 server.startListening()

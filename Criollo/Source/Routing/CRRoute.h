@@ -13,9 +13,9 @@
 
 @class CRRequest, CRResponse;
 
-@interface CRRoute : NSObject
-
 NS_ASSUME_NONNULL_BEGIN
+
+@interface CRRoute : NSObject
 
 @property (nonatomic, strong) CRRouteBlock block;
 
