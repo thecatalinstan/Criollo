@@ -1,0 +1,9 @@
+platform :osx, '10.9'
+use_frameworks!
+
+target 'HelloWorld' do
+
+	pod 'Criollo', '~> 0.1.0'
+
+end
+

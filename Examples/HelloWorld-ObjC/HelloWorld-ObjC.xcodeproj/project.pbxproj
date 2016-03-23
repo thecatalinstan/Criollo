@@ -13,35 +13,9 @@
 		ADD931F11C6A0DEE005B98FD /* MultipartViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = ADD931F01C6A0DEE005B98FD /* MultipartViewController.html */; };
 		ADE3DDA91BFE003900844DC9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE3DDA81BFE003900844DC9 /* AppDelegate.m */; };
 		ADE3DDAC1BFE003900844DC9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE3DDAB1BFE003900844DC9 /* main.m */; };
-		ADE3DDC11BFE00EB00844DC9 /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADE3DDBE1BFE00DD00844DC9 /* Criollo.framework */; };
-		ADE3DDC21BFE00EB00844DC9 /* Criollo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ADE3DDBE1BFE00DD00844DC9 /* Criollo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		ADE3DDCB1BFE055100844DC9 /* utils.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE3DDCA1BFE055100844DC9 /* utils.m */; };
 		ADE99FC01C6B83500080B1FA /* style.css in Copy Public Resources */ = {isa = PBXBuildFile; fileRef = ADE99FBB1C6B82850080B1FA /* style.css */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		ADE3DDBD1BFE00DD00844DC9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ADE3DDB81BFE00DD00844DC9 /* Criollo.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = ADEDB3761AEFC0B000A26AF1;
-			remoteInfo = Criollo;
-		};
-		ADE3DDBF1BFE00DD00844DC9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ADE3DDB81BFE00DD00844DC9 /* Criollo.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = AD5FFFCC1BF0024D00A57FE9;
-			remoteInfo = CriolloiOS;
-		};
-		ADE3DDC31BFE00EB00844DC9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ADE3DDB81BFE00DD00844DC9 /* Criollo.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = ADEDB3751AEFC0B000A26AF1;
-			remoteInfo = Criollo;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		ADE3DDC51BFE00EB00844DC9 /* Embed Frameworks */ = {
@@ -50,7 +24,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				ADE3DDC21BFE00EB00844DC9 /* Criollo.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -80,7 +53,6 @@
 		ADE3DDA81BFE003900844DC9 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		ADE3DDAB1BFE003900844DC9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		ADE3DDB21BFE003900844DC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ADE3DDB81BFE00DD00844DC9 /* Criollo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Criollo.xcodeproj; path = ../../Criollo.xcodeproj; sourceTree = "<group>"; };
 		ADE3DDC91BFE055100844DC9 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		ADE3DDCA1BFE055100844DC9 /* utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = utils.m; sourceTree = "<group>"; };
 		ADE99FBB1C6B82850080B1FA /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
@@ -91,7 +63,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADE3DDC11BFE00EB00844DC9 /* Criollo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,7 +72,6 @@
 		ADE3DD9B1BFE003900844DC9 = {
 			isa = PBXGroup;
 			children = (
-				ADE3DDB81BFE00DD00844DC9 /* Criollo.xcodeproj */,
 				ADE3DDA61BFE003900844DC9 /* HelloWorld-ObjC */,
 				ADE3DDA51BFE003900844DC9 /* Products */,
 			);
@@ -135,15 +105,6 @@
 			path = "HelloWorld-ObjC";
 			sourceTree = "<group>";
 		};
-		ADE3DDB91BFE00DD00844DC9 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				ADE3DDBE1BFE00DD00844DC9 /* Criollo.framework */,
-				ADE3DDC01BFE00DD00844DC9 /* CriolloiOS.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		ADE99FBF1C6B82F10080B1FA /* Public */ = {
 			isa = PBXGroup;
 			children = (
@@ -168,7 +129,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				ADE3DDC41BFE00EB00844DC9 /* PBXTargetDependency */,
 			);
 			name = "HelloWorld-ObjC";
 			productName = "HelloWorld-ObjC";
@@ -200,35 +160,12 @@
 			mainGroup = ADE3DD9B1BFE003900844DC9;
 			productRefGroup = ADE3DDA51BFE003900844DC9 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = ADE3DDB91BFE00DD00844DC9 /* Products */;
-					ProjectRef = ADE3DDB81BFE00DD00844DC9 /* Criollo.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				ADE3DDA31BFE003900844DC9 /* HelloWorld-ObjC */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		ADE3DDBE1BFE00DD00844DC9 /* Criollo.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Criollo.framework;
-			remoteRef = ADE3DDBD1BFE00DD00844DC9 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		ADE3DDC01BFE00DD00844DC9 /* CriolloiOS.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = CriolloiOS.framework;
-			remoteRef = ADE3DDBF1BFE00DD00844DC9 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		ADE3DDA21BFE003900844DC9 /* Resources */ = {
@@ -256,14 +193,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		ADE3DDC41BFE00EB00844DC9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Criollo;
-			targetProxy = ADE3DDC31BFE00EB00844DC9 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		ADE3DDB31BFE003900844DC9 /* Debug */ = {

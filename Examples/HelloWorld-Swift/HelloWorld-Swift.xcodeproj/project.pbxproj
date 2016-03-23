@@ -9,37 +9,11 @@
 /* Begin PBXBuildFile section */
 		ADA0B5DA1C03E52C009259C5 /* HelloWorldViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = ADA0B5D91C03E52C009259C5 /* HelloWorldViewController.html */; };
 		ADA0B5DD1C03E55E009259C5 /* HelloWorldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0B5DC1C03E55E009259C5 /* HelloWorldViewController.swift */; };
-		ADAEE9B51BFA7AA00034819C /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D71BF0FF0200DFCF6B /* Criollo.framework */; };
-		ADAEE9B61BFA7AA00034819C /* Criollo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D71BF0FF0200DFCF6B /* Criollo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		ADAEE9BE1BFA80630034819C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD57A6F81BFA6E5300815942 /* AppDelegate.swift */; };
 		ADAEE9BF1BFA80670034819C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF1D88E1BFA6F17002CCFD6 /* main.swift */; };
 		ADD8F6DE1C6CCE37004DDF54 /* style.css in Public Resources */ = {isa = PBXBuildFile; fileRef = ADD8F6DA1C6CCD68004DDF54 /* style.css */; };
 		ADDAE6501BFCD81000E2A901 /* utils.m in Sources */ = {isa = PBXBuildFile; fileRef = ADDAE64F1BFCD81000E2A901 /* utils.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		ADAEE9B71BFA7AA00034819C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = ADEDB3751AEFC0B000A26AF1;
-			remoteInfo = Criollo;
-		};
-		ADC331D61BF0FF0200DFCF6B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = ADEDB3761AEFC0B000A26AF1;
-			remoteInfo = Criollo;
-		};
-		ADC331D81BF0FF0200DFCF6B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = AD5FFFCC1BF0024D00A57FE9;
-			remoteInfo = CriolloiOS;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		ADAEE9B91BFA7AA00034819C /* Embed Frameworks */ = {
@@ -48,7 +22,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				ADAEE9B61BFA7AA00034819C /* Criollo.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -72,7 +45,6 @@
 		ADA0B5D91C03E52C009259C5 /* HelloWorldViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = HelloWorldViewController.html; sourceTree = "<group>"; };
 		ADA0B5DC1C03E55E009259C5 /* HelloWorldViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelloWorldViewController.swift; sourceTree = "<group>"; };
 		ADAEE9A81BFA7A4B0034819C /* HelloWorld-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HelloWorld-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Criollo.xcodeproj; path = ../../Criollo.xcodeproj; sourceTree = "<group>"; };
 		ADD8F6DA1C6CCD68004DDF54 /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
 		ADDAE64E1BFCD81000E2A901 /* HelloWorld-Swift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HelloWorld-Swift-Bridging-Header.h"; sourceTree = "<group>"; };
 		ADDAE64F1BFCD81000E2A901 /* utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = utils.m; sourceTree = "<group>"; };
@@ -84,7 +56,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADAEE9B51BFA7AA00034819C /* Criollo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,19 +80,9 @@
 		ADC331CA1BF0FEE300DFCF6B = {
 			isa = PBXGroup;
 			children = (
-				ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */,
 				AD57A6F71BFA6E5300815942 /* HelloWorld-Swift */,
 				ADC331DF1BF0FF4100DFCF6B /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		ADC331D21BF0FF0200DFCF6B /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				ADC331D71BF0FF0200DFCF6B /* Criollo.framework */,
-				ADC331D91BF0FF0200DFCF6B /* CriolloiOS.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		ADC331DF1BF0FF4100DFCF6B /* Products */ = {
@@ -156,7 +117,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				ADAEE9B81BFA7AA00034819C /* PBXTargetDependency */,
 			);
 			name = "HelloWorld-Swift";
 			productName = "HelloWorld-Swift";
@@ -188,35 +148,12 @@
 			mainGroup = ADC331CA1BF0FEE300DFCF6B;
 			productRefGroup = ADC331DF1BF0FF4100DFCF6B /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = ADC331D21BF0FF0200DFCF6B /* Products */;
-					ProjectRef = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				ADAEE9A71BFA7A4B0034819C /* HelloWorld-Swift */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		ADC331D71BF0FF0200DFCF6B /* Criollo.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Criollo.framework;
-			remoteRef = ADC331D61BF0FF0200DFCF6B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		ADC331D91BF0FF0200DFCF6B /* CriolloiOS.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = CriolloiOS.framework;
-			remoteRef = ADC331D81BF0FF0200DFCF6B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		ADAEE9A61BFA7A4B0034819C /* Resources */ = {
@@ -242,14 +179,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		ADAEE9B81BFA7AA00034819C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Criollo;
-			targetProxy = ADAEE9B71BFA7AA00034819C /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		ADAEE9B31BFA7A4B0034819C /* Debug */ = {
