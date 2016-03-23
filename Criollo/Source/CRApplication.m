@@ -23,7 +23,7 @@ NSString* const CRApplicationWillTerminateNotification = @"CRApplicationWillTerm
 @class CRApplication;
 CRApplication* CRApp;
 
-static void installSignalHandlers(void) {
+static void CRApplicationInstallSignalHandlers(void) {
     static dispatch_once_t   onceToken;
     static dispatch_source_t signalSource;
 
@@ -45,7 +45,7 @@ static void installSignalHandlers(void) {
 
 int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> delegate) {
     @autoreleasepool {
-        installSignalHandlers();
+        CRApplicationInstallSignalHandlers();
         CRApplication* app = [[CRApplication alloc] initWithDelegate:delegate];
         [app run];
     }
