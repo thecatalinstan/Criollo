@@ -18,5 +18,8 @@ DerivedData
 *.xcuserstate
 
 .DS_Store
+*.swp
+Pods
+Podfile.lock
 Examples/HelloWorld/HelloWorld.xcworkspace
-Examples/HelloWorld/Pods
+Examples/HelloWorld-ObjC/HelloWorld-ObjC.xcworkspace
