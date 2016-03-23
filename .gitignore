@@ -21,5 +21,4 @@ DerivedData
 *.swp
 Pods
 Podfile.lock
-Examples/HelloWorld/HelloWorld.xcworkspace
-Examples/HelloWorld-ObjC/HelloWorld-ObjC.xcworkspace
+HelloWorld*.xcworkspace
