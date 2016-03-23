@@ -145,6 +145,16 @@
 		ADEDB3AA1AEFCC8B00A26AF1 /* NSDate+RFC1123.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB35F1AEFBD8800A26AF1 /* NSDate+RFC1123.h */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		ADC1A5D81CA30F4A009A4A19 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ADC1A5D41CA30F49009A4A19 /* CriolloApp.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = ADC1A5C01CA30F49009A4A19;
+			remoteInfo = CriolloApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		AD0BA9901C961898005206A1 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		AD11F4F61C95A81F007DC2FF /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
@@ -210,6 +220,7 @@
 		ADADAB5E1BEEF28E000FBE6B /* CRRoute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRoute.m; sourceTree = "<group>"; };
 		ADB692FE1BE53FD400656BEC /* CRFCGIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFCGIRequest.h; sourceTree = "<group>"; };
 		ADB692FF1BE53FD400656BEC /* CRFCGIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRFCGIRequest.m; sourceTree = "<group>"; };
+		ADC1A5D41CA30F49009A4A19 /* CriolloApp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CriolloApp.xcodeproj; path = CriolloApp/CriolloApp.xcodeproj; sourceTree = "<group>"; };
 		ADD2B60A1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSHTTPCookie+Criollo.h"; sourceTree = "<group>"; };
 		ADD2B60B1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSHTTPCookie+Criollo.m"; sourceTree = "<group>"; };
 		ADE99FB51C6B40E10080B1FA /* CRStaticDirectoryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRStaticDirectoryManager.h; sourceTree = "<group>"; };
@@ -306,9 +317,18 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		ADC1A5D51CA30F49009A4A19 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				ADC1A5D91CA30F4A009A4A19 /* CriolloApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		ADEDB3471AEFBCF700A26AF1 = {
 			isa = PBXGroup;
 			children = (
+				ADC1A5D41CA30F49009A4A19 /* CriolloApp.xcodeproj */,
 				ADEDB3781AEFC0B000A26AF1 /* Criollo */,
 				ADEDB3771AEFC0B000A26AF1 /* Products */,
 			);
@@ -562,6 +582,12 @@
 			mainGroup = ADEDB3471AEFBCF700A26AF1;
 			productRefGroup = ADEDB3771AEFC0B000A26AF1 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = ADC1A5D51CA30F49009A4A19 /* Products */;
+					ProjectRef = ADC1A5D41CA30F49009A4A19 /* CriolloApp.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				ADEDB3751AEFC0B000A26AF1 /* Criollo */,
@@ -569,6 +595,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		ADC1A5D91CA30F4A009A4A19 /* CriolloApp.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = CriolloApp.app;
+			remoteRef = ADC1A5D81CA30F4A009A4A19 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		AD5FFFCA1BF0024D00A57FE9 /* Resources */ = {
