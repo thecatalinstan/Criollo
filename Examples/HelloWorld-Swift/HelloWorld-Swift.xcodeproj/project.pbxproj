@@ -1,383 +1,766 @@
-// !$*UTF8*$!
-{
-	archiveVersion = 1;
-	classes = {
-	};
-	objectVersion = 46;
-	objects = {
-
-/* Begin PBXBuildFile section */
-		ADA0B5DA1C03E52C009259C5 /* HelloWorldViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = ADA0B5D91C03E52C009259C5 /* HelloWorldViewController.html */; };
-		ADA0B5DD1C03E55E009259C5 /* HelloWorldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA0B5DC1C03E55E009259C5 /* HelloWorldViewController.swift */; };
-		ADAEE9B51BFA7AA00034819C /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D71BF0FF0200DFCF6B /* Criollo.framework */; };
-		ADAEE9B61BFA7AA00034819C /* Criollo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ADC331D71BF0FF0200DFCF6B /* Criollo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		ADAEE9BE1BFA80630034819C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD57A6F81BFA6E5300815942 /* AppDelegate.swift */; };
-		ADAEE9BF1BFA80670034819C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF1D88E1BFA6F17002CCFD6 /* main.swift */; };
-		ADD8F6DE1C6CCE37004DDF54 /* style.css in Public Resources */ = {isa = PBXBuildFile; fileRef = ADD8F6DA1C6CCD68004DDF54 /* style.css */; };
-		ADDAE6501BFCD81000E2A901 /* utils.m in Sources */ = {isa = PBXBuildFile; fileRef = ADDAE64F1BFCD81000E2A901 /* utils.m */; };
-/* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		ADAEE9B71BFA7AA00034819C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = ADEDB3751AEFC0B000A26AF1;
-			remoteInfo = Criollo;
-		};
-		ADC331D61BF0FF0200DFCF6B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = ADEDB3761AEFC0B000A26AF1;
-			remoteInfo = Criollo;
-		};
-		ADC331D81BF0FF0200DFCF6B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = AD5FFFCC1BF0024D00A57FE9;
-			remoteInfo = CriolloiOS;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		ADAEE9B91BFA7AA00034819C /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				ADAEE9B61BFA7AA00034819C /* Criollo.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		ADD8F6DD1C6CCE1D004DDF54 /* Public Resources */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = Public;
-			dstSubfolderSpec = 7;
-			files = (
-				ADD8F6DE1C6CCE37004DDF54 /* style.css in Public Resources */,
-			);
-			name = "Public Resources";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
-/* Begin PBXFileReference section */
-		AD57A6F81BFA6E5300815942 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		AD57A6FF1BFA6E5300815942 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ADA0B5D91C03E52C009259C5 /* HelloWorldViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = HelloWorldViewController.html; sourceTree = "<group>"; };
-		ADA0B5DC1C03E55E009259C5 /* HelloWorldViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelloWorldViewController.swift; sourceTree = "<group>"; };
-		ADAEE9A81BFA7A4B0034819C /* HelloWorld-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HelloWorld-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Criollo.xcodeproj; path = ../../Criollo.xcodeproj; sourceTree = "<group>"; };
-		ADD8F6DA1C6CCD68004DDF54 /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
-		ADDAE64E1BFCD81000E2A901 /* HelloWorld-Swift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HelloWorld-Swift-Bridging-Header.h"; sourceTree = "<group>"; };
-		ADDAE64F1BFCD81000E2A901 /* utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = utils.m; sourceTree = "<group>"; };
-		ADF1D88E1BFA6F17002CCFD6 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-/* End PBXFileReference section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		ADAEE9A51BFA7A4B0034819C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				ADAEE9B51BFA7AA00034819C /* Criollo.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
-
-/* Begin PBXGroup section */
-		AD57A6F71BFA6E5300815942 /* HelloWorld-Swift */ = {
-			isa = PBXGroup;
-			children = (
-				AD57A6F81BFA6E5300815942 /* AppDelegate.swift */,
-				ADA0B5DC1C03E55E009259C5 /* HelloWorldViewController.swift */,
-				ADA0B5D91C03E52C009259C5 /* HelloWorldViewController.html */,
-				ADF1D88E1BFA6F17002CCFD6 /* main.swift */,
-				AD57A6FF1BFA6E5300815942 /* Info.plist */,
-				ADDAE64F1BFCD81000E2A901 /* utils.m */,
-				ADDAE64E1BFCD81000E2A901 /* HelloWorld-Swift-Bridging-Header.h */,
-				ADD8F6D91C6CCD68004DDF54 /* Public */,
-			);
-			path = "HelloWorld-Swift";
-			sourceTree = "<group>";
-		};
-		ADC331CA1BF0FEE300DFCF6B = {
-			isa = PBXGroup;
-			children = (
-				ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */,
-				AD57A6F71BFA6E5300815942 /* HelloWorld-Swift */,
-				ADC331DF1BF0FF4100DFCF6B /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		ADC331D21BF0FF0200DFCF6B /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				ADC331D71BF0FF0200DFCF6B /* Criollo.framework */,
-				ADC331D91BF0FF0200DFCF6B /* CriolloiOS.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		ADC331DF1BF0FF4100DFCF6B /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				ADAEE9A81BFA7A4B0034819C /* HelloWorld-Swift.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		ADD8F6D91C6CCD68004DDF54 /* Public */ = {
-			isa = PBXGroup;
-			children = (
-				ADD8F6DA1C6CCD68004DDF54 /* style.css */,
-			);
-			path = Public;
-			sourceTree = "<group>";
-		};
-/* End PBXGroup section */
-
-/* Begin PBXNativeTarget section */
-		ADAEE9A71BFA7A4B0034819C /* HelloWorld-Swift */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = ADAEE9B21BFA7A4B0034819C /* Build configuration list for PBXNativeTarget "HelloWorld-Swift" */;
-			buildPhases = (
-				ADAEE9A41BFA7A4B0034819C /* Sources */,
-				ADAEE9A51BFA7A4B0034819C /* Frameworks */,
-				ADAEE9A61BFA7A4B0034819C /* Resources */,
-				ADAEE9B91BFA7AA00034819C /* Embed Frameworks */,
-				ADD8F6DD1C6CCE1D004DDF54 /* Public Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				ADAEE9B81BFA7AA00034819C /* PBXTargetDependency */,
-			);
-			name = "HelloWorld-Swift";
-			productName = "HelloWorld-Swift";
-			productReference = ADAEE9A81BFA7A4B0034819C /* HelloWorld-Swift.app */;
-			productType = "com.apple.product-type.application";
-		};
-/* End PBXNativeTarget section */
-
-/* Begin PBXProject section */
-		ADC331CB1BF0FEE300DFCF6B /* Project object */ = {
-			isa = PBXProject;
-			attributes = {
-				LastSwiftUpdateCheck = 0710;
-				LastUpgradeCheck = 0710;
-				TargetAttributes = {
-					ADAEE9A71BFA7A4B0034819C = {
-						CreatedOnToolsVersion = 7.1.1;
-					};
-				};
-			};
-			buildConfigurationList = ADC331CE1BF0FEE300DFCF6B /* Build configuration list for PBXProject "HelloWorld-Swift" */;
-			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
-			hasScannedForEncodings = 0;
-			knownRegions = (
-				en,
-				Base,
-			);
-			mainGroup = ADC331CA1BF0FEE300DFCF6B;
-			productRefGroup = ADC331DF1BF0FF4100DFCF6B /* Products */;
-			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = ADC331D21BF0FF0200DFCF6B /* Products */;
-					ProjectRef = ADC331D11BF0FF0200DFCF6B /* Criollo.xcodeproj */;
-				},
-			);
-			projectRoot = "";
-			targets = (
-				ADAEE9A71BFA7A4B0034819C /* HelloWorld-Swift */,
-			);
-		};
-/* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		ADC331D71BF0FF0200DFCF6B /* Criollo.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Criollo.framework;
-			remoteRef = ADC331D61BF0FF0200DFCF6B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		ADC331D91BF0FF0200DFCF6B /* CriolloiOS.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = CriolloiOS.framework;
-			remoteRef = ADC331D81BF0FF0200DFCF6B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
-
-/* Begin PBXResourcesBuildPhase section */
-		ADAEE9A61BFA7A4B0034819C /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				ADA0B5DA1C03E52C009259C5 /* HelloWorldViewController.html in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
-
-/* Begin PBXSourcesBuildPhase section */
-		ADAEE9A41BFA7A4B0034819C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				ADA0B5DD1C03E55E009259C5 /* HelloWorldViewController.swift in Sources */,
-				ADAEE9BF1BFA80670034819C /* main.swift in Sources */,
-				ADDAE6501BFCD81000E2A901 /* utils.m in Sources */,
-				ADAEE9BE1BFA80630034819C /* AppDelegate.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		ADAEE9B81BFA7AA00034819C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Criollo;
-			targetProxy = ADAEE9B71BFA7AA00034819C /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
-/* Begin XCBuildConfiguration section */
-		ADAEE9B31BFA7A4B0034819C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "HelloWorld-Swift/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.criollo.examples.HelloWorld-Swift";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "HelloWorld-Swift/HelloWorld-Swift-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-			};
-			name = Debug;
-		};
-		ADAEE9B41BFA7A4B0034819C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "HelloWorld-Swift/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.criollo.examples.HelloWorld-Swift";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "HelloWorld-Swift/HelloWorld-Swift-Bridging-Header.h";
-			};
-			name = Release;
-		};
-		ADC331CF1BF0FEE300DFCF6B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ENABLE_TESTABILITY = YES;
-				ONLY_ACTIVE_ARCH = YES;
-			};
-			name = Debug;
-		};
-		ADC331D01BF0FEE300DFCF6B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-			};
-			name = Release;
-		};
-/* End XCBuildConfiguration section */
-
-/* Begin XCConfigurationList section */
-		ADAEE9B21BFA7A4B0034819C /* Build configuration list for PBXNativeTarget "HelloWorld-Swift" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				ADAEE9B31BFA7A4B0034819C /* Debug */,
-				ADAEE9B41BFA7A4B0034819C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		ADC331CE1BF0FEE300DFCF6B /* Build configuration list for PBXProject "HelloWorld-Swift" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				ADC331CF1BF0FEE300DFCF6B /* Debug */,
-				ADC331D01BF0FEE300DFCF6B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-/* End XCConfigurationList section */
-	};
-	rootObject = ADC331CB1BF0FEE300DFCF6B /* Project object */;
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>archiveVersion</key>
+	<string>1</string>
+	<key>classes</key>
+	<dict/>
+	<key>objectVersion</key>
+	<string>46</string>
+	<key>objects</key>
+	<dict>
+		<key>0C1077D453B41BDBF4DAF312</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>name</key>
+			<string>Pods-HelloWorld-Swift.release.xcconfig</string>
+			<key>path</key>
+			<string>Pods/Target Support Files/Pods-HelloWorld-Swift/Pods-HelloWorld-Swift.release.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>1C2A3414820E65D18F7636FE</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>wrapper.framework</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>Pods_HelloWorld_Swift.framework</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>4F0A843B3512ED718F899704</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>73CFBA4DF1C74C1642F73A2C</string>
+				<string>0C1077D453B41BDBF4DAF312</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Pods</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>5CA486A64F5DE9AA1DD169F2</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>Embed Pods Frameworks</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld-Swift/Pods-HelloWorld-Swift-frameworks.sh"
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
+		</dict>
+		<key>6EC7292321231801059ED678</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>Check Pods Manifest.lock</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" &gt; /dev/null
+if [[ $? != 0 ]] ; then
+    cat &lt;&lt; EOM
+error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
+EOM
+    exit 1
+fi
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
+		</dict>
+		<key>73CFBA4DF1C74C1642F73A2C</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>name</key>
+			<string>Pods-HelloWorld-Swift.debug.xcconfig</string>
+			<key>path</key>
+			<string>Pods/Target Support Files/Pods-HelloWorld-Swift/Pods-HelloWorld-Swift.debug.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>AD57A6F71BFA6E5300815942</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>AD57A6F81BFA6E5300815942</string>
+				<string>ADA0B5DC1C03E55E009259C5</string>
+				<string>ADA0B5D91C03E52C009259C5</string>
+				<string>ADF1D88E1BFA6F17002CCFD6</string>
+				<string>AD57A6FF1BFA6E5300815942</string>
+				<string>ADDAE64F1BFCD81000E2A901</string>
+				<string>ADDAE64E1BFCD81000E2A901</string>
+				<string>ADD8F6D91C6CCD68004DDF54</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>path</key>
+			<string>HelloWorld-Swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>AD57A6F81BFA6E5300815942</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>AppDelegate.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>AD57A6FF1BFA6E5300815942</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.plist.xml</string>
+			<key>path</key>
+			<string>Info.plist</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>ADA0B5D91C03E52C009259C5</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.html</string>
+			<key>path</key>
+			<string>HelloWorldViewController.html</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>ADA0B5DA1C03E52C009259C5</key>
+		<dict>
+			<key>fileRef</key>
+			<string>ADA0B5D91C03E52C009259C5</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>ADA0B5DC1C03E55E009259C5</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>HelloWorldViewController.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>ADA0B5DD1C03E55E009259C5</key>
+		<dict>
+			<key>fileRef</key>
+			<string>ADA0B5DC1C03E55E009259C5</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>ADAEE9A41BFA7A4B0034819C</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>ADA0B5DD1C03E55E009259C5</string>
+				<string>ADAEE9BF1BFA80670034819C</string>
+				<string>ADDAE6501BFCD81000E2A901</string>
+				<string>ADAEE9BE1BFA80630034819C</string>
+			</array>
+			<key>isa</key>
+			<string>PBXSourcesBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>ADAEE9A51BFA7A4B0034819C</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>FDF113A5F19BC10B54D42F3F</string>
+			</array>
+			<key>isa</key>
+			<string>PBXFrameworksBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>ADAEE9A61BFA7A4B0034819C</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array>
+				<string>ADA0B5DA1C03E52C009259C5</string>
+			</array>
+			<key>isa</key>
+			<string>PBXResourcesBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>ADAEE9A71BFA7A4B0034819C</key>
+		<dict>
+			<key>buildConfigurationList</key>
+			<string>ADAEE9B21BFA7A4B0034819C</string>
+			<key>buildPhases</key>
+			<array>
+				<string>6EC7292321231801059ED678</string>
+				<string>ADAEE9A41BFA7A4B0034819C</string>
+				<string>ADAEE9A51BFA7A4B0034819C</string>
+				<string>ADAEE9A61BFA7A4B0034819C</string>
+				<string>ADAEE9B91BFA7AA00034819C</string>
+				<string>ADD8F6DD1C6CCE1D004DDF54</string>
+				<string>5CA486A64F5DE9AA1DD169F2</string>
+				<string>FA53E73EF16659676697FB3D</string>
+			</array>
+			<key>buildRules</key>
+			<array/>
+			<key>dependencies</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXNativeTarget</string>
+			<key>name</key>
+			<string>HelloWorld-Swift</string>
+			<key>productName</key>
+			<string>HelloWorld-Swift</string>
+			<key>productReference</key>
+			<string>ADAEE9A81BFA7A4B0034819C</string>
+			<key>productType</key>
+			<string>com.apple.product-type.application</string>
+		</dict>
+		<key>ADAEE9A81BFA7A4B0034819C</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>wrapper.application</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>HelloWorld-Swift.app</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>ADAEE9B21BFA7A4B0034819C</key>
+		<dict>
+			<key>buildConfigurations</key>
+			<array>
+				<string>ADAEE9B31BFA7A4B0034819C</string>
+				<string>ADAEE9B41BFA7A4B0034819C</string>
+			</array>
+			<key>defaultConfigurationIsVisible</key>
+			<string>0</string>
+			<key>defaultConfigurationName</key>
+			<string>Release</string>
+			<key>isa</key>
+			<string>XCConfigurationList</string>
+		</dict>
+		<key>ADAEE9B31BFA7A4B0034819C</key>
+		<dict>
+			<key>baseConfigurationReference</key>
+			<string>73CFBA4DF1C74C1642F73A2C</string>
+			<key>buildSettings</key>
+			<dict>
+				<key>ALWAYS_SEARCH_USER_PATHS</key>
+				<string>NO</string>
+				<key>CLANG_CXX_LANGUAGE_STANDARD</key>
+				<string>gnu++0x</string>
+				<key>CLANG_CXX_LIBRARY</key>
+				<string>libc++</string>
+				<key>CLANG_ENABLE_MODULES</key>
+				<string>YES</string>
+				<key>CLANG_ENABLE_OBJC_ARC</key>
+				<string>YES</string>
+				<key>CLANG_WARN_BOOL_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_CONSTANT_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_DIRECT_OBJC_ISA_USAGE</key>
+				<string>YES_ERROR</string>
+				<key>CLANG_WARN_EMPTY_BODY</key>
+				<string>YES</string>
+				<key>CLANG_WARN_ENUM_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_INT_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_OBJC_ROOT_CLASS</key>
+				<string>YES_ERROR</string>
+				<key>CLANG_WARN_UNREACHABLE_CODE</key>
+				<string>YES</string>
+				<key>CLANG_WARN__DUPLICATE_METHOD_MATCH</key>
+				<string>YES</string>
+				<key>CODE_SIGN_IDENTITY</key>
+				<string>-</string>
+				<key>COMBINE_HIDPI_IMAGES</key>
+				<string>YES</string>
+				<key>COPY_PHASE_STRIP</key>
+				<string>NO</string>
+				<key>DEBUG_INFORMATION_FORMAT</key>
+				<string>dwarf</string>
+				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
+				<string>YES</string>
+				<key>GCC_C_LANGUAGE_STANDARD</key>
+				<string>gnu99</string>
+				<key>GCC_DYNAMIC_NO_PIC</key>
+				<string>NO</string>
+				<key>GCC_NO_COMMON_BLOCKS</key>
+				<string>YES</string>
+				<key>GCC_OPTIMIZATION_LEVEL</key>
+				<string>0</string>
+				<key>GCC_PREPROCESSOR_DEFINITIONS</key>
+				<array>
+					<string>DEBUG=1</string>
+					<string>$(inherited)</string>
+				</array>
+				<key>GCC_WARN_64_TO_32_BIT_CONVERSION</key>
+				<string>YES</string>
+				<key>GCC_WARN_ABOUT_RETURN_TYPE</key>
+				<string>YES_ERROR</string>
+				<key>GCC_WARN_UNDECLARED_SELECTOR</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNINITIALIZED_AUTOS</key>
+				<string>YES_AGGRESSIVE</string>
+				<key>GCC_WARN_UNUSED_FUNCTION</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNUSED_VARIABLE</key>
+				<string>YES</string>
+				<key>INFOPLIST_FILE</key>
+				<string>HelloWorld-Swift/Info.plist</string>
+				<key>LD_RUNPATH_SEARCH_PATHS</key>
+				<string>$(inherited) @executable_path/../Frameworks</string>
+				<key>MACOSX_DEPLOYMENT_TARGET</key>
+				<string>10.11</string>
+				<key>MTL_ENABLE_DEBUG_INFO</key>
+				<string>YES</string>
+				<key>PRODUCT_BUNDLE_IDENTIFIER</key>
+				<string>io.criollo.examples.HelloWorld-Swift</string>
+				<key>PRODUCT_NAME</key>
+				<string>$(TARGET_NAME)</string>
+				<key>SDKROOT</key>
+				<string>macosx</string>
+				<key>SWIFT_OBJC_BRIDGING_HEADER</key>
+				<string>HelloWorld-Swift/HelloWorld-Swift-Bridging-Header.h</string>
+				<key>SWIFT_OPTIMIZATION_LEVEL</key>
+				<string>-Onone</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Debug</string>
+		</dict>
+		<key>ADAEE9B41BFA7A4B0034819C</key>
+		<dict>
+			<key>baseConfigurationReference</key>
+			<string>0C1077D453B41BDBF4DAF312</string>
+			<key>buildSettings</key>
+			<dict>
+				<key>ALWAYS_SEARCH_USER_PATHS</key>
+				<string>NO</string>
+				<key>CLANG_CXX_LANGUAGE_STANDARD</key>
+				<string>gnu++0x</string>
+				<key>CLANG_CXX_LIBRARY</key>
+				<string>libc++</string>
+				<key>CLANG_ENABLE_MODULES</key>
+				<string>YES</string>
+				<key>CLANG_ENABLE_OBJC_ARC</key>
+				<string>YES</string>
+				<key>CLANG_WARN_BOOL_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_CONSTANT_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_DIRECT_OBJC_ISA_USAGE</key>
+				<string>YES_ERROR</string>
+				<key>CLANG_WARN_EMPTY_BODY</key>
+				<string>YES</string>
+				<key>CLANG_WARN_ENUM_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_INT_CONVERSION</key>
+				<string>YES</string>
+				<key>CLANG_WARN_OBJC_ROOT_CLASS</key>
+				<string>YES_ERROR</string>
+				<key>CLANG_WARN_UNREACHABLE_CODE</key>
+				<string>YES</string>
+				<key>CLANG_WARN__DUPLICATE_METHOD_MATCH</key>
+				<string>YES</string>
+				<key>CODE_SIGN_IDENTITY</key>
+				<string>-</string>
+				<key>COMBINE_HIDPI_IMAGES</key>
+				<string>YES</string>
+				<key>COPY_PHASE_STRIP</key>
+				<string>NO</string>
+				<key>DEBUG_INFORMATION_FORMAT</key>
+				<string>dwarf-with-dsym</string>
+				<key>ENABLE_NS_ASSERTIONS</key>
+				<string>NO</string>
+				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
+				<string>YES</string>
+				<key>GCC_C_LANGUAGE_STANDARD</key>
+				<string>gnu99</string>
+				<key>GCC_NO_COMMON_BLOCKS</key>
+				<string>YES</string>
+				<key>GCC_WARN_64_TO_32_BIT_CONVERSION</key>
+				<string>YES</string>
+				<key>GCC_WARN_ABOUT_RETURN_TYPE</key>
+				<string>YES_ERROR</string>
+				<key>GCC_WARN_UNDECLARED_SELECTOR</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNINITIALIZED_AUTOS</key>
+				<string>YES_AGGRESSIVE</string>
+				<key>GCC_WARN_UNUSED_FUNCTION</key>
+				<string>YES</string>
+				<key>GCC_WARN_UNUSED_VARIABLE</key>
+				<string>YES</string>
+				<key>INFOPLIST_FILE</key>
+				<string>HelloWorld-Swift/Info.plist</string>
+				<key>LD_RUNPATH_SEARCH_PATHS</key>
+				<string>$(inherited) @executable_path/../Frameworks</string>
+				<key>MACOSX_DEPLOYMENT_TARGET</key>
+				<string>10.11</string>
+				<key>MTL_ENABLE_DEBUG_INFO</key>
+				<string>NO</string>
+				<key>PRODUCT_BUNDLE_IDENTIFIER</key>
+				<string>io.criollo.examples.HelloWorld-Swift</string>
+				<key>PRODUCT_NAME</key>
+				<string>$(TARGET_NAME)</string>
+				<key>SDKROOT</key>
+				<string>macosx</string>
+				<key>SWIFT_OBJC_BRIDGING_HEADER</key>
+				<string>HelloWorld-Swift/HelloWorld-Swift-Bridging-Header.h</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Release</string>
+		</dict>
+		<key>ADAEE9B91BFA7AA00034819C</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>dstPath</key>
+			<string></string>
+			<key>dstSubfolderSpec</key>
+			<string>10</string>
+			<key>files</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXCopyFilesBuildPhase</string>
+			<key>name</key>
+			<string>Embed Frameworks</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>ADAEE9BE1BFA80630034819C</key>
+		<dict>
+			<key>fileRef</key>
+			<string>AD57A6F81BFA6E5300815942</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>ADAEE9BF1BFA80670034819C</key>
+		<dict>
+			<key>fileRef</key>
+			<string>ADF1D88E1BFA6F17002CCFD6</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>ADC331CA1BF0FEE300DFCF6B</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>AD57A6F71BFA6E5300815942</string>
+				<string>ADC331DF1BF0FF4100DFCF6B</string>
+				<string>4F0A843B3512ED718F899704</string>
+				<string>D4F48E10D7880EF4A9DADEBE</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>ADC331CB1BF0FEE300DFCF6B</key>
+		<dict>
+			<key>attributes</key>
+			<dict>
+				<key>LastSwiftUpdateCheck</key>
+				<string>0710</string>
+				<key>LastUpgradeCheck</key>
+				<string>0710</string>
+				<key>TargetAttributes</key>
+				<dict>
+					<key>ADAEE9A71BFA7A4B0034819C</key>
+					<dict>
+						<key>CreatedOnToolsVersion</key>
+						<string>7.1.1</string>
+					</dict>
+				</dict>
+			</dict>
+			<key>buildConfigurationList</key>
+			<string>ADC331CE1BF0FEE300DFCF6B</string>
+			<key>compatibilityVersion</key>
+			<string>Xcode 3.2</string>
+			<key>developmentRegion</key>
+			<string>English</string>
+			<key>hasScannedForEncodings</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXProject</string>
+			<key>knownRegions</key>
+			<array>
+				<string>en</string>
+				<string>Base</string>
+			</array>
+			<key>mainGroup</key>
+			<string>ADC331CA1BF0FEE300DFCF6B</string>
+			<key>productRefGroup</key>
+			<string>ADC331DF1BF0FF4100DFCF6B</string>
+			<key>projectDirPath</key>
+			<string></string>
+			<key>projectReferences</key>
+			<array/>
+			<key>projectRoot</key>
+			<string></string>
+			<key>targets</key>
+			<array>
+				<string>ADAEE9A71BFA7A4B0034819C</string>
+			</array>
+		</dict>
+		<key>ADC331CE1BF0FEE300DFCF6B</key>
+		<dict>
+			<key>buildConfigurations</key>
+			<array>
+				<string>ADC331CF1BF0FEE300DFCF6B</string>
+				<string>ADC331D01BF0FEE300DFCF6B</string>
+			</array>
+			<key>defaultConfigurationIsVisible</key>
+			<string>0</string>
+			<key>defaultConfigurationName</key>
+			<string>Release</string>
+			<key>isa</key>
+			<string>XCConfigurationList</string>
+		</dict>
+		<key>ADC331CF1BF0FEE300DFCF6B</key>
+		<dict>
+			<key>buildSettings</key>
+			<dict>
+				<key>ENABLE_TESTABILITY</key>
+				<string>YES</string>
+				<key>ONLY_ACTIVE_ARCH</key>
+				<string>YES</string>
+			</dict>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Debug</string>
+		</dict>
+		<key>ADC331D01BF0FEE300DFCF6B</key>
+		<dict>
+			<key>buildSettings</key>
+			<dict/>
+			<key>isa</key>
+			<string>XCBuildConfiguration</string>
+			<key>name</key>
+			<string>Release</string>
+		</dict>
+		<key>ADC331DF1BF0FF4100DFCF6B</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>ADAEE9A81BFA7A4B0034819C</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Products</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>ADD8F6D91C6CCD68004DDF54</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>ADD8F6DA1C6CCD68004DDF54</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>path</key>
+			<string>Public</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>ADD8F6DA1C6CCD68004DDF54</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.css</string>
+			<key>path</key>
+			<string>style.css</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>ADD8F6DD1C6CCE1D004DDF54</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>dstPath</key>
+			<string>Public</string>
+			<key>dstSubfolderSpec</key>
+			<string>7</string>
+			<key>files</key>
+			<array>
+				<string>ADD8F6DE1C6CCE37004DDF54</string>
+			</array>
+			<key>isa</key>
+			<string>PBXCopyFilesBuildPhase</string>
+			<key>name</key>
+			<string>Public Resources</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+		</dict>
+		<key>ADD8F6DE1C6CCE37004DDF54</key>
+		<dict>
+			<key>fileRef</key>
+			<string>ADD8F6DA1C6CCD68004DDF54</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>ADDAE64E1BFCD81000E2A901</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>HelloWorld-Swift-Bridging-Header.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>ADDAE64F1BFCD81000E2A901</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>utils.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>ADDAE6501BFCD81000E2A901</key>
+		<dict>
+			<key>fileRef</key>
+			<string>ADDAE64F1BFCD81000E2A901</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>ADF1D88E1BFA6F17002CCFD6</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>main.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>D4F48E10D7880EF4A9DADEBE</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>1C2A3414820E65D18F7636FE</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Frameworks</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>FA53E73EF16659676697FB3D</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>Copy Pods Resources</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld-Swift/Pods-HelloWorld-Swift-resources.sh"
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
+		</dict>
+		<key>FDF113A5F19BC10B54D42F3F</key>
+		<dict>
+			<key>fileRef</key>
+			<string>1C2A3414820E65D18F7636FE</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+	</dict>
+	<key>rootObject</key>
+	<string>ADC331CB1BF0FEE300DFCF6B</string>
+</dict>
+</plist>

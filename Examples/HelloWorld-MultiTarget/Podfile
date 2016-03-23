@@ -1,0 +1,16 @@
+use_frameworks!
+
+target 'HelloWorld' do
+    platform :osx, '10.9'
+    pod 'Criollo', '~> 0.1.0'
+end
+
+target 'HelloWorld-Cocoa' do
+    platform :osx, '10.9'
+    pod 'Criollo', '~> 0.1.0'
+end
+
+target 'HelloWorld-iOS' do
+    platform :ios, '8.0'
+		pod 'Criollo', '~> 0.1.0'
+end

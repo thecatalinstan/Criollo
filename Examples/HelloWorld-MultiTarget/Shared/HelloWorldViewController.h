@@ -7,11 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-#import <CriolloiOS/CriolloiOS.h>
-#else
 #import <Criollo/Criollo.h>
-#endif
 
 @interface HelloWorldViewController : CRViewController
 
