@@ -39,7 +39,9 @@ NS_ASSUME_NONNULL_END
     Class serverClass = isFastCGI ? [CRFCGIServer class] : [CRHTTPServer class];
     self.server = [[serverClass alloc] initWithDelegate:self];
 
-    backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    backgroundQueue = dispatch_queue_create(self.className.UTF8String, DISPATCH_QUEUE_SERIAL);
+    dispatch_set_target_queue(backgroundQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
+
     NSBundle* bundle = [NSBundle mainBundle];
 
     // Add a header that says who we are :)

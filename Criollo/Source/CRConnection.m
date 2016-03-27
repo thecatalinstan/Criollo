@@ -210,10 +210,14 @@ NS_ASSUME_NONNULL_END
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
     switch (tag) {
         case CRConnectionSocketTagSendingResponse: {
-            CRRequest* request = (CRRequest*)self.requests.firstObject;
-            if ( request.bufferedResponseData.length > 0 ) {
-                [self sendDataToSocket:request.bufferedResponseData forRequest:request];
-            }
+            dispatch_async(self.isolationQueue, ^{
+                CRRequest* request = (CRRequest*)self.requests.firstObject;
+                if ( request.bufferedResponseData.length > 0 ) {
+                    dispatch_async(sock.delegateQueue, ^{
+                        [self sendDataToSocket:request.bufferedResponseData forRequest:request];
+                    });
+                }
+            });
         } break;
 
         default:
@@ -222,7 +226,6 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
-    [self.requests removeAllObjects];
     [self.server didCloseConnection:self];
 }
 
