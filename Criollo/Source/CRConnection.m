@@ -226,9 +226,6 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
-    dispatch_async(self.isolationQueue, ^{
-        [self.requests removeAllObjects];
-    });
     [self.server didCloseConnection:self];
 }
 
