@@ -24,8 +24,8 @@
 NS_ASSUME_NONNULL_BEGIN
 @interface CRRequest : CRMessage
 
-@property (nonatomic, strong) CRConnection *connection;
-@property (nonatomic, strong) CRResponse * response;
+@property (nonatomic, weak, nullable) CRConnection *connection;
+@property (nonatomic, strong, nullable) CRResponse * response;
 
 @property (nonatomic, readonly) NSURL * URL;
 @property (nonatomic, readonly) CRHTTPMethod method;
