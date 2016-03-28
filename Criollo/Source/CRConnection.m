@@ -196,7 +196,9 @@ NS_ASSUME_NONNULL_END
 
 - (void)didFinishResponseForRequest:(CRRequest *)request {
     [self.delegate connection:self didFinishRequest:request response:request.response];
-    [self.requests removeObject:request];
+    dispatch_async(self.isolationQueue, ^{
+        [self.requests removeObject:request];
+    });
 }
 
 #pragma mark - State
@@ -211,11 +213,13 @@ NS_ASSUME_NONNULL_END
     switch (tag) {
         case CRConnectionSocketTagSendingResponse: {
             dispatch_async(self.isolationQueue, ^{
-                CRRequest* request = (CRRequest*)self.requests.firstObject;
-                if ( request.bufferedResponseData.length > 0 ) {
-                    dispatch_async(sock.delegateQueue, ^{
-                        [self sendDataToSocket:request.bufferedResponseData forRequest:request];
-                    });
+                if ( self.requests.count > 0 && !self.willDisconnect ) {
+                    CRRequest* request = self.requests.firstObject;
+                    if ( request.bufferedResponseData.length > 0 ) {
+                        dispatch_async(sock.delegateQueue, ^{
+                            [self sendDataToSocket:request.bufferedResponseData forRequest:request];
+                        });
+                    }
                 }
             });
         } break;
