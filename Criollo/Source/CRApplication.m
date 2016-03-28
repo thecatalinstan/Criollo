@@ -19,28 +19,30 @@ NSString* const CRApplicationRunLoopMode = @"NSDefaultRunLoopMode";
 NSString* const CRApplicationWillFinishLaunchingNotification = @"CRApplicationWillFinishLaunchingNotification";
 NSString* const CRApplicationDidFinishLaunchingNotification = @"CRApplicationDidFinishLaunchingNotification";
 NSString* const CRApplicationWillTerminateNotification = @"CRApplicationWillTerminateNotification";
+NSString* const CRApplicationDidReceiveSignalNotification = @"CRApplicationDidReceiveSignal";
 
 @class CRApplication;
 CRApplication* CRApp;
 
 static void CRApplicationInstallSignalHandlers(void) {
-    static dispatch_once_t   onceToken;
-    static dispatch_source_t signalSource;
 
-    dispatch_once(&onceToken, ^{
-        signal(SIGTERM, SIG_IGN);
-
-        signalSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, SIGTERM, 0, dispatch_get_main_queue());
-        assert(signalSource != NULL);
-
+    dispatch_source_t(^installSignalHandler)(int) = ^(int sig){
+        signal(sig, SIG_IGN);
+        dispatch_source_t signalSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, sig, 0, dispatch_get_main_queue());
         dispatch_source_set_event_handler(signalSource, ^{
-            assert([NSThread isMainThread]);
-            [CRApp logErrorFormat: @"Got SIGTERM."];
-            [CRApp terminate:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationDidReceiveSignalNotification object:@(sig)];
         });
-
         dispatch_resume(signalSource);
+        return signalSource;
+    };
+
+    static dispatch_source_t sigtermSignalSource;
+
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sigtermSignalSource = installSignalHandler(SIGTERM);
     });
+
 }
 
 int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> delegate) {
@@ -124,6 +126,10 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     self = [super init];
     if ( self != nil ) {
         CRApp = self;
+        [[NSNotificationCenter defaultCenter] addObserverForName:CRApplicationDidReceiveSignalNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+//            int signal = [note.object intValue];
+            NSLog(@"%s %@", __PRETTY_FUNCTION__, note.object);
+        }];
     }
     return self;
 }
