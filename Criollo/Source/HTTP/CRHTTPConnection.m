@@ -173,9 +173,6 @@
                                 result = NO;
                             }
                             
-                            
-                            
-                            
                         } else {
                             result = NO;
                         }
@@ -191,29 +188,6 @@
         } else {
             result = NO;
         }
-
-//        NSArray<NSString*>* decodedHeaderLines = [decodedHeaders componentsSeparatedByString:@"\r\n"];
-//        NSString* decodedHeadersFirstLine = decodedHeaderLines[0];
-//        NSArray<NSString*>* decodedHeaderComponents = [decodedHeadersFirstLine componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-//
-//        if ( decodedHeaderComponents.count == 3 ) {
-//            NSString *methodSpec = decodedHeaderComponents[0];
-//            NSString *path = decodedHeaderComponents[1];
-//            NSString *versionSpec = decodedHeaderComponents[2];
-//            __block NSString *host;
-//
-//            // Get the "Host" header
-//            [decodedHeaderLines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//                if ( [obj hasPrefix:@"Host: "] ) {
-//                    host = [[obj substringFromIndex:5] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-//                    *stop = YES;
-//                }
-//            }];
-//            NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", host, path]];
-//            self.currentRequest = [[CRRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self];
-//        } else {
-//            [self.socket disconnectAfterWriting];
-//        }
 
         if ( !result ) {
             [self.socket disconnectAfterWriting];
