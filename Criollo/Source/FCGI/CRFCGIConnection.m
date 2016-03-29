@@ -227,6 +227,10 @@ NS_ASSUME_NONNULL_END
                         request.requestFlags = currentRequestFlags;
                         self.currentRequest = request;
 
+                        dispatch_barrier_async(self.isolationQueue, ^{
+                            [self.requests addObject:request];
+                        });
+
                         [self didReceiveCompleteRequestHeaders];
                     }
                         break;

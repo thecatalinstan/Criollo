@@ -153,9 +153,8 @@ NS_ASSUME_NONNULL_END
     }
 
     CRResponse* response = [self responseWithHTTPStatusCode:200];
-    [self.currentRequest setResponse:response];
-    [response setRequest:self.currentRequest];
-    [self.requests addObject:self.currentRequest];
+    self.currentRequest.response = response;
+    response.request = self.currentRequest;
     [self.delegate connection:self didReceiveRequest:self.currentRequest response:response];
     [self startReading];
 }

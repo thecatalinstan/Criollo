@@ -63,6 +63,7 @@
     if ( env[@"HTTP_HOST"]) {
         env[@"SERVER_NAME"] = env[@"HTTP_HOST"];
     }
+
 //    env[@"SERVER_SOFTWARE"] = @"";
     env[@"REQUEST_METHOD"] = NSStringFromCRHTTPMethod(self.currentRequest.method);
     env[@"SERVER_PROTOCOL"] = NSStringFromCRHTTPVersion(self.currentRequest.version);
@@ -77,6 +78,10 @@
     [self.currentRequest setEnv:env];
 
     [super didReceiveCompleteRequestHeaders];
+
+    if ( self.willDisconnect ) {
+        return;
+    }
 
     CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.server.configuration;
     requestBodyLength = [self.currentRequest valueForHTTPHeaderField:@"Content-Length"].integerValue;
@@ -95,7 +100,6 @@
 - (void)didReceiveCompleteRequest {
     [super didReceiveCompleteRequest];
 }
-
 
 #pragma mark - Responses
 
@@ -150,7 +154,11 @@
 
                         // TODO: request.URL should be parsed using no memcpy and using the actual scheme
                         NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", hostSpec, pathSpec]];
-                        self.currentRequest = [[CRRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self];
+                        CRRequest* request = [[CRRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self];
+                        self.currentRequest = request;
+                        dispatch_barrier_async(self.isolationQueue, ^{
+                            [self.requests addObject:request];
+                        });
                     } else {
                         result = NO;
                     }
@@ -164,15 +172,15 @@
             result = NO;
         }
 
-
         if ( !result ) {
-            [self.socket disconnectAfterWriting];
+            [self.socket disconnect];
             return;
         }
 
-
-        if ( ! [self.currentRequest appendData:data] ) {
-            [self.socket disconnectAfterWriting];
+        NSRange remainingDataRange = NSMakeRange(rangeOfFirstNewline.location + rangeOfFirstNewline.length, data.length - rangeOfFirstNewline.location - rangeOfFirstNewline.length);
+        NSData* remainingData = [NSData dataWithBytesNoCopy:data.bytes + remainingDataRange.location length:remainingDataRange.length freeWhenDone:NO];
+        if ( ! [self.currentRequest appendData:remainingData] ) {
+            [self.socket disconnect];
             return;
         }
 
@@ -180,8 +188,7 @@
         if ( self.currentRequest.headersComplete ) {
             [self didReceiveCompleteRequestHeaders];
         } else {
-            // The request is malformed
-            [self.socket disconnectAfterWriting];
+            [self.socket disconnect];
             return;
         }
 
