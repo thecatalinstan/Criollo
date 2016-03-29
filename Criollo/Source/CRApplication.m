@@ -25,21 +25,20 @@ NSString* const CRApplicationDidReceiveSignalNotification = @"CRApplicationDidRe
 CRApplication* CRApp;
 
 static void CRApplicationInstallSignalHandlers(void) {
-
-    dispatch_source_t(^installSignalHandler)(int) = ^(int sig){
-        signal(sig, SIG_IGN);
-        dispatch_source_t signalSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, sig, 0, dispatch_get_main_queue());
-        dispatch_source_set_event_handler(signalSource, ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationDidReceiveSignalNotification object:@(sig)];
-        });
-        dispatch_resume(signalSource);
-        return signalSource;
-    };
-
     static dispatch_source_t sigtermSignalSource;
 
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+        dispatch_source_t(^installSignalHandler)(int) = ^(int sig){
+            signal(sig, SIG_IGN);
+            dispatch_source_t signalSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, sig, 0, dispatch_get_main_queue());
+            dispatch_source_set_event_handler(signalSource, ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationDidReceiveSignalNotification object:@(sig)];
+            });
+            dispatch_resume(signalSource);
+            return signalSource;
+        };
+
         sigtermSignalSource = installSignalHandler(SIGTERM);
     });
 
@@ -127,8 +126,10 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     if ( self != nil ) {
         CRApp = self;
         [[NSNotificationCenter defaultCenter] addObserverForName:CRApplicationDidReceiveSignalNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-//            int signal = [note.object intValue];
-            NSLog(@"%s %@", __PRETTY_FUNCTION__, note.object);
+            int signal = [note.object intValue];
+            if ( signal == SIGTERM ) {
+                [CRApp terminate:nil];
+            }
         }];
     }
     return self;
