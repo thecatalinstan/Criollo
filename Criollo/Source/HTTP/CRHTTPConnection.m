@@ -116,66 +116,41 @@
         BOOL result = YES;
 
         NSRange rangeOfFirstNewline = [data rangeOfData:[CRConnection CRLFData] options:0 range:NSMakeRange(0, data.length)];
-        if ( rangeOfFirstNewline.location != NSNotFound ) {
+        NSRange rangeOfFirstSpace = [data rangeOfData:spaceData options:0 range:NSMakeRange(0, rangeOfFirstNewline.location)];
+        if (rangeOfFirstSpace.location != NSNotFound ) {
 
-            NSRange rangeOfFirstSpace = [data rangeOfData:spaceData options:0 range:NSMakeRange(0, rangeOfFirstNewline.location)];
-            if ( rangeOfFirstSpace.location != NSNotFound ) {
+            NSRange methodRange = NSMakeRange(0, rangeOfFirstSpace.location);
+            NSRange pathSearchRange = NSMakeRange(rangeOfFirstSpace.location + rangeOfFirstSpace.length, rangeOfFirstNewline.location - rangeOfFirstSpace.location - rangeOfFirstSpace.length);
+            NSRange rangeOfSecondSpace = [data rangeOfData:spaceData options:0 range:pathSearchRange];
 
-                NSRange methodRange = NSMakeRange(0, rangeOfFirstSpace.location);
+            if ( rangeOfSecondSpace.location != NSNotFound ) {
+                NSRange pathRange = NSMakeRange(pathSearchRange.location, rangeOfSecondSpace.location - pathSearchRange.location);
+                NSRange versionRange = NSMakeRange(rangeOfSecondSpace.location + rangeOfSecondSpace.length, rangeOfFirstNewline.location - rangeOfSecondSpace.location - rangeOfSecondSpace.length);
 
-                if ( methodRange.length > 0 ) {
-                    NSString * methodSpec = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes + methodRange.location length:methodRange.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
+                NSString * methodSpec = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes + methodRange.location length:methodRange.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
+                CRHTTPMethod requestMethod = CRHTTPMethodMake(methodSpec);
 
-                    CRHTTPMethod requestMethod = CRHTTPMethodMake(methodSpec);
-                    if ( requestMethod != CRHTTPMethodNone ) {
+                if ( requestMethod != CRHTTPMethodNone ) {
+                    NSString* pathSpec = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes + pathRange.location length:pathRange.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
 
-                        NSRange pathSearchRange = NSMakeRange(rangeOfFirstSpace.location + rangeOfFirstSpace.length, rangeOfFirstNewline.location - rangeOfFirstSpace.location - rangeOfFirstSpace.length);
-                        NSRange rangeOfSecondSpace = [data rangeOfData:spaceData options:0 range:pathSearchRange];
+                    NSString* versionSpec = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes + versionRange.location length:versionRange.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
+                    CRHTTPVersion version = CRHTTPVersionMake(versionSpec);
 
-                        if ( rangeOfSecondSpace.location != NSNotFound ) {
+                    NSRange rangeOfHostHeader = [data rangeOfData:[@"Host: " dataUsingEncoding:NSUTF8StringEncoding] options:0 range:NSMakeRange(0, data.length)];
 
-                            NSRange pathRange = NSMakeRange(pathSearchRange.location, rangeOfSecondSpace.location - pathSearchRange.location);
-                            if ( pathRange.length > 0 ) {
+                    if ( rangeOfHostHeader.location != NSNotFound || version == CRHTTPVersion1_0 ) {
+                        NSRange rangeOfNewLineAfterHost = [data rangeOfData:[CRConnection CRLFData] options:0 range:NSMakeRange(rangeOfHostHeader.location + rangeOfHostHeader.length, data.length - rangeOfHostHeader.location - rangeOfHostHeader.length)];
 
-                                NSString* pathSpec = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes + pathRange.location length:pathRange.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
-
-                                NSRange versionRange = NSMakeRange(rangeOfSecondSpace.location + rangeOfSecondSpace.length, rangeOfFirstNewline.location - rangeOfSecondSpace.location - rangeOfSecondSpace.length);
-
-                                if ( versionRange.length > 0 ) {
-                                    NSString* versionSpec = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes + versionRange.location length:versionRange.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
-                                    CRHTTPVersion version = CRHTTPVersionMake(versionSpec);
-
-
-                                    NSRange rangeOfHostHeader = [data rangeOfData:[@"Host: " dataUsingEncoding:NSUTF8StringEncoding] options:0 range:NSMakeRange(0, data.length)];
-
-                                    if ( rangeOfHostHeader.location != NSNotFound || version == CRHTTPVersion1_0 ) {
-
-                                        NSRange rangeOfNewLineAfterHost = [data rangeOfData:[CRConnection CRLFData] options:0 range:NSMakeRange(rangeOfHostHeader.location + rangeOfHostHeader.length, data.length - rangeOfHostHeader.location - rangeOfHostHeader.length)];
-
-                                        if ( rangeOfNewLineAfterHost.location == NSNotFound ) {
-                                            rangeOfNewLineAfterHost.location = data.length - 1;
-                                        }
-
-                                        NSRange hostSpecRange = NSMakeRange(rangeOfHostHeader.location + rangeOfHostHeader.length, rangeOfNewLineAfterHost.location - rangeOfHostHeader.location - rangeOfHostHeader.length);
-                                        NSString* hostSpec = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes + hostSpecRange.location length:hostSpecRange.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
-
-                                        // TODO: request.URL should be parsed using no memcpy and using the actual scheme
-                                        NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", hostSpec, pathSpec]];
-                                        self.currentRequest = [[CRRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self];
-                                    } else {
-                                        result = NO;
-                                    }
-                                } else {
-                                    result = NO;
-                                }
-
-                            } else {
-                                result = NO;
-                            }
-                            
-                        } else {
-                            result = NO;
+                        if ( rangeOfNewLineAfterHost.location == NSNotFound ) {
+                            rangeOfNewLineAfterHost.location = data.length - 1;
                         }
+
+                        NSRange hostSpecRange = NSMakeRange(rangeOfHostHeader.location + rangeOfHostHeader.length, rangeOfNewLineAfterHost.location - rangeOfHostHeader.location - rangeOfHostHeader.length);
+                        NSString* hostSpec = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes + hostSpecRange.location length:hostSpecRange.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
+
+                        // TODO: request.URL should be parsed using no memcpy and using the actual scheme
+                        NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", hostSpec, pathSpec]];
+                        self.currentRequest = [[CRRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self];
                     } else {
                         result = NO;
                     }
@@ -188,6 +163,7 @@
         } else {
             result = NO;
         }
+
 
         if ( !result ) {
             [self.socket disconnectAfterWriting];
