@@ -46,7 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)startListening:(NSError * _Nullable __autoreleasing * _Nullable)error portNumber:(NSUInteger)portNumber interface:(NSString * _Nullable)interface;
 
 - (void)stopListening;
-- (void)closeAllConnections;
+- (void)closeAllConnections:(dispatch_block_t _Nullable)completion;
 
 - (void)addBlock:(CRRouteBlock)block;
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString * _Nullable)path;
