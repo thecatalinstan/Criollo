@@ -123,9 +123,11 @@ NS_ASSUME_NONNULL_END
         UInt8 nameLengthB3, nameLengthB2, nameLengthB1, nameLengthB0;
         UInt32 nameLength, valueLength;
 
-        [paramsData getBytes:&pos0 range:NSMakeRange(*offset + 0, 1)];
-        [paramsData getBytes:&pos1 range:NSMakeRange(*offset + 1, 1)];
-        [paramsData getBytes:&pos4 range:NSMakeRange(*offset + 4, 1)];
+        const char *bytes = paramsData.bytes;
+
+        pos0 = bytes[*offset + 0];
+        pos1 = bytes[*offset + 1];
+        pos4 = bytes[*offset + 4];
 
         if (pos0 >> 7 == 0) {
 
@@ -138,10 +140,10 @@ NS_ASSUME_NONNULL_END
                 *offset += 2;
             } else {
                 //NameValuePair14
-                [paramsData getBytes:&valueLengthB3 range:NSMakeRange(*offset + 1, 1)];
-                [paramsData getBytes:&valueLengthB2 range:NSMakeRange(*offset + 2, 1)];
-                [paramsData getBytes:&valueLengthB1 range:NSMakeRange(*offset + 3, 1)];
-                [paramsData getBytes:&valueLengthB0 range:NSMakeRange(*offset + 4, 1)];
+                valueLengthB3 = bytes[*offset + 1];
+                valueLengthB2 = bytes[*offset + 2];
+                valueLengthB1 = bytes[*offset + 3];
+                valueLengthB0 = bytes[*offset + 4];
                 valueLength = ((valueLengthB3 & 0x7f) << 24) + (valueLengthB2 << 16) + (valueLengthB1 << 8) + valueLengthB0;
                 *offset += 5;
             }
@@ -149,10 +151,10 @@ NS_ASSUME_NONNULL_END
         } else {
 
             // NameValuePair41 or 44
-            [paramsData getBytes:&nameLengthB3 range:NSMakeRange(*offset + 0, 1)];
-            [paramsData getBytes:&nameLengthB2 range:NSMakeRange(*offset + 1, 1)];
-            [paramsData getBytes:&nameLengthB1 range:NSMakeRange(*offset + 2, 1)];
-            [paramsData getBytes:&nameLengthB0 range:NSMakeRange(*offset + 3, 1)];
+            nameLengthB3 = bytes[*offset + 1];
+            nameLengthB2 = bytes[*offset + 2];
+            nameLengthB1 = bytes[*offset + 3];
+            nameLengthB0 = bytes[*offset + 4];
             nameLength = ((nameLengthB3 & 0x7f) << 24) + (nameLengthB2 << 16) + (nameLengthB1 << 8) + nameLengthB0;
 
             if (pos4 >> 7 == 0) {
@@ -161,19 +163,19 @@ NS_ASSUME_NONNULL_END
                 *offset += 5;
             } else {
                 //NameValuePair44
-                [paramsData getBytes:&valueLengthB3 range:NSMakeRange(*offset + 4, 1)];
-                [paramsData getBytes:&valueLengthB2 range:NSMakeRange(*offset + 5, 1)];
-                [paramsData getBytes:&valueLengthB1 range:NSMakeRange(*offset + 6, 1)];
-                [paramsData getBytes:&valueLengthB0 range:NSMakeRange(*offset + 7, 1)];
+                valueLengthB3 = bytes[*offset + 4];
+                valueLengthB2 = bytes[*offset + 5];
+                valueLengthB1 = bytes[*offset + 6];
+                valueLengthB0 = bytes[*offset + 7];
                 valueLength = ((valueLengthB3 & 0x7f) << 24) + (valueLengthB2 << 16) + (valueLengthB1 << 8) + valueLengthB0;
                 *offset += 8;
             }
         }
 
-        *name = [[NSString alloc] initWithData:[paramsData subdataWithRange:NSMakeRange(*offset + 0, nameLength)] encoding:NSASCIIStringEncoding];
+        *name = [[NSString alloc] initWithBytesNoCopy:(void *)paramsData.bytes + *offset length:nameLength encoding:NSUTF8StringEncoding freeWhenDone:NO];
         *offset += nameLength;
 
-        *value = [[NSString alloc] initWithData:[paramsData subdataWithRange:NSMakeRange(*offset + 0, valueLength)] encoding:NSASCIIStringEncoding];
+        *value = [[NSString alloc] initWithBytes:(void *)paramsData.bytes + *offset length:valueLength encoding:NSUTF8StringEncoding];
         *offset += valueLength;
 
         if ( bytesRead != NULL ) {
