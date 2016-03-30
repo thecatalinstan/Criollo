@@ -178,7 +178,7 @@
         }
 
         NSRange remainingDataRange = NSMakeRange(rangeOfFirstNewline.location + rangeOfFirstNewline.length, data.length - rangeOfFirstNewline.location - rangeOfFirstNewline.length);
-        NSData* remainingData = [NSData dataWithBytesNoCopy:data.bytes + remainingDataRange.location length:remainingDataRange.length freeWhenDone:NO];
+        NSData* remainingData = [NSData dataWithBytesNoCopy:(void *)data.bytes + remainingDataRange.location length:remainingDataRange.length freeWhenDone:NO];
         if ( ! [self.currentRequest appendData:remainingData] ) {
             [self.socket disconnect];
             return;
