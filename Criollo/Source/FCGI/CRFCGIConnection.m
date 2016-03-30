@@ -172,7 +172,7 @@ NS_ASSUME_NONNULL_END
             }
         }
 
-        *name = [[NSString alloc] initWithBytes:(void *)paramsData.bytes + *offset length:nameLength encoding:NSUTF8StringEncoding];
+        *name = [[NSString alloc] initWithBytesNoCopy:(void *)paramsData.bytes + *offset length:nameLength encoding:NSUTF8StringEncoding freeWhenDone:NO];
         *offset += nameLength;
 
         *value = [[NSString alloc] initWithBytes:(void *)paramsData.bytes + *offset length:valueLength encoding:NSUTF8StringEncoding];
