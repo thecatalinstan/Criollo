@@ -170,10 +170,10 @@ NS_ASSUME_NONNULL_END
             }
         }
 
-        *name = [[NSString alloc] initWithData:[paramsData subdataWithRange:NSMakeRange(*offset + 0, nameLength)] encoding:NSASCIIStringEncoding];
+        *name = [[NSString alloc] initWithBytes:(void *)paramsData.bytes + *offset length:nameLength encoding:NSUTF8StringEncoding];
         *offset += nameLength;
 
-        *value = [[NSString alloc] initWithData:[paramsData subdataWithRange:NSMakeRange(*offset + 0, valueLength)] encoding:NSASCIIStringEncoding];
+        *value = [[NSString alloc] initWithBytes:(void *)paramsData.bytes + *offset length:valueLength encoding:NSUTF8StringEncoding];
         *offset += valueLength;
 
         if ( bytesRead != NULL ) {
