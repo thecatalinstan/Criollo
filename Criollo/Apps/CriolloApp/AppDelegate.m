@@ -13,6 +13,9 @@
 #include <arpa/inet.h>
 #include <sys/utsname.h>
 
+#import "HelloWorldViewController.h"
+#import "MultipartViewController.h"
+
 #define PortNumber          10781
 #define LogConnections          1
 #define LogRequests             1
@@ -153,8 +156,8 @@ NS_ASSUME_NONNULL_END
         [response sendString:[NSString stringWithFormat:@"%@\r\n\r\n--%@\r\n\r\n--", request, request.body]];
     } forPath:@"/post" HTTPMethod:CRHTTPMethodPost];
 
-//    [self.server addController:[MultipartViewController class] withNibName:@"MultipartViewController" bundle:nil forPath:@"/multipart"];
-//    [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" HTTPMethod:CRHTTPMethodAll recursive:YES];
+    [self.server addController:[MultipartViewController class] withNibName:@"MultipartViewController" bundle:nil forPath:@"/multipart"];
+    [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" HTTPMethod:CRHTTPMethodAll recursive:YES];
 
     // Serve static files from "/Public" (relative to bundle)
     NSString* staticFilesPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"];
