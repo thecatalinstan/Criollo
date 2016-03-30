@@ -174,6 +174,18 @@ NS_ASSUME_NONNULL_END
     [self startServer];
 }
 
+- (CRApplicationTerminateReply)applicationShouldTerminate:(CRApplication *)sender {
+    static CRApplicationTerminateReply reply;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        reply = CRTerminateLater;
+        [self.server closeAllConnections:^{
+            reply = CRTerminateNow;
+        }];
+    });
+    return reply;
+}
+
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     [self.server stopListening];
 }
