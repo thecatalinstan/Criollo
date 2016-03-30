@@ -26,6 +26,9 @@ CRApplication* CRApp;
 
 static void CRApplicationInstallSignalHandlers(void) {
     static dispatch_source_t sigtermSignalSource;
+    static dispatch_source_t sigintSignalSource;
+    static dispatch_source_t sigquitSignalSource;
+    static dispatch_source_t sigtstpSignalSource;
 
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -40,6 +43,9 @@ static void CRApplicationInstallSignalHandlers(void) {
         };
 
         sigtermSignalSource = installSignalHandler(SIGTERM);
+        sigintSignalSource = installSignalHandler(SIGINT);
+        sigquitSignalSource = installSignalHandler(SIGQUIT);
+        sigtstpSignalSource = installSignalHandler(SIGTSTP);
     });
 
 }
@@ -125,9 +131,11 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     self = [super init];
     if ( self != nil ) {
         CRApp = self;
+
         [[NSNotificationCenter defaultCenter] addObserverForName:CRApplicationDidReceiveSignalNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            NSLog(@"Got signal %@.", note.object);
             int signal = [note.object intValue];
-            if ( signal == SIGTERM ) {
+            if ( signal == SIGTERM || signal == SIGINT || signal == SIGQUIT ) {
                 [CRApp terminate:nil];
             }
         }];
