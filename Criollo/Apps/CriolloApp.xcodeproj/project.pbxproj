@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD41ECD71CB42EBB00133C8D /* SystemInfoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD41ECD61CB42EBB00133C8D /* SystemInfoHelper.m */; };
 		AD554D991CAC97C7002182A4 /* HelloWorldViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD554D921CAC97C7002182A4 /* HelloWorldViewController.html */; };
 		AD554D9A1CAC97C7002182A4 /* HelloWorldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD554D931CAC97C7002182A4 /* HelloWorldViewController.m */; };
 		AD554D9B1CAC97C7002182A4 /* MultipartViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD554D951CAC97C7002182A4 /* MultipartViewController.html */; };
@@ -45,11 +46,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AD41ECD51CB42EBB00133C8D /* SystemInfoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemInfoHelper.h; path = Shared/SystemInfoHelper.h; sourceTree = SOURCE_ROOT; };
+		AD41ECD61CB42EBB00133C8D /* SystemInfoHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemInfoHelper.m; path = Shared/SystemInfoHelper.m; sourceTree = SOURCE_ROOT; };
 		AD554D911CAC97C7002182A4 /* HelloWorldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloWorldViewController.h; sourceTree = "<group>"; };
-		AD554D921CAC97C7002182A4 /* HelloWorldViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = HelloWorldViewController.html; sourceTree = "<group>"; };
+		AD554D921CAC97C7002182A4 /* HelloWorldViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = HelloWorldViewController.html; path = ../Shared/HelloWorldViewController.html; sourceTree = "<group>"; };
 		AD554D931CAC97C7002182A4 /* HelloWorldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelloWorldViewController.m; sourceTree = "<group>"; };
 		AD554D941CAC97C7002182A4 /* MultipartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultipartViewController.h; sourceTree = "<group>"; };
-		AD554D951CAC97C7002182A4 /* MultipartViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = MultipartViewController.html; sourceTree = "<group>"; };
+		AD554D951CAC97C7002182A4 /* MultipartViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = MultipartViewController.html; path = ../Shared/MultipartViewController.html; sourceTree = "<group>"; };
 		AD554D961CAC97C7002182A4 /* MultipartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultipartViewController.m; sourceTree = "<group>"; };
 		AD554D981CAC97C7002182A4 /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
 		ADC1A5C01CA30F49009A4A19 /* CriolloApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CriolloApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,7 +81,8 @@
 			children = (
 				AD554D981CAC97C7002182A4 /* style.css */,
 			);
-			path = Public;
+			name = Public;
+			path = ../Shared/Public;
 			sourceTree = "<group>";
 		};
 		ADC1A5B71CA30F49009A4A19 = {
@@ -86,6 +90,7 @@
 			children = (
 				ADC1A5C21CA30F49009A4A19 /* CriolloApp */,
 				ADC1A5C11CA30F49009A4A19 /* Products */,
+				ADC1A5DE1CA311E9009A4A19 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -111,8 +116,9 @@
 				AD554D941CAC97C7002182A4 /* MultipartViewController.h */,
 				AD554D951CAC97C7002182A4 /* MultipartViewController.html */,
 				AD554D961CAC97C7002182A4 /* MultipartViewController.m */,
+				AD41ECD51CB42EBB00133C8D /* SystemInfoHelper.h */,
+				AD41ECD61CB42EBB00133C8D /* SystemInfoHelper.m */,
 				AD554D971CAC97C7002182A4 /* Public */,
-				ADC1A5DE1CA311E9009A4A19 /* Frameworks */,
 			);
 			path = CriolloApp;
 			sourceTree = "<group>";
@@ -123,6 +129,7 @@
 				ADC1A5DA1CA311D0009A4A19 /* Criollo.framework */,
 			);
 			name = Frameworks;
+			path = CriolloApp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -197,6 +204,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD41ECD71CB42EBB00133C8D /* SystemInfoHelper.m in Sources */,
 				ADC1A5C81CA30F49009A4A19 /* main.m in Sources */,
 				AD554D9C1CAC97C7002182A4 /* MultipartViewController.m in Sources */,
 				AD554D9A1CAC97C7002182A4 /* HelloWorldViewController.m in Sources */,

@@ -8,13 +8,9 @@
 
 #import "AppDelegate.h"
 
-#include <stdio.h>
-#include <ifaddrs.h>
-#include <arpa/inet.h>
-#include <sys/utsname.h>
-
 #import "HelloWorldViewController.h"
 #import "MultipartViewController.h"
+#import "SystemInfoHelper.h"
 
 #define PortNumber          10781
 #define LogConnections          1
@@ -27,9 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 @property (nonatomic, strong) CRServer* server;
-
-+ (nullable NSString *)IPAddress;
-+ (NSString*)systemInfo;
 
 @end
 
@@ -76,7 +69,7 @@ NS_ASSUME_NONNULL_END
     [self.server addBlock:jsonHelloBlock forPath:@"/json"];
 
     // Prints some more info as text/html
-    NSString *uname = [AppDelegate systemInfo];
+    NSString *uname = [SystemInfoHelper systemInfo];
     CRRouteBlock statusBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler ) {
 
         NSDate *startTime = [NSDate date];
@@ -200,7 +193,7 @@ NS_ASSUME_NONNULL_END
 
         // Get server ip address
 
-        NSString* address = [AppDelegate IPAddress];
+        NSString* address = [SystemInfoHelper IPAddress];
         if ( !address ) {
             address = @"127.0.0.1";
         }
@@ -254,7 +247,6 @@ NS_ASSUME_NONNULL_END
 }
 #endif
 
-
 - (void)server:(CRServer *)server didFinishRequest:(CRRequest *)request {
 #if LogRequests
     NSString* contentLength = [request.response valueForHTTPHeaderField:@"Content-Length"];
@@ -265,43 +257,7 @@ NS_ASSUME_NONNULL_END
         [CRApp logFormat:@"%@ %@ %@ - %lu %@ - %@", [NSDate date], remoteAddress, request, statusCode, contentLength ? : @"-", userAgent];
     });
 #endif
-}
-
-#pragma mark - Utils
-
-+ (NSString *)IPAddress {
-    static NSString* address;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        struct ifaddrs *interfaces = NULL;
-        struct ifaddrs *temp_addr = NULL;
-        int success = 0;
-        success = getifaddrs(&interfaces);
-        if (success == 0) {
-            temp_addr = interfaces;
-            while(temp_addr != NULL) {
-                if(temp_addr->ifa_addr->sa_family == AF_INET) {
-                    if([[NSString stringWithUTF8String:temp_addr->ifa_name] isEqualToString:@"en0"]) {
-                        address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)];
-                    }
-                }
-                temp_addr = temp_addr->ifa_next;
-            }
-        }
-        freeifaddrs(interfaces);
-    });
-    return address;
-}
-
-+ (NSString*)systemInfo {
-    static NSString* systemInfo;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        struct utsname unameStruct;
-        uname(&unameStruct);
-        systemInfo = [NSString stringWithFormat:@"%s %s %s %s %s", unameStruct.sysname, unameStruct.nodename, unameStruct.release, unameStruct.version, unameStruct.machine];
-    });
-    return systemInfo;
+    [SystemInfoHelper addRequest];
 }
 
 @end
