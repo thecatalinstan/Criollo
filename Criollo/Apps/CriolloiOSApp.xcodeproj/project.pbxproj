@@ -87,17 +87,17 @@
 		AD5B3C531CA820B5000988B7 /* CriolloiOSApp */ = {
 			isa = PBXGroup;
 			children = (
-				AD41ECDC1CB4330100133C8D /* SystemInfoHelper.h */,
-				AD41ECDD1CB4330100133C8D /* SystemInfoHelper.m */,
-				AD864DEA1CAD3F1D008D8FFE /* HelloWorldViewController.html */,
-				AD864DEB1CAD3F1D008D8FFE /* HelloWorldViewController.swift */,
 				AD5B3C541CA820B5000988B7 /* AppDelegate.swift */,
 				AD5B3C561CA820B5000988B7 /* ViewController.swift */,
+				AD864DEA1CAD3F1D008D8FFE /* HelloWorldViewController.html */,
+				AD864DEB1CAD3F1D008D8FFE /* HelloWorldViewController.swift */,
 				AD5B3C581CA820B5000988B7 /* Main.storyboard */,
 				AD5B3C5D1CA820B5000988B7 /* LaunchScreen.storyboard */,
 				AD5B3C601CA820B5000988B7 /* Info.plist */,
 				AD554DA01CAC9A95002182A4 /* Assets.xcassets */,
 				AD41ECDB1CB4330000133C8D /* CriolloiOSApp-Bridging-Header.h */,
+				AD41ECDC1CB4330100133C8D /* SystemInfoHelper.h */,
+				AD41ECDD1CB4330100133C8D /* SystemInfoHelper.m */,
 				AD41ECD01CB42D1C00133C8D /* Public */,
 			);
 			path = CriolloiOSApp;
