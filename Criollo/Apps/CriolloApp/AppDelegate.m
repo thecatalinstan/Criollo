@@ -149,6 +149,27 @@ NS_ASSUME_NONNULL_END
         [response sendString:[NSString stringWithFormat:@"%@\r\n\r\n--%@\r\n\r\n--", request, request.body]];
     } forPath:@"/post" HTTPMethod:CRHTTPMethodPost];
 
+    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        NSDictionary *info = @{
+                               @"IPAddress": [SystemInfoHelper IPAddress],
+                               @"systemInfo": [SystemInfoHelper systemInfo],
+                               @"systemVersion": [SystemInfoHelper systemVersion],
+                               @"processName": [SystemInfoHelper processName],
+                               @"processRunningTime": [SystemInfoHelper processRunningTime],
+                               @"memoryInfo": [SystemInfoHelper memoryInfo:nil],
+                               @"requestsServed": [SystemInfoHelper requestsServed],
+                               @"criolloVersion": [SystemInfoHelper criolloVersion], 
+                               @"bundleVersion": [SystemInfoHelper bundleVersion]
+                               };
+        @try {
+            [response sendData:[NSJSONSerialization dataWithJSONObject:info options:NSJSONWritingPrettyPrinted error:nil]];
+        } @catch (NSException *exception) {
+            NSError* error = [NSError errorWithDomain:CRErrorDomain code:100 userInfo:@{NSLocalizedDescriptionKey: exception.reason}];
+            [CRServer errorHandlingBlockWithStatus:500 error:error](request, response, completionHandler);
+        }
+
+    } forPath:@"/info"];
+
     [self.server addController:[MultipartViewController class] withNibName:@"MultipartViewController" bundle:nil forPath:@"/multipart"];
     [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" HTTPMethod:CRHTTPMethodAll recursive:YES];
 

@@ -129,17 +129,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
         };
         self.server.addBlock(statusBlock, forPath: "/status");
 
+        self.server.addBlock({ (request, response, next) -> Void in
+            let info:Dictionary = [
+                "IPAddress":SystemInfoHelper.IPAddress(),
+                "systemInfo":SystemInfoHelper.systemInfo(),
+                "systemVersion":SystemInfoHelper.systemVersion(),
+                "processName":SystemInfoHelper.processName(),
+                "processRunningTime":SystemInfoHelper.processRunningTime(),
+                "memoryInfo":SystemInfoHelper.memoryInfo(nil),
+                "requestsServed":SystemInfoHelper.requestsServed(),
+                "criolloVersion":SystemInfoHelper.criolloVersion(),
+                "bundleVersion":SystemInfoHelper.bundleVersion(),
+            ];
+            do {
+                try response.sendData(NSJSONSerialization.dataWithJSONObject(info, options: NSJSONWritingOptions.PrettyPrinted));
+            } catch let error as NSError {
+                CRServer.errorHandlingBlockWithStatus(500, error: error)(request, response, next);
+            }
+        }, forPath: "/info")
+
         self.server.addController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/controller");
 
         // Serve static files from "/Public" (relative to bundle)
         let staticFilePath:String = (NSBundle.mainBundle().resourcePath?.stringByAppendingString("/Public"))!;
         self.server.mountStaticDirectoryAtPath(staticFilePath, forPath: "/static", options: CRStaticDirectoryServingOptions.FollowSymlinks)
 
-
-        self.server.addBlock ( { (request, response, next) -> Void in
-            NSLog("\(request.URL.path)");
-            next();
-        });
 
         // Redirecter
         self.server.addBlock({ (request, response, completionHandler) -> Void in
@@ -227,6 +241,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
             let env:NSDictionary! = request.valueForKey("env") as! NSDictionary;
             NSLog(" * \(request.response!.connection!.remoteAddress) \(request.description) - \(request.response!.statusCode) - \(env["HTTP_USER_AGENT"])");
         }
+        SystemInfoHelper.addRequest()
     }
 }
 
