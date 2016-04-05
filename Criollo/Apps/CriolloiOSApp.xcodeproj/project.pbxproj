@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD41ECD41CB42D4900133C8D /* style.css in Copy Public Resources */ = {isa = PBXBuildFile; fileRef = AD41ECD11CB42D1C00133C8D /* style.css */; };
 		AD554DA11CAC9A95002182A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD554DA01CAC9A95002182A4 /* Assets.xcassets */; };
 		AD5B3C551CA820B5000988B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5B3C541CA820B5000988B7 /* AppDelegate.swift */; };
 		AD5B3C571CA820B5000988B7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5B3C561CA820B5000988B7 /* ViewController.swift */; };
@@ -17,7 +18,22 @@
 		AD864DED1CAD3F1D008D8FFE /* HelloWorldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD864DEB1CAD3F1D008D8FFE /* HelloWorldViewController.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		AD41ECD31CB42D3E00133C8D /* Copy Public Resources */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Public;
+			dstSubfolderSpec = 7;
+			files = (
+				AD41ECD41CB42D4900133C8D /* style.css in Copy Public Resources */,
+			);
+			name = "Copy Public Resources";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		AD41ECD11CB42D1C00133C8D /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
 		AD554DA01CAC9A95002182A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AD5B3C511CA820B5000988B7 /* CriolloiOSApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CriolloiOSApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD5B3C541CA820B5000988B7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -27,7 +43,7 @@
 		AD5B3C601CA820B5000988B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD864DE61CAD3EB0008D8FFE /* CriolloiOSApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CriolloiOSApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		AD864DE81CAD3EB0008D8FFE /* utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = utils.m; sourceTree = "<group>"; };
-		AD864DEA1CAD3F1D008D8FFE /* HelloWorldViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = HelloWorldViewController.html; sourceTree = "<group>"; };
+		AD864DEA1CAD3F1D008D8FFE /* HelloWorldViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = HelloWorldViewController.html; path = ../Shared/HelloWorldViewController.html; sourceTree = "<group>"; };
 		AD864DEB1CAD3F1D008D8FFE /* HelloWorldViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelloWorldViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -42,6 +58,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AD41ECD01CB42D1C00133C8D /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				AD41ECD11CB42D1C00133C8D /* style.css */,
+			);
+			name = Public;
+			path = Shared/Public;
+			sourceTree = SOURCE_ROOT;
+		};
 		AD5B3C481CA820B5000988B7 = {
 			isa = PBXGroup;
 			children = (
@@ -61,6 +86,7 @@
 		AD5B3C531CA820B5000988B7 /* CriolloiOSApp */ = {
 			isa = PBXGroup;
 			children = (
+				AD41ECD01CB42D1C00133C8D /* Public */,
 				AD864DEA1CAD3F1D008D8FFE /* HelloWorldViewController.html */,
 				AD864DEB1CAD3F1D008D8FFE /* HelloWorldViewController.swift */,
 				AD5B3C541CA820B5000988B7 /* AppDelegate.swift */,
@@ -85,6 +111,7 @@
 				AD5B3C4D1CA820B5000988B7 /* Sources */,
 				AD5B3C4E1CA820B5000988B7 /* Frameworks */,
 				AD5B3C4F1CA820B5000988B7 /* Resources */,
+				AD41ECD31CB42D3E00133C8D /* Copy Public Resources */,
 			);
 			buildRules = (
 			);

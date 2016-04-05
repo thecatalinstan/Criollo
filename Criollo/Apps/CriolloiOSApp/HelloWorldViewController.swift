@@ -14,21 +14,12 @@ class HelloWorldViewController: CRViewController {
         self.templateVariables["title"] = self.dynamicType;
 
         var text:String = String();
-        // Request Enviroment
         let env:NSDictionary! = request.valueForKey("env") as! NSDictionary;
         text += "<h3>Request Environment:</h2><pre>";
-        env.enumerateKeysAndObjectsUsingBlock({ (key:AnyObject,  object:AnyObject, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
-            let envKey:String = key as! String;
-            text += "\(envKey): ";
-            if let value = object as? String {
-                text += "\(value)";
-            } else if let value = object as? NSNumber {
-                text += "\(value)";
-            }
-            text += "\n";
+        env.enumerateKeysAndObjectsUsingBlock({ (key,  object, stop) -> Void in
+            text += "\(key): \(object)\n";
         });
         text += "</pre>";
-
         self.templateVariables["text"] = text;
         return super.presentViewControllerWithRequest(request, response: response);
     }

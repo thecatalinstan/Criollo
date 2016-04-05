@@ -46,10 +46,10 @@
 
 /* Begin PBXFileReference section */
 		AD554D911CAC97C7002182A4 /* HelloWorldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloWorldViewController.h; sourceTree = "<group>"; };
-		AD554D921CAC97C7002182A4 /* HelloWorldViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = HelloWorldViewController.html; sourceTree = "<group>"; };
+		AD554D921CAC97C7002182A4 /* HelloWorldViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = HelloWorldViewController.html; path = ../Shared/HelloWorldViewController.html; sourceTree = "<group>"; };
 		AD554D931CAC97C7002182A4 /* HelloWorldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelloWorldViewController.m; sourceTree = "<group>"; };
 		AD554D941CAC97C7002182A4 /* MultipartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultipartViewController.h; sourceTree = "<group>"; };
-		AD554D951CAC97C7002182A4 /* MultipartViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = MultipartViewController.html; sourceTree = "<group>"; };
+		AD554D951CAC97C7002182A4 /* MultipartViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = MultipartViewController.html; path = ../Shared/MultipartViewController.html; sourceTree = "<group>"; };
 		AD554D961CAC97C7002182A4 /* MultipartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultipartViewController.m; sourceTree = "<group>"; };
 		AD554D981CAC97C7002182A4 /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
 		ADC1A5C01CA30F49009A4A19 /* CriolloApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CriolloApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,7 +78,8 @@
 			children = (
 				AD554D981CAC97C7002182A4 /* style.css */,
 			);
-			path = Public;
+			name = Public;
+			path = ../Shared/Public;
 			sourceTree = "<group>";
 		};
 		ADC1A5B71CA30F49009A4A19 = {
@@ -100,6 +101,7 @@
 		ADC1A5C21CA30F49009A4A19 /* CriolloApp */ = {
 			isa = PBXGroup;
 			children = (
+				AD554D971CAC97C7002182A4 /* Public */,
 				ADC1A5C31CA30F49009A4A19 /* AppDelegate.h */,
 				ADC1A5C41CA30F49009A4A19 /* AppDelegate.m */,
 				ADC1A5C71CA30F49009A4A19 /* main.m */,
@@ -111,7 +113,6 @@
 				AD554D941CAC97C7002182A4 /* MultipartViewController.h */,
 				AD554D951CAC97C7002182A4 /* MultipartViewController.html */,
 				AD554D961CAC97C7002182A4 /* MultipartViewController.m */,
-				AD554D971CAC97C7002182A4 /* Public */,
 				ADC1A5DE1CA311E9009A4A19 /* Frameworks */,
 			);
 			path = CriolloApp;
