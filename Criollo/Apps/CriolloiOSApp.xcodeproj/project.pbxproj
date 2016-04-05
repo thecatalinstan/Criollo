@@ -1,0 +1,346 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AD41ECD41CB42D4900133C8D /* style.css in Copy Public Resources */ = {isa = PBXBuildFile; fileRef = AD41ECD11CB42D1C00133C8D /* style.css */; };
+		AD41ECDE1CB4330100133C8D /* SystemInfoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD41ECDD1CB4330100133C8D /* SystemInfoHelper.m */; };
+		AD554DA11CAC9A95002182A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD554DA01CAC9A95002182A4 /* Assets.xcassets */; };
+		AD5B3C551CA820B5000988B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5B3C541CA820B5000988B7 /* AppDelegate.swift */; };
+		AD5B3C571CA820B5000988B7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5B3C561CA820B5000988B7 /* ViewController.swift */; };
+		AD5B3C5A1CA820B5000988B7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD5B3C581CA820B5000988B7 /* Main.storyboard */; };
+		AD5B3C5F1CA820B5000988B7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD5B3C5D1CA820B5000988B7 /* LaunchScreen.storyboard */; };
+		AD864DEC1CAD3F1D008D8FFE /* HelloWorldViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD864DEA1CAD3F1D008D8FFE /* HelloWorldViewController.html */; };
+		AD864DED1CAD3F1D008D8FFE /* HelloWorldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD864DEB1CAD3F1D008D8FFE /* HelloWorldViewController.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		AD41ECD31CB42D3E00133C8D /* Copy Public Resources */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Public;
+			dstSubfolderSpec = 7;
+			files = (
+				AD41ECD41CB42D4900133C8D /* style.css in Copy Public Resources */,
+			);
+			name = "Copy Public Resources";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		AD41ECD11CB42D1C00133C8D /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
+		AD41ECDB1CB4330000133C8D /* CriolloiOSApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CriolloiOSApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		AD41ECDC1CB4330100133C8D /* SystemInfoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemInfoHelper.h; path = Shared/SystemInfoHelper.h; sourceTree = SOURCE_ROOT; };
+		AD41ECDD1CB4330100133C8D /* SystemInfoHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemInfoHelper.m; path = Shared/SystemInfoHelper.m; sourceTree = SOURCE_ROOT; };
+		AD554DA01CAC9A95002182A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AD5B3C511CA820B5000988B7 /* CriolloiOSApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CriolloiOSApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD5B3C541CA820B5000988B7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		AD5B3C561CA820B5000988B7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		AD5B3C591CA820B5000988B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		AD5B3C5E1CA820B5000988B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		AD5B3C601CA820B5000988B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AD864DEA1CAD3F1D008D8FFE /* HelloWorldViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = HelloWorldViewController.html; path = ../Shared/HelloWorldViewController.html; sourceTree = "<group>"; };
+		AD864DEB1CAD3F1D008D8FFE /* HelloWorldViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelloWorldViewController.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AD5B3C4E1CA820B5000988B7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AD41ECD01CB42D1C00133C8D /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				AD41ECD11CB42D1C00133C8D /* style.css */,
+			);
+			name = Public;
+			path = Shared/Public;
+			sourceTree = SOURCE_ROOT;
+		};
+		AD5B3C481CA820B5000988B7 = {
+			isa = PBXGroup;
+			children = (
+				AD5B3C531CA820B5000988B7 /* CriolloiOSApp */,
+				AD5B3C521CA820B5000988B7 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AD5B3C521CA820B5000988B7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AD5B3C511CA820B5000988B7 /* CriolloiOSApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AD5B3C531CA820B5000988B7 /* CriolloiOSApp */ = {
+			isa = PBXGroup;
+			children = (
+				AD5B3C541CA820B5000988B7 /* AppDelegate.swift */,
+				AD5B3C561CA820B5000988B7 /* ViewController.swift */,
+				AD864DEA1CAD3F1D008D8FFE /* HelloWorldViewController.html */,
+				AD864DEB1CAD3F1D008D8FFE /* HelloWorldViewController.swift */,
+				AD5B3C581CA820B5000988B7 /* Main.storyboard */,
+				AD5B3C5D1CA820B5000988B7 /* LaunchScreen.storyboard */,
+				AD5B3C601CA820B5000988B7 /* Info.plist */,
+				AD554DA01CAC9A95002182A4 /* Assets.xcassets */,
+				AD41ECDB1CB4330000133C8D /* CriolloiOSApp-Bridging-Header.h */,
+				AD41ECDC1CB4330100133C8D /* SystemInfoHelper.h */,
+				AD41ECDD1CB4330100133C8D /* SystemInfoHelper.m */,
+				AD41ECD01CB42D1C00133C8D /* Public */,
+			);
+			path = CriolloiOSApp;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AD5B3C501CA820B5000988B7 /* CriolloiOSApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD5B3C631CA820B5000988B7 /* Build configuration list for PBXNativeTarget "CriolloiOSApp" */;
+			buildPhases = (
+				AD5B3C4D1CA820B5000988B7 /* Sources */,
+				AD5B3C4E1CA820B5000988B7 /* Frameworks */,
+				AD5B3C4F1CA820B5000988B7 /* Resources */,
+				AD41ECD31CB42D3E00133C8D /* Copy Public Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CriolloiOSApp;
+			productName = CriolloiOSApp;
+			productReference = AD5B3C511CA820B5000988B7 /* CriolloiOSApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AD5B3C491CA820B5000988B7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0730;
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = "Cătălin Stan";
+				TargetAttributes = {
+					AD5B3C501CA820B5000988B7 = {
+						CreatedOnToolsVersion = 7.3;
+					};
+				};
+			};
+			buildConfigurationList = AD5B3C4C1CA820B5000988B7 /* Build configuration list for PBXProject "CriolloiOSApp" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AD5B3C481CA820B5000988B7;
+			productRefGroup = AD5B3C521CA820B5000988B7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AD5B3C501CA820B5000988B7 /* CriolloiOSApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AD5B3C4F1CA820B5000988B7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD5B3C5F1CA820B5000988B7 /* LaunchScreen.storyboard in Resources */,
+				AD554DA11CAC9A95002182A4 /* Assets.xcassets in Resources */,
+				AD5B3C5A1CA820B5000988B7 /* Main.storyboard in Resources */,
+				AD864DEC1CAD3F1D008D8FFE /* HelloWorldViewController.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AD5B3C4D1CA820B5000988B7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD864DED1CAD3F1D008D8FFE /* HelloWorldViewController.swift in Sources */,
+				AD5B3C571CA820B5000988B7 /* ViewController.swift in Sources */,
+				AD41ECDE1CB4330100133C8D /* SystemInfoHelper.m in Sources */,
+				AD5B3C551CA820B5000988B7 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		AD5B3C581CA820B5000988B7 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AD5B3C591CA820B5000988B7 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		AD5B3C5D1CA820B5000988B7 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AD5B3C5E1CA820B5000988B7 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		AD5B3C611CA820B5000988B7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AD5B3C621CA820B5000988B7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AD5B3C641CA820B5000988B7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				INFOPLIST_FILE = CriolloiOSApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloiOSApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "CriolloiOSApp/CriolloiOSApp-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AD5B3C651CA820B5000988B7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				INFOPLIST_FILE = CriolloiOSApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloiOSApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "CriolloiOSApp/CriolloiOSApp-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AD5B3C4C1CA820B5000988B7 /* Build configuration list for PBXProject "CriolloiOSApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD5B3C611CA820B5000988B7 /* Debug */,
+				AD5B3C621CA820B5000988B7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AD5B3C631CA820B5000988B7 /* Build configuration list for PBXNativeTarget "CriolloiOSApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD5B3C641CA820B5000988B7 /* Debug */,
+				AD5B3C651CA820B5000988B7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AD5B3C491CA820B5000988B7 /* Project object */;
+}

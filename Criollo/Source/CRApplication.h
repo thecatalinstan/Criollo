@@ -37,14 +37,13 @@ typedef NSUInteger CRError;
 
 @end
 
-FOUNDATION_EXPORT NSUInteger const CRErrorNone;
-FOUNDATION_EXPORT NSUInteger const CRErrorSigTERM;
-
 FOUNDATION_EXPORT NSString * const CRApplicationRunLoopMode;
 
 FOUNDATION_EXPORT NSString * const CRApplicationWillFinishLaunchingNotification;
 FOUNDATION_EXPORT NSString * const CRApplicationDidFinishLaunchingNotification;
 FOUNDATION_EXPORT NSString * const CRApplicationWillTerminateNotification;
+
+FOUNDATION_EXPORT NSString* const CRApplicationDidReceiveSignalNotification;
 
 FOUNDATION_EXPORT id CRApp;
 FOUNDATION_EXPORT int CRApplicationMain(int argc, const char * _Nullable argv[], id<CRApplicationDelegate> delegate);

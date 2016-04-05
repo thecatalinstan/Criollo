@@ -153,9 +153,8 @@ NS_ASSUME_NONNULL_END
     }
 
     CRResponse* response = [self responseWithHTTPStatusCode:200];
-    [self.currentRequest setResponse:response];
-    [response setRequest:self.currentRequest];
-    [self.requests addObject:self.currentRequest];
+    self.currentRequest.response = response;
+    response.request = self.currentRequest;
     [self.delegate connection:self didReceiveRequest:self.currentRequest response:response];
     [self startReading];
 }
@@ -196,7 +195,9 @@ NS_ASSUME_NONNULL_END
 
 - (void)didFinishResponseForRequest:(CRRequest *)request {
     [self.delegate connection:self didFinishRequest:request response:request.response];
-    [self.requests removeObject:request];
+    dispatch_async(self.isolationQueue, ^{
+        [self.requests removeObject:request];
+    });
 }
 
 #pragma mark - State
@@ -210,10 +211,16 @@ NS_ASSUME_NONNULL_END
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
     switch (tag) {
         case CRConnectionSocketTagSendingResponse: {
-            CRRequest* request = (CRRequest*)self.requests.firstObject;
-            if ( request.bufferedResponseData.length > 0 ) {
-                [self sendDataToSocket:request.bufferedResponseData forRequest:request];
-            }
+            dispatch_async(self.isolationQueue, ^{
+                if ( self.requests.count > 0 && !self.willDisconnect ) {
+                    CRRequest* request = self.requests.firstObject;
+                    if ( request.bufferedResponseData.length > 0 ) {
+                        dispatch_async(sock.delegateQueue, ^{
+                            [self sendDataToSocket:request.bufferedResponseData forRequest:request];
+                        });
+                    }
+                }
+            });
         } break;
 
         default:
@@ -222,7 +229,6 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
-    [self.requests removeAllObjects];
     [self.server didCloseConnection:self];
 }
 

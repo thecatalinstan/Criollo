@@ -119,7 +119,6 @@ NS_ASSUME_NONNULL_END
     do {
         NSUInteger chunkSize = data.length - offset > config.CRFCGIConnectionSocketWriteBuffer ? config.CRFCGIConnectionSocketWriteBuffer : data.length - offset;
 
-
         CRFCGIVersion version = CRFCGIVersion1;
         [recordData appendBytes:&version length:1];
 
@@ -138,7 +137,7 @@ NS_ASSUME_NONNULL_END
         UInt8 reserved = 0x00;
         [recordData appendBytes:&reserved length:1];
 
-        NSData* chunk = [NSData dataWithBytesNoCopy:((char *)data.bytes + offset) length:chunkSize freeWhenDone:NO];
+        NSData* chunk = [NSData dataWithBytesNoCopy:(char *)data.bytes + offset length:chunkSize freeWhenDone:NO];
         [recordData appendData:chunk];
 
         offset += chunkSize;

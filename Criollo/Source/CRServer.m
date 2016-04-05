@@ -211,12 +211,15 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Connections
 
-- (void)closeAllConnections {
+- (void)closeAllConnections:(dispatch_block_t)completion {
     dispatch_barrier_async(self.isolationQueue, ^{
         [self.connections enumerateObjectsUsingBlock:^(CRConnection * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [obj.socket disconnectAfterReadingAndWriting];
         }];
         [self.connections removeAllObjects];
+        if ( completion ) {
+            dispatch_async(self.delegateQueue, completion);
+        }
     });
 }
 

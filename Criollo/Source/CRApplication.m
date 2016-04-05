@@ -19,33 +19,40 @@ NSString* const CRApplicationRunLoopMode = @"NSDefaultRunLoopMode";
 NSString* const CRApplicationWillFinishLaunchingNotification = @"CRApplicationWillFinishLaunchingNotification";
 NSString* const CRApplicationDidFinishLaunchingNotification = @"CRApplicationDidFinishLaunchingNotification";
 NSString* const CRApplicationWillTerminateNotification = @"CRApplicationWillTerminateNotification";
+NSString* const CRApplicationDidReceiveSignalNotification = @"CRApplicationDidReceiveSignal";
 
 @class CRApplication;
 CRApplication* CRApp;
 
-static void installSignalHandlers(void) {
-    static dispatch_once_t   onceToken;
-    static dispatch_source_t signalSource;
+static void CRApplicationInstallSignalHandlers(void) {
+    static dispatch_source_t sigtermSignalSource;
+    static dispatch_source_t sigintSignalSource;
+    static dispatch_source_t sigquitSignalSource;
+    static dispatch_source_t sigtstpSignalSource;
 
+    static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        signal(SIGTERM, SIG_IGN);
+        dispatch_source_t(^installSignalHandler)(int) = ^(int sig){
+            signal(sig, SIG_IGN);
+            dispatch_source_t signalSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, sig, 0, dispatch_get_main_queue());
+            dispatch_source_set_event_handler(signalSource, ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationDidReceiveSignalNotification object:@(sig)];
+            });
+            dispatch_resume(signalSource);
+            return signalSource;
+        };
 
-        signalSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, SIGTERM, 0, dispatch_get_main_queue());
-        assert(signalSource != NULL);
-
-        dispatch_source_set_event_handler(signalSource, ^{
-            assert([NSThread isMainThread]);
-            [CRApp logErrorFormat: @"Got SIGTERM."];
-            [CRApp terminate:nil];
-        });
-
-        dispatch_resume(signalSource);
+        sigtermSignalSource = installSignalHandler(SIGTERM);
+        sigintSignalSource = installSignalHandler(SIGINT);
+        sigquitSignalSource = installSignalHandler(SIGQUIT);
+        sigtstpSignalSource = installSignalHandler(SIGTSTP);
     });
+
 }
 
 int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> delegate) {
     @autoreleasepool {
-        installSignalHandlers();
+        CRApplicationInstallSignalHandlers();
         CRApplication* app = [[CRApplication alloc] initWithDelegate:delegate];
         [app run];
     }
@@ -124,6 +131,14 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     self = [super init];
     if ( self != nil ) {
         CRApp = self;
+
+        [[NSNotificationCenter defaultCenter] addObserverForName:CRApplicationDidReceiveSignalNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            NSLog(@"Got signal %@.", note.object);
+            int signal = [note.object intValue];
+            if ( signal == SIGTERM || signal == SIGINT || signal == SIGQUIT ) {
+                [CRApp terminate:nil];
+            }
+        }];
     }
     return self;
 }

@@ -9,11 +9,10 @@
 #import <Foundation/Foundation.h>
 #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 #import <UIKit/UIKit.h>
-#import <CriolloiOS/CriolloiOS.h>
 #else
 #import <Cocoa/Cocoa.h>
-#import <Criollo/Criollo.h>
 #endif
+#import <Criollo/Criollo.h>
 
 #define PortNumber          10781
 #define LogConnections          1
