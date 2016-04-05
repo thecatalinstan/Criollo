@@ -147,7 +147,7 @@ static dispatch_queue_t backgroundQueue;
         }];
     }
 
-    return [NSString stringWithFormat:@"about %@ %@", [formatter stringFromNumber:@(requestCount)], unit];
+    return [NSString stringWithFormat:@"about %@%@%@", [formatter stringFromNumber:@(requestCount)], unit.length > 0 ? @" " : @"", unit];
 }
 
 + (NSString *)criolloVersion {
