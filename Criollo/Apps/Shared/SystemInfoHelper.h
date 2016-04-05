@@ -7,9 +7,9 @@
 //
 
 @import Foundation;
-@import Criollo;
 
-#define CWCriolloVersion        @"0.1.12"
+#define CRBundleIdentifier          @"io.criollo.Criollo"
+#define CRCriolloVersionFallback    @"0.1.12"
 
 NS_ASSUME_NONNULL_BEGIN
 @interface SystemInfoHelper : NSObject

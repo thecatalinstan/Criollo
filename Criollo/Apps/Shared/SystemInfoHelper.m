@@ -12,6 +12,8 @@
 #include <ifaddrs.h>
 #include <arpa/inet.h>
 #include <sys/utsname.h>
+#include <mach/mach.h>
+
 
 @implementation SystemInfoHelper {
 }
@@ -152,10 +154,10 @@ static dispatch_queue_t backgroundQueue;
     static NSString* criolloVersion;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        NSBundle *criolloBundle = [NSBundle bundleForClass:[CRServer class]];
+        NSBundle *criolloBundle = [NSBundle bundleWithIdentifier:CRBundleIdentifier];
         criolloVersion = [criolloBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
         if ( criolloVersion == nil ) {
-            criolloVersion = CWCriolloVersion;
+            criolloVersion = CRCriolloVersionFallback;
         }
     });
     return criolloVersion;

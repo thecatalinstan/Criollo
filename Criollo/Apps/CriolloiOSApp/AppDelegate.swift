@@ -55,7 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
         self.server.addBlock(jsonHelloBlock, forPath: "/json");
 
         // Prints some more info as text/html
-        let uname = systemInfo();
+        let uname = SystemInfoHelper.systemInfo();
         let statusBlock:CRRouteBlock = { (request, response, completionHandler) -> Void in
 
             let startTime:NSDate! = NSDate();
@@ -157,14 +157,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
             // Output some nice info to the console
 
             // Get server ip address
-            var address:NSString?;
-            let result:Bool = getIPAddress(&address);
-            if ( !result ) {
-                address = "127.0.0.1";
-            }
-
+            let address:NSString! = SystemInfoHelper.IPAddress();
             // Set the base url. This is only for logging
-            self.baseURL = NSURL(string: "http://\(address!):\(PortNumber)")
+            self.baseURL = NSURL(string: "http://\(address):\(PortNumber)")
 
             // Log the paths we can handle
 

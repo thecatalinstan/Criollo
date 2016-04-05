@@ -90,6 +90,7 @@
 			children = (
 				ADC1A5C21CA30F49009A4A19 /* CriolloApp */,
 				ADC1A5C11CA30F49009A4A19 /* Products */,
+				ADC1A5DE1CA311E9009A4A19 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -118,7 +119,6 @@
 				AD41ECD51CB42EBB00133C8D /* SystemInfoHelper.h */,
 				AD41ECD61CB42EBB00133C8D /* SystemInfoHelper.m */,
 				AD554D971CAC97C7002182A4 /* Public */,
-				ADC1A5DE1CA311E9009A4A19 /* Frameworks */,
 			);
 			path = CriolloApp;
 			sourceTree = "<group>";
@@ -129,6 +129,7 @@
 				ADC1A5DA1CA311D0009A4A19 /* Criollo.framework */,
 			);
 			name = Frameworks;
+			path = CriolloApp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
