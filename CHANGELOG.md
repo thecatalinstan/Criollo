@@ -6,6 +6,28 @@ This file includes all notable changes to Criollo.
 
 ---
 
+## [0.1.13](https://github.com/thecatalinstan/Criollo/releases/tag/0.1.13) (04/05/2016)
+
+**Released on Tuesday, April 5, 2016**. 
+
+This release focuses on optimizing memory usage, stability and generally speaking *speed*. It also includes some API changes to make developers’ lives easier.
+
+### Changed APIs
+
+* Added a callback to `[CRServer closeAllConnections]`, thus becoming `[CRServer closeAllConnections:(dispatch_block_t _Nullable)completion]`. [`538d4ce`](https://github.com/thecatalinstan/Criollo/commit/538d4ce024f961aed239698bb7947fe01f6d1673).
+
+### Additions and Improvements
+
+* Added signal handler in `CRApplication` for `SIGINT`, `SIGTSTP` and `SIGQUIT`. [`1c2500b`](https://github.com/thecatalinstan/Criollo/commit/1c2500b2a1965db25199f06577702c0bd99d366b).
+* String parsing in request headers is now done without excessive `memcpy` operations both for HTTP and FastCGI.
+* Both OS X and iOS frameworks are now developed with embedded apps. The OS X framework’s app is written in Objective-C, whilst   the iOS app is written in Swift.
+* All examples now use Criollo as a pod.
+
+### Fixed
+
+* Fixes a racing condition that could cause a crash when closing a connection that handles a large number of concurrent requests. [`7f90600`](https://github.com/thecatalinstan/Criollo/commit/7f906008611fb64d70558c18230fbcad7a1c27bf)
+
+
 ## [0.1.12](https://github.com/thecatalinstan/Criollo/releases/tag/0.1.12) (03/15/2016)
 
 **Released on Tuesday, March 15, 2016**. 
