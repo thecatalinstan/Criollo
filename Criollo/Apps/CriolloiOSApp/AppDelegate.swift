@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import CriolloiOS
+import Criollo
 
 let PortNumber:UInt = 10781;
 let LogConnections:Bool = false;

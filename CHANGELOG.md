@@ -6,6 +6,12 @@ This file includes all notable changes to Criollo.
 
 ---
 
+## [0.1.14](https://github.com/thecatalinstan/Criollo/releases/tag/0.1.13) (04/14/2016)
+
+**Released on Tuesday, April 14, 2016**. 
+
+This is a mainenance release. The main thing is that the internal structure of the Xcode project has been changed. There is now only one module name `Criollo` for both iOS and OSX.
+
 ## [0.1.13](https://github.com/thecatalinstan/Criollo/releases/tag/0.1.13) (04/05/2016)
 
 **Released on Tuesday, April 5, 2016**. 

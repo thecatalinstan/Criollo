@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name                    =  "Criollo"
-  s.version                 =  "0.1.13"
+  s.version                 =  "0.1.14"
   s.license                 =  "MIT"
 
   s.summary                 =  "A powerful Cocoa based web application framework for OS X and iOS."
