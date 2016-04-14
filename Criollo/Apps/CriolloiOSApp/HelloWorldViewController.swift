@@ -6,7 +6,7 @@
 //
 //
 
-import CriolloiOS
+import Criollo
 
 class HelloWorldViewController: CRViewController {
 
