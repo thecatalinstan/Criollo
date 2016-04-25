@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Catalin Stan. All rights reserved.
 //
 
-#import <Criollo/CRApplication.h>
+#import "CRApplication.h"
 
 NSString* const Criollo = @"Criollo";
 NSString* const CRErrorDomain = @"CRErrorDomain";
@@ -21,44 +21,7 @@ NSString* const CRApplicationDidFinishLaunchingNotification = @"CRApplicationDid
 NSString* const CRApplicationWillTerminateNotification = @"CRApplicationWillTerminateNotification";
 NSString* const CRApplicationDidReceiveSignalNotification = @"CRApplicationDidReceiveSignal";
 
-@class CRApplication;
 CRApplication* CRApp;
-
-static void CRApplicationInstallSignalHandlers(void) {
-    static dispatch_source_t sigtermSignalSource;
-    static dispatch_source_t sigintSignalSource;
-    static dispatch_source_t sigquitSignalSource;
-    static dispatch_source_t sigtstpSignalSource;
-
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        dispatch_source_t(^installSignalHandler)(int) = ^(int sig){
-            signal(sig, SIG_IGN);
-            dispatch_source_t signalSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, sig, 0, dispatch_get_main_queue());
-            dispatch_source_set_event_handler(signalSource, ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationDidReceiveSignalNotification object:@(sig)];
-            });
-            dispatch_resume(signalSource);
-            return signalSource;
-        };
-
-        sigtermSignalSource = installSignalHandler(SIGTERM);
-        sigintSignalSource = installSignalHandler(SIGINT);
-        sigquitSignalSource = installSignalHandler(SIGQUIT);
-        sigtstpSignalSource = installSignalHandler(SIGTSTP);
-    });
-
-}
-
-int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> delegate) {
-    @autoreleasepool {
-        CRApplicationInstallSignalHandlers();
-        CRApplication* app = [[CRApplication alloc] initWithDelegate:delegate];
-        [app run];
-    }
-    return EXIT_SUCCESS;
-}
-
 
 @interface CRApplication () {
     __strong id<CRApplicationDelegate> _delegate;
@@ -72,6 +35,8 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     CFRunLoopObserverRef mainRunLoopObserver;
 }
 
+@property (nonatomic, readonly, nonnull) NSMutableArray<dispatch_source_t> * dispatchSources;
+
 - (void)startRunLoop;
 - (void)stopRunLoop;
 
@@ -81,6 +46,34 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 - (void)waitingOnTerminateLaterReplyTimerCallback;
 
 @end
+
+int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> delegate) {
+    @autoreleasepool {
+        CRApplication* app = [[CRApplication alloc] initWithDelegate:delegate];
+
+        dispatch_source_t(^installSignalHandler)(int) = ^(int sig){
+            signal(sig, SIG_IGN);
+            dispatch_source_t signalSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, sig, 0, dispatch_get_main_queue());
+            dispatch_source_set_event_handler(signalSource, ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationDidReceiveSignalNotification object:@(sig)];
+            });
+            dispatch_resume(signalSource);
+            return signalSource;
+        };
+
+        [app.dispatchSources addObject:installSignalHandler(SIGTERM)];
+        [app.dispatchSources addObject:installSignalHandler(SIGINT)];
+        [app.dispatchSources addObject:installSignalHandler(SIGQUIT)];
+        [app.dispatchSources addObject:installSignalHandler(SIGTSTP)];
+
+        [app run];
+
+        [app.dispatchSources enumerateObjectsUsingBlock:^(dispatch_source_t  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            dispatch_source_cancel(obj);
+        }];
+    }
+    return EXIT_SUCCESS;
+}
 
 @implementation CRApplication
 
@@ -131,6 +124,8 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     self = [super init];
     if ( self != nil ) {
         CRApp = self;
+
+        _dispatchSources = [NSMutableArray array];
 
         [[NSNotificationCenter defaultCenter] addObserverForName:CRApplicationDidReceiveSignalNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
             NSLog(@"Got signal %@.", note.object);
