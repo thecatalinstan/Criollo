@@ -538,9 +538,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		AD5FFFCB1BF0024D00A57FE9 /* CriolloiOS */ = {
+		AD5FFFCB1BF0024D00A57FE9 /* Criollo iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AD5FFFD31BF0024D00A57FE9 /* Build configuration list for PBXNativeTarget "CriolloiOS" */;
+			buildConfigurationList = AD5FFFD31BF0024D00A57FE9 /* Build configuration list for PBXNativeTarget "Criollo iOS" */;
 			buildPhases = (
 				AD5FFFC71BF0024D00A57FE9 /* Sources */,
 				AD5FFFC81BF0024D00A57FE9 /* Frameworks */,
@@ -551,14 +551,14 @@
 			);
 			dependencies = (
 			);
-			name = CriolloiOS;
+			name = "Criollo iOS";
 			productName = CriolloiOS;
 			productReference = AD5FFFCC1BF0024D00A57FE9 /* Criollo.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		ADEDB3751AEFC0B000A26AF1 /* CriolloOSX */ = {
+		ADEDB3751AEFC0B000A26AF1 /* Criollo OSX */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = ADEDB38A1AEFC0B100A26AF1 /* Build configuration list for PBXNativeTarget "CriolloOSX" */;
+			buildConfigurationList = ADEDB38A1AEFC0B100A26AF1 /* Build configuration list for PBXNativeTarget "Criollo OSX" */;
 			buildPhases = (
 				ADEDB3711AEFC0B000A26AF1 /* Sources */,
 				ADEDB3721AEFC0B000A26AF1 /* Frameworks */,
@@ -569,7 +569,7 @@
 			);
 			dependencies = (
 			);
-			name = CriolloOSX;
+			name = "Criollo OSX";
 			productName = Criollo;
 			productReference = ADEDB3761AEFC0B000A26AF1 /* Criollo.framework */;
 			productType = "com.apple.product-type.framework";
@@ -615,8 +615,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				ADEDB3751AEFC0B000A26AF1 /* CriolloOSX */,
-				AD5FFFCB1BF0024D00A57FE9 /* CriolloiOS */,
+				ADEDB3751AEFC0B000A26AF1 /* Criollo OSX */,
+				AD5FFFCB1BF0024D00A57FE9 /* Criollo iOS */,
 			);
 		};
 /* End PBXProject section */
@@ -957,7 +957,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AD5FFFD31BF0024D00A57FE9 /* Build configuration list for PBXNativeTarget "CriolloiOS" */ = {
+		AD5FFFD31BF0024D00A57FE9 /* Build configuration list for PBXNativeTarget "Criollo iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AD5FFFD11BF0024D00A57FE9 /* Debug */,
@@ -975,7 +975,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		ADEDB38A1AEFC0B100A26AF1 /* Build configuration list for PBXNativeTarget "CriolloOSX" */ = {
+		ADEDB38A1AEFC0B100A26AF1 /* Build configuration list for PBXNativeTarget "Criollo OSX" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				ADEDB38B1AEFC0B100A26AF1 /* Debug */,
