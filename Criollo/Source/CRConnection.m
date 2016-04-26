@@ -35,22 +35,20 @@ NS_ASSUME_NONNULL_END
 
 @implementation CRConnection
 
+static const NSData * CRLFData;
+static const NSData * CRLFCRLFData;
+
++ (void)initialize {
+    CRLFData = [NSData dataWithBytes:"\x0D\x0A" length:2];
+    CRLFCRLFData = [NSData dataWithBytes:"\x0D\x0A\x0D\x0A" length:4];
+}
+
 + (NSData *)CRLFCRLFData {
-    static NSData* _CRLFCRLFData;
-    static dispatch_once_t _CRLFCRLFDataToken;
-    dispatch_once(&_CRLFCRLFDataToken, ^{
-        _CRLFCRLFData = [NSData dataWithBytes:"\x0D\x0A\x0D\x0A" length:4];
-    });
-    return _CRLFCRLFData;
+    return CRLFCRLFData;
 }
 
 + (NSData *)CRLFData {
-    static NSData* _CRLFData;
-    static dispatch_once_t _CRLFDataToken;
-    dispatch_once(&_CRLFDataToken, ^{
-        _CRLFData = [NSData dataWithBytes:"\x0D\x0A" length:2];
-    });
-    return _CRLFData;
+    return CRLFData;
 }
 
 #pragma mark - Responses

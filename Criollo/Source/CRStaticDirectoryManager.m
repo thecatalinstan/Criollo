@@ -38,6 +38,15 @@ NS_ASSUME_NONNULL_END
 
 @implementation CRStaticDirectoryManager
 
+static const NSDateFormatter *dateFormatter;
+
++ (void)initialize {
+    dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+    dateFormatter.timeZone = [NSTimeZone defaultTimeZone];
+    dateFormatter.dateFormat = @"dd-MMM-yyyy HH:mm:ss";
+}
+
 + (instancetype)managerWithDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix {
     return [[CRStaticDirectoryManager alloc] initWithDirectoryAtPath:directoryPath prefix:prefix options:0];
 }
@@ -73,14 +82,6 @@ NS_ASSUME_NONNULL_END
 }
 
 + (NSDateFormatter *)dateFormatter {
-    static NSDateFormatter *dateFormatter;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        dateFormatter = [[NSDateFormatter alloc] init];
-        dateFormatter.calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
-        dateFormatter.timeZone = [NSTimeZone defaultTimeZone];
-        dateFormatter.dateFormat = @"dd-MMM-yyyy HH:mm:ss";
-    });
     return dateFormatter;
 }
 

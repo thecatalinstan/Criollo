@@ -92,12 +92,14 @@ CRHTTPMethod CRHTTPMethodMake(NSString * methodSpec) {
 
 @implementation CRMessage
 
+static const NSArray<NSString *> *acceptedHTTPMethods;
+
++ (void)initialize {
+    acceptedHTTPMethods = @[CRHTTPMethodGetValue, CRHTTPMethodPostValue, CRHTTPMethodPutValue, CRHTTPMethodDeleteValue, CRHTTPMethodPatchValue, CRHTTPMethodOptionsValue, CRHTTPMethodHeadValue];
+
+}
+
 + (NSArray<NSString *> *)acceptedHTTPMethods {
-    static NSArray<NSString *> *acceptedHTTPMethods;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        acceptedHTTPMethods = @[CRHTTPMethodGetValue, CRHTTPMethodPostValue, CRHTTPMethodPutValue, CRHTTPMethodDeleteValue, CRHTTPMethodPatchValue, CRHTTPMethodOptionsValue, CRHTTPMethodHeadValue];
-    });
     return acceptedHTTPMethods;
 }
 
