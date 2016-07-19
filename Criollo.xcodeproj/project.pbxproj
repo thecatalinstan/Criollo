@@ -161,6 +161,13 @@
 			remoteGlobalIDString = ADC1A5C01CA30F49009A4A19;
 			remoteInfo = "Criollo macOS App";
 		};
+		ADAD527C1D3E568300DDFBB5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AD5B3C661CA820B5000988B7 /* Criollo iOS App.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AD5B3C511CA820B5000988B7;
+			remoteInfo = "Criollo iOS App";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -345,6 +352,14 @@
 			isa = PBXGroup;
 			children = (
 				ADAD526F1D3E4FBD00DDFBB5 /* Criollo macOS App.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		ADAD52791D3E568300DDFBB5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				ADAD527D1D3E568300DDFBB5 /* Criollo iOS App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -610,6 +625,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = ADAD52791D3E568300DDFBB5 /* Products */;
+					ProjectRef = AD5B3C661CA820B5000988B7 /* Criollo iOS App.xcodeproj */;
+				},
+				{
 					ProductGroup = ADAD526B1D3E4FBD00DDFBB5 /* Products */;
 					ProjectRef = ADC1A5D41CA30F49009A4A19 /* Criollo macOS App.xcodeproj */;
 				},
@@ -628,6 +647,13 @@
 			fileType = wrapper.application;
 			path = "Criollo macOS App.app";
 			remoteRef = ADAD526E1D3E4FBD00DDFBB5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		ADAD527D1D3E568300DDFBB5 /* Criollo iOS App.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "Criollo iOS App.app";
+			remoteRef = ADAD527C1D3E568300DDFBB5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
