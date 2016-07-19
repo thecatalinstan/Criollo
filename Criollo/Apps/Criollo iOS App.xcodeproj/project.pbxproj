@@ -38,7 +38,7 @@
 		AD41ECDC1CB4330100133C8D /* SystemInfoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemInfoHelper.h; path = Shared/SystemInfoHelper.h; sourceTree = SOURCE_ROOT; };
 		AD41ECDD1CB4330100133C8D /* SystemInfoHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemInfoHelper.m; path = Shared/SystemInfoHelper.m; sourceTree = SOURCE_ROOT; };
 		AD554DA01CAC9A95002182A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		AD5B3C511CA820B5000988B7 /* CriolloiOSApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CriolloiOSApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD5B3C511CA820B5000988B7 /* Criollo iOS App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Criollo iOS App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD5B3C541CA820B5000988B7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AD5B3C561CA820B5000988B7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		AD5B3C591CA820B5000988B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -79,7 +79,7 @@
 		AD5B3C521CA820B5000988B7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AD5B3C511CA820B5000988B7 /* CriolloiOSApp.app */,
+				AD5B3C511CA820B5000988B7 /* Criollo iOS App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -106,9 +106,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AD5B3C501CA820B5000988B7 /* CriolloiOSApp */ = {
+		AD5B3C501CA820B5000988B7 /* Criollo iOS App */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AD5B3C631CA820B5000988B7 /* Build configuration list for PBXNativeTarget "CriolloiOSApp" */;
+			buildConfigurationList = AD5B3C631CA820B5000988B7 /* Build configuration list for PBXNativeTarget "Criollo iOS App" */;
 			buildPhases = (
 				AD5B3C4D1CA820B5000988B7 /* Sources */,
 				AD5B3C4E1CA820B5000988B7 /* Frameworks */,
@@ -119,9 +119,9 @@
 			);
 			dependencies = (
 			);
-			name = CriolloiOSApp;
+			name = "Criollo iOS App";
 			productName = CriolloiOSApp;
-			productReference = AD5B3C511CA820B5000988B7 /* CriolloiOSApp.app */;
+			productReference = AD5B3C511CA820B5000988B7 /* Criollo iOS App.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -139,7 +139,7 @@
 					};
 				};
 			};
-			buildConfigurationList = AD5B3C4C1CA820B5000988B7 /* Build configuration list for PBXProject "CriolloiOSApp" */;
+			buildConfigurationList = AD5B3C4C1CA820B5000988B7 /* Build configuration list for PBXProject "Criollo iOS App" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -152,7 +152,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AD5B3C501CA820B5000988B7 /* CriolloiOSApp */,
+				AD5B3C501CA820B5000988B7 /* Criollo iOS App */,
 			);
 		};
 /* End PBXProject section */
@@ -297,7 +297,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloiOSApp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Criollo iOS App";
 				SWIFT_OBJC_BRIDGING_HEADER = "CriolloiOSApp/CriolloiOSApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -313,7 +313,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloiOSApp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Criollo iOS App";
 				SWIFT_OBJC_BRIDGING_HEADER = "CriolloiOSApp/CriolloiOSApp-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -322,7 +322,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AD5B3C4C1CA820B5000988B7 /* Build configuration list for PBXProject "CriolloiOSApp" */ = {
+		AD5B3C4C1CA820B5000988B7 /* Build configuration list for PBXProject "Criollo iOS App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AD5B3C611CA820B5000988B7 /* Debug */,
@@ -331,7 +331,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AD5B3C631CA820B5000988B7 /* Build configuration list for PBXNativeTarget "CriolloiOSApp" */ = {
+		AD5B3C631CA820B5000988B7 /* Build configuration list for PBXNativeTarget "Criollo iOS App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AD5B3C641CA820B5000988B7 /* Debug */,
