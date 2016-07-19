@@ -38,6 +38,8 @@ NS_ASSUME_NONNULL_END
     return self;
 }
 
+#pragma mark - Block Routes
+
 - (void)addBlock:(CRRouteBlock)block {
     [self addBlock:block forPath:nil HTTPMethod:CRHTTPMethodAll recursive:NO];
 }
@@ -55,6 +57,8 @@ NS_ASSUME_NONNULL_END
     [self addRoute:route forPath:path HTTPMethod:method recursive:recursive];
 }
 
+#pragma mark - Route Controller Routes
+
 - (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path {
     [self addController:controllerClass forPath:path HTTPMethod:CRHTTPMethodAll recursive:NO];
 }
@@ -64,9 +68,11 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive {
-    CRRoute* route = [CRRoute routeWithControllerClass:controllerClass];
+    CRRoute* route = [CRRoute routeWithControllerClass:controllerClass prefix:path];
     [self addRoute:route forPath:path HTTPMethod:method recursive:recursive];
 }
+
+#pragma mark - View Controller Routes
 
 - (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path {
     [self addViewController:viewControllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path HTTPMethod:CRHTTPMethodAll recursive:NO];
@@ -80,6 +86,8 @@ NS_ASSUME_NONNULL_END
     CRRoute* route = [CRRoute routeWithViewControllerClass:viewControllerClass nibName:nibNameOrNil bundle:nibBundleOrNil];
     [self addRoute:route forPath:path HTTPMethod:method recursive:recursive];
 }
+
+#pragma mark - General Routes
 
 - (void)addRoute:(CRRoute*)route forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive {
     NSArray<NSString*>* methods;

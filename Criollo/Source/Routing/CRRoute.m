@@ -27,8 +27,8 @@
     return [[CRRoute alloc] initWithBlock:block];
 }
 
-+ (CRRoute *)routeWithControllerClass:(Class)controllerClass {
-    return [[CRRoute alloc] initWithControllerClass:controllerClass];
++ (CRRoute *)routeWithControllerClass:(Class)controllerClass prefix:(NSString *)prefix {
+    return [[CRRoute alloc] initWithControllerClass:controllerClass prefix:prefix];
 }
 
 + (CRRoute *)routeWithViewControllerClass:(Class)controllerClass nibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -55,9 +55,9 @@
     return self;
 }
 
-- (instancetype)initWithControllerClass:(Class)controllerClass {
+- (instancetype)initWithControllerClass:(Class)controllerClass prefix:(NSString *)prefix {
     CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-        CRViewController* controller = [[controllerClass alloc] init];
+        CRViewController* controller = [[controllerClass alloc] initWithPrefix:prefix];
         controller.routeBlock(request, response, completionHandler);
     };
     return [self initWithBlock:block];

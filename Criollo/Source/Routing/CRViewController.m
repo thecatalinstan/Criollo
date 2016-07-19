@@ -55,8 +55,12 @@ static dispatch_queue_t isolationQueue;
     return [self initWithNibName:nil bundle:nil];
 }
 
+- (instancetype)initWithPrefix:(NSString *)prefix {
+    return [self initWithNibName:nil bundle:nil];
+}
+
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super init];
+    self = [super initWithPrefix:@"/"];
     if ( self != nil ) {
         _nibName = nibNameOrNil;
         if ( self.nibName == nil ) {
