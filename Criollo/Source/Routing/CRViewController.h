@@ -7,12 +7,13 @@
 //
 
 #import "CRTypes.h"
+#import "CRRouteController.h"
 
 @class CRView, CRRequest, CRResponse;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CRViewController : NSObject
+@interface CRViewController : CRRouteController
 
 @property (nonatomic, strong, nullable) CRView* view;
 
@@ -22,7 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, nullable) NSBundle *nibBundle;
 
 @property (nonatomic, readonly) BOOL shouldFinishResponse;
-@property (nonatomic, readonly) CRRouteBlock routeBlock;
 
 - (instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil NS_DESIGNATED_INITIALIZER;
 
