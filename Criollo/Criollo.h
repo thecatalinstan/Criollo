@@ -22,6 +22,7 @@
 #import <Criollo/CRHTTPServer.h>
 #import <Criollo/CRFCGIServer.h>
 
+#import <Criollo/CRRouteController.h>
 #import <Criollo/CRNib.h>
 #import <Criollo/CRView.h>
 #import <Criollo/CRViewController.h>
