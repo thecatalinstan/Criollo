@@ -44,11 +44,11 @@ static const NSData * CRLFCRLFData;
 }
 
 + (NSData *)CRLFCRLFData {
-    return CRLFCRLFData;
+    return (NSData *)CRLFCRLFData;
 }
 
 + (NSData *)CRLFData {
-    return CRLFData;
+    return (NSData *)CRLFData;
 }
 
 #pragma mark - Responses

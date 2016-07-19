@@ -31,7 +31,7 @@ static const CRMimeTypeHelper *sharedHelper;
 }
 
 + (instancetype)sharedHelper {
-    return sharedHelper;
+    return (CRMimeTypeHelper *)sharedHelper;
 }
 
 - (instancetype)init {

@@ -102,11 +102,11 @@ static const NSString * acceptRangesSpec;
 }
 
 + (NSArray<NSString *> *)acceptedRangeUnits {
-    return acceptedRangeUnits;
+    return (NSArray<NSString *> *)acceptedRangeUnits;
 }
 
 + (NSString *)acceptRangesSpec {
-    return acceptRangesSpec;
+    return (NSString *)acceptRangesSpec;
 }
 
 + (instancetype)reuestRangeWithRangesSpecifier:(NSString *)rangesSpecifier {

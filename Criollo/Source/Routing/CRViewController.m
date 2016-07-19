@@ -13,6 +13,7 @@
 #import "CRResponse.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface CRViewController ()
 
 @property (nonatomic, readonly, strong) NSMutableDictionary<NSString*, CRNib*> *nibCache;
@@ -22,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)loadView;
 
 @end
+
 NS_ASSUME_NONNULL_END
 
 @implementation CRViewController
@@ -38,11 +40,11 @@ static dispatch_queue_t isolationQueue;
 }
 
 - (NSMutableDictionary<NSString*, CRNib*>*)nibCache {
-    return nibCache;
+    return (NSMutableDictionary<NSString*, CRNib*>*)nibCache;
 }
 
 - (NSMutableDictionary<NSString*, CRView*>*)viewCache {
-    return viewCache;
+    return (NSMutableDictionary<NSString*, CRView*>*)viewCache;
 }
 
 - (dispatch_queue_t)isolationQueue {
@@ -123,10 +125,6 @@ static dispatch_queue_t isolationQueue;
         [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
 
         NSString* output = [self presentViewControllerWithRequest:request response:response];
-//        if ( ![response valueForHTTPHeaderField:@"Content-Length"] ) {
-//            [response setValue:@(output.length).stringValue forHTTPHeaderField:@"Content-Length"];
-//        }
-
         if ( self.shouldFinishResponse ) {
             [response sendString:output];
         } else {
