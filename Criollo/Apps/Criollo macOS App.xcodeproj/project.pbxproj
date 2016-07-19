@@ -13,6 +13,7 @@
 		AD554D9B1CAC97C7002182A4 /* MultipartViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD554D951CAC97C7002182A4 /* MultipartViewController.html */; };
 		AD554D9C1CAC97C7002182A4 /* MultipartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD554D961CAC97C7002182A4 /* MultipartViewController.m */; };
 		AD554D9F1CAC981C002182A4 /* style.css in Copy Public Resources */ = {isa = PBXBuildFile; fileRef = AD554D981CAC97C7002182A4 /* style.css */; };
+		ADC0811A1D3E712200E9E05D /* APIController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC081191D3E712200E9E05D /* APIController.m */; };
 		ADC1A5C51CA30F49009A4A19 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC1A5C41CA30F49009A4A19 /* AppDelegate.m */; };
 		ADC1A5C81CA30F49009A4A19 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC1A5C71CA30F49009A4A19 /* main.m */; };
 		ADC1A5CA1CA30F49009A4A19 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADC1A5C91CA30F49009A4A19 /* Assets.xcassets */; };
@@ -55,6 +56,8 @@
 		AD554D951CAC97C7002182A4 /* MultipartViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = MultipartViewController.html; path = ../Shared/MultipartViewController.html; sourceTree = "<group>"; };
 		AD554D961CAC97C7002182A4 /* MultipartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultipartViewController.m; sourceTree = "<group>"; };
 		AD554D981CAC97C7002182A4 /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
+		ADC081181D3E712200E9E05D /* APIController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIController.h; sourceTree = "<group>"; };
+		ADC081191D3E712200E9E05D /* APIController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIController.m; sourceTree = "<group>"; };
 		ADC1A5C01CA30F49009A4A19 /* Criollo macOS App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Criollo macOS App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADC1A5C31CA30F49009A4A19 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		ADC1A5C41CA30F49009A4A19 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -107,6 +110,8 @@
 			children = (
 				ADC1A5C31CA30F49009A4A19 /* AppDelegate.h */,
 				ADC1A5C41CA30F49009A4A19 /* AppDelegate.m */,
+				ADC081181D3E712200E9E05D /* APIController.h */,
+				ADC081191D3E712200E9E05D /* APIController.m */,
 				ADC1A5C71CA30F49009A4A19 /* main.m */,
 				ADC1A5C91CA30F49009A4A19 /* Assets.xcassets */,
 				ADC1A5CE1CA30F49009A4A19 /* Info.plist */,
@@ -204,6 +209,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADC0811A1D3E712200E9E05D /* APIController.m in Sources */,
 				AD41ECD71CB42EBB00133C8D /* SystemInfoHelper.m in Sources */,
 				ADC1A5C81CA30F49009A4A19 /* main.m in Sources */,
 				AD554D9C1CAC97C7002182A4 /* MultipartViewController.m in Sources */,
