@@ -153,6 +153,16 @@
 		ADEDB3AA1AEFCC8B00A26AF1 /* NSDate+RFC1123.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB35F1AEFBD8800A26AF1 /* NSDate+RFC1123.h */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		ADAD526E1D3E4FBD00DDFBB5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ADC1A5D41CA30F49009A4A19 /* Criollo macOS App.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = ADC1A5C01CA30F49009A4A19;
+			remoteInfo = "Criollo macOS App";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		AD0BA9901C961898005206A1 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		AD11F4F61C95A81F007DC2FF /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
@@ -329,6 +339,14 @@
 				AD8D1E441C0CF4F700A3763A /* NSString+Criollo.m */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		ADAD526B1D3E4FBD00DDFBB5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				ADAD526F1D3E4FBD00DDFBB5 /* Criollo macOS App.app */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		ADEDB3471AEFBCF700A26AF1 = {
@@ -590,6 +608,12 @@
 			mainGroup = ADEDB3471AEFBCF700A26AF1;
 			productRefGroup = ADEDB3771AEFC0B000A26AF1 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = ADAD526B1D3E4FBD00DDFBB5 /* Products */;
+					ProjectRef = ADC1A5D41CA30F49009A4A19 /* Criollo macOS App.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				ADEDB3751AEFC0B000A26AF1 /* Criollo macOS */,
@@ -597,6 +621,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		ADAD526F1D3E4FBD00DDFBB5 /* Criollo macOS App.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "Criollo macOS App.app";
+			remoteRef = ADAD526E1D3E4FBD00DDFBB5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		AD5FFFCA1BF0024D00A57FE9 /* Resources */ = {

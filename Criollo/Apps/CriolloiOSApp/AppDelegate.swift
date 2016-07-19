@@ -148,7 +148,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
             }
         }, forPath: "/info")
 
-        self.server.addController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/controller");
+        self.server.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/controller");
 
         // Serve static files from "/Public" (relative to bundle)
         let staticFilePath:String = (NSBundle.mainBundle().resourcePath?.stringByAppendingString("/Public"))!;
