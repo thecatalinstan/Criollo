@@ -7,6 +7,7 @@
 //
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface CRView : NSObject 
 
 @property (nonatomic, readonly, strong) NSString *contents;
@@ -16,4 +17,5 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString*)render:(NSDictionary * _Nullable)templateVariables;
 
 @end
+
 NS_ASSUME_NONNULL_END

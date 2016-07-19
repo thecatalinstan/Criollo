@@ -13,6 +13,7 @@
 #import "CRResponse.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface CRViewController ()
 
 @property (nonatomic, readonly, strong) NSMutableDictionary<NSString*, CRNib*> *nibCache;
@@ -22,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)loadView;
 
 @end
+
 NS_ASSUME_NONNULL_END
 
 @implementation CRViewController

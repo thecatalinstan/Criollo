@@ -11,6 +11,7 @@
 @class CRView, CRRequest, CRResponse;
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface CRViewController : NSObject
 
 @property (nonatomic, strong, nullable) CRView* view;
@@ -29,4 +30,5 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString*)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response;
 
 @end
+
 NS_ASSUME_NONNULL_END
