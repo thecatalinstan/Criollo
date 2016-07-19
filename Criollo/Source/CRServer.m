@@ -254,20 +254,7 @@ NS_ASSUME_NONNULL_END
             });
         }
         NSArray<CRRoute*>* routes = [self routesForPath:request.URL.path HTTPMethod:request.method];
-        if ( routes.count == 0 ) {
-            routes = @[[CRRoute routeWithBlock:self.notFoundBlock]];
-        }
-        __block BOOL shouldStopExecutingBlocks = NO;
-        __block NSUInteger currentRouteIndex = 0;
-        void(^completionHandler)(void) = ^{
-            shouldStopExecutingBlocks = NO;
-            currentRouteIndex++;
-        };
-        while (!shouldStopExecutingBlocks && currentRouteIndex < routes.count ) {
-            shouldStopExecutingBlocks = YES;
-            CRRouteBlock block = routes[currentRouteIndex].block;
-            block(request, response, completionHandler);
-        }
+        [self executeRoutes:routes forRequest:request response:response withNotFoundBlock:self.notFoundBlock];
     }]];
 
 }

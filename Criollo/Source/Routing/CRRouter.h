@@ -15,6 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CRRouter : NSObject
 
 - (NSArray<CRRoute *> *)routesForPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method;
+
+- (void)executeRoutes:(NSArray<CRRoute *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response;
+- (void)executeRoutes:(NSArray<CRRoute *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response withNotFoundBlock:(CRRouteBlock _Nullable)notFoundBlock;
+
 - (void)addRoute:(CRRoute *)route forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive;
 
 - (void)addBlock:(CRRouteBlock)block;

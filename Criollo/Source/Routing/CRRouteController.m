@@ -6,12 +6,13 @@
 //  Copyright © 2016 Cătălin Stan. All rights reserved.
 //
 
-#import "CRRouteController.h"
+#import "CRRouteController.h""
 
 @implementation CRRouteController
 
 - (CRRouteBlock)routeBlock {
     return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
+        NSLog(@"%@", [self valueForKey:@"routes"]);
         completionHandler();
     };
 }

@@ -8,6 +8,7 @@
 
 #import "CRRouter.h"
 #import "CRRoute.h"
+#import "CRServer.h"
 #import "CRMessage.h"
 #import "CRMessage_Internal.h"
 #import "CRRequest.h"
@@ -162,5 +163,30 @@ NS_ASSUME_NONNULL_END
     return routes;
 }
 
+- (void)executeRoutes:(NSArray<CRRoute *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response {
+    [self executeRoutes:routes forRequest:request response:response withNotFoundBlock:nil];
+}
+
+- (void)executeRoutes:(NSArray<CRRoute *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response withNotFoundBlock:(CRRouteBlock)notFoundBlock {
+    if ( !notFoundBlock ) {
+        notFoundBlock = [CRServer errorHandlingBlockWithStatus:404 error:nil];
+    }
+
+    if ( routes.count == 0 ) {
+        routes = @[[CRRoute routeWithBlock:notFoundBlock]];
+    }
+
+    __block BOOL shouldStopExecutingBlocks = NO;
+    __block NSUInteger currentRouteIndex = 0;
+    dispatch_block_t completionHandler = ^{
+        shouldStopExecutingBlocks = NO;
+        currentRouteIndex++;
+    };
+    while (!shouldStopExecutingBlocks && currentRouteIndex < routes.count ) {
+        shouldStopExecutingBlocks = YES;
+        CRRouteBlock block = routes[currentRouteIndex].block;
+        block(request, response, completionHandler);
+    }
+}
 
 @end
