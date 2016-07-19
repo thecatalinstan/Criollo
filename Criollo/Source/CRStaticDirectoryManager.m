@@ -109,7 +109,7 @@ static const NSDateFormatter *dateFormatter;
             }
         }
 
-        [CRServer errorHandlingBlockWithStatus:statusCode error:error](request, response, completionHandler);
+        [CRRouter errorHandlingBlockWithStatus:statusCode error:error](request, response, completionHandler);
     };
     return block;
 }

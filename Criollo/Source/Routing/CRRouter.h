@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRRouter : NSObject
 
++ (CRRouteBlock)errorHandlingBlockWithStatus:(NSUInteger)statusCode error:(NSError * _Nullable)error;
+
 @property (nonatomic, strong) CRRouteBlock notFoundBlock;
 
 - (NSArray<CRRoute *> *)routesForPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method;

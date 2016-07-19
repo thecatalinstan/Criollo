@@ -15,6 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) CRRouteBlock routeBlock;
 
+- (instancetype)initWithPrefix:(NSString *)prefix NS_DESIGNATED_INITIALIZER;
+- (void)didLoad;
+
 @end
 
 NS_ASSUME_NONNULL_END

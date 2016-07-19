@@ -29,11 +29,65 @@ NS_ASSUME_NONNULL_END
 
 @implementation CRRouter
 
++ (CRRouteBlock)errorHandlingBlockWithStatus:(NSUInteger)statusCode error:(NSError *)error {
+    return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
+        [response setStatusCode:statusCode description:nil];
+        [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+
+        NSMutableString* responseString = [NSMutableString string];
+
+#if DEBUG
+        NSError* err;
+        if (error == nil) {
+            NSMutableDictionary* mutableUserInfo = [NSMutableDictionary dictionaryWithCapacity:2];
+            NSString* errorDescription;
+            switch (statusCode) {
+                case 404:
+                    errorDescription = [NSString stringWithFormat:NSLocalizedString(@"No routes defined for “%@%@%@”",), NSStringFromCRHTTPMethod(request.method), request.URL.path, [request.URL.path hasSuffix:CRPathSeparator] ? @"" : CRPathSeparator];
+                    break;
+            }
+            if ( errorDescription ) {
+                mutableUserInfo[NSLocalizedDescriptionKey] = errorDescription;
+            }
+            mutableUserInfo[NSURLErrorFailingURLErrorKey] = request.URL;
+            err = [NSError errorWithDomain:CRServerErrorDomain code:statusCode userInfo:mutableUserInfo];
+        } else {
+            err = error;
+        }
+
+        // Error details
+        [responseString appendFormat:@"%@ %lu\n%@\n", err.domain, (long)err.code, err.localizedDescription];
+
+        // Error user-info
+        if ( err.userInfo.count > 0 ) {
+            [responseString appendString:@"\nUser Info\n"];
+            [err.userInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                [responseString appendFormat:@"%@: %@\n", key, obj];
+            }];
+        }
+
+        // Stack trace
+        [responseString appendString:@"\nStack Trace\n"];
+        [[NSThread callStackSymbols] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [responseString appendFormat:@"%@\n", obj];
+        }];
+#else
+        [responseString appendFormat:@"Cannot %@ %@", NSStringFromCRHTTPMethod(request.method), request.URL.path];
+#endif
+
+        [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
+        [response sendString:responseString];
+        
+        completionHandler();
+    };
+}
+
 - (instancetype)init {
     self = [super init];
     if ( self != nil ) {
         _routes = [NSMutableDictionary dictionary];
         _recursiveMatchRoutePathPrefixes = [NSMutableArray array];
+        _notFoundBlock = [CRRouter errorHandlingBlockWithStatus:404 error:nil];
     }
     return self;
 }
@@ -177,7 +231,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)executeRoutes:(NSArray<CRRoute *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response withNotFoundBlock:(CRRouteBlock)notFoundBlock {
     if ( !notFoundBlock ) {
-        notFoundBlock = [CRServer errorHandlingBlockWithStatus:404 error:nil];
+        notFoundBlock = [CRRouter errorHandlingBlockWithStatus:404 error:nil];
     }
 
     if ( routes.count == 0 ) {
