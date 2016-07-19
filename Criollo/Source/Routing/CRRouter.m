@@ -54,16 +54,29 @@ NS_ASSUME_NONNULL_END
     [self addRoute:route forPath:path HTTPMethod:method recursive:recursive];
 }
 
-- (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path {
-    [self addController:controllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path HTTPMethod:CRHTTPMethodAll recursive:NO];
+- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path {
+    [self addController:controllerClass forPath:path HTTPMethod:CRHTTPMethodAll recursive:NO];
 }
 
-- (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method {
-    [self addController:controllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path HTTPMethod:method recursive:NO];
+- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method {
+    [self addController:controllerClass forPath:path HTTPMethod:method recursive:NO];
 }
 
-- (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive {
-    CRRoute* route = [CRRoute routeWithControllerClass:controllerClass nibName:nibNameOrNil bundle:nibBundleOrNil];
+- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive {
+    CRRoute* route = [CRRoute routeWithControllerClass:controllerClass];
+    [self addRoute:route forPath:path HTTPMethod:method recursive:recursive];
+}
+
+- (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path {
+    [self addViewController:viewControllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path HTTPMethod:CRHTTPMethodAll recursive:NO];
+}
+
+- (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method {
+    [self addViewController:viewControllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path HTTPMethod:method recursive:NO];
+}
+
+- (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive {
+    CRRoute* route = [CRRoute routeWithViewControllerClass:viewControllerClass nibName:nibNameOrNil bundle:nibBundleOrNil];
     [self addRoute:route forPath:path HTTPMethod:method recursive:recursive];
 }
 
