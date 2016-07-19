@@ -82,7 +82,7 @@ static const NSDateFormatter *dateFormatter;
 }
 
 + (NSDateFormatter *)dateFormatter {
-    return dateFormatter;
+    return (NSDateFormatter *)dateFormatter;
 }
 
 - (CRRouteBlock)errorHandlerBlockForError:(NSError *)error {

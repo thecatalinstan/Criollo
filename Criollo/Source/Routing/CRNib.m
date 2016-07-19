@@ -28,8 +28,8 @@ static dispatch_queue_t isolationQueue;
     dispatch_set_target_queue(isolationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
 }
 
-- (NSMutableDictionary*)cache {
-    return cache;
+- (NSMutableDictionary *)cache {
+    return (NSMutableDictionary *)cache;
 }
 
 - (dispatch_queue_t)isolationQueue {    

@@ -40,11 +40,11 @@ static dispatch_queue_t isolationQueue;
 }
 
 - (NSMutableDictionary<NSString*, CRNib*>*)nibCache {
-    return nibCache;
+    return (NSMutableDictionary<NSString*, CRNib*>*)nibCache;
 }
 
 - (NSMutableDictionary<NSString*, CRView*>*)viewCache {
-    return viewCache;
+    return (NSMutableDictionary<NSString*, CRView*>*)viewCache;
 }
 
 - (dispatch_queue_t)isolationQueue {

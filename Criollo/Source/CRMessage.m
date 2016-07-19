@@ -100,7 +100,7 @@ static const NSArray<NSString *> *acceptedHTTPMethods;
 }
 
 + (NSArray<NSString *> *)acceptedHTTPMethods {
-    return acceptedHTTPMethods;
+    return (NSArray<NSString *> *)acceptedHTTPMethods;
 }
 
 - (instancetype)init {
