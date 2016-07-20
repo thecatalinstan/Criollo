@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CRRouteController : CRRouter
 
 @property (nonatomic, readonly) CRRouteBlock routeBlock;
+@property (nonatomic, strong, readonly) NSString *prefix;
 
 - (instancetype)initWithPrefix:(NSString *)prefix NS_DESIGNATED_INITIALIZER;
 - (void)didLoad;

@@ -31,8 +31,8 @@
     return [[CRRoute alloc] initWithControllerClass:controllerClass prefix:prefix];
 }
 
-+ (CRRoute *)routeWithViewControllerClass:(Class)controllerClass nibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    return [[CRRoute alloc] initWithViewControllerClass:controllerClass nibName:nibNameOrNil bundle:nibBundleOrNil];
++ (CRRoute *)routeWithViewControllerClass:(Class)controllerClass nibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil prefix:(NSString * _Nullable)prefix {
+    return [[CRRoute alloc] initWithViewControllerClass:controllerClass nibName:nibNameOrNil bundle:nibBundleOrNil prefix:prefix];
 }
 
 + (CRRoute *)routeWithStaticDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix options:(CRStaticDirectoryServingOptions)options {
@@ -63,9 +63,9 @@
     return [self initWithBlock:block];
 }
 
-- (instancetype)initWithViewControllerClass:(Class)viewControllerClass nibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+- (instancetype)initWithViewControllerClass:(Class)viewControllerClass nibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil prefix:(NSString * _Nullable)prefix {
     CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-        CRViewController* viewController = [[viewControllerClass alloc] initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+        CRViewController* viewController = [[viewControllerClass alloc] initWithNibName:nibNameOrNil bundle:nibBundleOrNil prefix:prefix];
         viewController.routeBlock(request, response, completionHandler);
     };
     return [self initWithBlock:block];

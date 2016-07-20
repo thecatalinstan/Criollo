@@ -52,15 +52,19 @@ static dispatch_queue_t isolationQueue;
 }
 
 - (instancetype)init {
-    return [self initWithNibName:nil bundle:nil];
+    return [self initWithNibName:nil bundle:nil prefix:nil];
 }
 
 - (instancetype)initWithPrefix:(NSString *)prefix {
-    return [self initWithNibName:nil bundle:nil];
+    return [self initWithNibName:nil bundle:nil prefix:prefix];
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithPrefix:@"/"];
+    return [self initWithNibName:nibNameOrNil bundle:nibBundleOrNil prefix:nil];
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil prefix:(NSString *)prefix {
+    self = [super initWithPrefix:prefix];
     if ( self != nil ) {
         _nibName = nibNameOrNil;
         if ( self.nibName == nil ) {
@@ -117,8 +121,7 @@ static dispatch_queue_t isolationQueue;
     [self viewDidLoad];
 }
 
-- (void)viewDidLoad {
-}
+- (void)viewDidLoad {}
 
 - (NSString *)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response {
     return [self.view render:self.templateVariables];
@@ -126,14 +129,23 @@ static dispatch_queue_t isolationQueue;
 
 - (CRRouteBlock)routeBlock {
     return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
-        [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+        NSString* requestedDocumentPath = request.env[@"DOCUMENT_URI"];
+        NSString* requestedRelativePath = [[requestedDocumentPath substringFromIndex:self.prefix.length] stringByStandardizingPath];
 
-        NSString* output = [self presentViewControllerWithRequest:request response:response];
-        if ( self.shouldFinishResponse ) {
-            [response sendString:output];
-        } else {
-            [response writeString:output];
-        }
+        NSArray<CRRoute*>* routes = [self routesForPath:requestedRelativePath HTTPMethod:request.method];
+        [self executeRoutes:routes forRequest:request response:response withNotFoundBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completion) {
+
+            [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+
+            NSString* output = [self presentViewControllerWithRequest:request response:response];
+            if ( self.shouldFinishResponse ) {
+                [response sendString:output];
+            } else {
+                [response writeString:output];
+            }
+
+            completion();
+        }];
         completionHandler();
     };
 }
