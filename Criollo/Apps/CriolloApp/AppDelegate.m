@@ -12,6 +12,7 @@
 #import "MultipartViewController.h"
 #import "SystemInfoHelper.h"
 #import "APIController.h"
+#import "MultiRouteViewController.h"
 
 #define PortNumber          10781
 #define LogConnections          1
@@ -74,9 +75,6 @@ NS_ASSUME_NONNULL_END
         [response sendString:[NSString stringWithFormat:@"%@\r\n\r\n--%@\r\n\r\n--", request, request.body]];
     } forPath:@"/post" HTTPMethod:CRHTTPMethodPost];
 
-    [self.server addViewController:[MultipartViewController class] withNibName:@"MultipartViewController" bundle:nil forPath:@"/multipart"];
-    [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" HTTPMethod:CRHTTPMethodAll recursive:YES];
-
     // Serve static files from "/Public" (relative to bundle)
     NSString* staticFilesPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"];
     [self.server mountStaticDirectoryAtPath:staticFilesPath forPath:@"/static" options:CRStaticDirectoryServingOptionsCacheFiles];
@@ -94,6 +92,13 @@ NS_ASSUME_NONNULL_END
 
     // API
     [self.server addController:[APIController class] forPath:@"/api" HTTPMethod:CRHTTPMethodAll recursive:YES];
+
+    // Multiroute
+    [self.server addViewController:[MultiRouteViewController class] withNibName:@"MultiRouteViewController" bundle:nil forPath:@"/multi" HTTPMethod:CRHTTPMethodAll recursive:YES];
+
+    [self.server addViewController:[MultipartViewController class] withNibName:@"MultipartViewController" bundle:nil forPath:@"/multipart"];
+    [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" HTTPMethod:CRHTTPMethodAll recursive:YES];
+
 
     [self startServer];
 }
