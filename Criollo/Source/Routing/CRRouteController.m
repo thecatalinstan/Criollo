@@ -37,14 +37,20 @@ NS_ASSUME_NONNULL_END
 
 - (void)didLoad {}
 
+- (NSString *)relativePathForRequestedPath:(NSString *)requestedPath {
+    NSUInteger relativePathStart = [requestedPath rangeOfString:self.prefix options:NSBackwardsSearch].location;
+    if ( relativePathStart == NSNotFound ) {
+        relativePathStart = 0;
+    }
+    return [[requestedPath substringFromIndex:relativePathStart + self.prefix.length] stringByStandardizingPath];
+}
+
+
 - (CRRouteBlock)routeBlock {
     return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
-        NSString* requestedDocumentPath = request.env[@"DOCUMENT_URI"];
-        NSString* requestedRelativePath = [[requestedDocumentPath substringFromIndex:self.prefix.length] stringByStandardizingPath];
-
+        NSString* requestedRelativePath = [self relativePathForRequestedPath:request.env[@"DOCUMENT_URI"]];
         NSArray<CRRoute*>* routes = [self routesForPath:requestedRelativePath HTTPMethod:request.method];
         [self executeRoutes:routes forRequest:request response:response];
-
         completionHandler();
     };
 }

@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithPrefix:(NSString *)prefix NS_DESIGNATED_INITIALIZER;
 - (void)didLoad;
 
+- (NSString *)relativePathForRequestedPath:(NSString *)requestedPath;
+
 @end
 
 NS_ASSUME_NONNULL_END

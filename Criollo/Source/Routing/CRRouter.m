@@ -195,7 +195,7 @@ NS_ASSUME_NONNULL_END
     }];
 }
 
-- (NSArray<CRRoute*>*)routesForPath:(NSString*)path HTTPMethod:(CRHTTPMethod)method {
+- (NSArray<CRRoute *> *)routesForPath:(NSString*)path HTTPMethod:(CRHTTPMethod)method {
     if ( path == nil ) {
         path = @"";
     }
