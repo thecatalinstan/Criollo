@@ -10,19 +10,23 @@ import Criollo
 
 class MultiRouteViewController: CRViewController {
 
-    override func didLoad() {
-        self.addBlock( { (request, response, completionHandler) -> Void in
-            response.setValue("text/plain", forHTTPHeaderField: "Content-type")
-            response.send("Hello")
-            }, forPath:"/hello")
+    override func init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?, prefix: String?) {
+        self = super.init(nibNameOrNil, nibBundleOrNil, prefix)
+        if ( self != nil ) {
+            self.addBlock( { (request, response, completionHandler) -> Void in
+                response.setValue("text/plain", forHTTPHeaderField: "Content-type")
+                response.send("Hello")
+                }, forPath:"/hello")
 
-        self.addBlock( { (request, response, completionHandler) -> Void in
-            response.setValue("text/plain", forHTTPHeaderField: "Content-type")
-            response.send(NSStringFromCRHTTPMethod(request.method))
-            }, forPath:"/method")
+            self.addBlock( { (request, response, completionHandler) -> Void in
+                response.setValue("text/plain", forHTTPHeaderField: "Content-type")
+                response.send(NSStringFromCRHTTPMethod(request.method))
+                }, forPath:"/method")
 
-        self.addViewController(HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil, forPath: "/hello-c", HTTPMethod: CRHTTPMethod.All, recursive: true)
-        self.addController(APIController.self, forPath: "/api", HTTPMethod: CRHTTPMethod.All, recursive: true)
+            self.addViewController(HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil, forPath: "/hello-c", HTTPMethod: CRHTTPMethod.All, recursive: true)
+            self.addController(APIController.self, forPath: "/api", HTTPMethod: CRHTTPMethod.All, recursive: true)
+        }
+        return self
     }
 
     override func presentViewControllerWithRequest(request: CRRequest, response: CRResponse) -> String {
@@ -36,6 +40,7 @@ class MultiRouteViewController: CRViewController {
         });
         text += "</pre>";
         self.vars["text"] = text;
+        
         return super.presentViewControllerWithRequest(request, response: response);
     }
 

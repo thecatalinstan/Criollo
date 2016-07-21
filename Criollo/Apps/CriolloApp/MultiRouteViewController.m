@@ -12,21 +12,25 @@
 
 @implementation MultiRouteViewController
 
-- (void)didLoad {
-    [self addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-        [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
-        [response send:@"Hello :)"];
-        completionHandler();
-    } forPath:@"/hello"];
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil prefix:(NSString * _Nullable)prefix {
+    self  = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil prefix:prefix];
+    if ( self != nil ) {
+        [self addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+            [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
+            [response send:@"Hello :)"];
+            completionHandler();
+        } forPath:@"/hello"];
 
-    [self addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-        [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
-        [response send:NSStringFromCRHTTPMethod(request.method)];
-        completionHandler();
-    } forPath:@"/method"];
+        [self addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+            [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
+            [response send:NSStringFromCRHTTPMethod(request.method)];
+            completionHandler();
+        } forPath:@"/method"];
 
-    [self addViewController:[HelloWorldViewController class] withNibName:nil bundle:nil forPath:@"/hello-c" HTTPMethod:CRHTTPMethodAll recursive:YES];
-    [self addController:[APIController class] forPath:@"/api" HTTPMethod:CRHTTPMethodAll recursive:YES];
+        [self addViewController:[HelloWorldViewController class] withNibName:nil bundle:nil forPath:@"/hello-c" HTTPMethod:CRHTTPMethodAll recursive:YES];
+        [self addController:[APIController class] forPath:@"/api" HTTPMethod:CRHTTPMethodAll recursive:YES];
+    }
+    return self;
 }
 
 - (NSString *)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response {

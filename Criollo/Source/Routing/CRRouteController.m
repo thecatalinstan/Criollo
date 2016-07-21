@@ -30,12 +30,9 @@ NS_ASSUME_NONNULL_END
     self = [super init];
     if ( self != nil ) {
         _prefix = prefix;
-        [self didLoad];
     }
     return self;
 }
-
-- (void)didLoad {}
 
 - (NSString *)relativePathForRequestedPath:(NSString *)requestedPath {
     NSUInteger relativePathStart = [requestedPath rangeOfString:self.prefix options:NSBackwardsSearch].location;

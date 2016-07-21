@@ -75,7 +75,6 @@ static dispatch_queue_t isolationQueue;
             _nibBundle = [NSBundle mainBundle];
         }
         _vars = [NSMutableDictionary dictionary];
-        [self loadView];
     }
     return self;
 }
@@ -84,13 +83,9 @@ static dispatch_queue_t isolationQueue;
     CRView* view;
 
     NSString* viewCacheKey = [NSString stringWithFormat:@"%@/%@@%@", self.nibBundle.bundleIdentifier, self.nibName, NSStringFromClass(self.class)];
-
     if ( self.viewCache[viewCacheKey] != nil ) {
-
         view = self.viewCache[viewCacheKey];
-
     } else {
-
         NSString* nibCacheKey = [NSString stringWithFormat:@"%@/%@", self.nibBundle.bundleIdentifier, self.nibName];
         CRNib *nib;
         if ( self.nibCache[nibCacheKey] != nil ) {
@@ -101,7 +96,6 @@ static dispatch_queue_t isolationQueue;
                 self.nibCache[nibCacheKey] = nib;
             });
         }
-
         NSString *contents = [NSString stringWithUTF8String:nib.data.bytes];
 
         // Determine the view class to use
@@ -109,7 +103,6 @@ static dispatch_queue_t isolationQueue;
         if ( viewClass == nil ) {
             viewClass = [CRView class];
         }
-
         view = [[viewClass alloc] initWithContents:contents];
         dispatch_async(self.isolationQueue, ^{
             self.viewCache[viewCacheKey] = view;
@@ -117,13 +110,15 @@ static dispatch_queue_t isolationQueue;
     }
 
     self.view = view;
-    
     [self viewDidLoad];
 }
 
 - (void)viewDidLoad {}
 
 - (NSString *)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response {
+    if ( self.view == nil ) {
+        [self loadView];
+    }
     return [self.view render:self.vars];
 }
 
@@ -144,6 +139,7 @@ static dispatch_queue_t isolationQueue;
 
             completion();
         }];
+
         completionHandler();
     };
 }

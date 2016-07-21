@@ -10,9 +10,6 @@
 
 @implementation HelloWorldViewController
 
-- (void)viewDidLoad {
-}
-
 - (NSString *)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response {
     self.vars[@"title"] = NSStringFromClass(self.class);
 
