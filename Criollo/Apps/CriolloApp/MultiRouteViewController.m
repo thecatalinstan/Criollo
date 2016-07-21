@@ -29,10 +29,6 @@
     [self addController:[APIController class] forPath:@"/api" HTTPMethod:CRHTTPMethodAll recursive:YES];
 }
 
-- (void)viewDidLoad {
-    NSLog(@"%@", [self valueForKey:@"routes"]);
-}
-
 - (NSString *)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response {
     self.templateVariables[@"title"] = NSStringFromClass(self.class);
 

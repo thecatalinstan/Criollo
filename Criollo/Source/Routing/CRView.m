@@ -32,9 +32,14 @@
     if ( templateVariables == nil ) {
         return self.contents;
     } else {
+        NSLog(@"%@", templateVariables);
         NSMutableString* mutableContents = self.contents.mutableCopy;
         [templateVariables enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+            if ( obj == nil || ![obj isKindOfClass:[NSString class]] ) {
+                return;
+            }
             [mutableContents replaceOccurrencesOfString:[NSString stringWithFormat:CRViewVariableFormat, key] withString:obj options:0 range:NSMakeRange(0, mutableContents.length)];
+            NSLog(@"%@", mutableContents);
         }];
         return mutableContents;
     }

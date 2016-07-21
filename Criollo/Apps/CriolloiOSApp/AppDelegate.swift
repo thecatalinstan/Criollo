@@ -54,8 +54,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
         };
         self.server.addBlock(jsonHelloBlock, forPath: "/json");
 
-        self.server.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/controller");
-
         // Serve static files from "/Public" (relative to bundle)
         let staticFilePath:String = (NSBundle.mainBundle().resourcePath?.stringByAppendingString("/Public"))!;
         self.server.mountStaticDirectoryAtPath(staticFilePath, forPath: "/static", options: CRStaticDirectoryServingOptions.FollowSymlinks)
@@ -71,6 +69,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
 
         // API 
         self.server .addController(APIController.self, forPath: "/api", HTTPMethod: CRHTTPMethod.All, recursive: true)
+
+        self.server.addViewController(MultiRouteViewController.self, withNibName:"MultiRouteViewController", bundle:nil, forPath: "/multi", HTTPMethod: CRHTTPMethod.All, recursive: true);
+
+        self.server.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/controller", HTTPMethod: CRHTTPMethod.All, recursive: true);
 
         // Start listening
         var serverError:NSError?;
@@ -99,7 +101,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
             });
 
             let sortedPaths:NSArray = paths.sortedArrayUsingDescriptors([NSSortDescriptor(key:"absoluteString", ascending:true)]);
-
             NSLog("Available paths are");
             sortedPaths.enumerateObjectsUsingBlock({ (obj:AnyObject, idx:Int, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
                 NSLog(" * \(obj.absoluteString )");

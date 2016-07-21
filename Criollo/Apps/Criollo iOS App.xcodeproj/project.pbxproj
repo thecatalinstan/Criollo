@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD23B7371D3FC7100056170D /* MultiRouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD23B7361D3FC7100056170D /* MultiRouteViewController.swift */; };
+		AD23B7391D3FC71C0056170D /* MultiRouteViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD23B7381D3FC71C0056170D /* MultiRouteViewController.html */; };
 		AD41ECD41CB42D4900133C8D /* style.css in Copy Public Resources */ = {isa = PBXBuildFile; fileRef = AD41ECD11CB42D1C00133C8D /* style.css */; };
 		AD41ECDE1CB4330100133C8D /* SystemInfoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD41ECDD1CB4330100133C8D /* SystemInfoHelper.m */; };
 		AD554DA11CAC9A95002182A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD554DA01CAC9A95002182A4 /* Assets.xcassets */; };
@@ -47,6 +49,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AD23B7361D3FC7100056170D /* MultiRouteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiRouteViewController.swift; sourceTree = "<group>"; };
+		AD23B7381D3FC71C0056170D /* MultiRouteViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = MultiRouteViewController.html; path = Shared/MultiRouteViewController.html; sourceTree = SOURCE_ROOT; };
 		AD41ECD11CB42D1C00133C8D /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
 		AD41ECDB1CB4330000133C8D /* CriolloiOSApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CriolloiOSApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		AD41ECDC1CB4330100133C8D /* SystemInfoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemInfoHelper.h; path = Shared/SystemInfoHelper.h; sourceTree = SOURCE_ROOT; };
@@ -110,6 +114,8 @@
 				AD5B3C561CA820B5000988B7 /* ViewController.swift */,
 				AD864DEA1CAD3F1D008D8FFE /* HelloWorldViewController.html */,
 				AD864DEB1CAD3F1D008D8FFE /* HelloWorldViewController.swift */,
+				AD23B7381D3FC71C0056170D /* MultiRouteViewController.html */,
+				AD23B7361D3FC7100056170D /* MultiRouteViewController.swift */,
 				AD5B3C581CA820B5000988B7 /* Main.storyboard */,
 				AD5B3C5D1CA820B5000988B7 /* LaunchScreen.storyboard */,
 				AD5B3C601CA820B5000988B7 /* Info.plist */,
@@ -193,6 +199,7 @@
 				AD5B3C5F1CA820B5000988B7 /* LaunchScreen.storyboard in Resources */,
 				AD554DA11CAC9A95002182A4 /* Assets.xcassets in Resources */,
 				AD5B3C5A1CA820B5000988B7 /* Main.storyboard in Resources */,
+				AD23B7391D3FC71C0056170D /* MultiRouteViewController.html in Resources */,
 				AD864DEC1CAD3F1D008D8FFE /* HelloWorldViewController.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -206,6 +213,7 @@
 			files = (
 				AD864DED1CAD3F1D008D8FFE /* HelloWorldViewController.swift in Sources */,
 				AD5B3C571CA820B5000988B7 /* ViewController.swift in Sources */,
+				AD23B7371D3FC7100056170D /* MultiRouteViewController.swift in Sources */,
 				AD41ECDE1CB4330100133C8D /* SystemInfoHelper.m in Sources */,
 				AD5B3C551CA820B5000988B7 /* AppDelegate.swift in Sources */,
 				ADC0811C1D3E767100E9E05D /* APIController.swift in Sources */,
