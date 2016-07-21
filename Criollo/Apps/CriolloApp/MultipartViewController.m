@@ -12,7 +12,7 @@
 
 - (NSString *)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response {
     self.vars[@"title"] = NSStringFromClass(self.class);
-
+    self.vars[@"body"] = [NSString stringWithFormat:@"%@", request.body];
     return [super presentViewControllerWithRequest:request response:response];
 }
 
