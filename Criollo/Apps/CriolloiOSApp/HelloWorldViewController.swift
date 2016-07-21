@@ -11,7 +11,7 @@ import Criollo
 class HelloWorldViewController: CRViewController {
 
     override func presentViewControllerWithRequest(request: CRRequest, response: CRResponse) -> String {
-        self.templateVariables["title"] = self.dynamicType;
+        self.templateVariables["title"] = String(self.dynamicType);
 
         var text:String = String();
         let env:NSDictionary! = request.valueForKey("env") as! NSDictionary;

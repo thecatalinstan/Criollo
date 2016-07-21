@@ -7,12 +7,19 @@
 //
 
 #import "CRTypes.h"
+#import "CRRouter.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CRRouteController : NSObject
+@interface CRRouteController : CRRouter
 
 @property (nonatomic, readonly) CRRouteBlock routeBlock;
+@property (nonatomic, strong, readonly) NSString *prefix;
+
+- (instancetype)initWithPrefix:(NSString *)prefix NS_DESIGNATED_INITIALIZER;
+- (void)didLoad;
+
+- (NSString *)relativePathForRequestedPath:(NSString *)requestedPath;
 
 @end
 

@@ -24,7 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) BOOL shouldFinishResponse;
 
-- (instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil;
+- (instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil prefix:(NSString * _Nullable)prefix NS_DESIGNATED_INITIALIZER;
 
 - (void)viewDidLoad;
 - (NSString*)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response;

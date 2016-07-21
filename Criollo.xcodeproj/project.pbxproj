@@ -161,7 +161,7 @@
 			remoteGlobalIDString = ADC1A5C01CA30F49009A4A19;
 			remoteInfo = "Criollo macOS App";
 		};
-		ADAD52751D3E552700DDFBB5 /* PBXContainerItemProxy */ = {
+		ADAD527C1D3E568300DDFBB5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AD5B3C661CA820B5000988B7 /* Criollo iOS App.xcodeproj */;
 			proxyType = 2;

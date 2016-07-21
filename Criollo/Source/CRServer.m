@@ -37,59 +37,6 @@ NS_ASSUME_NONNULL_END
 
 @implementation CRServer
 
-+ (CRRouteBlock)errorHandlingBlockWithStatus:(NSUInteger)statusCode error:(NSError *)error {
-    return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
-        [response setStatusCode:statusCode description:nil];
-        [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-
-        NSMutableString* responseString = [NSMutableString string];
-
-#if DEBUG
-        NSError* err;
-        if (error == nil) {
-            NSMutableDictionary* mutableUserInfo = [NSMutableDictionary dictionaryWithCapacity:2];
-            NSString* errorDescription;
-            switch (statusCode) {
-                case 404:
-                    errorDescription = [NSString stringWithFormat:NSLocalizedString(@"No routes defined for “%@%@%@”",), NSStringFromCRHTTPMethod(request.method), request.URL.path, [request.URL.path hasSuffix:CRPathSeparator] ? @"" : CRPathSeparator];
-                    break;
-            }
-            if ( errorDescription ) {
-                mutableUserInfo[NSLocalizedDescriptionKey] = errorDescription;
-            }
-            mutableUserInfo[NSURLErrorFailingURLErrorKey] = request.URL;
-            err = [NSError errorWithDomain:CRServerErrorDomain code:statusCode userInfo:mutableUserInfo];
-        } else {
-            err = error;
-        }
-
-        // Error details
-        [responseString appendFormat:@"%@ %lu\n%@\n", err.domain, (long)err.code, err.localizedDescription];
-
-        // Error user-info
-        if ( err.userInfo.count > 0 ) {
-            [responseString appendString:@"\nUser Info\n"];
-            [err.userInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-                [responseString appendFormat:@"%@: %@\n", key, obj];
-            }];
-        }
-
-        // Stack trace
-        [responseString appendString:@"\nStack Trace\n"];
-        [[NSThread callStackSymbols] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [responseString appendFormat:@"%@\n", obj];
-        }];
-#else
-        [responseString appendFormat:@"Cannot %@ %@", NSStringFromCRHTTPMethod(request.method), request.URL.path];
-#endif
-
-        [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
-        [response sendString:responseString];
-
-        completionHandler();
-    };
-}
-
 - (instancetype)init {
     return [self initWithDelegate:nil delegateQueue:nil];
 }
@@ -102,15 +49,12 @@ NS_ASSUME_NONNULL_END
     self = [super init];
     if ( self != nil ) {
         _configuration = [[CRServerConfiguration alloc] init];
-
         _delegate = delegate;
         _delegateQueue = delegateQueue;
         if ( _delegateQueue == nil ) {
             _delegateQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"ServerDelegateQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
             dispatch_set_target_queue(_delegateQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
         }
-
-        _notFoundBlock = [CRServer errorHandlingBlockWithStatus:404 error:nil];
     }
     return self;
 }
@@ -254,22 +198,8 @@ NS_ASSUME_NONNULL_END
             });
         }
         NSArray<CRRoute*>* routes = [self routesForPath:request.URL.path HTTPMethod:request.method];
-        if ( routes.count == 0 ) {
-            routes = @[[CRRoute routeWithBlock:self.notFoundBlock]];
-        }
-        __block BOOL shouldStopExecutingBlocks = NO;
-        __block NSUInteger currentRouteIndex = 0;
-        void(^completionHandler)(void) = ^{
-            shouldStopExecutingBlocks = NO;
-            currentRouteIndex++;
-        };
-        while (!shouldStopExecutingBlocks && currentRouteIndex < routes.count ) {
-            shouldStopExecutingBlocks = YES;
-            CRRouteBlock block = routes[currentRouteIndex].block;
-            block(request, response, completionHandler);
-        }
+        [self executeRoutes:routes forRequest:request response:response withNotFoundBlock:self.notFoundBlock];
     }]];
-
 }
 
 - (void)connection:(CRConnection *)connection didFinishRequest:(CRRequest *)request response:(CRResponse *)response {

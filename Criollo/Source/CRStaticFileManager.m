@@ -208,7 +208,7 @@ NS_ASSUME_NONNULL_END
             }
         }
 
-        [CRServer errorHandlingBlockWithStatus:statusCode error:error](request, response, completionHandler);
+        [CRRouter errorHandlingBlockWithStatus:statusCode error:error](request, response, completionHandler);
     };
     return block;
 }

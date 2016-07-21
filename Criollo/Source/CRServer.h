@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol CRServerDelegate <NSObject>
 
 @optional
+
 - (void)serverWillStartListening:(CRServer *)server;
 - (void)serverDidStartListening:(CRServer *)server;
 
@@ -36,7 +37,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CRServer : CRRouter
 
 @property (nonatomic, strong, nullable) id<CRServerDelegate> delegate;
-@property (nonatomic, strong) CRRouteBlock notFoundBlock;
 @property (nonatomic, strong, nullable) dispatch_queue_t delegateQueue;
 
 - (instancetype)initWithDelegate:(id<CRServerDelegate> _Nullable)delegate;
@@ -59,7 +59,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType;
 - (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
 
-+ (CRRouteBlock)errorHandlingBlockWithStatus:(NSUInteger)statusCode error:(NSError * _Nullable)error;
-
 @end
+
 NS_ASSUME_NONNULL_END
