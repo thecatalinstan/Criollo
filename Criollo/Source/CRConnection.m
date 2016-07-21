@@ -35,22 +35,20 @@ NS_ASSUME_NONNULL_END
 
 @implementation CRConnection
 
+static const NSData * CRLFData;
+static const NSData * CRLFCRLFData;
+
++ (void)initialize {
+    CRLFData = [NSData dataWithBytes:"\x0D\x0A" length:2];
+    CRLFCRLFData = [NSData dataWithBytes:"\x0D\x0A\x0D\x0A" length:4];
+}
+
 + (NSData *)CRLFCRLFData {
-    static NSData* _CRLFCRLFData;
-    static dispatch_once_t _CRLFCRLFDataToken;
-    dispatch_once(&_CRLFCRLFDataToken, ^{
-        _CRLFCRLFData = [NSData dataWithBytes:"\x0D\x0A\x0D\x0A" length:4];
-    });
-    return _CRLFCRLFData;
+    return (NSData *)CRLFCRLFData;
 }
 
 + (NSData *)CRLFData {
-    static NSData* _CRLFData;
-    static dispatch_once_t _CRLFDataToken;
-    dispatch_once(&_CRLFDataToken, ^{
-        _CRLFData = [NSData dataWithBytes:"\x0D\x0A" length:2];
-    });
-    return _CRLFData;
+    return (NSData *)CRLFData;
 }
 
 #pragma mark - Responses
@@ -110,16 +108,16 @@ NS_ASSUME_NONNULL_END
         return;
     }
 
-    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, (unsigned long)data.length);
-    NSString* contentType = self.currentRequest.env[@"HTTP_CONTENT_TYPE"];
-    if ([contentType hasPrefix:CRRequestTypeMultipart]) {
-        NSError* bodyParsingError;
-        if ( ![self.currentRequest parseMultipartBodyDataChunk:data error:&bodyParsingError] ) {
-            NSLog(@" * bodyParsingError = %@", bodyParsingError);
-        }
-    } else {
+//    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, (unsigned long)data.length);
+//    NSString* contentType = self.currentRequest.env[@"HTTP_CONTENT_TYPE"];
+//    if ([contentType hasPrefix:CRRequestTypeMultipart]) {
+//        NSError* bodyParsingError;
+//        if ( ![self.currentRequest parseMultipartBodyDataChunk:data error:&bodyParsingError] ) {
+//            NSLog(@" * bodyParsingError = %@", bodyParsingError);
+//        }
+//    } else {
         [self bufferBodyData:data forRequest:self.currentRequest];
-    }
+//    }
 }
 
 - (void)didReceiveCompleteRequest {
@@ -137,19 +135,19 @@ NS_ASSUME_NONNULL_END
 
         if ([contentType hasPrefix:CRRequestTypeJSON]) {
             result = [self.currentRequest parseJSONBodyData:&bodyParsingError];
-        } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
+//        } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
         } else if ([contentType hasPrefix:CRRequestTypeURLEncoded]) {
             result = [self.currentRequest parseURLEncodedBodyData:&bodyParsingError];
         } else {
             result = [self.currentRequest parseBufferedBodyData:&bodyParsingError];
         }
 
-        if ( !result ) {
-            NSLog(@" * bodyParsingError = %@", bodyParsingError);
-        } else {
-            NSLog(@" * request.body = %@", self.currentRequest.body);
-            NSLog(@" * bufferedBodyData = %lu bytes", (unsigned long)self.currentRequest.bufferedBodyData.length);
-        }
+//        if ( !result ) {
+//            NSLog(@" * bodyParsingError = %@", bodyParsingError);
+//        } else {
+//            NSLog(@" * request.body = %@", self.currentRequest.body);
+//            NSLog(@" * bufferedBodyData = %lu bytes", (unsigned long)self.currentRequest.bufferedBodyData.length);
+//        }
     }
 
     CRResponse* response = [self responseWithHTTPStatusCode:200];

@@ -12,6 +12,7 @@
 #define CRCriolloVersionFallback    @"0.1.12"
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface SystemInfoHelper : NSObject
 
 + (NSString *)IPAddress;
@@ -26,4 +27,5 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)bundleVersion;
 
 @end
+
 NS_ASSUME_NONNULL_END

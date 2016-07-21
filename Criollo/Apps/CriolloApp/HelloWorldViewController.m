@@ -10,11 +10,8 @@
 
 @implementation HelloWorldViewController
 
-- (void)viewDidLoad {
-}
-
 - (NSString *)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response {
-    self.templateVariables[@"title"] = NSStringFromClass(self.class);
+    self.vars[@"title"] = NSStringFromClass(self.class);
 
     NSMutableString* text = [NSMutableString string];
     [text appendString:@"<h3>Request Enviroment:</h3><pre>"];
@@ -22,7 +19,7 @@
         [text appendFormat:@"%@: %@\n", key, obj];
     }];
     [text appendString:@"</pre>"];
-    self.templateVariables[@"text"] = text;
+    self.vars[@"text"] = text;
 
     return [super presentViewControllerWithRequest:request response:response];
 }

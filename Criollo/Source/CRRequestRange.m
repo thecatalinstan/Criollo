@@ -90,25 +90,23 @@
 
 @implementation CRRequestRange
 
+static const NSArray<NSString *> *acceptedRangeUnits;
+static const NSString * acceptRangesSpec;
+
++ (void)initialize {
+    acceptedRangeUnits = @[@"bytes"];
+    acceptRangesSpec = [[CRRequestRange acceptedRangeUnits] componentsJoinedByString:CRRequestHeaderSeparator];
+    if ( acceptRangesSpec.length == 0 ) {
+        acceptRangesSpec = @"none";
+    }
+}
+
 + (NSArray<NSString *> *)acceptedRangeUnits {
-    static NSArray<NSString *> *acceptedRangeUnits;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        acceptedRangeUnits = @[@"bytes"];
-    });
-    return acceptedRangeUnits;
+    return (NSArray<NSString *> *)acceptedRangeUnits;
 }
 
 + (NSString *)acceptRangesSpec {
-    static NSString *acceptRangesSpec;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        acceptRangesSpec = [[CRRequestRange acceptedRangeUnits] componentsJoinedByString:CRRequestHeaderSeparator];
-        if ( acceptRangesSpec.length == 0 ) {
-            acceptRangesSpec = @"none";
-        }
-    });
-    return acceptRangesSpec;
+    return (NSString *)acceptRangesSpec;
 }
 
 + (instancetype)reuestRangeWithRangesSpecifier:(NSString *)rangesSpecifier {

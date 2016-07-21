@@ -11,6 +11,7 @@
 #import <Criollo/CRTypes.h>
 
 #import <Criollo/CRApplication.h>
+#import <Criollo/CRRouter.h>
 #import <Criollo/CRServer.h>
 #import <Criollo/CRConnection.h>
 #import <Criollo/CRMessage.h>
@@ -21,6 +22,7 @@
 #import <Criollo/CRHTTPServer.h>
 #import <Criollo/CRFCGIServer.h>
 
+#import <Criollo/CRRouteController.h>
 #import <Criollo/CRNib.h>
 #import <Criollo/CRView.h>
 #import <Criollo/CRViewController.h>

@@ -10,13 +10,9 @@
 
 @implementation MultipartViewController
 
-- (void)viewDidLoad {
-    
-}
-
 - (NSString *)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response {
-    self.templateVariables[@"title"] = NSStringFromClass(self.class);
-
+    self.vars[@"title"] = NSStringFromClass(self.class);
+    self.vars[@"body"] = [NSString stringWithFormat:@"%@", request.body];
     return [super presentViewControllerWithRequest:request response:response];
 }
 

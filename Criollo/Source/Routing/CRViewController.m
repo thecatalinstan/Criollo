@@ -13,6 +13,7 @@
 #import "CRResponse.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface CRViewController ()
 
 @property (nonatomic, readonly, strong) NSMutableDictionary<NSString*, CRNib*> *nibCache;
@@ -22,44 +23,48 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)loadView;
 
 @end
+
 NS_ASSUME_NONNULL_END
 
 @implementation CRViewController
 
+static const NSMutableDictionary<NSString *, CRNib *> * nibCache;
+static const NSMutableDictionary<NSString *, CRView *> * viewCache;
+static dispatch_queue_t isolationQueue;
+
++ (void)initialize {
+    nibCache = [NSMutableDictionary dictionary];
+    viewCache = [NSMutableDictionary dictionary];
+    isolationQueue = dispatch_queue_create([[NSStringFromClass(self.class) stringByAppendingPathExtension:@"IsolationQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
+    dispatch_set_target_queue(isolationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
+}
+
 - (NSMutableDictionary<NSString*, CRNib*>*)nibCache {
-    static NSMutableDictionary<NSString*, CRNib*>* nibCache;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        nibCache = [NSMutableDictionary dictionary];
-    });
-    return nibCache;
+    return (NSMutableDictionary<NSString*, CRNib*>*)nibCache;
 }
 
 - (NSMutableDictionary<NSString*, CRView*>*)viewCache {
-    static NSMutableDictionary<NSString*, CRView*>* viewCache;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        viewCache = [NSMutableDictionary dictionary];
-    });
-    return viewCache;
+    return (NSMutableDictionary<NSString*, CRView*>*)viewCache;
 }
 
 - (dispatch_queue_t)isolationQueue {
-    static dispatch_queue_t isolationQueue;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        isolationQueue = dispatch_queue_create([[NSStringFromClass(self.class) stringByAppendingPathExtension:@"IsolationQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
-        dispatch_set_target_queue(isolationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
-    });
     return isolationQueue;
 }
 
 - (instancetype)init {
-    return [self initWithNibName:nil bundle:nil];
+    return [self initWithNibName:nil bundle:nil prefix:nil];
+}
+
+- (instancetype)initWithPrefix:(NSString *)prefix {
+    return [self initWithNibName:nil bundle:nil prefix:prefix];
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super init];
+    return [self initWithNibName:nibNameOrNil bundle:nibBundleOrNil prefix:nil];
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil prefix:(NSString *)prefix {
+    self = [super initWithPrefix:prefix];
     if ( self != nil ) {
         _nibName = nibNameOrNil;
         if ( self.nibName == nil ) {
@@ -69,8 +74,7 @@ NS_ASSUME_NONNULL_END
         if ( self.nibBundle == nil ) {
             _nibBundle = [NSBundle mainBundle];
         }
-        _templateVariables = [NSMutableDictionary dictionary];
-        [self loadView];
+        _vars = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -79,13 +83,9 @@ NS_ASSUME_NONNULL_END
     CRView* view;
 
     NSString* viewCacheKey = [NSString stringWithFormat:@"%@/%@@%@", self.nibBundle.bundleIdentifier, self.nibName, NSStringFromClass(self.class)];
-
     if ( self.viewCache[viewCacheKey] != nil ) {
-
         view = self.viewCache[viewCacheKey];
-
     } else {
-
         NSString* nibCacheKey = [NSString stringWithFormat:@"%@/%@", self.nibBundle.bundleIdentifier, self.nibName];
         CRNib *nib;
         if ( self.nibCache[nibCacheKey] != nil ) {
@@ -96,7 +96,6 @@ NS_ASSUME_NONNULL_END
                 self.nibCache[nibCacheKey] = nib;
             });
         }
-
         NSString *contents = [NSString stringWithUTF8String:nib.data.bytes];
 
         // Determine the view class to use
@@ -104,7 +103,6 @@ NS_ASSUME_NONNULL_END
         if ( viewClass == nil ) {
             viewClass = [CRView class];
         }
-
         view = [[viewClass alloc] initWithContents:contents];
         dispatch_async(self.isolationQueue, ^{
             self.viewCache[viewCacheKey] = view;
@@ -112,31 +110,36 @@ NS_ASSUME_NONNULL_END
     }
 
     self.view = view;
-    
     [self viewDidLoad];
 }
 
-- (void)viewDidLoad {
-}
+- (void)viewDidLoad {}
 
 - (NSString *)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response {
-    return [self.view render:self.templateVariables];
+    if ( self.view == nil ) {
+        [self loadView];
+    }
+    return [self.view render:self.vars];
 }
 
 - (CRRouteBlock)routeBlock {
     return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
-        [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+        NSString* requestedRelativePath = [self relativePathForRequestedPath:request.env[@"DOCUMENT_URI"]];
+        NSArray<CRRoute*>* routes = [self routesForPath:requestedRelativePath HTTPMethod:request.method];
+        [self executeRoutes:routes forRequest:request response:response withNotFoundBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completion) {
 
-        NSString* output = [self presentViewControllerWithRequest:request response:response];
-//        if ( ![response valueForHTTPHeaderField:@"Content-Length"] ) {
-//            [response setValue:@(output.length).stringValue forHTTPHeaderField:@"Content-Length"];
-//        }
+            [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
 
-        if ( self.shouldFinishResponse ) {
-            [response sendString:output];
-        } else {
-            [response writeString:output];
-        }
+            NSString* output = [self presentViewControllerWithRequest:request response:response];
+            if ( self.shouldFinishResponse ) {
+                [response sendString:output];
+            } else {
+                [response writeString:output];
+            }
+
+            completion();
+        }];
+
         completionHandler();
     };
 }

@@ -8,6 +8,7 @@
 
 #import "CRRoute.h"
 #import "CRServer_Internal.h"
+#import "CRRouteController.h"
 #import "CRViewController.h"
 #import "CRRequest.h"
 #import "CRRequest_Internal.h"
@@ -26,8 +27,12 @@
     return [[CRRoute alloc] initWithBlock:block];
 }
 
-+ (CRRoute *)routeWithControllerClass:(Class)controllerClass nibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    return [[CRRoute alloc] initWithControllerClass:controllerClass nibName:nibNameOrNil bundle:nibBundleOrNil];
++ (CRRoute *)routeWithControllerClass:(Class)controllerClass prefix:(NSString *)prefix {
+    return [[CRRoute alloc] initWithControllerClass:controllerClass prefix:prefix];
+}
+
++ (CRRoute *)routeWithViewControllerClass:(Class)controllerClass nibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil prefix:(NSString * _Nullable)prefix {
+    return [[CRRoute alloc] initWithViewControllerClass:controllerClass nibName:nibNameOrNil bundle:nibBundleOrNil prefix:prefix];
 }
 
 + (CRRoute *)routeWithStaticDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix options:(CRStaticDirectoryServingOptions)options {
@@ -50,10 +55,18 @@
     return self;
 }
 
-- (instancetype)initWithControllerClass:(Class)controllerClass nibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+- (instancetype)initWithControllerClass:(Class)controllerClass prefix:(NSString *)prefix {
     CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-        CRViewController* controller = [[controllerClass alloc] initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+        CRViewController* controller = [[controllerClass alloc] initWithPrefix:prefix];
         controller.routeBlock(request, response, completionHandler);
+    };
+    return [self initWithBlock:block];
+}
+
+- (instancetype)initWithViewControllerClass:(Class)viewControllerClass nibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil prefix:(NSString * _Nullable)prefix {
+    CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        CRViewController* viewController = [[viewControllerClass alloc] initWithNibName:nibNameOrNil bundle:nibBundleOrNil prefix:prefix];
+        viewController.routeBlock(request, response, completionHandler);
     };
     return [self initWithBlock:block];
 }

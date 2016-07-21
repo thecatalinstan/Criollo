@@ -28,12 +28,15 @@
     return self;
 }
 
-- (NSString *)render:(NSDictionary<NSString*, NSString*> *)templateVariables {
-    if ( templateVariables == nil ) {
+- (NSString *)render:(NSDictionary<NSString*, NSString*> *)vars {
+    if ( vars == nil ) {
         return self.contents;
     } else {
         NSMutableString* mutableContents = self.contents.mutableCopy;
-        [templateVariables enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        [vars enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+            if ( ![obj isKindOfClass:[NSString class]] ) {
+                return;
+            }
             [mutableContents replaceOccurrencesOfString:[NSString stringWithFormat:CRViewVariableFormat, key] withString:obj options:0 range:NSMakeRange(0, mutableContents.length)];
         }];
         return mutableContents;

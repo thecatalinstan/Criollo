@@ -49,4 +49,5 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithNibNamed:(NSString *)nibName bundle:(NSBundle * _Nullable)bundle NS_DESIGNATED_INITIALIZER;
 
 @end
+
 NS_ASSUME_NONNULL_END

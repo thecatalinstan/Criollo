@@ -11,6 +11,8 @@
 #import "HelloWorldViewController.h"
 #import "MultipartViewController.h"
 #import "SystemInfoHelper.h"
+#import "APIController.h"
+#import "MultiRouteViewController.h"
 
 #define PortNumber          10781
 #define LogConnections          1
@@ -68,110 +70,10 @@ NS_ASSUME_NONNULL_END
     };
     [self.server addBlock:jsonHelloBlock forPath:@"/json"];
 
-    // Prints some more info as text/html
-    NSString *uname = [SystemInfoHelper systemInfo];
-    CRRouteBlock statusBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler ) {
-
-        NSDate *startTime = [NSDate date];
-
-        NSMutableString *responseString = [NSMutableString string];
-
-        // HTML
-        [responseString appendString:@"<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"/><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>"];
-        [responseString appendFormat:@"<title>%@</title>", bundle.bundleIdentifier];
-        [responseString appendString:@"<link rel=\"stylesheet\" href=\"/static/style.css\"/><link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css\" integrity=\"sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7\" crossorigin=\"anonymous\"/><link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css\" integrity=\"sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r\" crossorigin=\"anonymous\"/></head><body>"];
-
-        // Bundle info
-        [responseString appendFormat:@"<h1>%@</h1>", bundle.bundleIdentifier ];
-        [responseString appendFormat:@"<h2>Version %@ build %@</h2>", [bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [bundle objectForInfoDictionaryKey:@"CFBundleVersion"]];
-
-        // Headers
-        [responseString appendString:@"<h3>Request Headers:</h3><pre>"];
-        [request.allHTTPHeaderFields enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-            [responseString appendFormat:@"%@: %@\n", key, obj];
-        }];
-        [responseString appendString:@"</pre>"];
-
-        // Request enviroment
-        [responseString appendString:@"<h3>Request Enviroment:</h3><pre>"];
-        [request.env enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-            [responseString appendFormat:@"%@: %@\n", key, obj];
-        }];
-        [responseString appendString:@"</pre>"];
-
-        // Query
-        [responseString appendString:@"<h3>Request Query:</h3><pre>"];
-        [request.query enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-            [responseString appendFormat:@"%@: %@\n", key, obj];
-        }];
-        [responseString appendString:@"</pre>"];
-
-        // Body
-        if ( request.body != nil ) {
-            [responseString appendString:@"<h3>Request Body:</h3><pre>"];
-            [responseString appendFormat:@"%@", request.body];
-            [responseString appendString:@"</pre>"];
-        }
-
-        // Cookies
-        [responseString appendString:@"<h3>Request Cookies:</h3><pre>"];
-        [request.cookies enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-            [responseString appendFormat:@"%@: %@\n", key, obj];
-        }];
-        [responseString appendString:@"</pre>"];
-
-        // Stack trace
-        [responseString appendString:@"<h3>Stack Trace:</h3><pre>"];
-        [[NSThread callStackSymbols] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [responseString appendFormat:@"%@\n", obj];
-        }];
-        [responseString appendString:@"</pre>"];
-
-        // System info
-        [responseString appendString:@"<hr/>"];
-        [responseString appendFormat:@"<small>%@</small><br/>", uname];
-        [responseString appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
-
-        // HTML
-        [responseString appendString:@"</body></html>"];
-
-        [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
-        [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
-        [response sendString:responseString];
-
-        completionHandler();
-
-    };
-    [self.server addBlock:statusBlock forPath:@"/status"];
-
     [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
         [response sendString:[NSString stringWithFormat:@"%@\r\n\r\n--%@\r\n\r\n--", request, request.body]];
     } forPath:@"/post" HTTPMethod:CRHTTPMethodPost];
-
-    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-        NSDictionary *info = @{
-                               @"IPAddress": [SystemInfoHelper IPAddress],
-                               @"systemInfo": [SystemInfoHelper systemInfo],
-                               @"systemVersion": [SystemInfoHelper systemVersion],
-                               @"processName": [SystemInfoHelper processName],
-                               @"processRunningTime": [SystemInfoHelper processRunningTime],
-                               @"memoryInfo": [SystemInfoHelper memoryInfo:nil],
-                               @"requestsServed": [SystemInfoHelper requestsServed],
-                               @"criolloVersion": [SystemInfoHelper criolloVersion], 
-                               @"bundleVersion": [SystemInfoHelper bundleVersion]
-                               };
-        @try {
-            [response sendData:[NSJSONSerialization dataWithJSONObject:info options:NSJSONWritingPrettyPrinted error:nil]];
-        } @catch (NSException *exception) {
-            NSError* error = [NSError errorWithDomain:CRErrorDomain code:100 userInfo:@{NSLocalizedDescriptionKey: exception.reason}];
-            [CRServer errorHandlingBlockWithStatus:500 error:error](request, response, completionHandler);
-        }
-
-    } forPath:@"/info"];
-
-    [self.server addController:[MultipartViewController class] withNibName:@"MultipartViewController" bundle:nil forPath:@"/multipart"];
-    [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" HTTPMethod:CRHTTPMethodAll recursive:YES];
 
     // Serve static files from "/Public" (relative to bundle)
     NSString* staticFilesPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"];
@@ -187,6 +89,16 @@ NS_ASSUME_NONNULL_END
     } forPath:@"/redirect" HTTPMethod:CRHTTPMethodGet];
     
     [self.server mountStaticDirectoryAtPath:@"~" forPath:@"/pub" options:CRStaticDirectoryServingOptionsAutoIndex];
+
+    // API
+    [self.server addController:[APIController class] forPath:@"/api" HTTPMethod:CRHTTPMethodAll recursive:YES];
+
+    // Multiroute
+    [self.server addViewController:[MultiRouteViewController class] withNibName:@"MultiRouteViewController" bundle:nil forPath:@"/multi" HTTPMethod:CRHTTPMethodAll recursive:YES];
+
+    [self.server addViewController:[MultipartViewController class] withNibName:@"MultipartViewController" bundle:nil forPath:@"/multipart"];
+    [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" HTTPMethod:CRHTTPMethodAll recursive:YES];
+
 
     [self startServer];
 }

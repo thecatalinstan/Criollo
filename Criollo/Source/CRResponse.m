@@ -238,21 +238,31 @@
 #pragma mark - Redirect
 
 - (void)redirectToURL:(NSURL *)URL {
-    [self redirectToURL:URL statusCode:301];
+    [self redirectToURL:URL statusCode:301 finish:YES];
 }
 
 - (void)redirectToURL:(NSURL *)URL statusCode:(NSUInteger)statusCode {
-    [self redirectToLocation:URL.absoluteString statusCode:statusCode];
+    [self redirectToLocation:URL.absoluteString statusCode:statusCode finish:YES];
+}
+
+- (void)redirectToURL:(NSURL *)URL statusCode:(NSUInteger)statusCode finish:(BOOL)finish {
+    [self redirectToLocation:URL.absoluteString statusCode:statusCode finish:finish];
 }
 
 - (void)redirectToLocation:(NSString *)location {
-    [self redirectToLocation:location statusCode:301];
+    [self redirectToLocation:location statusCode:301 finish:YES];
 }
 
 - (void)redirectToLocation:(NSString *)location statusCode:(NSUInteger)statusCode {
+    [self redirectToLocation:location statusCode:statusCode finish:YES];
+}
+
+- (void)redirectToLocation:(NSString *)location statusCode:(NSUInteger)statusCode finish:(BOOL)finish {
     [self setStatusCode:statusCode description:nil];
     [self setValue:location forHTTPHeaderField:@"Location"];
-    [self finish];
+    if ( finish ) {
+        [self finish];
+    }
 }
 
 - (void)finish {
