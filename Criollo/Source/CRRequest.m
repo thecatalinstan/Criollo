@@ -234,30 +234,30 @@
     }
 }
 
-- (BOOL)appendBodyData:(NSData *)data forKey:(NSString *)key {
-    NSLog(@"%s %@ => %lu bytes", __PRETTY_FUNCTION__, key, (unsigned long)data.length);
+//- (BOOL)appendBodyData:(NSData *)data forKey:(NSString *)key {
+//    NSLog(@"%s %@ => %lu bytes", __PRETTY_FUNCTION__, key, (unsigned long)data.length);
+//
+//    BOOL result = YES;
+//
+//    if ( _body == nil ) {
+//        _body = [NSMutableDictionary dictionary];
+//    }
+//    NSString* dataString = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes length:data.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
+//    NSMutableDictionary* body = _body;
+//    if ( body[key] == nil ) {
+//        body[key] = [NSMutableString stringWithString:dataString];
+//    } else {
+//        [((NSMutableString *) body[key]) appendString:dataString];
+//    }
+//
+//    return result;
+//}
 
-    BOOL result = YES;
-
-    if ( _body == nil ) {
-        _body = [NSMutableDictionary dictionary];
-    }
-    NSString* dataString = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes length:data.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
-    NSMutableDictionary* body = _body;
-    if ( body[key] == nil ) {
-        body[key] = [NSMutableString stringWithString:dataString];
-    } else {
-        [((NSMutableString *) body[key]) appendString:dataString];
-    }
-
-    return result;
-}
-
-- (BOOL)appendFileData:(NSData *)data forKey:(NSString *)key {
-    NSLog(@"%s %@ => %lu bytes", __PRETTY_FUNCTION__, key, (unsigned long)data.length);
-
-    return YES;
-}
+//- (BOOL)appendFileData:(NSData *)data forKey:(NSString *)key {
+//    NSLog(@"%s %@ => %lu bytes", __PRETTY_FUNCTION__, key, (unsigned long)data.length);
+//
+//    return YES;
+//}
 
 - (void)bufferResponseData:(NSData *)data {
     if ( self.bufferedResponseData == nil ) {
