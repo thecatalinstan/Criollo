@@ -26,7 +26,7 @@ class MultiRouteViewController: CRViewController {
     }
 
     override func presentViewControllerWithRequest(request: CRRequest, response: CRResponse) -> String {
-        self.templateVariables["title"] = String(self.dynamicType);
+        self.vars["title"] = String(self.dynamicType);
 
         var text:String = String();
         let env:NSDictionary! = request.valueForKey("env") as! NSDictionary;
@@ -35,7 +35,7 @@ class MultiRouteViewController: CRViewController {
             text += "\(key): \(object)\n";
         });
         text += "</pre>";
-        self.templateVariables["text"] = text;
+        self.vars["text"] = text;
         return super.presentViewControllerWithRequest(request, response: response);
     }
 

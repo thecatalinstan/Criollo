@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithContents:(NSString * _Nullable)contents NS_DESIGNATED_INITIALIZER;
 
-- (NSString*)render:(NSDictionary * _Nullable)templateVariables;
+- (NSString*)render:(NSDictionary * _Nullable)vars;
 
 @end
 

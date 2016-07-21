@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nullable) CRView* view;
 
-@property (nonatomic, strong) NSMutableDictionary<NSString*, NSString*> *templateVariables;
+@property (nonatomic, strong) NSMutableDictionary<NSString*, NSString*> *vars;
 
 @property (nonatomic, readonly) NSString *nibName;
 @property (nonatomic, readonly, nullable) NSBundle *nibBundle;

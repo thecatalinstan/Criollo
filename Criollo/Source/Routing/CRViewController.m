@@ -74,7 +74,7 @@ static dispatch_queue_t isolationQueue;
         if ( self.nibBundle == nil ) {
             _nibBundle = [NSBundle mainBundle];
         }
-        _templateVariables = [NSMutableDictionary dictionary];
+        _vars = [NSMutableDictionary dictionary];
         [self loadView];
     }
     return self;
@@ -124,7 +124,7 @@ static dispatch_queue_t isolationQueue;
 - (void)viewDidLoad {}
 
 - (NSString *)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response {
-    return [self.view render:self.templateVariables];
+    return [self.view render:self.vars];
 }
 
 - (CRRouteBlock)routeBlock {
