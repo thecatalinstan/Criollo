@@ -81,24 +81,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
             // Output some nice info to the console
 
             // Get server ip address
-            let address:NSString! = SystemInfoHelper.IPAddress();
+            let address:NSString! = SystemInfoHelper.IPAddress()
             // Set the base url. This is only for logging
             self.baseURL = NSURL(string: "http://\(address):\(PortNumber)")
 
             // Log the paths we can handle
 
             // Get the list of paths from the registered routes
-            let routes:NSDictionary!  = self.server.valueForKey("routes") as! NSDictionary;
+            let routePaths:NSArray!  = self.server.valueForKeyPath("routes.path") as! NSArray;
             let paths:NSMutableSet! = NSMutableSet();
-            routes.enumerateKeysAndObjectsUsingBlock({ (key,  object, stop) -> Void in
-                let routeKey:NSString! = key as! NSString;
-                if ( routeKey.hasSuffix("*") ) {
+            routePaths.enumerateObjectsUsingBlock({ (path, idx, stop) in
+                if ( path.isKindOfClass(NSNull.self) ) {
                     return;
                 }
-                let path:String = routeKey.substringFromIndex(routeKey.rangeOfString("/").location + 1);
-                let pathURL:NSURL! = self.baseURL.URLByAppendingPathComponent(path);
+                let pathURL:NSURL! = self.baseURL.URLByAppendingPathComponent(path as! String)
                 paths.addObject(pathURL);
-            });
+            })
 
             let sortedPaths:NSArray = paths.sortedArrayUsingDescriptors([NSSortDescriptor(key:"absoluteString", ascending:true)]);
             NSLog("Available paths are");
