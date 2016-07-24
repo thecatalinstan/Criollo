@@ -54,13 +54,21 @@
                     [((NSMutableArray *)_pathKeys) addObject:keyName];
                     [pathRegexComponents addObject:@"([a-zA-Z0-9\\+\\-_%]+)"];
                     isRegex = YES;
-                } else if ( [component rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"[]().*|{}\\"]].location != NSNotFound ) {
-                    NSString *keyName = @(_pathKeys.count).stringValue;
-                    [((NSMutableArray *)_pathKeys) addObject:keyName];
-                    [pathRegexComponents addObject:component];
-                    isRegex = YES;
                 } else {
-                    [pathRegexComponents addObject:[component isEqualToString:CRPathSeparator] ? @"" : component];
+                    NSCharacterSet* regexChars = [NSCharacterSet characterSetWithCharactersInString:@"[]().*|{}\\"];
+                    NSRange range = [component rangeOfCharacterFromSet:regexChars];
+                    if ( range.location != NSNotFound ) {
+                        NSString *keyName = @(_pathKeys.count).stringValue;
+                        [((NSMutableArray *)_pathKeys) addObject:keyName];
+                        if ( [component hasPrefix:@"("] && [component hasSuffix:@")"] ) {
+                            [pathRegexComponents addObject:component];
+                        } else {
+                            [pathRegexComponents addObject:[NSString stringWithFormat:@"(%@)", component]];
+                        }
+                        isRegex = YES;
+                    } else {
+                        [pathRegexComponents addObject:[component isEqualToString:CRPathSeparator] ? @"" : component];
+                    }
                 }
             }];
             if ( isRegex ) {

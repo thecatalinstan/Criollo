@@ -95,6 +95,9 @@ NS_ASSUME_NONNULL_END
     // Placeholder path controller
     [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/blog/:year/:month/:slug" HTTPMethod:CRHTTPMethodAll recursive:NO];
 
+    // Regex path controller
+    [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/f[a-z]{2}/:payload" HTTPMethod:CRHTTPMethodAll recursive:NO];
+
     // HTML view controller
     [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" HTTPMethod:CRHTTPMethodAll recursive:YES];
 

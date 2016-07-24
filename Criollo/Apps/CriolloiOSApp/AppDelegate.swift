@@ -76,6 +76,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
         // Placeholder path controller
         self.server.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/blog/:year/:month/:slug", HTTPMethod: CRHTTPMethod.All, recursive: true)
 
+        // Regex path controller
+        self.server.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/f[a-z]{2}/:payload", HTTPMethod: CRHTTPMethod.All, recursive: true)        
+
         // HTML view controller
         self.server.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/controller", HTTPMethod: CRHTTPMethod.All, recursive: true)
 

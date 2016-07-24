@@ -42,7 +42,11 @@ NS_ASSUME_NONNULL_END
     if ( relativePathStart == NSNotFound ) {
         relativePathStart = 0;
     }
-    return [[requestedPath substringFromIndex:relativePathStart + self.prefix.length] stringByStandardizingPath];
+    @try {
+        return [[requestedPath substringFromIndex:relativePathStart + self.prefix.length] stringByStandardizingPath];
+    } @catch (NSException *exception) {
+        return @"/";
+    }
 }
 
 - (CRRouteBlock)routeBlock {
