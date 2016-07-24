@@ -11,6 +11,9 @@
 #import "CRRequest_Internal.h"
 #import "CRResponse.h"
 #import "CRResponse_Internal.h"
+#import "CRRouteMatchingResult.h"
+
+#import <objc/runtime.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -42,11 +45,10 @@ NS_ASSUME_NONNULL_END
     return [[requestedPath substringFromIndex:relativePathStart + self.prefix.length] stringByStandardizingPath];
 }
 
-
 - (CRRouteBlock)routeBlock {
-    return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
+    return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {        
         NSString* requestedRelativePath = [self relativePathForRequestedPath:request.env[@"DOCUMENT_URI"]];
-        NSArray<CRRoute*>* routes = [self routesForPath:requestedRelativePath HTTPMethod:request.method];
+        NSArray<CRRouteMatchingResult *>* routes = [self routesForPath:requestedRelativePath HTTPMethod:request.method];
         [self executeRoutes:routes forRequest:request response:response];
         completionHandler();
     };

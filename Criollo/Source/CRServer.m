@@ -197,7 +197,7 @@ NS_ASSUME_NONNULL_END
                 [self.delegate server:self didReceiveRequest:request];
             });
         }
-        NSArray<CRRoute*>* routes = [self routesForPath:request.URL.path HTTPMethod:request.method];
+        NSArray<CRRouteMatchingResult *> * routes = [self routesForPath:request.URL.path HTTPMethod:request.method];
         [self executeRoutes:routes forRequest:request response:response withNotFoundBlock:self.notFoundBlock];
     }]];
 }

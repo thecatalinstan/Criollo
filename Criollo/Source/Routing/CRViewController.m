@@ -125,7 +125,7 @@ static dispatch_queue_t isolationQueue;
 - (CRRouteBlock)routeBlock {
     return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
         NSString* requestedRelativePath = [self relativePathForRequestedPath:request.env[@"DOCUMENT_URI"]];
-        NSArray<CRRoute*>* routes = [self routesForPath:requestedRelativePath HTTPMethod:request.method];
+        NSArray<CRRouteMatchingResult * >* routes = [self routesForPath:requestedRelativePath HTTPMethod:request.method];
         [self executeRoutes:routes forRequest:request response:response withNotFoundBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completion) {
 
             [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];

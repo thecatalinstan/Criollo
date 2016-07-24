@@ -8,6 +8,9 @@
 
 #import "CRRouter.h"
 #import "CRRoute.h"
+#import "CRRoute_Internal.h"
+#import "CRRouteMatchingResult.h"
+#import "CRRouteMatchingResult_Internal.h"
 #import "CRServer.h"
 #import "CRMessage.h"
 #import "CRMessage_Internal.h"
@@ -15,6 +18,8 @@
 #import "CRRequest_Internal.h"
 #import "CRResponse.h"
 #import "CRResponse_Internal.h"
+
+#import <objc/runtime.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -145,9 +150,10 @@ NS_ASSUME_NONNULL_END
     [self.routes addObject:route];
 }
 
-- (NSArray<CRRoute *> *)routesForPath:(NSString*)path HTTPMethod:(CRHTTPMethod)method {
-    NSMutableArray<CRRoute *> * routes = [NSMutableArray array];
+- (NSArray<CRRouteMatchingResult *> *)routesForPath:(NSString*)path HTTPMethod:(CRHTTPMethod)method {
+    NSMutableArray<CRRouteMatchingResult *> * routes = [NSMutableArray array];
     [self.routes enumerateObjectsUsingBlock:^(CRRoute * _Nonnull route, NSUInteger idx, BOOL * _Nonnull stop) {
+
         // Bailout early if method does not match
         if ( route.method != method && route.method != CRHTTPMethodAll ) {
             return;
@@ -155,44 +161,59 @@ NS_ASSUME_NONNULL_END
 
         // Boilout early if route is valid for all paths or path matches exaclty
         if ( route.path == nil || [route.path isEqualToString:path] ) {
-            [routes addObject:route];
+            [routes addObject:[CRRouteMatchingResult routeMatchingResultWithRoute:route matches:nil]];
             return;
         }
 
         // If route is recursive just check that the path start with the route path
         if ( route.recursive && [path hasPrefix:route.path] ) {
-            [routes addObject:route];
+            [routes addObject:[CRRouteMatchingResult routeMatchingResultWithRoute:route matches:nil]];
+            return;
         }
 
-        return;
+        // If the route regex matches
+        if ( !route.pathRegex ) {
+            return;
+        }
+
+        NSArray* matches = [route processMatchesInPath:path];
+        if ( matches.count > 0 ) {
+            [routes addObject:[CRRouteMatchingResult routeMatchingResultWithRoute:route matches:matches]];
+        }
     }];
-    NSLog(@"%s %@", __PRETTY_FUNCTION__, routes);
+
+//    NSLog(@"%s %@", __PRETTY_FUNCTION__, routes);
     return routes;
 }
 
-- (void)executeRoutes:(NSArray<CRRoute *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response {
+- (void)executeRoutes:(NSArray<CRRouteMatchingResult *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response {
     [self executeRoutes:routes forRequest:request response:response withNotFoundBlock:nil];
 }
 
-- (void)executeRoutes:(NSArray<CRRoute *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response withNotFoundBlock:(CRRouteBlock)notFoundBlock {
+- (void)executeRoutes:(NSArray<CRRouteMatchingResult *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response withNotFoundBlock:(CRRouteBlock)notFoundBlock {
     if ( !notFoundBlock ) {
         notFoundBlock = [CRRouter errorHandlingBlockWithStatus:404 error:nil];
     }
 
     if ( routes.count == 0 ) {
-        routes = @[[[CRRoute alloc] initWithBlock:notFoundBlock method:CRHTTPMethodAll path:nil recursive:NO]];
+        CRRoute* defaultRoute = [[CRRoute alloc] initWithBlock:notFoundBlock method:CRHTTPMethodAll path:nil recursive:NO];
+        routes = @[[CRRouteMatchingResult routeMatchingResultWithRoute:defaultRoute matches:nil]];
     }
 
     __block BOOL shouldStopExecutingBlocks = NO;
     __block NSUInteger currentRouteIndex = 0;
-    dispatch_block_t completionHandler = ^{
-        shouldStopExecutingBlocks = NO;
-        currentRouteIndex++;
-    };
     while (!shouldStopExecutingBlocks && currentRouteIndex < routes.count ) {
         shouldStopExecutingBlocks = YES;
-        CRRouteBlock block = routes[currentRouteIndex].block;
-        block(request, response, completionHandler);
+        CRRouteMatchingResult* result = routes[currentRouteIndex];
+        if ( result.matches.count > 0 ) {
+            [result.route.pathKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull key, NSUInteger idx, BOOL * _Nonnull stop) {
+                [request setQuery:(result.matches[idx] ? : @"") forKey:key];
+            }];            
+        }
+        result.route.block (request, response, ^{
+            shouldStopExecutingBlocks = NO;
+            currentRouteIndex++;
+        });
     }
 }
 

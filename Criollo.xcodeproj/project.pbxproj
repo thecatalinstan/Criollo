@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD001ADA1D4555A500DE4AC9 /* CRRoute_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */; };
+		AD001ADD1D4555E000DE4AC9 /* CRRoute_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */; };
+		AD001AE01D455BA300DE4AC9 /* CRRouteMatchingResult.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001ADE1D455BA300DE4AC9 /* CRRouteMatchingResult.h */; };
+		AD001AE11D455BA300DE4AC9 /* CRRouteMatchingResult.m in Sources */ = {isa = PBXBuildFile; fileRef = AD001ADF1D455BA300DE4AC9 /* CRRouteMatchingResult.m */; };
+		AD001AE31D455C4F00DE4AC9 /* CRRouteMatchingResult_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001AE21D455C4F00DE4AC9 /* CRRouteMatchingResult_Internal.h */; };
 		AD19695E1B626EF90098CA89 /* CRServer.h in Headers */ = {isa = PBXBuildFile; fileRef = AD19695C1B626EF90098CA89 /* CRServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD19695F1B626EF90098CA89 /* CRServer.m in Sources */ = {isa = PBXBuildFile; fileRef = AD19695D1B626EF90098CA89 /* CRServer.m */; };
 		AD227F8A1BDC3F6000C23D52 /* CRServerConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = AD227F881BDC3F6000C23D52 /* CRServerConfiguration.h */; };
@@ -171,6 +176,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRoute_Internal.h; sourceTree = "<group>"; };
+		AD001ADE1D455BA300DE4AC9 /* CRRouteMatchingResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRouteMatchingResult.h; sourceTree = "<group>"; };
+		AD001ADF1D455BA300DE4AC9 /* CRRouteMatchingResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRouteMatchingResult.m; sourceTree = "<group>"; };
+		AD001AE21D455C4F00DE4AC9 /* CRRouteMatchingResult_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRouteMatchingResult_Internal.h; sourceTree = "<group>"; };
 		AD0BA9901C961898005206A1 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		AD11F4F61C95A81F007DC2FF /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
 		AD11F4F71C95A81F007DC2FF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
@@ -286,7 +295,11 @@
 			isa = PBXGroup;
 			children = (
 				ADADAB5D1BEEF28E000FBE6B /* CRRoute.h */,
+				AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */,
 				ADADAB5E1BEEF28E000FBE6B /* CRRoute.m */,
+				AD001ADE1D455BA300DE4AC9 /* CRRouteMatchingResult.h */,
+				AD001AE21D455C4F00DE4AC9 /* CRRouteMatchingResult_Internal.h */,
+				AD001ADF1D455BA300DE4AC9 /* CRRouteMatchingResult.m */,
 				ADAD52571D3E31AC00DDFBB5 /* CRRouter.h */,
 				ADAD52581D3E31AC00DDFBB5 /* CRRouter.m */,
 				ADAD525F1D3E484900DDFBB5 /* CRRouteController.h */,
@@ -489,6 +502,7 @@
 				AD60BA4C1C03990500118EED /* CRViewController.h in Headers */,
 				AD63F83A1BFEAE96003815DC /* CRMessage_Internal.h in Headers */,
 				AD5FFFF81BF0031E00A57FE9 /* CRRoute.h in Headers */,
+				AD001ADD1D4555E000DE4AC9 /* CRRoute_Internal.h in Headers */,
 				ADEBD0251C6C9D5F00F91D28 /* CRMimeTypeHelper.h in Headers */,
 				AD60BA401C0389F800118EED /* CRNib.h in Headers */,
 				AD9F740B1C8D815100D5DE5C /* CRRequestRange_Internal.h in Headers */,
@@ -535,13 +549,16 @@
 				ADA37C811BE3B86B008D89CA /* CRHTTPResponse.h in Headers */,
 				AD60BA4B1C03990500118EED /* CRViewController.h in Headers */,
 				AD63F8391BFEAE96003815DC /* CRMessage_Internal.h in Headers */,
+				AD001AE01D455BA300DE4AC9 /* CRRouteMatchingResult.h in Headers */,
 				ADADAB5F1BEEF28E000FBE6B /* CRRoute.h in Headers */,
+				AD001ADA1D4555A500DE4AC9 /* CRRoute_Internal.h in Headers */,
 				ADEBD0241C6C9D5F00F91D28 /* CRMimeTypeHelper.h in Headers */,
 				AD60BA3F1C0389F800118EED /* CRNib.h in Headers */,
 				ADAB16641C8C4E90001E104C /* CRRequestRange_Internal.h in Headers */,
 				AD61E9811BDD880C00F5BD17 /* CRFCGIConnection.h in Headers */,
 				ADB693001BE53FD400656BEC /* CRFCGIRequest.h in Headers */,
 				ADEDB3A71AEFCC8B00A26AF1 /* CRApplication.h in Headers */,
+				AD001AE31D455C4F00DE4AC9 /* CRRouteMatchingResult_Internal.h in Headers */,
 				ADA37C891BE3C713008D89CA /* CRHTTPServerConfiguration.h in Headers */,
 				AD227F8A1BDC3F6000C23D52 /* CRServerConfiguration.h in Headers */,
 				ADA37C8D1BE3C7A0008D89CA /* CRFCGIServerConfiguration.h in Headers */,
@@ -739,6 +756,7 @@
 				ADADAB601BEEF28E000FBE6B /* CRRoute.m in Sources */,
 				ADEBD0261C6C9D5F00F91D28 /* CRMimeTypeHelper.m in Sources */,
 				AD609C5C1BDA661F0003E702 /* GCDAsyncSocket.m in Sources */,
+				AD001AE11D455BA300DE4AC9 /* CRRouteMatchingResult.m in Sources */,
 				ADA37C8E1BE3C7A0008D89CA /* CRFCGIServerConfiguration.m in Sources */,
 				AD60BA471C03977300118EED /* CRView.m in Sources */,
 				ADAD52631D3E484900DDFBB5 /* CRRouteController.m in Sources */,

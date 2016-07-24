@@ -7,6 +7,7 @@
 //
 
 #import "CRRoute.h"
+#import "CRRoute_Internal.h"
 #import "CRTypes.h"
 #import "CRServer_Internal.h"
 #import "CRRouteController.h"
@@ -39,13 +40,45 @@
         self.method = method;
         self.path = path;
         self.recursive = recursive;
+
+        if ( path != nil ) {
+            __block BOOL isRegex = NO;
+            _pathKeys = [NSMutableArray array];
+            NSMutableArray<NSString *> * pathRegexComponents = [NSMutableArray array];
+            [self.path.pathComponents enumerateObjectsUsingBlock:^(NSString * _Nonnull component, NSUInteger idx, BOOL * _Nonnull stop) {
+                if ( [component hasPrefix:@":"] ) {
+                    NSString *keyName = [component substringFromIndex:1];
+                    if ( keyName.length == 0 ) {
+                        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:NSLocalizedString(@"Invalid path variable name at position %lu",), idx]  userInfo:nil];
+                    }
+                    [((NSMutableArray *)_pathKeys) addObject:keyName];
+                    [pathRegexComponents addObject:@"([a-zA-Z0-9\\+%]+)"];
+                    isRegex = YES;
+                } else if ( [component rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"[]().*|{}\\"]].location != NSNotFound ) {
+                    NSString *keyName = @(_pathKeys.count).stringValue;
+                    [((NSMutableArray *)_pathKeys) addObject:keyName];
+                    [pathRegexComponents addObject:component];
+                    isRegex = YES;
+                } else {
+                    [pathRegexComponents addObject:[component isEqualToString:CRPathSeparator] ? @"" : component];
+                }
+            }];
+            if ( isRegex ) {
+                NSError *regexError;
+                NSString *pattern = [pathRegexComponents componentsJoinedByString:CRPathSeparator];
+                _pathRegex = [[NSRegularExpression alloc] initWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:&regexError];
+                if ( _pathRegex == nil ) {
+                    @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:NSLocalizedString(@"Invalid path specification. \"%@\"",), _path]  userInfo:@{NSUnderlyingErrorKey: regexError}];
+                }
+            }
+        }
     }
     return self;
 }
 
 - (instancetype)initWithControllerClass:(Class)controllerClass method:(CRHTTPMethod)method path:(NSString * _Nullable)path recursive:(BOOL)recursive {
     CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-        CRViewController* controller = [[controllerClass alloc] initWithPrefix:path];
+        CRViewController* controller = [[controllerClass alloc] initWithPrefix:path];        
         controller.routeBlock(request, response, completionHandler);
     };
     return [self initWithBlock:block method:method path:path recursive:recursive];
@@ -67,6 +100,17 @@
 - (instancetype)initWithStaticFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString *)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition path:(NSString * _Nullable)path {
     CRRouteBlock block = [CRStaticFileManager managerWithFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition].routeBlock;
     return [self initWithBlock:block method:CRHTTPMethodGet path:path recursive:NO];
+}
+
+- (NSArray<NSString *> *)processMatchesInPath:(NSString *)path {
+    NSMutableArray<NSString *> * result = [NSMutableArray array];
+    NSArray<NSTextCheckingResult *> * matches = [self.pathRegex matchesInString:path options:0 range:NSMakeRange(0, path.length)];
+    [matches enumerateObjectsUsingBlock:^(NSTextCheckingResult * _Nonnull match, NSUInteger idx, BOOL * _Nonnull stop) {
+        for( NSUInteger i = 1; i < match.numberOfRanges; i++ ) {
+            [result addObject:[path substringWithRange:[match rangeAtIndex:i]]];
+        }
+    }];
+    return result;
 }
 
 @end

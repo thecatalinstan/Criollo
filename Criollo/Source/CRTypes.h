@@ -78,7 +78,7 @@ typedef NS_ENUM(NSUInteger, CRHTTPMethod) {
  *  A block that gets called at the end of a [route block](CRRouteBlock),
  *  indicating that execution of the next block can proceed safely.
  */
-typedef void(^CRRouteCompletionBlock)(void);
+typedef dispatch_block_t CRRouteCompletionBlock;
 
 /**
  *  A route block is attached to a route for a specified path and HTTP request 
