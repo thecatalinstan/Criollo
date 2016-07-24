@@ -14,6 +14,12 @@ class HelloWorldViewController: CRViewController {
         self.vars["title"] = String(self.dynamicType)
 
         var text:String = String()
+        let query:NSDictionary! = request.valueForKey("query") as! NSDictionary
+        text += "<h3>Request Query:</h2><pre>"
+        query.enumerateKeysAndObjectsUsingBlock({ (key,  object, stop) -> Void in
+            text += "\(key): \(object)\n"
+        })
+        text += "</pre>"
         let env:NSDictionary! = request.valueForKey("env") as! NSDictionary
         text += "<h3>Request Environment:</h2><pre>"
         env.enumerateKeysAndObjectsUsingBlock({ (key,  object, stop) -> Void in

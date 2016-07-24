@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 
 #import "HelloWorldViewController.h"
-#import "MultipartViewController.h"
 #import "SystemInfoHelper.h"
 #import "APIController.h"
 #import "MultiRouteViewController.h"
@@ -93,9 +92,15 @@ NS_ASSUME_NONNULL_END
     // Multiroute
     [self.server addViewController:[MultiRouteViewController class] withNibName:@"MultiRouteViewController" bundle:nil forPath:@"/multi" HTTPMethod:CRHTTPMethodAll recursive:YES];
 
-    [self.server addViewController:[MultipartViewController class] withNibName:@"MultipartViewController" bundle:nil forPath:@"/multipart"];
+    // Placeholder path controller
+    [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/blog/:year/:month/:slug" HTTPMethod:CRHTTPMethodAll recursive:NO];
+
+    // HTML view controller
     [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" HTTPMethod:CRHTTPMethodAll recursive:YES];
 
+    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        [response send:request.query];
+    } forPath:@"/posts/:pid"];
 
     [self startServer];
 }

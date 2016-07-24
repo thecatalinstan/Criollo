@@ -14,6 +14,11 @@
     self.vars[@"title"] = NSStringFromClass(self.class);
 
     NSMutableString* text = [NSMutableString string];
+    [text appendString:@"<h3>Request Query:</h3><pre>"];
+    [request.query enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        [text appendFormat:@"%@: %@\n", key, obj];
+    }];
+    [text appendString:@"</pre>"];
     [text appendString:@"<h3>Request Enviroment:</h3><pre>"];
     [request.env enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         [text appendFormat:@"%@: %@\n", key, obj];

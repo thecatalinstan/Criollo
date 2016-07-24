@@ -13,6 +13,7 @@ class MultiRouteViewController: CRViewController {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?, prefix: String?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil, prefix: prefix)
 
+
         self.addBlock( { (request, response, completionHandler) -> Void in
             response.setValue("text/plain", forHTTPHeaderField: "Content-type")
             response.send("Hello")
@@ -25,6 +26,9 @@ class MultiRouteViewController: CRViewController {
 
         self.addViewController(HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil, forPath: "/hello-c", HTTPMethod: CRHTTPMethod.All, recursive: true)
         self.addController(APIController.self, forPath: "/api", HTTPMethod: CRHTTPMethod.All, recursive: true)
+
+        // Placeholder path controller
+        self.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/:year/:month/:slug", HTTPMethod: CRHTTPMethod.All, recursive: true)
     }
 
     override func presentViewControllerWithRequest(request: CRRequest, response: CRResponse) -> String {

@@ -29,6 +29,10 @@
 
         [self addViewController:[HelloWorldViewController class] withNibName:nil bundle:nil forPath:@"/hello-c" HTTPMethod:CRHTTPMethodAll recursive:YES];
         [self addController:[APIController class] forPath:@"/api" HTTPMethod:CRHTTPMethodAll recursive:YES];
+
+        // Placeholder path controller
+        [self addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/:year/:month/:slug" HTTPMethod:CRHTTPMethodAll recursive:NO];
+
     }
     return self;
 }

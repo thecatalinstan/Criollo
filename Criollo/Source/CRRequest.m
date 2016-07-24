@@ -78,7 +78,7 @@
     }
 
     // Parse request query string
-    NSMutableDictionary<NSString *,NSString *> *query = _query ? : [NSMutableDictionary dictionary];
+    NSMutableDictionary<NSString *,NSString *> *query = _query ? _query.mutableCopy : [NSMutableDictionary dictionary];
     if ( _env[@"QUERY_STRING"] != nil ) {
         NSArray<NSString *> *queryVars = [_env[@"QUERY_STRING"] componentsSeparatedByString:CRRequestKeySeparator];
         [queryVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {

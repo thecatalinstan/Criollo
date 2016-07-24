@@ -70,8 +70,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
         // API 
         self.server .addController(APIController.self, forPath: "/api", HTTPMethod: CRHTTPMethod.All, recursive: true)
 
+        // Multi route vc
         self.server.addViewController(MultiRouteViewController.self, withNibName:"MultiRouteViewController", bundle:nil, forPath: "/multi", HTTPMethod: CRHTTPMethod.All, recursive: true)
 
+        // Placeholder path controller
+        self.server.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/blog/:year/:month/:slug", HTTPMethod: CRHTTPMethod.All, recursive: true)
+
+        // HTML view controller
         self.server.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/controller", HTTPMethod: CRHTTPMethod.All, recursive: true)
 
         // Start listening
