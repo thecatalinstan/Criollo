@@ -37,7 +37,7 @@ class APIController : CRRouteController {
             responseString += "<h3>Request Headers:</h2><pre>"
             headers.enumerateKeysAndObjectsUsingBlock({ (key,  object, stop) -> Void in
                 responseString += "\(key): \(object)\n"
-            });
+            })
             responseString += "</pre>"
 
             // Request Enviroment
@@ -45,7 +45,7 @@ class APIController : CRRouteController {
             responseString += "<h3>Request Environment:</h2><pre>"
             env.enumerateKeysAndObjectsUsingBlock({ (key,  object, stop) -> Void in
                 responseString += "\(key): \(object)\n"
-            });
+            })
             responseString += "</pre>"
 
             // Query
@@ -53,7 +53,7 @@ class APIController : CRRouteController {
             responseString += "<h3>Request Query:</h2><pre>"
             queryVars.enumerateKeysAndObjectsUsingBlock({ (key,  object, stop) -> Void in
                 responseString += "\(key): \(object)\n"
-            });
+            })
             responseString += "</pre>"
 
             // Cookies
@@ -81,7 +81,7 @@ class APIController : CRRouteController {
             // HTML
             responseString += "</body></html>"
 
-            response.setValue("text/html; charset=utf-8", forHTTPHeaderField: "Content-type")
+            response.setValue("text/html charset=utf-8", forHTTPHeaderField: "Content-type")
             response.setValue("\(responseString.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))", forHTTPHeaderField: "Content-Length")
             response.sendString(responseString)
 
