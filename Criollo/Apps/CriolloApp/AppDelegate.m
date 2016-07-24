@@ -45,12 +45,9 @@ NS_ASSUME_NONNULL_END
     // Add a header that says who we are :)
     [self.server addBlock:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
         [response setValue:[NSString stringWithFormat:@"%@, %@ build %@", bundle.bundleIdentifier, [bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [bundle objectForInfoDictionaryKey:@"CFBundleVersion"]] forHTTPHeaderField:@"Server"];
-
         if ( ! request.cookies[@"session_cookie"] ) {
             [response setCookie:@"session_cookie" value:[NSUUID UUID].UUIDString path:@"/" expires:nil domain:nil secure:NO];
         }
-        [response setCookie:@"persistent_cookie" value:[NSUUID UUID].UUIDString path:@"/" expires:[NSDate distantFuture] domain:nil secure:NO];
-
         completionHandler();
     }];
 
@@ -137,17 +134,14 @@ NS_ASSUME_NONNULL_END
         [CRApp logFormat:@"%@ Started HTTP server at %@", [NSDate date], baseURL.absoluteString];
 
         // Get the list of paths
-        NSDictionary<NSString*, NSMutableArray<CRRoute*>*>* routes = [[self.server valueForKey:@"routes"] mutableCopy];
-        NSMutableSet<NSURL*>* paths = [NSMutableSet set];
-
-        [routes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<CRRoute *> * _Nonnull obj, BOOL * _Nonnull stop) {
-            if ( [key hasSuffix:@"*"] ) {
+        NSArray<NSString *> * routePaths = [self.server valueForKeyPath:@"routes.path"];
+        NSMutableArray<NSURL *> *paths = [NSMutableArray array];
+        [routePaths enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ( [obj isKindOfClass:[NSNull class]] ) {
                 return;
             }
-            NSString* path = [key substringFromIndex:[key rangeOfString:@"/"].location + 1];
-            [paths addObject:[baseURL URLByAppendingPathComponent:path]];
+            [paths addObject:[baseURL URLByAppendingPathComponent:obj]];
         }];
-
         NSArray<NSURL*>* sortedPaths =[paths sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"absoluteString" ascending:YES]]];
         [CRApp logFormat:@"Available paths are:"];
         [sortedPaths enumerateObjectsUsingBlock:^(NSURL * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
