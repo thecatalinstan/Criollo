@@ -8,6 +8,9 @@
 
 #import "CRRouter.h"
 #import "CRRoute.h"
+#import "CRRoute_Internal.h"
+#import "CRRouteMatchingResult.h"
+#import "CRRouteMatchingResult_Internal.h"
 #import "CRServer.h"
 #import "CRMessage.h"
 #import "CRMessage_Internal.h"
@@ -16,12 +19,13 @@
 #import "CRResponse.h"
 #import "CRResponse_Internal.h"
 
+#import <objc/runtime.h>
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CRRouter ()
 
-@property (nonatomic, strong, readonly) NSMutableDictionary<NSString*, NSMutableArray<CRRoute *> *> * routes;
-@property (nonatomic, strong, readonly) NSMutableArray<NSString *> * recursiveMatchRoutePathPrefixes;
+@property (nonatomic, strong, readonly) NSMutableArray<CRRoute *> * routes;
 
 @end
 
@@ -85,8 +89,7 @@ NS_ASSUME_NONNULL_END
 - (instancetype)init {
     self = [super init];
     if ( self != nil ) {
-        _routes = [NSMutableDictionary dictionary];
-        _recursiveMatchRoutePathPrefixes = [NSMutableArray array];
+        _routes = [NSMutableArray array];
         _notFoundBlock = [CRRouter errorHandlingBlockWithStatus:404 error:nil];
     }
     return self;
@@ -107,8 +110,8 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive {
-    CRRoute* route = [CRRoute routeWithBlock:block];
-    [self addRoute:route forPath:path HTTPMethod:method recursive:recursive];
+    CRRoute* route = [[CRRoute alloc] initWithBlock:block method:method path:path recursive:recursive];
+    [self addRoute:route];
 }
 
 #pragma mark - Route Controller Routes
@@ -122,8 +125,8 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive {
-    CRRoute* route = [CRRoute routeWithControllerClass:controllerClass prefix:path];
-    [self addRoute:route forPath:path HTTPMethod:method recursive:recursive];
+    CRRoute* route = [[CRRoute alloc] initWithControllerClass:controllerClass method:method path:path recursive:recursive];
+    [self addRoute:route];
 }
 
 #pragma mark - View Controller Routes
@@ -137,117 +140,80 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive {
-    CRRoute* route = [CRRoute routeWithViewControllerClass:viewControllerClass nibName:nibNameOrNil bundle:nibBundleOrNil prefix:path];
-    [self addRoute:route forPath:path HTTPMethod:method recursive:recursive];
+    CRRoute* route = [[CRRoute alloc] initWithViewControllerClass:viewControllerClass nibName:nibNameOrNil bundle:nibBundleOrNil method:method path:path recursive:recursive];
+    [self addRoute:route];
 }
 
 #pragma mark - General Routes
 
-- (void)addRoute:(CRRoute*)route forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive {
-    NSArray<NSString*>* methods;
-
-    if ( method == CRHTTPMethodAll ) {
-        methods = [CRMessage acceptedHTTPMethods];
-    } else {
-        methods = @[NSStringFromCRHTTPMethod(method), NSStringFromCRHTTPMethod(CRHTTPMethodHead)];
-    }
-
-    if ( path == nil ) {
-        path = CRPathAnyPath;
-        recursive = NO;
-    }
-
-    if ( ![path isEqualToString:CRPathAnyPath] && ![path hasSuffix:CRPathSeparator] ) {
-        path = [path stringByAppendingString:CRPathSeparator];
-    }
-
-    [methods enumerateObjectsUsingBlock:^(NSString * _Nonnull method, NSUInteger idx, BOOL * _Nonnull stop) {
-
-        NSString* routePath = [method stringByAppendingString:path];
-
-        if ( ![self.routes[routePath] isKindOfClass:[NSMutableArray class]] ) {
-            NSMutableArray<CRRoute*>* parentRoutes = [NSMutableArray array];
-
-            // Add the "*" routes
-            NSString* anyPathRoutePath = [method stringByAppendingString:CRPathAnyPath];
-            if ( self.routes[anyPathRoutePath] != nil ) {
-                [parentRoutes addObjectsFromArray:self.routes[anyPathRoutePath]];
-            }
-
-            self.routes[routePath] = parentRoutes;
-        }
-
-        [self.routes[routePath] addObject:route];
-
-        // If the route should be executed on all paths, add it accordingly
-        if ( [path isEqualToString:CRPathAnyPath] ) {
-            [self.routes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<CRRoute *> * _Nonnull obj, BOOL * _Nonnull stop) {
-                if ( ![obj.lastObject isEqual:route] ) {
-                    [obj addObject:route];
-                }
-            }];
-        }
-
-        // If the route is recursive add it to the array
-        if ( recursive ) {
-            [self.recursiveMatchRoutePathPrefixes addObject:routePath];
-        }
-    }];
+- (void)addRoute:(CRRoute*)route {
+    [self.routes addObject:route];
 }
 
-- (NSArray<CRRoute *> *)routesForPath:(NSString*)path HTTPMethod:(CRHTTPMethod)method {
-    if ( path == nil ) {
-        path = @"";
-    }
+- (NSArray<CRRouteMatchingResult *> *)routesForPath:(NSString*)path HTTPMethod:(CRHTTPMethod)method {
+    NSMutableArray<CRRouteMatchingResult *> * routes = [NSMutableArray array];
+    [self.routes enumerateObjectsUsingBlock:^(CRRoute * _Nonnull route, NSUInteger idx, BOOL * _Nonnull stop) {
 
-    if ( ![path hasSuffix:CRPathSeparator] ) {
-        path = [path stringByAppendingString:CRPathSeparator];
-    }
-    path = [NSStringFromCRHTTPMethod(method) stringByAppendingString:path];
+        // Bailout early if method does not match
+        if ( route.method != method && route.method != CRHTTPMethodAll ) {
+            return;
+        }
 
-    __block BOOL shouldRecursivelyMatchRoutePathPrefix = NO;
-    [self.recursiveMatchRoutePathPrefixes enumerateObjectsUsingBlock:^(NSString * _Nonnull recursiveMatchRoutePathPrefix, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ( [path hasPrefix:recursiveMatchRoutePathPrefix] ) {
-            shouldRecursivelyMatchRoutePathPrefix = YES;
-            *stop = YES;
+        // Boilout early if route is valid for all paths or path matches exaclty
+        if ( route.path == nil || [route.path isEqualToString:path] ) {
+            [routes addObject:[CRRouteMatchingResult routeMatchingResultWithRoute:route matches:nil]];
+            return;
+        }
+
+        // If route is recursive just check that the path start with the route path
+        if ( route.recursive && [path hasPrefix:route.path] ) {
+            [routes addObject:[CRRouteMatchingResult routeMatchingResultWithRoute:route matches:nil]];
+            return;
+        }
+
+        // If the route regex matches
+        if ( !route.pathRegex ) {
+            return;
+        }
+
+        NSArray* matches = [route processMatchesInPath:path];
+        if ( matches.count > 0 ) {
+            [routes addObject:[CRRouteMatchingResult routeMatchingResultWithRoute:route matches:matches]];
         }
     }];
 
-    NSArray<CRRoute*>* routes;
-    while ( routes.count == 0 ) {
-        routes = self.routes[path];
-        if ( !shouldRecursivelyMatchRoutePathPrefix) {
-            break;
-        }
-        path = [[path stringByDeletingLastPathComponent] stringByAppendingString:CRPathSeparator];
-    }
-    
+//    NSLog(@"%s %@", __PRETTY_FUNCTION__, routes);
     return routes;
 }
 
-- (void)executeRoutes:(NSArray<CRRoute *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response {
+- (void)executeRoutes:(NSArray<CRRouteMatchingResult *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response {
     [self executeRoutes:routes forRequest:request response:response withNotFoundBlock:nil];
 }
 
-- (void)executeRoutes:(NSArray<CRRoute *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response withNotFoundBlock:(CRRouteBlock)notFoundBlock {
+- (void)executeRoutes:(NSArray<CRRouteMatchingResult *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response withNotFoundBlock:(CRRouteBlock)notFoundBlock {
     if ( !notFoundBlock ) {
         notFoundBlock = [CRRouter errorHandlingBlockWithStatus:404 error:nil];
     }
 
     if ( routes.count == 0 ) {
-        routes = @[[CRRoute routeWithBlock:notFoundBlock]];
+        CRRoute* defaultRoute = [[CRRoute alloc] initWithBlock:notFoundBlock method:CRHTTPMethodAll path:nil recursive:NO];
+        routes = @[[CRRouteMatchingResult routeMatchingResultWithRoute:defaultRoute matches:nil]];
     }
 
     __block BOOL shouldStopExecutingBlocks = NO;
     __block NSUInteger currentRouteIndex = 0;
-    dispatch_block_t completionHandler = ^{
-        shouldStopExecutingBlocks = NO;
-        currentRouteIndex++;
-    };
     while (!shouldStopExecutingBlocks && currentRouteIndex < routes.count ) {
         shouldStopExecutingBlocks = YES;
-        CRRouteBlock block = routes[currentRouteIndex].block;
-        block(request, response, completionHandler);
+        CRRouteMatchingResult* result = routes[currentRouteIndex];
+        if ( result.matches.count > 0 ) {
+            [result.route.pathKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull key, NSUInteger idx, BOOL * _Nonnull stop) {
+                [request setQuery:(result.matches[idx] ? : @"") forKey:key];
+            }];            
+        }
+        result.route.block (request, response, ^{
+            shouldStopExecutingBlocks = NO;
+            currentRouteIndex++;
+        });
     }
 }
 

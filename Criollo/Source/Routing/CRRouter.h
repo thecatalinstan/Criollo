@@ -8,7 +8,9 @@
 
 #import "CRTypes.h"
 
-@class CRRoute;
+#define CRPathVarsKey       @"vars"
+
+@class CRRoute, CRRouteMatchingResult;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,12 +20,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) CRRouteBlock notFoundBlock;
 
-- (NSArray<CRRoute *> *)routesForPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method;
+- (void)addRoute:(CRRoute *)route;
 
-- (void)executeRoutes:(NSArray<CRRoute *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response;
-- (void)executeRoutes:(NSArray<CRRoute *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response withNotFoundBlock:(CRRouteBlock _Nullable)notFoundBlock;
+- (NSArray<CRRouteMatchingResult *> *)routesForPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method;
 
-- (void)addRoute:(CRRoute *)route forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive;
+- (void)executeRoutes:(NSArray<CRRouteMatchingResult *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response;
+- (void)executeRoutes:(NSArray<CRRouteMatchingResult *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response withNotFoundBlock:(CRRouteBlock _Nullable)notFoundBlock;
 
 - (void)addBlock:(CRRouteBlock)block;
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString * _Nullable)path;

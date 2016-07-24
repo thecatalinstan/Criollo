@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 
 #import "HelloWorldViewController.h"
-#import "MultipartViewController.h"
 #import "SystemInfoHelper.h"
 #import "APIController.h"
 #import "MultiRouteViewController.h"
@@ -45,12 +44,9 @@ NS_ASSUME_NONNULL_END
     // Add a header that says who we are :)
     [self.server addBlock:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
         [response setValue:[NSString stringWithFormat:@"%@, %@ build %@", bundle.bundleIdentifier, [bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [bundle objectForInfoDictionaryKey:@"CFBundleVersion"]] forHTTPHeaderField:@"Server"];
-
         if ( ! request.cookies[@"session_cookie"] ) {
             [response setCookie:@"session_cookie" value:[NSUUID UUID].UUIDString path:@"/" expires:nil domain:nil secure:NO];
         }
-        [response setCookie:@"persistent_cookie" value:[NSUUID UUID].UUIDString path:@"/" expires:[NSDate distantFuture] domain:nil secure:NO];
-
         completionHandler();
     }];
 
@@ -96,9 +92,18 @@ NS_ASSUME_NONNULL_END
     // Multiroute
     [self.server addViewController:[MultiRouteViewController class] withNibName:@"MultiRouteViewController" bundle:nil forPath:@"/multi" HTTPMethod:CRHTTPMethodAll recursive:YES];
 
-    [self.server addViewController:[MultipartViewController class] withNibName:@"MultipartViewController" bundle:nil forPath:@"/multipart"];
+    // Placeholder path controller
+    [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/blog/:year/:month/:slug" HTTPMethod:CRHTTPMethodAll recursive:NO];
+
+    // Regex path controller
+    [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/f[a-z]{2}/:payload" HTTPMethod:CRHTTPMethodAll recursive:NO];
+
+    // HTML view controller
     [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" HTTPMethod:CRHTTPMethodAll recursive:YES];
 
+    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        [response send:request.query];
+    } forPath:@"/posts/:pid"];
 
     [self startServer];
 }
@@ -137,17 +142,14 @@ NS_ASSUME_NONNULL_END
         [CRApp logFormat:@"%@ Started HTTP server at %@", [NSDate date], baseURL.absoluteString];
 
         // Get the list of paths
-        NSDictionary<NSString*, NSMutableArray<CRRoute*>*>* routes = [[self.server valueForKey:@"routes"] mutableCopy];
-        NSMutableSet<NSURL*>* paths = [NSMutableSet set];
-
-        [routes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<CRRoute *> * _Nonnull obj, BOOL * _Nonnull stop) {
-            if ( [key hasSuffix:@"*"] ) {
+        NSArray<NSString *> * routePaths = [self.server valueForKeyPath:@"routes.path"];
+        NSMutableArray<NSURL *> *paths = [NSMutableArray array];
+        [routePaths enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ( [obj isKindOfClass:[NSNull class]] ) {
                 return;
             }
-            NSString* path = [key substringFromIndex:[key rangeOfString:@"/"].location + 1];
-            [paths addObject:[baseURL URLByAppendingPathComponent:path]];
+            [paths addObject:[baseURL URLByAppendingPathComponent:obj]];
         }];
-
         NSArray<NSURL*>* sortedPaths =[paths sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"absoluteString" ascending:YES]]];
         [CRApp logFormat:@"Available paths are:"];
         [sortedPaths enumerateObjectsUsingBlock:^(NSURL * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
