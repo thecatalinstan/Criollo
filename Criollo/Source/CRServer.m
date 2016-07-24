@@ -228,8 +228,8 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)mountStaticDirectoryAtPath:(NSString *)directoryPath forPath:(NSString *)path options:(CRStaticDirectoryServingOptions)options {
-    CRRoute* route = [CRRoute routeWithStaticDirectoryAtPath:directoryPath prefix:path options:options];
-    [self addRoute:route forPath:path HTTPMethod:CRHTTPMethodGet recursive:YES];
+    CRRoute* route = [[CRRoute alloc] initWithStaticDirectoryAtPath:directoryPath options:options path:path];
+    [self addRoute:route];
 }
 
 - (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path {
@@ -249,8 +249,8 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString *)fileName contentType:(NSString *)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition {
-    CRRoute* route = [CRRoute routeWithStaticFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition];
-    [self addRoute:route forPath:path HTTPMethod:CRHTTPMethodGet recursive:NO];
+    CRRoute* route = [[CRRoute alloc] initWithStaticFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition path:path];
+    [self addRoute:route];
 }
 
 @end

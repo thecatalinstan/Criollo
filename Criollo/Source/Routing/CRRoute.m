@@ -7,6 +7,7 @@
 //
 
 #import "CRRoute.h"
+#import "CRTypes.h"
 #import "CRServer_Internal.h"
 #import "CRRouteController.h"
 #import "CRViewController.h"
@@ -23,62 +24,49 @@
 
 @implementation CRRoute
 
-+ (CRRoute *)routeWithBlock:(CRRouteBlock)block {
-    return [[CRRoute alloc] initWithBlock:block];
-}
-
-+ (CRRoute *)routeWithControllerClass:(Class)controllerClass prefix:(NSString *)prefix {
-    return [[CRRoute alloc] initWithControllerClass:controllerClass prefix:prefix];
-}
-
-+ (CRRoute *)routeWithViewControllerClass:(Class)controllerClass nibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil prefix:(NSString * _Nullable)prefix {
-    return [[CRRoute alloc] initWithViewControllerClass:controllerClass nibName:nibNameOrNil bundle:nibBundleOrNil prefix:prefix];
-}
-
-+ (CRRoute *)routeWithStaticDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix options:(CRStaticDirectoryServingOptions)options {
-    return [[CRRoute alloc] initWithStaticDirectoryAtPath:directoryPath prefix:prefix options:options];
-}
-
-+ (CRRoute *)routeWithStaticFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString *)fileName contentType:(NSString *)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition {
-    return [[CRRoute alloc] initWithStaticFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:CRStaticFileContentDispositionNone];
+- (NSString *)description {
+    return [NSString stringWithFormat:@"<CRRoute %@, %@ %@%@>", @(self.hash), NSStringFromCRHTTPMethod(self.method), self.path ? : @"*", self.recursive ? @" recursive" : @""];
 }
 
 - (instancetype)init {
-    return [self initWithBlock:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {}];
+    return [self initWithBlock:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {} method:CRHTTPMethodAll path:nil recursive:NO];
 }
 
-- (instancetype)initWithBlock:(CRRouteBlock)block {
+- (instancetype)initWithBlock:(CRRouteBlock)block method:(CRHTTPMethod)method path:(NSString * _Nullable)path recursive:(BOOL)recursive {
     self = [super init];
     if ( self != nil ) {
-        _block = block;
+        self.block = block;
+        self.method = method;
+        self.path = path;
+        self.recursive = recursive;
     }
     return self;
 }
 
-- (instancetype)initWithControllerClass:(Class)controllerClass prefix:(NSString *)prefix {
+- (instancetype)initWithControllerClass:(Class)controllerClass method:(CRHTTPMethod)method path:(NSString * _Nullable)path recursive:(BOOL)recursive {
     CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-        CRViewController* controller = [[controllerClass alloc] initWithPrefix:prefix];
+        CRViewController* controller = [[controllerClass alloc] initWithPrefix:path];
         controller.routeBlock(request, response, completionHandler);
     };
-    return [self initWithBlock:block];
+    return [self initWithBlock:block method:method path:path recursive:recursive];
 }
 
-- (instancetype)initWithViewControllerClass:(Class)viewControllerClass nibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil prefix:(NSString * _Nullable)prefix {
+- (instancetype)initWithViewControllerClass:(Class)viewControllerClass nibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil method:(CRHTTPMethod)method path:(NSString * _Nullable)path recursive:(BOOL)recursive {
     CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-        CRViewController* viewController = [[viewControllerClass alloc] initWithNibName:nibNameOrNil bundle:nibBundleOrNil prefix:prefix];
+        CRViewController* viewController = [[viewControllerClass alloc] initWithNibName:nibNameOrNil bundle:nibBundleOrNil prefix:path];
         viewController.routeBlock(request, response, completionHandler);
     };
-    return [self initWithBlock:block];
+    return [self initWithBlock:block method:method path:path recursive:recursive];
 }
 
-- (instancetype)initWithStaticDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix options:(CRStaticDirectoryServingOptions)options {
-    CRRouteBlock block = [CRStaticDirectoryManager managerWithDirectoryAtPath:directoryPath prefix:prefix options:options].routeBlock;
-    return [self initWithBlock:block];
+- (instancetype)initWithStaticDirectoryAtPath:(NSString *)directoryPath options:(CRStaticDirectoryServingOptions)options path:(NSString * _Nullable)path {
+    CRRouteBlock block = [CRStaticDirectoryManager managerWithDirectoryAtPath:directoryPath prefix:path options:options].routeBlock;
+    return [self initWithBlock:block method:CRHTTPMethodGet path:path recursive:YES];
 }
 
-- (instancetype)initWithStaticFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString *)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition {
+- (instancetype)initWithStaticFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString *)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition path:(NSString * _Nullable)path {
     CRRouteBlock block = [CRStaticFileManager managerWithFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition].routeBlock;
-    return [self initWithBlock:block];
+    return [self initWithBlock:block method:CRHTTPMethodGet path:path recursive:NO];
 }
 
 @end

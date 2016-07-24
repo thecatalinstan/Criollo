@@ -18,12 +18,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) CRRouteBlock notFoundBlock;
 
+- (void)addRoute:(CRRoute *)route;
+
 - (NSArray<CRRoute *> *)routesForPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method;
 
 - (void)executeRoutes:(NSArray<CRRoute *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response;
 - (void)executeRoutes:(NSArray<CRRoute *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response withNotFoundBlock:(CRRouteBlock _Nullable)notFoundBlock;
-
-- (void)addRoute:(CRRoute *)route forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive;
 
 - (void)addBlock:(CRRouteBlock)block;
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString * _Nullable)path;
