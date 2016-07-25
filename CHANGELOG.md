@@ -7,6 +7,12 @@ This file includes all notable changes to Criollo.
 Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
+## [0.3.1](https://github.com/thecatalinstan/Criollo/releases/tag/0.3.1) (07/25/2016)
+
+**Released on Monday, July 25, 2016**. This is a hot-fix release.
+
+#### Fixed
+A bug in `CRRouteController` that affected the resolution of relative paths. [`f952862`](https://github.com/thecatalinstan/Criollo/commit/f952862b00978eb3eeff1345ca03e09450ccd524)
 
 ## [0.3.0](https://github.com/thecatalinstan/Criollo/releases/tag/0.3.0) (07/25/2016)
 
