@@ -8,6 +8,7 @@
 
 #import "CRRouteController.h"
 #import "CRRouter_Internal.h"
+#import "CRRoute.h"
 #import "CRRequest.h"
 #import "CRRequest_Internal.h"
 #import "CRResponse.h"
@@ -41,11 +42,19 @@ NS_ASSUME_NONNULL_END
     if ( relativePathStart == NSNotFound ) {
         relativePathStart = 0;
     }
+
+    NSString * relativePath;
     @try {
-        return [[requestedPath substringFromIndex:relativePathStart + self.prefix.length] stringByStandardizingPath];
+        relativePath = [[requestedPath substringFromIndex:relativePathStart + self.prefix.length] stringByStandardizingPath];
     } @catch (NSException *exception) {
-        return @"/";
+        relativePath = @"";
     }
+
+    if ( ![relativePath hasPrefix:CRPathSeparator] ) {
+        relativePath = [CRPathSeparator stringByAppendingString:relativePath ? : @""];
+    }
+
+    return relativePath;
 }
 
 - (CRRouteBlock)routeBlock {
