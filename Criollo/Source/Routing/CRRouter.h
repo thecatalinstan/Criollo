@@ -25,6 +25,17 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString * _Nullable)path HTTPMethod:(CRHTTPMethod)method;
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString * _Nullable)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive;
 
+- (void)add:(NSString *)path block:(CRRouteBlock)block;
+- (void)add:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive;
+- (void)get:(NSString *)path block:(CRRouteBlock)block;
+- (void)get:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive;
+- (void)post:(NSString *)path block:(CRRouteBlock)block;
+- (void)post:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive;
+- (void)put:(NSString *)path block:(CRRouteBlock)block;
+- (void)put:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive;
+- (void)delete:(NSString *)path block:(CRRouteBlock)block;
+- (void)delete:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive;
+
 - (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path;
 - (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method;
 - (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive;

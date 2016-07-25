@@ -7,6 +7,7 @@
 //
 
 #import "CRRouter.h"
+#import "CRRouter_Internal.h"
 #import "CRRoute.h"
 #import "CRRoute_Internal.h"
 #import "CRRouteMatchingResult.h"
@@ -18,8 +19,6 @@
 #import "CRRequest_Internal.h"
 #import "CRResponse.h"
 #import "CRResponse_Internal.h"
-
-#import <objc/runtime.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -114,6 +113,46 @@ NS_ASSUME_NONNULL_END
     [self addRoute:route];
 }
 
+- (void)add:(NSString *)path block:(CRRouteBlock)block {
+    [self add:path block:block recursive:NO];
+}
+
+- (void)add:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive {
+    [self addBlock:block forPath:path HTTPMethod:CRHTTPMethodAll recursive:YES];
+}
+
+- (void)get:(NSString *)path block:(CRRouteBlock)block {
+    [self get:path block:block recursive:NO];
+}
+
+- (void)get:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive {
+    [self addBlock:block forPath:path HTTPMethod:CRHTTPMethodGet recursive:recursive];
+}
+
+- (void)post:(NSString *)path block:(CRRouteBlock)block {
+    [self post:path block:block recursive:NO];
+}
+
+- (void)post:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive {
+    [self addBlock:block forPath:path HTTPMethod:CRHTTPMethodPost recursive:recursive];
+}
+
+- (void)put:(NSString *)path block:(CRRouteBlock)block {
+    [self put:path block:block recursive:NO];
+}
+
+- (void)put:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive {
+    [self addBlock:block forPath:path HTTPMethod:CRHTTPMethodPut recursive:recursive];
+}
+
+- (void)delete:(NSString *)path block:(CRRouteBlock)block {
+    [self delete:path block:block recursive:NO];
+}
+
+- (void)delete:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive {
+    [self addBlock:block forPath:path HTTPMethod:CRHTTPMethodDelete recursive:recursive];
+}
+
 #pragma mark - Route Controller Routes
 
 - (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path {
@@ -129,6 +168,7 @@ NS_ASSUME_NONNULL_END
     [self addRoute:route];
 }
 
+
 #pragma mark - View Controller Routes
 
 - (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path {
@@ -143,6 +183,8 @@ NS_ASSUME_NONNULL_END
     CRRoute* route = [[CRRoute alloc] initWithViewControllerClass:viewControllerClass nibName:nibNameOrNil bundle:nibBundleOrNil method:method path:path recursive:recursive];
     [self addRoute:route];
 }
+
+
 
 #pragma mark - General Routes
 
