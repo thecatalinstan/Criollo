@@ -7,6 +7,7 @@
 //
 
 #import "CRViewController.h"
+#import "CRRouter_Internal.h"
 #import "CRView.h"
 #import "CRNib.h"
 #import "CRRequest.h"
