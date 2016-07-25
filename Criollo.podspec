@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name                    =  "Criollo"
-  s.version                 =  "0.2.0"
+  s.version                 =  "0.3.0"
   s.license                 =  "MIT"
 
   s.summary                 =  "A powerful Cocoa based web application framework for OS X and iOS."
@@ -23,6 +23,6 @@ Pod::Spec.new do |s|
 
   s.requires_arc            = true
 
-  s.dependency              'CocoaAsyncSocket', '~> 7.4'
+  s.dependency              'CocoaAsyncSocket', '~> 7.5'
 
 end

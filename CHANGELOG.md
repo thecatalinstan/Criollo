@@ -1,10 +1,26 @@
 # Change Log
 
-This file includes all notable changes to Criollo.
+This file includes all notable changes to Criollo. 
 
-`Criollo` uses [Semantic Versioning](http://semver.org/).
+*Please note that during this early stage of development, **APIs are extremely prone to non-backward-compatible changes.** Please consult this file for the specifics, before you upgrade.*
+
+Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
+
+## [0.3.0](https://github.com/thecatalinstan/Criollo/releases/tag/0.3.0) (07/25/2016)
+
+**Released on Monday, July 25, 2016**. This release has significant API changes. It’s main focus is on extending the functionality of the [`CRRouter`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/Routing/CRRouter.h) API introduced in version 0.2.0.
+
+The core router logic has been re-written. Also now you can define routes using regular expressions, variable replacements.
+
+#### Added
+
+* [`CRRouter`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/Routing/CRRouter.h#L28-L37) now has a series of convenience methods for adding blocks to routes. This should make the code much cleaner and it looks damn good in swift. [`7ad5d9ae`](https://github.com/thecatalinstan/Criollo/commit/7ad5d9ae1cd0ca16a3d51870267c67c80b980822)
+
+#### Changed APIs
+
+* All methods containing `HTTPMethod:` in their signatures have been refactored to include `method:`. This affects [`CRRouter`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/Routing/CRRouter.h). [`c3a4974`](https://github.com/thecatalinstan/Criollo/commit/c3a4974dc9b83518a33052550c4c6a771e953461)
 
 ## [0.2.0](https://github.com/thecatalinstan/Criollo/releases/tag/0.2.0) (07/21/2016)
 
