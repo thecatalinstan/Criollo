@@ -51,7 +51,7 @@ NS_ASSUME_NONNULL_END
 - (CRRouteBlock)routeBlock {
     return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {        
         NSString* requestedRelativePath = [self relativePathForRequestedPath:request.env[@"DOCUMENT_URI"]];
-        NSArray<CRRouteMatchingResult *>* routes = [self routesForPath:requestedRelativePath HTTPMethod:request.method];
+        NSArray<CRRouteMatchingResult *>* routes = [self routesForPath:requestedRelativePath method:request.method];
         [self executeRoutes:routes forRequest:request response:response];
         completionHandler();
     };

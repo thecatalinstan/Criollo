@@ -69,7 +69,7 @@ NS_ASSUME_NONNULL_END
     [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
         [response sendString:[NSString stringWithFormat:@"%@\r\n\r\n--%@\r\n\r\n--", request, request.body]];
-    } forPath:@"/post" HTTPMethod:CRHTTPMethodPost];
+    } forPath:@"/post" method:CRHTTPMethodPost];
 
     // Serve static files from "/Public" (relative to bundle)
     NSString* staticFilesPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"];
@@ -82,24 +82,24 @@ NS_ASSUME_NONNULL_END
             [response redirectToURL:redirectURL];
         }
         completionHandler();
-    } forPath:@"/redirect" HTTPMethod:CRHTTPMethodGet];
+    } forPath:@"/redirect" method:CRHTTPMethodGet];
     
     [self.server mountStaticDirectoryAtPath:@"~" forPath:@"/pub" options:CRStaticDirectoryServingOptionsAutoIndex];
 
     // API
-    [self.server addController:[APIController class] forPath:@"/api" HTTPMethod:CRHTTPMethodAll recursive:YES];
+    [self.server addController:[APIController class] forPath:@"/api" method:CRHTTPMethodAll recursive:YES];
 
     // Multiroute
-    [self.server addViewController:[MultiRouteViewController class] withNibName:@"MultiRouteViewController" bundle:nil forPath:@"/multi" HTTPMethod:CRHTTPMethodAll recursive:YES];
+    [self.server addViewController:[MultiRouteViewController class] withNibName:@"MultiRouteViewController" bundle:nil forPath:@"/multi" method:CRHTTPMethodAll recursive:YES];
 
     // Placeholder path controller
-    [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/blog/:year/:month/:slug" HTTPMethod:CRHTTPMethodAll recursive:NO];
+    [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/blog/:year/:month/:slug" method:CRHTTPMethodAll recursive:NO];
 
     // Regex path controller
-    [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/f[a-z]{2}/:payload" HTTPMethod:CRHTTPMethodAll recursive:NO];
+    [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/f[a-z]{2}/:payload" method:CRHTTPMethodAll recursive:NO];
 
     // HTML view controller
-    [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" HTTPMethod:CRHTTPMethodAll recursive:YES];
+    [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" method:CRHTTPMethodAll recursive:YES];
 
     [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         [response send:request.query];

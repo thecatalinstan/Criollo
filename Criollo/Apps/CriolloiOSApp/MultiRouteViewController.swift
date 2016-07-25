@@ -24,11 +24,11 @@ class MultiRouteViewController: CRViewController {
             response.send(NSStringFromCRHTTPMethod(request.method))
             }, forPath:"/method")
 
-        self.addViewController(HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil, forPath: "/hello-c", HTTPMethod: CRHTTPMethod.All, recursive: true)
-        self.addController(APIController.self, forPath: "/api", HTTPMethod: CRHTTPMethod.All, recursive: true)
+        self.addViewController(HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil, forPath: "/hello-c", method: CRHTTPMethod.All, recursive: true)
+        self.addController(APIController.self, forPath: "/api", method: CRHTTPMethod.All, recursive: true)
 
         // Placeholder path controller
-        self.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/:year/:month/:slug", HTTPMethod: CRHTTPMethod.All, recursive: true)
+        self.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/:year/:month/:slug", method: CRHTTPMethod.All, recursive: true)
     }
 
     override func presentViewControllerWithRequest(request: CRRequest, response: CRResponse) -> String {

@@ -97,18 +97,18 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Block Routes
 
 - (void)addBlock:(CRRouteBlock)block {
-    [self addBlock:block forPath:nil HTTPMethod:CRHTTPMethodAll recursive:NO];
+    [self addBlock:block forPath:nil method:CRHTTPMethodAll recursive:NO];
 }
 
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString*)path {
-    [self addBlock:block forPath:path HTTPMethod:CRHTTPMethodAll recursive:NO];
+    [self addBlock:block forPath:path method:CRHTTPMethodAll recursive:NO];
 }
 
-- (void)addBlock:(CRRouteBlock)block forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method {
-    [self addBlock:block forPath:path HTTPMethod:method recursive:NO];
+- (void)addBlock:(CRRouteBlock)block forPath:(NSString *)path method:(CRHTTPMethod)method {
+    [self addBlock:block forPath:path method:method recursive:NO];
 }
 
-- (void)addBlock:(CRRouteBlock)block forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive {
+- (void)addBlock:(CRRouteBlock)block forPath:(NSString *)path method:(CRHTTPMethod)method recursive:(BOOL)recursive {
     CRRoute* route = [[CRRoute alloc] initWithBlock:block method:method path:path recursive:recursive];
     [self addRoute:route];
 }
@@ -118,7 +118,7 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)add:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive {
-    [self addBlock:block forPath:path HTTPMethod:CRHTTPMethodAll recursive:YES];
+    [self addBlock:block forPath:path method:CRHTTPMethodAll recursive:YES];
 }
 
 - (void)get:(NSString *)path block:(CRRouteBlock)block {
@@ -126,7 +126,7 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)get:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive {
-    [self addBlock:block forPath:path HTTPMethod:CRHTTPMethodGet recursive:recursive];
+    [self addBlock:block forPath:path method:CRHTTPMethodGet recursive:recursive];
 }
 
 - (void)post:(NSString *)path block:(CRRouteBlock)block {
@@ -134,7 +134,7 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)post:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive {
-    [self addBlock:block forPath:path HTTPMethod:CRHTTPMethodPost recursive:recursive];
+    [self addBlock:block forPath:path method:CRHTTPMethodPost recursive:recursive];
 }
 
 - (void)put:(NSString *)path block:(CRRouteBlock)block {
@@ -142,7 +142,7 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)put:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive {
-    [self addBlock:block forPath:path HTTPMethod:CRHTTPMethodPut recursive:recursive];
+    [self addBlock:block forPath:path method:CRHTTPMethodPut recursive:recursive];
 }
 
 - (void)delete:(NSString *)path block:(CRRouteBlock)block {
@@ -150,20 +150,20 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)delete:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive {
-    [self addBlock:block forPath:path HTTPMethod:CRHTTPMethodDelete recursive:recursive];
+    [self addBlock:block forPath:path method:CRHTTPMethodDelete recursive:recursive];
 }
 
 #pragma mark - Route Controller Routes
 
 - (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path {
-    [self addController:controllerClass forPath:path HTTPMethod:CRHTTPMethodAll recursive:NO];
+    [self addController:controllerClass forPath:path method:CRHTTPMethodAll recursive:NO];
 }
 
-- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method {
-    [self addController:controllerClass forPath:path HTTPMethod:method recursive:NO];
+- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path method:(CRHTTPMethod)method {
+    [self addController:controllerClass forPath:path method:method recursive:NO];
 }
 
-- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive {
+- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path method:(CRHTTPMethod)method recursive:(BOOL)recursive {
     CRRoute* route = [[CRRoute alloc] initWithControllerClass:controllerClass method:method path:path recursive:recursive];
     [self addRoute:route];
 }
@@ -172,14 +172,14 @@ NS_ASSUME_NONNULL_END
 #pragma mark - View Controller Routes
 
 - (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path {
-    [self addViewController:viewControllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path HTTPMethod:CRHTTPMethodAll recursive:NO];
+    [self addViewController:viewControllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path method:CRHTTPMethodAll recursive:NO];
 }
 
-- (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method {
-    [self addViewController:viewControllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path HTTPMethod:method recursive:NO];
+- (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path method:(CRHTTPMethod)method {
+    [self addViewController:viewControllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path method:method recursive:NO];
 }
 
-- (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive {
+- (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path method:(CRHTTPMethod)method recursive:(BOOL)recursive {
     CRRoute* route = [[CRRoute alloc] initWithViewControllerClass:viewControllerClass nibName:nibNameOrNil bundle:nibBundleOrNil method:method path:path recursive:recursive];
     [self addRoute:route];
 }
@@ -192,7 +192,7 @@ NS_ASSUME_NONNULL_END
     [self.routes addObject:route];
 }
 
-- (NSArray<CRRouteMatchingResult *> *)routesForPath:(NSString*)path HTTPMethod:(CRHTTPMethod)method {
+- (NSArray<CRRouteMatchingResult *> *)routesForPath:(NSString*)path method:(CRHTTPMethod)method {
     NSMutableArray<CRRouteMatchingResult *> * routes = [NSMutableArray array];
     [self.routes enumerateObjectsUsingBlock:^(CRRoute * _Nonnull route, NSUInteger idx, BOOL * _Nonnull stop) {
 

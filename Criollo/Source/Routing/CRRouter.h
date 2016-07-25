@@ -22,8 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addBlock:(CRRouteBlock)block;
 - (void)addBlock:(CRRouteBlock)block forPath:(NSString * _Nullable)path;
-- (void)addBlock:(CRRouteBlock)block forPath:(NSString * _Nullable)path HTTPMethod:(CRHTTPMethod)method;
-- (void)addBlock:(CRRouteBlock)block forPath:(NSString * _Nullable)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive;
+- (void)addBlock:(CRRouteBlock)block forPath:(NSString * _Nullable)path method:(CRHTTPMethod)method;
+- (void)addBlock:(CRRouteBlock)block forPath:(NSString * _Nullable)path method:(CRHTTPMethod)method recursive:(BOOL)recursive;
 
 - (void)add:(NSString *)path block:(CRRouteBlock)block;
 - (void)add:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive;
@@ -37,12 +37,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)delete:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive;
 
 - (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path;
-- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method;
-- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive;
+- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path method:(CRHTTPMethod)method;
+- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path method:(CRHTTPMethod)method recursive:(BOOL)recursive;
 
 - (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil forPath:(NSString *)path;
-- (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method;
-- (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive;
+- (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil forPath:(NSString *)path method:(CRHTTPMethod)method;
+- (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil forPath:(NSString *)path method:(CRHTTPMethod)method recursive:(BOOL)recursive;
 
 @end
 

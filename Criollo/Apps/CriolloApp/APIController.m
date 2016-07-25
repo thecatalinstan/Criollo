@@ -86,7 +86,7 @@
             [response sendString:responseString];
 
             completionHandler();
-        } forPath:@"/status" HTTPMethod:CRHTTPMethodGet];
+        } forPath:@"/status" method:CRHTTPMethodGet];
 
         [self addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
             NSDictionary *info = @{
@@ -107,7 +107,7 @@
                 [CRRouter errorHandlingBlockWithStatus:500 error:error](request, response, completionHandler);
             }
             
-        } forPath:@"/info" HTTPMethod:CRHTTPMethodGet];
+        } forPath:@"/info" method:CRHTTPMethodGet];
 
     }
     return self;

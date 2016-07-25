@@ -65,22 +65,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
                 response.redirectToURL(redirectURL)
             }
             completionHandler()
-        }, forPath: "/redirect", HTTPMethod:CRHTTPMethod.Get)
+        }, forPath: "/redirect", method:CRHTTPMethod.Get)
 
         // API 
-        self.server .addController(APIController.self, forPath: "/api", HTTPMethod: CRHTTPMethod.All, recursive: true)
+        self.server .addController(APIController.self, forPath: "/api", method: CRHTTPMethod.All, recursive: true)
 
         // Multi route vc
-        self.server.addViewController(MultiRouteViewController.self, withNibName:"MultiRouteViewController", bundle:nil, forPath: "/multi", HTTPMethod: CRHTTPMethod.All, recursive: true)
+        self.server.addViewController(MultiRouteViewController.self, withNibName:"MultiRouteViewController", bundle:nil, forPath: "/multi", method: CRHTTPMethod.All, recursive: true)
 
         // Placeholder path controller
-        self.server.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/blog/:year/:month/:slug", HTTPMethod: CRHTTPMethod.All, recursive: true)
+        self.server.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/blog/:year/:month/:slug", method: CRHTTPMethod.All, recursive: true)
 
         // Regex path controller
-        self.server.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/f[a-z]{2}/:payload", HTTPMethod: CRHTTPMethod.All, recursive: true)        
+        self.server.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/f[a-z]{2}/:payload", method: CRHTTPMethod.All, recursive: true)        
 
         // HTML view controller
-        self.server.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/controller", HTTPMethod: CRHTTPMethod.All, recursive: true)
+        self.server.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/controller", method: CRHTTPMethod.All, recursive: true)
 
         // Start listening
         var serverError:NSError?

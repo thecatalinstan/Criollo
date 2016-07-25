@@ -185,7 +185,7 @@
 		AD001ADE1D455BA300DE4AC9 /* CRRouteMatchingResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRouteMatchingResult.h; sourceTree = "<group>"; };
 		AD001ADF1D455BA300DE4AC9 /* CRRouteMatchingResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRouteMatchingResult.m; sourceTree = "<group>"; };
 		AD001AE21D455C4F00DE4AC9 /* CRRouteMatchingResult_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRouteMatchingResult_Internal.h; sourceTree = "<group>"; };
-		AD001AE91D45883C00DE4AC9 /* CRRouter_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRouter_Internal.h; sourceTree = "<group>"; };
+		AD001AE91D45883C00DE4AC9 /* CRRouter_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CRRouter_Internal.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		AD0BA9901C961898005206A1 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		AD11F4F61C95A81F007DC2FF /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
 		AD11F4F71C95A81F007DC2FF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
@@ -245,10 +245,10 @@
 		ADAB165F1C8C49DB001E104C /* CRRequestRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRequestRange.h; sourceTree = "<group>"; };
 		ADAB16601C8C49DB001E104C /* CRRequestRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRequestRange.m; sourceTree = "<group>"; };
 		ADAB16631C8C4E90001E104C /* CRRequestRange_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRequestRange_Internal.h; sourceTree = "<group>"; };
-		ADAD52571D3E31AC00DDFBB5 /* CRRouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRouter.h; sourceTree = "<group>"; };
-		ADAD52581D3E31AC00DDFBB5 /* CRRouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRouter.m; sourceTree = "<group>"; };
+		ADAD52571D3E31AC00DDFBB5 /* CRRouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CRRouter.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		ADAD52581D3E31AC00DDFBB5 /* CRRouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CRRouter.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		ADAD525F1D3E484900DDFBB5 /* CRRouteController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRouteController.h; sourceTree = "<group>"; };
-		ADAD52601D3E484900DDFBB5 /* CRRouteController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRouteController.m; sourceTree = "<group>"; };
+		ADAD52601D3E484900DDFBB5 /* CRRouteController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CRRouteController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		ADADAB5D1BEEF28E000FBE6B /* CRRoute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRoute.h; sourceTree = "<group>"; };
 		ADADAB5E1BEEF28E000FBE6B /* CRRoute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRoute.m; sourceTree = "<group>"; };
 		ADB692FE1BE53FD400656BEC /* CRFCGIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFCGIRequest.h; sourceTree = "<group>"; };
