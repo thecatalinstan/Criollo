@@ -10,38 +10,40 @@ import Criollo
 
 class MultiRouteViewController: CRViewController {
 
-    override func init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?, prefix: String?) {
-        self = super.init(nibNameOrNil, nibBundleOrNil, prefix)
-        if ( self != nil ) {
-            self.addBlock( { (request, response, completionHandler) -> Void in
-                response.setValue("text/plain", forHTTPHeaderField: "Content-type")
-                response.send("Hello")
-                }, forPath:"/hello")
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?, prefix: String?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil, prefix: prefix)
 
-            self.addBlock( { (request, response, completionHandler) -> Void in
-                response.setValue("text/plain", forHTTPHeaderField: "Content-type")
-                response.send(NSStringFromCRHTTPMethod(request.method))
-                }, forPath:"/method")
 
-            self.addViewController(HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil, forPath: "/hello-c", HTTPMethod: CRHTTPMethod.All, recursive: true)
-            self.addController(APIController.self, forPath: "/api", HTTPMethod: CRHTTPMethod.All, recursive: true)
-        }
-        return self
+        self.addBlock( { (request, response, completionHandler) -> Void in
+            response.setValue("text/plain", forHTTPHeaderField: "Content-type")
+            response.send("Hello")
+            }, forPath:"/hello")
+
+        self.addBlock( { (request, response, completionHandler) -> Void in
+            response.setValue("text/plain", forHTTPHeaderField: "Content-type")
+            response.send(NSStringFromCRHTTPMethod(request.method))
+            }, forPath:"/method")
+
+        self.addViewController(HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil, forPath: "/hello-c", method: CRHTTPMethod.All, recursive: true)
+        self.addController(APIController.self, forPath: "/api", method: CRHTTPMethod.All, recursive: true)
+
+        // Placeholder path controller
+        self.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/:year/:month/:slug", method: CRHTTPMethod.All, recursive: true)
     }
 
     override func presentViewControllerWithRequest(request: CRRequest, response: CRResponse) -> String {
-        self.vars["title"] = String(self.dynamicType);
+        self.vars["title"] = String(self.dynamicType)
 
-        var text:String = String();
-        let env:NSDictionary! = request.valueForKey("env") as! NSDictionary;
-        text += "<h3>Request Environment:</h2><pre>";
+        var text:String = String()
+        let env:NSDictionary! = request.valueForKey("env") as! NSDictionary
+        text += "<h3>Request Environment:</h2><pre>"
         env.enumerateKeysAndObjectsUsingBlock({ (key,  object, stop) -> Void in
-            text += "\(key): \(object)\n";
-        });
-        text += "</pre>";
-        self.vars["text"] = text;
+            text += "\(key): \(object)\n"
+        })
+        text += "</pre>"
+        self.vars["text"] = text
         
-        return super.presentViewControllerWithRequest(request, response: response);
+        return super.presentViewControllerWithRequest(request, response: response)
     }
 
 }

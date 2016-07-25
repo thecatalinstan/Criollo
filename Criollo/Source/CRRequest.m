@@ -53,6 +53,7 @@
         } else {
             [self setEnv:env];
         }
+        _query = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -77,7 +78,7 @@
     }
 
     // Parse request query string
-    NSMutableDictionary<NSString *,NSString *> *query = [NSMutableDictionary dictionary];
+    NSMutableDictionary<NSString *,NSString *> *query = _query ? _query.mutableCopy : [NSMutableDictionary dictionary];
     if ( _env[@"QUERY_STRING"] != nil ) {
         NSArray<NSString *> *queryVars = [_env[@"QUERY_STRING"] componentsSeparatedByString:CRRequestKeySeparator];
         [queryVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -107,6 +108,11 @@
 - (void)setEnv:(NSString *)obj forKey:(NSString *)key {
     [_env setObject:obj forKey:key];
 }
+
+- (void)setQuery:(NSString *)obj forKey:(NSString *)key {
+    [((NSMutableDictionary *)_query) setObject:obj forKey:key];
+}
+
 
 - (BOOL)parseJSONBodyData:(NSError *__autoreleasing  _Nullable *)error {
     BOOL result = NO;

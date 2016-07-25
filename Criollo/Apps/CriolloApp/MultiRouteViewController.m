@@ -27,8 +27,12 @@
             completionHandler();
         } forPath:@"/method"];
 
-        [self addViewController:[HelloWorldViewController class] withNibName:nil bundle:nil forPath:@"/hello-c" HTTPMethod:CRHTTPMethodAll recursive:YES];
-        [self addController:[APIController class] forPath:@"/api" HTTPMethod:CRHTTPMethodAll recursive:YES];
+        [self addViewController:[HelloWorldViewController class] withNibName:nil bundle:nil forPath:@"/hello-c" method:CRHTTPMethodAll recursive:YES];
+        [self addController:[APIController class] forPath:@"/api" method:CRHTTPMethodAll recursive:YES];
+
+        // Placeholder path controller
+        [self addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/:year/:month/:slug" method:CRHTTPMethodAll recursive:NO];
+
     }
     return self;
 }

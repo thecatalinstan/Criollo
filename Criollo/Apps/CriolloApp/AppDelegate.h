@@ -7,6 +7,7 @@
 //
 
 @import Criollo;
+@import Cocoa;
 
 @interface AppDelegate : NSObject <CRApplicationDelegate>
 
