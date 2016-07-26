@@ -240,7 +240,8 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Exposes the contents of a file at a path specification.
  
-
+ @param path               The path specification.
+ @param filePath           The filesystem path of the file.
  */
 - (void)mount:(NSString *)path fileAtPath:(NSString *)filePath;
 
@@ -252,7 +253,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param options            A bitwise-or'ed list of `CRStaticFileServingOptions`.
  @param fileName           The filename that will be exposed to the client.
  @param contentType        The value of the `Content-type` HTTP header.
- @param contentDisposition The `CRStaticFileContentDisposition` used to build the 
+ @param contentDisposition The `CRStaticFileContentDisposition` used to build the
  `Content-disposition` HTTP header.
  */
 - (void)mount:(NSString *)path fileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
