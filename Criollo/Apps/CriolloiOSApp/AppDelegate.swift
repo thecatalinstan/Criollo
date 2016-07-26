@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
         let bundle:NSBundle! = NSBundle.mainBundle()
 
         // Add a header that says who we are :)
-        let identifyBlock:CRRouteBlock = { (request, response, completionHandler) -> Void in
+        self.server.add { (request, response, completionHandler) in
             response.setValue("\(bundle.bundleIdentifier!), \(bundle.objectForInfoDictionaryKey("CFBundleShortVersionString") as! String) build \(bundle.objectForInfoDictionaryKey("CFBundleVersion") as! String)", forHTTPHeaderField: "Server")
 
             if ( request.cookies["session_cookie"] == nil ) {
@@ -36,51 +36,51 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
 
             completionHandler()
         }
-        self.server.addBlock(identifyBlock)
 
         // Prints a simple hello world as text/plain
-        let helloBlock:CRRouteBlock = { (request, response, completionHandler) -> Void in
+        self.server.add("/") { (request, response, completionHandler) in
             response.setValue("text/plain", forHTTPHeaderField: "Content-type")
             response.send("Hello World")
             completionHandler()
         }
-        self.server.addBlock(helloBlock, forPath: "/")
 
         // Prints a hello world JSON object as application/json
-        let jsonHelloBlock:CRRouteBlock = { (request, response, completionHandler) -> Void in
+        self.server.add("/json") { (request, response, completionHandler) in
             response.setValue("application/json charset=utf-8", forHTTPHeaderField: "Content-type")
             response.send(["status": true, "message": "Hello World"])
             completionHandler()
         }
-        self.server.addBlock(jsonHelloBlock, forPath: "/json")
 
         // Serve static files from "/Public" (relative to bundle)
         let staticFilePath:String = (NSBundle.mainBundle().resourcePath?.stringByAppendingString("/Public"))!
-        self.server.mountStaticDirectoryAtPath(staticFilePath, forPath: "/static", options: CRStaticDirectoryServingOptions.FollowSymlinks)
+        self.server.mount("/static", directoryAtPath:staticFilePath, options: CRStaticDirectoryServingOptions.FollowSymlinks)
+
+        // Public files
+        self.server.mount("/pub", directoryAtPath: "~", options: [CRStaticDirectoryServingOptions.FollowSymlinks, CRStaticDirectoryServingOptions.AutoIndex] )
 
         // Redirecter
-        self.server.addBlock({ (request, response, completionHandler) -> Void in
+        self.server.get("/redirect") { (request, response, completionHandler) in
             let redirectURL:NSURL! = NSURL(string: request.query["redirect"]!)
             if ( redirectURL != nil ) {
                 response.redirectToURL(redirectURL)
             }
             completionHandler()
-        }, forPath: "/redirect", method:CRHTTPMethod.Get)
-
-        // API 
-        self.server .addController(APIController.self, forPath: "/api", method: CRHTTPMethod.All, recursive: true)
-
-        // Multi route vc
-        self.server.addViewController(MultiRouteViewController.self, withNibName:"MultiRouteViewController", bundle:nil, forPath: "/multi", method: CRHTTPMethod.All, recursive: true)
-
-        // Placeholder path controller
-        self.server.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/blog/:year/:month/:slug", method: CRHTTPMethod.All, recursive: true)
-
-        // Regex path controller
-        self.server.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/f[a-z]{2}/:payload", method: CRHTTPMethod.All, recursive: true)        
+        }
 
         // HTML view controller
-        self.server.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/controller", method: CRHTTPMethod.All, recursive: true)
+        self.server.add("/controller", viewController: HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil)
+
+        // Multi route controller
+        self.server.add("/api", controller:APIController.self)
+
+        // Multi route view controller
+        self.server.add("/multi", viewController: MultiRouteViewController.self, withNibName: String(MultiRouteViewController.self), bundle: nil)
+
+        // Placeholder path controller
+        self.server.add("/blog/:year/:month/:slug", viewController: HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil)
+
+        // Regex path controller
+        self.server.add("/f[a-z]{2}/:payload", viewController: HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil)
 
         // Start listening
         var serverError:NSError?

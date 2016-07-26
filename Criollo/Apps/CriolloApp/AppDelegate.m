@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_END
     NSBundle* bundle = [NSBundle mainBundle];
 
     // Add a header that says who we are :)
-    [self.server addBlock:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
+    [self.server add:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
         [response setValue:[NSString stringWithFormat:@"%@, %@ build %@", bundle.bundleIdentifier, [bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [bundle objectForInfoDictionaryKey:@"CFBundleVersion"]] forHTTPHeaderField:@"Server"];
         if ( ! request.cookies[@"session_cookie"] ) {
             [response setCookie:@"session_cookie" value:[NSUUID UUID].UUIDString path:@"/" expires:nil domain:nil secure:NO];
@@ -56,7 +56,7 @@ NS_ASSUME_NONNULL_END
         [response send:@"Hello World"];
         completionHandler();
     };
-    [self.server addBlock:helloBlock forPath:@"/"];
+    [self.server add:@"/" block:helloBlock];
 
     // Prints a hello world JSON object as application/json
     CRRouteBlock jsonHelloBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler ) {
@@ -64,46 +64,47 @@ NS_ASSUME_NONNULL_END
         [response send:@{@"status":@(YES), @"mesage": @"Hello world"}];
         completionHandler();
     };
-    [self.server addBlock:jsonHelloBlock forPath:@"/json"];
+    [self.server add:@"/json" block:jsonHelloBlock];
 
-    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+    [self.server post:@"/post" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
         [response sendString:[NSString stringWithFormat:@"%@\r\n\r\n--%@\r\n\r\n--", request, request.body]];
-    } forPath:@"/post" method:CRHTTPMethodPost];
+    }];
 
     // Serve static files from "/Public" (relative to bundle)
     NSString* staticFilesPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"];
-    [self.server mountStaticDirectoryAtPath:staticFilesPath forPath:@"/static" options:CRStaticDirectoryServingOptionsCacheFiles];
+    [self.server mount:@"/static" directoryAtPath:staticFilesPath options:CRStaticDirectoryServingOptionsCacheFiles];
 
     // Redirecter
-    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+    [self.server get:@"/redirect" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         NSURL* redirectURL = [NSURL URLWithString:(request.query[@"redirect"] ? : @"")];
         if ( redirectURL ) {
             [response redirectToURL:redirectURL];
         }
         completionHandler();
-    } forPath:@"/redirect" method:CRHTTPMethodGet];
-    
-    [self.server mountStaticDirectoryAtPath:@"~" forPath:@"/pub" options:CRStaticDirectoryServingOptionsAutoIndex];
+    }];
+
+    // Public
+    [self.server mount:@"/pub" directoryAtPath:@"~" options:CRStaticDirectoryServingOptionsAutoIndex];
 
     // API
-    [self.server addController:[APIController class] forPath:@"/api" method:CRHTTPMethodAll recursive:YES];
+    [self.server add:@"/api" controller:[APIController class]];
 
     // Multiroute
-    [self.server addViewController:[MultiRouteViewController class] withNibName:@"MultiRouteViewController" bundle:nil forPath:@"/multi" method:CRHTTPMethodAll recursive:YES];
+    [self.server add:@"/multi" viewController:[MultiRouteViewController class] withNibName:@"MultiRouteViewController" bundle:nil];
 
     // Placeholder path controller
-    [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/blog/:year/:month/:slug" method:CRHTTPMethodAll recursive:NO];
+    [self.server add:@"/blog/:year/:month/:slug" viewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil recursive:NO method:CRHTTPMethodAll];
 
     // Regex path controller
-    [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/f[a-z]{2}/:payload" method:CRHTTPMethodAll recursive:NO];
+    [self.server add:@"/f[a-z]{2}/:payload" viewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil recursive:NO method:CRHTTPMethodAll];
 
     // HTML view controller
-    [self.server addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" method:CRHTTPMethodAll recursive:YES];
+    [self.server add:@"/controller" viewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil];
 
-    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+    [self.server add:@"/posts/:pid" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         [response send:request.query];
-    } forPath:@"/posts/:pid"];
+    }];
 
     [self startServer];
 }

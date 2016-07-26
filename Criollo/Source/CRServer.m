@@ -222,36 +222,4 @@ NS_ASSUME_NONNULL_END
     });
 }
 
-#pragma mark - Static file delivery
-
-- (void)mountStaticDirectoryAtPath:(NSString *)directoryPath forPath:(NSString *)path {
-    [self mountStaticDirectoryAtPath:directoryPath forPath:path options:0];
-}
-
-- (void)mountStaticDirectoryAtPath:(NSString *)directoryPath forPath:(NSString *)path options:(CRStaticDirectoryServingOptions)options {
-    CRRoute* route = [[CRRoute alloc] initWithStaticDirectoryAtPath:directoryPath options:options path:path];
-    [self addRoute:route];
-}
-
-- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path {
-    [self mountStaticFileAtPath:filePath forPath:path options:0 fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone];
-}
-
-- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options {
-    [self mountStaticFileAtPath:filePath forPath:path options:options fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone];
-}
-
-- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString *)fileName {
-    [self mountStaticFileAtPath:filePath forPath:path options:options fileName:fileName contentType:nil contentDisposition:CRStaticFileContentDispositionNone];
-}
-
-- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString *)fileName contentType:(NSString *)contentType {
-    [self mountStaticFileAtPath:filePath forPath:path options:options fileName:fileName contentType:contentType contentDisposition:CRStaticFileContentDispositionNone];
-}
-
-- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString *)fileName contentType:(NSString *)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition {
-    CRRoute* route = [[CRRoute alloc] initWithStaticFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition path:path];
-    [self addRoute:route];
-}
-
 @end

@@ -50,14 +50,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)stopListening;
 - (void)closeAllConnections:(dispatch_block_t _Nullable)completion;
 
-- (void)mountStaticDirectoryAtPath:(NSString *)directoryPath forPath:(NSString *)path;
-- (void)mountStaticDirectoryAtPath:(NSString *)directoryPath forPath:(NSString *)path options:(CRStaticDirectoryServingOptions)options;
-
-- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path;
-- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options;
-- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName;
-- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType;
-- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
 
 @end
 

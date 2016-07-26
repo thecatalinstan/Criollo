@@ -15,7 +15,6 @@ FOUNDATION_EXPORT CRStaticFileContentDisposition CRStaticFileContentDispositionM
 
 @interface CRStaticFileManager : NSObject
 
-
 @property (nonatomic, readonly) NSString * filePath;
 @property (nonatomic, readonly) NSDictionary * attributes;
 @property (nonatomic, readonly, strong, nullable) NSError* attributesError;

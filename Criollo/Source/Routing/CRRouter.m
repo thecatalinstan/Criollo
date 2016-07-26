@@ -96,74 +96,50 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Block Routes
 
-- (void)addBlock:(CRRouteBlock)block {
-    [self addBlock:block forPath:nil method:CRHTTPMethodAll recursive:NO];
+- (void)add:(CRRouteBlock)block {
+    [self add:nil block:block recursive:NO method:CRHTTPMethodAll];
 }
 
-- (void)addBlock:(CRRouteBlock)block forPath:(NSString*)path {
-    [self addBlock:block forPath:path method:CRHTTPMethodAll recursive:NO];
+- (void)add:(NSString *)path block:(CRRouteBlock)block {
+    [self add:path block:block recursive:NO method:CRHTTPMethodAll];
 }
 
-- (void)addBlock:(CRRouteBlock)block forPath:(NSString *)path method:(CRHTTPMethod)method {
-    [self addBlock:block forPath:path method:method recursive:NO];
-}
-
-- (void)addBlock:(CRRouteBlock)block forPath:(NSString *)path method:(CRHTTPMethod)method recursive:(BOOL)recursive {
+- (void)add:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive method:(CRHTTPMethod)method {
     CRRoute* route = [[CRRoute alloc] initWithBlock:block method:method path:path recursive:recursive];
     [self addRoute:route];
 }
 
-- (void)add:(NSString *)path block:(CRRouteBlock)block {
-    [self add:path block:block recursive:NO];
-}
-
-- (void)add:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive {
-    [self addBlock:block forPath:path method:CRHTTPMethodAll recursive:YES];
-}
-
 - (void)get:(NSString *)path block:(CRRouteBlock)block {
-    [self get:path block:block recursive:NO];
-}
-
-- (void)get:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive {
-    [self addBlock:block forPath:path method:CRHTTPMethodGet recursive:recursive];
+    [self add:path block:block recursive:NO method:CRHTTPMethodGet];
 }
 
 - (void)post:(NSString *)path block:(CRRouteBlock)block {
-    [self post:path block:block recursive:NO];
-}
-
-- (void)post:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive {
-    [self addBlock:block forPath:path method:CRHTTPMethodPost recursive:recursive];
+    [self add:path block:block recursive:NO method:CRHTTPMethodPost];
 }
 
 - (void)put:(NSString *)path block:(CRRouteBlock)block {
-    [self put:path block:block recursive:NO];
-}
-
-- (void)put:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive {
-    [self addBlock:block forPath:path method:CRHTTPMethodPut recursive:recursive];
+    [self add:path block:block recursive:NO method:CRHTTPMethodPut];
 }
 
 - (void)delete:(NSString *)path block:(CRRouteBlock)block {
-    [self delete:path block:block recursive:NO];
+    [self add:path block:block recursive:NO method:CRHTTPMethodDelete];
 }
 
-- (void)delete:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive {
-    [self addBlock:block forPath:path method:CRHTTPMethodDelete recursive:recursive];
+- (void)head:(NSString *)path block:(CRRouteBlock)block {
+    [self add:path block:block recursive:NO method:CRHTTPMethodHead];
+}
+
+- (void)options:(NSString *)path block:(CRRouteBlock)block {
+    [self add:path block:block recursive:NO method:CRHTTPMethodOptions];
 }
 
 #pragma mark - Route Controller Routes
 
-- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path {
-    [self addController:controllerClass forPath:path method:CRHTTPMethodAll recursive:NO];
+- (void)add:(NSString *)path controller:(__unsafe_unretained Class)controllerClass {
+    [self add:path controller:controllerClass recursive:YES method:CRHTTPMethodAll];
 }
 
-- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path method:(CRHTTPMethod)method {
-    [self addController:controllerClass forPath:path method:method recursive:NO];
-}
-
-- (void)addController:(__unsafe_unretained Class)controllerClass forPath:(NSString *)path method:(CRHTTPMethod)method recursive:(BOOL)recursive {
+- (void)add:(NSString *)path controller:(__unsafe_unretained Class)controllerClass recursive:(BOOL)recursive method:(CRHTTPMethod)method {
     CRRoute* route = [[CRRoute alloc] initWithControllerClass:controllerClass method:method path:path recursive:recursive];
     [self addRoute:route];
 }
@@ -171,22 +147,37 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - View Controller Routes
 
-- (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path {
-    [self addViewController:viewControllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path method:CRHTTPMethodAll recursive:NO];
+- (void)add:(NSString *)path viewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil {
+    [self add:path viewController:viewControllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil recursive:YES method:CRHTTPMethodAll];
 }
 
-- (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path method:(CRHTTPMethod)method {
-    [self addViewController:viewControllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil forPath:path method:method recursive:NO];
-}
-
-- (void)addViewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil forPath:(NSString *)path method:(CRHTTPMethod)method recursive:(BOOL)recursive {
+- (void)add:(NSString *)path viewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil recursive:(BOOL)recursive method:(CRHTTPMethod)method {
     CRRoute* route = [[CRRoute alloc] initWithViewControllerClass:viewControllerClass nibName:nibNameOrNil bundle:nibBundleOrNil method:method path:path recursive:recursive];
     [self addRoute:route];
 }
 
+#pragma mark - Static file delivery
+
+- (void)mount:(NSString *)path directoryAtPath:(NSString *)directoryPath {
+    [self mount:path directoryAtPath:directoryPath options:0];
+}
+
+- (void)mount:(NSString *)path directoryAtPath:(NSString *)directoryPath options:(CRStaticDirectoryServingOptions)options {
+    CRRoute* route = [[CRRoute alloc] initWithStaticDirectoryAtPath:directoryPath options:options path:path];
+    [self addRoute:route];
+}
+
+- (void)mount:(NSString *)path fileAtPath:(NSString *)filePath {
+    [self mount:path fileAtPath:filePath options:0 fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone];
+}
+
+- (void)mount:(NSString *)path fileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition {
+    CRRoute* route = [[CRRoute alloc] initWithStaticFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition path:path];
+    [self addRoute:route];
+}
 
 
-#pragma mark - General Routes
+#pragma mark - Routing
 
 - (void)addRoute:(CRRoute*)route {
     [self.routes addObject:route];

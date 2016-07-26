@@ -12,22 +12,22 @@ Criollo helps create really fast standalone web apps that deliver content direct
 
 It's as easy as this:
 
-```objective-c
-CRServer* server = [[CRHTTPServer alloc] init];
-[server addBlock:^(CRRequest * request, CRResponse * response, CRRouteCompletionBlock completionHandler) {
-    [response send:@"Hello world!"];
-} forPath:@"/"];
-[server startListening];
-```
-
-and in Swift:
-
 ```swift
 let server:CRServer = CRHTTPServer()
-server.addBlock({ (request, response, completionHandler) -> Void in
+server.get("/") { (request, response, completionHandler) in
 	response.send("Hello world!")
-}, forPath: "/")
+}
 server.startListening()
+```
+
+and in Objective-C:
+
+```objective-c
+CRServer* server = [[CRHTTPServer alloc] init];
+[server get:@"/" block:^(CRRequest * request, CRResponse * response, CRRouteCompletionBlock completionHandler) {
+    [response send:@"Hello world!"];
+}];
+[server startListening];
 ```
 
 ## Why?

@@ -14,6 +14,7 @@
 #import "CRResponse.h"
 #import "CRResponse_Internal.h"
 #import "CRRouteMatchingResult.h"
+#import "NSString+Criollo.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -37,29 +38,10 @@ NS_ASSUME_NONNULL_END
     return self;
 }
 
-- (NSString *)relativePathForRequestedPath:(NSString *)requestedPath {
-    NSUInteger relativePathStart = [requestedPath rangeOfString:self.prefix options:NSBackwardsSearch].location;
-    if ( relativePathStart == NSNotFound ) {
-        relativePathStart = 0;
-    }
-
-    NSString * relativePath;
-    @try {
-        relativePath = [[requestedPath substringFromIndex:relativePathStart + self.prefix.length] stringByStandardizingPath];
-    } @catch (NSException *exception) {
-        relativePath = @"";
-    }
-
-    if ( ![relativePath hasPrefix:CRPathSeparator] ) {
-        relativePath = [CRPathSeparator stringByAppendingString:relativePath ? : @""];
-    }
-
-    return relativePath;
-}
-
 - (CRRouteBlock)routeBlock {
-    return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {        
-        NSString* requestedRelativePath = [self relativePathForRequestedPath:request.env[@"DOCUMENT_URI"]];
+    return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
+        NSString* requestedPath = request.env[@"DOCUMENT_URI"];
+        NSString* requestedRelativePath = [requestedPath pathRelativeToPath:self.prefix];
         NSArray<CRRouteMatchingResult *>* routes = [self routesForPath:requestedRelativePath method:request.method];
         [self executeRoutes:routes forRequest:request response:response];
         completionHandler();

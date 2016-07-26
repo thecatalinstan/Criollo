@@ -27,18 +27,25 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface CRNib : NSObject
 
+/**
+ *  The contents of the nib.
+ */
 @property (nonatomic, strong, nullable, readonly) NSData *data;
+
+/**
+ *  The nib name
+ */
 @property (nonatomic, strong, readonly) NSString *name;
 
 /**
-@name Initializing a CRNib
+ @name Initializing a CRNib
  */
 
 /**
- Creates a new CRNib object from a file qith the given `nibName`,
+ Creates a new `CRNib` object from a file qith the given `nibName`,
  in the given bundle.
  
- The method will look for a file named `bibName.html` inside the 
+ The method will look for a file named `nibName.html` inside the
  `Resources` folder of the specified bundle.
 
  @param nibName The base name of the nib file

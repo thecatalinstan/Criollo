@@ -17,7 +17,7 @@ class APIController : CRRouteController {
         let bundle:NSBundle! = NSBundle.mainBundle()
 
         // Prints some more info as text/html
-        self.addBlock( { (request, response, completionHandler) -> Void in
+        self.add("/status") { (request, response, completionHandler) in
 
             let startTime:NSDate! = NSDate()
 
@@ -84,12 +84,12 @@ class APIController : CRRouteController {
             response.setValue("text/html charset=utf-8", forHTTPHeaderField: "Content-type")
             response.setValue("\(responseString.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))", forHTTPHeaderField: "Content-Length")
             response.sendString(responseString)
-
+            
             completionHandler()
+            
+        }
 
-            }, forPath: "/status")
-
-        self.addBlock({ (request, response, next) -> Void in
+        self.add("/info") { (request, response, next) in
             let info:Dictionary = [
                 "IPAddress":SystemInfoHelper.IPAddress(),
                 "systemInfo":SystemInfoHelper.systemInfo(),
@@ -100,13 +100,13 @@ class APIController : CRRouteController {
                 "requestsServed":SystemInfoHelper.requestsServed(),
                 "criolloVersion":SystemInfoHelper.criolloVersion(),
                 "bundleVersion":SystemInfoHelper.bundleVersion(),
-            ]
+                ]
             do {
                 try response.sendData(NSJSONSerialization.dataWithJSONObject(info, options: NSJSONWritingOptions.PrettyPrinted))
             } catch let error as NSError {
                 CRServer.errorHandlingBlockWithStatus(500, error: error)(request, response, next)
             }
-            }, forPath: "/info")
+        }
     }
 
 }
