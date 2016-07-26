@@ -19,7 +19,7 @@
 		AD864DEC1CAD3F1D008D8FFE /* HelloWorldViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD864DEA1CAD3F1D008D8FFE /* HelloWorldViewController.html */; };
 		AD864DED1CAD3F1D008D8FFE /* HelloWorldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD864DEB1CAD3F1D008D8FFE /* HelloWorldViewController.swift */; };
 		ADAD52671D3E4DFB00DDFBB5 /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADAD52661D3E4DFB00DDFBB5 /* Criollo.framework */; };
-		ADAD52691D3E4E8000DDFBB5 /* Criollo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ADAD52661D3E4DFB00DDFBB5 /* Criollo.framework */; };
+		ADAD52691D3E4E8000DDFBB5 /* Criollo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ADAD52661D3E4DFB00DDFBB5 /* Criollo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		ADC0811C1D3E767100E9E05D /* APIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC0811B1D3E767100E9E05D /* APIController.swift */; };
 /* End PBXBuildFile section */
 

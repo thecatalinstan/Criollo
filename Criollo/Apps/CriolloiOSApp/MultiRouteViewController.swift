@@ -14,21 +14,21 @@ class MultiRouteViewController: CRViewController {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil, prefix: prefix)
 
 
-        self.addBlock( { (request, response, completionHandler) -> Void in
+        self.add("/hello") { (request, response, completionHandler) in
             response.setValue("text/plain", forHTTPHeaderField: "Content-type")
             response.send("Hello")
-            }, forPath:"/hello")
+        }
 
-        self.addBlock( { (request, response, completionHandler) -> Void in
+        self.add("/method") { (request, response, completionHandler) in
             response.setValue("text/plain", forHTTPHeaderField: "Content-type")
             response.send(NSStringFromCRHTTPMethod(request.method))
-            }, forPath:"/method")
+        }
 
-        self.addViewController(HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil, forPath: "/hello-c", method: CRHTTPMethod.All, recursive: true)
-        self.addController(APIController.self, forPath: "/api", method: CRHTTPMethod.All, recursive: true)
+        self.add("/hello-c", viewController:HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil)
+        self.add("/api", controller:APIController.self)
 
         // Placeholder path controller
-        self.addViewController(HelloWorldViewController.self, withNibName:"HelloWorldViewController", bundle:nil, forPath: "/:year/:month/:slug", method: CRHTTPMethod.All, recursive: true)
+        self.add("/:year/:month/:slug", viewController:HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil)
     }
 
     override func presentViewControllerWithRequest(request: CRRequest, response: CRResponse) -> String {

@@ -15,23 +15,23 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil prefix:(NSString * _Nullable)prefix {
     self  = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil prefix:prefix];
     if ( self != nil ) {
-        [self addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        [self add:@"/hello" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
             [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
             [response send:@"Hello :)"];
             completionHandler();
-        } forPath:@"/hello"];
+        }];
 
-        [self addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        [self add:@"/method" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
             [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
             [response send:NSStringFromCRHTTPMethod(request.method)];
             completionHandler();
-        } forPath:@"/method"];
+        }];
 
-        [self addViewController:[HelloWorldViewController class] withNibName:nil bundle:nil forPath:@"/hello-c" method:CRHTTPMethodAll recursive:YES];
-        [self addController:[APIController class] forPath:@"/api" method:CRHTTPMethodAll recursive:YES];
+        [self add:@"/hello-c" viewController:[HelloWorldViewController class] withNibName:nil bundle:nil];
+        [self add:@"/api" controller:[APIController class]];
 
         // Placeholder path controller
-        [self addViewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/:year/:month/:slug" method:CRHTTPMethodAll recursive:NO];
+        [self add:@"/:year/:month/:slug" viewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil];
 
     }
     return self;

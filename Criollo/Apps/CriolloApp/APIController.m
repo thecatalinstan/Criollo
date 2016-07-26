@@ -17,7 +17,8 @@
         // Prints some more info as text/html
         NSBundle *bundle = [NSBundle mainBundle];
         NSString *uname = [SystemInfoHelper systemInfo];
-        [self addBlock:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler ) {
+
+        [self get:@"/status" block:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler ) {
 
             NSDate *startTime = [NSDate date];
             NSMutableString *responseString = [NSMutableString string];
@@ -86,9 +87,9 @@
             [response sendString:responseString];
 
             completionHandler();
-        } forPath:@"/status" method:CRHTTPMethodGet];
+        }];
 
-        [self addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        [self get:@"/info" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
             NSDictionary *info = @{
                                    @"IPAddress": [SystemInfoHelper IPAddress],
                                    @"systemInfo": [SystemInfoHelper systemInfo],
@@ -107,7 +108,7 @@
                 [CRRouter errorHandlingBlockWithStatus:500 error:error](request, response, completionHandler);
             }
             
-        } forPath:@"/info" method:CRHTTPMethodGet];
+        }];
 
     }
     return self;
