@@ -7,6 +7,13 @@ This file includes all notable changes to Criollo.
 Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
+[0.4.0](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.0) (07/26/2016)
+
+**Released on Tuesday, July 26, 2016**. This is a major overhaul of the routing mechanism.
+
+#### Changed
+The whole routing subsystem has been changed. The public API’s have also been changed. Check out the `CRRouter` documentation at: [http://cocoadocs.org/docsets/Criollo/0.4.0/Classes/CRRouter.html](http://cocoadocs.org/docsets/Criollo/0.4.0/Classes/CRRouter.html)
+
 ## [0.3.1](https://github.com/thecatalinstan/Criollo/releases/tag/0.3.1) (07/25/2016)
 
 **Released on Monday, July 25, 2016**. This is a hot-fix release.
