@@ -12,6 +12,7 @@
 #import "CRServer_Internal.h"
 #import "CRRequest.h"
 #import "CRResponse.h"
+#import "NSString+Criollo.h"
 
 #define CRStaticDirectoryIndexFileNameLength                            70
 #define CRStaticDirectoryIndexFileSizeLength                            20
@@ -185,7 +186,7 @@ static const NSDateFormatter *dateFormatter;
     CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
 
         NSString* requestedDocumentPath = request.env[@"DOCUMENT_URI"];
-        NSString* requestedRelativePath = [[requestedDocumentPath substringFromIndex:self.prefix.length] stringByStandardizingPath];
+        NSString* requestedRelativePath = [requestedDocumentPath pathRelativeToPath:self.prefix];
         NSString* requestedAbsolutePath = [[self.directoryPath stringByAppendingPathComponent:requestedRelativePath] stringByStandardizingPath];
 
         // Expand symlinks if needed

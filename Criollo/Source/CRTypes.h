@@ -6,6 +6,9 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
+#define CRPathSeparator                     @"/"
+#define CRPathAnyPath                       @"*"
+
 NS_ASSUME_NONNULL_BEGIN
 
 /**

@@ -8,9 +8,6 @@
 
 #import "CRTypes.h"
 
-#define CRPathSeparator                     @"/"
-#define CRPathAnyPath                       @"*"
-
 @class CRRequest, CRResponse;
 
 NS_ASSUME_NONNULL_BEGIN
