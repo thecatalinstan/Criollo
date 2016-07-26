@@ -73,7 +73,11 @@
             }];
             if ( isRegex ) {
                 NSError *regexError;
-                NSString *pattern = [pathRegexComponents componentsJoinedByString:CRPathSeparator];
+                NSMutableString *pattern = [NSMutableString stringWithString:@"^" ];
+                [pattern appendString:[pathRegexComponents componentsJoinedByString:CRPathSeparator]];
+                if ( !self.recursive ) {
+                    [pattern appendString:@"$"];
+                }
                 _pathRegex = [[NSRegularExpression alloc] initWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:&regexError];
                 if ( _pathRegex == nil ) {
                     @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:NSLocalizedString(@"Invalid path specification. \"%@\"",), _path]  userInfo:@{NSUnderlyingErrorKey: regexError}];
