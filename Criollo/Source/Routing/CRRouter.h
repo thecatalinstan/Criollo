@@ -28,8 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
  route by calling `add:block:recursive:method:`, one of its overloadds or any of
  the convenience methods provided, such as `get:block:`,
  `post:block:recursive:`, etc.
- 
- @warning *Important:* blocks are executed in the order in which they are added.
+
+ *Important:* blocks are executed in the order in which they are added.
  
  The final parameter of a `CRRouteBlock` is a `dispatch_block_t` object that 
  must be called in order to signal the router that the work of the cuurent block
@@ -48,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
  patterns are matched, they are added to `request.query`, under the keys `"0"`,
  `"1"` and `"2"` respectively.
  
- @warning *Important*: Regex patterns are parsed **per path component**.
+ *Important*: Regex patterns are parsed **per path component**.
 
  The string that is used to define a path is called a **path specification 
  (pathspec)**.

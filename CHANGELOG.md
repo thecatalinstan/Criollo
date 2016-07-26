@@ -7,7 +7,15 @@ This file includes all notable changes to Criollo.
 Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
-[0.4.0](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.0) (07/26/2016)
+
+## [0.4.1](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.1) (07/26/2016)
+
+**Released on Tuesday, July 26, 2016**. This is a hot-fix release.
+
+#### Fixed
+A bug in `CRRoute` that could cause incorrect (greedy) matching of regex path specs. [`a2b0470`](https://github.com/thecatalinstan/Criollo/commit/a2b047072445d087d3e1223e662c9dd6c42f86f7)
+
+## [0.4.0](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.0) (07/26/2016)
 
 **Released on Tuesday, July 26, 2016**. This is a major overhaul of the routing mechanism.
 
