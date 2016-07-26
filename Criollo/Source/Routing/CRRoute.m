@@ -55,7 +55,7 @@
                     [pathRegexComponents addObject:@"([a-zA-Z0-9\\+\\-_%]+)"];
                     isRegex = YES;
                 } else {
-                    NSCharacterSet* regexChars = [NSCharacterSet characterSetWithCharactersInString:@"[]().*|{}\\"];
+                    NSCharacterSet* regexChars = [NSCharacterSet characterSetWithCharactersInString:@"[]()*+|{}\\"];
                     NSRange range = [component rangeOfCharacterFromSet:regexChars];
                     if ( range.location != NSNotFound ) {
                         NSString *keyName = @(_pathKeys.count).stringValue;
