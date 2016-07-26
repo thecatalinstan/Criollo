@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSString *name;
 
 /**
-@name Initializing a CRNib
+ @name Initializing a CRNib
  */
 
 /**
