@@ -27,8 +27,11 @@ class MultiRouteViewController: CRViewController {
         self.add("/hello-c", viewController:HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil)
         self.add("/api", controller:APIController.self)
 
-        // Placeholder path controller
-        self.add("/:year/:month/:slug", viewController:HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil)
+        // Public folders path
+        self.mount("/pub", directoryAtPath: "~", options:CRStaticDirectoryServingOptions.AutoIndex)
+
+        // Static file
+        self.mount("/file.txt", fileAtPath:"/etc/hosts", options:CRStaticFileServingOptions.Cache, fileName:"hosts", contentType:"text/plain", contentDisposition:CRStaticFileContentDisposition.Inline)
     }
 
     override func presentViewControllerWithRequest(request: CRRequest, response: CRResponse) -> String {

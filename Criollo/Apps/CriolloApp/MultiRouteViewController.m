@@ -30,9 +30,11 @@
         [self add:@"/hello-c" viewController:[HelloWorldViewController class] withNibName:nil bundle:nil];
         [self add:@"/api" controller:[APIController class]];
 
-        // Placeholder path controller
-        [self add:@"/:year/:month/:slug" viewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil];
+        // Public folders path
+        [self mount:@"/pub" directoryAtPath:@"~" options:CRStaticDirectoryServingOptionsAutoIndex];
 
+        // Static file
+        [self mount:@"/file.txt" fileAtPath:@"/etc/hosts" options:CRStaticFileServingOptionsCache fileName:@"hosts" contentType:@"text/plain" contentDisposition:CRStaticFileContentDispositionInline];
     }
     return self;
 }

@@ -37,6 +37,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)add:(NSString *)path viewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil;
 - (void)add:(NSString *)path viewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil recursive:(BOOL)recursive method:(CRHTTPMethod)method;
 
+- (void)mount:(NSString *)path directoryAtPath:(NSString *)directoryPath;
+- (void)mount:(NSString *)path directoryAtPath:(NSString *)directoryPath options:(CRStaticDirectoryServingOptions)options;
+
+- (void)mount:(NSString *)path fileAtPath:(NSString *)filePath;
+- (void)mount:(NSString *)path fileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -53,7 +53,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
 
         // Serve static files from "/Public" (relative to bundle)
         let staticFilePath:String = (NSBundle.mainBundle().resourcePath?.stringByAppendingString("/Public"))!
-        self.server.mountStaticDirectoryAtPath(staticFilePath, forPath: "/static", options: CRStaticDirectoryServingOptions.FollowSymlinks)
+        self.server.mount("/static", directoryAtPath:staticFilePath, options: CRStaticDirectoryServingOptions.FollowSymlinks)
+
+        // Public files
+        self.server.mount("/pub", directoryAtPath: "~", options: [CRStaticDirectoryServingOptions.FollowSymlinks, CRStaticDirectoryServingOptions.AutoIndex] )
 
         // Redirecter
         self.server.get("/redirect") { (request, response, completionHandler) in
@@ -78,7 +81,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
 
         // Regex path controller
         self.server.add("/f[a-z]{2}/:payload", viewController: HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil)
-
 
         // Start listening
         var serverError:NSError?

@@ -73,7 +73,7 @@ NS_ASSUME_NONNULL_END
 
     // Serve static files from "/Public" (relative to bundle)
     NSString* staticFilesPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"];
-    [self.server mountStaticDirectoryAtPath:staticFilesPath forPath:@"/static" options:CRStaticDirectoryServingOptionsCacheFiles];
+    [self.server mount:@"/static" directoryAtPath:staticFilesPath options:CRStaticDirectoryServingOptionsCacheFiles];
 
     // Redirecter
     [self.server get:@"/redirect" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
@@ -85,7 +85,7 @@ NS_ASSUME_NONNULL_END
     }];
 
     // Public
-    [self.server mountStaticDirectoryAtPath:@"~" forPath:@"/pub" options:CRStaticDirectoryServingOptionsAutoIndex];
+    [self.server mount:@"/pub" directoryAtPath:@"~" options:CRStaticDirectoryServingOptionsAutoIndex];
 
     // API
     [self.server add:@"/api" controller:[APIController class]];

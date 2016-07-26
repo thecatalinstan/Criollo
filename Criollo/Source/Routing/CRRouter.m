@@ -148,6 +148,7 @@ NS_ASSUME_NONNULL_END
 #pragma mark - View Controller Routes
 
 - (void)add:(NSString *)path viewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil {
+    [self add:path viewController:viewControllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil recursive:YES method:CRHTTPMethodAll];
 }
 
 - (void)add:(NSString *)path viewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil recursive:(BOOL)recursive method:(CRHTTPMethod)method {
@@ -155,7 +156,28 @@ NS_ASSUME_NONNULL_END
     [self addRoute:route];
 }
 
-#pragma mark - General Routes
+#pragma mark - Static file delivery
+
+- (void)mount:(NSString *)path directoryAtPath:(NSString *)directoryPath {
+    [self mount:path directoryAtPath:directoryPath options:0];
+}
+
+- (void)mount:(NSString *)path directoryAtPath:(NSString *)directoryPath options:(CRStaticDirectoryServingOptions)options {
+    CRRoute* route = [[CRRoute alloc] initWithStaticDirectoryAtPath:directoryPath options:options path:path];
+    [self addRoute:route];
+}
+
+- (void)mount:(NSString *)path fileAtPath:(NSString *)filePath {
+    [self mount:path fileAtPath:filePath options:0 fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone];
+}
+
+- (void)mount:(NSString *)path fileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition {
+    CRRoute* route = [[CRRoute alloc] initWithStaticFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition path:path];
+    [self addRoute:route];
+}
+
+
+#pragma mark - Routing
 
 - (void)addRoute:(CRRoute*)route {
     [self.routes addObject:route];
