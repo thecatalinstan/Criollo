@@ -13,7 +13,7 @@ Criollo helps create really fast standalone web apps that deliver content direct
 It's as easy as this:
 
 ```swift
-let server:CRServer = CRHTTPServer()
+let server = CRHTTPServer()
 server.get("/") { (request, response, completionHandler) in
 	response.send("Hello world!")
 }
