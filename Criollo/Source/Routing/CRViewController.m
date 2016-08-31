@@ -54,7 +54,7 @@ static dispatch_queue_t isolationQueue;
 }
 
 - (instancetype)init {
-    return [self initWithNibName:nil bundle:nil prefix:nil];
+    return [self initWithNibName:nil bundle:nil prefix:CRPathSeparator];
 }
 
 - (instancetype)initWithPrefix:(NSString *)prefix {
@@ -68,14 +68,8 @@ static dispatch_queue_t isolationQueue;
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil prefix:(NSString *)prefix {
     self = [super initWithPrefix:prefix];
     if ( self != nil ) {
-        _nibName = nibNameOrNil;
-        if ( self.nibName == nil ) {
-            _nibName = NSStringFromClass(self.class);
-        }
-        _nibBundle = nibBundleOrNil;
-        if ( self.nibBundle == nil ) {
-            _nibBundle = [NSBundle mainBundle];
-        }
+        _nibName = nibNameOrNil ? : NSStringFromClass(self.class);
+        _nibBundle = nibBundleOrNil ? : [NSBundle mainBundle];
         _vars = [NSMutableDictionary dictionary];
     }
     return self;

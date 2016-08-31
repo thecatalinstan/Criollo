@@ -106,6 +106,7 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 
 + (CRApplication *)sharedApplication {
 	Class class;
+
 	if( ! CRApp ) {
 		if( ! ( class = [NSBundle mainBundle].principalClass ) ) {
 			NSLog(@"Main bundle does not define an existing principal class: %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSPrincipalClass"]);
@@ -114,7 +115,7 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 		if( ! [class isSubclassOfClass:self.class] ) {
 			NSLog(@"Principal class (%@) of main bundle is not subclass of %@", NSStringFromClass(class), NSStringFromClass(self.class) );
 		}
-		[class new];
+		CRApp = [class new];
 	}
 
 	return CRApp;
@@ -124,9 +125,7 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     self = [super init];
     if ( self != nil ) {
         CRApp = self;
-
         _dispatchSources = [NSMutableArray array];
-
         [[NSNotificationCenter defaultCenter] addObserverForName:CRApplicationDidReceiveSignalNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
             NSLog(@"Got signal %@.", note.object);
             int signal = [note.object intValue];

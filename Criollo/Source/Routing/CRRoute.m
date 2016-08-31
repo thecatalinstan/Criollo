@@ -38,7 +38,9 @@
     if ( self != nil ) {
         self.block = block;
         self.method = method;
-        self.path = path;
+        if ( path ) {
+            self.path = path;
+        }
         self.recursive = recursive;
 
         if ( path != nil ) {

@@ -57,7 +57,7 @@ static const NSDateFormatter *dateFormatter;
 }
 
 - (instancetype)init {
-    return  [self initWithDirectoryAtPath:[NSBundle mainBundle].bundlePath prefix:@"/" options:0];
+    return  [self initWithDirectoryAtPath:[NSBundle mainBundle].bundlePath prefix:CRPathSeparator options:0];
 }
 
 - (instancetype)initWithDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix {
@@ -167,7 +167,7 @@ static const NSDateFormatter *dateFormatter;
                 fileSizePadding = [@"" stringByPaddingToLength:CRStaticDirectoryIndexFileSizeLength - fileSize.length withString:@" " startingAtIndex:0];
             }
 
-            [responseString appendFormat:@"<a href=\"%@/%@\" title=\"%@\">%@%@</a>%@ %@ %@%@\n", requestedPath, URL.lastPathComponent, fullName, fileName, isDirectory ? @"/" : @"", fileNamePadding, fileModificationDate, fileSizePadding, fileSize];
+            [responseString appendFormat:@"<a href=\"%@/%@\" title=\"%@\">%@%@</a>%@ %@ %@%@\n", requestedPath, URL.lastPathComponent, fullName, fileName, isDirectory ? CRPathSeparator : @"", fileNamePadding, fileModificationDate, fileSizePadding, fileSize];
         }];
         [responseString appendString:@"</pre>"];
 

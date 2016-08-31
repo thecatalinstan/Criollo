@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_END
 @implementation CRRouteController
 
 - (instancetype)init {
-    return [self initWithPrefix:@"/"];
+    return [self initWithPrefix:CRPathSeparator];
 }
 
 - (instancetype)initWithPrefix:(NSString *)prefix {

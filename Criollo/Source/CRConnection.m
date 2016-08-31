@@ -74,8 +74,12 @@ static const NSData * CRLFCRLFData;
 - (instancetype)initWithSocket:(GCDAsyncSocket *)socket server:(CRServer *)server {
     self = [super init];
     if (self != nil) {
-        self.server = server;
-        self.socket = socket;
+        if ( server ) {
+            self.server = server;
+        }
+        if ( socket ) {
+            self.socket = socket;
+        }
         self.socket.delegate = self;
         self.requests = [NSMutableArray array];
 
@@ -142,12 +146,12 @@ static const NSData * CRLFCRLFData;
             result = [self.currentRequest parseBufferedBodyData:&bodyParsingError];
         }
 
-//        if ( !result ) {
+        if ( !result ) {
 //            NSLog(@" * bodyParsingError = %@", bodyParsingError);
-//        } else {
+        } else {
 //            NSLog(@" * request.body = %@", self.currentRequest.body);
 //            NSLog(@" * bufferedBodyData = %lu bytes", (unsigned long)self.currentRequest.bufferedBodyData.length);
-//        }
+        }
     }
 
     CRResponse* response = [self responseWithHTTPStatusCode:200];
