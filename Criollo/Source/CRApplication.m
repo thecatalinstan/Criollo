@@ -47,24 +47,26 @@ CRApplication* CRApp;
 
 @end
 
+dispatch_source_t CRApplicationInstallSignalHandler(int sig) {
+    @autoreleasepool {
+        signal(sig, SIG_IGN);
+        dispatch_source_t signalSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, sig, 0, dispatch_get_main_queue());
+        dispatch_source_set_event_handler(signalSource, ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationDidReceiveSignalNotification object:@(sig)];
+        });
+        dispatch_resume(signalSource);
+        return signalSource;
+    }
+};
+
 int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> delegate) {
     @autoreleasepool {
         CRApplication* app = [[CRApplication alloc] initWithDelegate:delegate];
 
-        dispatch_source_t(^installSignalHandler)(int) = ^(int sig){
-            signal(sig, SIG_IGN);
-            dispatch_source_t signalSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, sig, 0, dispatch_get_main_queue());
-            dispatch_source_set_event_handler(signalSource, ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationDidReceiveSignalNotification object:@(sig)];
-            });
-            dispatch_resume(signalSource);
-            return signalSource;
-        };
-
-        [app.dispatchSources addObject:installSignalHandler(SIGTERM)];
-        [app.dispatchSources addObject:installSignalHandler(SIGINT)];
-        [app.dispatchSources addObject:installSignalHandler(SIGQUIT)];
-        [app.dispatchSources addObject:installSignalHandler(SIGTSTP)];
+        [app.dispatchSources addObject:CRApplicationInstallSignalHandler(SIGTERM)];
+        [app.dispatchSources addObject:CRApplicationInstallSignalHandler(SIGINT)];
+        [app.dispatchSources addObject:CRApplicationInstallSignalHandler(SIGQUIT)];
+        [app.dispatchSources addObject:CRApplicationInstallSignalHandler(SIGTSTP)];
 
         [app run];
 
