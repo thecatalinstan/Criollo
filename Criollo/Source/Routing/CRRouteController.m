@@ -27,25 +27,25 @@ NS_ASSUME_NONNULL_END
 @implementation CRRouteController
 
 - (instancetype)init {
-    return [self initWithPrefix:@"/"];
+    return [self initWithPrefix:CRPathSeparator];
 }
 
 - (instancetype)initWithPrefix:(NSString *)prefix {
     self = [super init];
     if ( self != nil ) {
         _prefix = prefix;
+
+        CRRouteController * __weak controller = self;
+        _routeBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
+            @autoreleasepool {
+                NSString* requestedPath = request.env[@"DOCUMENT_URI"];
+                NSString* requestedRelativePath = [requestedPath pathRelativeToPath:controller.prefix];
+                NSArray<CRRouteMatchingResult *>* routes = [controller routesForPath:requestedRelativePath method:request.method];
+                [controller executeRoutes:routes forRequest:request response:response];
+                completionHandler();
+            }
+        };
     }
     return self;
 }
-
-- (CRRouteBlock)routeBlock {
-    return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
-        NSString* requestedPath = request.env[@"DOCUMENT_URI"];
-        NSString* requestedRelativePath = [requestedPath pathRelativeToPath:self.prefix];
-        NSArray<CRRouteMatchingResult *>* routes = [self routesForPath:requestedRelativePath method:request.method];
-        [self executeRoutes:routes forRequest:request response:response];
-        completionHandler();
-    };
-}
-
 @end

@@ -106,12 +106,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
                 paths.addObject(pathURL)
             })
 
-            let sortedPaths:NSArray = paths.sortedArrayUsingDescriptors([NSSortDescriptor(key:"absoluteString", ascending:true)])
-            NSLog("Available paths are")
-            sortedPaths.enumerateObjectsUsingBlock({ (obj:AnyObject, idx:Int, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
-                NSLog(" * \(obj.absoluteString )")
-            })
-            
+//            let sortedPaths = paths.sortedArrayUsingDescriptors([NSSortDescriptor(key:"absoluteString", ascending:true)])
+//            NSLog("Available paths are")
+//            NSLog("\(sortedPaths)")
+//            sortedPaths.enumerateObjectsUsingBlock({ (obj:AnyObject, idx:Int, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
+//                NSLog(" * \(obj)")
+//            })
+
         } else {
             NSLog("Failed to start HTTP server. \(serverError?.localizedDescription)")
         }

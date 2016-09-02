@@ -39,11 +39,13 @@ NS_ASSUME_NONNULL_END
     backgroundQueue = dispatch_queue_create(self.className.UTF8String, DISPATCH_QUEUE_SERIAL);
     dispatch_set_target_queue(backgroundQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
 
-    NSBundle* bundle = [NSBundle mainBundle];
+    NSString* bundleIdentifier = [NSBundle mainBundle].bundleIdentifier;
+    NSString* shortVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    NSString* buildNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
 
     // Add a header that says who we are :)
     [self.server add:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
-        [response setValue:[NSString stringWithFormat:@"%@, %@ build %@", bundle.bundleIdentifier, [bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [bundle objectForInfoDictionaryKey:@"CFBundleVersion"]] forHTTPHeaderField:@"Server"];
+        [response setValue:[NSString stringWithFormat:@"%@, %@ build %@", bundleIdentifier, shortVersion, buildNumber] forHTTPHeaderField:@"Server"];
         if ( ! request.cookies[@"session_cookie"] ) {
             [response setCookie:@"session_cookie" value:[NSUUID UUID].UUIDString path:@"/" expires:nil domain:nil secure:NO];
         }
@@ -77,11 +79,12 @@ NS_ASSUME_NONNULL_END
 
     // Redirecter
     [self.server get:@"/redirect" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-        NSURL* redirectURL = [NSURL URLWithString:(request.query[@"redirect"] ? : @"")];
-        if ( redirectURL ) {
-            [response redirectToURL:redirectURL];
+        @autoreleasepool {
+            NSURL* redirectURL = [NSURL URLWithString:(request.query[@"redirect"] ? : @"")];
+            if ( redirectURL ) {
+                [response redirectToURL:redirectURL];
+            }
         }
-        completionHandler();
     }];
 
     // Public
@@ -131,7 +134,6 @@ NS_ASSUME_NONNULL_END
     if ( [self.server startListening:&serverError portNumber:PortNumber] ) {
 
         // Get server ip address
-
         NSString* address = [SystemInfoHelper IPAddress];
         if ( !address ) {
             address = @"127.0.0.1";

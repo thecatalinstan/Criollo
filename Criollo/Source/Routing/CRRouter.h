@@ -81,7 +81,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The block called when there are no routes for the requested pathspec
  */
-@property (nonatomic, strong) CRRouteBlock notFoundBlock;
+@property (nonatomic, copy) CRRouteBlock notFoundBlock;
 
 /**
  @name Adding a Block

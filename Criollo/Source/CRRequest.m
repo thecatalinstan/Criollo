@@ -45,9 +45,13 @@
 - (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL *)URL version:(CRHTTPVersion)version connection:(CRConnection *)connection env:(NSDictionary *)env {
     self = [super init];
     if ( self != nil ) {
-        _connection = connection;
         _method = method;
-        self.message = CFBridgingRelease( CFHTTPMessageCreateRequest(NULL, (__bridge CFStringRef)NSStringFromCRHTTPMethod(_method), (__bridge CFURLRef)URL, (__bridge CFStringRef)NSStringFromCRHTTPVersion(version)) );
+        if ( connection ) {
+            _connection = connection;
+        }
+        if ( URL ) {
+            self.message = CFBridgingRelease( CFHTTPMessageCreateRequest(NULL, (__bridge CFStringRef)NSStringFromCRHTTPMethod(_method), (__bridge CFURLRef)URL, (__bridge CFStringRef)NSStringFromCRHTTPVersion(version)) );
+        }
         if ( env == nil ) {
             _env = [NSMutableDictionary dictionary];
         } else {

@@ -34,54 +34,56 @@ NS_ASSUME_NONNULL_END
 
 + (CRRouteBlock)errorHandlingBlockWithStatus:(NSUInteger)statusCode error:(NSError *)error {
     return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
-        [response setStatusCode:statusCode description:nil];
-        [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+        @autoreleasepool {
+            [response setStatusCode:statusCode description:nil];
+            [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
 
-        NSMutableString* responseString = [NSMutableString string];
+            NSMutableString* responseString = [NSMutableString string];
 
 #if DEBUG
-        NSError* err;
-        if (error == nil) {
-            NSMutableDictionary* mutableUserInfo = [NSMutableDictionary dictionaryWithCapacity:2];
-            NSString* errorDescription;
-            switch (statusCode) {
-                case 404:
-                    errorDescription = [NSString stringWithFormat:NSLocalizedString(@"No routes defined for “%@%@%@”",), NSStringFromCRHTTPMethod(request.method), request.URL.path, [request.URL.path hasSuffix:CRPathSeparator] ? @"" : CRPathSeparator];
-                    break;
+            NSError* err;
+            if (error == nil) {
+                NSMutableDictionary* mutableUserInfo = [NSMutableDictionary dictionaryWithCapacity:2];
+                NSString* errorDescription;
+                switch (statusCode) {
+                    case 404:
+                        errorDescription = [NSString stringWithFormat:NSLocalizedString(@"No routes defined for “%@%@%@”",), NSStringFromCRHTTPMethod(request.method), request.URL.path, [request.URL.path hasSuffix:CRPathSeparator] ? @"" : CRPathSeparator];
+                        break;
+                }
+                if ( errorDescription ) {
+                    mutableUserInfo[NSLocalizedDescriptionKey] = errorDescription;
+                }
+                mutableUserInfo[NSURLErrorFailingURLErrorKey] = request.URL;
+                err = [NSError errorWithDomain:CRServerErrorDomain code:statusCode userInfo:mutableUserInfo];
+            } else {
+                err = error;
             }
-            if ( errorDescription ) {
-                mutableUserInfo[NSLocalizedDescriptionKey] = errorDescription;
+
+            // Error details
+            [responseString appendFormat:@"%@ %lu\n%@\n", err.domain, (long)err.code, err.localizedDescription];
+
+            // Error user-info
+            if ( err.userInfo.count > 0 ) {
+                [responseString appendString:@"\nUser Info\n"];
+                [err.userInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                    [responseString appendFormat:@"%@: %@\n", key, obj];
+                }];
             }
-            mutableUserInfo[NSURLErrorFailingURLErrorKey] = request.URL;
-            err = [NSError errorWithDomain:CRServerErrorDomain code:statusCode userInfo:mutableUserInfo];
-        } else {
-            err = error;
-        }
 
-        // Error details
-        [responseString appendFormat:@"%@ %lu\n%@\n", err.domain, (long)err.code, err.localizedDescription];
-
-        // Error user-info
-        if ( err.userInfo.count > 0 ) {
-            [responseString appendString:@"\nUser Info\n"];
-            [err.userInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-                [responseString appendFormat:@"%@: %@\n", key, obj];
+            // Stack trace
+            [responseString appendString:@"\nStack Trace\n"];
+            [[NSThread callStackSymbols] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                [responseString appendFormat:@"%@\n", obj];
             }];
-        }
-
-        // Stack trace
-        [responseString appendString:@"\nStack Trace\n"];
-        [[NSThread callStackSymbols] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [responseString appendFormat:@"%@\n", obj];
-        }];
 #else
-        [responseString appendFormat:@"Cannot %@ %@", NSStringFromCRHTTPMethod(request.method), request.URL.path];
+            [responseString appendFormat:@"Cannot %@ %@", NSStringFromCRHTTPMethod(request.method), request.URL.path];
 #endif
-
-        [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
-        [response sendString:responseString];
-        
-        completionHandler();
+            
+            [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
+            [response sendString:responseString];
+            
+            completionHandler();
+        }
     };
 }
 
@@ -184,38 +186,38 @@ NS_ASSUME_NONNULL_END
 }
 
 - (NSArray<CRRouteMatchingResult *> *)routesForPath:(NSString*)path method:(CRHTTPMethod)method {
+//    NSLog(@"%s %@ %@", __PRETTY_FUNCTION__, path, NSStringFromCRHTTPMethod(method));
     NSMutableArray<CRRouteMatchingResult *> * routes = [NSMutableArray array];
     [self.routes enumerateObjectsUsingBlock:^(CRRoute * _Nonnull route, NSUInteger idx, BOOL * _Nonnull stop) {
+        @autoreleasepool {
+            // Bailout early if method does not match
+            if ( route.method != method && route.method != CRHTTPMethodAll ) {
+                return;
+            }
 
-        // Bailout early if method does not match
-        if ( route.method != method && route.method != CRHTTPMethodAll ) {
-            return;
-        }
+            // Boilout early if route is valid for all paths or path matches exaclty
+            if ( route.path == nil || [route.path isEqualToString:path] ) {
+                [routes addObject:[CRRouteMatchingResult routeMatchingResultWithRoute:route matches:nil]];
+                return;
+            }
 
-        // Boilout early if route is valid for all paths or path matches exaclty
-        if ( route.path == nil || [route.path isEqualToString:path] ) {
-            [routes addObject:[CRRouteMatchingResult routeMatchingResultWithRoute:route matches:nil]];
-            return;
-        }
+            // If route is recursive just check that the path start with the route path
+            if ( route.recursive && [path hasPrefix:route.path] ) {
+                [routes addObject:[CRRouteMatchingResult routeMatchingResultWithRoute:route matches:nil]];
+                return;
+            }
 
-        // If route is recursive just check that the path start with the route path
-        if ( route.recursive && [path hasPrefix:route.path] ) {
-            [routes addObject:[CRRouteMatchingResult routeMatchingResultWithRoute:route matches:nil]];
-            return;
-        }
+            // If the route regex matches
+            if ( !route.pathRegex ) {
+                return;
+            }
 
-        // If the route regex matches
-        if ( !route.pathRegex ) {
-            return;
-        }
-
-        NSArray* matches = [route processMatchesInPath:path];
-        if ( matches.count > 0 ) {
-            [routes addObject:[CRRouteMatchingResult routeMatchingResultWithRoute:route matches:matches]];
+            NSArray* matches = [route processMatchesInPath:path];
+            if ( matches.count > 0 ) {
+                [routes addObject:[CRRouteMatchingResult routeMatchingResultWithRoute:route matches:matches]];
+            }
         }
     }];
-
-//    NSLog(@"%s %@", __PRETTY_FUNCTION__, routes);
     return routes;
 }
 
