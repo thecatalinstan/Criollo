@@ -40,6 +40,8 @@ It incorporates an HTTP web server and a [FastCGI](http://fastcgi.com) applicati
 
 Criollo can easily be embedded as a web-server inside your OS X or iOS app, should you be in need of such a feature, however it was designed to create standalone, long-lived daemon style apps. It is fully [`launchd`](http://launchd.info/) compatible and replicates the lifecycle and behavior of `NSApplication`, so that the learning curve should be as smooth as possible. 
 
+For a more real-world example, check out the [criollo.io](https://criollo.io) website, made using Criollo and available for your cloning pleasure at [https://github.com/thecatalinstan/Criollo-Web](https://github.com/thecatalinstan/Criollo-Web).
+
 See the [Hello World Multi Target example](https://github.com/thecatalinstan/Criollo/tree/master/Examples/HelloWorld-MultiTarget) for a demo of the two usage patterns.
 
 ## Getting Started
