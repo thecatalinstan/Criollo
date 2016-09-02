@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nullable, readonly) NSRegularExpression * pathRegex;
 @property (nonatomic, strong, nullable, readonly) NSArray<NSString *> * pathKeys;
+@property (nonatomic, strong, nullable) id associatedObject;
 
 - (NSArray<NSString *> *)processMatchesInPath:(NSString *)path;
 

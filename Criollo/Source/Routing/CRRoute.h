@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) CRHTTPMethod method;
 @property (nonatomic, strong) NSString * path;
 @property (nonatomic) BOOL recursive;
-@property (nonatomic, strong) CRRouteBlock block;
+@property (nonatomic, copy) CRRouteBlock block;
 
 - (instancetype)initWithBlock:(CRRouteBlock)block method:(CRHTTPMethod)method path:(NSString * _Nullable)path recursive:(BOOL)recursive NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithControllerClass:(__unsafe_unretained Class )controllerClass method:(CRHTTPMethod)method path:(NSString * _Nullable)path recursive:(BOOL)recursive;
