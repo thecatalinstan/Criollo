@@ -28,11 +28,7 @@ static dispatch_queue_t isolationQueue;
     dispatch_set_target_queue(isolationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
 }
 
-- (NSMutableDictionary *)cache {
-    return (NSMutableDictionary *)cache;
-}
-
-- (dispatch_queue_t)isolationQueue {    
+- (dispatch_queue_t)isolationQueue {
     return isolationQueue;
 }
 
@@ -49,12 +45,12 @@ static dispatch_queue_t isolationQueue;
         }
         NSString* path = [bundle pathForResource:self.name ofType:@"html"];
         if ( path != nil ) {
-            if ( self.cache[path] != nil ) {
-                _data = self.cache[path];
+            if ( cache[path] != nil ) {
+                _data = cache[path];
             } else {
                 _data = [NSData dataWithContentsOfFile:path options:NSDataReadingMapped error:nil];
                 dispatch_async(self.isolationQueue, ^{
-                    self.cache[path] = _data;
+                    cache[path] = _data;
                 });
             }
         }

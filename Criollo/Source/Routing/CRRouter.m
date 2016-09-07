@@ -245,7 +245,8 @@ NS_ASSUME_NONNULL_END
                 [request setQuery:(result.matches[idx] ? : @"") forKey:key];
             }];            
         }
-        result.route.block (request, response, ^{
+        CRRouteBlock routeBlock = result.route.block;
+        routeBlock (request, response, ^{
             shouldStopExecutingBlocks = NO;
             currentRouteIndex++;
         });

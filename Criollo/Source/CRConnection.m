@@ -95,6 +95,12 @@ static const NSData * CRLFCRLFData;
     return self;
 }
 
+- (void)dealloc {
+    self.socket = nil;
+    self.currentRequest = nil;
+    _isolationQueue = nil;
+}
+
 #pragma mark - Data
 
 - (void)startReading {
@@ -179,6 +185,7 @@ static const NSData * CRLFCRLFData;
     if ( self.willDisconnect ) {
         return;
     }
+    
     CRRequest* firstRequest = self.requests.firstObject;
     if ( [firstRequest isEqual:request] ) {
         request.bufferedResponseData = nil;
@@ -196,9 +203,10 @@ static const NSData * CRLFCRLFData;
 }
 
 - (void)didFinishResponseForRequest:(CRRequest *)request {
+    CRConnection * __weak connection = self;
     [self.delegate connection:self didFinishRequest:request response:request.response];
     dispatch_async(self.isolationQueue, ^{
-        [self.requests removeObject:request];
+        [connection.requests removeObject:request];
     });
 }
 
@@ -211,14 +219,15 @@ static const NSData * CRLFCRLFData;
 #pragma mark - GCDAsyncSocketDelegate
 
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
+    CRConnection * __weak connection = self;
     switch (tag) {
         case CRConnectionSocketTagSendingResponse: {
             dispatch_async(self.isolationQueue, ^{
-                if ( self.requests.count > 0 && !self.willDisconnect ) {
-                    CRRequest* request = self.requests.firstObject;
+                if ( connection.requests.count > 0 && !self.willDisconnect ) {
+                    CRRequest* request = connection.requests.firstObject;
                     if ( request.bufferedResponseData.length > 0 ) {
                         dispatch_async(sock.delegateQueue, ^{
-                            [self sendDataToSocket:request.bufferedResponseData forRequest:request];
+                            [connection sendDataToSocket:request.bufferedResponseData forRequest:request];
                         });
                     }
                 }

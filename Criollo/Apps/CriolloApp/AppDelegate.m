@@ -14,8 +14,8 @@
 #import "MultiRouteViewController.h"
 
 #define PortNumber          10781
-#define LogConnections          1
-#define LogRequests             1
+#define LogConnections          0
+#define LogRequests             0
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -104,6 +104,7 @@ NS_ASSUME_NONNULL_END
 
     // HTML view controller
     [self.server add:@"/controller" viewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil];
+
 
     [self.server add:@"/posts/:pid" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         [response send:request.query];

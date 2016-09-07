@@ -18,10 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRViewController ()
 
-@property (nonatomic, readonly, strong) NSMutableDictionary<NSString*, CRNib*> *nibCache;
-@property (nonatomic, readonly, strong) NSMutableDictionary<NSString*, CRView*> *viewCache;
-@property (nonatomic, readonly, strong) dispatch_queue_t isolationQueue;
-
 - (void)loadView;
 
 @end
@@ -39,14 +35,6 @@ static dispatch_queue_t isolationQueue;
     viewCache = [NSMutableDictionary dictionary];
     isolationQueue = dispatch_queue_create([[NSStringFromClass(self.class) stringByAppendingPathExtension:@"IsolationQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
     dispatch_set_target_queue(isolationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
-}
-
-- (NSMutableDictionary<NSString*, CRNib*>*)nibCache {
-    return (NSMutableDictionary<NSString*, CRNib*>*)nibCache;
-}
-
-- (NSMutableDictionary<NSString*, CRView*>*)viewCache {
-    return (NSMutableDictionary<NSString*, CRView*>*)viewCache;
 }
 
 - (dispatch_queue_t)isolationQueue {
@@ -104,17 +92,17 @@ static dispatch_queue_t isolationQueue;
     CRView* view;
 
     NSString* viewCacheKey = [NSString stringWithFormat:@"%@/%@@%@", self.nibBundle.bundleIdentifier, self.nibName, NSStringFromClass(self.class)];
-    if ( self.viewCache[viewCacheKey] != nil ) {
-        view = self.viewCache[viewCacheKey];
+    if ( viewCache[viewCacheKey] != nil ) {
+        view = viewCache[viewCacheKey];
     } else {
         NSString* nibCacheKey = [NSString stringWithFormat:@"%@/%@", self.nibBundle.bundleIdentifier, self.nibName];
         CRNib *nib;
-        if ( self.nibCache[nibCacheKey] != nil ) {
-            nib = self.nibCache[nibCacheKey];
+        if ( nibCache[nibCacheKey] != nil ) {
+            nib = nibCache[nibCacheKey];
         } else {
             nib = [[CRNib alloc] initWithNibNamed:self.nibName bundle:self.nibBundle];
             dispatch_async(self.isolationQueue, ^{
-                self.nibCache[nibCacheKey] = nib;
+                nibCache[nibCacheKey] = nib;
             });
         }
         NSString *contents = [NSString stringWithUTF8String:nib.data.bytes];
@@ -126,7 +114,7 @@ static dispatch_queue_t isolationQueue;
         }
         view = [[viewClass alloc] initWithContents:contents];
         dispatch_async(self.isolationQueue, ^{
-            self.viewCache[viewCacheKey] = view;
+            viewCache[viewCacheKey] = view;
         });
     }
 
