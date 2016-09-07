@@ -1,12 +1,16 @@
 # Change Log
 
-This file includes all notable changes to Criollo. 
+This file includes all notable changes to Criollo.
 
 *Please note that during this early stage of development, **APIs are extremely prone to non-backward-compatible changes.** Please consult this file for the specifics, before you upgrade.*
 
 Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
+
+## [0.4.3](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.3) (09/07/2016)
+
+**Released on Wednsday, September 7, 2016**. This release includes on memory allocation and performance improvements. No API were changed.
 
 ## [0.4.1](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.1) (07/26/2016)
 
@@ -84,7 +88,7 @@ The core router logic has been re-written. Also now you can define routes using 
 
 ## [0.1.12](https://github.com/thecatalinstan/Criollo/releases/tag/0.1.12) (03/15/2016)
 
-**Released on Tuesday, March 15, 2016**. 
+**Released on Tuesday, March 15, 2016**.
 
 ### Fixed
 
@@ -92,7 +96,7 @@ The core router logic has been re-written. Also now you can define routes using 
 
 ## [0.1.11](https://github.com/thecatalinstan/Criollo/releases/tag/0.1.11) (03/15/2016)
 
-**Released on Tuesday, March 15, 2016**. 
+**Released on Tuesday, March 15, 2016**.
 
 ### Fixed
 
@@ -103,11 +107,11 @@ The core router logic has been re-written. Also now you can define routes using 
 
 ## [0.1.10](https://github.com/thecatalinstan/Criollo/releases/tag/0.1.10) (03/14/2016)
 
-**Released on Monday, March 14, 2016**. 
+**Released on Monday, March 14, 2016**.
 
 ### Added
 
-* `[CRServer delegateQueue]` property and `[CRServer initWithDelegate:delegateQueue:]` initializer. [`4ec8cff`](https://github.com/thecatalinstan/Criollo/commit/4ec8cff6e0f0a0ef587eef345ca3724b19ebb0b7) 
+* `[CRServer delegateQueue]` property and `[CRServer initWithDelegate:delegateQueue:]` initializer. [`4ec8cff`](https://github.com/thecatalinstan/Criollo/commit/4ec8cff6e0f0a0ef587eef345ca3724b19ebb0b7)
 
 ### Fixed
 
@@ -119,7 +123,7 @@ The core router logic has been re-written. Also now you can define routes using 
 
 ### Fixed
 
-* Fixed potential crash in the builtin server error handling block, due to an incorrect format string. [`6c3a0be`](https://github.com/thecatalinstan/Criollo/commit/6c3a0be15e8819cc3a29348e8e1b661ea5674512). 
+* Fixed potential crash in the builtin server error handling block, due to an incorrect format string. [`6c3a0be`](https://github.com/thecatalinstan/Criollo/commit/6c3a0be15e8819cc3a29348e8e1b661ea5674512).
 
 ## [0.1.8](https://github.com/thecatalinstan/Criollo/releases/tag/0.1.8) (03/13/2016)
 
@@ -128,7 +132,7 @@ The core router logic has been re-written. Also now you can define routes using 
 #### Changed APIs
 
 * Refactored `[CRServer addStaticDirectoryAtPath:]` to `[CRServer mountStaticDirectoryAtPath:]`. [`24c7b22`](https://github.com/thecatalinstan/Criollo/commit/24c7b2265fb0a9ddd9bbdc5e7badecba8e5d6c8d).
-* `CRHTTPMethod` and `CRHTTPVersion` are now enumerated types, instead of existing `NSString` `#define`. 
+* `CRHTTPMethod` and `CRHTTPVersion` are now enumerated types, instead of existing `NSString` `#define`.
 * Refactored the nullability specifiers across the board. Now using `NS_ASSUME_NONNULL` and `nullable`/`_Nullable` as needed.
 
 #### Added
