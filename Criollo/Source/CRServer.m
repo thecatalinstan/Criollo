@@ -27,7 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) dispatch_queue_t isolationQueue;
 @property (nonatomic, strong) dispatch_queue_t socketDelegateQueue;
 @property (nonatomic, strong) dispatch_queue_t acceptedSocketDelegateTargetQueue;
-@property (nonatomic, strong) dispatch_queue_t acceptedSocketSocketTargetQueue;
 
 @property (nonatomic, strong) NSOperationQueue* workerQueue;
 
@@ -60,12 +59,6 @@ NS_ASSUME_NONNULL_END
     return self;
 }
 
-#pragma mark - KVO
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
-    NSLog(@"%@.%@ = %lu", object, keyPath, (unsigned long)((NSArray*)change[NSKeyValueChangeNewKey]).count);
-}
-
 #pragma mark - Listening
 
 - (BOOL)startListening {
@@ -95,9 +88,6 @@ NS_ASSUME_NONNULL_END
 
     self.socketDelegateQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"SocketDelegateQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_CONCURRENT);
     dispatch_set_target_queue(self.socketDelegateQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
-
-    self.acceptedSocketSocketTargetQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"AcceptedSocketSocketTargetQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
-    dispatch_set_target_queue(self.acceptedSocketSocketTargetQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0));
 
     self.acceptedSocketDelegateTargetQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"AcceptedSocketDelegateTargetQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
     dispatch_set_target_queue(self.acceptedSocketDelegateTargetQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0));
@@ -149,13 +139,18 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Connections
 
 - (void)closeAllConnections:(dispatch_block_t)completion {
-    dispatch_barrier_async(self.isolationQueue, ^{
-        [self.connections enumerateObjectsUsingBlock:^(CRConnection * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [obj.socket disconnectAfterReadingAndWriting];
-        }];
-        [self.connections removeAllObjects];
-        if ( completion ) {
-            dispatch_async(self.delegateQueue, completion);
+    CRServer * __weak server = self;
+    dispatch_async(self.isolationQueue, ^{
+        @autoreleasepool {
+            [server.connections enumerateObjectsUsingBlock:^(CRConnection * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                @autoreleasepool {
+                    [obj.socket disconnectAfterReadingAndWriting];
+                }
+            }];
+            [server.connections removeAllObjects];
+            if ( completion ) {
+                dispatch_async(server.delegateQueue, completion);
+            }
         }
     });
 }
@@ -167,20 +162,20 @@ NS_ASSUME_NONNULL_END
 #pragma mark - GCDAsyncSocketDelegate
 
 - (void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket {
-    [newSocket markSocketQueueTargetQueue:self.acceptedSocketSocketTargetQueue];
-
     dispatch_queue_t acceptedSocketDelegateQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:[NSString stringWithFormat:@"SocketDelegateQueue-%hu", newSocket.connectedPort]] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_CONCURRENT);
     dispatch_set_target_queue(acceptedSocketDelegateQueue, self.acceptedSocketDelegateTargetQueue);
     newSocket.delegateQueue = acceptedSocketDelegateQueue;
 
     CRConnection* connection = [self newConnectionWithSocket:newSocket];
     connection.delegate = self;
+
+    CRServer * __weak server = self;
     dispatch_async(self.isolationQueue, ^(){
-        [self.connections addObject:connection];
+        [server.connections addObject:connection];
     });
     if ( [self.delegate respondsToSelector:@selector(server:didAcceptConnection:)]) {
         dispatch_async(self.delegateQueue, ^{
-            [self.delegate server:self didAcceptConnection:connection];
+            [server.delegate server:server didAcceptConnection:connection];
         });
     }
     [connection startReading];
@@ -192,33 +187,36 @@ NS_ASSUME_NONNULL_END
 #pragma mark - CRConnectionDelegate
 
 - (void)connection:(CRConnection *)connection didReceiveRequest:(CRRequest *)request response:(CRResponse *)response {
-    [self.workerQueue addOperation:[NSBlockOperation blockOperationWithBlock:^{
-        if ( [self.delegate respondsToSelector:@selector(server:didReceiveRequest:)] ) {
-            dispatch_async(self.delegateQueue, ^{
-                [self.delegate server:self didReceiveRequest:request];
-            });
-        }
-        NSArray<CRRouteMatchingResult *> * routes = [self routesForPath:request.URL.path method:request.method];
-        [self executeRoutes:routes forRequest:request response:response withNotFoundBlock:self.notFoundBlock];
-    }]];
+    CRServer * __weak server = self;
+    [self.workerQueue addOperationWithBlock:^{ @autoreleasepool {
+        NSArray<CRRouteMatchingResult *> * routes = [server routesForPath:request.URL.path method:request.method];
+        [server executeRoutes:routes forRequest:request response:response withNotFoundBlock:server.notFoundBlock];
+    }}];
+    if ( [self.delegate respondsToSelector:@selector(server:didReceiveRequest:)] ) {
+        dispatch_async(self.delegateQueue, ^{ @autoreleasepool {
+            [self.delegate server:server didReceiveRequest:request];
+        }});
+    }
 }
 
 - (void)connection:(CRConnection *)connection didFinishRequest:(CRRequest *)request response:(CRResponse *)response {
     if ( [self.delegate respondsToSelector:@selector(server:didFinishRequest:)]  ) {
+        CRServer * __weak server = self;
         dispatch_async(self.delegateQueue, ^{
-            [self.delegate server:self didFinishRequest:request];
+            [server.delegate server:server didFinishRequest:request];
         });
     }
 }
 
 - (void)didCloseConnection:(CRConnection*)connection {
+    CRServer * __weak server = self;
     if ( [self.delegate respondsToSelector:@selector(server:didCloseConnection:)]) {
         dispatch_async(self.delegateQueue, ^{
-            [self.delegate server:self didCloseConnection:connection];
+            [server.delegate server:server didCloseConnection:connection];
         });
     }
     dispatch_async(self.isolationQueue, ^(){
-        [self.connections removeObject:connection];
+        [server.connections removeObject:connection];
     });
 }
 

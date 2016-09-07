@@ -49,8 +49,10 @@
     // Create ENV from HTTP headers
     NSMutableDictionary* env = [NSMutableDictionary dictionary];
     [self.currentRequest.allHTTPHeaderFields enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString* headerName = [@"HTTP_" stringByAppendingString:[key.uppercaseString stringByReplacingOccurrencesOfString:@"-" withString:@"_"]];
-        [env setObject:obj forKey:headerName];
+        @autoreleasepool {
+            NSString* headerName = [@"HTTP_" stringByAppendingString:[key.uppercaseString stringByReplacingOccurrencesOfString:@"-" withString:@"_"]];
+            [env setObject:obj forKey:headerName];
+        }
     }];
 
     if ( env[@"HTTP_CONTENT_LENGTH"] ) {
@@ -155,10 +157,11 @@
                         // TODO: request.URL should be parsed using no memcpy and using the actual scheme
                         NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", hostSpec, pathSpec]];
                         CRRequest* request = [[CRRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self];
-                        self.currentRequest = request;
-                        dispatch_barrier_async(self.isolationQueue, ^{
-                            [self.requests addObject:request];
+                        CRHTTPConnection * __weak connection = self;
+                        dispatch_async(self.isolationQueue, ^{
+                            [connection.requests addObject:request];
                         });
+                        self.currentRequest = request;
                     } else {
                         result = NO;
                     }
