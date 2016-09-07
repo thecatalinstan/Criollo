@@ -30,7 +30,7 @@ static dispatch_queue_t backgroundQueue;
 }
 
 + (NSString *)IPAddress {
-    static NSString* address;
+    static NSString* address = @"127.0.0.1";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         struct ifaddrs *interfaces = NULL;
@@ -109,8 +109,10 @@ static dispatch_queue_t backgroundQueue;
     if( kerr == KERN_SUCCESS ) {
         return [NSByteCountFormatter stringFromByteCount:info.resident_size countStyle:NSByteCountFormatterCountStyleMemory];
     } else {
-        *error = [NSError errorWithDomain:[NSProcessInfo processInfo].processName code:-1 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%s",mach_error_string(kerr)]}];
-        return nil;
+        if ( *error ) {
+            *error = [NSError errorWithDomain:[NSProcessInfo processInfo].processName code:-1 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%s",mach_error_string(kerr)]}];
+        }
+        return @"";
     }
 }
 
