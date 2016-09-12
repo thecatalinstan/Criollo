@@ -223,7 +223,7 @@ static const NSData * CRLFCRLFData;
     CRConnection * __weak connection = self;
     switch (tag) {
         case CRConnectionSocketTagSendingResponse: {
-            dispatch_async(self.isolationQueue, ^{
+            dispatch_async(self.isolationQueue, ^{ @autoreleasepool {
                 if ( connection.requests.count > 0 && !self.willDisconnect ) {
                     CRRequest* request = connection.requests.firstObject;
                     if ( request.bufferedResponseData.length > 0 ) {
@@ -232,7 +232,7 @@ static const NSData * CRLFCRLFData;
                         });
                     }
                 }
-            });
+            }});
         } break;
 
         default:

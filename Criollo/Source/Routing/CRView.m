@@ -23,7 +23,7 @@
 - (instancetype)initWithContents:(NSString *)contents {
     self = [super init];
     if ( self != nil ) {
-        _contents = contents == nil ? @"" : contents;
+        _contents = contents ? : @"";
     }
     return self;
 }
@@ -33,12 +33,12 @@
         return self.contents;
     } else {
         NSMutableString* mutableContents = self.contents.mutableCopy;
-        [vars enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        [vars enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) { @autoreleasepool {
             if ( ![obj isKindOfClass:[NSString class]] ) {
                 return;
             }
             [mutableContents replaceOccurrencesOfString:[NSString stringWithFormat:CRViewVariableFormat, key] withString:obj options:0 range:NSMakeRange(0, mutableContents.length)];
-        }];
+        }}];
         return mutableContents;
     }
 }

@@ -140,19 +140,15 @@ NS_ASSUME_NONNULL_END
 
 - (void)closeAllConnections:(dispatch_block_t)completion {
     CRServer * __weak server = self;
-    dispatch_async(self.isolationQueue, ^{
-        @autoreleasepool {
-            [server.connections enumerateObjectsUsingBlock:^(CRConnection * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                @autoreleasepool {
-                    [obj.socket disconnectAfterReadingAndWriting];
-                }
-            }];
-            [server.connections removeAllObjects];
-            if ( completion ) {
-                dispatch_async(server.delegateQueue, completion);
-            }
+    dispatch_async(self.isolationQueue, ^{ @autoreleasepool {
+        [server.connections enumerateObjectsUsingBlock:^(CRConnection * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) { @autoreleasepool {
+            [obj.socket disconnectAfterReadingAndWriting];
+        }}];
+        [server.connections removeAllObjects];
+        if ( completion ) {
+            dispatch_async(server.delegateQueue, completion);
         }
-    });
+    }});
 }
 
 - (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket {
