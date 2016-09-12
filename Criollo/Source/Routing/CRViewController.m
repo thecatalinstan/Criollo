@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRViewController ()
 
-@property (nonatomic, strong, nullable, readonly) CRNib* nib;
+@property (nonatomic, strong, nonnull, readonly) CRNib* nib;
 
 - (void)loadView;
 
@@ -74,7 +74,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)loadView {
     _nib = [[CRNib alloc] initWithNibNamed:self.nibName bundle:self.nibBundle];
-    NSString * contents = [[NSString alloc] initWithBytesNoCopy:self.nib.data.bytes length:self.nib.data.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
+    NSString * contents = [[NSString alloc] initWithBytesNoCopy:(void *)self.nib.data.bytes length:self.nib.data.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
 
     // Determine the view class to use
     Class viewClass = NSClassFromString([NSStringFromClass(self.class) stringByReplacingOccurrencesOfString:@"Controller" withString:@""]);
