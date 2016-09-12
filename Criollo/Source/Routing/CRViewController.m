@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRViewController ()
 
+@property (nonatomic, strong, nullable, readonly) CRNib* nib;
+
 - (void)loadView;
 
 @end
@@ -26,20 +28,6 @@ NS_ASSUME_NONNULL_END
 
 @implementation CRViewController
 
-static const NSMutableDictionary<NSString *, CRNib *> * nibCache;
-static const NSMutableDictionary<NSString *, CRView *> * viewCache;
-static dispatch_queue_t isolationQueue;
-
-+ (void)initialize {
-    nibCache = [NSMutableDictionary dictionary];
-    viewCache = [NSMutableDictionary dictionary];
-    isolationQueue = dispatch_queue_create([[NSStringFromClass(self.class) stringByAppendingPathExtension:@"IsolationQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
-    dispatch_set_target_queue(isolationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
-}
-
-- (dispatch_queue_t)isolationQueue {
-    return isolationQueue;
-}
 
 - (instancetype)init {
     return [self initWithNibName:nil bundle:nil prefix:CRPathSeparator];
@@ -61,64 +49,41 @@ static dispatch_queue_t isolationQueue;
         _vars = [NSMutableDictionary dictionary];
 
         CRViewController* __weak controller = self;
-        self.routeBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
-            @autoreleasepool {
-                NSString* requestedPath = request.env[@"DOCUMENT_URI"];
-                NSString* requestedRelativePath = [requestedPath pathRelativeToPath:controller.prefix];
-                NSArray<CRRouteMatchingResult * >* routes = [controller routesForPath:requestedRelativePath method:request.method];
-                [controller executeRoutes:routes forRequest:request response:response withNotFoundBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completion) {
+        self.routeBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) { @autoreleasepool {
+            NSString* requestedPath = request.env[@"DOCUMENT_URI"];
+            NSString* requestedRelativePath = [requestedPath pathRelativeToPath:controller.prefix];
+            NSArray<CRRouteMatchingResult * >* routes = [controller routesForPath:requestedRelativePath method:request.method];
+            [controller executeRoutes:routes forRequest:request response:response withNotFoundBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completion) { @autoreleasepool {
+                [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
 
-                    @autoreleasepool {
-                        [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+                NSString* output = [controller presentViewControllerWithRequest:request response:response];
+                if ( controller.shouldFinishResponse ) {
+                    [response sendString:output];
+                } else {
+                    [response writeString:output];
+                }
 
-                        NSString* output = [controller presentViewControllerWithRequest:request response:response];
-                        if ( controller.shouldFinishResponse ) {
-                            [response sendString:output];
-                        } else {
-                            [response writeString:output];
-                        }
+                completion();
+            }}];
 
-                        completion();
-                    }
-                }];
-                completionHandler();
-            }
-        };
+            completionHandler();
+        }};
     }
     return self;
 }
 
 - (void)loadView {
-    CRView* view;
+    _nib = [[CRNib alloc] initWithNibNamed:self.nibName bundle:self.nibBundle];
+    NSString * contents = [[NSString alloc] initWithBytesNoCopy:self.nib.data.bytes length:self.nib.data.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
 
-    NSString* viewCacheKey = [NSString stringWithFormat:@"%@/%@@%@", self.nibBundle.bundleIdentifier, self.nibName, NSStringFromClass(self.class)];
-    if ( viewCache[viewCacheKey] != nil ) {
-        view = viewCache[viewCacheKey];
-    } else {
-        NSString* nibCacheKey = [NSString stringWithFormat:@"%@/%@", self.nibBundle.bundleIdentifier, self.nibName];
-        CRNib *nib;
-        if ( nibCache[nibCacheKey] != nil ) {
-            nib = nibCache[nibCacheKey];
-        } else {
-            nib = [[CRNib alloc] initWithNibNamed:self.nibName bundle:self.nibBundle];
-            dispatch_async(self.isolationQueue, ^{
-                nibCache[nibCacheKey] = nib;
-            });
-        }
-        NSString *contents = [NSString stringWithUTF8String:nib.data.bytes];
-
-        // Determine the view class to use
-        Class viewClass = NSClassFromString([NSStringFromClass(self.class) stringByReplacingOccurrencesOfString:@"Controller" withString:@""]);
-        if ( viewClass == nil ) {
-            viewClass = [CRView class];
-        }
-        view = [[viewClass alloc] initWithContents:contents];
-        dispatch_async(self.isolationQueue, ^{
-            viewCache[viewCacheKey] = view;
-        });
+    // Determine the view class to use
+    Class viewClass = NSClassFromString([NSStringFromClass(self.class) stringByReplacingOccurrencesOfString:@"Controller" withString:@""]);
+    if ( viewClass == nil ) {
+        viewClass = [CRView class];
     }
+    self.view = [[viewClass alloc] initWithContents:contents];
 
-    self.view = view;
+    //
     [self viewDidLoad];
 }
 
