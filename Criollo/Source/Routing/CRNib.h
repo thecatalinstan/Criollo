@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  The contents of the nib.
  */
-@property (nonatomic, strong, nullable, readonly) NSData *data;
+@property (nonatomic, strong, readonly) NSData *data;
 
 /**
  *  The nib name
