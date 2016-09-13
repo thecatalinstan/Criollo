@@ -34,7 +34,7 @@ CRServer* server = [[CRHTTPServer alloc] init];
 
 Criollo was created in order to take advantage of the truly awesome tools and APIs that OS X and iOS provide and serve content produced with them over the web. 
 
-It incorporates an HTTP web server and a [FastCGI](http://fastcgi.com) application server that are used to deliver content. The server is built on Grand Central Dispatch and designed for *speed*.
+It incorporates an HTTP web server and a [FastCGI](https://fast-cgi.github.io/) application server that are used to deliver content. The server is built on Grand Central Dispatch and designed for *speed*.
 
 ## How to Use
 
