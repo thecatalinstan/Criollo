@@ -36,8 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)bufferBodyData:(NSData *)data;
 - (void)bufferResponseData:(NSData *)data;
 
-//- (BOOL)appendBodyData:(NSData *)data forKey:(NSString *)key;
-//- (BOOL)appendFileData:(NSData *)data forKey:(NSString *)key;
+- (BOOL)appendBodyData:(NSData *)data forKey:(NSString *)key;
+- (BOOL)appendFileData:(NSData *)data forKey:(NSString *)key;
 
 - (void)setEnv:(NSDictionary<NSString *,NSString *> *)envDictionary;
 - (void)setEnv:(NSString *)obj forKey:(NSString *)key;

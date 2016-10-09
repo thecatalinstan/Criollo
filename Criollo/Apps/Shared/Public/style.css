@@ -1,3 +1,14 @@
 body {
     padding: 20px 40px;
+    font-size: 1.2em;
+    line-height: 1.5em;
+    font-family: sans-serif;
+}
+
+pre {
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    padding: 20px;
+    background-color: #efefef;
+    overflow: auto;
 }

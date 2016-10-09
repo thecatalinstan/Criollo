@@ -20,6 +20,7 @@
 #import "GCDAsyncSocket.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface CRFCGIConnection () {
     NSUInteger currentRequestBodyLength;
     NSUInteger currentRequestBodyReceivedBytesLength;
@@ -36,6 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)appendParamsFromData:(NSData *)paramsData length:(NSUInteger)dataLength;
 
 @end
+
 NS_ASSUME_NONNULL_END
 
 @implementation CRFCGIConnection

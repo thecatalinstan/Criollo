@@ -95,14 +95,6 @@
     }
 }
 
-- (void)didReceiveRequestBodyData:(NSData *)data {
-    [super didReceiveRequestBodyData:data];
-}
-
-- (void)didReceiveCompleteRequest {
-    [super didReceiveCompleteRequest];
-}
-
 #pragma mark - Responses
 
 - (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(CRHTTPVersion)version {
