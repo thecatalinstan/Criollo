@@ -16,8 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) CRServerConfiguration * configuration;
 @property (nonatomic, strong) NSMutableArray<CRConnection *> * connections;
 
-+ (CRRouteBlock)errorHandlingBlockWithStatus:(NSUInteger)statusCode error:(NSError * _Nullable)error;
-
 - (void)didCloseConnection:(CRConnection *)connection;
 
 @end

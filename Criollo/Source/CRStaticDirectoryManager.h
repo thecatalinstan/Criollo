@@ -12,8 +12,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@property (nonatomic, readonly) NSString * directoryPath;
-@property (nonatomic, readonly) CRRouteBlock routeBlock;
+@property (nonatomic, readonly, strong) NSString * directoryPath;
+@property (nonatomic, readonly, copy) CRRouteBlock routeBlock;
 
 @property (nonatomic, readonly) BOOL shouldCacheFiles;
 @property (nonatomic, readonly) BOOL shouldGenerateDirectoryIndex;

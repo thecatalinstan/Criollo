@@ -35,22 +35,20 @@ NS_ASSUME_NONNULL_END
 
 @implementation CRConnection
 
+static const NSData * CRLFData;
+static const NSData * CRLFCRLFData;
+
++ (void)initialize {
+    CRLFData = [NSData dataWithBytes:"\x0D\x0A" length:2];
+    CRLFCRLFData = [NSData dataWithBytes:"\x0D\x0A\x0D\x0A" length:4];
+}
+
 + (NSData *)CRLFCRLFData {
-    static NSData* _CRLFCRLFData;
-    static dispatch_once_t _CRLFCRLFDataToken;
-    dispatch_once(&_CRLFCRLFDataToken, ^{
-        _CRLFCRLFData = [NSData dataWithBytes:"\x0D\x0A\x0D\x0A" length:4];
-    });
-    return _CRLFCRLFData;
+    return (NSData *)CRLFCRLFData;
 }
 
 + (NSData *)CRLFData {
-    static NSData* _CRLFData;
-    static dispatch_once_t _CRLFDataToken;
-    dispatch_once(&_CRLFDataToken, ^{
-        _CRLFData = [NSData dataWithBytes:"\x0D\x0A" length:2];
-    });
-    return _CRLFData;
+    return (NSData *)CRLFData;
 }
 
 #pragma mark - Responses
@@ -76,8 +74,12 @@ NS_ASSUME_NONNULL_END
 - (instancetype)initWithSocket:(GCDAsyncSocket *)socket server:(CRServer *)server {
     self = [super init];
     if (self != nil) {
-        self.server = server;
-        self.socket = socket;
+        if ( server ) {
+            self.server = server;
+        }
+        if ( socket ) {
+            self.socket = socket;
+        }
         self.socket.delegate = self;
         self.requests = [NSMutableArray array];
 
@@ -91,6 +93,13 @@ NS_ASSUME_NONNULL_END
 
     }
     return self;
+}
+
+- (void)dealloc {
+    _socket = nil;
+    _requests = nil;
+    _currentRequest = nil;
+    _isolationQueue = nil;
 }
 
 #pragma mark - Data
@@ -110,16 +119,16 @@ NS_ASSUME_NONNULL_END
         return;
     }
 
-    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, (unsigned long)data.length);
-    NSString* contentType = self.currentRequest.env[@"HTTP_CONTENT_TYPE"];
-    if ([contentType hasPrefix:CRRequestTypeMultipart]) {
-        NSError* bodyParsingError;
-        if ( ![self.currentRequest parseMultipartBodyDataChunk:data error:&bodyParsingError] ) {
-            NSLog(@" * bodyParsingError = %@", bodyParsingError);
-        }
-    } else {
+//    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, (unsigned long)data.length);
+//    NSString* contentType = self.currentRequest.env[@"HTTP_CONTENT_TYPE"];
+//    if ([contentType hasPrefix:CRRequestTypeMultipart]) {
+//        NSError* bodyParsingError;
+//        if ( ![self.currentRequest parseMultipartBodyDataChunk:data error:&bodyParsingError] ) {
+//            NSLog(@" * bodyParsingError = %@", bodyParsingError);
+//        }
+//    } else {
         [self bufferBodyData:data forRequest:self.currentRequest];
-    }
+//    }
 }
 
 - (void)didReceiveCompleteRequest {
@@ -137,7 +146,7 @@ NS_ASSUME_NONNULL_END
 
         if ([contentType hasPrefix:CRRequestTypeJSON]) {
             result = [self.currentRequest parseJSONBodyData:&bodyParsingError];
-        } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
+//        } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
         } else if ([contentType hasPrefix:CRRequestTypeURLEncoded]) {
             result = [self.currentRequest parseURLEncodedBodyData:&bodyParsingError];
         } else {
@@ -145,17 +154,16 @@ NS_ASSUME_NONNULL_END
         }
 
         if ( !result ) {
-            NSLog(@" * bodyParsingError = %@", bodyParsingError);
+//            NSLog(@" * bodyParsingError = %@", bodyParsingError);
         } else {
-            NSLog(@" * request.body = %@", self.currentRequest.body);
-            NSLog(@" * bufferedBodyData = %lu bytes", (unsigned long)self.currentRequest.bufferedBodyData.length);
+//            NSLog(@" * request.body = %@", self.currentRequest.body);
+//            NSLog(@" * bufferedBodyData = %lu bytes", (unsigned long)self.currentRequest.bufferedBodyData.length);
         }
     }
 
     CRResponse* response = [self responseWithHTTPStatusCode:200];
-    [self.currentRequest setResponse:response];
-    [response setRequest:self.currentRequest];
-    [self.requests addObject:self.currentRequest];
+    self.currentRequest.response = response;
+    response.request = self.currentRequest;
     [self.delegate connection:self didReceiveRequest:self.currentRequest response:response];
     [self startReading];
 }
@@ -178,6 +186,7 @@ NS_ASSUME_NONNULL_END
     if ( self.willDisconnect ) {
         return;
     }
+    
     CRRequest* firstRequest = self.requests.firstObject;
     if ( [firstRequest isEqual:request] ) {
         request.bufferedResponseData = nil;
@@ -195,8 +204,11 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)didFinishResponseForRequest:(CRRequest *)request {
+    CRConnection * __weak connection = self;
     [self.delegate connection:self didFinishRequest:request response:request.response];
-    [self.requests removeObject:request];
+    dispatch_async(self.isolationQueue, ^{
+        [connection.requests removeObject:request];
+    });
 }
 
 #pragma mark - State
@@ -208,12 +220,19 @@ NS_ASSUME_NONNULL_END
 #pragma mark - GCDAsyncSocketDelegate
 
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
+    CRConnection * __weak connection = self;
     switch (tag) {
         case CRConnectionSocketTagSendingResponse: {
-            CRRequest* request = (CRRequest*)self.requests.firstObject;
-            if ( request.bufferedResponseData.length > 0 ) {
-                [self sendDataToSocket:request.bufferedResponseData forRequest:request];
-            }
+            dispatch_async(self.isolationQueue, ^{ @autoreleasepool {
+                if ( connection.requests.count > 0 && !self.willDisconnect ) {
+                    CRRequest* request = connection.requests.firstObject;
+                    if ( request.bufferedResponseData.length > 0 ) {
+                        dispatch_async(sock.delegateQueue, ^{
+                            [connection sendDataToSocket:request.bufferedResponseData forRequest:request];
+                        });
+                    }
+                }
+            }});
         } break;
 
         default:
@@ -222,7 +241,6 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
-    [self.requests removeAllObjects];
     [self.server didCloseConnection:self];
 }
 

@@ -80,18 +80,13 @@ NS_ASSUME_NONNULL_END
     self = [super init];
     if ( self != nil ) {
         if ( data != nil ) {
-            [data getBytes:&_version range:NSMakeRange(0, 1)];
-            [data getBytes:&_type range:NSMakeRange(1, 1)];
-
-            [data getBytes:&_requestID range:NSMakeRange(2, 2)];
-            _requestID = CFSwapInt16BigToHost(_requestID);
-
-            [data getBytes:&_contentLength range:NSMakeRange(4, 2)];
-            _contentLength = CFSwapInt16BigToHost(_contentLength);
-
-            [data getBytes:&_paddingLength range:NSMakeRange(6, 1)];
-
-            _reserved = 0x00;
+            const char *bytes = data.bytes;
+            _version = bytes[0];
+            _type = bytes[1];
+            _requestID = (bytes[2] << 8) + bytes[3];
+            _contentLength = (bytes[4] << 8) + bytes[5];
+            _paddingLength = bytes[6];
+            _reserved = bytes[7];
         }
     }
     return self;

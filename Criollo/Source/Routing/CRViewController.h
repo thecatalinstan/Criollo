@@ -7,26 +7,29 @@
 //
 
 #import "CRTypes.h"
+#import "CRRouteController.h"
 
 @class CRView, CRRequest, CRResponse;
 
 NS_ASSUME_NONNULL_BEGIN
-@interface CRViewController : NSObject
+
+@interface CRViewController : CRRouteController
 
 @property (nonatomic, strong, nullable) CRView* view;
 
-@property (nonatomic, strong) NSMutableDictionary<NSString*, NSString*> *templateVariables;
+@property (nonatomic, strong) NSMutableDictionary<NSString*, NSString*> *vars;
 
 @property (nonatomic, readonly) NSString *nibName;
 @property (nonatomic, readonly, nullable) NSBundle *nibBundle;
 
 @property (nonatomic, readonly) BOOL shouldFinishResponse;
-@property (nonatomic, readonly) CRRouteBlock routeBlock;
 
-- (instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil;
+- (instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil prefix:(NSString * _Nullable)prefix NS_DESIGNATED_INITIALIZER;
 
 - (void)viewDidLoad;
 - (NSString*)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response;
 
 @end
+
 NS_ASSUME_NONNULL_END

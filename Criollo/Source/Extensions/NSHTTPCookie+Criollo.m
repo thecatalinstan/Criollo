@@ -40,13 +40,13 @@
     }
     NSString* key = @"Set-Cookie";
     NSMutableArray* headerFields = [NSMutableArray arrayWithCapacity:cookies.count];
-    [cookies enumerateObjectsUsingBlock:^(NSHTTPCookie* obj, NSUInteger idx, BOOL *stop) {
+    [cookies enumerateObjectsUsingBlock:^(NSHTTPCookie* obj, NSUInteger idx, BOOL *stop) { @autoreleasepool {
         NSString* headerField = obj.HTTPHeaderField;
         if ( headerField != nil ) {
             [headerFields addObject:headerField];
         }
-    }];
-    return @{ key: [headerFields componentsJoinedByString:@", "] };
+    }}];
+    return @{key:[headerFields componentsJoinedByString:@", "]};
 }
 
 @end

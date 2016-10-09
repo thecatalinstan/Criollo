@@ -49,8 +49,10 @@
     // Create ENV from HTTP headers
     NSMutableDictionary* env = [NSMutableDictionary dictionary];
     [self.currentRequest.allHTTPHeaderFields enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString* headerName = [@"HTTP_" stringByAppendingString:[key.uppercaseString stringByReplacingOccurrencesOfString:@"-" withString:@"_"]];
-        [env setObject:obj forKey:headerName];
+        @autoreleasepool {
+            NSString* headerName = [@"HTTP_" stringByAppendingString:[key.uppercaseString stringByReplacingOccurrencesOfString:@"-" withString:@"_"]];
+            [env setObject:obj forKey:headerName];
+        }
     }];
 
     if ( env[@"HTTP_CONTENT_LENGTH"] ) {
@@ -63,6 +65,7 @@
     if ( env[@"HTTP_HOST"]) {
         env[@"SERVER_NAME"] = env[@"HTTP_HOST"];
     }
+
 //    env[@"SERVER_SOFTWARE"] = @"";
     env[@"REQUEST_METHOD"] = NSStringFromCRHTTPMethod(self.currentRequest.method);
     env[@"SERVER_PROTOCOL"] = NSStringFromCRHTTPVersion(self.currentRequest.version);
@@ -77,6 +80,10 @@
     [self.currentRequest setEnv:env];
 
     [super didReceiveCompleteRequestHeaders];
+
+    if ( self.willDisconnect ) {
+        return;
+    }
 
     CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.server.configuration;
     requestBodyLength = [self.currentRequest valueForHTTPHeaderField:@"Content-Length"].integerValue;
@@ -96,7 +103,6 @@
     [super didReceiveCompleteRequest];
 }
 
-
 #pragma mark - Responses
 
 - (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(CRHTTPVersion)version {
@@ -112,34 +118,72 @@
 
     if ( tag == CRHTTPConnectionSocketTagBeginReadingRequest ) {
 
-        // Parse the first line of the header
-        NSString* decodedHeaders = [[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(0, data.length - [CRConnection CRLFCRLFData].length)] encoding:NSUTF8StringEncoding];
-        NSArray<NSString*>* decodedHeaderLines = [decodedHeaders componentsSeparatedByString:@"\r\n"];
-        NSString* decodedHeadersFirstLine = decodedHeaderLines[0];
-        NSArray<NSString*>* decodedHeaderComponents = [decodedHeadersFirstLine componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        NSData* spaceData = [@" " dataUsingEncoding:NSUTF8StringEncoding];
+        BOOL result = YES;
 
-        if ( decodedHeaderComponents.count == 3 ) {
-            NSString *methodSpec = decodedHeaderComponents[0];
-            NSString *path = decodedHeaderComponents[1];
-            NSString *versionSpec = decodedHeaderComponents[2];
-            __block NSString *host;
+        NSRange rangeOfFirstNewline = [data rangeOfData:[CRConnection CRLFData] options:0 range:NSMakeRange(0, data.length)];
+        NSRange rangeOfFirstSpace = [data rangeOfData:spaceData options:0 range:NSMakeRange(0, rangeOfFirstNewline.location)];
+        if (rangeOfFirstSpace.location != NSNotFound ) {
 
-            // Get the "Host" header
-            [decodedHeaderLines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if ( [obj hasPrefix:@"Host: "] ) {
-                    host = [[obj substringFromIndex:5] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-                    *stop = YES;
+            NSRange methodRange = NSMakeRange(0, rangeOfFirstSpace.location);
+            NSRange pathSearchRange = NSMakeRange(rangeOfFirstSpace.location + rangeOfFirstSpace.length, rangeOfFirstNewline.location - rangeOfFirstSpace.location - rangeOfFirstSpace.length);
+            NSRange rangeOfSecondSpace = [data rangeOfData:spaceData options:0 range:pathSearchRange];
+
+            if ( rangeOfSecondSpace.location != NSNotFound ) {
+                NSRange pathRange = NSMakeRange(pathSearchRange.location, rangeOfSecondSpace.location - pathSearchRange.location);
+                NSRange versionRange = NSMakeRange(rangeOfSecondSpace.location + rangeOfSecondSpace.length, rangeOfFirstNewline.location - rangeOfSecondSpace.location - rangeOfSecondSpace.length);
+
+                NSString * methodSpec = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes + methodRange.location length:methodRange.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
+                CRHTTPMethod requestMethod = CRHTTPMethodMake(methodSpec);
+
+                if ( requestMethod != CRHTTPMethodNone ) {
+                    NSString* pathSpec = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes + pathRange.location length:pathRange.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
+
+                    NSString* versionSpec = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes + versionRange.location length:versionRange.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
+                    CRHTTPVersion version = CRHTTPVersionMake(versionSpec);
+
+                    NSRange rangeOfHostHeader = [data rangeOfData:[@"Host: " dataUsingEncoding:NSUTF8StringEncoding] options:0 range:NSMakeRange(0, data.length)];
+
+                    if ( rangeOfHostHeader.location != NSNotFound || version == CRHTTPVersion1_0 ) {
+                        NSRange rangeOfNewLineAfterHost = [data rangeOfData:[CRConnection CRLFData] options:0 range:NSMakeRange(rangeOfHostHeader.location + rangeOfHostHeader.length, data.length - rangeOfHostHeader.location - rangeOfHostHeader.length)];
+
+                        if ( rangeOfNewLineAfterHost.location == NSNotFound ) {
+                            rangeOfNewLineAfterHost.location = data.length - 1;
+                        }
+
+                        NSRange hostSpecRange = NSMakeRange(rangeOfHostHeader.location + rangeOfHostHeader.length, rangeOfNewLineAfterHost.location - rangeOfHostHeader.location - rangeOfHostHeader.length);
+                        NSString* hostSpec = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes + hostSpecRange.location length:hostSpecRange.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
+
+                        // TODO: request.URL should be parsed using no memcpy and using the actual scheme
+                        NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", hostSpec, pathSpec]];
+                        CRRequest* request = [[CRRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self];
+                        CRHTTPConnection * __weak connection = self;
+                        dispatch_async(self.isolationQueue, ^{
+                            [connection.requests addObject:request];
+                        });
+                        self.currentRequest = request;
+                    } else {
+                        result = NO;
+                    }
+                } else {
+                    result = NO;
                 }
-            }];
-            NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", host, path]];
-            self.currentRequest = [[CRRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self];
+            } else {
+                result = NO;
+            }
         } else {
-            [self.socket disconnectAfterWriting];
+            result = NO;
         }
 
-        BOOL result = [self.currentRequest appendData:data];
-        if (!result) {
-            [self.socket disconnectAfterWriting];
+        if ( !result ) {
+            [self.socket disconnect];
+            return;
+        }
+
+        NSRange remainingDataRange = NSMakeRange(rangeOfFirstNewline.location + rangeOfFirstNewline.length, data.length - rangeOfFirstNewline.location - rangeOfFirstNewline.length);
+        NSData* remainingData = [NSData dataWithBytesNoCopy:(void *)data.bytes + remainingDataRange.location length:remainingDataRange.length freeWhenDone:NO];
+        if ( ! [self.currentRequest appendData:remainingData] ) {
+            [self.socket disconnect];
             return;
         }
 
@@ -147,8 +191,7 @@
         if ( self.currentRequest.headersComplete ) {
             [self didReceiveCompleteRequestHeaders];
         } else {
-            // The request is malformed
-            [self.socket disconnectAfterWriting];
+            [self.socket disconnect];
             return;
         }
 

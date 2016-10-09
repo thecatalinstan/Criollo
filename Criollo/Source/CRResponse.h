@@ -16,7 +16,7 @@
 @interface CRResponse : CRMessage
 
 NS_ASSUME_NONNULL_BEGIN
-@property (nonatomic, strong, nullable) CRConnection *connection;
+@property (nonatomic, weak, nullable) CRConnection *connection;
 @property (nonatomic, weak, nullable) CRRequest *request;
 
 @property (nonatomic, readonly) NSUInteger statusCode;
@@ -47,9 +47,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)redirectToURL:(NSURL *)URL;
 - (void)redirectToURL:(NSURL *)URL statusCode:(NSUInteger)statusCode;
+- (void)redirectToURL:(NSURL *)URL statusCode:(NSUInteger)statusCode finish:(BOOL)finish;
 
 - (void)redirectToLocation:(NSString *)location;
 - (void)redirectToLocation:(NSString *)location statusCode:(NSUInteger)statusCode;
+- (void)redirectToLocation:(NSString *)location statusCode:(NSUInteger)statusCode finish:(BOOL)finish;
 
 - (void)finish;
 

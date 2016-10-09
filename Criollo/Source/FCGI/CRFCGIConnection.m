@@ -66,22 +66,26 @@ NS_ASSUME_NONNULL_END
     // Create HTTP headers from FCGI Params
     NSMutableData* headersData = [NSMutableData data];
     [self.currentRequest.env enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        if ( ![key hasPrefix:@"HTTP_"] ) {
-            return;
+        @autoreleasepool {
+            if ( ![key hasPrefix:@"HTTP_"] ) {
+                return;
+            }
+            NSArray<NSString*>* headerParts = [[key substringFromIndex:5] componentsSeparatedByString:@"_"];
+            NSMutableArray<NSString*>* transformedHeaderParts = [NSMutableArray arrayWithCapacity:headerParts.count];
+
+            [headerParts enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                @autoreleasepool {
+                    NSString* transformedHeaderPart = [[obj substringToIndex:1].uppercaseString stringByAppendingString:[obj substringFromIndex:1].lowercaseString];
+                    [transformedHeaderParts addObject:transformedHeaderPart];
+                }
+            }];
+
+            NSString* headerName = [transformedHeaderParts componentsJoinedByString:@"-"];
+
+            NSData* headerData = [[NSString stringWithFormat:@"%@: %@", headerName, obj] dataUsingEncoding:NSUTF8StringEncoding];
+            [headersData appendData:headerData];
+            [headersData appendData:[CRConnection CRLFData]];
         }
-        NSArray<NSString*>* headerParts = [[key substringFromIndex:5] componentsSeparatedByString:@"_"];
-        NSMutableArray<NSString*>* transformedHeaderParts = [NSMutableArray arrayWithCapacity:headerParts.count];
-
-        [headerParts enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSString* transformedHeaderPart = [[obj substringToIndex:1].uppercaseString stringByAppendingString:[obj substringFromIndex:1].lowercaseString];
-            [transformedHeaderParts addObject:transformedHeaderPart];
-        }];
-
-        NSString* headerName = [transformedHeaderParts componentsJoinedByString:@"-"];
-
-        NSData* headerData = [[NSString stringWithFormat:@"%@: %@", headerName, obj] dataUsingEncoding:NSUTF8StringEncoding];
-        [headersData appendData:headerData];
-        [headersData appendData:[CRConnection CRLFData]];
     }];
 
     [self.currentRequest appendData:headersData];
@@ -114,70 +118,74 @@ NS_ASSUME_NONNULL_END
 
     void(^parseValuePairBlock)(NSUInteger*, NSString**, NSString**, NSUInteger*) = ^(NSUInteger* offset, NSString** name, NSString** value, NSUInteger* bytesRead) {
 
-        // Refer to http://www.fastcgi.com/drupal/node/6?q=node/22#S3.4 for rules in parsing dictionaries
+        @autoreleasepool {
+            // Refer to http://www.fastcgi.com/drupal/node/6?q=node/22#S3.4 for rules in parsing dictionaries
 
-        NSUInteger initialOffset = *offset;
+            NSUInteger initialOffset = *offset;
 
-        UInt8 pos0, pos1, pos4;
-        UInt8 valueLengthB3, valueLengthB2, valueLengthB1, valueLengthB0;
-        UInt8 nameLengthB3, nameLengthB2, nameLengthB1, nameLengthB0;
-        UInt32 nameLength, valueLength;
+            UInt8 pos0, pos1, pos4;
+            UInt8 valueLengthB3, valueLengthB2, valueLengthB1, valueLengthB0;
+            UInt8 nameLengthB3, nameLengthB2, nameLengthB1, nameLengthB0;
+            UInt32 nameLength, valueLength;
 
-        [paramsData getBytes:&pos0 range:NSMakeRange(*offset + 0, 1)];
-        [paramsData getBytes:&pos1 range:NSMakeRange(*offset + 1, 1)];
-        [paramsData getBytes:&pos4 range:NSMakeRange(*offset + 4, 1)];
+            const char *bytes = paramsData.bytes;
 
-        if (pos0 >> 7 == 0) {
+            pos0 = bytes[*offset + 0];
+            pos1 = bytes[*offset + 1];
+            pos4 = bytes[*offset + 4];
 
-            // NameValuePair11 or 14
-            nameLength = pos0;
+            if (pos0 >> 7 == 0) {
 
-            if (pos1 >> 7 == 0) {
-                // NameValuePair11
-                valueLength = pos1;
-                *offset += 2;
+                // NameValuePair11 or 14
+                nameLength = pos0;
+
+                if (pos1 >> 7 == 0) {
+                    // NameValuePair11
+                    valueLength = pos1;
+                    *offset += 2;
+                } else {
+                    //NameValuePair14
+                    valueLengthB3 = bytes[*offset + 1];
+                    valueLengthB2 = bytes[*offset + 2];
+                    valueLengthB1 = bytes[*offset + 3];
+                    valueLengthB0 = bytes[*offset + 4];
+                    valueLength = ((valueLengthB3 & 0x7f) << 24) + (valueLengthB2 << 16) + (valueLengthB1 << 8) + valueLengthB0;
+                    *offset += 5;
+                }
+
             } else {
-                //NameValuePair14
-                [paramsData getBytes:&valueLengthB3 range:NSMakeRange(*offset + 1, 1)];
-                [paramsData getBytes:&valueLengthB2 range:NSMakeRange(*offset + 2, 1)];
-                [paramsData getBytes:&valueLengthB1 range:NSMakeRange(*offset + 3, 1)];
-                [paramsData getBytes:&valueLengthB0 range:NSMakeRange(*offset + 4, 1)];
-                valueLength = ((valueLengthB3 & 0x7f) << 24) + (valueLengthB2 << 16) + (valueLengthB1 << 8) + valueLengthB0;
-                *offset += 5;
+
+                // NameValuePair41 or 44
+                nameLengthB3 = bytes[*offset + 1];
+                nameLengthB2 = bytes[*offset + 2];
+                nameLengthB1 = bytes[*offset + 3];
+                nameLengthB0 = bytes[*offset + 4];
+                nameLength = ((nameLengthB3 & 0x7f) << 24) + (nameLengthB2 << 16) + (nameLengthB1 << 8) + nameLengthB0;
+
+                if (pos4 >> 7 == 0) {
+                    //NameValuePair41
+                    valueLength = pos4;
+                    *offset += 5;
+                } else {
+                    //NameValuePair44
+                    valueLengthB3 = bytes[*offset + 4];
+                    valueLengthB2 = bytes[*offset + 5];
+                    valueLengthB1 = bytes[*offset + 6];
+                    valueLengthB0 = bytes[*offset + 7];
+                    valueLength = ((valueLengthB3 & 0x7f) << 24) + (valueLengthB2 << 16) + (valueLengthB1 << 8) + valueLengthB0;
+                    *offset += 8;
+                }
             }
 
-        } else {
-
-            // NameValuePair41 or 44
-            [paramsData getBytes:&nameLengthB3 range:NSMakeRange(*offset + 0, 1)];
-            [paramsData getBytes:&nameLengthB2 range:NSMakeRange(*offset + 1, 1)];
-            [paramsData getBytes:&nameLengthB1 range:NSMakeRange(*offset + 2, 1)];
-            [paramsData getBytes:&nameLengthB0 range:NSMakeRange(*offset + 3, 1)];
-            nameLength = ((nameLengthB3 & 0x7f) << 24) + (nameLengthB2 << 16) + (nameLengthB1 << 8) + nameLengthB0;
-
-            if (pos4 >> 7 == 0) {
-                //NameValuePair41
-                valueLength = pos4;
-                *offset += 5;
-            } else {
-                //NameValuePair44
-                [paramsData getBytes:&valueLengthB3 range:NSMakeRange(*offset + 4, 1)];
-                [paramsData getBytes:&valueLengthB2 range:NSMakeRange(*offset + 5, 1)];
-                [paramsData getBytes:&valueLengthB1 range:NSMakeRange(*offset + 6, 1)];
-                [paramsData getBytes:&valueLengthB0 range:NSMakeRange(*offset + 7, 1)];
-                valueLength = ((valueLengthB3 & 0x7f) << 24) + (valueLengthB2 << 16) + (valueLengthB1 << 8) + valueLengthB0;
-                *offset += 8;
+            *name = [[NSString alloc] initWithBytesNoCopy:(void *)paramsData.bytes + *offset length:nameLength encoding:NSUTF8StringEncoding freeWhenDone:NO];
+            *offset += nameLength;
+            
+            *value = [[NSString alloc] initWithBytes:(void *)paramsData.bytes + *offset length:valueLength encoding:NSUTF8StringEncoding];
+            *offset += valueLength;
+            
+            if ( bytesRead != NULL ) {
+                *bytesRead = *offset - initialOffset;
             }
-        }
-
-        *name = [[NSString alloc] initWithData:[paramsData subdataWithRange:NSMakeRange(*offset + 0, nameLength)] encoding:NSASCIIStringEncoding];
-        *offset += nameLength;
-
-        *value = [[NSString alloc] initWithData:[paramsData subdataWithRange:NSMakeRange(*offset + 0, valueLength)] encoding:NSASCIIStringEncoding];
-        *offset += valueLength;
-
-        if ( bytesRead != NULL ) {
-            *bytesRead = *offset - initialOffset;
         }
     };
 
@@ -222,6 +230,10 @@ NS_ASSUME_NONNULL_END
 
                         NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", host, path]];
                         CRFCGIRequest* request = [[CRFCGIRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self env:currentRequestParams];
+                        CRFCGIConnection * __weak connection = self;
+                        dispatch_async(self.isolationQueue, ^{
+                            [connection.requests addObject:request];
+                        });
                         request.requestID = currentRequestID;
                         request.requestRole = currentRequestRole;
                         request.requestFlags = currentRequestFlags;

@@ -8,27 +8,26 @@
  [![MIT License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat)](https://opensource.org/licenses/MIT) [![Twitter](https://img.shields.io/badge/twitter-@Criolloio-orange.svg?style=flat)](http://twitter.com/Criolloio)
 
 
-
 Criollo helps create really fast standalone web apps that deliver content directly over HTTP or FastCGI. You can write code in Objective-C or Swift. And you can use technologies you know and love: Grand Central Dispatch, NSURLSession, CoreImage and many more. 
 
 It's as easy as this:
 
-```objective-c
-CRServer* server = [[CRHTTPServer alloc] init];
-[server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-    [response send:@"Hello world!"];
-} forPath:@"/"];
-[server startListening];
+```swift
+let server = CRHTTPServer()
+server.get("/") { (request, response, completionHandler) in
+	response.send("Hello world!")
+}
+server.startListening()
 ```
 
-and in Swift:
+and in Objective-C:
 
-```swift
-let server:CRServer = CRHTTPServer()
-server.addBlock({ (request:CRRequest, response:CRResponse, completionHandler:CRRouteCompletionBlock) -> Void in
-	response.send("Hello world!")
-}, forPath: "/")
-server.startListening()
+```objective-c
+CRServer* server = [[CRHTTPServer alloc] init];
+[server get:@"/" block:^(CRRequest * request, CRResponse * response, CRRouteCompletionBlock completionHandler) {
+    [response send:@"Hello world!"];
+}];
+[server startListening];
 ```
 
 ## Why?
@@ -39,7 +38,9 @@ It incorporates an HTTP web server and a [FastCGI](http://fastcgi.com) applicati
 
 ## How to Use
 
-Criollo can easily be embedded as a web-server inside your OS X or iOS app, should you be in need of such a feature, however it was designed to create standalone, long-lived daemon style apps. It is fully [`launchd`](http://launchd.info/) compatible and replicates the lifecycle and behaviour of `NSApplication`, so that the learning curve should be as smooth as possible. 
+Criollo can easily be embedded as a web-server inside your OS X or iOS app, should you be in need of such a feature, however it was designed to create standalone, long-lived daemon style apps. It is fully [`launchd`](http://launchd.info/) compatible and replicates the lifecycle and behavior of `NSApplication`, so that the learning curve should be as smooth as possible. 
+
+For a more real-world example, check out the [criollo.io](https://criollo.io) website, made using Criollo and available for your cloning pleasure at [https://github.com/thecatalinstan/Criollo-Web](https://github.com/thecatalinstan/Criollo-Web).
 
 See the [Hello World Multi Target example](https://github.com/thecatalinstan/Criollo/tree/master/Examples/HelloWorld-MultiTarget) for a demo of the two usage patterns.
 
@@ -48,7 +49,7 @@ See the [Hello World Multi Target example](https://github.com/thecatalinstan/Cri
 - [Download Criollo](https://github.com/thecatalinstan/Criollo/archive/master.zip) and try out the included OS X and iOS [example apps](https://github.com/thecatalinstan/Criollo/Examples). *Criollo requires [CocoaAsyncSocket](https://github.com/robbiehanson/CocoaAsyncSocket), so do not forget to [download](https://github.com/robbiehanson/CocoaAsyncSocket/archive/master.zip) it into `Libraries/CocoaAsyncSocket`*.
 - Read the [“Getting Started” guide](https://github.com/thecatalinstan/Criollo/wiki/Getting-Started) and move further with the [“Doing More Stuff” guide](https://github.com/thecatalinstan/Criollo/wiki/Doing-More-Stuff)
 - Check out the [documentation](http://cocoadocs.org/docsets/Criollo/) for a look at the APIs available
-- Learn how to deploy your Criollo apps in the [“Deployment” guide](https://guthub.com/thecatalinstan/Criollo/wiki/Deployment)
+- Learn how to deploy your Criollo apps in the [“Deployment” guide](https://github.com/thecatalinstan/Criollo/wiki/Deployment)
 
 ## Installing
 

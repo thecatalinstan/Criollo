@@ -7,11 +7,11 @@
 //
 
 #import "NSString+Criollo.h"
+#import "CRTypes.h"
 
 @implementation NSString (Criollo)
 
-- (NSString *)stringByDecodingURLEncodedString
-{
+- (NSString *)stringByDecodingURLEncodedString {
 	NSString* returnString;
 	if ( [self respondsToSelector:@selector(stringByRemovingPercentEncoding)] ) {
 		returnString = self.stringByRemovingPercentEncoding;
@@ -31,8 +31,7 @@
     return returnString;
 }
 
-- (NSString *)URLEncodedString
-{
+- (NSString *)URLEncodedString {
 	NSString* returnString;
 	NSString* allowedCharacters = @"!*'();:&=$,/?%#[]";
 	
@@ -55,18 +54,36 @@
     return returnString;
 }
 
-- (NSString *)uppercaseFirstLetterString
-{
+- (NSString *)uppercaseFirstLetterString {
     return [[self substringToIndex:1].uppercaseString stringByAppendingString:[self substringFromIndex:1].lowercaseString];
 }
 
-- (NSString *)stringbyFormattingHTTPHeader
-{
+- (NSString *)stringbyFormattingHTTPHeader {
     NSMutableArray* words = [[self componentsSeparatedByString:@"-"] mutableCopy];
     [words enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [words setObject:[obj uppercaseFirstLetterString] atIndexedSubscript:idx];
     }];
     return [words componentsJoinedByString:@"-"];
+}
+
+- (NSString *)pathRelativeToPath:(NSString *)path {
+    NSUInteger relativePathStart = [self rangeOfString:path options:NSBackwardsSearch].location;
+    if ( relativePathStart == NSNotFound ) {
+        relativePathStart = 0;
+    }
+
+    NSString * relativePath;
+    @try {
+        relativePath = [[self substringFromIndex:relativePathStart + path.length] stringByStandardizingPath];
+    } @catch (NSException *exception) {
+        relativePath = @"";
+    }
+
+    if ( ![relativePath hasPrefix:CRPathSeparator] ) {
+        relativePath = [CRPathSeparator stringByAppendingString:relativePath ? : @""];
+    }
+
+    return relativePath;
 }
 
 @end

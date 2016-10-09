@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Catalin Stan. All rights reserved.
 //
 
-#import <Criollo/CRApplication.h>
+#import "CRApplication.h"
 
 NSString* const Criollo = @"Criollo";
 NSString* const CRErrorDomain = @"CRErrorDomain";
@@ -19,39 +19,9 @@ NSString* const CRApplicationRunLoopMode = @"NSDefaultRunLoopMode";
 NSString* const CRApplicationWillFinishLaunchingNotification = @"CRApplicationWillFinishLaunchingNotification";
 NSString* const CRApplicationDidFinishLaunchingNotification = @"CRApplicationDidFinishLaunchingNotification";
 NSString* const CRApplicationWillTerminateNotification = @"CRApplicationWillTerminateNotification";
+NSString* const CRApplicationDidReceiveSignalNotification = @"CRApplicationDidReceiveSignal";
 
-@class CRApplication;
 CRApplication* CRApp;
-
-static void installSignalHandlers(void) {
-    static dispatch_once_t   onceToken;
-    static dispatch_source_t signalSource;
-
-    dispatch_once(&onceToken, ^{
-        signal(SIGTERM, SIG_IGN);
-
-        signalSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, SIGTERM, 0, dispatch_get_main_queue());
-        assert(signalSource != NULL);
-
-        dispatch_source_set_event_handler(signalSource, ^{
-            assert([NSThread isMainThread]);
-            [CRApp logErrorFormat: @"Got SIGTERM."];
-            [CRApp terminate:nil];
-        });
-
-        dispatch_resume(signalSource);
-    });
-}
-
-int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> delegate) {
-    @autoreleasepool {
-        installSignalHandlers();
-        CRApplication* app = [[CRApplication alloc] initWithDelegate:delegate];
-        [app run];
-    }
-    return EXIT_SUCCESS;
-}
-
 
 @interface CRApplication () {
     __strong id<CRApplicationDelegate> _delegate;
@@ -65,6 +35,8 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     CFRunLoopObserverRef mainRunLoopObserver;
 }
 
+@property (nonatomic, readonly, nonnull) NSMutableArray<dispatch_source_t> * dispatchSources;
+
 - (void)startRunLoop;
 - (void)stopRunLoop;
 
@@ -74,6 +46,36 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 - (void)waitingOnTerminateLaterReplyTimerCallback;
 
 @end
+
+dispatch_source_t CRApplicationInstallSignalHandler(int sig) {
+    @autoreleasepool {
+        signal(sig, SIG_IGN);
+        dispatch_source_t signalSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, sig, 0, dispatch_get_main_queue());
+        dispatch_source_set_event_handler(signalSource, ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationDidReceiveSignalNotification object:@(sig)];
+        });
+        dispatch_resume(signalSource);
+        return signalSource;
+    }
+};
+
+int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> delegate) {
+    @autoreleasepool {
+        CRApplication* app = [[CRApplication alloc] initWithDelegate:delegate];
+
+        [app.dispatchSources addObject:CRApplicationInstallSignalHandler(SIGTERM)];
+        [app.dispatchSources addObject:CRApplicationInstallSignalHandler(SIGINT)];
+        [app.dispatchSources addObject:CRApplicationInstallSignalHandler(SIGQUIT)];
+        [app.dispatchSources addObject:CRApplicationInstallSignalHandler(SIGTSTP)];
+
+        [app run];
+
+        [app.dispatchSources enumerateObjectsUsingBlock:^(dispatch_source_t  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            dispatch_source_cancel(obj);
+        }];
+    }
+    return EXIT_SUCCESS;
+}
 
 @implementation CRApplication
 
@@ -106,6 +108,7 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 
 + (CRApplication *)sharedApplication {
 	Class class;
+
 	if( ! CRApp ) {
 		if( ! ( class = [NSBundle mainBundle].principalClass ) ) {
 			NSLog(@"Main bundle does not define an existing principal class: %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSPrincipalClass"]);
@@ -114,7 +117,7 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 		if( ! [class isSubclassOfClass:self.class] ) {
 			NSLog(@"Principal class (%@) of main bundle is not subclass of %@", NSStringFromClass(class), NSStringFromClass(self.class) );
 		}
-		[class new];
+		CRApp = [class new];
 	}
 
 	return CRApp;
@@ -124,6 +127,14 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     self = [super init];
     if ( self != nil ) {
         CRApp = self;
+        _dispatchSources = [NSMutableArray array];
+        [[NSNotificationCenter defaultCenter] addObserverForName:CRApplicationDidReceiveSignalNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            NSLog(@"Got signal %@.", note.object);
+            int signal = [note.object intValue];
+            if ( signal == SIGTERM || signal == SIGINT || signal == SIGQUIT ) {
+                [CRApp terminate:nil];
+            }
+        }];
     }
     return self;
 }

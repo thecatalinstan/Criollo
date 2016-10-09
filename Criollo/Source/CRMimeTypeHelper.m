@@ -24,13 +24,14 @@ NS_ASSUME_NONNULL_END
 
 @implementation CRMimeTypeHelper
 
+static const CRMimeTypeHelper *sharedHelper;
+
++ (void)initialize {
+    sharedHelper = [[CRMimeTypeHelper alloc] init];
+}
+
 + (instancetype)sharedHelper {
-    static CRMimeTypeHelper *sharedHelper;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedHelper = [[CRMimeTypeHelper alloc] init];
-    });
-    return sharedHelper;
+    return (CRMimeTypeHelper *)sharedHelper;
 }
 
 - (instancetype)init {

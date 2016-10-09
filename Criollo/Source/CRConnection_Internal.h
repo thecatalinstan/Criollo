@@ -11,14 +11,15 @@
 @class GCDAsyncSocket, CRServer, CRRequest;
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface CRConnection ()
 
-@property (nonatomic, strong) GCDAsyncSocket* socket;
+@property (nonatomic, strong, nullable) GCDAsyncSocket* socket;
 @property (nonatomic, weak) CRServer* server;
 
 @property (nonatomic, strong) NSMutableArray<CRRequest*>* requests;
+@property (nonatomic, weak, nullable) CRRequest* currentRequest;
 
-@property (nonatomic, strong, nullable) CRRequest* currentRequest;
 @property (nonatomic, readonly, strong) dispatch_queue_t isolationQueue;
 
 @property (nonatomic, readonly) BOOL willDisconnect;
@@ -41,4 +42,5 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)didFinishResponseForRequest:(CRRequest *)request;
 
 @end
+
 NS_ASSUME_NONNULL_END

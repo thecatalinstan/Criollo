@@ -7,6 +7,7 @@
 //
 
 #import "CRTypes.h"
+#import "CRRouter.h"
 
 #define CRServerErrorDomain                   @"CRServerErrorDomain"
 #define CRServerSocketError                   2001
@@ -14,9 +15,11 @@
 @class CRServer, CRServerConfiguration, GCDAsyncSocket, CRConnection, CRRequest, CRResponse, CRRoute;
 
 NS_ASSUME_NONNULL_BEGIN
+
 @protocol CRServerDelegate <NSObject>
 
 @optional
+
 - (void)serverWillStartListening:(CRServer *)server;
 - (void)serverDidStartListening:(CRServer *)server;
 
@@ -31,10 +34,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface CRServer : NSObject
+@interface CRServer : CRRouter
 
-@property (nonatomic, strong, nullable) id<CRServerDelegate> delegate;
-@property (nonatomic, strong) CRRouteBlock notFoundBlock;
+@property (nonatomic, weak, nullable) id<CRServerDelegate> delegate;
 @property (nonatomic, strong, nullable) dispatch_queue_t delegateQueue;
 
 - (instancetype)initWithDelegate:(id<CRServerDelegate> _Nullable)delegate;
@@ -46,25 +48,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)startListening:(NSError * _Nullable __autoreleasing * _Nullable)error portNumber:(NSUInteger)portNumber interface:(NSString * _Nullable)interface;
 
 - (void)stopListening;
-- (void)closeAllConnections;
+- (void)closeAllConnections:(dispatch_block_t _Nullable)completion;
 
-- (void)addBlock:(CRRouteBlock)block;
-- (void)addBlock:(CRRouteBlock)block forPath:(NSString * _Nullable)path;
-- (void)addBlock:(CRRouteBlock)block forPath:(NSString * _Nullable)path HTTPMethod:(CRHTTPMethod)method;
-- (void)addBlock:(CRRouteBlock)block forPath:(NSString * _Nullable)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive;
-
-- (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil forPath:(NSString *)path;
-- (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method;
-- (void)addController:(__unsafe_unretained Class)controllerClass withNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil forPath:(NSString *)path HTTPMethod:(CRHTTPMethod)method recursive:(BOOL)recursive;
-
-- (void)mountStaticDirectoryAtPath:(NSString *)directoryPath forPath:(NSString *)path;
-- (void)mountStaticDirectoryAtPath:(NSString *)directoryPath forPath:(NSString *)path options:(CRStaticDirectoryServingOptions)options;
-
-- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path;
-- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options;
-- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName;
-- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType;
-- (void)mountStaticFileAtPath:(NSString *)filePath forPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
 
 @end
+
 NS_ASSUME_NONNULL_END

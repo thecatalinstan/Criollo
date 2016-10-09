@@ -8,27 +8,24 @@
 
 #import "CRTypes.h"
 
-#define CRPathSeparator                     @"/"
-#define CRPathAnyPath                       @"*"
-
 @class CRRequest, CRResponse;
-
-@interface CRRoute : NSObject
 
 NS_ASSUME_NONNULL_BEGIN
 
-@property (nonatomic, strong) CRRouteBlock block;
+@interface CRRoute : NSObject
 
-+ (CRRoute *)routeWithBlock:(CRRouteBlock)block;
-+ (CRRoute *)routeWithControllerClass:(__unsafe_unretained Class )controllerClass nibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil;
-+ (CRRoute *)routeWithStaticDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix options:(CRStaticDirectoryServingOptions)options;
-+ (CRRoute *)routeWithStaticFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
+@property (nonatomic) CRHTTPMethod method;
+@property (nonatomic, strong) NSString * path;
+@property (nonatomic) BOOL recursive;
+@property (nonatomic, copy) CRRouteBlock block;
 
-- (instancetype)initWithBlock:(CRRouteBlock)block NS_DESIGNATED_INITIALIZER;
-- (instancetype)initWithControllerClass:(__unsafe_unretained Class )controllerClass nibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil;
-- (instancetype)initWithStaticDirectoryAtPath:(NSString *)directoryPath prefix:(NSString *)prefix options:(CRStaticDirectoryServingOptions)options;
-- (instancetype)initWithStaticFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
+- (instancetype)initWithBlock:(CRRouteBlock)block method:(CRHTTPMethod)method path:(NSString * _Nullable)path recursive:(BOOL)recursive NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithControllerClass:(__unsafe_unretained Class )controllerClass method:(CRHTTPMethod)method path:(NSString * _Nullable)path recursive:(BOOL)recursive;
+- (instancetype)initWithViewControllerClass:(__unsafe_unretained Class )viewControllerClass nibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil method:(CRHTTPMethod)method path:(NSString * _Nullable)path recursive:(BOOL)recursive;
 
-NS_ASSUME_NONNULL_END
+- (instancetype)initWithStaticDirectoryAtPath:(NSString *)directoryPath options:(CRStaticDirectoryServingOptions)options path:(NSString * _Nullable)path;
+- (instancetype)initWithStaticFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition path:(NSString * _Nullable)path;
 
 @end
+
+NS_ASSUME_NONNULL_END
