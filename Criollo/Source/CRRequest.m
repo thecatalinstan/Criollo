@@ -18,17 +18,17 @@
 @implementation CRRequest {
     __strong NSMutableDictionary* _env;
 
-//    __block NSString * _multipartBoundary;
-//    __block dispatch_once_t _multipartBoundaryOnceToken;
-//
-//    __block NSString * _multipartBoundaryPrefixedString;
-//    __block dispatch_once_t _multipartBoundaryPrefixedStringOnceToken;
-//
-//    __block NSData * _multipartBoundaryPrefixedData;
-//    __block dispatch_once_t _multipartBoundaryPrefixedDataOnceToken;
-//
-//    NSString* currentMultipartBodyKey;
-//    NSString* currentMultipartFileKey;
+    __block NSString * _multipartBoundary;
+    __block dispatch_once_t _multipartBoundaryOnceToken;
+
+    __block NSString * _multipartBoundaryPrefixedString;
+    __block dispatch_once_t _multipartBoundaryPrefixedStringOnceToken;
+
+    __block NSData * _multipartBoundaryPrefixedData;
+    __block dispatch_once_t _multipartBoundaryPrefixedDataOnceToken;
+
+    NSString* currentMultipartBodyKey;
+    NSString* currentMultipartFileKey;
 }
 
 - (instancetype)init {
@@ -235,8 +235,6 @@
         }
 
     }
-
-
     return result;
 }
 
@@ -248,30 +246,30 @@
     }
 }
 
-//- (BOOL)appendBodyData:(NSData *)data forKey:(NSString *)key {
-//    NSLog(@"%s %@ => %lu bytes", __PRETTY_FUNCTION__, key, (unsigned long)data.length);
-//
-//    BOOL result = YES;
-//
-//    if ( _body == nil ) {
-//        _body = [NSMutableDictionary dictionary];
-//    }
-//    NSString* dataString = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes length:data.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
-//    NSMutableDictionary* body = _body;
-//    if ( body[key] == nil ) {
-//        body[key] = [NSMutableString stringWithString:dataString];
-//    } else {
-//        [((NSMutableString *) body[key]) appendString:dataString];
-//    }
-//
-//    return result;
-//}
+- (BOOL)appendBodyData:(NSData *)data forKey:(NSString *)key {
+    NSLog(@"%s %@ => %lu bytes", __PRETTY_FUNCTION__, key, (unsigned long)data.length);
 
-//- (BOOL)appendFileData:(NSData *)data forKey:(NSString *)key {
-//    NSLog(@"%s %@ => %lu bytes", __PRETTY_FUNCTION__, key, (unsigned long)data.length);
-//
-//    return YES;
-//}
+    BOOL result = YES;
+
+    if ( _body == nil ) {
+        _body = [NSMutableDictionary dictionary];
+    }
+    NSString* dataString = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes length:data.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
+    NSMutableDictionary* body = _body;
+    if ( body[key] == nil ) {
+        body[key] = [NSMutableString stringWithString:dataString];
+    } else {
+        [((NSMutableString *) body[key]) appendString:dataString];
+    }
+
+    return result;
+}
+
+- (BOOL)appendFileData:(NSData *)data forKey:(NSString *)key {
+    NSLog(@"%s %@ => %lu bytes", __PRETTY_FUNCTION__, key, (unsigned long)data.length);
+
+    return YES;
+}
 
 - (void)bufferResponseData:(NSData *)data {
     if ( self.bufferedResponseData == nil ) {
@@ -279,28 +277,6 @@
     } else {
         [self.bufferedResponseData appendData:data];
     }
-}
-
-- (void)validateMultipartBody:(NSData*)bodyData {
-    //    // Validate the input
-    //    NSData* prefixData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes length:boundaryData.length freeWhenDone:NO];
-    //    if ( [prefixData isEqualToData:boundaryData] ) {
-    //        NSData* suffixData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes + bodyData.length - boundaryPrefixData.length - 2 length:boundaryPrefixData.length freeWhenDone:NO];
-    //        if ( [suffixData isEqualToData:boundaryPrefixData] ) {
-    //            NSData* lastBoundaryData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes + bodyData.length - boundaryPrefixData.length - boundaryData.length - 2 length:boundaryData.length freeWhenDone:NO];
-    //            if ( [lastBoundaryData isEqualToData:boundaryData] ) {
-    //            } else {
-    //                result = NO;
-    //                *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not end with %@%@", boundaryString, boundaryPrefixString]}];
-    //            }
-    //        } else {
-    //            result = NO;
-    //            *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not end with \"%@\"", boundaryPrefixString]}];
-    //        }
-    //    } else {
-    //        result = NO;
-    //        *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not start with the boundary. (%@)", boundaryString]}];
-    //    }
 }
 
 - (BOOL)parseURLEncodedBodyData:(NSError *__autoreleasing  _Nullable *)error {
@@ -381,6 +357,28 @@
 //        });
 //    }
 //    return _multipartBoundaryPrefixedData;
+//}
+//
+//- (void)validateMultipartBody:(NSData*)bodyData {
+//        // Validate the input
+//        NSData* prefixData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes length:boundaryData.length freeWhenDone:NO];
+//        if ( [prefixData isEqualToData:boundaryData] ) {
+//            NSData* suffixData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes + bodyData.length - boundaryPrefixData.length - 2 length:boundaryPrefixData.length freeWhenDone:NO];
+//            if ( [suffixData isEqualToData:boundaryPrefixData] ) {
+//                NSData* lastBoundaryData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes + bodyData.length - boundaryPrefixData.length - boundaryData.length - 2 length:boundaryData.length freeWhenDone:NO];
+//                if ( [lastBoundaryData isEqualToData:boundaryData] ) {
+//                } else {
+//                    result = NO;
+//                    *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not end with %@%@", boundaryString, boundaryPrefixString]}];
+//                }
+//            } else {
+//                result = NO;
+//                *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not end with \"%@\"", boundaryPrefixString]}];
+//            }
+//        } else {
+//            result = NO;
+//            *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not start with the boundary. (%@)", boundaryString]}];
+//        }
 //}
 
 @end
