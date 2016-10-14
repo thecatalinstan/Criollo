@@ -14,7 +14,7 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ## [0.4.4](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.4) (09/07/2016)
 
-**Released on Wednsday, September 7, 2016**. This release includes memory allocation and performance improvements. No API were changed.
+**Released on Wednesday, September 7, 2016**. This release includes memory allocation and performance improvements. No API were changed.
 
 ## [0.4.1](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.1) (07/26/2016)
 
