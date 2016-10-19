@@ -119,11 +119,13 @@ static const NSData * CRLFCRLFData;
         return;
     }
 
-    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, (unsigned long)data.length);
+//    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, (unsigned long)data.length);
+//    NSLog(@" * %s %@", __PRETTY_FUNCTION__, [[NSString alloc] initWithBytesNoCopy:(void*)data.bytes length:data.length encoding:NSASCIIStringEncoding freeWhenDone:NO]);
+
     if ([self.currentRequest.env[@"HTTP_CONTENT_TYPE"] hasPrefix:CRRequestTypeMultipart]) {
         NSError* bodyParsingError;
         if ( ![self.currentRequest parseMultipartBodyDataChunk:data error:&bodyParsingError] ) {
-            NSLog(@" * bodyParsingError = %@", bodyParsingError);
+            [CRApp logErrorFormat:@"%@" , bodyParsingError];
         }
     } else {
         [self bufferBodyData:data forRequest:self.currentRequest];
@@ -147,18 +149,15 @@ static const NSData * CRLFCRLFData;
             result = [self.currentRequest parseJSONBodyData:&bodyParsingError];
         } else if ([contentType hasPrefix:CRRequestTypeURLEncoded]) {
             result = [self.currentRequest parseURLEncodedBodyData:&bodyParsingError];
+        } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
+            // multipart/form-data requests are parsed as they come in and not once the
+            // request hast been fully received ;)
         } else {
             result = [self.currentRequest parseBufferedBodyData:&bodyParsingError];
         }
 
-        // multipart/form-data requests are parsed as they come in and not once the
-        // request hast been fully received ;)
-
         if ( !result ) {
-            NSLog(@" * bodyParsingError = %@", bodyParsingError);
-        } else {
-            NSLog(@" * request.body = %@", self.currentRequest.body);
-            NSLog(@" * bufferedBodyData = %lu bytes", (unsigned long)self.currentRequest.bufferedBodyData.length);
+            [CRApp logErrorFormat:@"%@" , bodyParsingError];
         }
     }
 

@@ -8,6 +8,7 @@
 
 #import "CRRequest.h"
 
+#define CRRequestHeaderNameSeparator        @":"
 #define CRRequestHeaderSeparator            @";"
 #define CRRequestHeaderArraySeparator       @","
 #define CRRequestKeySeparator               @"&"

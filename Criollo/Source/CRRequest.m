@@ -161,20 +161,26 @@
 - (BOOL)parseMultipartBodyDataChunk:(NSData *)data error:(NSError *__autoreleasing  _Nullable * _Nullable)error {
     BOOL result = YES;
 
-    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
-    NSLog(@"%@", [[NSString alloc] initWithBytesNoCopy:(void*)data.bytes length:data.length encoding:NSUTF8StringEncoding freeWhenDone:NO]);
+//    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, data.length);
+//    NSLog(@" * %s %@", __PRETTY_FUNCTION__, [[NSString alloc] initWithBytesNoCopy:(void*)data.bytes length:data.length encoding:NSASCIIStringEncoding freeWhenDone:NO]);
 
     // Search for a boundary
     NSRange searchRange = NSMakeRange(0, data.length);
     NSRange nextBoundaryRange = [data rangeOfData:self.multipartBoundaryPrefixedData options:0 range:searchRange];
 
+//    NSLog(@" * nextBoundaryRange: %@", NSStringFromRange(nextBoundaryRange));
+
     if ( nextBoundaryRange.location != NSNotFound ) {                                   // We have a boundary
+
+        NSData* CRLFData = [CRConnection CRLFData];
+        NSData* CRLFCRLFData = [CRConnection CRLFCRLFData];
 
         // Check if we have something before the boundary
         if ( nextBoundaryRange.location != 0 ) {                                        // There is an existing chunk
 
             // Extract the piece
-            NSData* preambleData = [NSData dataWithBytesNoCopy:(void *)data.bytes length:nextBoundaryRange.location freeWhenDone:NO];
+            NSData* preambleData = [NSData dataWithBytesNoCopy:(void *)data.bytes length:nextBoundaryRange.location - CRLFData.length freeWhenDone:NO];
+//            NSLog(@" * preambleData: %lu bytes", preambleData.length);
 
             // Check if we have something buffered
             if ( self.bufferedBodyData.length > 0 ) {                                   // This is part of a field that
@@ -189,18 +195,18 @@
 
                 // Call this method again with the combined data
                 result = [self parseMultipartBodyDataChunk:bufferedAndPreambleData error:error];
+
             } else {
 
                 // Append the piece to the target if there is one otherwise discard it
                 // (RFC 1341 says to discard anything before the first --boundary (the preamble)
                 // http://www.w3.org/Protocols/rfc1341/7_2_Multipart.html
 
-                if (currentMultipartBodyKey != nil && self.body != nil) {
+                if (currentMultipartBodyKey != nil) {
                     result = [self appendBodyData:preambleData forKey:currentMultipartBodyKey];
-                } else if ( currentMultipartFileKey == nil && self.files != nil ) {
+                } else if ( currentMultipartFileKey != nil) {
                     result = [self appendFileData:preambleData forKey:currentMultipartFileKey];
                 }
-
             }
 
             if ( result ) {
@@ -213,30 +219,84 @@
 
         } else {                                                                        // We are starting with a new field
 
-            NSData* CRLFData = [CRConnection CRLFData];
-            NSData* CRLFCRLFData = [CRConnection CRLFCRLFData];
-
             // Read the header (starts after the --boundary and a CRLF and ends with CRLFCRLF)
             NSUInteger headerStartLocation = nextBoundaryRange.location + nextBoundaryRange.length + CRLFData.length;
             NSRange headerSearchRange = NSMakeRange(headerStartLocation, data.length - headerStartLocation);
-
             NSRange headerTerminatorRange = [data rangeOfData:CRLFCRLFData options:0 range:headerSearchRange];
 
             if ( headerTerminatorRange.location != NSNotFound ) {                                 // We have a header - all good
 
                 NSData* headerData = [NSData dataWithBytesNoCopy:(void *)data.bytes + headerSearchRange.location length:headerTerminatorRange.location - headerSearchRange.location freeWhenDone:NO];
-                NSLog(@" * Header:\n%@", [[NSString alloc] initWithBytesNoCopy:(void *)headerData.bytes length:headerData.length encoding:NSUTF8StringEncoding freeWhenDone:NO] );
+//                NSLog(@" * headerData: %lu bytes", headerData.length);
 
-                // Parse the multipart header
-//                NSMutableDictionary* parsedHeaderFields = [NSMutableDictionary alloc]
-//                NSString* headerString = [[NSString alloc] initWithBytesNoCopy:(void *)headerData length:headerData.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
-//                NSArray<NSString *>* headerLines = [headerString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-//                [headerLines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//
-//                }];
-            } else {                                                                    // There is no header something is very wrong
-                *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse multipart data.",)}];
-                return NO;
+                NSString* headerString = [[NSString alloc] initWithBytesNoCopy:(void *)headerData.bytes length:headerData.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
+//                NSLog(@" * headerString: %@", headerString);
+
+                // Parse the header
+                NSArray<NSString *> * headerLines = [headerString componentsSeparatedByString:@"\r\n"];
+//                NSLog(@" * headerLines: %@", headerLines);
+
+                NSMutableDictionary<NSString *, NSString *> * headerFields = [NSMutableDictionary dictionary];
+                [headerLines enumerateObjectsUsingBlock:^(NSString * _Nonnull headerLine, NSUInteger idx, BOOL * _Nonnull stop) { @autoreleasepool {
+//                    NSLog(@" * headerLines[%lu]: %@", idx, headerLine);
+
+                    NSArray* headerComponents = [headerLine componentsSeparatedByString:CRRequestHeaderNameSeparator];
+                    NSString* headerName = [headerComponents[0] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].lowercaseString;
+                    NSString* headerValue = [headerComponents[1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                    NSArray* headerValueComponents = [headerValue componentsSeparatedByString:CRRequestHeaderSeparator];
+                    [headerValueComponents enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) { @autoreleasepool {
+                        if ( idx == 0 ) {
+                            headerFields[headerName] = [obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                            return;
+                        }
+
+                        NSArray* headerValueComponentsParts = [obj componentsSeparatedByString:CRRequestValueSeparator];
+                        NSString* headerValueComponentsPartName = [headerValueComponentsParts[0] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                        NSString* headerValueComponentsPartValue = [headerValueComponentsParts[1] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\" "]];
+                        headerFields[headerValueComponentsPartName] = headerValueComponentsPartValue;
+                    }}];
+
+                }}];
+
+//                NSLog(@" * headerFields: %@", headerFields);
+
+                // Set the target for the value
+                currentMultipartBodyKey = nil;
+                currentMultipartFileKey = nil;
+                if ( headerFields[@"name"].length > 0 ) {
+                    if ( headerFields[@"filename"] && headerFields[@"filename"].length > 0 ) {
+                        currentMultipartFileKey = headerFields[@"name"];
+                    } else if ( !headerFields[@"filename"] ) {
+                        currentMultipartBodyKey = headerFields[@"name"];
+                    }
+                }
+
+                // Extract the remaining data
+                NSData* nextChunkData = [NSData dataWithBytesNoCopy:(void *)data.bytes + headerTerminatorRange.location + headerTerminatorRange.length length:data.length - headerTerminatorRange.location - headerTerminatorRange.length freeWhenDone:NO];
+//                NSLog(@" * nextChunkData: %@", [[NSString alloc] initWithBytesNoCopy:(void *)nextChunkData.bytes length:nextChunkData.length encoding:NSUTF8StringEncoding freeWhenDone:NO]);
+
+                // Call this method again with the remaining data
+                result = [self parseMultipartBodyDataChunk:nextChunkData error:error];
+
+            } else {
+                // Checkk if this is the end of the message "--boundary--"
+                NSRange terminatorSearchRange = NSMakeRange(nextBoundaryRange.location + nextBoundaryRange.length, data.length - nextBoundaryRange.location - nextBoundaryRange.length);
+                NSRange terminatorCRLFRange = [data rangeOfData:CRLFData options:0 range:terminatorSearchRange];
+
+//                NSLog(@" * terminatorRange = %@", NSStringFromRange(terminatorCRLFRange));
+
+                NSData * terminatorData = [NSData dataWithBytesNoCopy:(void *)data.bytes + terminatorSearchRange.location length:data.length - terminatorCRLFRange.location freeWhenDone:NO];
+//                NSLog(@" * terminatorData = %@ (%lu bytes)", [[NSString alloc] initWithBytesNoCopy:(void *)terminatorData.bytes length:terminatorData.length encoding:NSASCIIStringEncoding freeWhenDone:NO], terminatorData.length);
+//                NSLog(@" * self.multipartBoundaryPrefixData = %@ (%lu bytes)", [[NSString alloc] initWithBytesNoCopy:(void *)self.multipartBoundaryPrefixData.bytes length:self.multipartBoundaryPrefixData.length encoding:NSASCIIStringEncoding freeWhenDone:NO], self.multipartBoundaryPrefixData.length);
+
+                if ( [terminatorData isEqualToData:self.multipartBoundaryPrefixData] ) {
+                    // This is the end of the message
+                    result = YES;
+                } else {
+                    // There is no header something is very wrong
+                    *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse multipart data.",)}];
+                    result = NO;
+                }
             }
 
         }
@@ -247,9 +307,9 @@
         // (RFC 1341 says to discard anything before the first --boundary (the preamble)
         // http://www.w3.org/Protocols/rfc1341/7_2_Multipart.html
 
-        if (currentMultipartBodyKey != nil && self.body != nil) {
+        if ( currentMultipartBodyKey != nil ) {
             result = [self appendBodyData:data forKey:currentMultipartBodyKey];
-        } else if ( currentMultipartFileKey == nil && self.files != nil ) {
+        } else if ( currentMultipartFileKey != nil ) {
             result = [self appendFileData:data forKey:currentMultipartFileKey];
         }
 
@@ -258,6 +318,7 @@
 }
 
 - (void)bufferBodyData:(NSData*)data {
+    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, (unsigned long)data.length);
     if ( self.bufferedBodyData == nil ) {
         self.bufferedBodyData = [NSMutableData dataWithData:data];
     } else {
@@ -266,27 +327,29 @@
 }
 
 - (BOOL)appendBodyData:(NSData *)data forKey:(NSString *)key {
-    NSLog(@"%s %@ => %lu bytes", __PRETTY_FUNCTION__, key, (unsigned long)data.length);
+//    NSLog(@"%s %@ => %lu bytes", __PRETTY_FUNCTION__, key, (unsigned long)data.length);
 
     BOOL result = YES;
 
     if ( _body == nil ) {
         _body = [NSMutableDictionary dictionary];
     }
+
     NSString* dataString = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes length:data.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
-    NSMutableDictionary* body = _body;
-    if ( body[key] == nil ) {
-        body[key] = [NSMutableString stringWithString:dataString];
+    if ( self.body[key] == nil ) {
+        self.body[key] = [NSMutableString stringWithString:dataString];
     } else {
-        [((NSMutableString *) body[key]) appendString:dataString];
+        [((NSMutableString *) self.body[key]) appendString:dataString];
     }
 
+//    NSLog(@" * body = %@", self.body);
     return result;
 }
 
 - (BOOL)appendFileData:(NSData *)data forKey:(NSString *)key {
     NSLog(@"%s %@ => %lu bytes", __PRETTY_FUNCTION__, key, (unsigned long)data.length);
 
+    NSLog(@" * files = %@", self.files);
     return YES;
 }
 
@@ -328,6 +391,7 @@
                     return;
                 }
                 _multipartBoundary = [[obj componentsSeparatedByString:CRRequestValueSeparator][1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+//                NSLog(@" * _multipartBoundary = %@", _multipartBoundary);
             }];
         });
     }
@@ -339,6 +403,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _multipartBoundaryPrefixData = [NSData dataWithBytesNoCopy:(void * )CRRequestBoundaryPrefix.UTF8String length:CRRequestBoundaryPrefix.length freeWhenDone:NO];
+//        NSLog(@" * _multipartBoundaryPrefixData = %@", [[NSString alloc] initWithData:_multipartBoundaryPrefixData encoding:NSUTF8StringEncoding]);
     });
     return _multipartBoundaryPrefixData;
 }
@@ -346,7 +411,8 @@
 - (NSString *)multipartBoundaryPrefixedString {
     if ( self.multipartBoundary.length > 0 ) {
         dispatch_once(&_multipartBoundaryPrefixedStringOnceToken, ^{
-            _multipartBoundaryPrefixedString = [NSString stringWithFormat:@"\r\n%@%@", CRRequestBoundaryPrefix, self.multipartBoundary];
+            _multipartBoundaryPrefixedString = [NSString stringWithFormat:@"%@%@", CRRequestBoundaryPrefix, self.multipartBoundary];
+//            NSLog(@" * _multipartBoundaryPrefixedString = %@", _multipartBoundaryPrefixedString);
         });
     }
     return _multipartBoundaryPrefixedString;
@@ -356,6 +422,7 @@
     if ( self.multipartBoundaryPrefixedString.length > 0 ) {
         dispatch_once(&_multipartBoundaryPrefixedDataOnceToken, ^{
             _multipartBoundaryPrefixedData = [NSData dataWithBytesNoCopy:(void *)self.multipartBoundaryPrefixedString.UTF8String length:self.multipartBoundaryPrefixedString.length freeWhenDone:NO];
+//            NSLog(@" * _multipartBoundaryPrefixedData = %@", [[NSString alloc] initWithData:_multipartBoundaryPrefixedData encoding:NSUTF8StringEncoding]);
         });
     }
     return _multipartBoundaryPrefixedData;

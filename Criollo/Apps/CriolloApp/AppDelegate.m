@@ -15,7 +15,7 @@
 
 #define PortNumber          10781
 #define LogConnections          0
-#define LogRequests             0
+#define LogRequests             1
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -108,13 +108,13 @@ NS_ASSUME_NONNULL_END
         [response write:@"<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"67108864\" />"];
         [response write:@"<div><label>File: </label><input type=\"file\" name=\"file1\" /></div>"];
         [response write:@"<div><label>Text: </label><input type=\"text\" name=\"text1\" /></div>"];
-        [response write:@"<div><label>Check: </label><input type=\"checkbox\" value=\"1\" /></div>"];
+        [response write:@"<div><label>Check: </label><input type=\"checkbox\" name=\"checkbox1\" value=\"1\" /></div>"];
         [response write:@"<div><input type=\"submit\"/></div>"];
         [response write:@"</form>"];
 
         if ( request.method == CRHTTPMethodPost ) {
             [response write:@"<h2>Request Body</h2>"];
-            [response writeFormat:@"<pre>%@</pre>", [[NSString alloc] initWithBytesNoCopy:(void *)[request.body bytes] length:[request.body length] encoding:NSASCIIStringEncoding freeWhenDone:NO]];
+            [response writeFormat:@"<pre>%@</pre>", request.body];
         }
 
         [response write:@"<hr/>"];
@@ -139,7 +139,6 @@ NS_ASSUME_NONNULL_END
 
     // HTML view controller
     [self.server add:@"/controller" viewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil];
-
 
     [self.server add:@"/posts/:pid" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         [response send:request.query];
