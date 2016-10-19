@@ -119,10 +119,6 @@ static const NSData * CRLFCRLFData;
         return;
     }
 
-//    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, (unsigned long)data.length);
-//    NSLog(@" * Content-type: %@", self.currentRequest.env[@"HTTP_CONTENT_TYPE"]);
-//    NSLog(@" * %s %@", __PRETTY_FUNCTION__, [[NSString alloc] initWithBytesNoCopy:(void*)data.bytes length:data.length encoding:NSASCIIStringEncoding freeWhenDone:NO]);
-
     if ([self.currentRequest.env[@"HTTP_CONTENT_TYPE"] hasPrefix:CRRequestTypeMultipart]) {
         NSError* bodyParsingError;
         if ( ![self.currentRequest parseMultipartBodyDataChunk:data error:&bodyParsingError] ) {
@@ -170,10 +166,10 @@ static const NSData * CRLFCRLFData;
 }
 
 - (void)bufferBodyData:(NSData *)data forRequest:(CRRequest *)request {
-//    NSLog(@" * %s %lu bytes", __PRETTY_FUNCTION__, (unsigned long)data.length);
     if ( self.willDisconnect ) {
         return;
     }
+
     [request bufferBodyData:data];
 }
 
@@ -181,6 +177,7 @@ static const NSData * CRLFCRLFData;
     if ( self.willDisconnect ) {
         return;
     }
+
     [request bufferResponseData:data];
 }
 
