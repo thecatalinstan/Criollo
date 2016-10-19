@@ -58,7 +58,7 @@ The preferred way of installing Criollo is through [CocoaPods](http://cocoapods.
 ### Installing with CocoaPods
 
 1. Create the Podfile if you don’t already have one. You can do so by running `pod init` in the folder of the project.
-2. Add Criollo to your Podfile. `pod 'Criollo', '~> 0.1’`
+2. Add Criollo to your Podfile. `pod 'Criollo', '~> 0.4’`
 3. Run `pod install`
 
 Please note that Criollo will download [CocoaAsyncSocket](https://github.com/robbiehanson/CocoaAsyncSocket) as a dependency.
