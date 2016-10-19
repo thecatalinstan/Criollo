@@ -79,9 +79,7 @@ The existing APIs are relatively stable and are unlikely to change dramatically 
 
 ### Missing Biggies
 
-1. **Multipart request body parsing**. Criollo can handle JSON and URL-encoded bodies for now. Upcoming and in progress is the `multipart/form-data` request parsing.
-2. **Binary / MIME body**. Requests that send binary data completely ignore this for now. This implementation is on the way, right after multipart.
-3. **HTTPS** - The workaround for this is putting your app behind a  web server, like Nginx, and using the web-server as a reverse HTTP proxy or FastCGI client. Here’s an example of how to setup nginx to [reverse proxy HTTP requests](https://www.nginx.com/resources/wiki/start/topics/examples/reverseproxycachingexample/) and here’s how to [set up FastCGI](https://www.nginx.com/resources/wiki/start/topics/examples/fastcgiexample/#connecting-nginx-to-the-running-fastcgi-process).
+1. **HTTPS** - The workaround for this is putting your app behind a  web server, like Nginx, and using the web-server as a reverse HTTP proxy or FastCGI client. Here’s an example of how to setup nginx to [reverse proxy HTTP requests](https://www.nginx.com/resources/wiki/start/topics/examples/reverseproxycachingexample/) and here’s how to [set up FastCGI](https://www.nginx.com/resources/wiki/start/topics/examples/fastcgiexample/#connecting-nginx-to-the-running-fastcgi-process).
 
 ## Get in Touch
 
