@@ -38,9 +38,6 @@ NS_ASSUME_NONNULL_END
     if ( self != nil ) {
         self.name = name;
         self.temporaryFileURL = [CRUploadedFile temporaryFileURL];
-
-        self.fileWriteStream = [NSOutputStream outputStreamToFileAtPath:self.temporaryFileURL.path append:YES];
-        [self.fileWriteStream open];
     }
     return self;
 }
@@ -62,6 +59,11 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)appendData:(NSData *)data {
+    if ( self.fileWriteStream == nil ) {
+        self.fileWriteStream = [NSOutputStream outputStreamToFileAtPath:self.temporaryFileURL.path append:YES];
+        [self.fileWriteStream open];
+    }
+
     self.totalBytesToWrite += data.length;
     NSInteger bytesWritten = [self.fileWriteStream write:data.bytes maxLength:data.length];
     if ( bytesWritten > 0 ) {
@@ -77,7 +79,10 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)finishWriting {
+
     [self.fileWriteStream close];
+    self.fileWriteStream = nil;
+
     [self fetchAttributes];
     if ( self.mimeType.length == 0 || [self.mimeType isEqualToString:@"application/octet-stream"]) {
         [self fetchMimeType];
