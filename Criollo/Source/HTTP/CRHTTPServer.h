@@ -12,4 +12,7 @@
 
 @interface CRHTTPServer : CRServer
 
+@property (nonatomic) BOOL isSecure;
+@property (nonatomic, strong, nullable) NSArray *certificates;
+
 @end

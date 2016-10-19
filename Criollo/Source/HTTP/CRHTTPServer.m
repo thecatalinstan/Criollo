@@ -11,6 +11,7 @@
 #import "CRHTTPConnection.h"
 #import "CRConnection_Internal.h"
 #import "CRHTTPServerConfiguration.h"
+#import "GCDAsyncSocket.h"
 
 @implementation CRHTTPServer
 
@@ -24,6 +25,13 @@
 
 - (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket {
     CRHTTPConnection* connection = [[CRHTTPConnection alloc] initWithSocket:socket server:self];
+    if ( self.isSecure && self.certificates.count > 0 ) {
+        NSMutableDictionary *settings = [NSMutableDictionary dictionaryWithCapacity:3];
+        settings[(__bridge NSString *)kCFStreamSSLIsServer] = @YES;
+        settings[(__bridge NSString *)kCFStreamSSLCertificates] = self.certificates;
+        settings[(__bridge NSString *)kCFStreamPropertySocketSecurityLevel] = (__bridge NSString *)(kCFStreamSocketSecurityLevelNegotiatedSSL);
+        [connection.socket startTLS:settings];
+    }
     return connection;
 }
 
