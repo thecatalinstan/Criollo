@@ -116,9 +116,14 @@ NS_ASSUME_NONNULL_END
             if ( request.body != nil ) {
                 [response write:@"<h2>Request Body</h2>"];
                 [response write:@"<pre>"];
-                [request.body enumerateKeysAndObjectsUsingBlock:^(NSString *  _Nonnull key, NSString *  _Nonnull obj, BOOL * _Nonnull stop) {
-                    [response writeFormat:@"%@: %@\n", key, obj];
-                }];
+                if ( [request.body isKindOfClass:[NSDictionary class]] ) {
+                    [request.body enumerateKeysAndObjectsUsingBlock:^(NSString *  _Nonnull key, NSString *  _Nonnull obj, BOOL * _Nonnull stop) {
+                        [response writeFormat:@"%@: %@\n", key, obj];
+                    }];
+                } else if ( [request.body isKindOfClass:[NSData class]] ) {
+                    NSData * data = request.body;
+                    [response writeString:[[NSString alloc] initWithBytesNoCopy:(void *)data.bytes length:data.length encoding:NSASCIIStringEncoding freeWhenDone:NO]];
+                }
                 [response write:@"</pre>"];
             }
 

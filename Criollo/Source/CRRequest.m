@@ -332,7 +332,7 @@
 }
 
 - (void)bufferBodyData:(NSData*)data {
-    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, (unsigned long)data.length);
+//    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, (unsigned long)data.length);
     if ( self.bufferedBodyData == nil ) {
         self.bufferedBodyData = [NSMutableData dataWithData:data];
     } else {
@@ -411,6 +411,7 @@
 }
 
 - (BOOL)parseBufferedBodyData:(NSError *__autoreleasing  _Nullable *)error {
+//    NSLog(@" * %s", __PRETTY_FUNCTION__);
     _body = [NSData dataWithBytesNoCopy:(void *)self.bufferedBodyData.bytes length:self.bufferedBodyData.length freeWhenDone:NO];
     return YES;
 }

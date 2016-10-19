@@ -100,14 +100,6 @@ NS_ASSUME_NONNULL_END
     [self.socket readDataToLength:CRFCGIRecordHeaderLength withTimeout:config.CRFCGIConnectionReadRecordTimeout tag:CRFCGIConnectionSocketTagReadRecordHeader];
 }
 
-- (void)didReceiveRequestBodyData:(NSData *)data {
-    [super didReceiveRequestBodyData:data];
-}
-
-- (void)didReceiveCompleteRequest {
-    [super didReceiveCompleteRequest];
-}
-
 #pragma mark - Responses
 
 - (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(CRHTTPVersion)version {
