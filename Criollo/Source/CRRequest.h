@@ -18,6 +18,7 @@
 //#define CRErrorRequestMalformedRequest      1001
 //#define CRErrorRequestUnsupportedMethod     1002
 #define CRRequestErrorMalformedBody         3001
+#define CRRequestFileWriteError             3010
 
 @class CRResponse, CRUploadedFile, CRConnection, CRRequestRange;
 

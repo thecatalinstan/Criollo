@@ -18,6 +18,7 @@
 #import <Criollo/CRRequest.h>
 #import <Criollo/CRRequestRange.h>
 #import <Criollo/CRResponse.h>
+#import <Criollo/CRUploadedFile.h>
 
 #import <Criollo/CRHTTPServer.h>
 #import <Criollo/CRFCGIServer.h>

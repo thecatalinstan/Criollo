@@ -113,8 +113,23 @@ NS_ASSUME_NONNULL_END
         [response write:@"</form>"];
 
         if ( request.method == CRHTTPMethodPost ) {
-            [response write:@"<h2>Request Body</h2>"];
-            [response writeFormat:@"<pre>%@</pre>", request.body];
+            if ( request.body != nil ) {
+                [response write:@"<h2>Request Body</h2>"];
+                [response write:@"<pre>"];
+                [request.body enumerateKeysAndObjectsUsingBlock:^(NSString *  _Nonnull key, NSString *  _Nonnull obj, BOOL * _Nonnull stop) {
+                    [response writeFormat:@"%@: %@\n", key, obj];
+                }];
+                [response write:@"</pre>"];
+            }
+
+            if ( request.files != nil ) {
+                [response write:@"<h2>Request Files</h2>"];
+                [response write:@"<pre>"];
+                [request.files enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, CRUploadedFile * _Nonnull obj, BOOL * _Nonnull stop) {
+                    [response writeFormat:@"%@: %@\n", key, @{@"name": obj.name ? : @"(null)", @"path": obj.temporaryFileURL ? : @"(null)", @"attributes": obj.attributes ? : @"(null)", @"mime": obj.mimeType ? : @"(null)" }];
+                }];
+                [response write:@"</pre>"];
+            }
         }
 
         [response write:@"<hr/>"];

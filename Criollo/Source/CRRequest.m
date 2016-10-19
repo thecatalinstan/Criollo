@@ -14,6 +14,10 @@
 #import "CRServer.h"
 #import "CRServer_Internal.h"
 #import "CRRequestRange.h"
+#import "CRRequestRange_Internal.h"
+#import "CRUploadedFile.h"
+#import "CRUploadedFile_Internal.h"
+#import "CRApplication.h"
 
 @implementation CRRequest {
     __strong NSMutableDictionary* _env;
@@ -260,6 +264,11 @@
 
 //                NSLog(@" * headerFields: %@", headerFields);
 
+                // Close any file output streams
+                if ( currentMultipartFileKey != nil ) {
+                    [self.files[currentMultipartFileKey] finishWriting];
+                }
+
                 // Set the target for the value
                 currentMultipartBodyKey = nil;
                 currentMultipartFileKey = nil;
@@ -269,6 +278,11 @@
                     } else if ( !headerFields[@"filename"] ) {
                         currentMultipartBodyKey = headerFields[@"name"];
                     }
+                }
+
+                // Create the file
+                if ( currentMultipartFileKey != nil ) {
+                    result = [self setFileHeader:headerFields forKey:currentMultipartFileKey];
                 }
 
                 // Extract the remaining data
@@ -346,10 +360,31 @@
     return result;
 }
 
-- (BOOL)appendFileData:(NSData *)data forKey:(NSString *)key {
-    NSLog(@"%s %@ => %lu bytes", __PRETTY_FUNCTION__, key, (unsigned long)data.length);
+- (BOOL)setFileHeader:(NSDictionary *)headerFields forKey:(NSString *)key {
+//    NSLog(@"%s %@ => %@", __PRETTY_FUNCTION__, key, headerFields);
+    BOOL result = YES;
 
-    NSLog(@" * files = %@", self.files);
+    if ( self.files == nil ) {
+        _files = [NSMutableDictionary dictionary];
+    }
+
+    CRUploadedFile * file = [[CRUploadedFile alloc] initWithName:headerFields[@"filename"]];
+    file.mimeType = headerFields[@"content-type"];
+
+    ((NSMutableDictionary *)self.files)[key] = file;
+    return result;
+}
+
+- (BOOL)appendFileData:(NSData *)data forKey:(NSString *)key {
+//    NSLog(@"%s %@ => %lu bytes", __PRETTY_FUNCTION__, key, (unsigned long)data.length);
+
+    CRUploadedFile * file = self.files[key];
+    if ( file == nil ) {
+        return NO;
+    }
+
+    [file appendData:data];
+//    NSLog(@" * files = %@", self.files);
     return YES;
 }
 
@@ -427,27 +462,5 @@
     }
     return _multipartBoundaryPrefixedData;
 }
-
-//- (void)validateMultipartBody:(NSData*)bodyData {
-//        // Validate the input
-//        NSData* prefixData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes length:boundaryData.length freeWhenDone:NO];
-//        if ( [prefixData isEqualToData:boundaryData] ) {
-//            NSData* suffixData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes + bodyData.length - boundaryPrefixData.length - 2 length:boundaryPrefixData.length freeWhenDone:NO];
-//            if ( [suffixData isEqualToData:boundaryPrefixData] ) {
-//                NSData* lastBoundaryData = [NSData dataWithBytesNoCopy:(void *)bodyData.bytes + bodyData.length - boundaryPrefixData.length - boundaryData.length - 2 length:boundaryData.length freeWhenDone:NO];
-//                if ( [lastBoundaryData isEqualToData:boundaryData] ) {
-//                } else {
-//                    result = NO;
-//                    *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not end with %@%@", boundaryString, boundaryPrefixString]}];
-//                }
-//            } else {
-//                result = NO;
-//                *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not end with \"%@\"", boundaryPrefixString]}];
-//            }
-//        } else {
-//            result = NO;
-//            *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Malformed multipart request.", NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"The body does not start with the boundary. (%@)", boundaryString]}];
-//        }
-//}
 
 @end

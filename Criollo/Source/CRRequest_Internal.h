@@ -17,6 +17,7 @@
 #define CRRequestBoundaryPrefix             @"--"
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface CRRequest ()
 
 @property (nonatomic, readonly) BOOL shouldCloseConnection;
@@ -38,6 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)bufferResponseData:(NSData *)data;
 
 - (BOOL)appendBodyData:(NSData *)data forKey:(NSString *)key;
+- (BOOL)setFileHeader:(NSDictionary *)headerFields forKey:(NSString *)key;
 - (BOOL)appendFileData:(NSData *)data forKey:(NSString *)key;
 
 - (void)setEnv:(NSDictionary<NSString *,NSString *> *)envDictionary;
@@ -51,4 +53,5 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)parseBufferedBodyData:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
 @end
+
 NS_ASSUME_NONNULL_END
