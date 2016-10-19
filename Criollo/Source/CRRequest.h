@@ -18,25 +18,28 @@
 //#define CRErrorRequestMalformedRequest      1001
 //#define CRErrorRequestUnsupportedMethod     1002
 #define CRRequestErrorMalformedBody         3001
+#define CRRequestFileWriteError             3010
 
 @class CRResponse, CRUploadedFile, CRConnection, CRRequestRange;
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface CRRequest : CRMessage
 
 @property (nonatomic, weak, nullable) CRConnection *connection;
 @property (nonatomic, strong, nullable) CRResponse * response;
 
-@property (nonatomic, readonly) NSURL * URL;
+@property (nonatomic, readonly, strong) NSURL * URL;
 @property (nonatomic, readonly) CRHTTPMethod method;
 
-@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> * env;
-@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> * cookies;
-@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> * query;
-@property (nonatomic, readonly) id body;
-@property (nonatomic, readonly) NSDictionary<NSString *, CRUploadedFile *> * files;
+@property (nonatomic, readonly, strong) NSDictionary<NSString *, NSString *> * env;
+@property (nonatomic, readonly, strong) NSDictionary<NSString *, NSString *> * cookies;
+@property (nonatomic, readonly, strong) NSDictionary<NSString *, NSString *> * query;
+@property (nonatomic, readonly, strong) id body;
+@property (nonatomic, readonly, strong) NSDictionary<NSString *, CRUploadedFile *> * files;
 
 @property (nonatomic, readonly, nullable) CRRequestRange * range;
 
 @end
+
 NS_ASSUME_NONNULL_END
