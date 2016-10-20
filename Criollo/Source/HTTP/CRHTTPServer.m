@@ -13,7 +13,15 @@
 #import "CRHTTPServerConfiguration.h"
 #import "GCDAsyncSocket.h"
 
-@implementation CRHTTPServer
+@interface CRHTTPServer () <GCDAsyncSocketDelegate>
+
+@property (nonatomic, strong, nullable, readonly) NSArray *certificates;
+
+@end
+
+@implementation CRHTTPServer {
+    NSArray * _certificates;
+}
 
 - (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate delegateQueue:(dispatch_queue_t)delegateQueue {
     self = [super initWithDelegate:delegate delegateQueue:delegateQueue];
@@ -34,5 +42,35 @@
     }
     return connection;
 }
+
+- (NSArray *)certificates {
+    if ( _certificates != nil ) {
+        return _certificates;
+    }
+
+    _certificates = [NSMutableArray array];
+
+    if ( self.certificatePath.length > 0 ) {
+        
+    }
+
+    return _certificates;
+}
+
+#pragma mark - GCDAsyncSocketDelegate
+
+- (void)socketDidSecure:(GCDAsyncSocket *)sock {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+- (void)socket:(GCDAsyncSocket *)sock didReceiveTrust:(SecTrustRef)trust completionHandler:(void (^)(BOOL))completionHandler {
+    NSLog(@"%s %@", __PRETTY_FUNCTION__, trust);
+    completionHandler(YES);
+}
+
+- (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
+    NSLog(@"%s %@", __PRETTY_FUNCTION__, err);
+}
+
 
 @end

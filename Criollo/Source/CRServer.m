@@ -177,9 +177,6 @@ NS_ASSUME_NONNULL_END
     [connection startReading];
 }
 
-- (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
-}
-
 #pragma mark - CRConnectionDelegate
 
 - (void)connection:(CRConnection *)connection didReceiveRequest:(CRRequest *)request response:(CRResponse *)response {

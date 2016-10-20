@@ -6,6 +6,7 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
+
 #import "CRServer.h"
 
 @class CRHTTPServerConfiguration;
@@ -13,6 +14,8 @@
 @interface CRHTTPServer : CRServer
 
 @property (nonatomic) BOOL isSecure;
-@property (nonatomic, strong, nullable) NSArray *certificates;
+
+@property (nonatomic, strong, nullable) NSString *certificatePath;
+@property (nonatomic, strong, nullable) NSString *keyPath;
 
 @end
