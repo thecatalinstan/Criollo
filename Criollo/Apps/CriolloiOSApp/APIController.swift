@@ -57,7 +57,7 @@ class APIController : CRRouteController {
             responseString += "</pre>"
 
             // Cookies
-            let cookies:NSDictionary! = request.cookies as NSDictionary
+            let cookies:NSDictionary! = request.cookies as! NSDictionary
             responseString += "<h3>Request Cookies:</h2><pre>"
             cookies.enumerateKeysAndObjects { (key,  object, stop) -> Void in
                 responseString += "\(key): \(object)\n"

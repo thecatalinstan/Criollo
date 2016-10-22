@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
         self.server.add { (request, response, completionHandler) in
             response.setValue("\(bundle.bundleIdentifier!), \(bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String) build \(bundle.object(forInfoDictionaryKey: "CFBundleVersion") as! String)", forHTTPHeaderField: "Server")
 
-            if ( request.cookies["session_cookie"] == nil ) {
+            if ( request.cookies?["session_cookie"] == nil ) {
                 response.setCookie("session_cookie", value:NSUUID().uuidString, path:"/", expires:nil, domain:nil, secure:false)
             }
             response.setCookie("persistant_cookie", value:NSUUID().uuidString, path:"/", expires:NSDate.distantFuture, domain:nil, secure:false)
@@ -82,62 +82,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
 
         self.server.add("/mime") { (request, response, completionHandler) in
             response.setValue("text/html", forHTTPHeaderField: "Content-type");
+            response.write("<html>")
+            response.write("<head>")
+            response.write("<link rel=\"stylesheet\" href=\"/static/style.css\"/>")
+            response.write("</head>")
+            response.write("<body>")
+            response.write("<h2>Mime</h2>")
+            response.write("<form action=\"\" method=\"post\" enctype=\"multipart/form-data\">")
+            response.write("<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"67108864\" />")
+            response.write("<div><label>File: </label><input type=\"file\" name=\"file1\" /></div>")
+            response.write("<div><label>Text: </label><input type=\"text\" name=\"text1\" /></div>")
+            response.write("<div><label>Check: </label><input type=\"checkbox\" name=\"checkbox1\" value=\"1\" /></div>")
+            response.write("<div><input type=\"submit\"/></div>")
+            response.write("</form>")
+
+            if ( request.method == CRHTTPMethod.post ) {
+                if ( request.body != nil ) {
+                    response.write("<h2>Request Body</h2>")
+                    response.write("<pre>")
+                    response.write(request.body);
+                    response.write("</pre>")
+                }
+
+                if ( request.files != nil ) {
+                    response.write("<h2>Request Files</h2>")
+                    response.write("<pre>")
+
+                    let files:NSDictionary! = request.files as [String:CRUploadedFile]! as NSDictionary!
+                    files.enumerateKeysAndObjects(options: [], using: { (key, file, stop) in
+                        response.write("\(key): \((file as! CRUploadedFile).name)\n")
+                    })
+                    response.write("</pre>")
+                }
+            }
+
+            response.finish()
+
         }
 
-//        [self.server add:@"/mime" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-//            [response setValue:@"text/html; charset=utf=8" forHTTPHeaderField:@"Content-type"];
-//            [response write:@"<html>"];
-//            [response write:@"<head>"];
-//            [response write:@"<link rel=\"stylesheet\" href=\"/static/style.css\"/>"];
-//            [response write:@"</head>"];
-//            [response write:@"<body>"];
-//            [response write:@"<h2>Mime</h2>"];
-//            [response write:@"<form action=\"\" method=\"post\" enctype=\"multipart/form-data\">"];
-//            [response write:@"<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"67108864\" />"];
-//            [response write:@"<div><label>File: </label><input type=\"file\" name=\"file1\" /></div>"];
-//            [response write:@"<div><label>Text: </label><input type=\"text\" name=\"text1\" /></div>"];
-//            [response write:@"<div><label>Check: </label><input type=\"checkbox\" name=\"checkbox1\" value=\"1\" /></div>"];
-//            [response write:@"<div><input type=\"submit\"/></div>"];
-//            [response write:@"</form>"];
-//
-//            if ( request.method == CRHTTPMethodPost ) {
-//                if ( request.body != nil ) {
-//                    [response write:@"<h2>Request Body</h2>"];
-//                    [response write:@"<pre>"];
-//                    if ( [request.body isKindOfClass:[NSDictionary class]] ) {
-//                        [request.body enumerateKeysAndObjectsUsingBlock:^(NSString *  _Nonnull key, NSString *  _Nonnull obj, BOOL * _Nonnull stop) {
-//                            [response writeFormat:@"%@: %@\n", key, obj];
-//                            }];
-//                    } else if ( [request.body isKindOfClass:[NSData class]] ) {
-//                        NSData * data = request.body;
-//                        [response writeString:[[NSString alloc] initWithBytesNoCopy:(void *)data.bytes length:data.length encoding:NSASCIIStringEncoding freeWhenDone:NO]];
-//                    }
-//                    [response write:@"</pre>"];
-//                }
-//
-//                if ( request.files != nil ) {
-//                    [response write:@"<h2>Request Files</h2>"];
-//                    [response write:@"<pre>"];
-//                    [request.files enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, CRUploadedFile * _Nonnull obj, BOOL * _Nonnull stop) {
-//                    [response writeFormat:@"%@: %@\n", key, @{@"name": obj.name ? : @"(null)", @"path": obj.temporaryFileURL ? : @"(null)", @"attributes": obj.attributes ? : @"(null)", @"mime": obj.mimeType ? : @"(null)" }];
-//                    }];
-//                    [response write:@"</pre>"];
-//                }
-//            }
-//
-//            [response write:@"<hr/>"];
-//            [response write:@"<h2>Request Env</h2>"];
-//            [response write:@"<pre>"];
-//            [request.env enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-//            [response writeFormat:@"%@: %@\n", key, obj];
-//            }];
-//            [response write:@"</pre>"];
-//            
-//            [response write:@"</body>"];
-//            [response write:@"</html>"];
-//            [response finish];
-//            completionHandler();
-//        }];
 
         // Placeholder path controller
         self.server.add("/blog/:year/:month/:slug", viewController: HelloWorldViewController.self, withNibName: String(describing: HelloWorldViewController.self), bundle: nil)

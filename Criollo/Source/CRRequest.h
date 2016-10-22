@@ -33,10 +33,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) CRHTTPMethod method;
 
 @property (nonatomic, readonly, strong) NSDictionary<NSString *, NSString *> * env;
-@property (nonatomic, readonly, strong) NSDictionary<NSString *, NSString *> * cookies;
 @property (nonatomic, readonly, strong) NSDictionary<NSString *, NSString *> * query;
-@property (nonatomic, readonly, strong) id body;
-@property (nonatomic, readonly, strong) NSDictionary<NSString *, CRUploadedFile *> * files;
+@property (nonatomic, readonly, strong, nullable) NSDictionary<NSString *, NSString *> * cookies;
+@property (nonatomic, readonly, strong, nullable) id body;
+@property (nonatomic, readonly, strong, nullable) NSDictionary<NSString *, CRUploadedFile *> * files;
 
 @property (nonatomic, readonly, nullable) CRRequestRange * range;
 
