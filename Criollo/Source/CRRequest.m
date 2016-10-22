@@ -425,4 +425,17 @@
     return _multipartBoundaryPrefixedData;
 }
 
+- (void)dealloc {
+    // Delete temporary files created by multipart uploadds
+    if ( self.files.count != 0 ) {
+        [self.files enumerateKeysAndObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSString * _Nonnull key, CRUploadedFile * _Nonnull obj, BOOL * _Nonnull stop) {
+            NSURL * temporaryFileURL = obj.temporaryFileURL;
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
+            });
+        }];
+    }
+
+}
+
 @end
