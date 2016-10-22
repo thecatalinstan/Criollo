@@ -21,9 +21,12 @@
 
 @interface CRHTTPServer : CRServer
 
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#else
 @property (nonatomic) BOOL isSecure;
 
 @property (nonatomic, strong, nullable) NSString *certificatePath;
 @property (nonatomic, strong, nullable) NSString *certificateKeyPath;
+#endif
 
 @end

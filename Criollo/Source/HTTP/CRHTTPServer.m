@@ -16,14 +16,22 @@
 
 @interface CRHTTPServer () <GCDAsyncSocketDelegate>
 
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#else
+
 @property (nonatomic, strong, nullable, readonly) NSArray *certificates;
 
 - (nullable NSArray *)fetchIdentityAndCertificatesWithError:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
+#endif
+
 @end
 
 @implementation CRHTTPServer {
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#else
     NSArray * _certificates;
+#endif
 }
 
 - (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate delegateQueue:(dispatch_queue_t)delegateQueue {
@@ -36,6 +44,8 @@
 
 - (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket {
     CRHTTPConnection* connection = [[CRHTTPConnection alloc] initWithSocket:socket server:self];
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#else
     if ( self.isSecure && self.certificates.count > 0 ) {
         NSMutableDictionary *settings = [NSMutableDictionary dictionaryWithCapacity:3];
         settings[(__bridge NSString *)kCFStreamSSLIsServer] = @YES;
@@ -43,19 +53,25 @@
         settings[(__bridge NSString *)kCFStreamPropertySocketSecurityLevel] = (__bridge NSString *)(kCFStreamSocketSecurityLevelNegotiatedSSL);
         [connection.socket startTLS:settings];
     }
+#endif
     return connection;
 }
 
 - (BOOL)startListening:(NSError *__autoreleasing  _Nullable *)error portNumber:(NSUInteger)portNumber interface:(NSString *)interface {
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#else
     NSError * certificateParsingError;
     _certificates = [self fetchIdentityAndCertificatesWithError:&certificateParsingError];
     if ( _certificates == nil ) {
         [CRApp logErrorFormat:NSLocalizedString(@"Unable to parse certificates: %@",), certificateParsingError];
         return NO;
     }
+#endif
     return [super startListening:error portNumber:portNumber interface:interface];
 }
 
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#else
 - (NSArray *)fetchIdentityAndCertificatesWithError:(NSError *__autoreleasing  _Nullable *)error {
     *error = nil;
 
@@ -145,5 +161,5 @@
     
     return result;
 }
-
+#endif
 @end

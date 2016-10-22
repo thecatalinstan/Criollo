@@ -147,7 +147,11 @@
                         NSString* hostSpec = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes + hostSpecRange.location length:hostSpecRange.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
 
                         // TODO: request.URL should be parsed using no memcpy and using the actual scheme
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+                        NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", hostSpec, pathSpec]];
+#else
                         NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http%@://%@%@", ((CRHTTPServer *)self.server).isSecure ? @"s" : @"", hostSpec, pathSpec]];
+#endif
                         CRRequest* request = [[CRRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self];
                         CRHTTPConnection * __weak connection = self;
                         dispatch_async(self.isolationQueue, ^{
