@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD05DD031DBBA220007CEDEF /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD05DD021DBBA220007CEDEF /* Criollo.framework */; };
+		AD05DD041DBBA220007CEDEF /* Criollo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AD05DD021DBBA220007CEDEF /* Criollo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AD23B7371D3FC7100056170D /* MultiRouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD23B7361D3FC7100056170D /* MultiRouteViewController.swift */; };
 		AD23B7391D3FC71C0056170D /* MultiRouteViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD23B7381D3FC71C0056170D /* MultiRouteViewController.html */; };
 		AD41ECD41CB42D4900133C8D /* style.css in Copy Public Resources */ = {isa = PBXBuildFile; fileRef = AD41ECD11CB42D1C00133C8D /* style.css */; };
@@ -18,12 +20,21 @@
 		AD5B3C5F1CA820B5000988B7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD5B3C5D1CA820B5000988B7 /* LaunchScreen.storyboard */; };
 		AD864DEC1CAD3F1D008D8FFE /* HelloWorldViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD864DEA1CAD3F1D008D8FFE /* HelloWorldViewController.html */; };
 		AD864DED1CAD3F1D008D8FFE /* HelloWorldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD864DEB1CAD3F1D008D8FFE /* HelloWorldViewController.swift */; };
-		ADAD52671D3E4DFB00DDFBB5 /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADAD52661D3E4DFB00DDFBB5 /* Criollo.framework */; };
-		ADAD52691D3E4E8000DDFBB5 /* Criollo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ADAD52661D3E4DFB00DDFBB5 /* Criollo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		ADC0811C1D3E767100E9E05D /* APIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC0811B1D3E767100E9E05D /* APIController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		AD05DD011DBBA188007CEDEF /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				AD05DD041DBBA220007CEDEF /* Criollo.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AD41ECD31CB42D3E00133C8D /* Copy Public Resources */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -35,20 +46,10 @@
 			name = "Copy Public Resources";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		ADAD52681D3E4E5F00DDFBB5 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				ADAD52691D3E4E8000DDFBB5 /* Criollo.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AD05DD021DBBA220007CEDEF /* Criollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Criollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD23B7361D3FC7100056170D /* MultiRouteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiRouteViewController.swift; sourceTree = "<group>"; };
 		AD23B7381D3FC71C0056170D /* MultiRouteViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = MultiRouteViewController.html; path = Shared/MultiRouteViewController.html; sourceTree = SOURCE_ROOT; };
 		AD41ECD11CB42D1C00133C8D /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
@@ -64,7 +65,6 @@
 		AD5B3C601CA820B5000988B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD864DEA1CAD3F1D008D8FFE /* HelloWorldViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = HelloWorldViewController.html; path = ../Shared/HelloWorldViewController.html; sourceTree = "<group>"; };
 		AD864DEB1CAD3F1D008D8FFE /* HelloWorldViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelloWorldViewController.swift; sourceTree = "<group>"; };
-		ADAD52661D3E4DFB00DDFBB5 /* Criollo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Criollo.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/Criollo-eemhgzqdjilensffmajjquecuxkt/Build/Products/Debug-iphoneos/Criollo.framework"; sourceTree = "<group>"; };
 		ADC0811B1D3E767100E9E05D /* APIController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -73,7 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADAD52671D3E4DFB00DDFBB5 /* Criollo.framework in Frameworks */,
+				AD05DD031DBBA220007CEDEF /* Criollo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,7 +131,7 @@
 		ADAD526A1D3E4F0400DDFBB5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				ADAD52661D3E4DFB00DDFBB5 /* Criollo.framework */,
+				AD05DD021DBBA220007CEDEF /* Criollo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -146,8 +146,8 @@
 				AD5B3C4D1CA820B5000988B7 /* Sources */,
 				AD5B3C4E1CA820B5000988B7 /* Frameworks */,
 				AD5B3C4F1CA820B5000988B7 /* Resources */,
-				ADAD52681D3E4E5F00DDFBB5 /* Embed Frameworks */,
 				AD41ECD31CB42D3E00133C8D /* Copy Public Resources */,
+				AD05DD011DBBA188007CEDEF /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -165,12 +165,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Cătălin Stan";
 				TargetAttributes = {
 					AD5B3C501CA820B5000988B7 = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = JNX7A8G939;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -257,8 +258,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -302,8 +305,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -322,6 +327,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -341,6 +347,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CriolloiOSApp/CriolloiOSApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -359,6 +366,7 @@
 				PRODUCT_NAME = "Criollo iOS App";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CriolloiOSApp/CriolloiOSApp-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

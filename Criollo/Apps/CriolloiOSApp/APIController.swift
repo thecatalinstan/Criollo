@@ -14,7 +14,7 @@ class APIController : CRRouteController {
         super.init(prefix: prefix)
 
         let uname = SystemInfoHelper.systemInfo()
-        let bundle:NSBundle! = NSBundle.mainBundle()
+        let bundle:Bundle! = Bundle.main
 
         // Prints some more info as text/html
         self.add("/status") { (request, response, completionHandler) in
@@ -30,20 +30,20 @@ class APIController : CRRouteController {
 
             // Bundle info
             responseString += "<h1>\(bundle.bundleIdentifier!)</h1>"
-            responseString += "<h2>Version \(bundle.objectForInfoDictionaryKey("CFBundleShortVersionString") as! String) build \(bundle.objectForInfoDictionaryKey("CFBundleVersion") as! String)</h2>"
+            responseString += "<h2>Version \(bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String) build \(bundle.object(forInfoDictionaryKey: "CFBundleVersion") as! String)</h2>"
 
             // Headers
-            let headers:NSDictionary! = request.allHTTPHeaderFields
+            let headers:NSDictionary! = request.allHTTPHeaderFields as NSDictionary!
             responseString += "<h3>Request Headers:</h2><pre>"
-            headers.enumerateKeysAndObjectsUsingBlock({ (key,  object, stop) -> Void in
+            headers.enumerateKeysAndObjects({ (key,  object, stop) -> Void in
                 responseString += "\(key): \(object)\n"
             })
             responseString += "</pre>"
 
             // Request Enviroment
-            let env:NSDictionary! = request.valueForKey("env") as! NSDictionary
+            let env:NSDictionary! = request.value(forKey: "env") as! NSDictionary
             responseString += "<h3>Request Environment:</h2><pre>"
-            env.enumerateKeysAndObjectsUsingBlock({ (key,  object, stop) -> Void in
+            env.enumerateKeysAndObjects({ (key,  object, stop) -> Void in
                 responseString += "\(key): \(object)\n"
             })
             responseString += "</pre>"
@@ -51,7 +51,7 @@ class APIController : CRRouteController {
             // Query
             let queryVars:NSDictionary! = request.query as NSDictionary
             responseString += "<h3>Request Query:</h2><pre>"
-            queryVars.enumerateKeysAndObjectsUsingBlock({ (key,  object, stop) -> Void in
+            queryVars.enumerateKeysAndObjects({ (key,  object, stop) -> Void in
                 responseString += "\(key): \(object)\n"
             })
             responseString += "</pre>"
@@ -59,18 +59,20 @@ class APIController : CRRouteController {
             // Cookies
             let cookies:NSDictionary! = request.cookies as NSDictionary
             responseString += "<h3>Request Cookies:</h2><pre>"
-            cookies.enumerateKeysAndObjectsUsingBlock { (key,  object, stop) -> Void in
+            cookies.enumerateKeysAndObjects { (key,  object, stop) -> Void in
                 responseString += "\(key): \(object)\n"
             }
             responseString += "</pre>"
 
             // Stack trace
-            let stackTrace:NSArray! = NSThread.callStackSymbols()
+            let stackTrace:NSArray! = Thread.callStackSymbols as NSArray!
             responseString += "<h3>Stack Trace:</h2><pre>"
-            stackTrace.enumerateObjectsUsingBlock { (call:AnyObject, idx:Int, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
-                let callInfo:String = call as! String
-                responseString += "\(callInfo)\n"
-            }
+            
+
+//            stackTrace.enumerateObjectsUsingBlock { (call:AnyObject, idx:Int, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
+//                let callInfo:String = call as! String
+//                responseString += "\(callInfo)\n"
+//            } as! (Any, Int, UnsafeMutablePointer<ObjCBool>) -> Void as! (Any, Int, UnsafeMutablePointer<ObjCBool>) -> Void as! (Any, Int, UnsafeMutablePointer<ObjCBool>) -> Void as! (Any, Int, UnsafeMutablePointer<ObjCBool>) -> Void as! (Any, Int, UnsafeMutablePointer<ObjCBool>) -> Void as! (Any, Int, UnsafeMutablePointer<ObjCBool>) -> Void as! (Any, Int, UnsafeMutablePointer<ObjCBool>) -> Void
             responseString += "</pre>"
 
             // System Info
@@ -82,8 +84,8 @@ class APIController : CRRouteController {
             responseString += "</body></html>"
 
             response.setValue("text/html charset=utf-8", forHTTPHeaderField: "Content-type")
-            response.setValue("\(responseString.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))", forHTTPHeaderField: "Content-Length")
-            response.sendString(responseString)
+            response.setValue("\(responseString.lengthOfBytes(using: String.Encoding.utf8))", forHTTPHeaderField: "Content-Length")
+            response.send(responseString)
             
             completionHandler()
             
@@ -91,7 +93,7 @@ class APIController : CRRouteController {
 
         self.add("/info") { (request, response, next) in
             let info:Dictionary = [
-                "IPAddress":SystemInfoHelper.IPAddress(),
+                "IPAddress":SystemInfoHelper.ipAddress(),
                 "systemInfo":SystemInfoHelper.systemInfo(),
                 "systemVersion":SystemInfoHelper.systemVersion(),
                 "processName":SystemInfoHelper.processName(),
@@ -102,9 +104,9 @@ class APIController : CRRouteController {
                 "bundleVersion":SystemInfoHelper.bundleVersion(),
                 ]
             do {
-                try response.sendData(NSJSONSerialization.dataWithJSONObject(info, options: NSJSONWritingOptions.PrettyPrinted))
+                try response.send(JSONSerialization.data(withJSONObject: info, options: JSONSerialization.WritingOptions.prettyPrinted))
             } catch let error as NSError {
-                CRServer.errorHandlingBlockWithStatus(500, error: error)(request, response, next)
+                CRServer.errorHandlingBlock(withStatus: 500, error: error)(request, response, next)
             }
         }
     }
