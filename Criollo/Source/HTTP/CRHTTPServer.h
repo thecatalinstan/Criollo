@@ -6,10 +6,24 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
+
 #import "CRServer.h"
+
+#define CRHTTPServerErrorDomain                     @"CRHTTPServerErrorDomain"
+#define CRHTTPServerInternalError                   1000
+#define CRHTTPServerInvalidCertificateBundle        1001
+#define CRHTTPServerInvalidCertificatePrivateKey    1002
+
+#define CRHTTPServerCertificatePathKey              @"CRHTTPServerCertificatePath"
+#define CRHTTPServerCertificateKeyPathKey           @"CRHTTPServerCertificateKeyPath"
 
 @class CRHTTPServerConfiguration;
 
 @interface CRHTTPServer : CRServer
+
+@property (nonatomic) BOOL isSecure;
+
+@property (nonatomic, strong, nullable) NSString *certificatePath;
+@property (nonatomic, strong, nullable) NSString *certificateKeyPath;
 
 @end
