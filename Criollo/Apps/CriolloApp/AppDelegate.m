@@ -36,6 +36,12 @@ NS_ASSUME_NONNULL_END
     Class serverClass = isFastCGI ? [CRFCGIServer class] : [CRHTTPServer class];
     self.server = [[serverClass alloc] initWithDelegate:self];
 
+    if ( !isFastCGI ) {
+        ((CRHTTPServer *)self.server).isSecure = YES;
+        ((CRHTTPServer *)self.server).certificatePath = [[NSBundle mainBundle] pathForResource:@"cert" ofType:@"pem"];
+        ((CRHTTPServer *)self.server).certificateKeyPath = [[NSBundle mainBundle] pathForResource:@"key" ofType:@"pem"];
+    }
+
     backgroundQueue = dispatch_queue_create(self.className.UTF8String, DISPATCH_QUEUE_SERIAL);
     dispatch_set_target_queue(backgroundQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
 
@@ -195,7 +201,7 @@ NS_ASSUME_NONNULL_END
         }
 
         // Set the base url. This is only for logging
-        NSURL* baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d", address, PortNumber]];
+        NSURL* baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"http%@://%@:%d", ((CRHTTPServer *)self.server).isSecure ? @"s" : @"", address, PortNumber]];
 
         [CRApp logFormat:@"%@ Started HTTP server at %@", [NSDate date], baseURL.absoluteString];
 

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD05DCFC1DBB9A15007CEDEF /* key.pem in Resources */ = {isa = PBXBuildFile; fileRef = AD05DCFA1DBB9A15007CEDEF /* key.pem */; };
+		AD05DCFD1DBB9A15007CEDEF /* cert.pem in Resources */ = {isa = PBXBuildFile; fileRef = AD05DCFB1DBB9A15007CEDEF /* cert.pem */; };
 		AD41ECD71CB42EBB00133C8D /* SystemInfoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD41ECD61CB42EBB00133C8D /* SystemInfoHelper.m */; };
 		AD554D991CAC97C7002182A4 /* HelloWorldViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD554D921CAC97C7002182A4 /* HelloWorldViewController.html */; };
 		AD554D9A1CAC97C7002182A4 /* HelloWorldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD554D931CAC97C7002182A4 /* HelloWorldViewController.m */; };
@@ -47,6 +49,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AD05DCFA1DBB9A15007CEDEF /* key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = key.pem; path = Shared/key.pem; sourceTree = SOURCE_ROOT; };
+		AD05DCFB1DBB9A15007CEDEF /* cert.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = cert.pem; path = Shared/cert.pem; sourceTree = SOURCE_ROOT; };
 		AD41ECD51CB42EBB00133C8D /* SystemInfoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemInfoHelper.h; path = Shared/SystemInfoHelper.h; sourceTree = SOURCE_ROOT; };
 		AD41ECD61CB42EBB00133C8D /* SystemInfoHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemInfoHelper.m; path = Shared/SystemInfoHelper.m; sourceTree = SOURCE_ROOT; };
 		AD554D911CAC97C7002182A4 /* HelloWorldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloWorldViewController.h; sourceTree = "<group>"; };
@@ -123,6 +127,8 @@
 				ADC081201D3EBD2B00E9E05D /* MultiRouteViewController.html */,
 				AD41ECD51CB42EBB00133C8D /* SystemInfoHelper.h */,
 				AD41ECD61CB42EBB00133C8D /* SystemInfoHelper.m */,
+				AD05DCFA1DBB9A15007CEDEF /* key.pem */,
+				AD05DCFB1DBB9A15007CEDEF /* cert.pem */,
 				AD554D971CAC97C7002182A4 /* Public */,
 			);
 			path = CriolloApp;
@@ -196,7 +202,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD05DCFC1DBB9A15007CEDEF /* key.pem in Resources */,
 				ADC1A5CA1CA30F49009A4A19 /* Assets.xcassets in Resources */,
+				AD05DCFD1DBB9A15007CEDEF /* cert.pem in Resources */,
 				ADC081211D3EBD2B00E9E05D /* MultiRouteViewController.html in Resources */,
 				AD554D991CAC97C7002182A4 /* HelloWorldViewController.html in Resources */,
 			);
