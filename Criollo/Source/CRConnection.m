@@ -90,7 +90,6 @@ static const NSData * CRLFCRLFData;
 
         _isolationQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:[NSString stringWithFormat:@"CRConnection-IsolationQueue-%lu", (unsigned long)self.hash]] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
         dispatch_set_target_queue(self.isolationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
-
     }
     return self;
 }

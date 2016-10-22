@@ -14,12 +14,11 @@
 #import "GCDAsyncSocket.h"
 #import "CRApplication.h"
 
-#define CRHTTPServerPEMBeginCertMarker          @"-----BEGIN CERTIFICATE-----"
-#define CRHTTPServerPEMEndCertMarker            @"-----END CERTIFICATE-----"
-
 @interface CRHTTPServer () <GCDAsyncSocketDelegate>
 
 @property (nonatomic, strong, nullable, readonly) NSArray *certificates;
+
+- (nullable NSArray *)fetchIdentityAndCertificatesWithError:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
 @end
 
@@ -42,103 +41,109 @@
         settings[(__bridge NSString *)kCFStreamSSLIsServer] = @YES;
         settings[(__bridge NSString *)kCFStreamSSLCertificates] = self.certificates;
         settings[(__bridge NSString *)kCFStreamPropertySocketSecurityLevel] = (__bridge NSString *)(kCFStreamSocketSecurityLevelNegotiatedSSL);
-
-        NSLog(@" * %s %@ %@", __PRETTY_FUNCTION__, self.certificates, settings);
         [connection.socket startTLS:settings];
     }
     return connection;
 }
 
 - (BOOL)startListening:(NSError *__autoreleasing  _Nullable *)error portNumber:(NSUInteger)portNumber interface:(NSString *)interface {
-    _certificates = [self fetchIdentityAndCertificates];
+    NSError * certificateParsingError;
+    _certificates = [self fetchIdentityAndCertificatesWithError:&certificateParsingError];
+    if ( _certificates == nil ) {
+        [CRApp logErrorFormat:NSLocalizedString(@"Unable to parse certificates: %@",), certificateParsingError];
+        return NO;
+    }
     return [super startListening:error portNumber:portNumber interface:interface];
 }
 
-- (NSArray *)fetchIdentityAndCertificates {
-    NSMutableArray * certificates = [NSMutableArray array];
+- (NSArray *)fetchIdentityAndCertificatesWithError:(NSError *__autoreleasing  _Nullable *)error {
+    *error = nil;
 
     if ( self.certificatePath.length == 0 ) {
-        return certificates;
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse PEM certificate bundle.",), CRHTTPServerCertificatePathKey: self.certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"}];
+        return nil;
     }
 
-    NSError * pemReadError;
-    NSData * pemContents = [NSData dataWithContentsOfFile:self.certificatePath options:NSDataReadingUncached error:&pemReadError];
-    if ( pemContents.length == 0 ) {
-        [CRApp logErrorFormat:@"Unable to parse pem certificates: %@", pemReadError];
-        return certificates;
+    // Read the contents of the PEM chained bundle and get SecCertRefs
+    NSError * pemCertReadError;
+    NSData * pemCertContents = [NSData dataWithContentsOfFile:self.certificatePath options:NSDataReadingUncached error:&pemCertReadError];
+    if ( pemCertContents.length == 0 ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse PEM certificate bundle.",), NSUnderlyingErrorKey: pemCertReadError, CRHTTPServerCertificatePathKey: self.certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"}];
+        return nil;
     }
 
-    NSData *beginMarker = [NSData dataWithBytesNoCopy:CRHTTPServerPEMBeginCertMarker.UTF8String length:CRHTTPServerPEMBeginCertMarker.length freeWhenDone:NO];
-    NSData *endMarker = [NSData dataWithBytesNoCopy:CRHTTPServerPEMEndCertMarker.UTF8String length:CRHTTPServerPEMEndCertMarker.length freeWhenDone:NO];
-
-    NSUInteger offset = 0;
-    while ( offset < pemContents.length ) {
-        // Search for the end marker and extract data before it
-        NSRange endMarkerSearchRange = NSMakeRange(offset, pemContents.length - offset);
-        NSRange endMarkerRange = [pemContents rangeOfData:endMarker options:0 range:endMarkerSearchRange];
-
-        if ( endMarkerRange.location == NSNotFound ) {
-            break;
-        }
-
-        // Search for the begin marker and extract data after it
-        NSRange beginMarkerSearchRange = NSMakeRange(offset, endMarkerRange.location - offset);
-        NSRange beginMarkerRange = [pemContents rangeOfData:beginMarker options:0 range:beginMarkerSearchRange];
-
-        // Extract the certificate data
-        NSRange pemDataRange = NSMakeRange(beginMarkerRange.location + beginMarkerRange.length, endMarkerRange.location - beginMarkerRange.location - beginMarkerRange.length);
-        NSData *pemData = [NSData dataWithBytesNoCopy:(void *)pemContents.bytes + pemDataRange.location length:pemDataRange.length freeWhenDone:NO];
-
-        // Decode the base64 DER
-        SecTransformRef transform = SecDecodeTransformCreate(kSecBase64Encoding, NULL);
-        if ( !transform ) {
-            break;
-        }
-
-        NSData *decodedPemData = nil;
-        if (SecTransformSetAttribute(transform, kSecTransformInputAttributeName, (__bridge CFDataRef)pemData, NULL)) {
-            decodedPemData = CFBridgingRelease(SecTransformExecute(transform, NULL));
-        }
-
-        if ( transform ) {
-            CFRelease(transform);
-        }
-
-        // Create a certificate ref
-        SecCertificateRef certificate = SecCertificateCreateWithData(NULL, (__bridge CFDataRef)decodedPemData);
-        if ( !certificate) {
-            break;
-        }
-
-        // SecCertificateCreateWithData does not always return NULL radar://problem/16124651
-        // Check that the certificate serial number can be retrieved. According to
-        // RFC5280, the serial number field is required.
-        NSData *serial = CFBridgingRelease(SecCertificateCopySerialNumber(certificate, NULL));
-        if ( serial ) {
-            [certificates addObject:(__bridge id _Nonnull)(certificate)];
-        }
-        CFRelease(certificate);  // was retained when added to the certificates array
-
-        offset = endMarkerRange.location + endMarkerRange.length;
+    CFArrayRef certificateImportItems = NULL;
+    OSStatus certificateImportStatus = SecItemImport((__bridge CFDataRef)pemCertContents , NULL, NULL, NULL, 0, NULL, NULL, &certificateImportItems);
+    if ( certificateImportStatus != errSecSuccess ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to parse PEM certificate bundle. %@",), (__bridge NSString *)SecCopyErrorMessageString(certificateImportStatus, NULL)], CRHTTPServerCertificatePathKey: self.certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"}];
+        return nil;
     }
 
-    return certificates;
+    // Check if the first item in the import is a certificate
+    SecCertificateRef certificate = CFArrayGetValueAtIndex(certificateImportItems, 0);
+    if ( CFGetTypeID(certificate) != SecCertificateGetTypeID() ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Expected a PEM certificate, but got %@ instead.",), (__bridge id)certificate], CRHTTPServerCertificatePathKey: self.certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"}];
+        return nil;
+    }
+
+    // Read the contents of the PEM private key file and fetch SecKeyRef
+    if ( self.certificateKeyPath.length == 0 ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse PEM RSA key file.",), CRHTTPServerCertificatePathKey: self.certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"}];
+        return nil;
+    }
+
+    NSError * pemKeyReadError;
+    NSData * pemKeyContents = [NSData dataWithContentsOfFile:self.certificateKeyPath options:NSDataReadingUncached error:&pemKeyReadError];
+    if ( pemKeyContents.length == 0 ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse PEM RSA key file.",), NSUnderlyingErrorKey: pemKeyReadError, CRHTTPServerCertificatePathKey: self.certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"}];
+        return nil;
+    }
+
+    // Create a temp keychain and import the private key into it
+    NSString *keychainPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSUUID UUID].UUIDString];
+    NSString *keychainPassword = [NSUUID UUID].UUIDString;
+    SecKeychainRef keychain;
+    OSStatus keychainCreationStatus = SecKeychainCreate(keychainPath.UTF8String, keychainPassword.length, keychainPassword.UTF8String, NO, NULL, &keychain);
+    if ( keychainCreationStatus != errSecSuccess ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInternalError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to create keychain. %@",), (__bridge NSString *)SecCopyErrorMessageString(keychainCreationStatus, NULL)], CRHTTPServerCertificatePathKey: self.certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"}];
+        return nil;
+    }
+
+    // Import the key into the keychain
+    CFArrayRef keyImportItems = NULL;
+    OSStatus keyImportStatus = SecItemImport((__bridge CFDataRef)pemKeyContents , NULL, NULL, NULL, 0, NULL, keychain, &keyImportItems);
+    if ( keyImportStatus != errSecSuccess ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to parse PEM RSA key file. %@",), (__bridge NSString *)SecCopyErrorMessageString(keyImportStatus, NULL)], CRHTTPServerCertificatePathKey: self.certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"}];
+        SecKeychainDelete(keychain);
+        return nil;
+    }
+
+    // Check if the first item in the import is a privatekey
+    SecKeyRef key = CFArrayGetValueAtIndex(keyImportItems, 0);
+    if ( CFGetTypeID(key) != SecKeyGetTypeID() ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Expected a RSA private key, but got %@ instead.",), (__bridge id)key], CRHTTPServerCertificatePathKey: self.certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"}];
+        SecKeychainDelete(keychain);
+        return nil;
+    }
+
+    // Create an identity from the keychain and the certificate
+    SecIdentityRef identity;
+    OSStatus identityCreationStatus = SecIdentityCreateWithCertificate(keychain, certificate, &identity);
+    if ( identityCreationStatus != errSecSuccess ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to get a suitable identity. %@",), (__bridge NSString *)SecCopyErrorMessageString(identityCreationStatus, NULL)], CRHTTPServerCertificatePathKey: self.certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"}];
+        SecKeychainDelete(keychain);
+        return nil;
+    }
+
+    // Create the outut array
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity:CFArrayGetCount(certificateImportItems)];
+    [result addObjectsFromArray:(__bridge NSArray * _Nonnull)(certificateImportItems)];
+    result[0] = (__bridge id _Nonnull)(identity);
+
+    // Cleanup
+    SecKeychainDelete(keychain);
+    
+    return result;
 }
-
-#pragma mark - GCDAsyncSocketDelegate
-
-- (void)socketDidSecure:(GCDAsyncSocket *)sock {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-
-- (void)socket:(GCDAsyncSocket *)sock didReceiveTrust:(SecTrustRef)trust completionHandler:(void (^)(BOOL))completionHandler {
-    NSLog(@"%s %@", __PRETTY_FUNCTION__, trust);
-    completionHandler(YES);
-}
-
-- (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
-    NSLog(@"%s %@", __PRETTY_FUNCTION__, err);
-}
-
 
 @end
