@@ -96,9 +96,7 @@ static const NSData * CRLFCRLFData;
 
 - (void)dealloc {
     _socket = nil;
-    _requests = nil;
     _currentRequest = nil;
-    _isolationQueue = nil;
 }
 
 #pragma mark - Data

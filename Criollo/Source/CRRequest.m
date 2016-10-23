@@ -266,7 +266,7 @@
 
                 // Create the file
                 if ( currentMultipartFileKey != nil ) {
-                    result = [self setFileHeader:headerFields forKey:currentMultipartFileKey];
+                    [self setFileHeader:headerFields forKey:currentMultipartFileKey];
                 }
 
                 // Extract the remaining data
@@ -286,7 +286,9 @@
                     result = YES;
                 } else {
                     // There is no header something is very wrong
-                    *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse multipart data.",)}];
+                    if ( *error != nil ) {
+                        *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse multipart data.",)}];
+                    }
                     result = NO;
                 }
             }
