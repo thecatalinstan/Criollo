@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_END
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil prefix:(NSString *)prefix {
-    self = [super initWithPrefix:prefix];
+    self = [super initWithPrefix:CRPathSeparator];
     if ( self != nil ) {
         _nibName = nibNameOrNil ? : NSStringFromClass(self.class);
         _nibBundle = nibBundleOrNil ? : [NSBundle mainBundle];
