@@ -20,6 +20,7 @@
 #import "GCDAsyncSocket.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface CRFCGIConnection () {
     NSUInteger currentRequestBodyLength;
     NSUInteger currentRequestBodyReceivedBytesLength;
@@ -36,6 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)appendParamsFromData:(NSData *)paramsData length:(NSUInteger)dataLength;
 
 @end
+
 NS_ASSUME_NONNULL_END
 
 @implementation CRFCGIConnection
@@ -96,14 +98,6 @@ NS_ASSUME_NONNULL_END
     currentRequestBodyLength = [self.currentRequest.env[@"CONTENT_LENGTH"] integerValue];
     CRFCGIServerConfiguration* config = (CRFCGIServerConfiguration*)self.server.configuration;
     [self.socket readDataToLength:CRFCGIRecordHeaderLength withTimeout:config.CRFCGIConnectionReadRecordTimeout tag:CRFCGIConnectionSocketTagReadRecordHeader];
-}
-
-- (void)didReceiveRequestBodyData:(NSData *)data {
-    [super didReceiveRequestBodyData:data];
-}
-
-- (void)didReceiveCompleteRequest {
-    [super didReceiveCompleteRequest];
 }
 
 #pragma mark - Responses

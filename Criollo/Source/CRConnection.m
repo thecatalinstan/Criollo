@@ -90,7 +90,6 @@ static const NSData * CRLFCRLFData;
 
         _isolationQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:[NSString stringWithFormat:@"CRConnection-IsolationQueue-%lu", (unsigned long)self.hash]] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
         dispatch_set_target_queue(self.isolationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
-
     }
     return self;
 }
@@ -119,16 +118,14 @@ static const NSData * CRLFCRLFData;
         return;
     }
 
-//    NSLog(@"%s %lu bytes", __PRETTY_FUNCTION__, (unsigned long)data.length);
-//    NSString* contentType = self.currentRequest.env[@"HTTP_CONTENT_TYPE"];
-//    if ([contentType hasPrefix:CRRequestTypeMultipart]) {
-//        NSError* bodyParsingError;
-//        if ( ![self.currentRequest parseMultipartBodyDataChunk:data error:&bodyParsingError] ) {
-//            NSLog(@" * bodyParsingError = %@", bodyParsingError);
-//        }
-//    } else {
+    if ([self.currentRequest.env[@"HTTP_CONTENT_TYPE"] hasPrefix:CRRequestTypeMultipart]) {
+        NSError* bodyParsingError;
+        if ( ![self.currentRequest parseMultipartBodyDataChunk:data error:&bodyParsingError] ) {
+            [CRApp logErrorFormat:@"%@" , bodyParsingError];
+        }
+    } else {
         [self bufferBodyData:data forRequest:self.currentRequest];
-//    }
+    }
 }
 
 - (void)didReceiveCompleteRequest {
@@ -146,18 +143,17 @@ static const NSData * CRLFCRLFData;
 
         if ([contentType hasPrefix:CRRequestTypeJSON]) {
             result = [self.currentRequest parseJSONBodyData:&bodyParsingError];
-//        } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
         } else if ([contentType hasPrefix:CRRequestTypeURLEncoded]) {
             result = [self.currentRequest parseURLEncodedBodyData:&bodyParsingError];
+        } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
+            // multipart/form-data requests are parsed as they come in and not once the
+            // request hast been fully received ;)
         } else {
             result = [self.currentRequest parseBufferedBodyData:&bodyParsingError];
         }
 
         if ( !result ) {
-//            NSLog(@" * bodyParsingError = %@", bodyParsingError);
-        } else {
-//            NSLog(@" * request.body = %@", self.currentRequest.body);
-//            NSLog(@" * bufferedBodyData = %lu bytes", (unsigned long)self.currentRequest.bufferedBodyData.length);
+            [CRApp logErrorFormat:@"%@" , bodyParsingError];
         }
     }
 
@@ -172,6 +168,7 @@ static const NSData * CRLFCRLFData;
     if ( self.willDisconnect ) {
         return;
     }
+
     [request bufferBodyData:data];
 }
 
@@ -179,6 +176,7 @@ static const NSData * CRLFCRLFData;
     if ( self.willDisconnect ) {
         return;
     }
+
     [request bufferResponseData:data];
 }
 

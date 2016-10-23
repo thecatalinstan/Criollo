@@ -10,24 +10,24 @@ import Criollo
 
 class HelloWorldViewController: CRViewController {
 
-    override func presentViewControllerWithRequest(request: CRRequest, response: CRResponse) -> String {
-        self.vars["title"] = String(self.dynamicType)
+    override func present(with request: CRRequest, response: CRResponse) -> String {
+        self.vars["title"] = String(describing: type(of: self))
 
         var text:String = String()
-        let query:NSDictionary! = request.valueForKey("query") as! NSDictionary
+        let query:NSDictionary! = request.value(forKey: "query") as! NSDictionary
         text += "<h3>Request Query:</h2><pre>"
-        query.enumerateKeysAndObjectsUsingBlock({ (key,  object, stop) -> Void in
+        query.enumerateKeysAndObjects({ (key,  object, stop) -> Void in
             text += "\(key): \(object)\n"
         })
         text += "</pre>"
-        let env:NSDictionary! = request.valueForKey("env") as! NSDictionary
+        let env:NSDictionary! = request.value(forKey: "env") as! NSDictionary
         text += "<h3>Request Environment:</h2><pre>"
-        env.enumerateKeysAndObjectsUsingBlock({ (key,  object, stop) -> Void in
+        env.enumerateKeysAndObjects({ (key,  object, stop) -> Void in
             text += "\(key): \(object)\n"
         })
         text += "</pre>"
         self.vars["text"] = text
-        return super.presentViewControllerWithRequest(request, response: response)
+        return super.present(with: request, response: response)
     }
 
 }

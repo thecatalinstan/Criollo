@@ -16,23 +16,27 @@ let LogRequests:Bool = true
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
 
-    var server:CRServer!
-    var baseURL:NSURL!
+    var server:CRHTTPServer!
+    var baseURL:URL!
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Create the server and add some handlers to do some work
         self.server = CRHTTPServer(delegate:self)
 
-        let bundle:NSBundle! = NSBundle.mainBundle()
+//        // Setup HTTPS
+//        self.server.isSecure = YES
+//        self.server.certificatePath = Bundle.mainBundle().pathForResource
+
+        let bundle:Bundle! = Bundle.main
 
         // Add a header that says who we are :)
         self.server.add { (request, response, completionHandler) in
-            response.setValue("\(bundle.bundleIdentifier!), \(bundle.objectForInfoDictionaryKey("CFBundleShortVersionString") as! String) build \(bundle.objectForInfoDictionaryKey("CFBundleVersion") as! String)", forHTTPHeaderField: "Server")
+            response.setValue("\(bundle.bundleIdentifier!), \(bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String) build \(bundle.object(forInfoDictionaryKey: "CFBundleVersion") as! String)", forHTTPHeaderField: "Server")
 
-            if ( request.cookies["session_cookie"] == nil ) {
-                response.setCookie("session_cookie", value:NSUUID().UUIDString, path:"/", expires:nil, domain:nil, secure:false)
+            if ( request.cookies?["session_cookie"] == nil ) {
+                response.setCookie("session_cookie", value:NSUUID().uuidString, path:"/", expires:nil, domain:nil, secure:false)
             }
-            response.setCookie("persistant_cookie", value:NSUUID().UUIDString, path:"/", expires:NSDate.distantFuture(), domain:nil, secure:false)
+            response.setCookie("persistant_cookie", value:NSUUID().uuidString, path:"/", expires:NSDate.distantFuture, domain:nil, secure:false)
 
             completionHandler()
         }
@@ -52,35 +56,76 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
         }
 
         // Serve static files from "/Public" (relative to bundle)
-        let staticFilePath:String = (NSBundle.mainBundle().resourcePath?.stringByAppendingString("/Public"))!
-        self.server.mount("/static", directoryAtPath:staticFilePath, options: CRStaticDirectoryServingOptions.FollowSymlinks)
+        let staticFilePath:String = ((Bundle.main.resourcePath)! + "/Public")
+        self.server.mount("/static", directoryAtPath:staticFilePath, options: CRStaticDirectoryServingOptions.followSymlinks)
 
         // Public files
-        self.server.mount("/pub", directoryAtPath: "~", options: [CRStaticDirectoryServingOptions.FollowSymlinks, CRStaticDirectoryServingOptions.AutoIndex] )
+        self.server.mount("/pub", directoryAtPath: "~", options: [CRStaticDirectoryServingOptions.followSymlinks, CRStaticDirectoryServingOptions.autoIndex] )
 
         // Redirecter
         self.server.get("/redirect") { (request, response, completionHandler) in
             let redirectURL:NSURL! = NSURL(string: request.query["redirect"]!)
             if ( redirectURL != nil ) {
-                response.redirectToURL(redirectURL)
+                response.redirect(to: redirectURL as URL)
             }
             completionHandler()
         }
 
         // HTML view controller
-        self.server.add("/controller", viewController: HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil)
+        self.server.add("/controller", viewController: HelloWorldViewController.self, withNibName: String(describing: HelloWorldViewController.self), bundle: nil)
 
         // Multi route controller
         self.server.add("/api", controller:APIController.self)
 
         // Multi route view controller
-        self.server.add("/multi", viewController: MultiRouteViewController.self, withNibName: String(MultiRouteViewController.self), bundle: nil)
+        self.server.add("/multi", viewController: MultiRouteViewController.self, withNibName: String(describing: MultiRouteViewController.self), bundle: nil)
+
+        self.server.add("/mime") { (request, response, completionHandler) in
+            response.setValue("text/html", forHTTPHeaderField: "Content-type");
+            response.write("<html>")
+            response.write("<head>")
+            response.write("<link rel=\"stylesheet\" href=\"/static/style.css\"/>")
+            response.write("</head>")
+            response.write("<body>")
+            response.write("<h2>Mime</h2>")
+            response.write("<form action=\"\" method=\"post\" enctype=\"multipart/form-data\">")
+            response.write("<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"67108864\" />")
+            response.write("<div><label>File: </label><input type=\"file\" name=\"file1\" /></div>")
+            response.write("<div><label>Text: </label><input type=\"text\" name=\"text1\" /></div>")
+            response.write("<div><label>Check: </label><input type=\"checkbox\" name=\"checkbox1\" value=\"1\" /></div>")
+            response.write("<div><input type=\"submit\"/></div>")
+            response.write("</form>")
+
+            if ( request.method == CRHTTPMethod.post ) {
+                if ( request.body != nil ) {
+                    response.write("<h2>Request Body</h2>")
+                    response.write("<pre>")
+                    response.write(request.body);
+                    response.write("</pre>")
+                }
+
+                if ( request.files != nil ) {
+                    response.write("<h2>Request Files</h2>")
+                    response.write("<pre>")
+
+                    let files:NSDictionary! = request.files as [String:CRUploadedFile]! as NSDictionary!
+                    files.enumerateKeysAndObjects(options: [], using: { (key, file, stop) in
+                        response.write("\(key): \((file as! CRUploadedFile).name)\n")
+                    })
+                    response.write("</pre>")
+                }
+            }
+
+            response.finish()
+
+        }
+
 
         // Placeholder path controller
-        self.server.add("/blog/:year/:month/:slug", viewController: HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil)
+        self.server.add("/blog/:year/:month/:slug", viewController: HelloWorldViewController.self, withNibName: String(describing: HelloWorldViewController.self), bundle: nil)
 
         // Regex path controller
-        self.server.add("/f[a-z]{2}/:payload", viewController: HelloWorldViewController.self, withNibName: String(HelloWorldViewController.self), bundle: nil)
+        self.server.add("/f[a-z]{2}/:payload", viewController: HelloWorldViewController.self, withNibName: String(describing: HelloWorldViewController.self), bundle: nil)
 
         // Start listening
         var serverError:NSError?
@@ -89,21 +134,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
             // Output some nice info to the console
 
             // Get server ip address
-            let address:NSString! = SystemInfoHelper.IPAddress()
+            let address:NSString! = SystemInfoHelper.ipAddress() as NSString!
             // Set the base url. This is only for logging
-            self.baseURL = NSURL(string: "http://\(address):\(PortNumber)")
+            self.baseURL = URL(string: "http://\(address):\(PortNumber)")
 
             // Log the paths we can handle
 
             // Get the list of paths from the registered routes
-            let routePaths:NSArray!  = self.server.valueForKeyPath("routes.path") as! NSArray
+            let routePaths:NSArray!  = self.server.value(forKeyPath: "routes.path") as! NSArray
             let paths:NSMutableSet! = NSMutableSet()
-            routePaths.enumerateObjectsUsingBlock({ (path, idx, stop) in
-                if ( path.isKindOfClass(NSNull.self) ) {
+            routePaths.enumerateObjects({ (path, idx, stop) in
+                if ( (path as AnyObject).isKind(of: NSNull.self) ) {
                     return
                 }
-                let pathURL:NSURL! = self.baseURL.URLByAppendingPathComponent(path as! String)
-                paths.addObject(pathURL)
+                let pathURL:URL! = self.baseURL.appendingPathComponent(path as! String)
+                paths.add(pathURL)
             })
 
 //            let sortedPaths = paths.sortedArrayUsingDescriptors([NSSortDescriptor(key:"absoluteString", ascending:true)])
@@ -120,41 +165,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
         return true
     }
 
-    func applicationWillResignActive(application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
 
     }
 
-    func applicationDidEnterBackground(application: UIApplication) {
+    func applicationDidEnterBackground(_ application: UIApplication) {
     }
 
-    func applicationWillEnterForeground(application: UIApplication) {
-
-    }
-
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
 
     }
 
-    func applicationWillTerminate(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
+
+    }
+
+    func applicationWillTerminate(_ application: UIApplication) {
         self.server.stopListening()
     }
 
-    func server(server: CRServer, didAcceptConnection connection: CRConnection) {
+    func server(_ server: CRServer, didAccept connection: CRConnection) {
         if ( LogConnections ) {
             NSLog(" * Accepted connection from \(connection.remoteAddress):\(connection.remotePort)")
         }
     }
 
-    func server(server: CRServer, didCloseConnection connection: CRConnection) {
+    func server(_ server: CRServer, didClose connection: CRConnection) {
         if ( LogConnections ) {
             NSLog(" * Disconnected \(connection.remoteAddress):\(connection.remotePort)")
         }
     }
 
 
-    func server(server: CRServer, didFinishRequest request: CRRequest) {
+    func server(_ server: CRServer, didFinish request: CRRequest) {
         if ( LogRequests ) {
-            let env:NSDictionary! = request.valueForKey("env") as! NSDictionary
+            let env:NSDictionary! = request.value(forKey: "env") as! NSDictionary
             NSLog(" * \(request.response!.connection!.remoteAddress) \(request.description) - \(request.response!.statusCode) - \(env["HTTP_USER_AGENT"])")
         }
         SystemInfoHelper.addRequest()

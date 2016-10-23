@@ -8,13 +8,22 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [0.4.6](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.6) (10/23/2016)
+
+**Released on Sunday, October 23, 2016**. This release implements `multipart/form-data` request body parsing and HTTPS on macOS.
+
+#### Added
+
+* [`CRRequest`] now automatically parses `multipart/formdata` request bodies. After parsing such a request, the `body` property will be a dictionary containing the parsed properties and the `files` property will be a dictionary containing the uploaded files. Uploaded files are deleted from their temporary location when the `CRRequest` object is deallocated.
+* [`CRTPServer`] can now deliver content over HTTPS (macOS only). Use the `isSecure`, `certificatePath` and `certificateKeyPath` properties to configure the HTTPS server. Both the key and the certificate bundle are expected to be in PEM format.
+
 ## [0.4.5](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.5) (09/12/2016)
 
 **Released on Monday, September 12, 2016**. This release removes CRNib and CRView caching in favor of OS filesystem memory mapping.
 
 ## [0.4.4](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.4) (09/07/2016)
 
-**Released on Wednsday, September 7, 2016**. This release includes memory allocation and performance improvements. No API were changed.
+**Released on Wednesday, September 7, 2016**. This release includes memory allocation and performance improvements. No API were changed.
 
 ## [0.4.1](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.1) (07/26/2016)
 

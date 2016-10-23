@@ -15,7 +15,7 @@
 
 #define PortNumber          10781
 #define LogConnections          0
-#define LogRequests             0
+#define LogRequests             1
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -35,6 +35,12 @@ NS_ASSUME_NONNULL_END
     BOOL isFastCGI = [[NSUserDefaults standardUserDefaults] boolForKey:@"FastCGI"];
     Class serverClass = isFastCGI ? [CRFCGIServer class] : [CRHTTPServer class];
     self.server = [[serverClass alloc] initWithDelegate:self];
+
+    if ( !isFastCGI ) {
+        ((CRHTTPServer *)self.server).isSecure = YES;
+        ((CRHTTPServer *)self.server).certificatePath = [[NSBundle mainBundle] pathForResource:@"cert" ofType:@"pem"];
+        ((CRHTTPServer *)self.server).certificateKeyPath = [[NSBundle mainBundle] pathForResource:@"key" ofType:@"pem"];
+    }
 
     backgroundQueue = dispatch_queue_create(self.className.UTF8String, DISPATCH_QUEUE_SERIAL);
     dispatch_set_target_queue(backgroundQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
@@ -96,6 +102,61 @@ NS_ASSUME_NONNULL_END
     // Multiroute
     [self.server add:@"/multi" viewController:[MultiRouteViewController class] withNibName:@"MultiRouteViewController" bundle:nil];
 
+    [self.server add:@"/mime" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        [response setValue:@"text/html; charset=utf=8" forHTTPHeaderField:@"Content-type"];
+        [response write:@"<html>"];
+        [response write:@"<head>"];
+        [response write:@"<link rel=\"stylesheet\" href=\"/static/style.css\"/>"];
+        [response write:@"</head>"];
+        [response write:@"<body>"];
+        [response write:@"<h2>Mime</h2>"];
+        [response write:@"<form action=\"\" method=\"post\" enctype=\"multipart/form-data\">"];
+        [response write:@"<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"67108864\" />"];
+        [response write:@"<div><label>File: </label><input type=\"file\" name=\"file1\" /></div>"];
+        [response write:@"<div><label>Text: </label><input type=\"text\" name=\"text1\" /></div>"];
+        [response write:@"<div><label>Check: </label><input type=\"checkbox\" name=\"checkbox1\" value=\"1\" /></div>"];
+        [response write:@"<div><input type=\"submit\"/></div>"];
+        [response write:@"</form>"];
+
+        if ( request.method == CRHTTPMethodPost ) {
+            if ( request.body != nil ) {
+                [response write:@"<h2>Request Body</h2>"];
+                [response write:@"<pre>"];
+                if ( [request.body isKindOfClass:[NSDictionary class]] ) {
+                    [request.body enumerateKeysAndObjectsUsingBlock:^(NSString *  _Nonnull key, NSString *  _Nonnull obj, BOOL * _Nonnull stop) {
+                        [response writeFormat:@"%@: %@\n", key, obj];
+                    }];
+                } else if ( [request.body isKindOfClass:[NSData class]] ) {
+                    NSData * data = request.body;
+                    [response writeString:[[NSString alloc] initWithBytesNoCopy:(void *)data.bytes length:data.length encoding:NSASCIIStringEncoding freeWhenDone:NO]];
+                }
+                [response write:@"</pre>"];
+            }
+
+            if ( request.files != nil ) {
+                [response write:@"<h2>Request Files</h2>"];
+                [response write:@"<pre>"];
+                [request.files enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, CRUploadedFile * _Nonnull obj, BOOL * _Nonnull stop) {
+                    [response writeFormat:@"%@: %@\n", key, @{@"name": obj.name ? : @"(null)", @"path": obj.temporaryFileURL ? : @"(null)", @"attributes": obj.attributes ? : @"(null)", @"mime": obj.mimeType ? : @"(null)" }];
+                }];
+                [response write:@"</pre>"];
+            }
+        }
+
+        [response write:@"<hr/>"];
+        [response write:@"<h2>Request Env</h2>"];
+        [response write:@"<pre>"];
+        [request.env enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+            [response writeFormat:@"%@: %@\n", key, obj];
+        }];
+        [response write:@"</pre>"];
+
+        [response write:@"</body>"];
+        [response write:@"</html>"];
+        [response finish];
+        completionHandler();
+    }];
+
     // Placeholder path controller
     [self.server add:@"/blog/:year/:month/:slug" viewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil recursive:NO method:CRHTTPMethodAll];
 
@@ -104,7 +165,6 @@ NS_ASSUME_NONNULL_END
 
     // HTML view controller
     [self.server add:@"/controller" viewController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil];
-
 
     [self.server add:@"/posts/:pid" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         [response send:request.query];
@@ -141,7 +201,7 @@ NS_ASSUME_NONNULL_END
         }
 
         // Set the base url. This is only for logging
-        NSURL* baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d", address, PortNumber]];
+        NSURL* baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"http%@://%@:%d", ((CRHTTPServer *)self.server).isSecure ? @"s" : @"", address, PortNumber]];
 
         [CRApp logFormat:@"%@ Started HTTP server at %@", [NSDate date], baseURL.absoluteString];
 
