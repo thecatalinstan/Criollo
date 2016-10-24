@@ -38,11 +38,11 @@ NS_ASSUME_NONNULL_END
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    return [self initWithNibName:nibNameOrNil bundle:nibBundleOrNil prefix:nil];
+    return [self initWithNibName:nibNameOrNil bundle:nibBundleOrNil prefix:CRPathSeparator];
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil prefix:(NSString *)prefix {
-    self = [super initWithPrefix:CRPathSeparator];
+    self = [super initWithPrefix:prefix];
     if ( self != nil ) {
         _nibName = nibNameOrNil ? : NSStringFromClass(self.class);
         _nibBundle = nibBundleOrNil ? : [NSBundle mainBundle];
