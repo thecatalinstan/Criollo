@@ -74,11 +74,8 @@
 #else
 - (NSArray *)fetchIdentityAndCertificatesWithError:(NSError *__autoreleasing  _Nullable *)error {
 
-    if ( self.certificatePath.length == 0 ) {
-        if ( *error != nil ) {
-            *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse PEM certificate bundle.",), CRHTTPServerCertificatePathKey: self.certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"}];
-        }
-        return nil;
+    if ( self.certificatePath.length == 0 || self.certificateKeyPath.length == 0 ) {
+        return [NSArray array];
     }
 
     // Read the contents of the PEM chained bundle and get SecCertRefs
@@ -104,11 +101,6 @@
     }
 
     // Read the contents of the PEM private key file and fetch SecKeyRef
-    if ( self.certificateKeyPath.length == 0 ) {
-        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse PEM RSA key file.",), CRHTTPServerCertificatePathKey: self.certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"}];
-        return nil;
-    }
-
     NSError * pemKeyReadError;
     NSData * pemKeyContents = [NSData dataWithContentsOfFile:self.certificateKeyPath options:NSDataReadingUncached error:&pemKeyReadError];
     if ( pemKeyContents.length == 0 ) {

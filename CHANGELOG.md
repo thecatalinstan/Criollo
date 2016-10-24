@@ -8,6 +8,10 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [0.4.7](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.7) (10/24/2016)
+
+**Released on Monday, October 24, 2016**. This is a hotfix release that addersses failed server initialization when no SSL certifcates are provided.
+
 ## [0.4.6](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.6) (10/23/2016)
 
 **Released on Sunday, October 23, 2016**. This release implements `multipart/form-data` request body parsing and HTTPS on macOS.
