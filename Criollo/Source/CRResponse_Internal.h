@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL alreadySentHeaders;
 @property (nonatomic, assign) BOOL alreadyBuiltHeaders;
 @property (nonatomic, readonly) BOOL finished;
+@property (nonatomic, readonly) BOOL hasWrittenBodyData;
 
 - (instancetype)initWithConnection:(CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode;
 - (instancetype)initWithConnection:(CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString * _Nullable)description;

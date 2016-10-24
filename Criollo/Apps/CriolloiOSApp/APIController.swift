@@ -33,11 +33,10 @@ class APIController : CRRouteController {
             responseString += "<h2>Version \(bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String) build \(bundle.object(forInfoDictionaryKey: "CFBundleVersion") as! String)</h2>"
 
             // Headers
-            let headers:NSDictionary! = request.allHTTPHeaderFields as NSDictionary!
             responseString += "<h3>Request Headers:</h2><pre>"
-            headers.enumerateKeysAndObjects({ (key,  object, stop) -> Void in
+            for (key, object) in request.allHTTPHeaderFields {
                 responseString += "\(key): \(object)\n"
-            })
+            }
             responseString += "</pre>"
 
             // Request Enviroment
@@ -49,30 +48,25 @@ class APIController : CRRouteController {
             responseString += "</pre>"
 
             // Query
-            let queryVars:NSDictionary! = request.query as NSDictionary
             responseString += "<h3>Request Query:</h2><pre>"
-            queryVars.enumerateKeysAndObjects({ (key,  object, stop) -> Void in
+            for (key, object) in request.query {
                 responseString += "\(key): \(object)\n"
-            })
+            }
             responseString += "</pre>"
 
             // Cookies
-            let cookies:NSDictionary! = request.cookies as! NSDictionary
             responseString += "<h3>Request Cookies:</h2><pre>"
-            cookies.enumerateKeysAndObjects { (key,  object, stop) -> Void in
+            for (key, object) in request.cookies! {
                 responseString += "\(key): \(object)\n"
             }
             responseString += "</pre>"
 
             // Stack trace
-            let stackTrace:NSArray! = Thread.callStackSymbols as NSArray!
             responseString += "<h3>Stack Trace:</h2><pre>"
-            
+            for (object) in Thread.callStackSymbols {
+                responseString += "\(object)\n"
+            }
 
-//            stackTrace.enumerateObjectsUsingBlock { (call:AnyObject, idx:Int, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
-//                let callInfo:String = call as! String
-//                responseString += "\(callInfo)\n"
-//            } as! (Any, Int, UnsafeMutablePointer<ObjCBool>) -> Void as! (Any, Int, UnsafeMutablePointer<ObjCBool>) -> Void as! (Any, Int, UnsafeMutablePointer<ObjCBool>) -> Void as! (Any, Int, UnsafeMutablePointer<ObjCBool>) -> Void as! (Any, Int, UnsafeMutablePointer<ObjCBool>) -> Void as! (Any, Int, UnsafeMutablePointer<ObjCBool>) -> Void as! (Any, Int, UnsafeMutablePointer<ObjCBool>) -> Void
             responseString += "</pre>"
 
             // System Info
@@ -83,7 +77,7 @@ class APIController : CRRouteController {
             // HTML
             responseString += "</body></html>"
 
-            response.setValue("text/html charset=utf-8", forHTTPHeaderField: "Content-type")
+            response.setValue("text/html; charset=utf-8", forHTTPHeaderField: "Content-type")
             response.setValue("\(responseString.lengthOfBytes(using: String.Encoding.utf8))", forHTTPHeaderField: "Content-Length")
             response.send(responseString)
             

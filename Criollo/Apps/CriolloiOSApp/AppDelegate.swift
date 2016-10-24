@@ -136,30 +136,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
             // Get server ip address
             let address:NSString! = SystemInfoHelper.ipAddress() as NSString!
             // Set the base url. This is only for logging
-            self.baseURL = URL(string: "http://\(address):\(PortNumber)")
+            self.baseURL = URL(string: "http://\(address!):\(PortNumber)")
 
             // Log the paths we can handle
 
             // Get the list of paths from the registered routes
-            let routePaths:NSArray!  = self.server.value(forKeyPath: "routes.path") as! NSArray
-            let paths:NSMutableSet! = NSMutableSet()
-            routePaths.enumerateObjects({ (path, idx, stop) in
-                if ( (path as AnyObject).isKind(of: NSNull.self) ) {
-                    return
+            let paths = NSMutableSet()
+            let routes:NSArray! = self.server.value(forKeyPath: "routes") as! NSArray
+            for ( route ) in routes {
+                let path:String? = (route as AnyObject).path
+                if ( path != nil ) {
+                    let pathURL:URL! = self.baseURL.appendingPathComponent(path!)
+                    paths.add(pathURL)
                 }
-                let pathURL:URL! = self.baseURL.appendingPathComponent(path as! String)
-                paths.add(pathURL)
-            })
+            }
 
-//            let sortedPaths = paths.sortedArrayUsingDescriptors([NSSortDescriptor(key:"absoluteString", ascending:true)])
-//            NSLog("Available paths are")
-//            NSLog("\(sortedPaths)")
-//            sortedPaths.enumerateObjectsUsingBlock({ (obj:AnyObject, idx:Int, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
-//                NSLog(" * \(obj)")
-//            })
-
+            let sortedPaths = paths.sortedArray(using: [NSSortDescriptor(key:"absoluteString", ascending:true)] )
+            print("Available paths are:")
+            for ( path ) in sortedPaths {
+                print(" * \(path)")
+            }
         } else {
-            NSLog("Failed to start HTTP server. \(serverError?.localizedDescription)")
+            print("Failed to start HTTP server. \(serverError?.localizedDescription)")
         }
 
         return true

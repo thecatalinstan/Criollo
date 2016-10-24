@@ -249,6 +249,17 @@ NS_ASSUME_NONNULL_END
         routeBlock (request, response, ^{
             shouldStopExecutingBlocks = NO;
             currentRouteIndex++;
+            if ( currentRouteIndex == routes.count && !response.finished ) {
+                if ( !response.hasWrittenBodyData ) {
+                    notFoundBlock(request, response, ^{
+                        if ( !response.finished) {
+                            [response finish];
+                        }
+                    });
+                } else {
+                    [response finish];
+                }
+            }
         });
     }
 }
