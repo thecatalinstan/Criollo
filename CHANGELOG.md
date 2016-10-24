@@ -8,7 +8,13 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
-4f3d0ec14135854b6a873e83b61dca51ba62ddf2
+## [0.4.9](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.9) (10/24/2016)
+
+**Released on Monday, October 24, 2016**. This is a hotfix release that fixes a bug introduced in version  0.4.7, that caused routes defined within CRViewControllers to not be resolved correctly.
+
+#### Fixed
+
+* `CRViewController initWithNibName:bundle:prefix` now passes along the correct prefix instead of the default. [`57d71d9`](https://github.com/thecatalinstan/Criollo/commit/57d71d95a9503e42b305a53106e50b3face1784b)
 
 ## [0.4.8](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.8) (10/24/2016)
 
