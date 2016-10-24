@@ -8,9 +8,19 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
+4f3d0ec14135854b6a873e83b61dca51ba62ddf2
+
+## [0.4.8](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.8) (10/24/2016)
+
+**Released on Monday, October 24, 2016**. This is a hotfix release that ensures that all responses are finished.
+
+#### Fixed
+
+* `CRRouter` now makes sure that the response is finished once all blocks have been executed. Also, if no data has been sent, the default error handling block will be invoked. The net result of this is that a 404 response will be sent for all request paths that do not actually send something back to the client. [`4f3d0ec`](https://github.com/thecatalinstan/Criollo/commit/4f3d0ec14135854b6a873e83b61dca51ba62ddf2)
+
 ## [0.4.7](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.7) (10/24/2016)
 
-**Released on Monday, October 24, 2016**. This is a hotfix release that addersses failed server initialization when no SSL certifcates are provided.
+**Released on Monday, October 24, 2016**. This is a hotfix release that addresses failed server initialization when no SSL certificates are provided.
 
 ## [0.4.6](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.6) (10/23/2016)
 
@@ -41,6 +51,7 @@ A bug in `CRRoute` that could cause incorrect (greedy) matching of regex path sp
 **Released on Tuesday, July 26, 2016**. This is a major overhaul of the routing mechanism.
 
 #### Changed
+
 The whole routing subsystem has been changed. The public API’s have also been changed. Check out the `CRRouter` documentation at: [http://cocoadocs.org/docsets/Criollo/0.4.0/Classes/CRRouter.html](http://cocoadocs.org/docsets/Criollo/0.4.0/Classes/CRRouter.html)
 
 ## [0.3.1](https://github.com/thecatalinstan/Criollo/releases/tag/0.3.1) (07/25/2016)
@@ -48,7 +59,8 @@ The whole routing subsystem has been changed. The public API’s have also been 
 **Released on Monday, July 25, 2016**. This is a hot-fix release.
 
 #### Fixed
-A bug in `CRRouteController` that affected the resolution of relative paths. [`f952862`](https://github.com/thecatalinstan/Criollo/commit/f952862b00978eb3eeff1345ca03e09450ccd524)
+
+* A bug in `CRRouteController` that affected the resolution of relative paths. [`f952862`](https://github.com/thecatalinstan/Criollo/commit/f952862b00978eb3eeff1345ca03e09450ccd524)
 
 ## [0.3.0](https://github.com/thecatalinstan/Criollo/releases/tag/0.3.0) (07/25/2016)
 
