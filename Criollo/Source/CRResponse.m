@@ -180,6 +180,7 @@
     if ( flag ) {
         _finished = YES;
     }
+    _hasWrittenBodyData = YES;
     [self.connection sendDataToSocket:data forRequest:self.request];
 }
 
