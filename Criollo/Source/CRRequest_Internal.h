@@ -38,6 +38,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)bufferBodyData:(NSData *)data;
 - (void)bufferResponseData:(NSData *)data;
 
+- (void)clearBodyParsingTargets;
+
 - (BOOL)appendBodyData:(NSData *)data forKey:(NSString *)key;
 - (BOOL)setFileHeader:(NSDictionary *)headerFields forKey:(NSString *)key;
 - (BOOL)appendFileData:(NSData *)data forKey:(NSString *)key;
@@ -48,6 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setQuery:(NSString *)obj forKey:(NSString *)key;
 
 - (BOOL)parseJSONBodyData:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (BOOL)parseMIMEBodyDataChunk:(NSData *)data error:(NSError *__autoreleasing  _Nullable * _Nullable)error;
 - (BOOL)parseMultipartBodyDataChunk:(NSData *)data error:(NSError * _Nullable __autoreleasing * _Nullable)error;
 - (BOOL)parseURLEncodedBodyData:(NSError * _Nullable __autoreleasing * _Nullable)error;
 - (BOOL)parseBufferedBodyData:(NSError * _Nullable __autoreleasing * _Nullable)error;
