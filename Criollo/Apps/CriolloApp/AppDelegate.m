@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_END
     self.server = [[serverClass alloc] initWithDelegate:self];
 
     if ( !isFastCGI ) {
-        ((CRHTTPServer *)self.server).isSecure = YES;
+        ((CRHTTPServer *)self.server).isSecure = NO;
         ((CRHTTPServer *)self.server).certificatePath = [[NSBundle mainBundle] pathForResource:@"cert" ofType:@"pem"];
         ((CRHTTPServer *)self.server).certificateKeyPath = [[NSBundle mainBundle] pathForResource:@"key" ofType:@"pem"];
     }
@@ -100,9 +100,64 @@ NS_ASSUME_NONNULL_END
     [self.server add:@"/api" controller:[APIController class]];
 
     // Multiroute
-    [self.server add:@"/multi" viewController:[MultiRouteViewController class] withNibName:@"MultiRouteViewController" bundle:nil];
+    [self.server add:@"/routes" viewController:[MultiRouteViewController class] withNibName:@"MultiRouteViewController" bundle:nil];
 
+    // MIME
+    NSURL *uploadURL = [NSURL URLWithString:[NSString stringWithFormat:@"http%@://%@:%d/mime-response", ((CRHTTPServer *)self.server).isSecure ? @"s" : @"", [SystemInfoHelper IPAddress] ? : @"127.0.0.1", PortNumber]];
     [self.server add:@"/mime" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+
+        // Send a mime encoded request to "/mime-response" and display the output of that page here :)
+
+        NSString* file = @"~/Desktop/mimeFile";
+        NSError* dataReadingError;
+        NSData* data = [NSData dataWithContentsOfFile:file.stringByStandardizingPath options:0 error:&dataReadingError];
+
+        if ( dataReadingError ) {
+            [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
+            [response setValue:@(dataReadingError.description.length).stringValue forHTTPHeaderField:@"Content-length"];
+            [response sendString:dataReadingError.description];
+            return;
+        }
+
+        NSString* mimeType = [[CRMimeTypeHelper sharedHelper] mimeTypeForFileAtPath:file.stringByStandardizingPath];
+
+        NSMutableURLRequest * uploadRequest = [[NSMutableURLRequest alloc] initWithURL:uploadURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:60.0];
+        [uploadRequest setValue:mimeType forHTTPHeaderField:@"Content-type"];
+        [uploadRequest setValue:@(data.length).stringValue forHTTPHeaderField:@"Content-length"];
+        [uploadRequest setHTTPBody:data];
+        [uploadRequest setHTTPMethod:@"POST"];
+        NSURLSession* session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+
+        [[session dataTaskWithRequest:uploadRequest completionHandler:^(NSData * _Nullable resData, NSURLResponse * _Nullable res, NSError * _Nullable error) {
+            if ( error ) {
+                [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
+                [response setValue:@(error.description.length).stringValue forHTTPHeaderField:@"Content-length"];
+                [response sendString:error.description];
+            } else {
+                [response setValue:((NSHTTPURLResponse *)res).MIMEType forHTTPHeaderField:@"Content-type"];
+                [response setValue:@(resData.length).stringValue forHTTPHeaderField:@"Content-length"];
+                [response sendData:resData];
+                completionHandler();
+            }
+        }] resume];
+    }];
+
+    [self.server add:@"/mime-response" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+        NSError *error;
+        NSData *data = [NSData dataWithContentsOfURL:request.files.allValues[0].temporaryFileURL options:0 error:&error];
+        if ( error ) {
+            [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
+            [response setValue:@(error.description.length).stringValue forHTTPHeaderField:@"Content-length"];
+            [response sendString:error.description];
+        } else {
+            [response setValue:request.env[@"HTTP_CONTENT_TYPE"] forHTTPHeaderField:@"Content-type"];
+            [response setValue:@(data.length).stringValue forHTTPHeaderField:@"Content-length"];
+            [response sendData:data];
+        }
+    }];
+
+    // Multipart
+    [self.server add:@"/multipart" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         [response setValue:@"text/html; charset=utf=8" forHTTPHeaderField:@"Content-type"];
         [response write:@"<html>"];
         [response write:@"<head>"];
@@ -195,13 +250,10 @@ NS_ASSUME_NONNULL_END
     if ( [self.server startListening:&serverError portNumber:PortNumber] ) {
 
         // Get server ip address
-        NSString* address = [SystemInfoHelper IPAddress];
-        if ( !address ) {
-            address = @"127.0.0.1";
-        }
+        NSString* address = [SystemInfoHelper IPAddress] ? : @"127.0.0.1";
 
         // Set the base url. This is only for logging
-        NSURL* baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"http%@://%@:%d", ((CRHTTPServer *)self.server).isSecure ? @"s" : @"", address, PortNumber]];
+        NSURL *baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"http%@://%@:%d", ((CRHTTPServer *)self.server).isSecure ? @"s" : @"", address, PortNumber]];
 
         [CRApp logFormat:@"%@ Started HTTP server at %@", [NSDate date], baseURL.absoluteString];
 

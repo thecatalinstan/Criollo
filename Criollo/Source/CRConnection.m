@@ -118,13 +118,23 @@ static const NSData * CRLFCRLFData;
         return;
     }
 
-    if ([self.currentRequest.env[@"HTTP_CONTENT_TYPE"] hasPrefix:CRRequestTypeMultipart]) {
-        NSError* bodyParsingError;
-        if ( ![self.currentRequest parseMultipartBodyDataChunk:data error:&bodyParsingError] ) {
-            [CRApp logErrorFormat:@"%@" , bodyParsingError];
+    NSString * contentType = self.currentRequest.env[@"HTTP_CONTENT_TYPE"];
+    if ([contentType hasPrefix:CRRequestTypeMultipart]) {
+        NSError* multipartParsingError;
+        if ( ![self.currentRequest parseMultipartBodyDataChunk:data error:&multipartParsingError] ) {
+            [CRApp logErrorFormat:@"%@" , multipartParsingError];
         }
-    } else {
+    } else if ([contentType hasPrefix:CRRequestTypeJSON]) {
+        // JSON requests are parsed after we have all the data
         [self bufferBodyData:data forRequest:self.currentRequest];
+    } else if ([contentType hasPrefix:CRRequestTypeURLEncoded]) {
+        // URL-encoded requests are parsed after we have all the data
+        [self bufferBodyData:data forRequest:self.currentRequest];
+    } else {
+        NSError* mimeParsingError;
+        if ( ![self.currentRequest parseMIMEBodyDataChunk:data error:&mimeParsingError] ) {
+            [CRApp logErrorFormat:@"%@" , mimeParsingError];
+        }
     }
 }
 
@@ -149,7 +159,9 @@ static const NSData * CRLFCRLFData;
             // multipart/form-data requests are parsed as they come in and not once the
             // request hast been fully received ;)
         } else {
-            result = [self.currentRequest parseBufferedBodyData:&bodyParsingError];
+            // other mime types are assumed to be files and will be treated just like
+            // multipart request files. What we need to do here is to reset the target
+            [self.currentRequest clearBodyParsingTargets];
         }
 
         if ( !result ) {

@@ -19,6 +19,10 @@
 #import "CRUploadedFile_Internal.h"
 #import "CRApplication.h"
 
+#define CRFileHeaderNameKey             @"name"
+#define CRFileHeaderFilenameKey         @"filename"
+#define CRFileHeaderContentTypeKey      @"content-type"
+
 @implementation CRRequest {
     __strong NSMutableDictionary* _env;
 
@@ -142,8 +146,12 @@
     return shouldClose;
 }
 
-
 #pragma mark - Body parsing
+
+- (void)clearBodyParsingTargets {
+    currentMultipartBodyKey = nil;
+    currentMultipartFileKey = nil;
+}
 
 - (BOOL)parseJSONBodyData:(NSError *__autoreleasing  _Nullable *)error {
     BOOL result = NO;
@@ -159,6 +167,34 @@
         *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Unable to parse JSON request.", NSUnderlyingErrorKey:jsonDecodingError}];
     }
 
+    return result;
+}
+
+- (BOOL)parseMIMEBodyDataChunk:(NSData *)data error:(NSError *__autoreleasing  _Nullable * _Nullable)error {
+    BOOL result = YES;
+
+    if ( currentMultipartFileKey == nil ) {
+        // Set the target for the value
+        currentMultipartFileKey = @(self.files.count).stringValue;
+        NSString *contentType = self.env[@"HTTP_CONTENT_TYPE"];
+        NSRange separatorRange = [contentType rangeOfString:CRRequestHeaderSeparator];
+        if ( separatorRange.location != NSNotFound ) {
+            contentType = [contentType substringToIndex:separatorRange.location];
+        }
+        if ( contentType.length == 0 ) {
+            contentType = @"application/octet-stream";
+        }
+        NSDictionary *headerFields = @{ CRFileHeaderNameKey: @"", CRFileHeaderFilenameKey: @"", CRFileHeaderContentTypeKey: contentType };
+        [self setFileHeader:headerFields forKey:currentMultipartFileKey];
+    }
+
+    if ( currentMultipartFileKey != nil ) {
+        result = [self appendFileData:data forKey:currentMultipartFileKey];
+    } else {
+        result = NO;
+        *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestFileWriteError userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to append MIME data",)}];
+    }
+        
     return result;
 }
 
@@ -254,13 +290,12 @@
                 }
 
                 // Set the target for the value
-                currentMultipartBodyKey = nil;
-                currentMultipartFileKey = nil;
-                if ( headerFields[@"name"].length > 0 ) {
-                    if ( headerFields[@"filename"] && headerFields[@"filename"].length > 0 ) {
-                        currentMultipartFileKey = headerFields[@"name"];
-                    } else if ( !headerFields[@"filename"] ) {
-                        currentMultipartBodyKey = headerFields[@"name"];
+                [self clearBodyParsingTargets];
+                if ( headerFields[CRFileHeaderNameKey].length > 0 ) {
+                    if ( headerFields[CRFileHeaderFilenameKey] && headerFields[CRFileHeaderFilenameKey].length > 0 ) {
+                        currentMultipartFileKey = headerFields[CRFileHeaderNameKey];
+                    } else if ( !headerFields[CRFileHeaderFilenameKey] ) {
+                        currentMultipartBodyKey = headerFields[CRFileHeaderNameKey];
                     }
                 }
 
@@ -339,8 +374,8 @@
         _files = [NSMutableDictionary dictionary];
     }
 
-    CRUploadedFile * file = [[CRUploadedFile alloc] initWithName:headerFields[@"filename"]];
-    file.mimeType = headerFields[@"content-type"];
+    CRUploadedFile * file = [[CRUploadedFile alloc] initWithName:headerFields[CRFileHeaderFilenameKey]];
+    file.mimeType = headerFields[CRFileHeaderContentTypeKey];
 
     ((NSMutableDictionary *)self.files)[key] = file;
 

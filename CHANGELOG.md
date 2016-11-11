@@ -8,6 +8,14 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [0.4.10](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.10) (11/11/2016)
+
+**Released on Friday, November 11, 2016**. This release implements MIME (binary) request body parsing.
+
+#### Added
+
+* [`CRRequest`] now automatically parses MIME (binary) request bodies. After parsing such a request, the `files` property will be a dictionary containing the uploaded file as its first value (the key is “0”). Uploaded files are deleted from their temporary location when the `CRRequest` object is deallocated.
+
 ## [0.4.9](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.9) (10/24/2016)
 
 **Released on Monday, October 24, 2016**. This is a hotfix release that fixes a bug introduced in version  0.4.7, that caused routes defined within CRViewControllers to not be resolved correctly.
