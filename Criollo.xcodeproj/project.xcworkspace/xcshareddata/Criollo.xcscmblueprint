@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "1A1A47D5B86E7CE952A443F553C63A444BD2D339",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "1A1A47D5B86E7CE952A443F553C63A444BD2D339" : 9223372036854775807,
+    "1C75F1C5CFCB95B3702F6F632FA05ED5244B519E" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "E3A8D286-E580-4898-949D-BD20BA8EF12A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "1A1A47D5B86E7CE952A443F553C63A444BD2D339" : "Criollo\/",
+    "1C75F1C5CFCB95B3702F6F632FA05ED5244B519E" : "Criollo\/Libraries\/CocoaAsyncSocket\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Criollo",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Criollo.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/thecatalinstan\/Criollo.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "1A1A47D5B86E7CE952A443F553C63A444BD2D339"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/robbiehanson\/CocoaAsyncSocket.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "1C75F1C5CFCB95B3702F6F632FA05ED5244B519E"
+    }
+  ]
+}
