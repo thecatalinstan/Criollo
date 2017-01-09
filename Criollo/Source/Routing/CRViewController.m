@@ -53,20 +53,18 @@ NS_ASSUME_NONNULL_END
             NSString* requestedPath = request.env[@"DOCUMENT_URI"];
             NSString* requestedRelativePath = [requestedPath pathRelativeToPath:controller.prefix];
             NSArray<CRRouteMatchingResult * >* routes = [controller routesForPath:requestedRelativePath method:request.method];
-            [controller executeRoutes:routes forRequest:request response:response withNotFoundBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completion) { @autoreleasepool {
-                [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+            [controller executeRoutes:routes forRequest:request response:response withCompletion:completionHandler notFoundBlock:^(CRRequest * _Nonnull req, CRResponse * _Nonnull res, CRRouteCompletionBlock  _Nonnull completion) { @autoreleasepool {
+                [res setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
 
-                NSString* output = [controller presentViewControllerWithRequest:request response:response];
+                NSString* output = [controller presentViewControllerWithRequest:req response:res];
                 if ( controller.shouldFinishResponse ) {
-                    [response sendString:output];
+                    [res sendString:output];
                 } else {
-                    [response writeString:output];
+                    [res writeString:output];
                 }
 
                 completion();
             }}];
-
-            completionHandler();
         }};
     }
     return self;
