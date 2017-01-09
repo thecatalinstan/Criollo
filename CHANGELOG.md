@@ -8,6 +8,14 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [0.4.11](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.11) (01/09/2017)
+
+**Released on Monday, January 9, 2017**. This is a hotfix release that fixes a bug introduced in version  0.4.8, that could cause premature response termination for certain async operations performed inside nested routers (`CRViewController` or `CRRouteController`).
+
+#### Fixed
+
+* Built-in `CRRouter` subclasses would call the route block’s `completionHandler` right after calling `executeRoutes:resquest:response:withNotFoundBlock:`. This is not valid for routes that perform any async operations and are defined as the last route in the path, as the `completionHandler` gets invoked before the async operation has ended, thus causing the response to finish, causing an `NSInternalInconsistencyException`. [`844cb5f`](https://github.com/thecatalinstan/Criollo/commit/844cb5f9dfd4450e9adaa676a5881a7849b1c787)
+
 ## [0.4.10](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.10) (11/11/2016)
 
 **Released on Friday, November 11, 2016**. This release implements MIME (binary) request body parsing.

@@ -41,8 +41,7 @@ NS_ASSUME_NONNULL_END
                 NSString* requestedPath = request.env[@"DOCUMENT_URI"];
                 NSString* requestedRelativePath = [requestedPath pathRelativeToPath:controller.prefix];
                 NSArray<CRRouteMatchingResult *>* routes = [controller routesForPath:requestedRelativePath method:request.method];
-                [controller executeRoutes:routes forRequest:request response:response];
-                completionHandler();
+                [controller executeRoutes:routes forRequest:request response:response withCompletion:completionHandler];
             }
         };
     }
