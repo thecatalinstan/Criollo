@@ -221,11 +221,11 @@ NS_ASSUME_NONNULL_END
     return routes;
 }
 
-- (void)executeRoutes:(NSArray<CRRouteMatchingResult *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response {
-    [self executeRoutes:routes forRequest:request response:response withNotFoundBlock:nil];
+- (void)executeRoutes:(NSArray<CRRouteMatchingResult *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response withCompletion:(nonnull CRRouteCompletionBlock)completionBlock {
+    [self executeRoutes:routes forRequest:request response:response withCompletion:completionBlock notFoundBlock:nil];
 }
 
-- (void)executeRoutes:(NSArray<CRRouteMatchingResult *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response withNotFoundBlock:(CRRouteBlock)notFoundBlock {
+- (void)executeRoutes:(NSArray<CRRouteMatchingResult *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response withCompletion:(nonnull CRRouteCompletionBlock)completionBlock notFoundBlock:(CRRouteBlock _Nullable)notFoundBlock {
     if ( !notFoundBlock ) {
         notFoundBlock = [CRRouter errorHandlingBlockWithStatus:404 error:nil];
     }
@@ -249,15 +249,25 @@ NS_ASSUME_NONNULL_END
         routeBlock (request, response, ^{
             shouldStopExecutingBlocks = NO;
             currentRouteIndex++;
-            if ( currentRouteIndex == routes.count && !response.finished ) {
-                if ( !response.hasWrittenBodyData ) {
-                    notFoundBlock(request, response, ^{
-                        if ( !response.finished) {
-                            [response finish];
+            if ( currentRouteIndex == routes.count ) {
+                if ( !response.finished ) {
+                    if ( !response.hasWrittenBodyData ) {
+                        notFoundBlock(request, response, ^{
+                            if ( !response.finished) {
+                                [response finish];
+                            }
+                            if ( completionBlock ) {
+                                completionBlock();
+                            }
+                        });
+                    } else {
+                        [response finish];
+                        if ( completionBlock ) {
+                            completionBlock();
                         }
-                    });
-                } else {
-                    [response finish];
+                    }
+                } else if ( completionBlock ) {
+                    completionBlock();
                 }
             }
         });

@@ -336,10 +336,11 @@ NS_ASSUME_NONNULL_END
                                 userInfo[NSUnderlyingErrorKey] = underlyingError;
                             }
                             NSError* channelReleaseError = [NSError errorWithDomain:CRStaticFileManagerErrorDomain code:CRStaticFileManagerFileReadError userInfo:userInfo];
-                            [CRStaticFileManager errorHandlerBlockForError:channelReleaseError](request, response, ^{});
+                            [CRStaticFileManager errorHandlerBlockForError:channelReleaseError](request, response, completionHandler);
                             return;
                         }
                         
+                        completionHandler();
                         [response finish];
                     }
                 });
@@ -372,7 +373,7 @@ NS_ASSUME_NONNULL_END
                                 userInfo[NSUnderlyingErrorKey] = underlyingError;
                             }
                             NSError* fileReadError = [NSError errorWithDomain:CRStaticFileManagerErrorDomain code:CRStaticFileManagerReleaseFailedError userInfo:userInfo];
-                            [CRStaticFileManager errorHandlerBlockForError:fileReadError](request, response, ^{});
+                            [CRStaticFileManager errorHandlerBlockForError:fileReadError](request, response, completionHandler);
                             return;
                         }
 
@@ -385,8 +386,6 @@ NS_ASSUME_NONNULL_END
                         }
                     }
                 });
-                
-                completionHandler();
             }
         }
     };

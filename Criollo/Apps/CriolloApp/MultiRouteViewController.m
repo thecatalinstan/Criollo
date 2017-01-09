@@ -35,6 +35,14 @@
 
         // Static file
         [self mount:@"/file.txt" fileAtPath:@"/etc/hosts" options:CRStaticFileServingOptionsCache fileName:@"hosts" contentType:@"text/plain" contentDisposition:CRStaticFileContentDispositionInline];
+        
+        // Dispatch something asynchroneosly after a delay
+        [self add:@"/async" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [response send:@"Bla bla"];
+                completionHandler();
+            });
+        }];
     }
     return self;
 }
