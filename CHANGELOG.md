@@ -8,9 +8,18 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
+
+## [0.4.12](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.12) (01/10/2017)
+
+**Released on Tuesday, January 9, 2017**. This is a hot-fix release that closes an issue that could cause invalid URL-encoded parameters to be lost.
+
+#### Fixed
+
+* When decoding URL-encoded strings, `CRRequest` would remove the keys or values that would not properly decode using `stringByRemovingPercentEscapes`. The current implementation attempts to also pass these strings through `stringByDecodingURLEncodedString` so that some intermediate representation can be salvaged. [`144fab1`](https://github.com/thecatalinstan/Criollo/commit/144fab1c83664fb6408d964d15e4fbb5f1f9d96c)
+
 ## [0.4.11](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.11) (01/09/2017)
 
-**Released on Monday, January 9, 2017**. This is a hotfix release that fixes a bug introduced in version  0.4.8, that could cause premature response termination for certain async operations performed inside nested routers (`CRViewController` or `CRRouteController`).
+**Released on Monday, January 9, 2017**. This is a hot-fix release that fixes a bug introduced in version  0.4.8, that could cause premature response termination for certain async operations performed inside nested routers (`CRViewController` or `CRRouteController`).
 
 #### Fixed
 
@@ -26,7 +35,7 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ## [0.4.9](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.9) (10/24/2016)
 
-**Released on Monday, October 24, 2016**. This is a hotfix release that fixes a bug introduced in version  0.4.7, that caused routes defined within CRViewControllers to not be resolved correctly.
+**Released on Monday, October 24, 2016**. This is a hot-fix release that fixes a bug introduced in version  0.4.7, that caused routes defined within CRViewControllers to not be resolved correctly.
 
 #### Fixed
 
@@ -34,7 +43,7 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ## [0.4.8](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.8) (10/24/2016)
 
-**Released on Monday, October 24, 2016**. This is a hotfix release that ensures that all responses are finished.
+**Released on Monday, October 24, 2016**. This is a hot-fix release that ensures that all responses are finished.
 
 #### Fixed
 
@@ -42,7 +51,7 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ## [0.4.7](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.7) (10/24/2016)
 
-**Released on Monday, October 24, 2016**. This is a hotfix release that addresses failed server initialization when no SSL certificates are provided.
+**Released on Monday, October 24, 2016**. This is a hot-fix release that addresses failed server initialization when no SSL certificates are provided.
 
 ## [0.4.6](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.6) (10/23/2016)
 
@@ -170,7 +179,7 @@ The core router logic has been re-written. Also now you can define routes using 
 
 ## [0.1.9](https://github.com/thecatalinstan/Criollo/releases/tag/0.1.9) (03/13/2016)
 
-**Released on Sunday, March 13, 2016**. This is just a hotfix release.
+**Released on Sunday, March 13, 2016**. This is just a hot-fix release.
 
 ### Fixed
 
