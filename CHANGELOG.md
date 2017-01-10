@@ -8,10 +8,17 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [0.4.13](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.13) (01/10/2017)
+
+**Released on Tuesday, January 10, 2017**. This is a hot-fix release that closes an issue introduced in [`144fab1`](https://github.com/thecatalinstan/Criollo/commit/144fab1c83664fb6408d964d15e4fbb5f1f9d96c) where query string params that do not have a value cause an unhandled exception.
+
+#### Fixed
+
+* An index out bounds exception was raised in the URL encoded string parsing block if the key value pair did not have a value. There is now a check to prevent that. [`f41fb06`](https://github.com/thecatalinstan/Criollo/commit/f41fb06a59135bbee2cfb558e3dc0475b3f27e98)
 
 ## [0.4.12](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.12) (01/10/2017)
 
-**Released on Tuesday, January 9, 2017**. This is a hot-fix release that closes an issue that could cause invalid URL-encoded parameters to be lost.
+**Released on Tuesday, January 10, 2017**. This is a hot-fix release that closes an issue that could cause invalid URL-encoded parameters to be lost.
 
 #### Fixed
 
