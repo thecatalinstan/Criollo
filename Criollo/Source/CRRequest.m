@@ -19,6 +19,8 @@
 #import "CRUploadedFile_Internal.h"
 #import "CRApplication.h"
 
+#import "NSString+Criollo.h"
+
 #define CRFileHeaderNameKey             @"name"
 #define CRFileHeaderFilenameKey         @"filename"
 #define CRFileHeaderContentTypeKey      @"content-type"
@@ -93,12 +95,12 @@
     NSMutableDictionary<NSString *,NSString *> *query = _query ? _query.mutableCopy : [NSMutableDictionary dictionary];
     if ( _env[@"QUERY_STRING"] != nil ) {
         NSArray<NSString *> *queryVars = [_env[@"QUERY_STRING"] componentsSeparatedByString:CRRequestKeySeparator];
-        [queryVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            @autoreleasepool {
-                NSArray<NSString *> *queryVarComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
-                query[queryVarComponents[0].stringByRemovingPercentEncoding] = queryVarComponents.count > 1 ? queryVarComponents[1].stringByRemovingPercentEncoding : @"";
-            }
-        }];
+        [queryVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) { @autoreleasepool {
+            NSArray<NSString *> *queryVarComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
+            NSString *key = queryVarComponents[0].stringByDecodingURLEncodedString.stringByRemovingPercentEncoding ? : (queryVarComponents[0].stringByDecodingURLEncodedString ? : queryVarComponents[0]);
+            NSString *value = queryVarComponents[1].stringByDecodingURLEncodedString.stringByRemovingPercentEncoding ? : (queryVarComponents[0].stringByDecodingURLEncodedString ? : queryVarComponents[1]);
+            query[key] = value;
+        }}];
     }
     _query = query;
 
@@ -106,12 +108,10 @@
     NSMutableDictionary<NSString *,NSString *> *cookies = [NSMutableDictionary dictionary];
     if ( _env[@"HTTP_COOKIE"] != nil ) {
         NSArray<NSString *> *cookieStrings = [_env[@"HTTP_COOKIE"] componentsSeparatedByString:CRRequestHeaderSeparator];
-        [cookieStrings enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            @autoreleasepool {
-                NSArray<NSString *> *cookieComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
-                cookies[cookieComponents[0]] = cookieComponents.count > 1 ? cookieComponents[1] : @"";
-            }
-        }];
+        [cookieStrings enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) { @autoreleasepool {
+            NSArray<NSString *> *cookieComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
+            cookies[cookieComponents[0]] = cookieComponents.count > 1 ? cookieComponents[1] : @"";
+        }}];
     }
     _cookies = cookies;
 
@@ -404,10 +404,12 @@
 
     NSString* bodyString = [[NSString alloc] initWithBytesNoCopy:(void *)self.bufferedBodyData.bytes length:self.bufferedBodyData.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
     NSArray<NSString *> *bodyVars = [bodyString componentsSeparatedByString:CRRequestKeySeparator];
-    [bodyVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [bodyVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) { @autoreleasepool {
         NSArray<NSString *> *bodyVarComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
-        body[bodyVarComponents[0].stringByRemovingPercentEncoding] = bodyVarComponents.count > 1 ? bodyVarComponents[1].stringByRemovingPercentEncoding : @"";
-    }];
+        NSString *key = bodyVarComponents[0].stringByDecodingURLEncodedString.stringByRemovingPercentEncoding ? : (bodyVarComponents[0].stringByDecodingURLEncodedString ? : bodyVarComponents[0]);
+        NSString *value = bodyVarComponents[1].stringByDecodingURLEncodedString.stringByRemovingPercentEncoding ? : (bodyVarComponents[0].stringByDecodingURLEncodedString ? : bodyVarComponents[1]);
+        body[key] = value;
+    }}];
     _body = body;
     self.bufferedBodyData = nil;
     return YES;
