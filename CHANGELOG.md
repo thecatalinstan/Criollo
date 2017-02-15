@@ -8,6 +8,18 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [0.4.14](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.14) (02/15/2017)
+
+**Released on Wednesday, February 15, 2017**. This is a hot-fix release that closes issue [\#7](https://github.com/thecatalinstan/Criollo/issues/7) that caused incorrect relative path resolution for `NSDirectoryManager` routes mounted at the root path, as well as tweaking some auto-indexing functionality.
+
+#### Fixed
+
+* The resolution of relative paths was attempted also for static routes mounted at `/`, which led to an incorrect result, since the relative path is always the same as the requested path. [`1a1beb4`](https://github.com/thecatalinstan/Criollo/commit/1a1beb4b99c022b1e85a919143fd05d8f13cfdf2)
+
+* Do not display the `../` link for auto-indexed directories when we are at the top level of the mount path. [`858693c`](https://github.com/thecatalinstan/Criollo/commit/858693c44d3fca302c1395c8b30f5567e58dbbbd)
+
+* Fix the generation of auto-indexed links for `NSDirectoryManager` routes mounted at the root path. There was an extra `/` added to the top level link href. [`4ea82e7`](https://github.com/thecatalinstan/Criollo/commit/4ea82e76ff0fcdecb20a26dee93b5dba9fb7bbbc)
+
 ## [0.4.13](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.13) (01/10/2017)
 
 **Released on Tuesday, January 10, 2017**. This is a hot-fix release that closes an issue introduced in [`144fab1`](https://github.com/thecatalinstan/Criollo/commit/144fab1c83664fb6408d964d15e4fbb5f1f9d96c) where query string params that do not have a value cause an unhandled exception.
