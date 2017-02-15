@@ -67,6 +67,11 @@
 }
 
 - (NSString *)pathRelativeToPath:(NSString *)path {
+    
+    if ( [path isEqualToString:CRPathSeparator] ) {
+        return self;
+    }
+
     NSUInteger relativePathStart = [self rangeOfString:path options:NSBackwardsSearch].location;
     if ( relativePathStart == NSNotFound ) {
         relativePathStart = 0;
