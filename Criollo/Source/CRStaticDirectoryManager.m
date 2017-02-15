@@ -184,7 +184,7 @@ static const NSDateFormatter *dateFormatter;
 
             [responseString appendString:@"<pre>"];
 
-            if ( displayParentLink && ! [requestedPath isEqualToString:prefix] ) {
+            if ( displayParentLink && ! [requestedPath hasSuffix:prefix] ) {
                 [responseString appendFormat:@"<a href=\"%@\">../</a>\n", requestedPath.stringByDeletingLastPathComponent];
             }
 
