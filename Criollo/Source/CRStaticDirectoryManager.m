@@ -217,7 +217,7 @@ static const NSDateFormatter *dateFormatter;
                     fileSizePadding = [@"" stringByPaddingToLength:CRStaticDirectoryIndexFileSizeLength - fileSize.length withString:@" " startingAtIndex:0];
                 }
 
-                [responseString appendFormat:@"<a href=\"%@/%@\" title=\"%@\">%@%@</a>%@ %@ %@%@\n", requestedPath, URL.lastPathComponent, fullName, fileName, isDirectory ? CRPathSeparator : @"", fileNamePadding, fileModificationDate, fileSizePadding, fileSize];
+                [responseString appendFormat:@"<a href=\"%@%@%@\" title=\"%@\">%@%@</a>%@ %@ %@%@\n", requestedPath, [requestedPath isEqualToString:CRPathSeparator] ? @"" : CRPathSeparator, URL.lastPathComponent, fullName, fileName, isDirectory ? CRPathSeparator : @"", fileNamePadding, fileModificationDate, fileSizePadding, fileSize];
             }];
             [responseString appendString:@"</pre>"];
 
