@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) CRStaticDirectoryServingOptions options;
 
 + (CRRouteBlock)errorHandlerBlockForError:(NSError *)error;
-+ (CRRouteBlock)indexBlockForDirectoryAtPath:(NSString *)directoryPath requestedPath:(NSString *)requestedPath displayParentLink:(BOOL)displayParentLink showHiddenFiles:(BOOL)showHiddenFiles;
++ (CRRouteBlock)indexBlockForDirectoryAtPath:(NSString *)directoryPath requestedPath:(NSString *)requestedPath prefix:(NSString *)prefix displayParentLink:(BOOL)displayParentLink showHiddenFiles:(BOOL)showHiddenFiles;
 
 + (NSDateFormatter *)dateFormatter;
 
@@ -102,7 +102,7 @@ static const NSDateFormatter *dateFormatter;
                 } else if ( [itemAttributes.fileType isEqualToString:NSFileTypeDirectory] ) {
                     if ( manager.shouldGenerateDirectoryIndex ) {
                         // Make the index
-                        [CRStaticDirectoryManager indexBlockForDirectoryAtPath:requestedAbsolutePath requestedPath:requestedDocumentPath displayParentLink:requestedRelativePath.length != 0 showHiddenFiles:manager.shouldShowHiddenFilesInDirectoryIndex](request, response, completionHandler);
+                        [CRStaticDirectoryManager indexBlockForDirectoryAtPath:requestedAbsolutePath requestedPath:requestedDocumentPath prefix:manager.prefix displayParentLink:requestedRelativePath.length != 0 showHiddenFiles:manager.shouldShowHiddenFilesInDirectoryIndex](request, response, completionHandler);
                     } else {
                         // Forbidden
                         NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
@@ -165,7 +165,7 @@ static const NSDateFormatter *dateFormatter;
     };
 }
 
-+ (CRRouteBlock)indexBlockForDirectoryAtPath:(NSString *)directoryPath requestedPath:(NSString *)requestedPath displayParentLink:(BOOL)displayParentLink showHiddenFiles:(BOOL)showHiddenFiles {
++ (CRRouteBlock)indexBlockForDirectoryAtPath:(NSString *)directoryPath requestedPath:(NSString *)requestedPath prefix:(NSString *)prefix displayParentLink:(BOOL)displayParentLink showHiddenFiles:(BOOL)showHiddenFiles {
     return ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         @autoreleasepool {
             NSMutableString* responseString = [NSMutableString string];
@@ -184,7 +184,7 @@ static const NSDateFormatter *dateFormatter;
 
             [responseString appendString:@"<pre>"];
 
-            if ( displayParentLink ) {
+            if ( displayParentLink && ! [requestedPath isEqualToString:prefix] ) {
                 [responseString appendFormat:@"<a href=\"%@\">../</a>\n", requestedPath.stringByDeletingLastPathComponent];
             }
 
