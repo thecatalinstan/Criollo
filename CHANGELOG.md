@@ -8,6 +8,16 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [0.4.15](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.15) (03/11/2017)
+
+**Released on Sunday, March 11, 2017**. This is a hot-fix release that ensures Carthage compatibility and eliminates some potential warnings related to code formatting standards.
+
+#### Fixed
+
+* Missing shared build schemes were added to ensure Carthage compatibility. [`69e2b75`](https://github.com/thecatalinstan/Criollo/commit/69e2b751b80a6758d04ff5aaa8d24e3ea773ce29)
+
+* Missing new lines at the end of header files were added. [`294e844`](https://github.com/thecatalinstan/Criollo/commit/294e844b261219e90bf0939d63c9ba0fa29bb5fe)
+
 ## [0.4.14](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.14) (02/15/2017)
 
 **Released on Wednesday, February 15, 2017**. This is a hot-fix release that closes issue [\#7](https://github.com/thecatalinstan/Criollo/issues/7) that caused incorrect relative path resolution for `NSDirectoryManager` routes mounted at the root path, as well as tweaking some auto-indexing functionality.
