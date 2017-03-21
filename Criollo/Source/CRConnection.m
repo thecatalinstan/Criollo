@@ -198,7 +198,7 @@ static const NSData * CRLFCRLFData;
     }
     
     CRRequest* firstRequest = self.requests.firstObject;
-    if ( [firstRequest isEqual:request] ) {
+    if ( [firstRequest isEqual:request] || self.requests.count == 0 ) {
         request.bufferedResponseData = nil;
         [self.socket writeData:data withTimeout:self.server.configuration.CRConnectionWriteTimeout tag:CRConnectionSocketTagSendingResponse];
         if ( request.shouldCloseConnection ) {
