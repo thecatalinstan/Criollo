@@ -100,7 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
                 if ( request.body != nil ) {
                     response.write("<h2>Request Body</h2>")
                     response.write("<pre>")
-                    response.write(request.body);
+                    response.write(request.body!);
                     response.write("</pre>")
                 }
 

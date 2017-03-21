@@ -183,7 +183,7 @@ NS_ASSUME_NONNULL_END
     CRServer * __weak server = self;
     [self.workerQueue addOperationWithBlock:^{ @autoreleasepool {
         NSArray<CRRouteMatchingResult *> * routes = [server routesForPath:request.URL.path method:request.method];
-        [server executeRoutes:routes forRequest:request response:response withCompletion:^{} notFoundBlock:server.notFoundBlock];
+        [server executeRoutes:routes forRequest:request response:response withCompletion:nil notFoundBlock:server.notFoundBlock];
     }}];
     if ( [self.delegate respondsToSelector:@selector(server:didReceiveRequest:)] ) {
         dispatch_async(self.delegateQueue, ^{ @autoreleasepool {
