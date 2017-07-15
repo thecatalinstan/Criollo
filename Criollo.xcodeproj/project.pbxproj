@@ -19,8 +19,6 @@
 		AD001AED1D45888700DE4AC9 /* CRRouter_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001AE91D45883C00DE4AC9 /* CRRouter_Internal.h */; };
 		AD030FE01F0C02C900BD9FE4 /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADEDB3761AEFC0B000A26AF1 /* Criollo.framework */; };
 		AD030FF11F0C037500BD9FE4 /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD5FFFCC1BF0024D00A57FE9 /* Criollo.framework */; };
-		AD030FF91F0C096B00BD9FE4 /* CRHTTPServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD030FF81F0C096B00BD9FE4 /* CRHTTPServerTests.m */; };
-		AD030FFA1F0C096B00BD9FE4 /* CRHTTPServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD030FF81F0C096B00BD9FE4 /* CRHTTPServerTests.m */; };
 		AD19695E1B626EF90098CA89 /* CRServer.h in Headers */ = {isa = PBXBuildFile; fileRef = AD19695C1B626EF90098CA89 /* CRServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD19695F1B626EF90098CA89 /* CRServer.m in Sources */ = {isa = PBXBuildFile; fileRef = AD19695D1B626EF90098CA89 /* CRServer.m */; };
 		AD227F8A1BDC3F6000C23D52 /* CRServerConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = AD227F881BDC3F6000C23D52 /* CRServerConfiguration.h */; };
@@ -112,10 +110,18 @@
 		AD63F83A1BFEAE96003815DC /* CRMessage_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD63F8381BFEAE96003815DC /* CRMessage_Internal.h */; };
 		AD63F83C1BFEB114003815DC /* CRResponse_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD63F83B1BFEB114003815DC /* CRResponse_Internal.h */; };
 		AD63F83D1BFEB114003815DC /* CRResponse_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD63F83B1BFEB114003815DC /* CRResponse_Internal.h */; };
+		AD7F2F711F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */; };
+		AD7F2F721F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */; };
 		AD8D1E451C0CF4F700A3763A /* NSString+Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = AD8D1E431C0CF4F700A3763A /* NSString+Criollo.h */; };
 		AD8D1E461C0CF4F700A3763A /* NSString+Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = AD8D1E431C0CF4F700A3763A /* NSString+Criollo.h */; };
 		AD8D1E471C0CF4F700A3763A /* NSString+Criollo.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8D1E441C0CF4F700A3763A /* NSString+Criollo.m */; };
 		AD8D1E481C0CF4F700A3763A /* NSString+Criollo.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8D1E441C0CF4F700A3763A /* NSString+Criollo.m */; };
+		AD96F7521F1A3F9900C8D075 /* unknown.unknown in Resources */ = {isa = PBXBuildFile; fileRef = AD96F74F1F1A3F8000C8D075 /* unknown.unknown */; };
+		AD96F7531F1A3F9A00C8D075 /* unknown.unknown in Resources */ = {isa = PBXBuildFile; fileRef = AD96F74F1F1A3F8000C8D075 /* unknown.unknown */; };
+		AD96F7551F1A436A00C8D075 /* empty.empty in Resources */ = {isa = PBXBuildFile; fileRef = AD96F7541F1A436A00C8D075 /* empty.empty */; };
+		AD96F7561F1A436A00C8D075 /* empty.empty in Resources */ = {isa = PBXBuildFile; fileRef = AD96F7541F1A436A00C8D075 /* empty.empty */; };
+		AD96F7581F1A43AE00C8D075 /* random.random in Resources */ = {isa = PBXBuildFile; fileRef = AD96F7571F1A43AE00C8D075 /* random.random */; };
+		AD96F7591F1A43AE00C8D075 /* random.random in Resources */ = {isa = PBXBuildFile; fileRef = AD96F7571F1A43AE00C8D075 /* random.random */; };
 		AD9BE7F41C91B9A400CE52B0 /* CRStaticFileManager.h in Headers */ = {isa = PBXBuildFile; fileRef = AD9BE7F21C91B9A400CE52B0 /* CRStaticFileManager.h */; };
 		AD9BE7F51C91B9A400CE52B0 /* CRStaticFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AD9BE7F31C91B9A400CE52B0 /* CRStaticFileManager.m */; };
 		AD9BE7F61C91B9B500CE52B0 /* CRStaticFileManager.h in Headers */ = {isa = PBXBuildFile; fileRef = AD9BE7F21C91B9A400CE52B0 /* CRStaticFileManager.h */; };
@@ -209,7 +215,6 @@
 		AD030FDB1F0C02C900BD9FE4 /* CriolloTests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CriolloTests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD030FDF1F0C02C900BD9FE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD030FEC1F0C037500BD9FE4 /* CriolloTests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CriolloTests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AD030FF81F0C096B00BD9FE4 /* CRHTTPServerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPServerTests.m; sourceTree = "<group>"; };
 		AD0BA9901C961898005206A1 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		AD11F4F61C95A81F007DC2FF /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
 		AD11F4F71C95A81F007DC2FF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
@@ -252,8 +257,12 @@
 		AD63F8351BFEAD08003815DC /* CRRequest_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRequest_Internal.h; sourceTree = "<group>"; };
 		AD63F8381BFEAE96003815DC /* CRMessage_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRMessage_Internal.h; sourceTree = "<group>"; };
 		AD63F83B1BFEB114003815DC /* CRResponse_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRResponse_Internal.h; sourceTree = "<group>"; };
+		AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRMimeTypeHelperTests.m; sourceTree = "<group>"; };
 		AD8D1E431C0CF4F700A3763A /* NSString+Criollo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Criollo.h"; sourceTree = "<group>"; };
 		AD8D1E441C0CF4F700A3763A /* NSString+Criollo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Criollo.m"; sourceTree = "<group>"; };
+		AD96F74F1F1A3F8000C8D075 /* unknown.unknown */ = {isa = PBXFileReference; lastKnownFileType = file; path = unknown.unknown; sourceTree = "<group>"; };
+		AD96F7541F1A436A00C8D075 /* empty.empty */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = empty.empty; sourceTree = "<group>"; };
+		AD96F7571F1A43AE00C8D075 /* random.random */ = {isa = PBXFileReference; lastKnownFileType = file; path = random.random; sourceTree = "<group>"; };
 		AD9BE7F21C91B9A400CE52B0 /* CRStaticFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRStaticFileManager.h; sourceTree = "<group>"; };
 		AD9BE7F31C91B9A400CE52B0 /* CRStaticFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRStaticFileManager.m; sourceTree = "<group>"; };
 		ADA37C721BE38E69008D89CA /* CRFCGIRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFCGIRecord.h; sourceTree = "<group>"; };
@@ -333,7 +342,8 @@
 			isa = PBXGroup;
 			children = (
 				AD030FDF1F0C02C900BD9FE4 /* Info.plist */,
-				AD030FF81F0C096B00BD9FE4 /* CRHTTPServerTests.m */,
+				AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */,
+				AD96F74D1F1A3F8000C8D075 /* Samples */,
 			);
 			path = CriolloTests;
 			sourceTree = "<group>";
@@ -416,6 +426,24 @@
 				AD8D1E441C0CF4F700A3763A /* NSString+Criollo.m */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		AD96F74D1F1A3F8000C8D075 /* Samples */ = {
+			isa = PBXGroup;
+			children = (
+				AD96F74E1F1A3F8000C8D075 /* CRMimeTypeHelper */,
+			);
+			path = Samples;
+			sourceTree = "<group>";
+		};
+		AD96F74E1F1A3F8000C8D075 /* CRMimeTypeHelper */ = {
+			isa = PBXGroup;
+			children = (
+				AD96F7571F1A43AE00C8D075 /* random.random */,
+				AD96F7541F1A436A00C8D075 /* empty.empty */,
+				AD96F74F1F1A3F8000C8D075 /* unknown.unknown */,
+			);
+			path = CRMimeTypeHelper;
 			sourceTree = "<group>";
 		};
 		ADAD526B1D3E4FBD00DDFBB5 /* Products */ = {
@@ -795,6 +823,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD96F7521F1A3F9900C8D075 /* unknown.unknown in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -802,6 +831,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD96F7531F1A3F9A00C8D075 /* unknown.unknown in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -809,6 +839,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD96F7561F1A436A00C8D075 /* empty.empty in Resources */,
+				AD96F7591F1A43AE00C8D075 /* random.random in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -816,6 +848,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD96F7551F1A436A00C8D075 /* empty.empty in Resources */,
+				AD96F7581F1A43AE00C8D075 /* random.random in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -826,7 +860,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD030FF91F0C096B00BD9FE4 /* CRHTTPServerTests.m in Sources */,
+				AD7F2F711F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -834,7 +868,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD030FFA1F0C096B00BD9FE4 /* CRHTTPServerTests.m in Sources */,
+				AD7F2F721F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

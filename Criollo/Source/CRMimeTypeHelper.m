@@ -66,19 +66,21 @@ static const CRMimeTypeHelper *sharedHelper;
         contentType = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)UTI, kUTTagClassMIMEType);
 
         if ( contentType.length == 0 ) {
-            if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeText) ) {
-                contentType = @"text/plain; charset=utf-8";
-            } else if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeSourceCode) ) {
+            if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeSourceCode) ) {
                 contentType = @"text/plain; charset=utf-8";
             } else if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeXMLPropertyList) ) {
                 contentType = @"application/xml; charset=utf-8";
+            } else if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeText) ) {
+                contentType = @"text/plain; charset=utf-8";
             } else {
                 contentType = @"application/octet-stream; charset=binary";
             }
-        }
-
-        if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeText) ) {
+        } else if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeText) || UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeSourceCode) ) {
             contentType = [contentType stringByAppendingString:@"; charset=utf-8"];
+        }
+        
+        if ( contentType.length == 0 ) {
+            contentType = @"application/octet-stream; charset=binary";
         }
 
         [self setMimeType:contentType forExtension:fileExtension];
