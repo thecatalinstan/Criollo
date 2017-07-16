@@ -57,25 +57,26 @@ static const CRMimeTypeHelper *sharedHelper;
 }
 
 - (NSString *)mimeTypeForFileAtPath:(NSString *)path {
+    
     NSString *fileExtension = path.pathExtension;
     NSString *contentType = [self mimeTypeForExtension:fileExtension];
 
     if ( contentType.length == 0 ) {
-
-        NSString *UTI = (__bridge_transfer NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)fileExtension, NULL);
-        contentType = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)UTI, kUTTagClassMIMEType);
-
+        
+        CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)fileExtension, NULL);
+        contentType = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
+        
         if ( contentType.length == 0 ) {
-            if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeSourceCode) ) {
+            if ( UTTypeConformsTo(UTI, kUTTypeText) ) {
                 contentType = @"text/plain; charset=utf-8";
-            } else if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeXMLPropertyList) ) {
+            } else if ( UTTypeConformsTo(UTI, kUTTypeXMLPropertyList) ) {
                 contentType = @"application/xml; charset=utf-8";
-            } else if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeText) ) {
+            } else if ( UTTypeConformsTo(UTI,kUTTypeSourceCode) ) {
                 contentType = @"text/plain; charset=utf-8";
             } else {
                 contentType = @"application/octet-stream; charset=binary";
             }
-        } else if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeText) || UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeSourceCode) ) {
+        } else if ( UTTypeConformsTo(UTI, kUTTypeText) || UTTypeConformsTo(UTI, kUTTypeSourceCode) ) {
             contentType = [contentType stringByAppendingString:@"; charset=utf-8"];
         }
         
