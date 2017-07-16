@@ -50,7 +50,7 @@ static const CRMimeTypeHelper *sharedHelper;
 
 - (void)setMimeType:(NSString *)mimeType forExtension:(NSString *)extension {
     if ( mimeType != nil ) {
-        dispatch_async(self.isolationQueue, ^{
+        dispatch_sync(self.isolationQueue, ^{
             self.mimeTypes[extension] = mimeType;
         });
     }

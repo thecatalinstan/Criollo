@@ -19,16 +19,6 @@
 
 @implementation CRMimeTypeHelperTests
 
-- (void)setUp {
-    self.extensions = @[@"txt", @"html", @"xml", @"jpg", @"png", @"gif", @"mp3", @"mp4", @"mov"];
-    [super setUp];
-}
-
-- (void)tearDown {
-    self.extensions = nil;
-    [super tearDown];
-}
-
 - (NSString *)pathForSampleFile:(NSString *)samplefile {
     return [[@(__FILE__).stringByDeletingLastPathComponent stringByAppendingPathComponent:@"Samples/CRMimeTypeHelper"] stringByAppendingPathComponent:samplefile];
 }
@@ -44,25 +34,21 @@
 }
 
 - (void)testMimeTypeForExtension {
-    CRMimeTypeHelper *helper = [CRMimeTypeHelper new];
+    CRMimeTypeHelper *helper = [CRMimeTypeHelper sharedHelper];
+    NSString *extension = @"dummy";
     
     // No extensions should be known at first
-    for (NSString *extension in self.extensions) {
-        XCTAssertNil([helper mimeTypeForExtension:extension], @"Extension %@ should not be known.", extension);
-    }
+    XCTAssertNil([helper mimeTypeForExtension:extension], @"Extension %@ should not be known.", extension);
     
     // Let's add some extensions to the dictionary
-    for (NSString *extension in self.extensions) {
-        [helper setMimeType:[self dummyMimeTypeForExtension: extension] forExtension:extension];
-    }
+    [helper setMimeType:[self dummyMimeTypeForExtension: extension] forExtension:extension];
     
-    // The sample extensions should now be known
-    for (NSString *extension in self.extensions) {
-        NSString *expectedMimeType = [self dummyMimeTypeForExtension: extension];
-        NSString *mimeType = [helper mimeTypeForExtension:extension];
-        XCTAssertNotNil(mimeType, @"Extension %@ should be known.", extension);
-        XCTAssertTrue([mimeType isEqualToString:expectedMimeType], @"Extension %@ should be %@ not %@.", extension, expectedMimeType, mimeType);
-    }
+    NSString *expectedMimeType = [self dummyMimeTypeForExtension: extension];
+    NSString *mimeType = [helper mimeTypeForExtension:extension];
+    
+    XCTAssertNotNil(mimeType, @"Extension %@ should be known.", extension);
+    XCTAssertTrue([mimeType isEqualToString:expectedMimeType], @"Extension %@ should be %@ not %@.", extension, expectedMimeType, mimeType);
+    
 }
 
 - (void)testMimeTypeForFileAtPath {
