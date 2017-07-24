@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) GCDAsyncSocket* socket;
 @property (nonatomic, weak) CRServer* server;
 
-@property (nonatomic, strong, nullable) NSMutableArray<CRRequest*>* requests;
+@property (nonatomic, strong, nullable) NSMutableArray<CRRequest *> * requests;
 @property (nonatomic, weak, nullable) CRRequest* currentRequest;
 
 @property (nonatomic, readonly, strong, nullable) dispatch_queue_t isolationQueue;

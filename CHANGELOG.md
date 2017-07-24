@@ -8,6 +8,24 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [0.4.16](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.16) (03/21/2017)
+
+**Released on Tuesday, March 21, 2017**. This is a hot-fix release that handles a potential issue when running Criollo servers on iOS devices whereby response data would be buffered instead of sent to the client, thus making it seem like the server was stalling.
+
+#### Fixed
+
+* A racing condition occurred in `[CRConnection sendDataToSocket:forRequest:]`, by which the request would be removed from the current connection’s requests array before the response was sent, thereby causing the execution to enter the *buffering* code path instead of actually sending the data. This has been fixed by adding an additional check for the length of the array. [`6b7f51d`](https://github.com/thecatalinstan/Criollo/commit/6b7f51d69f79adcad6fe7c4ebc49539a490c7d76)
+
+## [0.4.15](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.15) (03/11/2017)
+
+**Released on Sunday, March 11, 2017**. This is a hot-fix release that ensures Carthage compatibility and eliminates some potential warnings related to code formatting standards.
+
+#### Fixed
+
+* Missing shared build schemes were added to ensure Carthage compatibility. [`69e2b75`](https://github.com/thecatalinstan/Criollo/commit/69e2b751b80a6758d04ff5aaa8d24e3ea773ce29)
+
+* Missing new lines at the end of header files were added. [`294e844`](https://github.com/thecatalinstan/Criollo/commit/294e844b261219e90bf0939d63c9ba0fa29bb5fe)
+
 ## [0.4.14](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.14) (02/15/2017)
 
 **Released on Wednesday, February 15, 2017**. This is a hot-fix release that closes issue [\#7](https://github.com/thecatalinstan/Criollo/issues/7) that caused incorrect relative path resolution for `NSDirectoryManager` routes mounted at the root path, as well as tweaking some auto-indexing functionality.
