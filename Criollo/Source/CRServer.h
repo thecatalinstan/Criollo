@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CRServer : CRRouter
 
 @property (nonatomic, weak, nullable) id<CRServerDelegate> delegate;
-@property (nonatomic, nullable) dispatch_queue_t delegateQueue;
+@property (nonatomic, strong, nullable) dispatch_queue_t delegateQueue;
 
 - (instancetype)initWithDelegate:(id<CRServerDelegate> _Nullable)delegate;
 - (instancetype)initWithDelegate:(id<CRServerDelegate> _Nullable)delegate delegateQueue:(dispatch_queue_t _Nullable)delegateQueue NS_DESIGNATED_INITIALIZER;
