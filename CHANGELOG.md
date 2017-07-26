@@ -8,6 +8,10 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [0.4.17](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.17) (07/26/2017)
+
+**Released on Wednesday, July 26, 2017**. This is a maintenance and update release that aims to address various issues arising from Xcode and SDK updates.
+
 ## [0.4.16](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.16) (03/21/2017)
 
 **Released on Tuesday, March 21, 2017**. This is a hot-fix release that handles a potential issue when running Criollo servers on iOS devices whereby response data would be buffered instead of sent to the client, thus making it seem like the server was stalling.
