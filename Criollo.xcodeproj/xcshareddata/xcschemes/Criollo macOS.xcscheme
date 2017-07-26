@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AD030FDA1F0C02C900BD9FE4"
+               BuildableName = "CriolloTests macOS.xctest"
+               BlueprintName = "CriolloTests macOS"
+               ReferencedContainer = "container:Criollo.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "ADEDB3751AEFC0B000A26AF1"
+            BuildableName = "Criollo.framework"
+            BlueprintName = "Criollo macOS"
+            ReferencedContainer = "container:Criollo.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>

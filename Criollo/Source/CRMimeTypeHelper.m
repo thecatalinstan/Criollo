@@ -50,35 +50,38 @@ static const CRMimeTypeHelper *sharedHelper;
 
 - (void)setMimeType:(NSString *)mimeType forExtension:(NSString *)extension {
     if ( mimeType != nil ) {
-        dispatch_async(self.isolationQueue, ^{
+        dispatch_sync(self.isolationQueue, ^{
             self.mimeTypes[extension] = mimeType;
         });
     }
 }
 
 - (NSString *)mimeTypeForFileAtPath:(NSString *)path {
+    
     NSString *fileExtension = path.pathExtension;
     NSString *contentType = [self mimeTypeForExtension:fileExtension];
 
     if ( contentType.length == 0 ) {
-
-        NSString *UTI = (__bridge_transfer NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)fileExtension, NULL);
-        contentType = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)UTI, kUTTagClassMIMEType);
-
+        
+        CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)fileExtension, NULL);
+        contentType = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
+        
         if ( contentType.length == 0 ) {
-            if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeText) ) {
+            if ( UTTypeConformsTo(UTI, kUTTypeText) ) {
                 contentType = @"text/plain; charset=utf-8";
-            } else if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeSourceCode) ) {
-                contentType = @"text/plain; charset=utf-8";
-            } else if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeXMLPropertyList) ) {
+            } else if ( UTTypeConformsTo(UTI, kUTTypeXMLPropertyList) ) {
                 contentType = @"application/xml; charset=utf-8";
+            } else if ( UTTypeConformsTo(UTI,kUTTypeSourceCode) ) {
+                contentType = @"text/plain; charset=utf-8";
             } else {
                 contentType = @"application/octet-stream; charset=binary";
             }
-        }
-
-        if ( UTTypeConformsTo((__bridge CFStringRef _Nonnull)(UTI), kUTTypeText) ) {
+        } else if ( UTTypeConformsTo(UTI, kUTTypeText) || UTTypeConformsTo(UTI, kUTTypeSourceCode) ) {
             contentType = [contentType stringByAppendingString:@"; charset=utf-8"];
+        }
+        
+        if ( contentType.length == 0 ) {
+            contentType = @"application/octet-stream; charset=binary";
         }
 
         [self setMimeType:contentType forExtension:fileExtension];

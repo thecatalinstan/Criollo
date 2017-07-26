@@ -17,6 +17,8 @@
 		AD001AE61D457BC100DE4AC9 /* CRRouteMatchingResult.m in Sources */ = {isa = PBXBuildFile; fileRef = AD001ADF1D455BA300DE4AC9 /* CRRouteMatchingResult.m */; };
 		AD001AEA1D45883C00DE4AC9 /* CRRouter_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001AE91D45883C00DE4AC9 /* CRRouter_Internal.h */; };
 		AD001AED1D45888700DE4AC9 /* CRRouter_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001AE91D45883C00DE4AC9 /* CRRouter_Internal.h */; };
+		AD030FE01F0C02C900BD9FE4 /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADEDB3761AEFC0B000A26AF1 /* Criollo.framework */; };
+		AD030FF11F0C037500BD9FE4 /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD5FFFCC1BF0024D00A57FE9 /* Criollo.framework */; };
 		AD19695E1B626EF90098CA89 /* CRServer.h in Headers */ = {isa = PBXBuildFile; fileRef = AD19695C1B626EF90098CA89 /* CRServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD19695F1B626EF90098CA89 /* CRServer.m in Sources */ = {isa = PBXBuildFile; fileRef = AD19695D1B626EF90098CA89 /* CRServer.m */; };
 		AD227F8A1BDC3F6000C23D52 /* CRServerConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = AD227F881BDC3F6000C23D52 /* CRServerConfiguration.h */; };
@@ -108,10 +110,18 @@
 		AD63F83A1BFEAE96003815DC /* CRMessage_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD63F8381BFEAE96003815DC /* CRMessage_Internal.h */; };
 		AD63F83C1BFEB114003815DC /* CRResponse_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD63F83B1BFEB114003815DC /* CRResponse_Internal.h */; };
 		AD63F83D1BFEB114003815DC /* CRResponse_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD63F83B1BFEB114003815DC /* CRResponse_Internal.h */; };
+		AD7F2F711F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */; };
+		AD7F2F721F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */; };
 		AD8D1E451C0CF4F700A3763A /* NSString+Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = AD8D1E431C0CF4F700A3763A /* NSString+Criollo.h */; };
 		AD8D1E461C0CF4F700A3763A /* NSString+Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = AD8D1E431C0CF4F700A3763A /* NSString+Criollo.h */; };
 		AD8D1E471C0CF4F700A3763A /* NSString+Criollo.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8D1E441C0CF4F700A3763A /* NSString+Criollo.m */; };
 		AD8D1E481C0CF4F700A3763A /* NSString+Criollo.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8D1E441C0CF4F700A3763A /* NSString+Criollo.m */; };
+		AD96F7521F1A3F9900C8D075 /* unknown.unknown in Resources */ = {isa = PBXBuildFile; fileRef = AD96F74F1F1A3F8000C8D075 /* unknown.unknown */; };
+		AD96F7531F1A3F9A00C8D075 /* unknown.unknown in Resources */ = {isa = PBXBuildFile; fileRef = AD96F74F1F1A3F8000C8D075 /* unknown.unknown */; };
+		AD96F7551F1A436A00C8D075 /* empty.empty in Resources */ = {isa = PBXBuildFile; fileRef = AD96F7541F1A436A00C8D075 /* empty.empty */; };
+		AD96F7561F1A436A00C8D075 /* empty.empty in Resources */ = {isa = PBXBuildFile; fileRef = AD96F7541F1A436A00C8D075 /* empty.empty */; };
+		AD96F7581F1A43AE00C8D075 /* random.random in Resources */ = {isa = PBXBuildFile; fileRef = AD96F7571F1A43AE00C8D075 /* random.random */; };
+		AD96F7591F1A43AE00C8D075 /* random.random in Resources */ = {isa = PBXBuildFile; fileRef = AD96F7571F1A43AE00C8D075 /* random.random */; };
 		AD9BE7F41C91B9A400CE52B0 /* CRStaticFileManager.h in Headers */ = {isa = PBXBuildFile; fileRef = AD9BE7F21C91B9A400CE52B0 /* CRStaticFileManager.h */; };
 		AD9BE7F51C91B9A400CE52B0 /* CRStaticFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AD9BE7F31C91B9A400CE52B0 /* CRStaticFileManager.m */; };
 		AD9BE7F61C91B9B500CE52B0 /* CRStaticFileManager.h in Headers */ = {isa = PBXBuildFile; fileRef = AD9BE7F21C91B9A400CE52B0 /* CRStaticFileManager.h */; };
@@ -166,6 +176,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		AD030FE11F0C02C900BD9FE4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ADEDB3481AEFBCF800A26AF1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ADEDB3751AEFC0B000A26AF1;
+			remoteInfo = "Criollo macOS";
+		};
+		AD030FF21F0C037500BD9FE4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ADEDB3481AEFBCF800A26AF1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AD5FFFCB1BF0024D00A57FE9;
+			remoteInfo = "Criollo iOS";
+		};
 		AD35A82B1D411246005BD4A9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AD5B3C661CA820B5000988B7 /* Criollo iOS App.xcodeproj */;
@@ -188,6 +212,9 @@
 		AD001ADF1D455BA300DE4AC9 /* CRRouteMatchingResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRouteMatchingResult.m; sourceTree = "<group>"; };
 		AD001AE21D455C4F00DE4AC9 /* CRRouteMatchingResult_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRouteMatchingResult_Internal.h; sourceTree = "<group>"; };
 		AD001AE91D45883C00DE4AC9 /* CRRouter_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CRRouter_Internal.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		AD030FDB1F0C02C900BD9FE4 /* CriolloTests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CriolloTests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD030FDF1F0C02C900BD9FE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AD030FEC1F0C037500BD9FE4 /* CriolloTests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CriolloTests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD0BA9901C961898005206A1 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		AD11F4F61C95A81F007DC2FF /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
 		AD11F4F71C95A81F007DC2FF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
@@ -230,8 +257,12 @@
 		AD63F8351BFEAD08003815DC /* CRRequest_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRequest_Internal.h; sourceTree = "<group>"; };
 		AD63F8381BFEAE96003815DC /* CRMessage_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRMessage_Internal.h; sourceTree = "<group>"; };
 		AD63F83B1BFEB114003815DC /* CRResponse_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRResponse_Internal.h; sourceTree = "<group>"; };
+		AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRMimeTypeHelperTests.m; sourceTree = "<group>"; };
 		AD8D1E431C0CF4F700A3763A /* NSString+Criollo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Criollo.h"; sourceTree = "<group>"; };
 		AD8D1E441C0CF4F700A3763A /* NSString+Criollo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Criollo.m"; sourceTree = "<group>"; };
+		AD96F74F1F1A3F8000C8D075 /* unknown.unknown */ = {isa = PBXFileReference; lastKnownFileType = file; path = unknown.unknown; sourceTree = "<group>"; };
+		AD96F7541F1A436A00C8D075 /* empty.empty */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = empty.empty; sourceTree = "<group>"; };
+		AD96F7571F1A43AE00C8D075 /* random.random */ = {isa = PBXFileReference; lastKnownFileType = file; path = random.random; sourceTree = "<group>"; };
 		AD9BE7F21C91B9A400CE52B0 /* CRStaticFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRStaticFileManager.h; sourceTree = "<group>"; };
 		AD9BE7F31C91B9A400CE52B0 /* CRStaticFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRStaticFileManager.m; sourceTree = "<group>"; };
 		ADA37C721BE38E69008D89CA /* CRFCGIRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFCGIRecord.h; sourceTree = "<group>"; };
@@ -274,6 +305,22 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		AD030FD81F0C02C900BD9FE4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD030FE01F0C02C900BD9FE4 /* Criollo.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD030FE91F0C037500BD9FE4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD030FF11F0C037500BD9FE4 /* Criollo.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AD5FFFC81BF0024D00A57FE9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -291,6 +338,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AD030FDC1F0C02C900BD9FE4 /* CriolloTests */ = {
+			isa = PBXGroup;
+			children = (
+				AD030FDF1F0C02C900BD9FE4 /* Info.plist */,
+				AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */,
+				AD96F74D1F1A3F8000C8D075 /* Samples */,
+			);
+			path = CriolloTests;
+			sourceTree = "<group>";
+		};
 		AD5B3C7D1CA821E9000988B7 /* Apps */ = {
 			isa = PBXGroup;
 			children = (
@@ -371,6 +428,24 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		AD96F74D1F1A3F8000C8D075 /* Samples */ = {
+			isa = PBXGroup;
+			children = (
+				AD96F74E1F1A3F8000C8D075 /* CRMimeTypeHelper */,
+			);
+			path = Samples;
+			sourceTree = "<group>";
+		};
+		AD96F74E1F1A3F8000C8D075 /* CRMimeTypeHelper */ = {
+			isa = PBXGroup;
+			children = (
+				AD96F7571F1A43AE00C8D075 /* random.random */,
+				AD96F7541F1A436A00C8D075 /* empty.empty */,
+				AD96F74F1F1A3F8000C8D075 /* unknown.unknown */,
+			);
+			path = CRMimeTypeHelper;
+			sourceTree = "<group>";
+		};
 		ADAD526B1D3E4FBD00DDFBB5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -392,6 +467,7 @@
 			children = (
 				ADEDB3781AEFC0B000A26AF1 /* Criollo */,
 				AD5B3C7D1CA821E9000988B7 /* Apps */,
+				AD030FDC1F0C02C900BD9FE4 /* CriolloTests */,
 				ADEDB3771AEFC0B000A26AF1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -411,6 +487,8 @@
 			children = (
 				ADEDB3761AEFC0B000A26AF1 /* Criollo.framework */,
 				AD5FFFCC1BF0024D00A57FE9 /* Criollo.framework */,
+				AD030FDB1F0C02C900BD9FE4 /* CriolloTests macOS.xctest */,
+				AD030FEC1F0C037500BD9FE4 /* CriolloTests iOS.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -592,6 +670,42 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		AD030FDA1F0C02C900BD9FE4 /* CriolloTests macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD030FE71F0C02C900BD9FE4 /* Build configuration list for PBXNativeTarget "CriolloTests macOS" */;
+			buildPhases = (
+				AD030FD71F0C02C900BD9FE4 /* Sources */,
+				AD030FD81F0C02C900BD9FE4 /* Frameworks */,
+				AD030FD91F0C02C900BD9FE4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AD030FE21F0C02C900BD9FE4 /* PBXTargetDependency */,
+			);
+			name = "CriolloTests macOS";
+			productName = CriolloTests;
+			productReference = AD030FDB1F0C02C900BD9FE4 /* CriolloTests macOS.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		AD030FEB1F0C037500BD9FE4 /* CriolloTests iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD030FF41F0C037500BD9FE4 /* Build configuration list for PBXNativeTarget "CriolloTests iOS" */;
+			buildPhases = (
+				AD030FE81F0C037500BD9FE4 /* Sources */,
+				AD030FE91F0C037500BD9FE4 /* Frameworks */,
+				AD030FEA1F0C037500BD9FE4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AD030FF31F0C037500BD9FE4 /* PBXTargetDependency */,
+			);
+			name = "CriolloTests iOS";
+			productName = CriolloTests;
+			productReference = AD030FEC1F0C037500BD9FE4 /* CriolloTests iOS.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		AD5FFFCB1BF0024D00A57FE9 /* Criollo iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = AD5FFFD31BF0024D00A57FE9 /* Build configuration list for PBXNativeTarget "Criollo iOS" */;
@@ -639,6 +753,16 @@
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Cătălin Stan";
 				TargetAttributes = {
+					AD030FDA1F0C02C900BD9FE4 = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = JNX7A8G939;
+						ProvisioningStyle = Automatic;
+					};
+					AD030FEB1F0C037500BD9FE4 = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = JNX7A8G939;
+						ProvisioningStyle = Automatic;
+					};
 					AD5FFFCB1BF0024D00A57FE9 = {
 						CreatedOnToolsVersion = 7.1;
 					};
@@ -671,6 +795,8 @@
 			targets = (
 				ADEDB3751AEFC0B000A26AF1 /* Criollo macOS */,
 				AD5FFFCB1BF0024D00A57FE9 /* Criollo iOS */,
+				AD030FDA1F0C02C900BD9FE4 /* CriolloTests macOS */,
+				AD030FEB1F0C037500BD9FE4 /* CriolloTests iOS */,
 			);
 		};
 /* End PBXProject section */
@@ -693,10 +819,28 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		AD030FD91F0C02C900BD9FE4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD96F7521F1A3F9900C8D075 /* unknown.unknown in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD030FEA1F0C037500BD9FE4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD96F7531F1A3F9A00C8D075 /* unknown.unknown in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AD5FFFCA1BF0024D00A57FE9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD96F7561F1A436A00C8D075 /* empty.empty in Resources */,
+				AD96F7591F1A43AE00C8D075 /* random.random in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -704,12 +848,30 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD96F7551F1A436A00C8D075 /* empty.empty in Resources */,
+				AD96F7581F1A43AE00C8D075 /* random.random in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		AD030FD71F0C02C900BD9FE4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD7F2F711F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD030FE81F0C037500BD9FE4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD7F2F721F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AD5FFFC71BF0024D00A57FE9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -792,7 +954,153 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		AD030FE21F0C02C900BD9FE4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = ADEDB3751AEFC0B000A26AF1 /* Criollo macOS */;
+			targetProxy = AD030FE11F0C02C900BD9FE4 /* PBXContainerItemProxy */;
+		};
+		AD030FF31F0C037500BD9FE4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AD5FFFCB1BF0024D00A57FE9 /* Criollo iOS */;
+			targetProxy = AD030FF21F0C037500BD9FE4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		AD030FE31F0C02C900BD9FE4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = JNX7A8G939;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = CriolloTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		AD030FE41F0C02C900BD9FE4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = JNX7A8G939;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = CriolloTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		AD030FF51F0C037500BD9FE4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = JNX7A8G939;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = CriolloTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		AD030FF61F0C037500BD9FE4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = JNX7A8G939;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = CriolloTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		AD5FFFD11BF0024D00A57FE9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1061,6 +1369,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		AD030FE71F0C02C900BD9FE4 /* Build configuration list for PBXNativeTarget "CriolloTests macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD030FE31F0C02C900BD9FE4 /* Debug */,
+				AD030FE41F0C02C900BD9FE4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AD030FF41F0C037500BD9FE4 /* Build configuration list for PBXNativeTarget "CriolloTests iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD030FF51F0C037500BD9FE4 /* Debug */,
+				AD030FF61F0C037500BD9FE4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		AD5FFFD31BF0024D00A57FE9 /* Build configuration list for PBXNativeTarget "Criollo iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
