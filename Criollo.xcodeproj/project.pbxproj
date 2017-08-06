@@ -21,6 +21,16 @@
 		AD030FF11F0C037500BD9FE4 /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD5FFFCC1BF0024D00A57FE9 /* Criollo.framework */; };
 		AD19695E1B626EF90098CA89 /* CRServer.h in Headers */ = {isa = PBXBuildFile; fileRef = AD19695C1B626EF90098CA89 /* CRServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD19695F1B626EF90098CA89 /* CRServer.m in Sources */ = {isa = PBXBuildFile; fileRef = AD19695D1B626EF90098CA89 /* CRServer.m */; };
+		AD1D44E21F375DE100C5D260 /* CRNibTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD1D44E11F375DE100C5D260 /* CRNibTests.m */; };
+		AD1D44E91F37600300C5D260 /* CRNibTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD1D44E11F375DE100C5D260 /* CRNibTests.m */; };
+		AD1D44EA1F37600D00C5D260 /* CRNibTests.html in Resources */ = {isa = PBXBuildFile; fileRef = AD1D44E71F375F8D00C5D260 /* CRNibTests.html */; };
+		AD1D44EB1F37600D00C5D260 /* random.random in Resources */ = {isa = PBXBuildFile; fileRef = AD96F7571F1A43AE00C8D075 /* random.random */; };
+		AD1D44EC1F37600D00C5D260 /* empty.empty in Resources */ = {isa = PBXBuildFile; fileRef = AD96F7541F1A436A00C8D075 /* empty.empty */; };
+		AD1D44ED1F37600D00C5D260 /* unknown.unknown in Resources */ = {isa = PBXBuildFile; fileRef = AD96F74F1F1A3F8000C8D075 /* unknown.unknown */; };
+		AD1D44EE1F37600E00C5D260 /* CRNibTests.html in Resources */ = {isa = PBXBuildFile; fileRef = AD1D44E71F375F8D00C5D260 /* CRNibTests.html */; };
+		AD1D44EF1F37600E00C5D260 /* random.random in Resources */ = {isa = PBXBuildFile; fileRef = AD96F7571F1A43AE00C8D075 /* random.random */; };
+		AD1D44F01F37600E00C5D260 /* empty.empty in Resources */ = {isa = PBXBuildFile; fileRef = AD96F7541F1A436A00C8D075 /* empty.empty */; };
+		AD1D44F11F37600E00C5D260 /* unknown.unknown in Resources */ = {isa = PBXBuildFile; fileRef = AD96F74F1F1A3F8000C8D075 /* unknown.unknown */; };
 		AD227F8A1BDC3F6000C23D52 /* CRServerConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = AD227F881BDC3F6000C23D52 /* CRServerConfiguration.h */; };
 		AD227F8B1BDC3F6000C23D52 /* CRServerConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = AD227F891BDC3F6000C23D52 /* CRServerConfiguration.m */; };
 		AD2A35491C47FA8000E30387 /* CRUploadedFile.h in Headers */ = {isa = PBXBuildFile; fileRef = AD2A35471C47FA8000E30387 /* CRUploadedFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -116,12 +126,6 @@
 		AD8D1E461C0CF4F700A3763A /* NSString+Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = AD8D1E431C0CF4F700A3763A /* NSString+Criollo.h */; };
 		AD8D1E471C0CF4F700A3763A /* NSString+Criollo.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8D1E441C0CF4F700A3763A /* NSString+Criollo.m */; };
 		AD8D1E481C0CF4F700A3763A /* NSString+Criollo.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8D1E441C0CF4F700A3763A /* NSString+Criollo.m */; };
-		AD96F7521F1A3F9900C8D075 /* unknown.unknown in Resources */ = {isa = PBXBuildFile; fileRef = AD96F74F1F1A3F8000C8D075 /* unknown.unknown */; };
-		AD96F7531F1A3F9A00C8D075 /* unknown.unknown in Resources */ = {isa = PBXBuildFile; fileRef = AD96F74F1F1A3F8000C8D075 /* unknown.unknown */; };
-		AD96F7551F1A436A00C8D075 /* empty.empty in Resources */ = {isa = PBXBuildFile; fileRef = AD96F7541F1A436A00C8D075 /* empty.empty */; };
-		AD96F7561F1A436A00C8D075 /* empty.empty in Resources */ = {isa = PBXBuildFile; fileRef = AD96F7541F1A436A00C8D075 /* empty.empty */; };
-		AD96F7581F1A43AE00C8D075 /* random.random in Resources */ = {isa = PBXBuildFile; fileRef = AD96F7571F1A43AE00C8D075 /* random.random */; };
-		AD96F7591F1A43AE00C8D075 /* random.random in Resources */ = {isa = PBXBuildFile; fileRef = AD96F7571F1A43AE00C8D075 /* random.random */; };
 		AD9BE7F41C91B9A400CE52B0 /* CRStaticFileManager.h in Headers */ = {isa = PBXBuildFile; fileRef = AD9BE7F21C91B9A400CE52B0 /* CRStaticFileManager.h */; };
 		AD9BE7F51C91B9A400CE52B0 /* CRStaticFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AD9BE7F31C91B9A400CE52B0 /* CRStaticFileManager.m */; };
 		AD9BE7F61C91B9B500CE52B0 /* CRStaticFileManager.h in Headers */ = {isa = PBXBuildFile; fileRef = AD9BE7F21C91B9A400CE52B0 /* CRStaticFileManager.h */; };
@@ -220,6 +224,8 @@
 		AD11F4F71C95A81F007DC2FF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		AD19695C1B626EF90098CA89 /* CRServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRServer.h; sourceTree = "<group>"; };
 		AD19695D1B626EF90098CA89 /* CRServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRServer.m; sourceTree = "<group>"; };
+		AD1D44E11F375DE100C5D260 /* CRNibTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRNibTests.m; sourceTree = "<group>"; };
+		AD1D44E71F375F8D00C5D260 /* CRNibTests.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = CRNibTests.html; sourceTree = "<group>"; };
 		AD227F881BDC3F6000C23D52 /* CRServerConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRServerConfiguration.h; sourceTree = "<group>"; };
 		AD227F891BDC3F6000C23D52 /* CRServerConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRServerConfiguration.m; sourceTree = "<group>"; };
 		AD2A35471C47FA8000E30387 /* CRUploadedFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUploadedFile.h; sourceTree = "<group>"; };
@@ -343,9 +349,18 @@
 			children = (
 				AD030FDF1F0C02C900BD9FE4 /* Info.plist */,
 				AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */,
+				AD1D44E11F375DE100C5D260 /* CRNibTests.m */,
 				AD96F74D1F1A3F8000C8D075 /* Samples */,
 			);
 			path = CriolloTests;
+			sourceTree = "<group>";
+		};
+		AD1D44E61F375F8D00C5D260 /* CRNibTests */ = {
+			isa = PBXGroup;
+			children = (
+				AD1D44E71F375F8D00C5D260 /* CRNibTests.html */,
+			);
+			path = CRNibTests;
 			sourceTree = "<group>";
 		};
 		AD5B3C7D1CA821E9000988B7 /* Apps */ = {
@@ -431,6 +446,7 @@
 		AD96F74D1F1A3F8000C8D075 /* Samples */ = {
 			isa = PBXGroup;
 			children = (
+				AD1D44E61F375F8D00C5D260 /* CRNibTests */,
 				AD96F74E1F1A3F8000C8D075 /* CRMimeTypeHelper */,
 			);
 			path = Samples;
@@ -536,13 +552,13 @@
 				AD4AE7711BDAB1C300B9F221 /* CRConnection.m */,
 				AD63F82F1BFEA782003815DC /* CRConnection_Internal.h */,
 				AD61E9851BDD8C8E00F5BD17 /* CRMessage.h */,
-				AD61E9861BDD8C8E00F5BD17 /* CRMessage.m */,
 				AD63F8381BFEAE96003815DC /* CRMessage_Internal.h */,
+				AD61E9861BDD8C8E00F5BD17 /* CRMessage.m */,
 				ADEBD0221C6C9D5F00F91D28 /* CRMimeTypeHelper.h */,
 				ADEBD0231C6C9D5F00F91D28 /* CRMimeTypeHelper.m */,
 				AD61E9871BDD8C8E00F5BD17 /* CRRequest.h */,
-				AD61E9881BDD8C8E00F5BD17 /* CRRequest.m */,
 				AD63F8351BFEAD08003815DC /* CRRequest_Internal.h */,
+				AD61E9881BDD8C8E00F5BD17 /* CRRequest.m */,
 				ADAB165F1C8C49DB001E104C /* CRRequestRange.h */,
 				ADAB16631C8C4E90001E104C /* CRRequestRange_Internal.h */,
 				ADAB16601C8C49DB001E104C /* CRRequestRange.m */,
@@ -823,7 +839,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD96F7521F1A3F9900C8D075 /* unknown.unknown in Resources */,
+				AD1D44EA1F37600D00C5D260 /* CRNibTests.html in Resources */,
+				AD1D44ED1F37600D00C5D260 /* unknown.unknown in Resources */,
+				AD1D44EB1F37600D00C5D260 /* random.random in Resources */,
+				AD1D44EC1F37600D00C5D260 /* empty.empty in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -831,7 +850,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD96F7531F1A3F9A00C8D075 /* unknown.unknown in Resources */,
+				AD1D44EE1F37600E00C5D260 /* CRNibTests.html in Resources */,
+				AD1D44F11F37600E00C5D260 /* unknown.unknown in Resources */,
+				AD1D44EF1F37600E00C5D260 /* random.random in Resources */,
+				AD1D44F01F37600E00C5D260 /* empty.empty in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -839,8 +861,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD96F7561F1A436A00C8D075 /* empty.empty in Resources */,
-				AD96F7591F1A43AE00C8D075 /* random.random in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -848,8 +868,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD96F7551F1A436A00C8D075 /* empty.empty in Resources */,
-				AD96F7581F1A43AE00C8D075 /* random.random in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -860,6 +878,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD1D44E21F375DE100C5D260 /* CRNibTests.m in Sources */,
 				AD7F2F711F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -868,6 +887,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD1D44E91F37600300C5D260 /* CRNibTests.m in Sources */,
 				AD7F2F721F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

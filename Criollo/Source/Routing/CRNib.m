@@ -20,13 +20,17 @@
     self = [super init];
     if ( self != nil ) {
         _name = nibName;
+
         if ( bundle == nil ) {
             bundle = [NSBundle mainBundle];
         }
+        
         NSString* path = [bundle pathForResource:self.name ofType:CRNibExtension];
-        NSError * nibLoadError;
-        _data = [NSData dataWithContentsOfFile:path options:NSDataReadingMapped error:&nibLoadError];
-        if ( nibLoadError ) {
+        if ( path != nil ) {
+            NSError * nibLoadError;
+            _data = [NSData dataWithContentsOfFile:path options:NSDataReadingMapped error:&nibLoadError];
+        }
+        if ( _data == nil ) {
             _data = [NSData data];
         }
     }

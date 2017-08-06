@@ -19,7 +19,8 @@
 @implementation CRMimeTypeHelperTests
 
 - (NSString *)pathForSampleFile:(NSString *)samplefile {
-    return [[@(__FILE__).stringByDeletingLastPathComponent stringByAppendingPathComponent:@"Samples/CRMimeTypeHelper"] stringByAppendingPathComponent:samplefile];
+    NSBundle *bundle = [NSBundle bundleForClass:self.class];
+    return [bundle.resourcePath stringByAppendingPathComponent:samplefile];
 }
 - (NSString *)dummyMimeTypeForExtension:(NSString *)extension {
     return [NSString stringWithFormat:@"mime-test-type/%@", extension];
@@ -55,8 +56,8 @@
     NSString *path;
     
     // A conent type should be returned no matter what
-    path =
-    type = [helper mimeTypeForFileAtPath:[self pathForSampleFile:@"empty.empty"]];
+    path = [self pathForSampleFile:@"empty.empty"];
+    type = [helper mimeTypeForFileAtPath:path];
     XCTAssertNotNil(type, "A mime type should always be returned.");
     
     // Known file types should be recognized even if empty
