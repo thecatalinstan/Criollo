@@ -24,7 +24,7 @@
     XCTAssertNotNil(emptyNib.data, "Nib data should never be nil.");
     XCTAssertEqual(emptyNib.data.length, 0, "Nib data created from invalid files should be zero-length.");
     
-    NSString *nibFilePath = [bundle pathForResource:@"CRNibTests" ofType:@"html"];
+    NSString *nibFilePath = [bundle pathForResource:NSStringFromClass(self.class) ofType:@"html"];
     XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:nibFilePath], "The nib file %@ should exist.", nibFilePath.lastPathComponent);
 
     NSError *nibReadError;
@@ -32,7 +32,7 @@
     XCTAssertNil(nibReadError, "We should be able to read the nib file.");
     XCTAssertTrue(nibData.length > 0, "Data read manually from the file should be non-zero length.");
     
-    CRNib *nib = [[CRNib alloc] initWithNibNamed:@"CRNibTests" bundle:bundle];
+    CRNib *nib = [[CRNib alloc] initWithNibNamed:NSStringFromClass(self.class) bundle:bundle];
     XCTAssertTrue(nib.data.length > 0, "Data read by [CRNib init] from the file should be non-zero length.");
     XCTAssertTrue([nib.data isEqualToData:nibData], "Data read manually should be the same as the data read by [CRNib init].");
 }
@@ -42,7 +42,7 @@
     XCTAssertNotNil(bundle, "The bundle for the test case should not be nil.");
     
     [self measureBlock:^{
-        CRNib *nib = [[CRNib alloc] initWithNibNamed:@"CRNibTests" bundle:bundle];
+        CRNib *nib = [[CRNib alloc] initWithNibNamed:NSStringFromClass(self.class) bundle:bundle];
         XCTAssertTrue(nib.data.length > 0, "Data read by [CRNib init] from the file should be non-zero length.");
     }];
 }

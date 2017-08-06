@@ -8,7 +8,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CRView : NSObject 
+@interface CRView : NSObject
 
 @property (nonatomic, readonly, strong) NSString *contents;
 
