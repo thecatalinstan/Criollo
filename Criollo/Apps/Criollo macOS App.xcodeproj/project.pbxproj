@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A2F43D31F65A2C900A466D5 /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A2F43D21F65A2C900A466D5 /* Criollo.framework */; };
 		AD05DCFC1DBB9A15007CEDEF /* key.pem in Resources */ = {isa = PBXBuildFile; fileRef = AD05DCFA1DBB9A15007CEDEF /* key.pem */; };
 		AD05DCFD1DBB9A15007CEDEF /* cert.pem in Resources */ = {isa = PBXBuildFile; fileRef = AD05DCFB1DBB9A15007CEDEF /* cert.pem */; };
 		AD41ECD71CB42EBB00133C8D /* SystemInfoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD41ECD61CB42EBB00133C8D /* SystemInfoHelper.m */; };
@@ -19,8 +20,6 @@
 		ADC1A5C51CA30F49009A4A19 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC1A5C41CA30F49009A4A19 /* AppDelegate.m */; };
 		ADC1A5C81CA30F49009A4A19 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC1A5C71CA30F49009A4A19 /* main.m */; };
 		ADC1A5CA1CA30F49009A4A19 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADC1A5C91CA30F49009A4A19 /* Assets.xcassets */; };
-		ADC1A5DB1CA311D0009A4A19 /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADC1A5DA1CA311D0009A4A19 /* Criollo.framework */; };
-		ADC1A5DC1CA311D0009A4A19 /* Criollo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ADC1A5DA1CA311D0009A4A19 /* Criollo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,20 +34,10 @@
 			name = "Copy Public Resources";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		ADC1A5DD1CA311D0009A4A19 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				ADC1A5DC1CA311D0009A4A19 /* Criollo.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4A2F43D21F65A2C900A466D5 /* Criollo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Criollo.framework; path = "../../../../../../Library/Developer/Xcode/DerivedData/Criollo-gxkxtbnmmrlzvbafuydgpalbahjh/Build/Products/Debug/Criollo.framework"; sourceTree = "<group>"; };
 		AD05DCFA1DBB9A15007CEDEF /* key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = key.pem; path = Shared/key.pem; sourceTree = SOURCE_ROOT; };
 		AD05DCFB1DBB9A15007CEDEF /* cert.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = cert.pem; path = Shared/cert.pem; sourceTree = SOURCE_ROOT; };
 		AD41ECD51CB42EBB00133C8D /* SystemInfoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemInfoHelper.h; path = Shared/SystemInfoHelper.h; sourceTree = SOURCE_ROOT; };
@@ -76,7 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADC1A5DB1CA311D0009A4A19 /* Criollo.framework in Frameworks */,
+				4A2F43D31F65A2C900A466D5 /* Criollo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,6 +126,7 @@
 		ADC1A5DE1CA311E9009A4A19 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4A2F43D21F65A2C900A466D5 /* Criollo.framework */,
 				ADC1A5DA1CA311D0009A4A19 /* Criollo.framework */,
 			);
 			name = Frameworks;
@@ -153,7 +143,6 @@
 				ADC1A5BC1CA30F49009A4A19 /* Sources */,
 				ADC1A5BD1CA30F49009A4A19 /* Frameworks */,
 				ADC1A5BE1CA30F49009A4A19 /* Resources */,
-				ADC1A5DD1CA311D0009A4A19 /* Embed Frameworks */,
 				AD554D9E1CAC980B002182A4 /* Copy Public Resources */,
 			);
 			buildRules = (

@@ -1,0 +1,101 @@
+//
+//  CRHTTPS.m
+//  Criollo
+//
+//  Created by Cătălin Stan on 10/09/2017.
+//  Copyright © 2017 Cătălin Stan. All rights reserved.
+//
+
+#import "CRHTTPS.h"
+#import "CRHTTPServer.h"
+
+@implementation CRHTTPS
+
++ (NSArray *)parseIdentrityFile:(NSString *)identityFilePath WithError:(NSError *__autoreleasing  _Nullable *)error {
+    return @[];
+}
+
++ (NSArray *)parseCertificateFile:(NSString *)certificatePath certificateKeyFile:(NSString *)certificateKeyPath withError:(NSError *__autoreleasing  _Nullable *)error {
+    
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+    *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInternalError userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"Parsing certificate bundles and private keys is not yet implemented on iOS",), CRHTTPServerCertificatePathKey: certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
+    return @[];
+#else
+    NSError * pemCertReadError;
+    NSData * pemCertContents = [NSData dataWithContentsOfFile:certificatePath options:NSDataReadingUncached error:&pemCertReadError];
+    if ( pemCertContents.length == 0 ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse PEM certificate bundle.",), NSUnderlyingErrorKey: pemCertReadError, CRHTTPServerCertificatePathKey: certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey:certificateKeyPath ? : @"(null)"}];
+        return nil;
+    }
+    
+    CFArrayRef certificateImportItems = NULL;
+    OSStatus certificateImportStatus = SecItemImport((__bridge CFDataRef)pemCertContents , NULL, NULL, NULL, 0, NULL, NULL, &certificateImportItems);
+    if ( certificateImportStatus != errSecSuccess ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to parse PEM certificate bundle. %@",), (__bridge NSString *)SecCopyErrorMessageString(certificateImportStatus, NULL)], CRHTTPServerCertificatePathKey:certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey:certificateKeyPath ? : @"(null)"}];
+        return nil;
+    }
+    
+    // Check if the first item in the import is a certificate
+    SecCertificateRef certificate = (SecCertificateRef) CFArrayGetValueAtIndex(certificateImportItems, 0);
+    if ( CFGetTypeID(certificate) != SecCertificateGetTypeID() ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Expected a PEM certificate, but got %@ instead.",), (__bridge id)certificate], CRHTTPServerCertificatePathKey:certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey:certificateKeyPath ? : @"(null)"}];
+        return nil;
+    }
+    
+    // Read the contents of the PEM private key file and fetch SecKeyRef
+    NSError * pemKeyReadError;
+    NSData * pemKeyContents = [NSData dataWithContentsOfFile:certificateKeyPath options:NSDataReadingUncached error:&pemKeyReadError];
+    if ( pemKeyContents.length == 0 ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse PEM RSA key file.",), NSUnderlyingErrorKey: pemKeyReadError, CRHTTPServerCertificatePathKey:certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey:certificateKeyPath ? : @"(null)"}];
+        return nil;
+    }
+    
+    // Create a temp keychain and import the private key into it
+    NSString *keychainPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSUUID UUID].UUIDString];
+    NSString *keychainPassword = [NSUUID UUID].UUIDString;
+    SecKeychainRef keychain;
+    OSStatus keychainCreationStatus = SecKeychainCreate(keychainPath.UTF8String, (UInt32)keychainPassword.length, keychainPassword.UTF8String, NO, NULL, &keychain);
+    if ( keychainCreationStatus != errSecSuccess ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInternalError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to create keychain. %@",), (__bridge NSString *)SecCopyErrorMessageString(keychainCreationStatus, NULL)], CRHTTPServerCertificatePathKey: certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
+        return nil;
+    }
+    
+    // Import the key into the keychain
+    CFArrayRef keyImportItems = NULL;
+    OSStatus keyImportStatus = SecItemImport((__bridge CFDataRef)pemKeyContents , NULL, NULL, NULL, 0, NULL, keychain, &keyImportItems);
+    if ( keyImportStatus != errSecSuccess ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to parse PEM RSA key file. %@",), (__bridge NSString *)SecCopyErrorMessageString(keyImportStatus, NULL)], CRHTTPServerCertificatePathKey: certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
+        SecKeychainDelete(keychain);
+        return nil;
+    }
+    
+    // Check if the first item in the import is a privatekey
+    SecKeyRef key = (SecKeyRef) CFArrayGetValueAtIndex(keyImportItems, 0);
+    if ( CFGetTypeID(key) != SecKeyGetTypeID() ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Expected a RSA private key, but got %@ instead.",), (__bridge id)key], CRHTTPServerCertificatePathKey: certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
+        SecKeychainDelete(keychain);
+        return nil;
+    }
+    
+    // Create an identity from the keychain and the certificate
+    SecIdentityRef identity;
+    OSStatus identityCreationStatus = SecIdentityCreateWithCertificate(keychain, certificate, &identity);
+    if ( identityCreationStatus != errSecSuccess ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to get a suitable identity. %@",), (__bridge NSString *)SecCopyErrorMessageString(identityCreationStatus, NULL)], CRHTTPServerCertificatePathKey: certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
+        SecKeychainDelete(keychain);
+        return nil;
+    }
+    
+    // Create the outut array
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity:CFArrayGetCount(certificateImportItems)];
+    [result addObjectsFromArray:(__bridge NSArray * _Nonnull)(certificateImportItems)];
+    result[0] = (__bridge id _Nonnull)(identity);
+    
+    // Cleanup
+    SecKeychainDelete(keychain);
+    
+    return result;
+#endif
+}
+
+@end

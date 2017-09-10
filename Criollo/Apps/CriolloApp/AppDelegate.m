@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_END
     self.server = [[serverClass alloc] initWithDelegate:self];
 
     if ( !isFastCGI ) {
-        ((CRHTTPServer *)self.server).isSecure = NO;
+        ((CRHTTPServer *)self.server).isSecure = YES;
         ((CRHTTPServer *)self.server).certificatePath = [[NSBundle mainBundle] pathForResource:@"cert" ofType:@"pem"];
         ((CRHTTPServer *)self.server).certificateKeyPath = [[NSBundle mainBundle] pathForResource:@"key" ofType:@"pem"];
     }
