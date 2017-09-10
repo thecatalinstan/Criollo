@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRHTTPS : NSObject
 
-+ (nullable NSArray *)parseIdentrityFile:(NSString *)identityFilePath WithError:(NSError * _Nullable __autoreleasing * _Nullable)error;
++ (nullable NSArray *)parseIdentrityFile:(NSString *)identityFilePath password:(NSString *)password withError:(NSError * _Nullable __autoreleasing * _Nullable)error;
 + (nullable NSArray *)parseCertificateFile:(NSString *)certificatePath certificateKeyFile:(NSString *)certificateKeyPath withError:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
 @end

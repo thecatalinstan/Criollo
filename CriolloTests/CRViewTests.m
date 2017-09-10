@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "CRView.h"
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#if TARGET_OS_IPHONE || TARGET_OS_SIMULATOR
 #import <UIKit/UIKit.h>
 #else
 #import <AppKit/AppKit.h>
@@ -79,7 +79,7 @@
     [invalidData addObject:[NSData dataWithBytesNoCopy:(void *)view.contents.UTF8String length:view.contents.length freeWhenDone:NO]];
     [invalidData addObject:[NSNull new]];
     [invalidData addObject:[NSBundle bundleForClass:self.class]];
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#if TARGET_OS_IPHONE || TARGET_OS_SIMULATOR
     [invalidData addObject:[UIBezierPath bezierPathWithRect:CGRectZero]];
 #else
     [invalidData addObject:[NSBezierPath bezierPathWithRect:NSZeroRect]];

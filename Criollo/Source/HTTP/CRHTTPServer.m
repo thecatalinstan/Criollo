@@ -50,16 +50,23 @@
 - (BOOL)startListening:(NSError *__autoreleasing  _Nullable *)error portNumber:(NSUInteger)portNumber interface:(NSString *)interface {
     NSError * certificateParsingError;
     self.certificates = [self fetchIdentityWithError:&certificateParsingError];
+    
+    self.identityPath = nil;
+    self.password = nil;
+    self.certificatePath = nil;
+    self.certificateKeyPath = nil;
+    
     if ( self.certificates == nil ) {
         [CRApp logErrorFormat:NSLocalizedString(@"Unable to parse certificates: %@",), certificateParsingError];
         return NO;
     }
+    
     return [super startListening:error portNumber:portNumber interface:interface];
 }
 
 - (NSArray *)fetchIdentityWithError:(NSError *__autoreleasing  _Nullable *)error {    
     if ( self.identityPath.length > 0 ) {
-        return [CRHTTPS parseIdentrityFile:self.identityPath WithError:error];
+        return [CRHTTPS parseIdentrityFile:self.identityPath password:self.password withError:error];
     } else if ( self.certificatePath.length > 0 && self.certificateKeyPath.length > 0 ) {
         return [CRHTTPS parseCertificateFile:self.certificatePath certificateKeyFile:self.certificateKeyPath withError:error];
     } else {

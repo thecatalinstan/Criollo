@@ -7,7 +7,7 @@
 //
 
 #import "CRMimeTypeHelper.h"
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#if TARGET_OS_IPHONE || TARGET_OS_SIMULATOR
 #import <MobileCoreServices/MobileCoreServices.h>
 #else
 #import <CoreServices/CoreServices.h>

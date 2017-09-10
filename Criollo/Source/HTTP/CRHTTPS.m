@@ -9,15 +9,91 @@
 #import "CRHTTPS.h"
 #import "CRHTTPServer.h"
 
+@interface CRHTTPS ()
+
++ (SecKeychainRef)getKeychainWithError:(NSError * _Nullable __autoreleasing * _Nullable)error;
+
+@end
+
 @implementation CRHTTPS
 
-+ (NSArray *)parseIdentrityFile:(NSString *)identityFilePath WithError:(NSError *__autoreleasing  _Nullable *)error {
-    return @[];
++ (SecKeychainRef)getKeychainWithError:(NSError * _Nullable __autoreleasing * _Nullable)error {
+    SecKeychainRef keychain = NULL;
+    *error = nil;
+#if TARGET_OS_OSX
+    NSString *keychainPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSUUID UUID].UUIDString];
+    NSString *keychainPassword = [NSUUID UUID].UUIDString;
+    OSStatus keychainCreationStatus = SecKeychainCreate(keychainPath.UTF8String, (UInt32)keychainPassword.length, keychainPassword.UTF8String, NO, NULL, &keychain);
+    if ( keychainCreationStatus != errSecSuccess ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInternalError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to create keychain. %@",), (__bridge NSString *)SecCopyErrorMessageString(keychainCreationStatus, NULL)]}];
+        return NULL;
+    }
+#endif
+    return keychain;
+}
+
++ (NSArray *)parseIdentrityFile:(NSString *)identityFilePath password:(nonnull NSString *)password withError:(NSError *__autoreleasing  _Nullable * _Nullable)error {
+    NSError * identityReadError;
+    NSData * identityContents = [NSData dataWithContentsOfFile:identityFilePath options:NSDataReadingUncached error:&identityReadError];
+    if ( identityContents.length == 0 ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidIdentityFile userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse PKCS12 identity file.",), NSUnderlyingErrorKey: identityReadError, CRHTTPServerIdentityPathKey: identityFilePath ? : @"(null)"}];
+        return nil;
+    }
+    
+    CFArrayRef identityImportItems = NULL;
+    NSMutableDictionary *identityImportOptions = [NSMutableDictionary dictionary];
+    identityImportOptions[(id)kSecImportExportPassphrase] = password ? : @"";
+    
+    // Create a temp keychain and import the private key into it
+    SecKeychainRef keychain = [CRHTTPS getKeychainWithError:error];
+    if ( *error != nil ) {
+        return nil;
+    }
+    
+    if (keychain != NULL) {
+        identityImportOptions[(id)kSecImportExportKeychain] = (__bridge id)keychain;
+    }
+
+    OSStatus identityImportStatus = SecPKCS12Import((__bridge CFDataRef)identityContents, (__bridge CFDictionaryRef)identityImportOptions, &identityImportItems);
+    
+    if ( identityImportStatus != errSecSuccess ) {
+        NSString *errorMessage;
+#if TARGET_OS_OSX
+        errorMessage = (__bridge NSString *)SecCopyErrorMessageString(identityImportStatus, NULL);
+#else
+        if ( identityImportStatus == errSecAuthFailed ) {
+            errorMessage = NSLocalizedString(@"Invalid password when importing PKCS12 identity file.",);
+        } else {
+            errorMessage = NSLocalizedString(@"Unable to parse PKCS12 identity file.",);
+        }
+#endif
+        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidIdentityFile userInfo:@{NSLocalizedDescriptionKey: errorMessage, CRHTTPServerIdentityPathKey: identityFilePath ? : @"(null)"}];
+        
+#if TARGET_OS_OSX
+        if ( keychain != NULL ) {
+            SecKeychainDelete(keychain);
+        }
+#endif
+    
+        return nil;
+    }
+
+    CFDictionaryRef identityDictionary = CFArrayGetValueAtIndex(identityImportItems, 0);
+    CFArrayRef certificateImportItems = CFDictionaryGetValue(identityDictionary, kSecImportItemCertChain);
+    SecIdentityRef identity = (SecIdentityRef)CFDictionaryGetValue(identityDictionary, kSecImportItemIdentity);
+
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity:CFArrayGetCount(certificateImportItems)];
+    [result addObjectsFromArray:(__bridge NSArray * _Nonnull)(certificateImportItems)];
+    result[0] = (__bridge id _Nonnull)(identity);
+    
+    NSLog(@" *** %@", result);
+
+    return result;
 }
 
 + (NSArray *)parseCertificateFile:(NSString *)certificatePath certificateKeyFile:(NSString *)certificateKeyPath withError:(NSError *__autoreleasing  _Nullable *)error {
     
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#if TARGET_OS_IPHONE || TARGET_OS_SIMULATOR
     *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInternalError userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"Parsing certificate bundles and private keys is not yet implemented on iOS",), CRHTTPServerCertificatePathKey: certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
     return @[];
 #else
@@ -51,12 +127,8 @@
     }
     
     // Create a temp keychain and import the private key into it
-    NSString *keychainPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSUUID UUID].UUIDString];
-    NSString *keychainPassword = [NSUUID UUID].UUIDString;
-    SecKeychainRef keychain;
-    OSStatus keychainCreationStatus = SecKeychainCreate(keychainPath.UTF8String, (UInt32)keychainPassword.length, keychainPassword.UTF8String, NO, NULL, &keychain);
-    if ( keychainCreationStatus != errSecSuccess ) {
-        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInternalError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to create keychain. %@",), (__bridge NSString *)SecCopyErrorMessageString(keychainCreationStatus, NULL)], CRHTTPServerCertificatePathKey: certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
+    SecKeychainRef keychain = [CRHTTPS getKeychainWithError:error];
+    if ( *error != nil ) {
         return nil;
     }
     
@@ -65,7 +137,10 @@
     OSStatus keyImportStatus = SecItemImport((__bridge CFDataRef)pemKeyContents , NULL, NULL, NULL, 0, NULL, keychain, &keyImportItems);
     if ( keyImportStatus != errSecSuccess ) {
         *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to parse PEM RSA key file. %@",), (__bridge NSString *)SecCopyErrorMessageString(keyImportStatus, NULL)], CRHTTPServerCertificatePathKey: certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
-        SecKeychainDelete(keychain);
+        
+        if ( keychain != NULL ) {
+            SecKeychainDelete(keychain);
+        }
         return nil;
     }
     
@@ -73,7 +148,10 @@
     SecKeyRef key = (SecKeyRef) CFArrayGetValueAtIndex(keyImportItems, 0);
     if ( CFGetTypeID(key) != SecKeyGetTypeID() ) {
         *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Expected a RSA private key, but got %@ instead.",), (__bridge id)key], CRHTTPServerCertificatePathKey: certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
-        SecKeychainDelete(keychain);
+       
+        if ( keychain != NULL ) {
+            SecKeychainDelete(keychain);
+        }
         return nil;
     }
     
@@ -82,9 +160,15 @@
     OSStatus identityCreationStatus = SecIdentityCreateWithCertificate(keychain, certificate, &identity);
     if ( identityCreationStatus != errSecSuccess ) {
         *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to get a suitable identity. %@",), (__bridge NSString *)SecCopyErrorMessageString(identityCreationStatus, NULL)], CRHTTPServerCertificatePathKey: certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
-        SecKeychainDelete(keychain);
+        
+        if ( keychain != NULL ) {
+            SecKeychainDelete(keychain);
+        }
         return nil;
     }
+    
+    NSLog(@" *** %@", (__bridge NSArray * _Nonnull)(certificateImportItems));
+    NSLog(@" *** %@", (__bridge id _Nonnull)(identity));
     
     // Create the outut array
     NSMutableArray *result = [NSMutableArray arrayWithCapacity:CFArrayGetCount(certificateImportItems)];
@@ -93,6 +177,8 @@
     
     // Cleanup
     SecKeychainDelete(keychain);
+    
+    NSLog(@" *** %@", result);
     
     return result;
 #endif

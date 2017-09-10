@@ -28,6 +28,7 @@
 @property (nonatomic) BOOL isSecure;
 
 @property (nonatomic, strong, nullable) NSString *identityPath;
+@property (nonatomic, strong, nullable) NSString *password;
 @property (nonatomic, strong, nullable) NSString *certificatePath;
 @property (nonatomic, strong, nullable) NSString *certificateKeyPath;
 
