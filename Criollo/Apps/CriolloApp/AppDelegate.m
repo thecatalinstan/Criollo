@@ -40,15 +40,10 @@ NS_ASSUME_NONNULL_END
         CRHTTPServer *server = (CRHTTPServer *)self.server;
         server.isSecure = YES;
 
-//        server.identityPath = @"/Users/cas/Desktop/criollo_local.p12";
-        server.identityPath = @"/Users/cas/Desktop/criollo.p12";
+        server.identityPath = [[NSBundle mainBundle] pathForResource:@"criollo_local" ofType:@"p12"];
         server.password = @"123456";
-        
-//        server.certificatePath = @"/Users/cas/Desktop/criollo_io.chained.crt";
-//        server.certificateKeyPath = @"/Users/cas/Desktop/criollo_io.key";
-//        
-//        server.certificatePath = [[NSBundle mainBundle] pathForResource:@"cert" ofType:@"pem"];
-//        server.certificateKeyPath = [[NSBundle mainBundle] pathForResource:@"key" ofType:@"pem"];
+        server.certificatePath = [[NSBundle mainBundle] pathForResource:@"cert" ofType:@"pem"];
+        server.certificateKeyPath = [[NSBundle mainBundle] pathForResource:@"key" ofType:@"pem"];
     }
 
     backgroundQueue = dispatch_queue_create(self.className.UTF8String, DISPATCH_QUEUE_SERIAL);

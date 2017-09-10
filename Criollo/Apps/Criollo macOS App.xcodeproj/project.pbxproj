@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4A2F43D31F65A2C900A466D5 /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A2F43D21F65A2C900A466D5 /* Criollo.framework */; };
+		4A2F43DB1F65CB7C00A466D5 /* criollo_local.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 4A2F43DA1F65CB7C00A466D5 /* criollo_local.p12 */; };
 		AD05DCFC1DBB9A15007CEDEF /* key.pem in Resources */ = {isa = PBXBuildFile; fileRef = AD05DCFA1DBB9A15007CEDEF /* key.pem */; };
 		AD05DCFD1DBB9A15007CEDEF /* cert.pem in Resources */ = {isa = PBXBuildFile; fileRef = AD05DCFB1DBB9A15007CEDEF /* cert.pem */; };
 		AD41ECD71CB42EBB00133C8D /* SystemInfoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD41ECD61CB42EBB00133C8D /* SystemInfoHelper.m */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		4A2F43D21F65A2C900A466D5 /* Criollo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Criollo.framework; path = "../../../../../../Library/Developer/Xcode/DerivedData/Criollo-gxkxtbnmmrlzvbafuydgpalbahjh/Build/Products/Debug/Criollo.framework"; sourceTree = "<group>"; };
+		4A2F43DA1F65CB7C00A466D5 /* criollo_local.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; name = criollo_local.p12; path = Shared/criollo_local.p12; sourceTree = SOURCE_ROOT; };
 		AD05DCFA1DBB9A15007CEDEF /* key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = key.pem; path = Shared/key.pem; sourceTree = SOURCE_ROOT; };
 		AD05DCFB1DBB9A15007CEDEF /* cert.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = cert.pem; path = Shared/cert.pem; sourceTree = SOURCE_ROOT; };
 		AD41ECD51CB42EBB00133C8D /* SystemInfoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemInfoHelper.h; path = Shared/SystemInfoHelper.h; sourceTree = SOURCE_ROOT; };
@@ -118,6 +120,7 @@
 				AD41ECD61CB42EBB00133C8D /* SystemInfoHelper.m */,
 				AD05DCFA1DBB9A15007CEDEF /* key.pem */,
 				AD05DCFB1DBB9A15007CEDEF /* cert.pem */,
+				4A2F43DA1F65CB7C00A466D5 /* criollo_local.p12 */,
 				AD554D971CAC97C7002182A4 /* Public */,
 			);
 			path = CriolloApp;
@@ -195,6 +198,7 @@
 				ADC1A5CA1CA30F49009A4A19 /* Assets.xcassets in Resources */,
 				AD05DCFD1DBB9A15007CEDEF /* cert.pem in Resources */,
 				ADC081211D3EBD2B00E9E05D /* MultiRouteViewController.html in Resources */,
+				4A2F43DB1F65CB7C00A466D5 /* criollo_local.p12 in Resources */,
 				AD554D991CAC97C7002182A4 /* HelloWorldViewController.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

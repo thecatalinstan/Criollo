@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A2F43E41F65CD3C00A466D5 /* criollo_local.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 4A2F43E21F65CD3C00A466D5 /* criollo_local.p12 */; };
+		4A2F43E81F65CE7B00A466D5 /* cert.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A2F43E61F65CE7B00A466D5 /* cert.pem */; };
+		4A2F43E91F65CE7B00A466D5 /* key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A2F43E71F65CE7B00A466D5 /* key.pem */; };
 		AD05DD031DBBA220007CEDEF /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD05DD021DBBA220007CEDEF /* Criollo.framework */; };
 		AD05DD041DBBA220007CEDEF /* Criollo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AD05DD021DBBA220007CEDEF /* Criollo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AD23B7371D3FC7100056170D /* MultiRouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD23B7361D3FC7100056170D /* MultiRouteViewController.swift */; };
@@ -49,6 +52,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4A2F43E21F65CD3C00A466D5 /* criollo_local.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; name = criollo_local.p12; path = Shared/criollo_local.p12; sourceTree = SOURCE_ROOT; };
+		4A2F43E61F65CE7B00A466D5 /* cert.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = cert.pem; path = Shared/cert.pem; sourceTree = SOURCE_ROOT; };
+		4A2F43E71F65CE7B00A466D5 /* key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = key.pem; path = Shared/key.pem; sourceTree = SOURCE_ROOT; };
 		AD05DD021DBBA220007CEDEF /* Criollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Criollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD23B7361D3FC7100056170D /* MultiRouteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiRouteViewController.swift; sourceTree = "<group>"; };
 		AD23B7381D3FC71C0056170D /* MultiRouteViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = MultiRouteViewController.html; path = Shared/MultiRouteViewController.html; sourceTree = SOURCE_ROOT; };
@@ -123,6 +129,9 @@
 				AD41ECDB1CB4330000133C8D /* CriolloiOSApp-Bridging-Header.h */,
 				AD41ECDC1CB4330100133C8D /* SystemInfoHelper.h */,
 				AD41ECDD1CB4330100133C8D /* SystemInfoHelper.m */,
+				4A2F43E21F65CD3C00A466D5 /* criollo_local.p12 */,
+				4A2F43E61F65CE7B00A466D5 /* cert.pem */,
+				4A2F43E71F65CE7B00A466D5 /* key.pem */,
 				AD41ECD01CB42D1C00133C8D /* Public */,
 			);
 			path = CriolloiOSApp;
@@ -198,10 +207,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A2F43E91F65CE7B00A466D5 /* key.pem in Resources */,
 				AD5B3C5F1CA820B5000988B7 /* LaunchScreen.storyboard in Resources */,
 				AD554DA11CAC9A95002182A4 /* Assets.xcassets in Resources */,
+				4A2F43E81F65CE7B00A466D5 /* cert.pem in Resources */,
 				AD5B3C5A1CA820B5000988B7 /* Main.storyboard in Resources */,
 				AD23B7391D3FC71C0056170D /* MultiRouteViewController.html in Resources */,
+				4A2F43E41F65CD3C00A466D5 /* criollo_local.p12 in Resources */,
 				AD864DEC1CAD3F1D008D8FFE /* HelloWorldViewController.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

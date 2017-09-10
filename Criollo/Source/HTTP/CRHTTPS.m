@@ -9,6 +9,10 @@
 #import "CRHTTPS.h"
 #import "CRHTTPServer.h"
 
+#if !SEC_OS_OSX_INCLUDES
+typedef CFTypeRef SecKeychainRef;
+#endif
+
 @interface CRHTTPS ()
 
 + (SecKeychainRef)getKeychainWithError:(NSError * _Nullable __autoreleasing * _Nullable)error;
@@ -44,21 +48,20 @@
     NSMutableDictionary *identityImportOptions = [NSMutableDictionary dictionary];
     identityImportOptions[(id)kSecImportExportPassphrase] = password ? : @"";
     
+#if SEC_OS_OSX_INCLUDES
     // Create a temp keychain and import the private key into it
     SecKeychainRef keychain = [CRHTTPS getKeychainWithError:error];
     if ( *error != nil ) {
         return nil;
     }
+    identityImportOptions[(id)kSecImportExportKeychain] = (__bridge id)keychain;
+#endif
     
-    if (keychain != NULL) {
-        identityImportOptions[(id)kSecImportExportKeychain] = (__bridge id)keychain;
-    }
-
     OSStatus identityImportStatus = SecPKCS12Import((__bridge CFDataRef)identityContents, (__bridge CFDictionaryRef)identityImportOptions, &identityImportItems);
     
     if ( identityImportStatus != errSecSuccess ) {
         NSString *errorMessage;
-#if TARGET_OS_OSX
+#if SEC_OS_OSX_INCLUDES
         errorMessage = (__bridge NSString *)SecCopyErrorMessageString(identityImportStatus, NULL);
 #else
         if ( identityImportStatus == errSecAuthFailed ) {
@@ -69,7 +72,7 @@
 #endif
         *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidIdentityFile userInfo:@{NSLocalizedDescriptionKey: errorMessage, CRHTTPServerIdentityPathKey: identityFilePath ? : @"(null)"}];
         
-#if TARGET_OS_OSX
+#if SEC_OS_OSX_INCLUDES
         if ( keychain != NULL ) {
             SecKeychainDelete(keychain);
         }
@@ -86,14 +89,12 @@
     [result addObjectsFromArray:(__bridge NSArray * _Nonnull)(certificateImportItems)];
     result[0] = (__bridge id _Nonnull)(identity);
     
-    NSLog(@" *** %@", result);
-
     return result;
 }
 
 + (NSArray *)parseCertificateFile:(NSString *)certificatePath certificateKeyFile:(NSString *)certificateKeyPath withError:(NSError *__autoreleasing  _Nullable *)error {
     
-#if TARGET_OS_IPHONE || TARGET_OS_SIMULATOR
+#if !SEC_OS_OSX_INCLUDES
     *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInternalError userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"Parsing certificate bundles and private keys is not yet implemented on iOS",), CRHTTPServerCertificatePathKey: certificatePath ? : @"(null)", CRHTTPServerCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
     return @[];
 #else
@@ -167,9 +168,6 @@
         return nil;
     }
     
-    NSLog(@" *** %@", (__bridge NSArray * _Nonnull)(certificateImportItems));
-    NSLog(@" *** %@", (__bridge id _Nonnull)(identity));
-    
     // Create the outut array
     NSMutableArray *result = [NSMutableArray arrayWithCapacity:CFArrayGetCount(certificateImportItems)];
     [result addObjectsFromArray:(__bridge NSArray * _Nonnull)(certificateImportItems)];
@@ -177,8 +175,6 @@
     
     // Cleanup
     SecKeychainDelete(keychain);
-    
-    NSLog(@" *** %@", result);
     
     return result;
 #endif
