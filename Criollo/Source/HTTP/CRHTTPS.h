@@ -8,6 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+#define CRHTTPSErrorDomain                     @"CRHTTPSErrorDomain"
+
+#define CRHTTPSInternalError                   1000
+#define CRHTTPSInvalidCertificateBundle        1001
+#define CRHTTPSInvalidCertificatePrivateKey    1002
+#define CRHTTPSInvalidIdentityFile             1003
+#define CRHTTPSInvalidCredentialFiles          1004
+
+#define CRHTTPSIdentityPathKey                 @"CRHTTPSIdentityPath"
+#define CRHTTPSCertificatePathKey              @"CRHTTPSCertificatePath"
+#define CRHTTPSCertificateKeyPathKey           @"CRHTTPSCertificateKeyPath"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CRHTTPS : NSObject

@@ -72,12 +72,13 @@
     } else {
         NSDictionary *info = @{
             NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse credential strings.",),
-            CRHTTPServerIdentityPathKey: self.identityPath ? : @"(null)",
-            CRHTTPServerCertificatePathKey: self.certificatePath ? : @"(null)",
-            CRHTTPServerCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"
+            CRHTTPSIdentityPathKey: self.identityPath ? : @"(null)",
+            CRHTTPSCertificatePathKey: self.certificatePath ? : @"(null)",
+            CRHTTPSCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"
         };
-        *error = [[NSError alloc] initWithDomain:CRHTTPServerErrorDomain code:CRHTTPServerInvalidCredentialFiles userInfo:info];
-        return @[];
+        *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCredentialFiles userInfo:info];
+        
+        return nil;
     }
 }
 

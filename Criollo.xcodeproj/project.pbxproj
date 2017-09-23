@@ -11,6 +11,8 @@
 		4A2F43CD1F659FE400A466D5 /* CRHTTPS.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A2F43CA1F659FE400A466D5 /* CRHTTPS.h */; };
 		4A2F43CE1F659FE400A466D5 /* CRHTTPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F43CB1F659FE400A466D5 /* CRHTTPS.m */; };
 		4A2F43D71F65AE9C00A466D5 /* CRHTTPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F43CB1F659FE400A466D5 /* CRHTTPS.m */; };
+		4AD0AD591F6662AA00943DC3 /* CRHTTPSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */; };
+		4AD0AD5A1F6662AA00943DC3 /* CRHTTPSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */; };
 		AD001ADA1D4555A500DE4AC9 /* CRRoute_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */; };
 		AD001ADD1D4555E000DE4AC9 /* CRRoute_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */; };
 		AD001AE01D455BA300DE4AC9 /* CRRouteMatchingResult.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001ADE1D455BA300DE4AC9 /* CRRouteMatchingResult.h */; };
@@ -221,6 +223,7 @@
 /* Begin PBXFileReference section */
 		4A2F43CA1F659FE400A466D5 /* CRHTTPS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRHTTPS.h; sourceTree = "<group>"; };
 		4A2F43CB1F659FE400A466D5 /* CRHTTPS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPS.m; sourceTree = "<group>"; };
+		4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPSTests.m; sourceTree = "<group>"; };
 		AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRoute_Internal.h; sourceTree = "<group>"; };
 		AD001ADE1D455BA300DE4AC9 /* CRRouteMatchingResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRouteMatchingResult.h; sourceTree = "<group>"; };
 		AD001ADF1D455BA300DE4AC9 /* CRRouteMatchingResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRouteMatchingResult.m; sourceTree = "<group>"; };
@@ -363,6 +366,7 @@
 				AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */,
 				AD1D44E11F375DE100C5D260 /* CRNibTests.m */,
 				AD1D44F71F376DED00C5D260 /* CRViewTests.m */,
+				4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */,
 				AD96F74D1F1A3F8000C8D075 /* Samples */,
 			);
 			path = CriolloTests;
@@ -906,6 +910,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AD0AD591F6662AA00943DC3 /* CRHTTPSTests.m in Sources */,
 				AD1D44F81F376DED00C5D260 /* CRViewTests.m in Sources */,
 				AD1D44E21F375DE100C5D260 /* CRNibTests.m in Sources */,
 				AD7F2F711F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */,
@@ -916,6 +921,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AD0AD5A1F6662AA00943DC3 /* CRHTTPSTests.m in Sources */,
 				AD1D44F91F3772ED00C5D260 /* CRViewTests.m in Sources */,
 				AD1D44E91F37600300C5D260 /* CRNibTests.m in Sources */,
 				AD7F2F721F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */,
