@@ -20,23 +20,24 @@
     __weak AppDelegate* waakSelf = self;
 
     // Ablock that creates a screenshot and sends it to the clinet
-    [self.server addBlock:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
-
-        UIView* hostView = waakSelf.window.rootViewController.view;
-
-        UIGraphicsBeginImageContextWithOptions(hostView.bounds.size, hostView.opaque, 0.0);
-        [hostView.layer renderInContext:UIGraphicsGetCurrentContext()];
-        UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-
-        NSData* imageData = UIImagePNGRepresentation(img);
-        [response setValue:@"image/png" forHTTPHeaderField:@"Content-type"];
-        [response setValue:@(imageData.length).stringValue forHTTPHeaderField:@"Content-Length"];
-        [response sendData:imageData];
-
-        completionHandler();
-
-    } forPath:@"/screenshot" HTTPMethod:CRHTTPMethodGet];
+    [self.server get:@"/screenshot" block:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIView* hostView = waakSelf.window.rootViewController.view;
+            
+            UIGraphicsBeginImageContextWithOptions(hostView.bounds.size, hostView.opaque, 0.0);
+            [hostView.layer renderInContext:UIGraphicsGetCurrentContext()];
+            UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            NSData* imageData = UIImagePNGRepresentation(img);
+            [response setValue:@"image/png" forHTTPHeaderField:@"Content-type"];
+            [response setValue:@(imageData.length).stringValue forHTTPHeaderField:@"Content-Length"];
+            [response sendData:imageData];
+            
+            completionHandler();
+        });
+    }];
 
     return YES;
 }
