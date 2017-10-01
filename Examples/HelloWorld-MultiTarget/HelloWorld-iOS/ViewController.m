@@ -83,7 +83,7 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    [self.appDelegate.server closeAllConnections];
+    [self.appDelegate.server closeAllConnections:nil];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -141,7 +141,7 @@
 }
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
-    if ( [SFSafariViewController class] != NULL ) {
+    if (@available(iOS 9.0, *)) {
         SFSafariViewController* safari = [[SFSafariViewController alloc] initWithURL:URL];
         safari.modalPresentationStyle = UIModalPresentationPageSheet;
         safari.modalTransitionStyle = UIModalTransitionStyleCoverVertical;

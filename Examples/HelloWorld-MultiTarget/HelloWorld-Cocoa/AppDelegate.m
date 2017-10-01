@@ -22,7 +22,7 @@
 
     __weak AppDelegate* weakSelf = self;
     // A block that creates a screenshot and sends it to the client
-    [self.server addBlock:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
+    [self.server get:@"/screenshot" block:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
         NSMutableData* imageData = [NSMutableData data];
 
         CGImageRef windowImage = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionOnScreenOnly, (CGWindowID)weakSelf.windowController.window.windowNumber, kCGWindowImageBestResolution);
@@ -38,7 +38,7 @@
         [response sendData:imageData];
 
         completionHandler();
-    } forPath:@"/screenshot" HTTPMethod:CRHTTPMethodGet];
+    }];
 
     self.windowController = [[WindowController alloc] initWithWindowNibName:@"WindowController"];
     [self.windowController showWindow:nil];
