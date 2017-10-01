@@ -69,18 +69,12 @@ static const CRMimeTypeHelper *sharedHelper;
         if ( contentType.length == 0 ) {
             if ( UTTypeConformsTo(UTI, kUTTypeText) ) {
                 contentType = @"text/plain; charset=utf-8";
+            } else if ( UTTypeConformsTo(UTI, kUTTypeXMLPropertyList) ) {
+                contentType = @"application/xml; charset=utf-8";
             } else if ( UTTypeConformsTo(UTI,kUTTypeSourceCode) ) {
                 contentType = @"text/plain; charset=utf-8";
             } else {
-                if (@available(macOS 10.10, *)) {
-                    if ( UTTypeConformsTo(UTI, kUTTypeXMLPropertyList) ) {
-                        contentType = @"application/xml; charset=utf-8";
-                    } else {
-                        contentType = @"application/octet-stream; charset=binary";
-                    }
-                } else {
-                    contentType = @"application/octet-stream; charset=binary";
-                }
+                contentType = @"application/octet-stream; charset=binary";
             }
         } else if ( UTTypeConformsTo(UTI, kUTTypeText) || UTTypeConformsTo(UTI, kUTTypeSourceCode) ) {
             contentType = [contentType stringByAppendingString:@"; charset=utf-8"];
