@@ -1102,7 +1102,6 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = CriolloTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloTests;
@@ -1131,7 +1130,6 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = CriolloTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloTests;
@@ -1273,7 +1271,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.Criollo;
 				PRODUCT_NAME = Criollo;
 				VALID_ARCHS = x86_64;
-				WARNING_CFLAGS = " -Wpartial-availability";
+				WARNING_CFLAGS = "-Wpartial-availability";
 			};
 			name = Debug;
 		};
@@ -1314,7 +1312,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.Criollo;
 				PRODUCT_NAME = Criollo;
 				VALID_ARCHS = x86_64;
-				WARNING_CFLAGS = " -Wpartial-availability";
+				WARNING_CFLAGS = "-Wpartial-availability";
 			};
 			name = Release;
 		};
