@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AD05DD031DBBA220007CEDEF /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD05DD021DBBA220007CEDEF /* Criollo.framework */; };
-		AD05DD041DBBA220007CEDEF /* Criollo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AD05DD021DBBA220007CEDEF /* Criollo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4A9CE5DB1F81048200107CBD /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9CE5DC1F81048200107CBD /* Criollo.framework */; };
 		AD23B7371D3FC7100056170D /* MultiRouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD23B7361D3FC7100056170D /* MultiRouteViewController.swift */; };
 		AD23B7391D3FC71C0056170D /* MultiRouteViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD23B7381D3FC71C0056170D /* MultiRouteViewController.html */; };
 		AD41ECD41CB42D4900133C8D /* style.css in Copy Public Resources */ = {isa = PBXBuildFile; fileRef = AD41ECD11CB42D1C00133C8D /* style.css */; };
@@ -24,17 +23,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		AD05DD011DBBA188007CEDEF /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				AD05DD041DBBA220007CEDEF /* Criollo.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		AD41ECD31CB42D3E00133C8D /* Copy Public Resources */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -49,6 +37,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4A9CE5DC1F81048200107CBD /* Criollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Criollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD05DD021DBBA220007CEDEF /* Criollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Criollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD23B7361D3FC7100056170D /* MultiRouteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiRouteViewController.swift; sourceTree = "<group>"; };
 		AD23B7381D3FC71C0056170D /* MultiRouteViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = MultiRouteViewController.html; path = Shared/MultiRouteViewController.html; sourceTree = SOURCE_ROOT; };
@@ -73,7 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD05DD031DBBA220007CEDEF /* Criollo.framework in Frameworks */,
+				4A9CE5DB1F81048200107CBD /* Criollo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +120,7 @@
 		ADAD526A1D3E4F0400DDFBB5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4A9CE5DC1F81048200107CBD /* Criollo.framework */,
 				AD05DD021DBBA220007CEDEF /* Criollo.framework */,
 			);
 			name = Frameworks;
@@ -147,7 +137,6 @@
 				AD5B3C4E1CA820B5000988B7 /* Frameworks */,
 				AD5B3C4F1CA820B5000988B7 /* Resources */,
 				AD41ECD31CB42D3E00133C8D /* Copy Public Resources */,
-				AD05DD011DBBA188007CEDEF /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -171,7 +160,7 @@
 					AD5B3C501CA820B5000988B7 = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = JNX7A8G939;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0900;
 					};
 				};
 			};
@@ -359,7 +348,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CriolloiOSApp/CriolloiOSApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -378,7 +367,7 @@
 				PRODUCT_NAME = "Criollo iOS App";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CriolloiOSApp/CriolloiOSApp-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

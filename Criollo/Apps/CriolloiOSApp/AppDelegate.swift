@@ -16,6 +16,8 @@ let LogRequests:Bool = true
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
 
+    var window:UIWindow?
+    
     var server:CRHTTPServer!
     var baseURL:URL!
 
@@ -157,7 +159,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
                 print(" * \(path)")
             }
         } else {
-            print("Failed to start HTTP server. \(serverError?.localizedDescription)")
+            print("Failed to start HTTP server. \(String(describing: serverError?.localizedDescription))")
         }
 
         return true
@@ -198,7 +200,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
     func server(_ server: CRServer, didFinish request: CRRequest) {
         if ( LogRequests ) {
             let env:NSDictionary! = request.value(forKey: "env") as! NSDictionary
-            NSLog(" * \(request.response!.connection!.remoteAddress) \(request.description) - \(request.response!.statusCode) - \(env["HTTP_USER_AGENT"])")
+            NSLog(" * \(request.response!.connection!.remoteAddress) \(request.description) - \(request.response!.statusCode) - \(String(describing: env["HTTP_USER_AGENT"]))")
         }
         SystemInfoHelper.addRequest()
     }
