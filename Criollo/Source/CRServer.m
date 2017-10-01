@@ -93,7 +93,7 @@ NS_ASSUME_NONNULL_END
     dispatch_set_target_queue(self.acceptedSocketDelegateTargetQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0));
 
     self.workerQueue = [[NSOperationQueue alloc] init];
-    if ( [self.workerQueue respondsToSelector:@selector(qualityOfService)] ) {
+    if (@available(macOS 10.10, *)) {
         self.workerQueue.qualityOfService = NSQualityOfServiceUserInitiated;
     }
     self.workerQueue.maxConcurrentOperationCount = NSOperationQueueDefaultMaxConcurrentOperationCount;
