@@ -1,3 +1,6 @@
 [submodule "Libraries/CocoaAsyncSocket"]
 	path = Libraries/CocoaAsyncSocket
 	url = https://github.com/robbiehanson/CocoaAsyncSocket.git
+[submodule "Libraries/OpenSSL"]
+	path = Libraries/OpenSSL
+	url = https://github.com/thecatalinstan/openssl-xcode.git
