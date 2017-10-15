@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4A2F43DB1F65CB7C00A466D5 /* criollo_local.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 4A2F43DA1F65CB7C00A466D5 /* criollo_local.p12 */; };
 		4A9CE5D91F81044700107CBD /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9CE5DA1F81044700107CBD /* Criollo.framework */; };
-		AD05DCFC1DBB9A15007CEDEF /* key.pem in Resources */ = {isa = PBXBuildFile; fileRef = AD05DCFA1DBB9A15007CEDEF /* key.pem */; };
-		AD05DCFD1DBB9A15007CEDEF /* cert.pem in Resources */ = {isa = PBXBuildFile; fileRef = AD05DCFB1DBB9A15007CEDEF /* cert.pem */; };
+		4AF7622F1F93C5B00061EFC9 /* criollo_local.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 4AF7622A1F93C5B00061EFC9 /* criollo_local.p12 */; };
+		4AF762301F93C5B00061EFC9 /* key.der in Resources */ = {isa = PBXBuildFile; fileRef = 4AF7622B1F93C5B00061EFC9 /* key.der */; };
+		4AF762311F93C5B00061EFC9 /* cert.der in Resources */ = {isa = PBXBuildFile; fileRef = 4AF7622C1F93C5B00061EFC9 /* cert.der */; };
+		4AF762321F93C5B00061EFC9 /* cert.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4AF7622D1F93C5B00061EFC9 /* cert.pem */; };
+		4AF762331F93C5B00061EFC9 /* key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4AF7622E1F93C5B00061EFC9 /* key.pem */; };
 		AD41ECD71CB42EBB00133C8D /* SystemInfoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD41ECD61CB42EBB00133C8D /* SystemInfoHelper.m */; };
 		AD554D991CAC97C7002182A4 /* HelloWorldViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = AD554D921CAC97C7002182A4 /* HelloWorldViewController.html */; };
 		AD554D9A1CAC97C7002182A4 /* HelloWorldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD554D931CAC97C7002182A4 /* HelloWorldViewController.m */; };
@@ -38,10 +40,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4A2F43DA1F65CB7C00A466D5 /* criollo_local.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; name = criollo_local.p12; path = Shared/criollo_local.p12; sourceTree = SOURCE_ROOT; };
 		4A9CE5DA1F81044700107CBD /* Criollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Criollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AD05DCFA1DBB9A15007CEDEF /* key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = key.pem; path = Shared/key.pem; sourceTree = SOURCE_ROOT; };
-		AD05DCFB1DBB9A15007CEDEF /* cert.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = cert.pem; path = Shared/cert.pem; sourceTree = SOURCE_ROOT; };
+		4AF7622A1F93C5B00061EFC9 /* criollo_local.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = criollo_local.p12; sourceTree = "<group>"; };
+		4AF7622B1F93C5B00061EFC9 /* key.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = key.der; sourceTree = "<group>"; };
+		4AF7622C1F93C5B00061EFC9 /* cert.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = cert.der; sourceTree = "<group>"; };
+		4AF7622D1F93C5B00061EFC9 /* cert.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cert.pem; sourceTree = "<group>"; };
+		4AF7622E1F93C5B00061EFC9 /* key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = key.pem; sourceTree = "<group>"; };
 		AD41ECD51CB42EBB00133C8D /* SystemInfoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemInfoHelper.h; path = Shared/SystemInfoHelper.h; sourceTree = SOURCE_ROOT; };
 		AD41ECD61CB42EBB00133C8D /* SystemInfoHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemInfoHelper.m; path = Shared/SystemInfoHelper.m; sourceTree = SOURCE_ROOT; };
 		AD554D911CAC97C7002182A4 /* HelloWorldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloWorldViewController.h; sourceTree = "<group>"; };
@@ -73,6 +77,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4AF762291F93C5980061EFC9 /* Certificates */ = {
+			isa = PBXGroup;
+			children = (
+				4AF7622A1F93C5B00061EFC9 /* criollo_local.p12 */,
+				4AF7622C1F93C5B00061EFC9 /* cert.der */,
+				4AF7622D1F93C5B00061EFC9 /* cert.pem */,
+				4AF7622B1F93C5B00061EFC9 /* key.der */,
+				4AF7622E1F93C5B00061EFC9 /* key.pem */,
+			);
+			name = Certificates;
+			path = ../Shared/Certificates;
+			sourceTree = "<group>";
+		};
 		AD554D971CAC97C7002182A4 /* Public */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,9 +134,7 @@
 				ADC081201D3EBD2B00E9E05D /* MultiRouteViewController.html */,
 				AD41ECD51CB42EBB00133C8D /* SystemInfoHelper.h */,
 				AD41ECD61CB42EBB00133C8D /* SystemInfoHelper.m */,
-				AD05DCFA1DBB9A15007CEDEF /* key.pem */,
-				AD05DCFB1DBB9A15007CEDEF /* cert.pem */,
-				4A2F43DA1F65CB7C00A466D5 /* criollo_local.p12 */,
+				4AF762291F93C5980061EFC9 /* Certificates */,
 				AD554D971CAC97C7002182A4 /* Public */,
 			);
 			path = CriolloApp;
@@ -192,11 +207,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD05DCFC1DBB9A15007CEDEF /* key.pem in Resources */,
+				4AF762331F93C5B00061EFC9 /* key.pem in Resources */,
+				4AF762301F93C5B00061EFC9 /* key.der in Resources */,
+				4AF7622F1F93C5B00061EFC9 /* criollo_local.p12 in Resources */,
+				4AF762321F93C5B00061EFC9 /* cert.pem in Resources */,
 				ADC1A5CA1CA30F49009A4A19 /* Assets.xcassets in Resources */,
-				AD05DCFD1DBB9A15007CEDEF /* cert.pem in Resources */,
+				4AF762311F93C5B00061EFC9 /* cert.der in Resources */,
 				ADC081211D3EBD2B00E9E05D /* MultiRouteViewController.html in Resources */,
-				4A2F43DB1F65CB7C00A466D5 /* criollo_local.p12 in Resources */,
 				AD554D991CAC97C7002182A4 /* HelloWorldViewController.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

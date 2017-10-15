@@ -36,15 +36,19 @@ NS_ASSUME_NONNULL_END
     Class serverClass = isFastCGI ? [CRFCGIServer class] : [CRHTTPServer class];
     self.server = [[serverClass alloc] initWithDelegate:self];
 
-//    if ( !isFastCGI ) {
-//        CRHTTPServer *server = (CRHTTPServer *)self.server;
-//        server.isSecure = YES;
-
+    if ( !isFastCGI ) {
+        CRHTTPServer *server = (CRHTTPServer *)self.server;
+        server.isSecure = YES;
+        
 //        server.identityPath = [[NSBundle mainBundle] pathForResource:@"criollo_local" ofType:@"p12"];
 //        server.password = @"123456";
+        
 //        server.certificatePath = [[NSBundle mainBundle] pathForResource:@"cert" ofType:@"pem"];
 //        server.certificateKeyPath = [[NSBundle mainBundle] pathForResource:@"key" ofType:@"pem"];
-//    }
+        
+//        server.certificatePath = [[NSBundle mainBundle] pathForResource:@"cert" ofType:@"der"];
+//        server.certificateKeyPath = [[NSBundle mainBundle] pathForResource:@"key" ofType:@"der"];
+    }
 
     backgroundQueue = dispatch_queue_create(self.className.UTF8String, DISPATCH_QUEUE_SERIAL);
     dispatch_set_target_queue(backgroundQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));

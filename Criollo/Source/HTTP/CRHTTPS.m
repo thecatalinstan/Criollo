@@ -13,6 +13,7 @@
 #import <openssl/bio.h>
 #import <openssl/pem.h>
 #import <openssl/err.h>
+#import <openssl/x509.h>
 #import <openssl/pkcs12.h>
 typedef CFTypeRef SecKeychainRef;
 #endif
@@ -214,30 +215,40 @@ NS_ASSUME_NONNULL_END
     
     OpenSSL_add_all_algorithms();
     ERR_load_crypto_strings();
-    
-    BIO *bpCert = BIO_new_mem_buf(certificate.bytes, (int)certificate.length);
-    X509 *cert = PEM_read_bio_X509(bpCert, NULL, NULL, NULL);
+
+    // Attempt to parse cert as DER encoded
+    const unsigned char *cert_data = (unsigned char *)certificate.bytes;
+    X509 *cert = d2i_X509(NULL, &cert_data, certificate.length);
     if ( cert == NULL ) {
-        char *err = ERR_error_string(ERR_get_error(), NULL);
-        *error = [NSError errorWithDomain:CRSSLErrorDomain code:CRSSLInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
+        // Attempt to parse cert as PEM encoded
+        BIO *bpCert = BIO_new_mem_buf(certificate.bytes, (int)certificate.length);
+        cert = PEM_read_bio_X509(bpCert, NULL, NULL, NULL);
+        if ( cert == NULL ) {
+            char *err = ERR_error_string(ERR_get_error(), NULL);
+            *error = [NSError errorWithDomain:CRSSLErrorDomain code:CRSSLInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
+            BIO_free(bpCert);
+            return nil;
+        }
         BIO_free(bpCert);
-        return nil;
     }
-    BIO_free(bpCert);
-    
-    BIO *bpkey = BIO_new_mem_buf(certificateKey.bytes, (int)certificateKey.length);
-    EVP_PKEY *key = PEM_read_bio_PrivateKey(bpkey, NULL, NULL, NULL);
+
+    // Attempt to parse key as DER encoded
+    const unsigned char *key_data = (unsigned char *)certificateKey.bytes;
+    EVP_PKEY *key = d2i_AutoPrivateKey(NULL, &key_data, certificateKey.length);
     if ( key == NULL ) {
-        ERR_print_errors_fp(stderr);
-        char *err = ERR_error_string(ERR_get_error(), NULL);
-        *error = [NSError errorWithDomain:CRSSLErrorDomain code:CRSSLInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
-        X509_free(cert);
+        // Attempt to parse key as PEM encoded
+        BIO *bpkey = BIO_new_mem_buf(certificateKey.bytes, (int)certificateKey.length);
+        key = PEM_read_bio_PrivateKey(bpkey, NULL, NULL, NULL);
+        if ( key == NULL ) {
+            char *err = ERR_error_string(ERR_get_error(), NULL);
+            *error = [NSError errorWithDomain:CRSSLErrorDomain code:CRSSLInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
+            X509_free(cert);
+            BIO_free(bpkey);
+            return nil;
+        }
         BIO_free(bpkey);
-        return nil;
     }
-    BIO_free(bpkey);
     
-//    struct stack_st_X509 *ca = NULL;
     NSString *identityPath = [NSTemporaryDirectory() stringByAppendingPathComponent:NSUUID.UUID.UUIDString];
     
     PKCS12 *p12 = PKCS12_create(password.UTF8String, identityPath.lastPathComponent.UTF8String, key, cert, NULL, 0, 0, 0, 0, 0);
@@ -252,14 +263,6 @@ NS_ASSUME_NONNULL_END
 
     X509_free(cert);
     EVP_PKEY_free(key);
-    
-//    NSError *dataWrittingError;
-//    NSData *identity = [NSData dataWithBytesNoCopy:buf length:len freeWhenDone:YES];
-//    if ( ! [identity writeToFile:identityPath options:NSDataWritingAtomic error:&dataWrittingError] ) {
-//        *error = [NSError errorWithDomain:CRSSLErrorDomain code:CRSSLIdentityCreateError userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to save temporary identity file", @""), NSUnderlyingErrorKey: dataWrittingError ? : @"(null)"}];
-//        PKCS12_free(p12);
-//        return nil;
-//    }
     
     FILE *fpIdentity = fopen(identityPath.UTF8String, "wb");
     if ( fpIdentity == NULL ) {

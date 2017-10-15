@@ -30,8 +30,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
         
 //        self.server.identityPath = Bundle.main.path(forResource: "criollo_local", ofType: "p12")
 //        self.server.password = "123456"
+        
 //        self.server.certificatePath = Bundle.main.path(forResource: "cert", ofType: "pem")
 //        self.server.certificateKeyPath = Bundle.main.path(forResource: "key", ofType: "pem")
+        
+//        self.server.certificatePath = Bundle.main.path(forResource: "cert", ofType: "der")
+//        self.server.certificateKeyPath = Bundle.main.path(forResource: "key", ofType: "der")
 
         let bundle:Bundle! = Bundle.main
 
@@ -142,7 +146,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
             // Get server ip address
             let address:NSString! = SystemInfoHelper.ipAddress() as NSString!
             // Set the base url. This is only for logging
-            self.baseURL = URL(string: "http://\(address!):\(PortNumber)")
+            self.baseURL = URL(string: "http\(self.server.isSecure ? "s" :"")://\(address!):\(PortNumber)")
 
             // Log the paths we can handle
 

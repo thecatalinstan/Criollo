@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4A02E3361F92A8710055A4F8 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A02E3341F92A8700055A4F8 /* libssl.a */; };
-		4A02E3371F92A8710055A4F8 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A02E3351F92A8700055A4F8 /* libcrypto.a */; };
 		4A02E3381F92A89B0055A4F8 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A02E2E91F92A7F30055A4F8 /* GCDAsyncSocket.m */; };
 		4A02E3391F92A89C0055A4F8 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A02E2E91F92A7F30055A4F8 /* GCDAsyncSocket.m */; };
 		4A02E33A1F92A8A60055A4F8 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A02E2EA1F92A7F30055A4F8 /* GCDAsyncSocket.h */; };
@@ -17,6 +15,8 @@
 		4A2F43CD1F659FE400A466D5 /* CRHTTPS.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A2F43CA1F659FE400A466D5 /* CRHTTPS.h */; };
 		4A2F43CE1F659FE400A466D5 /* CRHTTPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F43CB1F659FE400A466D5 /* CRHTTPS.m */; };
 		4A2F43D71F65AE9C00A466D5 /* CRHTTPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F43CB1F659FE400A466D5 /* CRHTTPS.m */; };
+		4A5E40BE1F93CB5A007CB2B9 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A02E3351F92A8700055A4F8 /* libcrypto.a */; };
+		4A5E40BF1F93CB5A007CB2B9 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A02E3341F92A8700055A4F8 /* libssl.a */; };
 		4AD0AD591F6662AA00943DC3 /* CRHTTPSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */; };
 		4AD0AD5A1F6662AA00943DC3 /* CRHTTPSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */; };
 		AD001ADA1D4555A500DE4AC9 /* CRRoute_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */; };
@@ -350,8 +350,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A02E3361F92A8710055A4F8 /* libssl.a in Frameworks */,
-				4A02E3371F92A8710055A4F8 /* libcrypto.a in Frameworks */,
+				4A5E40BE1F93CB5A007CB2B9 /* libcrypto.a in Frameworks */,
+				4A5E40BF1F93CB5A007CB2B9 /* libssl.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
