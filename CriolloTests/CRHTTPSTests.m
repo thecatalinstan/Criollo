@@ -13,12 +13,15 @@
 
 @property (nonatomic, strong, nullable) NSString *password;
 
+@property (nonatomic, strong, nullable) NSString *basePath;
+
 @property (nonatomic, strong, nullable) NSString *bogusPath;
 @property (nonatomic, strong, nullable) NSString *identityPath;
 @property (nonatomic, strong, nullable) NSString *chainedIdentityPath;
 @property (nonatomic, strong, nullable) NSString *chainedCertificatePath;
 @property (nonatomic, strong, nullable) NSString *certificatePath;
 @property (nonatomic, strong, nullable) NSString *certificateKeyPath;
+
 
 @end
 
@@ -27,11 +30,20 @@
 - (void)setUp {
     [super setUp];
     
-    self.password = @"123456";
+    // Setup a bassword
+    self.password = NSUUID.UUID.UUIDString;
+
+    self.basePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSStringFromClass(self.class) stringByAppendingString:NSUUID.UUID.UUIDString]];
+    [NSFileManager.defaultManager createDirectoryAtPath:self.basePath withIntermediateDirectories:YES attributes:nil error:nil];
+#if SEC_OS_OSX
+    [NSWorkspace.sharedWorkspace openFile:self.basePath];
+#endif
     
     // Create some bogus data file
+    self.bogusPath = [self.basePath stringByAppendingPathComponent:@"junk"];
     
     // Create self signed certificate root
+//    self.bogusPath =
     
     // Create self signed cert-key pair
     
@@ -43,24 +55,20 @@
 - (void)tearDown {
     
     // Delete all created files
-    if ( self.bogusPath.length > 0 ) {
-        [[NSFileManager defaultManager] removeItemAtPath:self.bogusPath error:nil];
-    }
-    if ( self.identityPath.length > 0 ) {
-        [[NSFileManager defaultManager] removeItemAtPath:self.identityPath error:nil];
-    }
-    if ( self.chainedIdentityPath.length > 0 ) {
-        [[NSFileManager defaultManager] removeItemAtPath:self.chainedIdentityPath error:nil];
-    }
-    if ( self.chainedCertificatePath.length > 0 ) {
-        [[NSFileManager defaultManager] removeItemAtPath:self.chainedCertificatePath error:nil];
-    }
-    if ( self.certificatePath.length > 0 ) {
-        [[NSFileManager defaultManager] removeItemAtPath:self.certificatePath error:nil];
-    }
-    if ( self.certificateKeyPath.length > 0 ) {
-        [[NSFileManager defaultManager] removeItemAtPath:self.certificateKeyPath error:nil];
-    }
+    if ( self.bogusPath.length > 0 )
+        [NSFileManager.defaultManager removeItemAtPath:self.bogusPath error:nil];
+    if ( self.identityPath.length > 0 )
+        [NSFileManager.defaultManager removeItemAtPath:self.identityPath error:nil];
+    if ( self.chainedIdentityPath.length > 0 )
+        [NSFileManager.defaultManager removeItemAtPath:self.chainedIdentityPath error:nil];
+    if ( self.chainedCertificatePath.length > 0 )
+        [NSFileManager.defaultManager removeItemAtPath:self.chainedCertificatePath error:nil];
+    if ( self.certificatePath.length > 0 )
+        [NSFileManager.defaultManager removeItemAtPath:self.certificatePath error:nil];
+    if ( self.certificateKeyPath.length > 0 )
+        [NSFileManager.defaultManager removeItemAtPath:self.certificateKeyPath error:nil];
+    if ( self.basePath.length > 0 )
+        [NSFileManager.defaultManager removeItemAtPath:self.basePath error:nil];
     
     [super tearDown];
 }

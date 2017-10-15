@@ -22,7 +22,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CRHTTPS ()
 
 + (SecKeychainRef _Nullable)getKeychainWithError:(NSError * _Nullable __autoreleasing * _Nullable)error;
+
+#if !SEC_OS_OSX_INCLUDES
 + (NSString * _Nullable)creaIdentrityFileWithPassword:(NSString *)password certificate:(NSData *)certificate certificateKey:(NSData *)certificateKey withError:(NSError *__autoreleasing  _Nullable * _Nullable)error;
+#endif
 
 @end
 
@@ -204,6 +207,7 @@ NS_ASSUME_NONNULL_END
 #endif
 }
 
+#if !SEC_OS_OSX_INCLUDES
 + (NSString *)creaIdentrityFileWithPassword:(NSString *)password certificate:(NSData *)certificate certificateKey:(NSData *)certificateKey withError:(NSError * _Nullable __autoreleasing *)error {
     
     *error = nil;
@@ -274,5 +278,6 @@ NS_ASSUME_NONNULL_END
     
     return identityPath;
 }
+#endif
 
 @end
