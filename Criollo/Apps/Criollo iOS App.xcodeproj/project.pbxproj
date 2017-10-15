@@ -129,7 +129,6 @@
 			isa = PBXGroup;
 			children = (
 				4A9CE5DC1F81048200107CBD /* Criollo.framework */,
-				AD05DD021DBBA220007CEDEF /* Criollo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

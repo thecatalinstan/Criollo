@@ -214,7 +214,6 @@ NS_ASSUME_NONNULL_END
     BIO *bpCert = BIO_new_mem_buf(certificate.bytes, (int)certificate.length);
     X509 *cert = PEM_read_bio_X509(bpCert, NULL, NULL, NULL);
     if ( cert == NULL ) {
-        ERR_print_errors_fp(stderr);
         char *err = ERR_error_string(ERR_get_error(), NULL);
         *error = [NSError errorWithDomain:CRSSLErrorDomain code:CRSSLInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
         BIO_free(bpCert);
