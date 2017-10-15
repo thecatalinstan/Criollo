@@ -11,6 +11,7 @@
 		4A2F43E81F65CE7B00A466D5 /* cert.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A2F43E61F65CE7B00A466D5 /* cert.pem */; };
 		4A2F43E91F65CE7B00A466D5 /* key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A2F43E71F65CE7B00A466D5 /* key.pem */; };
 		4A9CE5DB1F81048200107CBD /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9CE5DC1F81048200107CBD /* Criollo.framework */; };
+		4AA2134D1F9416A900AC6EC5 /* Criollo.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9CE5DC1F81048200107CBD /* Criollo.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4AF762231F93B4FE0061EFC9 /* cert.der in Resources */ = {isa = PBXBuildFile; fileRef = 4AF762221F93B4FE0061EFC9 /* cert.der */; };
 		4AF762271F93C4A00061EFC9 /* key.der in Resources */ = {isa = PBXBuildFile; fileRef = 4AF762261F93C49F0061EFC9 /* key.der */; };
 		AD23B7371D3FC7100056170D /* MultiRouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD23B7361D3FC7100056170D /* MultiRouteViewController.swift */; };
@@ -28,6 +29,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		4AA2134E1F9416A900AC6EC5 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4AA2134D1F9416A900AC6EC5 /* Criollo.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AD41ECD31CB42D3E00133C8D /* Copy Public Resources */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -159,6 +171,7 @@
 				AD5B3C4E1CA820B5000988B7 /* Frameworks */,
 				AD5B3C4F1CA820B5000988B7 /* Resources */,
 				AD41ECD31CB42D3E00133C8D /* Copy Public Resources */,
+				4AA2134E1F9416A900AC6EC5 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -369,6 +382,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = CriolloiOSApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloiOSApp;
@@ -388,6 +402,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = CriolloiOSApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloiOSApp;
