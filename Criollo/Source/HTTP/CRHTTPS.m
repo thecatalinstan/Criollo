@@ -10,23 +10,32 @@
 #import "CRHTTPS.h"
 
 #if !SEC_OS_OSX_INCLUDES
+#import <openssl/bio.h>
+#import <openssl/pem.h>
+#import <openssl/err.h>
+#import <openssl/pkcs12.h>
 typedef CFTypeRef SecKeychainRef;
 #endif
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface CRHTTPS ()
 
-+ (SecKeychainRef)getKeychainWithError:(NSError * _Nullable __autoreleasing * _Nullable)error;
++ (SecKeychainRef _Nullable)getKeychainWithError:(NSError * _Nullable __autoreleasing * _Nullable)error;
++ (NSString * _Nullable)creaIdentrityFileWithPassword:(NSString *)password certificate:(NSData *)certificate certificateKey:(NSData *)certificateKey withError:(NSError *__autoreleasing  _Nullable * _Nullable)error;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 @implementation CRHTTPS
 
 + (SecKeychainRef)getKeychainWithError:(NSError * _Nullable __autoreleasing * _Nullable)error {
     SecKeychainRef keychain = NULL;
     *error = nil;
-#if TARGET_OS_OSX
-    NSString *keychainPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSUUID UUID].UUIDString];
-    NSString *keychainPassword = [NSUUID UUID].UUIDString;
+#if SEC_OS_OSX_INCLUDES
+    NSString *keychainPath = [NSTemporaryDirectory() stringByAppendingPathComponent:NSUUID.UUID.UUIDString];
+    NSString *keychainPassword = NSUUID.UUID.UUIDString;
     OSStatus keychainCreationStatus = SecKeychainCreate(keychainPath.UTF8String, (UInt32)keychainPassword.length, keychainPassword.UTF8String, NO, NULL, &keychain);
     if ( keychainCreationStatus != errSecSuccess ) {
         *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInternalError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to create keychain. %@",), (__bridge NSString *)SecCopyErrorMessageString(keychainCreationStatus, NULL)]}];
@@ -94,16 +103,37 @@ typedef CFTypeRef SecKeychainRef;
 
 + (NSArray *)parseCertificateFile:(NSString *)certificatePath certificateKeyFile:(NSString *)certificateKeyPath withError:(NSError *__autoreleasing  _Nullable *)error {
     
-#if !SEC_OS_OSX_INCLUDES
-    *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInternalError userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"Parsing certificate bundles and private keys is not yet implemented on iOS",), CRHTTPSCertificatePathKey: certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
-    return nil;
-#else
     NSError * pemCertReadError;
     NSData * pemCertContents = [NSData dataWithContentsOfFile:certificatePath options:NSDataReadingUncached error:&pemCertReadError];
     if ( pemCertContents.length == 0 ) {
         *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse PEM certificate bundle.",), NSUnderlyingErrorKey: pemCertReadError, CRHTTPSCertificatePathKey: certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey:certificateKeyPath ? : @"(null)"}];
         return nil;
     }
+    
+    // Read the contents of the PEM private key file and fetch SecKeyRef
+    NSError * pemKeyReadError;
+    NSData * pemKeyContents = [NSData dataWithContentsOfFile:certificateKeyPath options:NSDataReadingUncached error:&pemKeyReadError];
+    if ( pemKeyContents.length == 0 ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse PEM RSA key file.",), NSUnderlyingErrorKey: pemKeyReadError, CRHTTPSCertificatePathKey:certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey:certificateKeyPath ? : @"(null)"}];
+        return nil;
+    }
+    
+#if !SEC_OS_OSX_INCLUDES
+    
+    NSString *password = NSUUID.UUID.UUIDString;
+    
+    NSError *identityCreateError;
+    NSString *identityPath = [self creaIdentrityFileWithPassword:password certificate:pemCertContents certificateKey:pemKeyContents withError:&identityCreateError];
+    if ( identityPath.length == 0 ) {
+        *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSIdentityCreateError userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to create temporary PKS12 identity file.",), NSUnderlyingErrorKey: identityCreateError, CRHTTPSCertificatePathKey: certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey:certificateKeyPath ? : @"(null)"}];
+        return nil;
+    }
+    
+    NSArray *result = [self parseIdentrityFile:identityPath password:password withError:error];
+    [NSFileManager.defaultManager removeItemAtPath:identityPath error:nil];
+    return result;
+    
+#else
     
     CFArrayRef certificateImportItems = NULL;
     OSStatus certificateImportStatus = SecItemImport((__bridge CFDataRef)pemCertContents , NULL, NULL, NULL, 0, NULL, NULL, &certificateImportItems);
@@ -116,14 +146,6 @@ typedef CFTypeRef SecKeychainRef;
     SecCertificateRef certificate = (SecCertificateRef) CFArrayGetValueAtIndex(certificateImportItems, 0);
     if ( CFGetTypeID(certificate) != SecCertificateGetTypeID() ) {
         *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Expected a PEM certificate, but got %@ instead.",), (__bridge id)certificate], CRHTTPSCertificatePathKey:certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey:certificateKeyPath ? : @"(null)"}];
-        return nil;
-    }
-    
-    // Read the contents of the PEM private key file and fetch SecKeyRef
-    NSError * pemKeyReadError;
-    NSData * pemKeyContents = [NSData dataWithContentsOfFile:certificateKeyPath options:NSDataReadingUncached error:&pemKeyReadError];
-    if ( pemKeyContents.length == 0 ) {
-        *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse PEM RSA key file.",), NSUnderlyingErrorKey: pemKeyReadError, CRHTTPSCertificatePathKey:certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey:certificateKeyPath ? : @"(null)"}];
         return nil;
     }
     
@@ -180,6 +202,78 @@ typedef CFTypeRef SecKeychainRef;
     
     return result;
 #endif
+}
+
++ (NSString *)creaIdentrityFileWithPassword:(NSString *)password certificate:(NSData *)certificate certificateKey:(NSData *)certificateKey withError:(NSError * _Nullable __autoreleasing *)error {
+    
+    *error = nil;
+    
+    OpenSSL_add_all_algorithms();
+    ERR_load_crypto_strings();
+    
+    BIO *bpCert = BIO_new_mem_buf(certificate.bytes, (int)certificate.length);
+    X509 *cert = PEM_read_bio_X509(bpCert, NULL, NULL, NULL);
+    if ( cert == NULL ) {
+        ERR_print_errors_fp(stderr);
+        char *err = ERR_error_string(ERR_get_error(), NULL);
+        *error = [NSError errorWithDomain:CRSSLErrorDomain code:CRSSLInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
+        BIO_free(bpCert);
+        return nil;
+    }
+    BIO_free(bpCert);
+    
+    BIO *bpkey = BIO_new_mem_buf(certificateKey.bytes, (int)certificateKey.length);
+    EVP_PKEY *key = PEM_read_bio_PrivateKey(bpkey, NULL, NULL, NULL);
+    if ( key == NULL ) {
+        ERR_print_errors_fp(stderr);
+        char *err = ERR_error_string(ERR_get_error(), NULL);
+        *error = [NSError errorWithDomain:CRSSLErrorDomain code:CRSSLInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
+        X509_free(cert);
+        BIO_free(bpkey);
+        return nil;
+    }
+    BIO_free(bpkey);
+    
+//    struct stack_st_X509 *ca = NULL;
+    NSString *identityPath = [NSTemporaryDirectory() stringByAppendingPathComponent:NSUUID.UUID.UUIDString];
+    
+    PKCS12 *p12 = PKCS12_create(password.UTF8String, identityPath.lastPathComponent.UTF8String, key, cert, NULL, 0, 0, 0, 0, 0);
+    if ( p12 == NULL ) {
+        ERR_print_errors_fp(stderr);
+        char *err = ERR_error_string(ERR_get_error(), NULL);
+        *error = [NSError errorWithDomain:CRSSLErrorDomain code:CRSSLIdentityCreateError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
+        X509_free(cert);
+        EVP_PKEY_free(key);
+        return nil;
+    }
+
+    X509_free(cert);
+    EVP_PKEY_free(key);
+    
+//    NSError *dataWrittingError;
+//    NSData *identity = [NSData dataWithBytesNoCopy:buf length:len freeWhenDone:YES];
+//    if ( ! [identity writeToFile:identityPath options:NSDataWritingAtomic error:&dataWrittingError] ) {
+//        *error = [NSError errorWithDomain:CRSSLErrorDomain code:CRSSLIdentityCreateError userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to save temporary identity file", @""), NSUnderlyingErrorKey: dataWrittingError ? : @"(null)"}];
+//        PKCS12_free(p12);
+//        return nil;
+//    }
+    
+    FILE *fpIdentity = fopen(identityPath.UTF8String, "wb");
+    if ( fpIdentity == NULL ) {
+        ERR_print_errors_fp(stderr);
+        char *err = ERR_error_string(ERR_get_error(), NULL);
+        *error = [NSError errorWithDomain:CRSSLErrorDomain code:CRSSLIdentityCreateError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
+        X509_free(cert);
+        EVP_PKEY_free(key);
+        return nil;
+    }
+    
+    i2d_PKCS12_fp(fpIdentity, p12);
+    
+    fclose(fpIdentity);
+    PKCS12_free(p12);
+    
+    return identityPath;
 }
 
 @end

@@ -15,6 +15,13 @@
 #define CRHTTPSInvalidCertificatePrivateKey    1002
 #define CRHTTPSInvalidIdentityFile             1003
 #define CRHTTPSInvalidCredentialFiles          1004
+#define CRHTTPSIdentityCreateError             1005
+
+#define CRSSLErrorDomain                       @"CRSSLErrorDomain"
+
+#define CRSSLInvalidCertificateBundle          CRHTTPSInvalidCertificateBundle
+#define CRSSLInvalidCertificatePrivateKey      CRHTTPSInvalidCertificatePrivateKey
+#define CRSSLIdentityCreateError               CRHTTPSIdentityCreateError
 
 #define CRHTTPSIdentityPathKey                 @"CRHTTPSIdentityPath"
 #define CRHTTPSCertificatePathKey              @"CRHTTPSCertificatePath"
