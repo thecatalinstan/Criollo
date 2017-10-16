@@ -25,15 +25,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
         // Create the server and add some handlers to do some work
         self.server = CRHTTPServer(delegate:self)
 
-        // Setup HTTPS
-        self.server.isSecure = true
-        
+//        // Setup HTTPS
+//        self.server.isSecure = true
+//        // Identity and password
 //        self.server.identityPath = Bundle.main.path(forResource: "criollo_local", ofType: "p12")
 //        self.server.password = "123456"
-        
+//        // PEM
 //        self.server.certificatePath = Bundle.main.path(forResource: "cert", ofType: "pem")
 //        self.server.certificateKeyPath = Bundle.main.path(forResource: "key", ofType: "pem")
-        
+//        // DER
 //        self.server.certificatePath = Bundle.main.path(forResource: "cert", ofType: "der")
 //        self.server.certificateKeyPath = Bundle.main.path(forResource: "key", ofType: "der")
 
@@ -130,7 +130,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
 
         }
 
-
         // Placeholder path controller
         self.server.add("/blog/:year/:month/:slug", viewController: HelloWorldViewController.self, withNibName: String(describing: HelloWorldViewController.self), bundle: nil)
 
@@ -139,7 +138,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
 
         // Start listening
         var serverError:NSError?
-        if ( self.server.startListening(&serverError, portNumber: PortNumber) ) {
+        if ( self.server.startListening(&serverError, portNumber: PortNumber, interface: nil) ) {
 
             // Output some nice info to the console
 

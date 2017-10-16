@@ -10,12 +10,15 @@
 #import "CRHTTPS.h"
 
 #if !SEC_OS_OSX_INCLUDES
+
 #import <openssl/bio.h>
-#import <openssl/pem.h>
 #import <openssl/err.h>
-#import <openssl/x509.h>
+#import <openssl/pem.h>
 #import <openssl/pkcs12.h>
+#import <openssl/x509.h>
+
 typedef CFTypeRef SecKeychainRef;
+
 #endif
 
 NS_ASSUME_NONNULL_BEGIN
@@ -213,9 +216,6 @@ NS_ASSUME_NONNULL_END
     
     *error = nil;
     
-    OpenSSL_add_all_algorithms();
-    ERR_load_crypto_strings();
-
     // Attempt to parse cert as DER encoded
     const unsigned char *cert_data = (unsigned char *)certificate.bytes;
     X509 *cert = d2i_X509(NULL, &cert_data, certificate.length);

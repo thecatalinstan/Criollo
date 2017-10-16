@@ -38,7 +38,8 @@ NS_ASSUME_NONNULL_END
 
     if ( !isFastCGI ) {
         CRHTTPServer *server = (CRHTTPServer *)self.server;
-        server.isSecure = YES;
+        
+//        server.isSecure = YES;
         
 //        server.identityPath = [[NSBundle mainBundle] pathForResource:@"criollo_local" ofType:@"p12"];
 //        server.password = @"123456";
