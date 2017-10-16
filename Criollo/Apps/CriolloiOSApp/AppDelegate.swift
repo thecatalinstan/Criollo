@@ -27,13 +27,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
 
 //        // Setup HTTPS
 //        self.server.isSecure = true
-//        // Identity and password
+//        
+//        // Credentials: PKCS#12 Identity and password
 //        self.server.identityPath = Bundle.main.path(forResource: "criollo_local", ofType: "p12")
 //        self.server.password = "123456"
-//        // PEM
+//        
+//        // Credentials: PEM-encoded certificate and public key
 //        self.server.certificatePath = Bundle.main.path(forResource: "cert", ofType: "pem")
 //        self.server.certificateKeyPath = Bundle.main.path(forResource: "key", ofType: "pem")
-//        // DER
+//        
+//        // Credentials: DER-encoded certificate and public key
 //        self.server.certificatePath = Bundle.main.path(forResource: "cert", ofType: "der")
 //        self.server.certificateKeyPath = Bundle.main.path(forResource: "key", ofType: "der")
 
@@ -166,7 +169,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
                 print(" * \(path)")
             }
         } else {
-            print("Failed to start HTTP server. \(String(describing: serverError?.localizedDescription))")
+            print("Failed to start HTTP server. \(serverError!.localizedDescription)")
         }
 
         return true
