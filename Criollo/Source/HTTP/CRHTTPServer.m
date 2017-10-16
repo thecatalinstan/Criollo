@@ -20,7 +20,7 @@
 @interface CRHTTPServer () <GCDAsyncSocketDelegate>
 
 @property (nonatomic, strong, nullable) NSArray *certificates;
-@property (nonatomic, strong, nullable) NSArray *TLSSettings;
+@property (nonatomic, strong, nullable) NSDictionary <NSString *, NSObject *> *tlsSettings;
 
 - (nullable NSArray *)fetchIdentityWithError:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
@@ -40,7 +40,7 @@
     CRHTTPConnection* connection = [[CRHTTPConnection alloc] initWithSocket:socket server:self];
     
     if ( self.isSecure )
-        [connection.socket startTLS:self.TLSSettings];
+        [connection.socket startTLS:self.tlsSettings];
     
     return connection;
 }
@@ -62,7 +62,7 @@
             return NO;
         }
         
-        self.TLSSettings = @{
+        self.tlsSettings = @{
             (__bridge NSString *)kCFStreamSSLIsServer: @YES,
             (__bridge NSString *)kCFStreamSSLCertificates: self.certificates,
             (__bridge NSString *)kCFStreamPropertySocketSecurityLevel: (__bridge NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL
