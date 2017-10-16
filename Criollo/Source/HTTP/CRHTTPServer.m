@@ -20,6 +20,7 @@
 @interface CRHTTPServer () <GCDAsyncSocketDelegate>
 
 @property (nonatomic, strong, nullable) NSArray *certificates;
+@property (nonatomic, strong, nullable) NSArray *TLSSettings;
 
 - (nullable NSArray *)fetchIdentityWithError:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
@@ -37,28 +38,35 @@
 
 - (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket {
     CRHTTPConnection* connection = [[CRHTTPConnection alloc] initWithSocket:socket server:self];
-    if ( self.isSecure && self.certificates.count > 0 ) {
-        NSMutableDictionary *settings = [NSMutableDictionary dictionaryWithCapacity:3];
-        settings[(__bridge NSString *)kCFStreamSSLIsServer] = @YES;
-        settings[(__bridge NSString *)kCFStreamSSLCertificates] = self.certificates;
-        settings[(__bridge NSString *)kCFStreamPropertySocketSecurityLevel] = (__bridge NSString *)(kCFStreamSocketSecurityLevelNegotiatedSSL);
-        [connection.socket startTLS:settings];
-    }
+    
+    if ( self.isSecure )
+        [connection.socket startTLS:self.TLSSettings];
+    
     return connection;
 }
 
 - (BOOL)startListening:(NSError *__autoreleasing  _Nullable *)error portNumber:(NSUInteger)portNumber interface:(NSString *)interface {
-    NSError * certificateParsingError;
-    self.certificates = [self fetchIdentityWithError:&certificateParsingError];
-    
-    self.identityPath = nil;
-    self.password = nil;
-    self.certificatePath = nil;
-    self.certificateKeyPath = nil;
-    
-    if ( self.certificates == nil ) {
-        [CRApp logErrorFormat:NSLocalizedString(@"Unable to parse certificates: %@",), certificateParsingError];
-        return NO;
+    if ( self.isSecure ) {
+        NSError * certificateParsingError;
+        self.certificates = [self fetchIdentityWithError:&certificateParsingError];
+      
+        // Clear sensitive data from memory
+        self.identityPath = nil;
+        self.password = nil;
+        self.certificatePath = nil;
+        self.certificateKeyPath = nil;
+        
+        if ( self.certificates == nil ) {
+            *error = certificateParsingError;
+            self.isSecure = NO;
+            return NO;
+        }
+        
+        self.TLSSettings = @{
+            (__bridge NSString *)kCFStreamSSLIsServer: @YES,
+            (__bridge NSString *)kCFStreamSSLCertificates: self.certificates,
+            (__bridge NSString *)kCFStreamPropertySocketSecurityLevel: (__bridge NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL
+        };
     }
     
     return [super startListening:error portNumber:portNumber interface:interface];
@@ -71,7 +79,7 @@
         return [CRHTTPS parseCertificateFile:self.certificatePath certificateKeyFile:self.certificateKeyPath withError:error];
     } else {
         NSDictionary *info = @{
-            NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse credential strings.",),
+            NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse credential settings.",),
             CRHTTPSIdentityPathKey: self.identityPath ? : @"(null)",
             CRHTTPSCertificatePathKey: self.certificatePath ? : @"(null)",
             CRHTTPSCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"
