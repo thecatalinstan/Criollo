@@ -231,7 +231,7 @@ NS_ASSUME_NONNULL_END
 }
 
 #if !SEC_OS_OSX_INCLUDES
-+ (NSString *)creaIdentrityFileWithPassword:(NSString *)password certificate:(NSData *)certificate certificateKey:(NSData *)certificateKey withError:(NSError * _Nullable __autoreleasing *)error {
++ (NSString *)creaIdentrityFileWithPassword:(NSString *)password certificate:(NSData *)certificate certificateKey:(NSData *)certificateKey withError:(NSError * _Nullable __autoreleasing * _Nullable)error {
     
     // Attempt to parse cert as DER encoded
     const unsigned char *cert_data = (unsigned char *)certificate.bytes;
@@ -242,7 +242,9 @@ NS_ASSUME_NONNULL_END
         cert = PEM_read_bio_X509(bpCert, NULL, NULL, NULL);
         if ( cert == NULL ) {
             char *err = ERR_error_string(ERR_get_error(), NULL);
-            *error = [NSError errorWithDomain:CRSSLErrorDomain code:CRSSLInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
+            if ( error != nil ) {
+                *error = [NSError errorWithDomain:CRSSLErrorDomain code:CRSSLInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
+            }
             BIO_free(bpCert);
             return nil;
         }
@@ -289,7 +291,9 @@ NS_ASSUME_NONNULL_END
     if ( fpIdentity == NULL ) {
         ERR_print_errors_fp(stderr);
         char *err = ERR_error_string(ERR_get_error(), NULL);
-        *error = [NSError errorWithDomain:CRSSLErrorDomain code:CRSSLIdentityCreateError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
+        if ( error != nil ) {
+            *error = [NSError errorWithDomain:CRSSLErrorDomain code:CRSSLIdentityCreateError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
+        }
         X509_free(cert);
         EVP_PKEY_free(key);
         return nil;
