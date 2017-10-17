@@ -28,14 +28,9 @@
 @implementation CRRequest {
     __strong NSMutableDictionary* _env;
 
-    __block NSString * _multipartBoundary;
-    __block dispatch_once_t _multipartBoundaryOnceToken;
-
-    __block NSString * _multipartBoundaryPrefixedString;
-    __block dispatch_once_t _multipartBoundaryPrefixedStringOnceToken;
-
-    __block NSData * _multipartBoundaryPrefixedData;
-    __block dispatch_once_t _multipartBoundaryPrefixedDataOnceToken;
+    NSString * _multipartBoundary;
+    NSString * _multipartBoundaryPrefixedString;
+    NSData * _multipartBoundaryPrefixedData;
 
     NSString* currentMultipartBodyKey;
     NSString* currentMultipartFileKey;
@@ -191,8 +186,10 @@
     if ( currentMultipartFileKey != nil ) {
         result = [self appendFileData:data forKey:currentMultipartFileKey];
     } else {
-        result = NO;
-        *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestFileWriteError userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to append MIME data",)}];
+        if ( error != nil ) {
+            *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestFileWriteError userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to append MIME data",)}];
+            result = NO;
+        }
     }
         
     return result;
@@ -423,7 +420,7 @@
 - (NSString *)multipartBoundary {
     NSString* contentType = _env[@"HTTP_CONTENT_TYPE"];
     if ([contentType hasPrefix:CRRequestTypeMultipart]) {
-        dispatch_once(&_multipartBoundaryOnceToken, ^{
+        if ( ! _multipartBoundary ) {
             NSArray<NSString*>* headerComponents = [contentType componentsSeparatedByString:CRRequestHeaderSeparator];
             [headerComponents enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 obj = [obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -432,7 +429,7 @@
                 }
                 _multipartBoundary = [[obj componentsSeparatedByString:CRRequestValueSeparator][1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
             }];
-        });
+        }
     }
     return _multipartBoundary;
 }
@@ -447,19 +444,15 @@
 }
 
 - (NSString *)multipartBoundaryPrefixedString {
-    if ( self.multipartBoundary.length > 0 ) {
-        dispatch_once(&_multipartBoundaryPrefixedStringOnceToken, ^{
-            _multipartBoundaryPrefixedString = [NSString stringWithFormat:@"%@%@", CRRequestBoundaryPrefix, self.multipartBoundary];
-        });
+    if ( self.multipartBoundary.length > 0 && !_multipartBoundaryPrefixedString ) {
+        _multipartBoundaryPrefixedString = [NSString stringWithFormat:@"%@%@", CRRequestBoundaryPrefix, self.multipartBoundary];
     }
     return _multipartBoundaryPrefixedString;
 }
 
 - (NSData *)multipartBoundaryPrefixedData {
-    if ( self.multipartBoundaryPrefixedString.length > 0 ) {
-        dispatch_once(&_multipartBoundaryPrefixedDataOnceToken, ^{
-            _multipartBoundaryPrefixedData = [NSData dataWithBytesNoCopy:(void *)self.multipartBoundaryPrefixedString.UTF8String length:self.multipartBoundaryPrefixedString.length freeWhenDone:NO];
-        });
+    if ( self.multipartBoundaryPrefixedString.length > 0 && !_multipartBoundaryPrefixedData ) {
+        _multipartBoundaryPrefixedData = [NSData dataWithBytesNoCopy:(void *)self.multipartBoundaryPrefixedString.UTF8String length:self.multipartBoundaryPrefixedString.length freeWhenDone:NO];
     }
     return _multipartBoundaryPrefixedData;
 }
