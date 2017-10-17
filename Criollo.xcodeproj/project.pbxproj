@@ -15,6 +15,24 @@
 		4A2F43CD1F659FE400A466D5 /* CRHTTPS.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A2F43CA1F659FE400A466D5 /* CRHTTPS.h */; };
 		4A2F43CE1F659FE400A466D5 /* CRHTTPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F43CB1F659FE400A466D5 /* CRHTTPS.m */; };
 		4A2F43D71F65AE9C00A466D5 /* CRHTTPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F43CB1F659FE400A466D5 /* CRHTTPS.m */; };
+		4A63BB021F96BE850062D930 /* CRHTTPSTests.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF41F96BD5C0062D930 /* CRHTTPSTests.pem */; };
+		4A63BB031F96BE850062D930 /* CRHTTPSTests.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEF1F96BD5C0062D930 /* CRHTTPSTests.der */; };
+		4A63BB041F96BE850062D930 /* CRHTTPSTests.key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF61F96BD5C0062D930 /* CRHTTPSTests.key.pem */; };
+		4A63BB051F96BE850062D930 /* CRHTTPSTests.key.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF11F96BD5C0062D930 /* CRHTTPSTests.key.der */; };
+		4A63BB061F96BE850062D930 /* CRHTTPSTests.bundle.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEC1F96BD5C0062D930 /* CRHTTPSTests.bundle.pem */; };
+		4A63BB071F96BE850062D930 /* CRHTTPSTests.bundle.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF31F96BD5C0062D930 /* CRHTTPSTests.bundle.der */; };
+		4A63BB081F96BE850062D930 /* CRHTTPSTests.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF21F96BD5C0062D930 /* CRHTTPSTests.p12 */; };
+		4A63BB091F96BE850062D930 /* CRHTTPSTests.junk in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF01F96BD5C0062D930 /* CRHTTPSTests.junk */; };
+		4A63BB0A1F96BE850062D930 /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF51F96BD5C0062D930 /* Readme.md */; };
+		4A63BB0B1F96BE8A0062D930 /* CRHTTPSTests.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF41F96BD5C0062D930 /* CRHTTPSTests.pem */; };
+		4A63BB0C1F96BE8A0062D930 /* CRHTTPSTests.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEF1F96BD5C0062D930 /* CRHTTPSTests.der */; };
+		4A63BB0D1F96BE8A0062D930 /* CRHTTPSTests.key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF61F96BD5C0062D930 /* CRHTTPSTests.key.pem */; };
+		4A63BB0E1F96BE8A0062D930 /* CRHTTPSTests.key.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF11F96BD5C0062D930 /* CRHTTPSTests.key.der */; };
+		4A63BB0F1F96BE8A0062D930 /* CRHTTPSTests.bundle.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEC1F96BD5C0062D930 /* CRHTTPSTests.bundle.pem */; };
+		4A63BB101F96BE8A0062D930 /* CRHTTPSTests.bundle.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF31F96BD5C0062D930 /* CRHTTPSTests.bundle.der */; };
+		4A63BB111F96BE8A0062D930 /* CRHTTPSTests.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF21F96BD5C0062D930 /* CRHTTPSTests.p12 */; };
+		4A63BB121F96BE8A0062D930 /* CRHTTPSTests.junk in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF01F96BD5C0062D930 /* CRHTTPSTests.junk */; };
+		4A63BB131F96BE8A0062D930 /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF51F96BD5C0062D930 /* Readme.md */; };
 		4A96B1871F95576F0091B193 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A96B1851F95576F0091B193 /* libcrypto.a */; };
 		4A96B1881F95576F0091B193 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A96B1861F95576F0091B193 /* libssl.a */; };
 		4AD0AD591F6662AA00943DC3 /* CRHTTPSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */; };
@@ -227,6 +245,15 @@
 		4A02E2EA1F92A7F30055A4F8 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = Source/GCD/GCDAsyncSocket.h; sourceTree = "<group>"; };
 		4A2F43CA1F659FE400A466D5 /* CRHTTPS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRHTTPS.h; sourceTree = "<group>"; };
 		4A2F43CB1F659FE400A466D5 /* CRHTTPS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPS.m; sourceTree = "<group>"; };
+		4A63BAEC1F96BD5C0062D930 /* CRHTTPSTests.bundle.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSTests.bundle.pem; sourceTree = "<group>"; };
+		4A63BAEF1F96BD5C0062D930 /* CRHTTPSTests.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = CRHTTPSTests.der; sourceTree = "<group>"; };
+		4A63BAF01F96BD5C0062D930 /* CRHTTPSTests.junk */ = {isa = PBXFileReference; lastKnownFileType = file; path = CRHTTPSTests.junk; sourceTree = "<group>"; };
+		4A63BAF11F96BD5C0062D930 /* CRHTTPSTests.key.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = CRHTTPSTests.key.der; sourceTree = "<group>"; };
+		4A63BAF21F96BD5C0062D930 /* CRHTTPSTests.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = CRHTTPSTests.p12; sourceTree = "<group>"; };
+		4A63BAF31F96BD5C0062D930 /* CRHTTPSTests.bundle.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = CRHTTPSTests.bundle.der; sourceTree = "<group>"; };
+		4A63BAF41F96BD5C0062D930 /* CRHTTPSTests.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSTests.pem; sourceTree = "<group>"; };
+		4A63BAF51F96BD5C0062D930 /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
+		4A63BAF61F96BD5C0062D930 /* CRHTTPSTests.key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSTests.key.pem; sourceTree = "<group>"; };
 		4A96B1851F95576F0091B193 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "Libraries/OpenSSL-for-iPhone/lib/libcrypto.a"; sourceTree = "<group>"; };
 		4A96B1861F95576F0091B193 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "Libraries/OpenSSL-for-iPhone/lib/libssl.a"; sourceTree = "<group>"; };
 		4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPSTests.m; sourceTree = "<group>"; };
@@ -375,6 +402,22 @@
 			path = Libraries/CocoaAsyncSocket;
 			sourceTree = "<group>";
 		};
+		4A63BB011F96BDFC0062D930 /* CRHTTPSTests */ = {
+			isa = PBXGroup;
+			children = (
+				4A63BAF41F96BD5C0062D930 /* CRHTTPSTests.pem */,
+				4A63BAEF1F96BD5C0062D930 /* CRHTTPSTests.der */,
+				4A63BAF61F96BD5C0062D930 /* CRHTTPSTests.key.pem */,
+				4A63BAF11F96BD5C0062D930 /* CRHTTPSTests.key.der */,
+				4A63BAEC1F96BD5C0062D930 /* CRHTTPSTests.bundle.pem */,
+				4A63BAF31F96BD5C0062D930 /* CRHTTPSTests.bundle.der */,
+				4A63BAF21F96BD5C0062D930 /* CRHTTPSTests.p12 */,
+				4A63BAF01F96BD5C0062D930 /* CRHTTPSTests.junk */,
+				4A63BAF51F96BD5C0062D930 /* Readme.md */,
+			);
+			path = CRHTTPSTests;
+			sourceTree = "<group>";
+		};
 		4A96B1821F95576F0091B193 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -387,11 +430,11 @@
 		AD030FDC1F0C02C900BD9FE4 /* CriolloTests */ = {
 			isa = PBXGroup;
 			children = (
-				AD030FDF1F0C02C900BD9FE4 /* Info.plist */,
+				4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */,
 				AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */,
 				AD1D44E11F375DE100C5D260 /* CRNibTests.m */,
 				AD1D44F71F376DED00C5D260 /* CRViewTests.m */,
-				4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */,
+				AD030FDF1F0C02C900BD9FE4 /* Info.plist */,
 				AD96F74D1F1A3F8000C8D075 /* Samples */,
 			);
 			path = CriolloTests;
@@ -498,9 +541,10 @@
 		AD96F74D1F1A3F8000C8D075 /* Samples */ = {
 			isa = PBXGroup;
 			children = (
-				AD1D44F21F376DD500C5D260 /* CRViewTests */,
-				AD1D44E61F375F8D00C5D260 /* CRNibTests */,
+				4A63BB011F96BDFC0062D930 /* CRHTTPSTests */,
 				AD96F74E1F1A3F8000C8D075 /* CRMimeTypeHelper */,
+				AD1D44E61F375F8D00C5D260 /* CRNibTests */,
+				AD1D44F21F376DD500C5D260 /* CRViewTests */,
 			);
 			path = Samples;
 			sourceTree = "<group>";
@@ -894,6 +938,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A63BB021F96BE850062D930 /* CRHTTPSTests.pem in Resources */,
+				4A63BB031F96BE850062D930 /* CRHTTPSTests.der in Resources */,
+				4A63BB041F96BE850062D930 /* CRHTTPSTests.key.pem in Resources */,
+				4A63BB051F96BE850062D930 /* CRHTTPSTests.key.der in Resources */,
+				4A63BB061F96BE850062D930 /* CRHTTPSTests.bundle.pem in Resources */,
+				4A63BB071F96BE850062D930 /* CRHTTPSTests.bundle.der in Resources */,
+				4A63BB081F96BE850062D930 /* CRHTTPSTests.p12 in Resources */,
+				4A63BB091F96BE850062D930 /* CRHTTPSTests.junk in Resources */,
+				4A63BB0A1F96BE850062D930 /* Readme.md in Resources */,
 				AD1D44EA1F37600D00C5D260 /* CRNibTests.html in Resources */,
 				AD1D44F51F376DDE00C5D260 /* CRViewTests.html in Resources */,
 				AD1D44ED1F37600D00C5D260 /* unknown.unknown in Resources */,
@@ -911,6 +964,15 @@
 				AD1D44F11F37600E00C5D260 /* unknown.unknown in Resources */,
 				AD1D44EF1F37600E00C5D260 /* random.random in Resources */,
 				AD1D44F01F37600E00C5D260 /* empty.empty in Resources */,
+				4A63BB0B1F96BE8A0062D930 /* CRHTTPSTests.pem in Resources */,
+				4A63BB0C1F96BE8A0062D930 /* CRHTTPSTests.der in Resources */,
+				4A63BB0D1F96BE8A0062D930 /* CRHTTPSTests.key.pem in Resources */,
+				4A63BB0E1F96BE8A0062D930 /* CRHTTPSTests.key.der in Resources */,
+				4A63BB0F1F96BE8A0062D930 /* CRHTTPSTests.bundle.pem in Resources */,
+				4A63BB101F96BE8A0062D930 /* CRHTTPSTests.bundle.der in Resources */,
+				4A63BB111F96BE8A0062D930 /* CRHTTPSTests.p12 in Resources */,
+				4A63BB121F96BE8A0062D930 /* CRHTTPSTests.junk in Resources */,
+				4A63BB131F96BE8A0062D930 /* Readme.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1146,7 +1208,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Libraries/OpenSSL/lib",
+					"$(PROJECT_DIR)/Libraries/OpenSSL-for-iPhone/lib",
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloTests;
@@ -1178,7 +1240,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Libraries/OpenSSL/lib",
+					"$(PROJECT_DIR)/Libraries/OpenSSL-for-iPhone/lib",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloTests;

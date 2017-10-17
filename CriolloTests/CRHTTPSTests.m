@@ -27,52 +27,6 @@
 
 @implementation CRHTTPSTests
 
-- (void)setUp {
-    [super setUp];
-    
-    // Setup a bassword
-    self.password = NSUUID.UUID.UUIDString;
-
-    self.basePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSStringFromClass(self.class) stringByAppendingString:NSUUID.UUID.UUIDString]];
-    [NSFileManager.defaultManager createDirectoryAtPath:self.basePath withIntermediateDirectories:YES attributes:nil error:nil];
-#if SEC_OS_OSX
-    [NSWorkspace.sharedWorkspace openFile:self.basePath];
-#endif
-    
-    // Create some bogus data file
-    self.bogusPath = [self.basePath stringByAppendingPathComponent:@"junk"];
-    
-    // Create self signed certificate root
-//    self.bogusPath =
-    
-    // Create self signed cert-key pair
-    
-    // Create chained bundle
-    
-    // Create identity
-}
-
-- (void)tearDown {
-    
-    // Delete all created files
-    if ( self.bogusPath.length > 0 )
-        [NSFileManager.defaultManager removeItemAtPath:self.bogusPath error:nil];
-    if ( self.identityPath.length > 0 )
-        [NSFileManager.defaultManager removeItemAtPath:self.identityPath error:nil];
-    if ( self.chainedIdentityPath.length > 0 )
-        [NSFileManager.defaultManager removeItemAtPath:self.chainedIdentityPath error:nil];
-    if ( self.chainedCertificatePath.length > 0 )
-        [NSFileManager.defaultManager removeItemAtPath:self.chainedCertificatePath error:nil];
-    if ( self.certificatePath.length > 0 )
-        [NSFileManager.defaultManager removeItemAtPath:self.certificatePath error:nil];
-    if ( self.certificateKeyPath.length > 0 )
-        [NSFileManager.defaultManager removeItemAtPath:self.certificateKeyPath error:nil];
-    if ( self.basePath.length > 0 )
-        [NSFileManager.defaultManager removeItemAtPath:self.basePath error:nil];
-    
-    [super tearDown];
-}
-
 - (void)testPrivateKeychainCreation  {
 }
 
@@ -113,7 +67,6 @@
 }
 
 - (void)testCertificateKeyImport {
-    
 }
 
 @end
