@@ -80,6 +80,8 @@ static const CRMimeTypeHelper *sharedHelper;
             contentType = [contentType stringByAppendingString:@"; charset=utf-8"];
         }
         
+        CFRelease(UTI);
+        
         if ( contentType.length == 0 ) {
             contentType = @"application/octet-stream; charset=binary";
         }
