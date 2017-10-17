@@ -37,9 +37,9 @@ NS_ASSUME_NONNULL_END
     self.server = [[serverClass alloc] initWithDelegate:self];
 
     if ( !isFastCGI ) {
-        CRHTTPServer *server = (CRHTTPServer *)self.server;
 
 //        // Setup HTTPS
+//        CRHTTPServer *server = (CRHTTPServer *)self.server;
 //        server.isSecure = YES;
         
 //        // Credentials: PKCS#12 Identity and password
