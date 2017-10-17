@@ -78,14 +78,15 @@
     } else if ( self.certificatePath.length > 0 && self.certificateKeyPath.length > 0 ) {
         return [CRHTTPS parseCertificateFile:self.certificatePath certificateKeyFile:self.certificateKeyPath withError:error];
     } else {
-        NSDictionary *info = @{
-            NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse credential settings.",),
-            CRHTTPSIdentityPathKey: self.identityPath ? : @"(null)",
-            CRHTTPSCertificatePathKey: self.certificatePath ? : @"(null)",
-            CRHTTPSCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"
-        };
-        *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCredentialFiles userInfo:info];
-        
+        if ( error != nil ) {
+            NSDictionary *info = @{
+                NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse credential settings.",),
+                CRHTTPSIdentityPathKey: self.identityPath ? : @"(null)",
+                CRHTTPSCertificatePathKey: self.certificatePath ? : @"(null)",
+                CRHTTPSCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"
+            };
+            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCredentialFiles userInfo:info];
+        }
         return nil;
     }
 }
