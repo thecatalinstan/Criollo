@@ -20,7 +20,6 @@
 		4A63BB041F96BE850062D930 /* CRHTTPSTests.key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF61F96BD5C0062D930 /* CRHTTPSTests.key.pem */; };
 		4A63BB051F96BE850062D930 /* CRHTTPSTests.key.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF11F96BD5C0062D930 /* CRHTTPSTests.key.der */; };
 		4A63BB061F96BE850062D930 /* CRHTTPSTests.bundle.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEC1F96BD5C0062D930 /* CRHTTPSTests.bundle.pem */; };
-		4A63BB071F96BE850062D930 /* CRHTTPSTests.bundle.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF31F96BD5C0062D930 /* CRHTTPSTests.bundle.der */; };
 		4A63BB081F96BE850062D930 /* CRHTTPSTests.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF21F96BD5C0062D930 /* CRHTTPSTests.p12 */; };
 		4A63BB091F96BE850062D930 /* CRHTTPSTests.junk in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF01F96BD5C0062D930 /* CRHTTPSTests.junk */; };
 		4A63BB0A1F96BE850062D930 /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF51F96BD5C0062D930 /* Readme.md */; };
@@ -29,7 +28,6 @@
 		4A63BB0D1F96BE8A0062D930 /* CRHTTPSTests.key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF61F96BD5C0062D930 /* CRHTTPSTests.key.pem */; };
 		4A63BB0E1F96BE8A0062D930 /* CRHTTPSTests.key.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF11F96BD5C0062D930 /* CRHTTPSTests.key.der */; };
 		4A63BB0F1F96BE8A0062D930 /* CRHTTPSTests.bundle.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEC1F96BD5C0062D930 /* CRHTTPSTests.bundle.pem */; };
-		4A63BB101F96BE8A0062D930 /* CRHTTPSTests.bundle.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF31F96BD5C0062D930 /* CRHTTPSTests.bundle.der */; };
 		4A63BB111F96BE8A0062D930 /* CRHTTPSTests.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF21F96BD5C0062D930 /* CRHTTPSTests.p12 */; };
 		4A63BB121F96BE8A0062D930 /* CRHTTPSTests.junk in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF01F96BD5C0062D930 /* CRHTTPSTests.junk */; };
 		4A63BB131F96BE8A0062D930 /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF51F96BD5C0062D930 /* Readme.md */; };
@@ -250,7 +248,6 @@
 		4A63BAF01F96BD5C0062D930 /* CRHTTPSTests.junk */ = {isa = PBXFileReference; lastKnownFileType = file; path = CRHTTPSTests.junk; sourceTree = "<group>"; };
 		4A63BAF11F96BD5C0062D930 /* CRHTTPSTests.key.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = CRHTTPSTests.key.der; sourceTree = "<group>"; };
 		4A63BAF21F96BD5C0062D930 /* CRHTTPSTests.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = CRHTTPSTests.p12; sourceTree = "<group>"; };
-		4A63BAF31F96BD5C0062D930 /* CRHTTPSTests.bundle.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = CRHTTPSTests.bundle.der; sourceTree = "<group>"; };
 		4A63BAF41F96BD5C0062D930 /* CRHTTPSTests.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSTests.pem; sourceTree = "<group>"; };
 		4A63BAF51F96BD5C0062D930 /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
 		4A63BAF61F96BD5C0062D930 /* CRHTTPSTests.key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSTests.key.pem; sourceTree = "<group>"; };
@@ -410,7 +407,6 @@
 				4A63BAF61F96BD5C0062D930 /* CRHTTPSTests.key.pem */,
 				4A63BAF11F96BD5C0062D930 /* CRHTTPSTests.key.der */,
 				4A63BAEC1F96BD5C0062D930 /* CRHTTPSTests.bundle.pem */,
-				4A63BAF31F96BD5C0062D930 /* CRHTTPSTests.bundle.der */,
 				4A63BAF21F96BD5C0062D930 /* CRHTTPSTests.p12 */,
 				4A63BAF01F96BD5C0062D930 /* CRHTTPSTests.junk */,
 				4A63BAF51F96BD5C0062D930 /* Readme.md */,
@@ -943,7 +939,6 @@
 				4A63BB041F96BE850062D930 /* CRHTTPSTests.key.pem in Resources */,
 				4A63BB051F96BE850062D930 /* CRHTTPSTests.key.der in Resources */,
 				4A63BB061F96BE850062D930 /* CRHTTPSTests.bundle.pem in Resources */,
-				4A63BB071F96BE850062D930 /* CRHTTPSTests.bundle.der in Resources */,
 				4A63BB081F96BE850062D930 /* CRHTTPSTests.p12 in Resources */,
 				4A63BB091F96BE850062D930 /* CRHTTPSTests.junk in Resources */,
 				4A63BB0A1F96BE850062D930 /* Readme.md in Resources */,
@@ -969,7 +964,6 @@
 				4A63BB0D1F96BE8A0062D930 /* CRHTTPSTests.key.pem in Resources */,
 				4A63BB0E1F96BE8A0062D930 /* CRHTTPSTests.key.der in Resources */,
 				4A63BB0F1F96BE8A0062D930 /* CRHTTPSTests.bundle.pem in Resources */,
-				4A63BB101F96BE8A0062D930 /* CRHTTPSTests.bundle.der in Resources */,
 				4A63BB111F96BE8A0062D930 /* CRHTTPSTests.p12 in Resources */,
 				4A63BB121F96BE8A0062D930 /* CRHTTPSTests.junk in Resources */,
 				4A63BB131F96BE8A0062D930 /* Readme.md in Resources */,

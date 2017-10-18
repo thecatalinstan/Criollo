@@ -14,14 +14,9 @@
 #define CRHTTPSInvalidCertificateBundle        1001
 #define CRHTTPSInvalidCertificatePrivateKey    1002
 #define CRHTTPSInvalidIdentityFile             1003
-#define CRHTTPSInvalidCredentialFiles          1004
-#define CRHTTPSIdentityCreateError             1005
-
-#define CRSSLErrorDomain                       @"CRSSLErrorDomain"
-
-#define CRSSLInvalidCertificateBundle          CRHTTPSInvalidCertificateBundle
-#define CRSSLInvalidCertificatePrivateKey      CRHTTPSInvalidCertificatePrivateKey
-#define CRSSLIdentityCreateError               CRHTTPSIdentityCreateError
+#define CRHTTPSInvalidIdentityPassword         1004
+#define CRHTTPSInvalidCredentialFiles          1005
+#define CRHTTPSIdentityCreateError             1006
 
 #define CRHTTPSIdentityPathKey                 @"CRHTTPSIdentityPath"
 #define CRHTTPSCertificatePathKey              @"CRHTTPSCertificatePath"

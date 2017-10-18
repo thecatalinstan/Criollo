@@ -9,7 +9,6 @@ Here's a description of the files used in the `CRHTTPS` test suite:
 | **CRHTTPSTests.key.pem** | PEM-encoded RSA private key |
 | **CRHTTPSTests.key.der** | DER-encoded RSA private key |
 | **CRHTTPSTests.bundle.pem** | PEM-encoded chained X509 certificate and CA bundle |
-| **CRHTTPSTests.bundle.der** | PEM-encoded chained X509 certificate and CA bundle |
 | **CRHTTPSTests.p12*** | PKCS#12 identity including certificate, chained CA bundle and private key |
 | **CRHTTPSTests.junk** | 4096 bytes of junk |
 
