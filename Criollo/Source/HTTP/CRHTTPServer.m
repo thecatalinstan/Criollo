@@ -85,7 +85,7 @@
                 CRHTTPSCertificatePathKey: self.certificatePath ? : @"(null)",
                 CRHTTPSCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"
             };
-            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCredentialFiles userInfo:info];
+            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSMissingCredentialsError userInfo:info];
         }
         return nil;
     }

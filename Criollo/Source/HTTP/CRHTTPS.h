@@ -8,21 +8,21 @@
 
 #import <Foundation/Foundation.h>
 
-#define CRHTTPSErrorDomain                     @"CRHTTPSErrorDomain"
-
-#define CRHTTPSInternalError                   1000
-#define CRHTTPSInvalidCertificateBundle        1001
-#define CRHTTPSInvalidCertificatePrivateKey    1002
-#define CRHTTPSInvalidIdentityFile             1003
-#define CRHTTPSInvalidIdentityPassword         1004
-#define CRHTTPSInvalidCredentialFiles          1005
-#define CRHTTPSIdentityCreateError             1006
-
-#define CRHTTPSIdentityPathKey                 @"CRHTTPSIdentityPath"
-#define CRHTTPSCertificatePathKey              @"CRHTTPSCertificatePath"
-#define CRHTTPSCertificateKeyPathKey           @"CRHTTPSCertificateKeyPath"
-
 NS_ASSUME_NONNULL_BEGIN
+
+FOUNDATION_EXPORT NSString * const CRHTTPSErrorDomain;
+
+FOUNDATION_EXPORT NSUInteger const CRHTTPSInternalError;
+FOUNDATION_EXPORT NSUInteger const CRHTTPSInvalidCertificateError;
+FOUNDATION_EXPORT NSUInteger const CRHTTPSInvalidPrivateKeyError;
+FOUNDATION_EXPORT NSUInteger const CRHTTPSInvalidIdentityError;
+FOUNDATION_EXPORT NSUInteger const CRHTTPSInvalidPasswordError;
+FOUNDATION_EXPORT NSUInteger const CRHTTPSMissingCredentialsError;
+FOUNDATION_EXPORT NSUInteger const CRHTTPSCreateIdentityError;
+
+FOUNDATION_EXPORT NSString * const CRHTTPSIdentityPathKey;
+FOUNDATION_EXPORT NSString * const CRHTTPSCertificatePathKey;
+FOUNDATION_EXPORT NSString * const CRHTTPSCertificateKeyPathKey;
 
 @interface CRHTTPS : NSObject
 

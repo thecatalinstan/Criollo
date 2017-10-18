@@ -8,6 +8,20 @@
 
 #import "CRHTTPS.h"
 
+NSString * const CRHTTPSErrorDomain                      = @"CRHTTPSErrorDomain";
+
+NSUInteger const CRHTTPSInternalError                    = 1000;
+NSUInteger const CRHTTPSInvalidCertificateError          = 1001;
+NSUInteger const CRHTTPSInvalidPrivateKeyError           = 1002;
+NSUInteger const CRHTTPSInvalidIdentityError             = 1003;
+NSUInteger const CRHTTPSInvalidPasswordError             = 1004;
+NSUInteger const CRHTTPSMissingCredentialsError          = 1005;
+NSUInteger const CRHTTPSCreateIdentityError              = 1006;
+
+NSString * const CRHTTPSIdentityPathKey                  = @"CRHTTPSIdentityPath";
+NSString * const CRHTTPSCertificatePathKey               = @"CRHTTPSCertificatePath";
+NSString * const CRHTTPSCertificateKeyPathKey            = @"CRHTTPSCertificateKeyPath";
+
 #if !SEC_OS_OSX_INCLUDES
 
 #import <openssl/bio.h>
@@ -57,7 +71,7 @@ NS_ASSUME_NONNULL_END
     NSError * identityReadError;
     NSData * identityContents = [NSData dataWithContentsOfFile:identityFilePath options:NSDataReadingUncached error:&identityReadError];
     if ( identityContents.length == 0 ) {
-        *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidIdentityFile userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse PKCS12 identity file.",), NSUnderlyingErrorKey: identityReadError, CRHTTPSIdentityPathKey: identityFilePath ? : @"(null)"}];
+        *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidIdentityError userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse PKCS12 identity file.",), NSUnderlyingErrorKey: identityReadError, CRHTTPSIdentityPathKey: identityFilePath ? : @"(null)"}];
         return nil;
     }
     
@@ -77,12 +91,12 @@ NS_ASSUME_NONNULL_END
     OSStatus identityImportStatus = SecPKCS12Import((__bridge CFDataRef)identityContents, (__bridge CFDictionaryRef)identityImportOptions, &identityImportItems);
     if ( identityImportStatus != errSecSuccess ) {
         if ( error != nil ) {
-            NSUInteger errorCode = (identityImportStatus == errSecAuthFailed || identityImportStatus == errSecPkcs12VerifyFailure) ? CRHTTPSInvalidIdentityPassword : CRHTTPSInvalidIdentityFile;
+            NSUInteger errorCode = (identityImportStatus == errSecAuthFailed || identityImportStatus == errSecPkcs12VerifyFailure) ? CRHTTPSInvalidPasswordError : CRHTTPSInvalidIdentityError;
             NSString *errorMessage;
 #if SEC_OS_OSX_INCLUDES
             errorMessage = (NSString *)CFBridgingRelease(SecCopyErrorMessageString(identityImportStatus, NULL));
 #else
-            if ( errorCode == CRHTTPSInvalidIdentityPassword ) {
+            if ( errorCode == CRHTTPSInvalidPasswordError ) {
                 errorMessage = NSLocalizedString(@"Invalid password when importing PKCS12 identity file.",);
             } else {
                 errorMessage = NSLocalizedString(@"Unable to parse PKCS12 identity file.",);
@@ -118,7 +132,7 @@ NS_ASSUME_NONNULL_END
     NSData * certContents = [NSData dataWithContentsOfFile:certificatePath options:NSDataReadingUncached error:&certReadError];
     if ( certContents.length == 0 ) {
         if ( error != nil ) {
-            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse PEM certificate bundle.",), NSUnderlyingErrorKey: certReadError, CRHTTPSCertificatePathKey: certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey:certificateKeyPath ? : @"(null)"}];
+            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCertificateError userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse certificate file.",), NSUnderlyingErrorKey: certReadError, CRHTTPSCertificatePathKey: certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey:certificateKeyPath ? : @"(null)"}];
         }
         return nil;
     }
@@ -127,7 +141,7 @@ NS_ASSUME_NONNULL_END
     NSData * keyContents = [NSData dataWithContentsOfFile:certificateKeyPath options:NSDataReadingUncached error:&keyReadError];
     if ( keyContents.length == 0 ) {
         if ( error != nil )  {
-            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse PEM RSA key file.",), NSUnderlyingErrorKey: keyReadError, CRHTTPSCertificatePathKey:certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey:certificateKeyPath ? : @"(null)"}];
+            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidPrivateKeyError userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse private key file.",), NSUnderlyingErrorKey: keyReadError, CRHTTPSCertificatePathKey:certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey:certificateKeyPath ? : @"(null)"}];
         }
         return nil;
     }
@@ -152,7 +166,7 @@ NS_ASSUME_NONNULL_END
     if ( certificateImportStatus != errSecSuccess ) {
         if ( error != nil ) {
             NSString *secErrorString = (NSString *)CFBridgingRelease(SecCopyErrorMessageString(certificateImportStatus, NULL));
-            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to parse PEM certificate bundle. %@",), secErrorString], CRHTTPSCertificatePathKey:certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey:certificateKeyPath ? : @"(null)"}];
+            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCertificateError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to parse certificate bundle. %@",), secErrorString], CRHTTPSCertificatePathKey:certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey:certificateKeyPath ? : @"(null)"}];
         }
         return nil;
     }
@@ -161,7 +175,7 @@ NS_ASSUME_NONNULL_END
     SecCertificateRef certificate = (SecCertificateRef) CFArrayGetValueAtIndex(certificateImportItems, 0);
     if ( CFGetTypeID(certificate) != SecCertificateGetTypeID() ) {
         if ( error != nil ) {
-            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Expected a PEM certificate, but got %@ instead.",), (__bridge id)certificate], CRHTTPSCertificatePathKey:certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey:certificateKeyPath ? : @"(null)"}];
+            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCertificateError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Expected a certificate, but got %@ instead.",), (__bridge id)certificate], CRHTTPSCertificatePathKey:certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey:certificateKeyPath ? : @"(null)"}];
         }
         return nil;
     }
@@ -178,7 +192,7 @@ NS_ASSUME_NONNULL_END
     if ( keyImportStatus != errSecSuccess ) {
         if ( error != nil ) {
             NSString *secErrorMessage = (NSString *)CFBridgingRelease(SecCopyErrorMessageString(keyImportStatus, NULL));
-            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to parse PEM RSA key file. %@",), secErrorMessage], CRHTTPSCertificatePathKey: certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
+            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidPrivateKeyError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to parse private key file. %@",), secErrorMessage], CRHTTPSCertificatePathKey: certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
         }
         if ( keychain != NULL ) {
             SecKeychainDelete(keychain);
@@ -191,7 +205,7 @@ NS_ASSUME_NONNULL_END
     SecKeyRef key = (SecKeyRef) CFArrayGetValueAtIndex(keyImportItems, 0);
     if ( CFGetTypeID(key) != SecKeyGetTypeID() ) {
         if ( error != nil ) {
-            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Expected a RSA private key, but got %@ instead.",), (__bridge id)key], CRHTTPSCertificatePathKey: certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
+            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidPrivateKeyError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Expected a private key, but got %@ instead.",), (__bridge id)key], CRHTTPSCertificatePathKey: certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
         }
         if ( keychain != NULL ) {
             SecKeychainDelete(keychain);
@@ -206,7 +220,7 @@ NS_ASSUME_NONNULL_END
     if ( identityCreationStatus != errSecSuccess ) {
         if ( error != nil ) {
             NSString *secErrorMessage = (NSString *)CFBridgingRelease(SecCopyErrorMessageString(identityCreationStatus, NULL));
-            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSIdentityCreateError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to get a suitable identity. %@",), secErrorMessage], CRHTTPSCertificatePathKey: certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
+            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSCreateIdentityError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to get a suitable identity. %@",), secErrorMessage], CRHTTPSCertificatePathKey: certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
         }
         if ( keychain != NULL ) {
             SecKeychainDelete(keychain);
@@ -242,7 +256,7 @@ NS_ASSUME_NONNULL_END
         if ( cert == NULL ) {
             char *err = ERR_error_string(ERR_get_error(), NULL);
             if ( error != nil ) {
-                *error = [NSError errorWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCertificateBundle userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
+                *error = [NSError errorWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCertificateError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
             }
             BIO_free(bpCert);
             return nil;
@@ -260,7 +274,7 @@ NS_ASSUME_NONNULL_END
         if ( key == NULL ) {
             char *err = ERR_error_string(ERR_get_error(), NULL);
             if ( error != nil ) {
-                *error = [NSError errorWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCertificatePrivateKey userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
+                *error = [NSError errorWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidPrivateKeyError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
             }
             X509_free(cert);
             BIO_free(bpkey);
@@ -276,7 +290,7 @@ NS_ASSUME_NONNULL_END
         ERR_print_errors_fp(stderr);
         char *err = ERR_error_string(ERR_get_error(), NULL);
         if ( error != nil ) {
-            *error = [NSError errorWithDomain:CRHTTPSErrorDomain code:CRHTTPSIdentityCreateError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
+            *error = [NSError errorWithDomain:CRHTTPSErrorDomain code:CRHTTPSCreateIdentityError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
         }
         X509_free(cert);
         EVP_PKEY_free(key);
@@ -291,7 +305,7 @@ NS_ASSUME_NONNULL_END
         ERR_print_errors_fp(stderr);
         char *err = ERR_error_string(ERR_get_error(), NULL);
         if ( error != nil ) {
-            *error = [NSError errorWithDomain:CRHTTPSErrorDomain code:CRHTTPSIdentityCreateError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
+            *error = [NSError errorWithDomain:CRHTTPSErrorDomain code:CRHTTPSCreateIdentityError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
         }
         X509_free(cert);
         EVP_PKEY_free(key);

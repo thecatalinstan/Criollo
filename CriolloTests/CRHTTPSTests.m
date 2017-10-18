@@ -63,7 +63,7 @@ typedef CFTypeRef SecKeychainRef;
 
         XCTAssertNotNil(error, @"Parsing a non-existent identity file should result in an error.");
         XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidIdentityFile, @"Non-existent identity files should yield CRHTTPSInvalidIdentityFile errors.");
+        XCTAssertEqual(error.code, CRHTTPSInvalidIdentityError, @"Non-existent identity files should yield CRHTTPSInvalidIdentityError errors.");
         XCTAssertNil(items, @"Resulting items array should be nil");
     }
 
@@ -75,7 +75,7 @@ typedef CFTypeRef SecKeychainRef;
 
         XCTAssertNotNil(error, @"Parsing an invalid identity file should result in an error.");
         XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidIdentityFile, @"Malformed identity files should yield CRHTTPSInvalidIdentityFile errors.");
+        XCTAssertEqual(error.code, CRHTTPSInvalidIdentityError, @"Malformed identity files should yield CRHTTPSInvalidIdentityError errors.");
         XCTAssertNil(items, @"Resulting items array should be nil");
     }
     
@@ -87,7 +87,7 @@ typedef CFTypeRef SecKeychainRef;
         
         XCTAssertNotNil(error, @"Parsing a valid identity file with an incorrect password should result in an error.");
         XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidIdentityPassword, @"Authentication failures should yield CRHTTPSInvalidIdentityFile errors.");
+        XCTAssertEqual(error.code, CRHTTPSInvalidPasswordError, @"Authentication failures should yield CRHTTPSInvalidIdentityError errors.");
         XCTAssertNil(items, @"Resulting items array should be nil");
     }
     
@@ -126,7 +126,7 @@ typedef CFTypeRef SecKeychainRef;
 
         XCTAssertNotNil(error, @"Parsing a non-existent certificate file should result in an error.");
         XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidCertificateBundle, @"Non-existent certificate files should yield CRHTTPSInvalidCertificateBundle errors.");
+        XCTAssertEqual(error.code, CRHTTPSInvalidCertificateError, @"Non-existent certificate files should yield CRHTTPSInvalidCertificateError errors.");
         XCTAssertNil(items, @"Resulting items array should be nil");
     }
 
@@ -139,7 +139,7 @@ typedef CFTypeRef SecKeychainRef;
 
         XCTAssertNotNil(error, @"Parsing a non-existent private key file should result in an error.");
         XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidCertificatePrivateKey, @"Non-existent private key files should yield CRHTTPSInvalidCertificatePrivateKey errors.");
+        XCTAssertEqual(error.code, CRHTTPSInvalidPrivateKeyError, @"Non-existent private key files should yield CRHTTPSInvalidPrivateKeyError errors.");
         XCTAssertNil(items, @"Resulting items array should be nil");
     }
 
@@ -152,7 +152,7 @@ typedef CFTypeRef SecKeychainRef;
 
         XCTAssertNotNil(error, @"Parsing an invalid certificate file should result in an error.");
         XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidCertificateBundle, @"Invalid certificate files should yield CRHTTPSInvalidCertificateBundle errors.");
+        XCTAssertEqual(error.code, CRHTTPSInvalidCertificateError, @"Invalid certificate files should yield CRHTTPSInvalidCertificateError errors.");
         XCTAssertNil(items, @"Resulting items array should be nil");
     }
 
@@ -165,7 +165,7 @@ typedef CFTypeRef SecKeychainRef;
 
         XCTAssertNotNil(error, @"Parsing an invalid key file should result in an error.");
         XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidCertificatePrivateKey, @"Invalid key files should yield CRHTTPSInvalidCertificatePrivateKey errors.");
+        XCTAssertEqual(error.code, CRHTTPSInvalidPrivateKeyError, @"Invalid key files should yield CRHTTPSInvalidPrivateKeyError errors.");
         XCTAssertNil(items, @"Resulting items array should be nil");
     }
 
