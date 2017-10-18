@@ -31,6 +31,8 @@
 		4A63BB111F96BE8A0062D930 /* CRHTTPSTests.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF21F96BD5C0062D930 /* CRHTTPSTests.p12 */; };
 		4A63BB121F96BE8A0062D930 /* CRHTTPSTests.junk in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF01F96BD5C0062D930 /* CRHTTPSTests.junk */; };
 		4A63BB131F96BE8A0062D930 /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF51F96BD5C0062D930 /* Readme.md */; };
+		4A84C76F1F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */; };
+		4A84C7701F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */; };
 		4A96B1871F95576F0091B193 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A96B1851F95576F0091B193 /* libcrypto.a */; };
 		4A96B1881F95576F0091B193 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A96B1861F95576F0091B193 /* libssl.a */; };
 		4AD0AD591F6662AA00943DC3 /* CRHTTPSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */; };
@@ -251,6 +253,7 @@
 		4A63BAF41F96BD5C0062D930 /* CRHTTPSTests.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSTests.pem; sourceTree = "<group>"; };
 		4A63BAF51F96BD5C0062D930 /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
 		4A63BAF61F96BD5C0062D930 /* CRHTTPSTests.key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSTests.key.pem; sourceTree = "<group>"; };
+		4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRHTTPServerTests.m; sourceTree = "<group>"; };
 		4A96B1851F95576F0091B193 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "Libraries/OpenSSL-for-iPhone/lib/libcrypto.a"; sourceTree = "<group>"; };
 		4A96B1861F95576F0091B193 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "Libraries/OpenSSL-for-iPhone/lib/libssl.a"; sourceTree = "<group>"; };
 		4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPSTests.m; sourceTree = "<group>"; };
@@ -426,6 +429,7 @@
 		AD030FDC1F0C02C900BD9FE4 /* CriolloTests */ = {
 			isa = PBXGroup;
 			children = (
+				4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */,
 				4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */,
 				AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */,
 				AD1D44E11F375DE100C5D260 /* CRNibTests.m */,
@@ -994,6 +998,7 @@
 				4AD0AD591F6662AA00943DC3 /* CRHTTPSTests.m in Sources */,
 				AD1D44F81F376DED00C5D260 /* CRViewTests.m in Sources */,
 				AD1D44E21F375DE100C5D260 /* CRNibTests.m in Sources */,
+				4A84C76F1F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */,
 				AD7F2F711F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1005,6 +1010,7 @@
 				4AD0AD5A1F6662AA00943DC3 /* CRHTTPSTests.m in Sources */,
 				AD1D44F91F3772ED00C5D260 /* CRViewTests.m in Sources */,
 				AD1D44E91F37600300C5D260 /* CRNibTests.m in Sources */,
+				4A84C7701F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */,
 				AD7F2F721F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
