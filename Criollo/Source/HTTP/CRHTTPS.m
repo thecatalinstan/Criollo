@@ -95,6 +95,7 @@ NS_ASSUME_NONNULL_END
 #if SEC_OS_OSX_INCLUDES
         if ( keychain != NULL ) {
             SecKeychainDelete(keychain);
+            CFRelease(keychain);
         }
 #endif
     
@@ -186,6 +187,7 @@ NS_ASSUME_NONNULL_END
         }
         if ( keychain != NULL ) {
             SecKeychainDelete(keychain);
+            CFRelease(keychain);
         }
         return nil;
     }
@@ -198,6 +200,7 @@ NS_ASSUME_NONNULL_END
         }
         if ( keychain != NULL ) {
             SecKeychainDelete(keychain);
+            CFRelease(keychain);
         }
         return nil;
     }
@@ -224,6 +227,7 @@ NS_ASSUME_NONNULL_END
     // Cleanup
     if ( keychain != NULL ) {
         SecKeychainDelete(keychain);
+        CFRelease(keychain);
     }
     
     return result;
