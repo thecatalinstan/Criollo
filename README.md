@@ -8,7 +8,7 @@
  [![MIT License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat)](https://opensource.org/licenses/MIT) [![Twitter](https://img.shields.io/badge/twitter-@Criolloio-orange.svg?style=flat)](http://twitter.com/Criolloio)
 
 
-Criollo helps create really fast standalone web apps that deliver content directly over HTTP or FastCGI. You can write code in Objective-C or Swift. And you can use technologies you know and love: Grand Central Dispatch, NSURLSession, CoreImage and many more. 
+Criollo helps create fast standalone or embedded web apps that deliver content directly over HTTP or FastCGI. You can write code in Swift or Objective-C and you can use the Cocoa technologies you already know. 
 
 It's as easy as this:
 
@@ -20,19 +20,70 @@ server.get("/") { (request, response, completionHandler) in
 server.startListening()
 ```
 
-and in Objective-C:
+... and in Objective-C:
 
 ```objective-c
 CRServer* server = [[CRHTTPServer alloc] init];
-[server get:@"/" block:^(CRRequest * request, CRResponse * response, CRRouteCompletionBlock completionHandler) {
-    [response send:@"Hello world!"];
+[server get:@"/" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
+	[response send:@"Hello world!"];
 }];
 [server startListening];
 ```
 
+# Key Features
+
+Criollo is designed with speed, security and flexibility in mind, that's why it comes with a few very useful features out of the box, thus allowing you to focus on the actual job your project needs to do, without having to jump through hoops in order to make it happen.
+
+### Routing
+
+When defining routes, paths can be specified in three ways:
+
+- **Fixed string** (ex. `/api`). This will match the string exactly.
+- **Placeholders** (ex. `/posts/:pid`). The next path component after `/posts`, will be matched and added to `request.query` under the `pid` key.
+- **Regex patterns** (ex. `/[0-9]{4}/[0-9]{1,2}/[a-zA-Z0-9-]+`). When the three patterns are matched, they are added to `request.query`, under the keys `0`, `1` and `2` respectively.
+
+```swift
+self.server.add("/api") { (req, res, next) in
+	// /api/?pid=12345
+	res.send(req.query)
+}
+
+self.server.add("/posts/:pid") { (req, res, next) in
+	// /posts/12345
+	res.send(req.query);
+}
+
+self.server.add("/[0-9]{4}/[0-9]{1,2}/[a-zA-Z0-9-]+") { (req, res, next) in
+	// /2017/10/my-first-criollo-app
+	res.send(req.query);
+}
+```
+
+```objective-c
+[self.server add:@"/api" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
+    // /api/?pid=12345
+    [response send:request.query];
+}];
+
+[self.server add:@"/posts/:pid" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
+    // /posts/12345
+    [response send:request.query];
+}];
+
+[self.server add:@"/[0-9]{4}/[0-9]{1,2}/[a-zA-Z0-9-]+" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
+    // /2017/10/my-first-criollo-app
+    [response send:request.query];
+}];
+```
+
+### Controllers
+### View Controllers
+### Static File/Directory Serving
+### Multipart File Uploads
+
 ## Why?
 
-Criollo was created in order to take advantage of the truly awesome tools and APIs that OS X and iOS provide and serve content produced with them over the web. 
+Criollo was created in order to take advantage of the truly awesome tools and APIs that the Apple stack provides and serve content produced with them over the web. 
 
 It incorporates an HTTP web server and a [FastCGI](https://fast-cgi.github.io/) application server that are used to deliver content. The server is built on Grand Central Dispatch and designed for *speed*.
 
@@ -70,12 +121,6 @@ Criollo uses [CocoaAsyncSocket](https://github.com/robbiehanson/CocoaAsyncSocket
 ```bashh
 git clone --recursive https://github.com/thecatalinstan/Criollo.git
 ```
-
-## Work in Progress
-
-Criollo is work in progress and - as such - it’s not ready for the wild yet. The reason for this is mainly missing functionality and sheer lack of documentation[^It is also very high on my list of priorities, but sadly still a “to-do” item].
-
-The existing APIs are relatively stable and are unlikely to change dramatically unless marked as such.
 
 ## Get in Touch
 
