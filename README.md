@@ -34,6 +34,42 @@ CRServer* server = [[CRHTTPServer alloc] init];
 
 Criollo is designed with speed, security and flexibility in mind, that's why it comes with a few very useful features out of the box, thus allowing you to focus on the actual job your project needs to do, without having to jump through hoops in order to make it happen.
 
+### HTTPS
+
+Criollo fully supports HTTPS on all platform. You can pass the credentials as a PKCS#12 identity and password, or an X509 certificate and private key pair, either PEM or DER encoded. 
+
+```swift
+server.isSecure = true
+
+// Credentials: PKCS#12 Identity and password
+server.identityPath = Bundle.main.path(forResource: "identity", ofType: "p12")
+server.password = "123456"
+
+// Credentials: PEM-encoded certificate and public key
+server.certificatePath = Bundle.main.path(forResource: "certificate", ofType: "pem")
+server.certificateKeyPath = Bundle.main.path(forResource: "key", ofType: "pem")
+
+// Credentials: DER-encoded certificate and public key
+server.certificatePath = Bundle.main.path(forResource: "certificate", ofType: "der")
+server.certificateKeyPath = Bundle.main.path(forResource: "key", ofType: "der")
+```
+
+```objective-c
+server.isSecure = YES;
+        
+// Credentials: PKCS#12 Identity and password
+server.identityPath = [NSBundle.mainBundle pathForResource:@"identity" ofType:@"p12"];
+server.password = @"password";
+        
+// Credentials: PEM-encoded certificate and public key
+server.certificatePath = [NSBundle.mainBundle pathForResource:@"certificate" ofType:@"pem"];
+server.certificateKeyPath = [NSBundle.mainBundle pathForResource:@"key" ofType:@"pem"];
+        
+// Credentials: DER-encoded certificate and public key
+server.certificatePath = [NSBundle.mainBundle pathForResource:@"certificate" ofType:@"der"];
+server.certificateKeyPath = [NSBundle.mainBundle pathForResource:@"key" ofType:@"der"];
+```
+
 ### Routing
 
 When defining routes, paths can be specified in three ways:
@@ -43,34 +79,34 @@ When defining routes, paths can be specified in three ways:
 - **Regex patterns** (ex. `/[0-9]{4}/[0-9]{1,2}/[a-zA-Z0-9-]+`). When the three patterns are matched, they are added to `request.query`, under the keys `0`, `1` and `2` respectively.
 
 ```swift
-self.server.add("/api") { (req, res, next) in
+server.add("/api") { (req, res, next) in
 	// /api/?pid=12345
 	res.send(req.query)
 }
 
-self.server.add("/posts/:pid") { (req, res, next) in
+server.add("/posts/:pid") { (req, res, next) in
 	// /posts/12345
-	res.send(req.query);
+	res.send(req.query)
 }
 
-self.server.add("/[0-9]{4}/[0-9]{1,2}/[a-zA-Z0-9-]+") { (req, res, next) in
+server.add("/[0-9]{4}/[0-9]{1,2}/[a-zA-Z0-9-]+") { (req, res, next) in
 	// /2017/10/my-first-criollo-app
-	res.send(req.query);
+	res.send(req.query)
 }
 ```
 
 ```objective-c
-[self.server add:@"/api" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
+[server add:@"/api" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
     // /api/?pid=12345
     [response send:request.query];
 }];
 
-[self.server add:@"/posts/:pid" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
+[server add:@"/posts/:pid" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
     // /posts/12345
     [response send:request.query];
 }];
 
-[self.server add:@"/[0-9]{4}/[0-9]{1,2}/[a-zA-Z0-9-]+" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
+[server add:@"/[0-9]{4}/[0-9]{1,2}/[a-zA-Z0-9-]+" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
     // /2017/10/my-first-criollo-app
     [response send:request.query];
 }];
@@ -108,8 +144,8 @@ The preferred way of installing Criollo is through [CocoaPods](http://cocoapods.
 
 ### Installing with CocoaPods
 
-1. Create the Podfile if you don’t already have one. You can do so by running `pod init` in the folder of the project.
-2. Add Criollo to your Podfile. `pod 'Criollo', '~> 0.4’`
+1. Create the `Podfile` if you don’t already have one. You can do so by running `pod init` in the folder of the project.
+2. Add Criollo to your `Podfile`. `pod 'Criollo', '~> 0.4’`
 3. Run `pod install`
 
 Please note that Criollo will download [CocoaAsyncSocket](https://github.com/robbiehanson/CocoaAsyncSocket) as a dependency.
