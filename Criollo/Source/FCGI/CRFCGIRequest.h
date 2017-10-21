@@ -20,7 +20,7 @@ typedef UInt8  CRFCGIRequestFlags;
 
 NS_ASSUME_NONNULL_BEGIN
 
-FOUNDATION_EXPORT  NSString * NSStringFromCRFCGIRequestRole(CRFCGIRequestRole requestRole);
+FOUNDATION_EXPORT NSString * NSStringFromCRFCGIRequestRole(CRFCGIRequestRole requestRole);
 
 @interface CRFCGIRequest : CRRequest
 

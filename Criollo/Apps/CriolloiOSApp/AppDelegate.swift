@@ -26,8 +26,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
         self.server = CRHTTPServer(delegate:self)
 
 //        // Setup HTTPS
-//        self.server.isSecure = YES
-//        self.server.certificatePath = Bundle.mainBundle().pathForResource
+//        self.server.isSecure = true
+//        
+//        // Credentials: PKCS#12 Identity and password
+//        self.server.identityPath = Bundle.main.path(forResource: "criollo_local", ofType: "p12")
+//        self.server.password = "123456"
+//        
+//        // Credentials: PEM-encoded certificate and public key
+//        self.server.certificatePath = Bundle.main.path(forResource: "cert", ofType: "pem")
+//        self.server.certificateKeyPath = Bundle.main.path(forResource: "key", ofType: "pem")
+//        
+//        // Credentials: DER-encoded certificate and public key
+//        self.server.certificatePath = Bundle.main.path(forResource: "cert", ofType: "der")
+//        self.server.certificateKeyPath = Bundle.main.path(forResource: "key", ofType: "der")
 
         let bundle:Bundle! = Bundle.main
 
@@ -122,7 +133,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
 
         }
 
-
         // Placeholder path controller
         self.server.add("/blog/:year/:month/:slug", viewController: HelloWorldViewController.self, withNibName: String(describing: HelloWorldViewController.self), bundle: nil)
 
@@ -131,14 +141,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
 
         // Start listening
         var serverError:NSError?
-        if ( self.server.startListening(&serverError, portNumber: PortNumber) ) {
+        if ( self.server.startListening(&serverError, portNumber: PortNumber, interface: nil) ) {
 
             // Output some nice info to the console
 
             // Get server ip address
             let address:NSString! = SystemInfoHelper.ipAddress() as NSString!
             // Set the base url. This is only for logging
-            self.baseURL = URL(string: "http://\(address!):\(PortNumber)")
+            self.baseURL = URL(string: "http\(self.server.isSecure ? "s" :"")://\(address!):\(PortNumber)")
 
             // Log the paths we can handle
 
@@ -159,7 +169,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
                 print(" * \(path)")
             }
         } else {
-            print("Failed to start HTTP server. \(String(describing: serverError?.localizedDescription))")
+            print("Failed to start HTTP server. \(serverError!.localizedDescription)")
         }
 
         return true

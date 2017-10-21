@@ -1,0 +1,8 @@
+
+target 'SecureHTTPServer' do
+  use_frameworks!
+  platform :ios, '8.0'
+
+  pod 'Criollo', '~> 0.5'
+  pod 'CSSystemInfoHelper', '~> 1.4'
+end
