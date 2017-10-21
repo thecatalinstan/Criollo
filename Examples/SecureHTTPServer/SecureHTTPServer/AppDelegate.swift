@@ -28,48 +28,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
         // Setup HTTPS
         self.server?.isSecure = true
         
-//        // Secure with PKCS#12 identity and password
-//        self.server?.identityPath = Bundle.main.path(forResource: "SecureHTTPServer", ofType: "p12")
-//        self.server?.password = "password"
-        
         // Secure with PEM certificate and key
         self.server?.certificatePath = Bundle.main.path(forResource: "SecureHTTPServer.bundle", ofType: "pem")
         self.server?.certificateKeyPath = Bundle.main.path(forResource: "SecureHTTPServer.key", ofType: "pem")
         
-        // Add some routes
+        // Secure with PKCS#12 identity and password.
+//        self.server?.identityPath = Bundle.main.path(forResource: "SecureHTTPServer", ofType: "p12")
+//        self.server?.password = "password"
+        
         self.server?.get("/", block: { (req, res, next) in
-            res.send("Hello world")
+            res.send("Hello over HTTPS.")
         })
         
         // Start listening
-        var serverError:NSError?
-        if ( self.server?.startListening(&serverError, portNumber: UInt(self.port), interface: self.interface) )! {
-            
-            // Output some nice info to the console
-            
-            // Get server ip address
-            // Set the base url. This is only for logging
-            self.baseURL = URL(string: "http\((self.server?.isSecure)! ? "s" :"")://\(self.interface):\(self.port)")
-            
-            // Log the paths we can handle
-            // Get the list of paths from the registered routes
-            let paths = NSMutableSet()
-            let routes:NSArray! = self.server!.value(forKeyPath: "routes") as! NSArray
-            for ( route ) in routes {
-                let path:String? = (route as AnyObject).path
-                if ( path != nil ) {
-                    let pathURL:URL! = self.baseURL!.appendingPathComponent(path!)
-                    paths.add(pathURL)
-                }
-            }
-            
-            let sortedPaths = paths.sortedArray(using: [NSSortDescriptor(key:"absoluteString", ascending:true)] )
-            print("Available paths are:")
-            for ( path ) in sortedPaths {
-                print(" * \(path)")
-            }
+        var error:NSError?
+        if ( self.server?.startListening(&error, portNumber: UInt(self.port), interface: self.interface) )! {
+            print("Started HTTPS server at: https://\(self.interface):\(self.port)/")
         } else {
-            print("Failed to start HTTP server. \(serverError!.localizedDescription)")
+            print("Failed to start HTTPS server. \(error!.localizedDescription)")
+            print(error?.domain ?? "", error?.code ?? 0)
+            print(error?.userInfo ?? "")
         }
 
         return true
@@ -92,7 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
     }
     
     func serverDidStopListening(_ server: CRServer) {
-        print ("Server stop listening.")
+        print ("Server stopped.")
     }
 
 }
