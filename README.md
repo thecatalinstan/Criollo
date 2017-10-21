@@ -119,6 +119,24 @@ server.add("/[0-9]{4}/[0-9]{1,2}/[a-zA-Z0-9-]+") { (req, res, next) in
 ### Controllers
 ### View Controllers
 ### Static File/Directory Serving
+Criollo comes with built-in support for exposing both directories and individual over HTTP. The `CRStaticFileManager` and `CRStaticDirectoryManager` APIs enable you to do this.
+
+```swift
+// Expose the home directory (with auto-indexing)
+server.mount("/pub", directoryAtPath: "~", options: [.autoIndex])
+
+// Serve a single static file at a path
+server.mount("/info.plist", fileAtPath:  Bundle.main.bundlePath.appending("/Info.plist"))
+```
+
+... and in Objective-C
+
+```objective-c
+[server mount:@"/pub" directoryAtPath:@"~" options:CRStaticDirectoryServingOptionsAutoIndex];
+    
+[server mount:@"/info.plist" fileAtPath:[NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"/Contents/Info.plist"]];
+```
+
 ### Multipart File Uploads
 
 ## Why?
