@@ -14,8 +14,8 @@ It's as easy as this:
 
 ```swift
 let server = CRHTTPServer()
-server.get("/") { (request, response, completionHandler) in
-	response.send("Hello world!")
+server.get("/") { (req, res, next) in
+	res("Hello world!")
 }
 server.startListening()
 ```
@@ -25,7 +25,7 @@ server.startListening()
 ```objective-c
 CRServer* server = [[CRHTTPServer alloc] init];
 [server get:@"/" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
-	[response send:@"Hello world!"];
+	[res send:@"Hello world!"];
 }];
 [server startListening];
 ```
@@ -102,17 +102,17 @@ server.add("/[0-9]{4}/[0-9]{1,2}/[a-zA-Z0-9-]+") { (req, res, next) in
 ```objective-c
 [server add:@"/api" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
     // /api/?pid=12345
-    [response send:request.query];
+    [res send:req];
 }];
 
 [server add:@"/posts/:pid" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
     // /posts/12345
-    [response send:request.query];
+    [res send:req];
 }];
 
 [server add:@"/[0-9]{4}/[0-9]{1,2}/[a-zA-Z0-9-]+" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
     // /2017/10/my-first-criollo-app
-    [response send:request.query];
+    [res send:req];
 }];
 ```
 
@@ -132,12 +132,51 @@ server.mount("/info.plist", fileAtPath:  Bundle.main.bundlePath.appending("/Info
 ... and in Objective-C
 
 ```objective-c
+// Expose the home directory (with auto-indexing)
 [server mount:@"/pub" directoryAtPath:@"~" options:CRStaticDirectoryServingOptionsAutoIndex];
-    
+   
+// Serve a single static file at a path 
 [server mount:@"/info.plist" fileAtPath:[NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"/Contents/Info.plist"]];
 ```
 
 ### Multipart File Uploads
+
+Criollo comes with builtin support for handling `multipart/form-data` POST requests, so that you can handle HTML file uploads out of the box. Uploaded files are provided in `request.files`, as an array of `CRUploadedFile` objects.
+
+```swift
+// Serve the first uploaded file back to the client
+self.server.post("/image") { (req, res, next) in
+	do {
+	    let data = try Data.init(contentsOf: (req.files!["0"]?.temporaryFileURL)!)
+	    res.setValue(req.env["HTTP_CONTENT_TYPE"]!, forHTTPHeaderField: "Content-type")
+	    res.setValue("\(data.count)", forHTTPHeaderField: "Content-Length")
+	    res.send(data)
+	} catch {
+	    res.setValue("text/plain", forHTTPHeaderField: "Content-type")
+	    res.setValue("\(error.localizedDescription.count)", forHTTPHeaderField: "Content-length")
+	    res.send(error.localizedDescription)
+	}
+}
+```
+
+... and in Objective-C
+
+```objective-c
+// Serve the first uploaded file back to the client
+[server post:@"/image" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
+    NSError *error;
+    NSData *data = [NSData dataWithContentsOfURL:req[0].temporaryFileURL options:0 error:&error];
+    if ( error ) {
+        [res setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
+        [res setValue:@(error.description.length).stringValue forHTTPHeaderField:@"Content-length"];
+        [res sendString:error.description];
+    } else {
+        [res setValue:request.env[@"HTTP_CONTENT_TYPE"] forHTTPHeaderField:@"Content-type"];
+        [res setValue:@(data.length).stringValue forHTTPHeaderField:@"Content-length"];
+        [res sendData:data];
+    }
+}];
+```
 
 ## Why?
 
