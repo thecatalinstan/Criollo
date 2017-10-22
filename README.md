@@ -120,17 +120,47 @@ server.add("/[0-9]{4}/[0-9]{1,2}/[a-zA-Z0-9-]+") { (req, res, next) in
 Controllers provide a very simple way of grouping functionality into one semantical unit. They function as routers and allow you to define routes based on paths relative to the path they are themselves attached to.
 
 ```swift
-// controller class
+// The controller class
+class APIController : CRRouteController {
+  override init(prefix: String) {
+    super.init(prefix: prefix)
+    ...    
+		self.add("/status") { (req, res, next) in
+		  res.send(["status": true])
+    }
+    ...
+  }
+}
 
-// add to server
+
+// Add the controller to the server
+server.add("/api", controller:APIController.self)
 ```
 
 ... and in Objective-C:
 
 ```objective-c
-// controller class
+// The controller class
+@interface APIController : CRRouteController
+@end
 
-// add to server
+@implementation APIController
+
+- (instancetype)initWithPrefix:(NSString *)prefix {
+  self = [super initWithPrefix:prefix];
+  if ( self != nil ) {
+    ...
+    [self add:@"/status" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
+      [res send:@{@"status": @YES}];
+    }];
+    ...      
+  }
+}
+
+@end
+
+// Add the controller to the server
+[server add:@"/api" controller:APIController.class];
 ```
 
 ### Views and View Controllers
