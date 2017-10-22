@@ -122,14 +122,16 @@ Controllers provide a very simple way of grouping functionality into one semanti
 ```swift
 // The controller class
 class APIController : CRRouteController {
+
   override init(prefix: String) {
     super.init(prefix: prefix)
-    ...    
-		self.add("/status") { (req, res, next) in
-		  res.send(["status": true])
+    ...
+    self.add("/status") { (req, res, next) in
+      res.send(["status": true])
     }
     ...
   }
+  
 }
 
 
@@ -142,6 +144,7 @@ server.add("/api", controller:APIController.self)
 ```objective-c
 // The controller class
 @interface APIController : CRRouteController
+
 @end
 
 @implementation APIController
