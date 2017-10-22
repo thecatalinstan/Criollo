@@ -9,28 +9,25 @@
 import Criollo
 
 class HelloWorldViewController: CRViewController {
+    
+    override func present(with request: CRRequest, response: CRResponse) -> String {
+        self.vars["title"] = String(describing: type(of: self))
 
-    override func presentViewControllerWithRequest(request: CRRequest, response: CRResponse) -> String {
-        self.templateVariables["title"] = self.className;
-
-        var text:String = String();
-        // Request Enviroment
-        let env:NSDictionary! = request.valueForKey("env") as! NSDictionary;
-        text += "<h3>Request Environment:</h2><pre>";
-        env.enumerateKeysAndObjectsUsingBlock({ (key:AnyObject,  object:AnyObject, stop:UnsafeMutablePointer<ObjCBool>) -> Void in
-            let envKey:String = key as! String;
-            text += "\(envKey): ";
-            if let value = object as? String {
-                text += "\(value)";
-            } else if let value = object as? NSNumber {
-                text += "\(value)";
-            }
-            text += "\n";
-        });
-        text += "</pre>";
-
-        self.templateVariables["text"] = text;
-        return super.presentViewControllerWithRequest(request, response: response);
+        var text:String = String()
+        let query:NSDictionary! = request.value(forKey: "query") as! NSDictionary
+        text += "<h3>Request Query:</h2><pre>"
+        query.enumerateKeysAndObjects({ (key,  object, stop) -> Void in
+            text += "\(key): \(object)\n"
+        })
+        text += "</pre>"
+        let env:NSDictionary! = request.value(forKey: "env") as! NSDictionary
+        text += "<h3>Request Environment:</h2><pre>"
+        env.enumerateKeysAndObjects({ (key,  object, stop) -> Void in
+            text += "\(key): \(object)\n"
+        })
+        text += "</pre>"
+        self.vars["text"] = text
+        return super.present(with: request, response: response)
     }
 
 }
