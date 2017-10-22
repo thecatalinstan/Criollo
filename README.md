@@ -122,18 +122,15 @@ Controllers provide a very simple way of grouping functionality into one semanti
 ```swift
 // The controller class
 class APIController : CRRouteController {
-
   override init(prefix: String) {
     super.init(prefix: prefix)
-    ...
+    
     self.add("/status") { (req, res, next) in
       res.send(["status": true])
     }
-    ...
+    
   }
-  
 }
-
 
 // Add the controller to the server
 server.add("/api", controller:APIController.self)
@@ -144,7 +141,6 @@ server.add("/api", controller:APIController.self)
 ```objective-c
 // The controller class
 @interface APIController : CRRouteController
-
 @end
 
 @implementation APIController
@@ -152,11 +148,11 @@ server.add("/api", controller:APIController.self)
 - (instancetype)initWithPrefix:(NSString *)prefix {
   self = [super initWithPrefix:prefix];
   if ( self != nil ) {
-    ...
+    
     [self add:@"/status" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
       [res send:@{@"status": @YES}];
     }];
-    ...      
+         
   }
 }
 
@@ -174,22 +170,57 @@ View controllers are powerful objects that allow you to easily standardise an ap
 
 HTML template file:
 ```html
-<!-- Template file -->
+<!-- Define some placeholders -->
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <title>{{title}}</title>
+  </head>
+  <body>
+    <h1>{{title}}</h1>
+    <div>{{content}}</div>
+  </body>
+</html>
 ```
 
 Source code:
 ```swift
-// view controller class
+// The view controller class
+class HelloWorldViewController: CRViewController {
+  
+  override func present(with request: CRRequest, response: CRResponse) -> String {
+    self.vars["title"] = String(describing: type(of: self))
+    self.vars["text"] = "Hello from the view controller."
 
-// add to server
+    return super.present(with: request, response: response)
+  }
+  
+}
+
+// Add the view controller to server
+server.add("/controller", viewController: HelloWorldViewController.self, withNibName: "HelloWorldViewController", bundle: nil)
 ```
 
 ... and in Objective-C:
 
 ```objective-c
-// view controller class
+// The view controller class
+@interface HelloWorldViewController : CRViewController
+@end
 
-// add to server
+@implementation HelloWorldViewController
+
+- (NSString *)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response {
+    self.vars[@"title"] = NSStringFromClass(self.class);
+    self.vars[@"text"] = @"Hello from the view controller.";
+
+    return [super presentViewControllerWithRequest:request response:response];
+}
+
+@end
+
+// Add the view controller to server
+[server add:@"/controller" viewController:HelloWorldViewController.class withNibName:@"HelloWorldViewController" bundle:nil];
 ```
 
 ### Static File/Directory Serving
