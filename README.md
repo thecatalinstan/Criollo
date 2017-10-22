@@ -178,7 +178,7 @@ HTML template file:
   </head>
   <body>
     <h1>{{title}}</h1>
-    <div>{{content}}</div>
+    <p>{{content}}</p>
   </body>
 </html>
 ```
@@ -190,7 +190,7 @@ class HelloWorldViewController: CRViewController {
   
   override func present(with request: CRRequest, response: CRResponse) -> String {
     self.vars["title"] = String(describing: type(of: self))
-    self.vars["text"] = "Hello from the view controller."
+    self.vars["content"] = "Hello from the view controller."
 
     return super.present(with: request, response: response)
   }
@@ -212,7 +212,7 @@ server.add("/controller", viewController: HelloWorldViewController.self, withNib
 
 - (NSString *)presentViewControllerWithRequest:(CRRequest *)request response:(CRResponse *)response {
     self.vars[@"title"] = NSStringFromClass(self.class);
-    self.vars[@"text"] = @"Hello from the view controller.";
+    self.vars[@"content"] = @"Hello from the view controller.";
 
     return [super presentViewControllerWithRequest:request response:response];
 }
