@@ -331,4 +331,6 @@ If you have any **questions** regarding the project or **how to** do anything wi
 
 I really encourage you to [submit an issue](https://github.com/thecatalinstan/Criollo/issues/new), as your input is really and truly appreciated.
 
+---
+
 Check out the [Criollo Blog](https://criollo.io/blog) for news, ideas and updates on Criollo.
