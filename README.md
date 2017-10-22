@@ -299,10 +299,11 @@ See the [Hello World Multi Target example](https://github.com/thecatalinstan/Cri
 
 ## Getting Started
 
-- [Download Criollo](https://github.com/thecatalinstan/Criollo/archive/master.zip) and try out the included OS X and iOS [example apps](https://github.com/thecatalinstan/Criollo/Examples). *Criollo requires [CocoaAsyncSocket](https://github.com/robbiehanson/CocoaAsyncSocket), so do not forget to [download](https://github.com/robbiehanson/CocoaAsyncSocket/archive/master.zip) it into `Libraries/CocoaAsyncSocket`*.
 - Read the [“Getting Started” guide](https://github.com/thecatalinstan/Criollo/wiki/Getting-Started) and move further with the [“Doing More Stuff” guide](https://github.com/thecatalinstan/Criollo/wiki/Doing-More-Stuff)
-- Check out the [documentation](http://cocoadocs.org/docsets/Criollo/) for a look at the APIs available
+- Check out the [Examples](https://github.com/thecatalinstan/Criollo/tree/master/Examples)
+- Check out the [API Reference](http://cocoadocs.org/docsets/Criollo/) for a look at the APIs available
 - Learn how to deploy your Criollo apps in the [“Deployment” guide](https://github.com/thecatalinstan/Criollo/wiki/Deployment)
+- Check out the [Criollo Blog](https://criollo.io/blog) for news, ideas and updates on Criollo.
 
 ## Installing
 
@@ -329,3 +330,5 @@ git clone --recursive https://github.com/thecatalinstan/Criollo.git
 If you have any **questions** regarding the project or **how to** do anything with it, please feel free to get in touch either on Twitter [@criolloio](https://twitter.com/criolloio) or by plain old email [criollo@criollo.io](mailto:criollo@criollo.io).
 
 I really encourage you to [submit an issue](https://github.com/thecatalinstan/Criollo/issues/new), as your input is really and truly appreciated.
+
+Check out the [Criollo Blog](https://criollo.io/blog) for news, ideas and updates on Criollo.
