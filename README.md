@@ -15,7 +15,7 @@ It's as easy as this:
 ```swift
 let server = CRHTTPServer()
 server.get("/") { (req, res, next) in
-	res("Hello world!")
+  res("Hello world!")
 }
 server.startListening()
 ```
@@ -25,7 +25,7 @@ server.startListening()
 ```objective-c
 CRServer* server = [[CRHTTPServer alloc] init];
 [server get:@"/" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
-	[res send:@"Hello world!"];
+  [res send:@"Hello world!"];
 }];
 [server startListening];
 ```
@@ -36,7 +36,7 @@ Criollo is designed with speed, security and flexibility in mind, that's why it 
 
 ### HTTPS
 
-Criollo fully supports HTTPS on all platform. You can pass the credentials as a PKCS#12 identity and password, or an X509 certificate and private key pair, either PEM or DER encoded. 
+Criollo fully supports HTTPS on all platforms. You can pass the credentials as a PKCS#12 identity and password, or an X509 certificate and private key pair, either PEM or DER encoded. 
 
 ```swift
 server.isSecure = true
@@ -82,18 +82,18 @@ When defining routes, paths can be specified in three ways:
 
 ```swift
 server.add("/api") { (req, res, next) in
-	// /api/?pid=12345
-	res.send(req.query)
+  // /api/?pid=12345
+  res.send(req.query)
 }
 
 server.add("/posts/:pid") { (req, res, next) in
-	// /posts/12345
-	res.send(req.query)
+  // /posts/12345
+  res.send(req.query)
 }
 
 server.add("/[0-9]{4}/[0-9]{1,2}/[a-zA-Z0-9-]+") { (req, res, next) in
-	// /2017/10/my-first-criollo-app
-	res.send(req.query)
+  // /2017/10/my-first-criollo-app
+  res.send(req.query)
 }
 ```
 
@@ -101,23 +101,64 @@ server.add("/[0-9]{4}/[0-9]{1,2}/[a-zA-Z0-9-]+") { (req, res, next) in
 
 ```objective-c
 [server add:@"/api" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
-    // /api/?pid=12345
-    [res send:req];
+  // /api/?pid=12345
+  [res send:req];
 }];
 
 [server add:@"/posts/:pid" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
-    // /posts/12345
-    [res send:req];
+  // /posts/12345
+  [res send:req];
 }];
 
 [server add:@"/[0-9]{4}/[0-9]{1,2}/[a-zA-Z0-9-]+" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
-    // /2017/10/my-first-criollo-app
-    [res send:req];
+  // /2017/10/my-first-criollo-app
+  [res send:req];
 }];
 ```
 
 ### Controllers
-### View Controllers
+Controllers provide a very simple way of grouping functionality into one semantical unit. They function as routers and allow you to define routes based on paths relative to the path they are themselves attached to.
+
+```swift
+// controller class
+
+// add to server
+```
+
+... and in Objective-C:
+
+```objective-c
+// controller class
+
+// add to server
+```
+
+### Views and View Controllers
+
+View controllers render view objects, constructed from HTML resource files by calling the view's `render` method. This is achieved by the `CRViewConroller`, `CRView` and `CRNib` APIs respectively.
+
+View controllers are powerful objects that allow you to easily standardise an app's appearance and group functionality together into a coherent unit.
+
+HTML template file:
+```html
+<!-- Template file -->
+```
+
+Source code:
+```swift
+// view controller class
+
+// add to server
+```
+
+... and in Objective-C:
+
+```objective-c
+// view controller class
+
+// add to server
+```
+
 ### Static File/Directory Serving
 Criollo comes with built-in support for exposing both directories and individual over HTTP. The `CRStaticFileManager` and `CRStaticDirectoryManager` APIs enable you to do this.
 
@@ -146,16 +187,16 @@ Criollo comes with builtin support for handling `multipart/form-data` POST reque
 ```swift
 // Serve the first uploaded file back to the client
 self.server.post("/image") { (req, res, next) in
-	do {
-	    let data = try Data.init(contentsOf: (req.files!["0"]?.temporaryFileURL)!)
-	    res.setValue(req.env["HTTP_CONTENT_TYPE"]!, forHTTPHeaderField: "Content-type")
-	    res.setValue("\(data.count)", forHTTPHeaderField: "Content-Length")
-	    res.send(data)
-	} catch {
-	    res.setValue("text/plain", forHTTPHeaderField: "Content-type")
-	    res.setValue("\(error.localizedDescription.count)", forHTTPHeaderField: "Content-length")
-	    res.send(error.localizedDescription)
-	}
+  do {
+    let data = try Data.init(contentsOf: (req.files!["0"]?.temporaryFileURL)!)
+    res.setValue(req.env["HTTP_CONTENT_TYPE"]!, forHTTPHeaderField: "Content-type")
+    res.setValue("\(data.count)", forHTTPHeaderField: "Content-Length")
+    res.send(data)
+  } catch {
+    res.setValue("text/plain", forHTTPHeaderField: "Content-type")
+    res.setValue("\(error.localizedDescription.count)", forHTTPHeaderField: "Content-length")
+    res.send(error.localizedDescription)
+  }
 }
 ```
 
@@ -164,17 +205,17 @@ self.server.post("/image") { (req, res, next) in
 ```objective-c
 // Serve the first uploaded file back to the client
 [server post:@"/image" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
-    NSError *error;
-    NSData *data = [NSData dataWithContentsOfURL:req[0].temporaryFileURL options:0 error:&error];
-    if ( error ) {
-        [res setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
-        [res setValue:@(error.description.length).stringValue forHTTPHeaderField:@"Content-length"];
-        [res sendString:error.description];
-    } else {
-        [res setValue:request.env[@"HTTP_CONTENT_TYPE"] forHTTPHeaderField:@"Content-type"];
-        [res setValue:@(data.length).stringValue forHTTPHeaderField:@"Content-length"];
-        [res sendData:data];
-    }
+  NSError *error;
+  NSData *data = [NSData dataWithContentsOfURL:req[0].temporaryFileURL options:0 error:&error];
+  if ( error ) {
+    [res setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
+    [res setValue:@(error.description.length).stringValue forHTTPHeaderField:@"Content-length"];
+    [res sendString:error.description];
+  } else {
+    [res setValue:request.env[@"HTTP_CONTENT_TYPE"] forHTTPHeaderField:@"Content-type"];
+    [res setValue:@(data.length).stringValue forHTTPHeaderField:@"Content-length"];
+    [res sendData:data];
+  }
 }];
 ```
 
