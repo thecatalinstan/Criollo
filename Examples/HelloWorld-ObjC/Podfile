@@ -2,6 +2,6 @@ platform :osx, '10.10'
 use_frameworks!
 
 target 'HelloWorld-ObjC' do
-	pod 'Criollo', '~> 0.4.17'
+	pod 'Criollo', :path => '../../'
 end
 

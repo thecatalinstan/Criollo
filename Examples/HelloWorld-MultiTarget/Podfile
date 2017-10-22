@@ -2,15 +2,15 @@ use_frameworks!
 
 target 'HelloWorld' do
     platform :osx, '10.10'
-    pod 'Criollo', '~> 0.4.17'
+    pod 'Criollo', :path => '../../'
 end
 
 target 'HelloWorld-Cocoa' do
     platform :osx, '10.10'
-    pod 'Criollo', '~> 0.4.17'
+    pod 'Criollo', :path => '../../'
 end
 
 target 'HelloWorld-iOS' do
     platform :ios, '8.0'
-    pod 'Criollo', '~> 0.4.17'
+    pod 'Criollo', :path => '../../'
 end

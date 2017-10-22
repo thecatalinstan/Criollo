@@ -2,7 +2,7 @@ platform :osx, '10.10'
 use_frameworks!
 
 target 'CriolloServerStats' do
-    pod 'Criollo', '~> 0.4.17'
+    pod 'Criollo', :path => '../../'
     pod 'CSSystemInfoHelper', '~> 1.4.0'
 end
 
