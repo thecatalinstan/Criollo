@@ -40,22 +40,22 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
         }
 
         // Prints a simple hello world as text/plain
-        self.server.add("/") { (request, response, completionHandler) -> Void in
+        self.server.add("/") { (request, response, completionHandler) in
             response.setValue("text/plain", forHTTPHeaderField: "Content-type")
             response.send("Hello World")
             completionHandler()
         }
 
         // Prints a hello world JSON object as application/json
-        self.server.add("/json") { (request, response, completionHandler) -> Void in
-            response.setValue("application/json charset=utf-8", forHTTPHeaderField: "Content-type")
+        self.server.add("/json") { (request, response, completionHandler) in
+            response.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-type")
             response.send(["status": true, "message": "Hello World"])
             completionHandler()
         }
         
         // Prints some more info as text/html
         let uname = systemInfo()
-        self.server.add("/status") { (request, response, completionHandler) -> Void in
+        self.server.add("/status") { (request, response, completionHandler) in
 
             let startTime:NSDate! = NSDate()
 
@@ -123,8 +123,8 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
         self.server.add("/controller", viewController: HelloWorldViewController.self, withNibName: "HelloWorldViewController", bundle: nil)
         
         // Serve static files from "/Public" (relative to bundle)
-        let staticFilePath:String = "\(Bundle.main.resourcePath ?? "")/Public"
-        self.server.mount("/static", directoryAtPath: staticFilePath, options: [.followSymlinks])
+        let staticFilePath = "\(Bundle.main.resourcePath ?? "")/Public"
+        self.server.mount("/static", directoryAtPath: staticFilePath, options: [.followSymlinks, .autoIndex])
 
         // Redirecter
         self.server.get("/redirect") { (request, response, completionHandler) in
@@ -189,7 +189,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
     
     func server(_ server: CRServer, didFinish request: CRRequest) {
         if ( LogRequests ) {
-            self.app.log(" * \(request.response?.connection!.remoteAddress ?? "") \(request.description) - \(request.response?.statusCode ?? 200)")
+//            self.app.log(" * \(request.response?.connection!.remoteAddress ?? "") \(request.description) - \(request.response?.statusCode ?? 200) - \(request.env["HTTP_USER_AGENT"] ?? "-")")
         }
     }
 
