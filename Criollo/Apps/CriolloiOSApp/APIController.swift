@@ -15,6 +15,10 @@ class APIController : CRRouteController {
 
         let uname = SystemInfoHelper.systemInfo()
         let bundle:Bundle! = Bundle.main
+        
+        self.add("/env")  { (request, response, completionHandler) in
+            response.send(request.env)
+        }
 
         // Prints some more info as text/html
         self.add("/status") { (request, response, completionHandler) in

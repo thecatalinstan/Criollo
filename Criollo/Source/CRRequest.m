@@ -47,6 +47,7 @@
 - (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL *)URL version:(CRHTTPVersion)version connection:(CRConnection * _Nullable)connection {
     return [self initWithMethod:method URL:URL version:version connection:connection env:nil];
 }
+
 - (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL *)URL version:(CRHTTPVersion)version connection:(CRConnection *)connection env:(NSDictionary *)env {
     self = [super init];
     if ( self != nil ) {
@@ -73,10 +74,6 @@
 
 - (BOOL)appendData:(NSData *)data {
     return CFHTTPMessageAppendBytes((__bridge CFHTTPMessageRef)self.message, data.bytes, data.length);
-}
-
-- (NSDictionary<NSString *,NSString *> *)env {
-    return _env;
 }
 
 - (void)setEnv:(NSDictionary<NSString *,NSString *> *)envDictionary {
