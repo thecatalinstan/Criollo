@@ -17,7 +17,8 @@ class APIController : CRRouteController {
         let bundle:Bundle! = Bundle.main
         
         self.add("/env")  { (request, response, completionHandler) in
-            response.send(request.env)
+            let dict:Dictionary = request.env as Dictionary
+            response.send(dict)
         }
 
         // Prints some more info as text/html
@@ -44,11 +45,10 @@ class APIController : CRRouteController {
             responseString += "</pre>"
 
             // Request Enviroment
-            let env:NSDictionary! = request.value(forKey: "env") as! NSDictionary
             responseString += "<h3>Request Environment:</h2><pre>"
-            env.enumerateKeysAndObjects({ (key,  object, stop) -> Void in
+            for (key, object) in request.env {
                 responseString += "\(key): \(object)\n"
-            })
+            }
             responseString += "</pre>"
 
             // Query

@@ -38,11 +38,10 @@ class MultiRouteViewController: CRViewController {
         self.vars["title"] = String(describing: type(of: self))
 
         var text:String = String()
-        let env:NSDictionary! = request.value(forKey: "env") as! NSDictionary
         text += "<h3>Request Environment:</h2><pre>"
-        env.enumerateKeysAndObjects({ (key,  object, stop) -> Void in
+        for (key, object) in request.env {
             text += "\(key): \(object)\n"
-        })
+        }
         text += "</pre>"
         self.vars["text"] = text
         
