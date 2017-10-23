@@ -9,6 +9,7 @@
 #import "CommonRequestHandler.h"
 
 #import <sys/utsname.h>
+#import <CSSystemInfoHelper/CSSystemInfoHelper.h>
 
 @interface CommonRequestHandler () {
     __block dispatch_once_t identifyBlockOnceToken;
@@ -148,7 +149,7 @@
 
             // System info
             [responseString appendString:@"<hr/>"];
-            [responseString appendFormat:@"<small>%@</small><br/>", _uname];
+            [responseString appendFormat:@"<small>%@</small><br/>", CSSystemInfoHelper.sharedHelper.systemInfoString];
             [responseString appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
 
             // HTML
