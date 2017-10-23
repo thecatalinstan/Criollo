@@ -12,7 +12,6 @@
 		ADAEE9BE1BFA80630034819C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD57A6F81BFA6E5300815942 /* AppDelegate.swift */; };
 		ADAEE9BF1BFA80670034819C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF1D88E1BFA6F17002CCFD6 /* main.swift */; };
 		ADD8F6DE1C6CCE37004DDF54 /* style.css in Public Resources */ = {isa = PBXBuildFile; fileRef = ADD8F6DA1C6CCD68004DDF54 /* style.css */; };
-		ADDAE6501BFCD81000E2A901 /* utils.m in Sources */ = {isa = PBXBuildFile; fileRef = ADDAE64F1BFCD81000E2A901 /* utils.m */; };
 		FDF113A5F19BC10B54D42F3F /* Pods_HelloWorld_Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C2A3414820E65D18F7636FE /* Pods_HelloWorld_Swift.framework */; };
 /* End PBXBuildFile section */
 
@@ -50,8 +49,6 @@
 		ADA0B5DC1C03E55E009259C5 /* HelloWorldViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelloWorldViewController.swift; sourceTree = "<group>"; };
 		ADAEE9A81BFA7A4B0034819C /* HelloWorld-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HelloWorld-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADD8F6DA1C6CCD68004DDF54 /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
-		ADDAE64E1BFCD81000E2A901 /* HelloWorld-Swift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HelloWorld-Swift-Bridging-Header.h"; sourceTree = "<group>"; };
-		ADDAE64F1BFCD81000E2A901 /* utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = utils.m; sourceTree = "<group>"; };
 		ADF1D88E1BFA6F17002CCFD6 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -84,8 +81,6 @@
 				ADA0B5D91C03E52C009259C5 /* HelloWorldViewController.html */,
 				ADF1D88E1BFA6F17002CCFD6 /* main.swift */,
 				AD57A6FF1BFA6E5300815942 /* Info.plist */,
-				ADDAE64F1BFCD81000E2A901 /* utils.m */,
-				ADDAE64E1BFCD81000E2A901 /* HelloWorld-Swift-Bridging-Header.h */,
 				ADD8F6D91C6CCD68004DDF54 /* Public */,
 			);
 			path = "HelloWorld-Swift";
@@ -201,11 +196,13 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld-Swift/Pods-HelloWorld-Swift-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CSSystemInfoHelper/CSSystemInfoHelper.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
 				"${BUILT_PRODUCTS_DIR}/Criollo/Criollo.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CSSystemInfoHelper.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Criollo.framework",
 			);
@@ -256,7 +253,6 @@
 			files = (
 				ADA0B5DD1C03E55E009259C5 /* HelloWorldViewController.swift in Sources */,
 				ADAEE9BF1BFA80670034819C /* main.swift in Sources */,
-				ADDAE6501BFCD81000E2A901 /* utils.m in Sources */,
 				ADAEE9BE1BFA80630034819C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -308,7 +304,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.criollo.examples.HelloWorld-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "HelloWorld-Swift/HelloWorld-Swift-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -352,7 +347,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.criollo.examples.HelloWorld-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "HelloWorld-Swift/HelloWorld-Swift-Bridging-Header.h";
 			};
 			name = Release;
 		};

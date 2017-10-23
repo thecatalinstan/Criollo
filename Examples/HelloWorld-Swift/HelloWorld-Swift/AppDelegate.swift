@@ -7,6 +7,7 @@
 //
 
 import Criollo
+import CSSystemInfoHelper
 
 let PortNumber:UInt = 10781
 let LogConnections:Bool = false
@@ -54,7 +55,6 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
         }
         
         // Prints some more info as text/html
-        let uname = systemInfo()
         self.server.add("/status") { (request, response, completionHandler) in
 
             let startTime:NSDate! = NSDate()
@@ -107,13 +107,13 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
 
             // System Info
             responseString += "<hr/>"
-            responseString += "<small>\(String(describing: uname))</small><br/>"
+            responseString += "<small>\(String(describing: CSSystemInfoHelper.shared().systemInfoString))</small><br/>"
             responseString += String(format: "<small>Task took: %.4fms</small>", startTime.timeIntervalSinceNow * -1000)
 
             // HTML
             responseString += "</body></html>"
 
-            response.setValue("text/html charset=utf-8", forHTTPHeaderField: "Content-type")
+            response.setValue("text/html; charset=utf-8", forHTTPHeaderField: "Content-type")
             response.setValue("\(responseString.lengthOfBytes(using: String.Encoding.utf8))", forHTTPHeaderField: "Content-Length")
             response.send(responseString)
 
@@ -140,14 +140,8 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
         if ( self.server.startListening(&serverError, portNumber: PortNumber) ) {
 
             
-            var address:NSString?
-            let result:Bool = getIPAddress(&address)
-            if ( !result ) {
-                address = "127.0.0.1"
-            }
-
             // Output some nice info to the console
-            self.baseURL = NSURL(string: "http://\(address!):\(PortNumber)")
+            self.baseURL = NSURL(string: "http://\(CSSystemInfoHelper.shared().ipAddress):\(PortNumber)")
 
             let paths = NSMutableSet()
             let routes:NSArray! = self.server!.value(forKeyPath: "routes") as! NSArray

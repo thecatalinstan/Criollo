@@ -14,7 +14,6 @@
 		ADD931F11C6A0DEE005B98FD /* MultipartViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = ADD931F01C6A0DEE005B98FD /* MultipartViewController.html */; };
 		ADE3DDA91BFE003900844DC9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE3DDA81BFE003900844DC9 /* AppDelegate.m */; };
 		ADE3DDAC1BFE003900844DC9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE3DDAB1BFE003900844DC9 /* main.m */; };
-		ADE3DDCB1BFE055100844DC9 /* utils.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE3DDCA1BFE055100844DC9 /* utils.m */; };
 		ADE99FC01C6B83500080B1FA /* style.css in Copy Public Resources */ = {isa = PBXBuildFile; fileRef = ADE99FBB1C6B82850080B1FA /* style.css */; };
 /* End PBXBuildFile section */
 
@@ -57,8 +56,6 @@
 		ADE3DDA81BFE003900844DC9 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		ADE3DDAB1BFE003900844DC9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		ADE3DDB21BFE003900844DC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ADE3DDC91BFE055100844DC9 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
-		ADE3DDCA1BFE055100844DC9 /* utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = utils.m; sourceTree = "<group>"; };
 		ADE99FBB1C6B82850080B1FA /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,8 +108,6 @@
 				ADD931EC1C6A0DD6005B98FD /* MultipartViewController.h */,
 				ADD931ED1C6A0DD6005B98FD /* MultipartViewController.m */,
 				ADD931F01C6A0DEE005B98FD /* MultipartViewController.html */,
-				ADE3DDC91BFE055100844DC9 /* utils.h */,
-				ADE3DDCA1BFE055100844DC9 /* utils.m */,
 				ADE3DDAB1BFE003900844DC9 /* main.m */,
 				ADE3DDB21BFE003900844DC9 /* Info.plist */,
 				ADE99FBF1C6B82F10080B1FA /* Public */,
@@ -247,11 +242,13 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld-ObjC/Pods-HelloWorld-ObjC-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CSSystemInfoHelper/CSSystemInfoHelper.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
 				"${BUILT_PRODUCTS_DIR}/Criollo/Criollo.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CSSystemInfoHelper.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Criollo.framework",
 			);
@@ -269,7 +266,6 @@
 			files = (
 				ADD931EE1C6A0DD6005B98FD /* MultipartViewController.m in Sources */,
 				AD60BA521C03A6F200118EED /* HelloWorldViewController.m in Sources */,
-				ADE3DDCB1BFE055100844DC9 /* utils.m in Sources */,
 				ADE3DDAC1BFE003900844DC9 /* main.m in Sources */,
 				ADE3DDA91BFE003900844DC9 /* AppDelegate.m in Sources */,
 			);

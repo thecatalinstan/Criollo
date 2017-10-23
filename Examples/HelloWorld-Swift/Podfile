@@ -3,5 +3,6 @@ use_frameworks!
 
 target 'HelloWorld-Swift' do
   pod 'Criollo', :path => '../../'
+  pod 'CSSystemInfoHelper', '~> 1.4'
 end
 

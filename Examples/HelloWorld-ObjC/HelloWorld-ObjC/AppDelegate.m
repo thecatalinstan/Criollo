@@ -6,8 +6,9 @@
 //  Copyright © 2015 Catalin Stan. All rights reserved.
 //
 
+#import <CSSystemInfoHelper/CSSystemInfoHelper.h>
+
 #import "AppDelegate.h"
-#import "utils.h"
 #import "HelloWorldViewController.h"
 #import "MultipartViewController.h"
 
@@ -66,7 +67,6 @@
     [self.server add:@"/json" block:jsonHelloBlock];
 
     // Prints some more info as text/html
-    NSString *uname = systemInfo();
     CRRouteBlock statusBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler ) {
 
         NSDate *startTime = [NSDate date];
@@ -126,7 +126,7 @@
 
         // System info
         [responseString appendString:@"<hr/>"];
-        [responseString appendFormat:@"<small>%@</small><br/>", uname];
+        [responseString appendFormat:@"<small>%@</small><br/>", CSSystemInfoHelper.sharedHelper.systemInfoString];
         [responseString appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
 
         // HTML
@@ -170,15 +170,8 @@
 
         // Output some nice info to the console
 
-        // Get server ip address
-        NSString *address;
-        BOOL result = getIPAddress(&address);
-        if ( !result ) {
-            address = @"127.0.0.1";
-        }
-
         // Set the base url. This is only for logging
-        self.baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d", address, PortNumber]];
+        self.baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d", CSSystemInfoHelper.sharedHelper.IPAddress, PortNumber]];
 
         [CRApp logFormat:@"Started HTTP server at %@", self.baseURL.absoluteString];
 
