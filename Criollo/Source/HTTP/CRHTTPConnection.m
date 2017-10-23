@@ -66,7 +66,6 @@
         env[@"SERVER_NAME"] = env[@"HTTP_HOST"];
     }
 
-//    env[@"SERVER_SOFTWARE"] = @"";
     env[@"REQUEST_METHOD"] = NSStringFromCRHTTPMethod(self.currentRequest.method);
     env[@"SERVER_PROTOCOL"] = NSStringFromCRHTTPVersion(self.currentRequest.version);
     env[@"REQUEST_URI"] = self.currentRequest.URL.absoluteString;
@@ -74,10 +73,9 @@
     env[@"SCRIPT_NAME"] = self.currentRequest.URL.path;
     env[@"QUERY_STRING"] = self.currentRequest.URL.query;
     env[@"REMOTE_ADDR"] = self.socket.connectedHost;
-    env[@"REMOTE_PORT"] = @(self.socket.connectedPort);
+    env[@"REMOTE_PORT"] = @(self.socket.connectedPort).stringValue;
     env[@"SERVER_ADDR"] = self.socket.localHost;
-    env[@"SERVER_PORT"] = @(self.socket.localPort);
-    [self.currentRequest setEnv:env];
+    env[@"SERVER_PORT"] = @(self.socket.localPort).stringValue;
     
     self.currentRequest.env = env;
     [self.currentRequest parseQueryString];
