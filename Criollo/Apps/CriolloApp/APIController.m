@@ -17,6 +17,10 @@
         // Prints some more info as text/html
         NSBundle *bundle = [NSBundle mainBundle];
         NSString *uname = [SystemInfoHelper systemInfo];
+        
+        [self add:@"/env" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+            [response send:request.env];
+        }];
 
         [self get:@"/status" block:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler ) {
 

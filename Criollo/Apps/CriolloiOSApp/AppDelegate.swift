@@ -118,13 +118,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
                 }
 
                 if ( request.files != nil ) {
-                    response.write("<h2>Request Files</h2>")
-                    response.write("<pre>")
-
-                    let files:NSDictionary! = request.files as [String:CRUploadedFile]! as NSDictionary!
-                    files.enumerateKeysAndObjects(options: [], using: { (key, file, stop) in
-                        response.write("\(key): \((file as! CRUploadedFile).name)\n")
-                    })
+                    response.write("<h2>Request Files</h2><pre>")
+                    for (key, file) in request.files! {
+                        response.write("\(key): \(file.name)")
+                    }
                     response.write("</pre>")
                 }
             }
@@ -210,7 +207,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
     func server(_ server: CRServer, didFinish request: CRRequest) {
         if ( LogRequests ) {
             let env:NSDictionary! = request.value(forKey: "env") as! NSDictionary
-            NSLog(" * \(request.response!.connection!.remoteAddress) \(request.description) - \(request.response!.statusCode) - \(String(describing: env["HTTP_USER_AGENT"]))")
+            NSLog(" * \(request.response!.connection!.remoteAddress) \(request.description) - \(request.response!.statusCode) - \(String(describing: env["HTTP_USER_AGENT"]!))")
         }
         SystemInfoHelper.addRequest()
     }
