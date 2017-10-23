@@ -78,6 +78,11 @@
     env[@"SERVER_ADDR"] = self.socket.localHost;
     env[@"SERVER_PORT"] = @(self.socket.localPort);
     [self.currentRequest setEnv:env];
+    
+    self.currentRequest.env = env;
+    [self.currentRequest parseQueryString];
+    [self.currentRequest parseCookiesHeader];
+    [self.currentRequest parseRangeHeader];
 
     [super didReceiveCompleteRequestHeaders];
 
