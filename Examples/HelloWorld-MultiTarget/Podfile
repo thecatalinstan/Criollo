@@ -2,18 +2,24 @@ use_frameworks!
 
 target 'HelloWorld' do
   platform :osx, '10.10'
-  pod 'Criollo', :path => '../../'
+  pod 'Criollo', :git => 'file:///Users/cas/Projects/Criollo/Criollo', :branch => 'feature/http-message'
   pod 'CSSystemInfoHelper', '~> 1.4'
 end
 
 target 'HelloWorld-Cocoa' do
   platform :osx, '10.10'
-  pod 'Criollo', :path => '../../'
+  pod 'Criollo', :git => 'file:///Users/cas/Projects/Criollo/Criollo', :branch => 'feature/http-message'
   pod 'CSSystemInfoHelper', '~> 1.4'
 end
 
 target 'HelloWorld-iOS' do
   platform :ios, '8.0'
-  pod 'Criollo', :path => '../../'
+  pod 'Criollo', :git => 'file:///Users/cas/Projects/Criollo/Criollo', :branch => 'feature/http-message'
+  pod 'CSSystemInfoHelper', '~> 1.4'
+end
+
+target 'HelloWorld-tvOS' do
+  platform :tvos, '9.0'
+  pod 'Criollo', :git => 'file:///Users/cas/Projects/Criollo/Criollo', :branch => 'feature/http-message'
   pod 'CSSystemInfoHelper', '~> 1.4'
 end
