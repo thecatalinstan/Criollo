@@ -56,7 +56,11 @@
         if ( URL ) {
             self.message = CFBridgingRelease( CFHTTPMessageCreateRequest(NULL, (__bridge CFStringRef)NSStringFromCRHTTPMethod(_method), (__bridge CFURLRef)URL, (__bridge CFStringRef)NSStringFromCRHTTPVersion(version)) );
         }
-        self.env = [NSMutableDictionary dictionaryWithDictionary:env];
+        if ( env != nil ) {
+            self.env = [NSMutableDictionary dictionaryWithDictionary:env];
+        } else {
+            self.env = [NSMutableDictionary dictionary];
+        }
         [self parseQueryString];
         [self parseCookiesHeader];
         [self parseRangeHeader];
@@ -182,7 +186,7 @@
             result = NO;
         }
     }
-        
+
     return result;
 }
 
