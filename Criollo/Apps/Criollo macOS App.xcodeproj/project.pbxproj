@@ -344,7 +344,7 @@
 				INFOPLIST_FILE = CriolloApp/Info.plist;
 				LD_NO_PIE = YES;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloApp;
+				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloMacApp;
 				PRODUCT_NAME = "Criollo macOS App";
 			};
 			name = Debug;
@@ -358,7 +358,7 @@
 				INFOPLIST_FILE = CriolloApp/Info.plist;
 				LD_NO_PIE = YES;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloApp;
+				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloMacApp;
 				PRODUCT_NAME = "Criollo macOS App";
 			};
 			name = Release;

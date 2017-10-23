@@ -316,6 +316,13 @@
 			remoteGlobalIDString = 4ABB1DD91F9E6B0900480EC7;
 			remoteInfo = "Criollo-tvos";
 		};
+		4ABB1E871F9E7AB400480EC7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4ABB1E7C1F9E7A8500480EC7 /* CriolloTVApp.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4ABB1E6A1F9E7A8500480EC7;
+			remoteInfo = CriolloTVApp;
+		};
 		AD030FE11F0C02C900BD9FE4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = ADEDB3481AEFBCF800A26AF1 /* Project object */;
@@ -367,6 +374,7 @@
 		4ABB1DE21F9E6B0A00480EC7 /* CriolloTests tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CriolloTests tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4ABB1E491F9E72B500480EC7 /* libssl-tvOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libssl-tvOS.a"; path = "Libraries/OpenSSL/lib/libssl-tvOS.a"; sourceTree = "<group>"; };
 		4ABB1E4A1F9E72B500480EC7 /* libcrypto-tvOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libcrypto-tvOS.a"; path = "Libraries/OpenSSL/lib/libcrypto-tvOS.a"; sourceTree = "<group>"; };
+		4ABB1E7C1F9E7A8500480EC7 /* CriolloTVApp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CriolloTVApp.xcodeproj; path = Criollo/Apps/CriolloTVApp.xcodeproj; sourceTree = "<group>"; };
 		4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPSTests.m; sourceTree = "<group>"; };
 		AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRoute_Internal.h; sourceTree = "<group>"; };
 		AD001ADE1D455BA300DE4AC9 /* CRRouteMatchingResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRouteMatchingResult.h; sourceTree = "<group>"; };
@@ -556,6 +564,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		4ABB1E841F9E7AB400480EC7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4ABB1E881F9E7AB400480EC7 /* CriolloTVApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		AD030FDC1F0C02C900BD9FE4 /* CriolloTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -589,6 +605,7 @@
 		AD5B3C7D1CA821E9000988B7 /* Apps */ = {
 			isa = PBXGroup;
 			children = (
+				4ABB1E7C1F9E7A8500480EC7 /* CriolloTVApp.xcodeproj */,
 				ADC1A5D41CA30F49009A4A19 /* Criollo macOS App.xcodeproj */,
 				AD5B3C661CA820B5000988B7 /* Criollo iOS App.xcodeproj */,
 			);
@@ -1134,6 +1151,10 @@
 					ProductGroup = ADAD526B1D3E4FBD00DDFBB5 /* Products */;
 					ProjectRef = ADC1A5D41CA30F49009A4A19 /* Criollo macOS App.xcodeproj */;
 				},
+				{
+					ProductGroup = 4ABB1E841F9E7AB400480EC7 /* Products */;
+					ProjectRef = 4ABB1E7C1F9E7A8500480EC7 /* CriolloTVApp.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -1148,6 +1169,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		4ABB1E881F9E7AB400480EC7 /* CriolloTVApp.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = CriolloTVApp.app;
+			remoteRef = 4ABB1E871F9E7AB400480EC7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		AD35A82C1D411246005BD4A9 /* Criollo iOS App.app */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.application;
