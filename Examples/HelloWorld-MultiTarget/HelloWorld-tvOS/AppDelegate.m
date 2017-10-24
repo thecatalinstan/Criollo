@@ -56,7 +56,7 @@
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             NSMutableDictionary* tempDictionary = [NSMutableDictionary dictionaryWithDictionary:super.logDebugAtributes];
-            tempDictionary[NSFontAttributeName] = [UIFont systemFontOfSize:16.f];
+            tempDictionary[NSFontAttributeName] = [UIFont systemFontOfSize:18.f];
             tempDictionary[NSForegroundColorAttributeName] = [UIColor lightGrayColor];
             _logTextAtributes = tempDictionary.copy;
         });
@@ -68,7 +68,7 @@
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             NSMutableDictionary* tempDictionary = [NSMutableDictionary dictionaryWithDictionary:super.logDebugAtributes];
-            tempDictionary[NSFontAttributeName] = [UIFont systemFontOfSize:16.f];
+            tempDictionary[NSFontAttributeName] = [UIFont systemFontOfSize:18.f];
             tempDictionary[NSForegroundColorAttributeName] = [UIColor grayColor];
             _logDebugAtributes = tempDictionary.copy;
         });
@@ -80,7 +80,7 @@
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             NSMutableDictionary* tempDictionary = [NSMutableDictionary dictionaryWithDictionary:super.logDebugAtributes];
-            tempDictionary[NSFontAttributeName] = [UIFont systemFontOfSize:16.f];
+            tempDictionary[NSFontAttributeName] = [UIFont systemFontOfSize:18.f];
             tempDictionary[NSForegroundColorAttributeName] = [UIColor redColor];
             _logErrorAtributes = tempDictionary.copy;
         });

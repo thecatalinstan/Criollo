@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder.AppleTV.Storyboard" version="3.0" toolsVersion="13122.16" systemVersion="17A278a" targetRuntime="AppleTV" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder.AppleTV.Storyboard" version="3.0" toolsVersion="13196" targetRuntime="AppleTV" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="appleTV" orientation="landscape">
+        <adaptation id="light"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -9,7 +14,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -17,12 +22,79 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="1920" height="1080"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NUY-Mn-pWp">
+                                <rect key="frame" x="960" y="235" width="870" height="785"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <attributedString key="attributedText"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" textContentType="url"/>
+                                <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="V0z-g1-JfG"/>
+                                </connections>
+                            </textView>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xTH-7n-oZ6">
+                                <rect key="frame" x="90" y="60" width="1740" height="145"/>
+                                <items>
+                                    <navigationItem title="Title" id="JC9-kg-82R">
+                                        <leftBarButtonItems>
+                                            <barButtonItem systemItem="play" id="lRM-9v-MPe">
+                                                <connections>
+                                                    <action selector="startListening:" destination="BYZ-38-t0r" id="KOz-0X-G7z"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem systemItem="pause" id="eUw-b5-HoH">
+                                                <connections>
+                                                    <action selector="stopListening:" destination="BYZ-38-t0r" id="SfV-Jg-atZ"/>
+                                                </connections>
+                                            </barButtonItem>
+                                        </leftBarButtonItems>
+                                        <connections>
+                                            <outlet property="titleView" destination="bQB-dc-kPj" id="VWO-Qv-gbV"/>
+                                        </connections>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="1" baselineRelativeArrangement="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uvt-IL-GID">
+                                <rect key="frame" x="90" y="235" width="870" height="785"/>
+                            </stackView>
+                        </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="NUY-Mn-pWp" firstAttribute="width" secondItem="wu6-TO-1qx" secondAttribute="width" multiplier="0.5" id="6sz-DP-cQ1"/>
+                            <constraint firstItem="Uvt-IL-GID" firstAttribute="top" secondItem="xTH-7n-oZ6" secondAttribute="bottom" constant="30" id="7Zy-ze-zFI"/>
+                            <constraint firstItem="wu6-TO-1qx" firstAttribute="bottom" secondItem="NUY-Mn-pWp" secondAttribute="bottom" id="8P6-Pf-CY3"/>
+                            <constraint firstItem="Uvt-IL-GID" firstAttribute="leading" secondItem="wu6-TO-1qx" secondAttribute="leading" id="DVP-9a-ecd"/>
+                            <constraint firstItem="NUY-Mn-pWp" firstAttribute="top" secondItem="xTH-7n-oZ6" secondAttribute="bottom" constant="30" id="L1F-ep-mxp"/>
+                            <constraint firstItem="xTH-7n-oZ6" firstAttribute="top" secondItem="wu6-TO-1qx" secondAttribute="top" id="RVk-NO-LBv"/>
+                            <constraint firstItem="wu6-TO-1qx" firstAttribute="trailing" secondItem="NUY-Mn-pWp" secondAttribute="trailing" id="dyc-SS-Zmx"/>
+                            <constraint firstItem="xTH-7n-oZ6" firstAttribute="leading" secondItem="wu6-TO-1qx" secondAttribute="leading" id="edM-zS-wxK"/>
+                            <constraint firstItem="xTH-7n-oZ6" firstAttribute="trailing" secondItem="wu6-TO-1qx" secondAttribute="trailing" id="lIK-zU-WLQ"/>
+                            <constraint firstItem="NUY-Mn-pWp" firstAttribute="leading" secondItem="Uvt-IL-GID" secondAttribute="trailing" id="vr3-pw-4CD"/>
+                            <constraint firstItem="wu6-TO-1qx" firstAttribute="bottom" secondItem="Uvt-IL-GID" secondAttribute="bottom" id="zMz-wd-uzA"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="wu6-TO-1qx"/>
                     </view>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="logTextView" destination="NUY-Mn-pWp" id="52q-cR-woE"/>
+                        <outlet property="pathsStackView" destination="Uvt-IL-GID" id="DAU-Ur-x48"/>
+                        <outlet property="startItem" destination="lRM-9v-MPe" id="9mq-MM-mlQ"/>
+                        <outlet property="statusDetailsButton" destination="bQB-dc-kPj" id="ywU-Xm-h1r"/>
+                        <outlet property="stopItem" destination="eUw-b5-HoH" id="BxP-ty-BDX"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bQB-dc-kPj">
+                    <rect key="frame" x="0.0" y="0.0" width="93" height="46"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </objects>
+            <point key="canvasLocation" x="1138" y="-83"/>
         </scene>
     </scenes>
 </document>
