@@ -140,16 +140,15 @@
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:60.f];
     [[NSURLSession.sharedSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
-        NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
-        [self postSuccessResponseString:[NSString stringWithFormat:@"Response from: %@, HTTP %lu, %@ %lu bytes", res.URL, res.statusCode, res.MIMEType, data.length]];
-        
         if ( error != nil ) {
             [self postErrorResponseString:error.localizedDescription];
             return;
         }
         
-        [self handleResponse:res withData:data];
+        NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
+        [self postSuccessResponseString:[NSString stringWithFormat:@"Response from: %@, HTTP %lu, %@ %lu bytes", res.URL, res.statusCode, res.MIMEType, data.length]];
         
+        [self handleResponse:res withData:data];
     }] resume];
 }
 
@@ -219,14 +218,14 @@
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
-    
-    [self.pathsStackView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [obj removeFromSuperview];
-    }];
-    
     if ( [keyPath isEqualToString:@"isConnected"] || [keyPath isEqualToString:@"isDisconnected"] ) {
         
         if ( self.appDelegate.isConnected ) {
+            
+            [self.pathsStackView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                [obj removeFromSuperview];
+            }];
+            
             NSArray<NSString *> *paths = [[self.appDelegate.server valueForKeyPath:@"routes.@distinctUnionOfObjects.path"] sortedArrayUsingSelector:@selector(compare:)];
             [paths enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
