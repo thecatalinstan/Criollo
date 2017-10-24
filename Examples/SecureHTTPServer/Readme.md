@@ -12,7 +12,11 @@ Criollo makes it as painlessly as possible:
 // Secure with PEM certificate and key
 server.certificatePath = Bundle.main.path(forResource: "SecureHTTPServer.bundle", ofType: "pem")
 server.certificateKeyPath = Bundle.main.path(forResource: "SecureHTTPServer.key", ofType: "pem")
+```
 
+or 
+
+```swift
 // Secure with PKCS#12 identity and password.
 server.identityPath = Bundle.main.path(forResource: "SecureHTTPServer", ofType: "p12")
 server.password = "password"
