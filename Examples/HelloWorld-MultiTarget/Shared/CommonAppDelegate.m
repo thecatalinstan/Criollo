@@ -93,17 +93,19 @@
     _isDisconnected = NO;
     [self didChangeValueForKey:@"isDisconnected"];
 
-    [self.server stopListening];
-    
-    [self willChangeValueForKey:@"isConnected"];
-    _isConnected = NO;
-    [self didChangeValueForKey:@"isConnected"];
-
-    [self willChangeValueForKey:@"isDisconnected"];
-    _isDisconnected = YES;
-    [self didChangeValueForKey:@"isDisconnected"];
-
-    [self serverDidStopListening];
+    [self.server closeAllConnections:^{
+        [self.server stopListening];
+        
+        [self willChangeValueForKey:@"isConnected"];
+        _isConnected = NO;
+        [self didChangeValueForKey:@"isConnected"];
+        
+        [self willChangeValueForKey:@"isDisconnected"];
+        _isDisconnected = YES;
+        [self didChangeValueForKey:@"isDisconnected"];
+        
+        [self serverDidStopListening];        
+    }];
 }
 
 - (void)closeAllConnections {
