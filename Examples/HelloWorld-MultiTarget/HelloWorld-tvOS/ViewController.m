@@ -20,6 +20,7 @@
 @property (weak) IBOutlet UILabel *statusDetailsButton;
 
 @property (assign) BOOL isScheduled;
+@property (assign) CGFloat width;
 
 @property (strong) NSDataDetector* linkChecker;
 
@@ -47,6 +48,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.width = (self.logTextView.frame.size.width);
     
     self.appDelegate = [[UIApplication sharedApplication] delegate];
     [self.appDelegate addObserver:self forKeyPath:@"isConnected" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
@@ -96,11 +99,8 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSMutableParagraphStyle* style = [[NSMutableParagraphStyle alloc] init];
-        style.lineHeightMultiple = 1.2;
+        style.lineHeightMultiple = 1.;
         style.lineBreakMode = NSLineBreakByTruncatingMiddle;
-        style.headIndent = 10.f;
-        style.firstLineHeadIndent = 10.f;
-        style.lineSpacing = 1.5f;
         
         NSMutableDictionary* tempDictionary = [NSMutableDictionary dictionaryWithDictionary:self.appDelegate.logDebugAtributes];
         tempDictionary[NSParagraphStyleAttributeName] = style;
@@ -141,7 +141,7 @@
     [[NSURLSession.sharedSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
         NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
-        [self postSuccessResponseString:[NSString stringWithFormat:@"Response from: %@ %lu bytes %@", res.URL, data.length, res.MIMEType]];
+        [self postSuccessResponseString:[NSString stringWithFormat:@"Response from: %@, HTTP %lu, %@ %lu bytes", res.URL, res.statusCode, res.MIMEType, data.length]];
         
         if ( error != nil ) {
             [self postErrorResponseString:error.localizedDescription];
@@ -161,9 +161,9 @@
     }
     
     if ( [response.MIMEType hasPrefix:@"image/"] ) {
-        
+        UIImage *image = [[UIImage alloc] initWithData:data];
+        [self postImageResponse:image];
     } else {
-        
         NSString *string = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes length:data.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
         if ( [response.MIMEType hasPrefix:@"text/html"] ) {
             
@@ -172,7 +172,17 @@
     }
 }
 
-
+- (void)postImageResponse:(UIImage *)image {
+    NSTextAttachment *textAttachment = [[NSTextAttachment alloc] init];
+    textAttachment.image = image;
+    CGFloat oldWidth = textAttachment.image.size.width;
+    CGFloat scaleFactor = oldWidth / self.width;
+    textAttachment.image = [UIImage imageWithCGImage:textAttachment.image.CGImage scale:scaleFactor orientation:UIImageOrientationUp];
+    
+    NSMutableAttributedString *attributtedString = [[NSMutableAttributedString alloc] initWithString:@"\n\n"];
+    [attributtedString insertAttributedString:[NSAttributedString attributedStringWithAttachment:textAttachment]  atIndex:1];
+    [NSNotificationCenter.defaultCenter postNotificationName:LogMessageNotificationName object:attributtedString];
+}
 
 - (void)postSuccessResponseString:(NSString *)string {
     [self postResponseString:string attributes:[self logResponseAtributes]];
@@ -239,10 +249,6 @@
 - (void)dealloc {
     [self.appDelegate removeObserver:self forKeyPath:@"isConnected"];
     [self.appDelegate removeObserver:self forKeyPath:@"isDisconnected"];
-}
-
-- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
-    return YES;
 }
 
 @end

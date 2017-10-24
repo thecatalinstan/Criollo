@@ -150,9 +150,12 @@
     __block CRRouteBlock _redirectBlock;
     if ( _redirectBlock == nil ) {
         _redirectBlock = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-            NSURL* redirectURL = [NSURL URLWithString:(request.query[@"redirect"] ? : @"")];
-            if ( redirectURL ) {
+            if ( request.query[@"redirect"] ) {
+                NSURL* redirectURL = [NSURL URLWithString:request.query[@"redirect"]];
                 [response redirectToURL:redirectURL];
+            } else {
+                [response setStatusCode:501 description:nil];
+                [response send:@"No redirect URL provided."];
             }
             completionHandler();
         };
