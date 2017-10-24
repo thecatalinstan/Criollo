@@ -61,14 +61,14 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:LogMessageNotificationName object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
     
         dispatch_async(self.appDelegate.isolationQueue, ^{
-            NSMutableAttributedString* attributtedString = [note.object mutableCopy];
+            NSMutableAttributedString* attributedString = [note.object mutableCopy];
             
-            NSArray<NSTextCheckingResult*>* matches = [self.linkChecker matchesInString:attributtedString.string options:0 range:NSMakeRange(0, attributtedString.length)];
+            NSArray<NSTextCheckingResult*>* matches = [self.linkChecker matchesInString:attributedString.string options:0 range:NSMakeRange(0, attributedString.length)];
             [matches enumerateObjectsUsingBlock:^(NSTextCheckingResult * _Nonnull match, NSUInteger idx, BOOL * _Nonnull stop) {
-                [attributtedString addAttribute:NSLinkAttributeName value:match.URL range:match.range];
+                [attributedString addAttribute:NSLinkAttributeName value:match.URL range:match.range];
             }];
             
-            [self.logTextView.textStorage appendAttributedString:attributtedString];
+            [self.logTextView.textStorage appendAttributedString:attributedString];
             [self.logTextView.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
             [self.logTextView scrollRangeToVisible:NSMakeRange(self.logTextView.text.length, 0)];
         });
@@ -163,12 +163,29 @@
     if ( [response.MIMEType hasPrefix:@"image/"] ) {
         UIImage *image = [[UIImage alloc] initWithData:data];
         [self postImageResponse:image];
+    }else if ( [response.MIMEType hasPrefix:@"text/html"] ) {
+        [self postHTMLResponse:data];
     } else {
         NSString *string = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes length:data.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
-        if ( [response.MIMEType hasPrefix:@"text/html"] ) {
-            
-        }
         [self postSuccessResponseString:string];
+    }
+}
+
+- (void)postHTMLResponse:(NSData *)html {
+    NSDictionary *options = @{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType, NSBackgroundColorAttributeName: UIColor.whiteColor};
+    NSError *error;
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithData:html options:options documentAttributes:nil error:&error];
+    if ( error != nil ) {
+        [self postErrorResponseString:error.localizedDescription];
+    } else {
+        CGFloat scaleFactor = attributedString.size.width / self.width;
+        UIGraphicsBeginImageContextWithOptions(attributedString.size, YES, scaleFactor);
+        [UIColor.whiteColor setFill];
+        CGContextFillRect(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, attributedString.size.width, attributedString.size.height));
+        [attributedString drawAtPoint:CGPointZero];
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        [self postImageResponse:image];
     }
 }
 
@@ -179,9 +196,9 @@
     CGFloat scaleFactor = oldWidth / self.width;
     textAttachment.image = [UIImage imageWithCGImage:textAttachment.image.CGImage scale:scaleFactor orientation:UIImageOrientationUp];
     
-    NSMutableAttributedString *attributtedString = [[NSMutableAttributedString alloc] initWithString:@"\n\n"];
-    [attributtedString insertAttributedString:[NSAttributedString attributedStringWithAttachment:textAttachment]  atIndex:1];
-    [NSNotificationCenter.defaultCenter postNotificationName:LogMessageNotificationName object:attributtedString];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"\n\n"];
+    [attributedString insertAttributedString:[NSAttributedString attributedStringWithAttachment:textAttachment]  atIndex:1];
+    [self postLogString:attributedString];
 }
 
 - (void)postSuccessResponseString:(NSString *)string {
@@ -193,8 +210,12 @@
 }
 
 - (void)postResponseString:(NSString *)string attributes:(NSDictionary *)attributes {
-    NSMutableAttributedString *attributtedString = [[NSMutableAttributedString alloc] initWithString:string attributes:attributes];
-    [NSNotificationCenter.defaultCenter postNotificationName:LogMessageNotificationName object:attributtedString];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:string attributes:attributes];
+    [self postLogString:attributedString];
+}
+
+- (void)postLogString:(NSAttributedString *)attributedString {
+    [NSNotificationCenter.defaultCenter postNotificationName:LogMessageNotificationName object:attributedString];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
