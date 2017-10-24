@@ -1,6 +1,6 @@
 # SecureHTTPServer
 
-This example illustrates how to setup an HTTPS server in an iOS app. The same of setting up a secure web server is also valid for a Mac app, be it Cocoa or `launchd`, Swift or Objective-C.
+This example illustrates how to setup an HTTPS server in an iOS app. The same of setting up a secure web server is also valid for an Apple TV app or Mac app, be it Cocoa or `launchd`, Swift or Objective-C.
 
 Criollo supports passing in credentials as a PKCS#12 identity and password, or an X509 certificate and private key pair, either PEM or DER encoded. The example shows both PKCS#12 identity and X509 certificate and key pair. 
 
