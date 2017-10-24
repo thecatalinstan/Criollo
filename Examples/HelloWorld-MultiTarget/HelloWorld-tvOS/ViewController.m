@@ -106,7 +106,6 @@
         tempDictionary[NSParagraphStyleAttributeName] = style;
         tempDictionary[NSFontAttributeName] = [UIFont fontWithName:@"Menlo" size:14.0f];
         
-        
         logCommonAtributes = tempDictionary.copy;
     });
     return logCommonAtributes;
@@ -128,7 +127,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSMutableDictionary* tempDictionary = [NSMutableDictionary dictionaryWithDictionary:[self logCommonAtributes]];
-        tempDictionary[NSForegroundColorAttributeName] = [UIColor redColor];
+        tempDictionary[NSForegroundColorAttributeName] = [UIColor orangeColor];
         logErrorAtributes = tempDictionary.copy;
     });
     return logErrorAtributes;
@@ -136,16 +135,55 @@
 
 - (void)openURL:(UIButton *)sender {
     NSURL *url = [NSURL URLWithString: sender.titleLabel.text];
+    [self postSuccessResponseString:[NSString stringWithFormat:@"Requesting: %@ ...", url]];
     
-    NSError *error;
-    NSString *response = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:&error];
-    NSDictionary *attributes = [self logResponseAtributes];
-    if ( response == nil ) {
-        response = error.localizedDescription;
-        attributes = [self logErrorAtributes];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:60.f];
+    [[NSURLSession.sharedSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+        NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
+        [self postSuccessResponseString:[NSString stringWithFormat:@"Response from: %@ %lu bytes %@", res.URL, data.length, res.MIMEType]];
+        
+        if ( error != nil ) {
+            [self postErrorResponseString:error.localizedDescription];
+            return;
+        }
+        
+        [self handleResponse:res withData:data];
+        
+    }] resume];
+}
+
+- (void)handleResponse:(NSHTTPURLResponse *)response withData:(NSData *)data {
+    BOOL isErrorResponse = response.statusCode < 200 || response.statusCode > 399;
+    if ( isErrorResponse ) {
+        [self postErrorResponseString:[[NSString alloc] initWithBytesNoCopy:(void *)data.bytes length:data.length encoding:NSUTF8StringEncoding freeWhenDone:NO]];
+        return;
     }
     
-    NSMutableAttributedString *attributtedString = [[NSMutableAttributedString alloc] initWithString:response attributes:attributes];
+    if ( [response.MIMEType hasPrefix:@"image/"] ) {
+        
+    } else {
+        
+        NSString *string = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes length:data.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
+        if ( [response.MIMEType hasPrefix:@"text/html"] ) {
+            
+        }
+        [self postSuccessResponseString:string];
+    }
+}
+
+
+
+- (void)postSuccessResponseString:(NSString *)string {
+    [self postResponseString:string attributes:[self logResponseAtributes]];
+}
+
+- (void)postErrorResponseString:(NSString *)string {
+    [self postResponseString:string attributes:[self logErrorAtributes]];
+}
+
+- (void)postResponseString:(NSString *)string attributes:(NSDictionary *)attributes {
+    NSMutableAttributedString *attributtedString = [[NSMutableAttributedString alloc] initWithString:string attributes:attributes];
     [NSNotificationCenter.defaultCenter postNotificationName:LogMessageNotificationName object:attributtedString];
 }
 
@@ -160,8 +198,6 @@
         if ( self.appDelegate.isConnected ) {
             NSArray<NSString *> *paths = [[self.appDelegate.server valueForKeyPath:@"routes.@distinctUnionOfObjects.path"] sortedArrayUsingSelector:@selector(compare:)];
             [paths enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if ( [obj hasSuffix:@"screenshot"] )
-                    return;
                 UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
                 [button setTitle:[self.appDelegate.baseURL URLByAppendingPathComponent:[obj substringFromIndex:1]].absoluteString forState:UIControlStateNormal];
                 [button addTarget:self action:@selector(openURL:) forControlEvents:UIControlEventAllEvents];
