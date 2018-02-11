@@ -10,12 +10,12 @@
 	<string>io.criollo.HelloWorld</string>
 	<key>ProgramArguments</key>
 	<array>
-		<string>&quot;/WebApplications/HelloWorld.app/Contents/MacOS/HelloWorld&quot;</string>
+		<string>/WebApplications/HelloWorld.app/Contents/MacOS/HelloWorld</string>
 	</array>
 	<key>RunAtLoad</key>
 	<true/>
 	<key>ServiceDescription</key>
-	<string>The criollo.io website https://criollo.io/</string>
+	<string>Example daemon app</string>
 	<key>StandardErrorPath</key>
 	<string>/var/log/io.criollo.HelloWorld.log</string>
 	<key>StandardOutPath</key>
