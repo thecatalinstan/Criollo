@@ -15,7 +15,7 @@ It's as easy as this:
 ```swift
 let server = CRHTTPServer()
 server.get("/") { (req, res, next) in
-  res("Hello world!")
+  res.send("Hello world!")
 }
 server.startListening()
 ```
