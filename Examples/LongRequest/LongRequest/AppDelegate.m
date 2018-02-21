@@ -19,7 +19,7 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     self.server = [[CRHTTPServer alloc] initWithDelegate:self];
     
-    // http://localhost:10781/
+    // https://localhost:10781/
     // Shows the request enviroment variables
     [self.server get:@"/" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         
@@ -30,7 +30,7 @@
         [response send:string];
     }];
     
-    // http://localhost:10781/timeout
+    // https://localhost:10781/timeout
     // Simulates a long lasting request (in truth it just sleeps for 20 seconds
     [self.server get:@"/timeout" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         NSDate *startDate = [NSDate date];
@@ -46,12 +46,12 @@
         
     }];
     
-    // http://localhost:10781/request
+    // https://localhost:10781/request
     // Performs a request to "/timeout" and returns the response of that request
     // to the client, or an error if one occured
     [self.server get:@"/request" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
        
-        NSURL* remoteURL = [NSURL URLWithString:@"http://localhost:10781/timeout"];
+        NSURL* remoteURL = [NSURL URLWithString:@"https://localhost:10781/timeout"];
         NSMutableURLRequest *remoteRequest = [[NSMutableURLRequest alloc] initWithURL:remoteURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:60.0];
         [remoteRequest setHTTPMethod:@"GET"];
         NSURLSession* session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
@@ -68,6 +68,10 @@
             }
         }] resume];
     }];
+    
+    self.server.isSecure = YES;
+    self.server.certificatePath = [NSBundle.mainBundle pathForResource:@"SecureHTTPServer.bundle" ofType:@"pem"];
+    self.server.certificateKeyPath = [NSBundle.mainBundle pathForResource:@"SecureHTTPServer.key" ofType:@"pem"];
     
     [self.server startListening];
 }

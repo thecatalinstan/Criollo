@@ -39,16 +39,16 @@ NS_ASSUME_NONNULL_END
     if ( !isFastCGI ) {
 
 //        // Setup HTTPS
-//        CRHTTPServer *server = (CRHTTPServer *)self.server;
-//        server.isSecure = YES;
+        CRHTTPServer *server = (CRHTTPServer *)self.server;
+        server.isSecure = YES;
         
 //        // Credentials: PKCS#12 Identity and password
 //        server.identityPath = [NSBundle.mainBundle pathForResource:@"criollo_local" ofType:@"p12"];
 //        server.password = @"123456";
         
 //        // Credentials: PEM-encoded certificate and public key
-//        server.certificatePath = [NSBundle.mainBundle pathForResource:@"cert" ofType:@"pem"];
-//        server.certificateKeyPath = [NSBundle.mainBundle pathForResource:@"key" ofType:@"pem"];
+        server.certificatePath = [NSBundle.mainBundle pathForResource:@"cert" ofType:@"pem"];
+        server.certificateKeyPath = [NSBundle.mainBundle pathForResource:@"key" ofType:@"pem"];
         
 //        // Credentials: DER-encoded certificate and public key
 //        server.certificatePath = [NSBundle.mainBundle pathForResource:@"cert" ofType:@"der"];
