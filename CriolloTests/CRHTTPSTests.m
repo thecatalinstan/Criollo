@@ -35,11 +35,11 @@ typedef CFTypeRef SecKeychainRef;
     return [bundle.resourcePath stringByAppendingPathComponent:samplefile];
 }
 
+#if SEC_OS_OSX_INCLUDES
 - (void)testGetKeychain  {
     NSError *error = nil;
     SecKeychainRef keychain = [CRHTTPS getKeychainWithError:&error];
     XCTAssertNil(error, @"No errors should be returned.");
-#if SEC_OS_OSX_INCLUDES
     XCTAssertNotNil((__bridge id)keychain, @"Custom keychains should NOT return nil on OSX.");
     
     OSStatus status = SecKeychainDelete(keychain);
@@ -47,10 +47,8 @@ typedef CFTypeRef SecKeychainRef;
     XCTAssertEqual(errSecSuccess, status, @"Deleting custom keychains should succeed.");
     
     CFRelease(keychain);
-#else
-    XCTAssertNil((__bridge id)keychain, @"Custom keychains should return nil on non OSX platforms.");
-#endif
 }
+#endif
 
 - (void)testParseIdentityFile {
     NSString *password = @"password";
