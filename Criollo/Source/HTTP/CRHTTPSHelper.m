@@ -1,12 +1,12 @@
 //
-//  CRHTTPS.m
+//  CRHTTPSHelper.m
 //  Criollo
 //
 //  Created by Cătălin Stan on 10/09/2017.
 //  Copyright © 2017 Cătălin Stan. All rights reserved.
 //
 
-#import "CRHTTPS.h"
+#import "CRHTTPSHelper.h"
 
 NSString * const CRHTTPSErrorDomain                      = @"CRHTTPSErrorDomain";
 
@@ -34,15 +34,27 @@ NSString * const CRHTTPSCertificateKeyPathKey            = @"CRHTTPSCertificateK
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CRHTTPS ()
+@interface CRHTTPSHelper () {
+    
+#if SEC_OS_OSX_INCLUDES
+    NSString *_keychainPassword;
+    NSString *_keychainPath;
+#endif
+    
+}
 
 #if SEC_OS_OSX_INCLUDES
 
-+ (SecKeychainRef _Nullable)getKeychainWithError:(NSError * _Nullable __autoreleasing * _Nullable)error;
+@property (nonatomic) SecKeychainRef keychain;
+
+@property (nonatomic, strong, readonly) NSString *keychainPassword;
+@property (nonatomic, strong, readonly) NSString *keychainPath;
+
+- (SecKeychainRef _Nullable)setupKeychain;
 
 #else
 
-+ (NSString * _Nullable)creaIdentrityFileWithPassword:(NSString *)password certificate:(NSData *)certificate certificateKey:(NSData *)certificateKey withError:(NSError *__autoreleasing  _Nullable * _Nullable)error;
+- (NSString * _Nullable)creaIdentrityFileWithPassword:(NSString *)password certificate:(NSData *)certificate certificateKey:(NSData *)certificateKey withError:(NSError *__autoreleasing  _Nullable * _Nullable)error;
 
 #endif
 
@@ -50,9 +62,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 NS_ASSUME_NONNULL_END
 
-@implementation CRHTTPS
+@implementation CRHTTPSHelper
 
-+ (NSArray *)parseIdentrityFile:(NSString *)identityFilePath password:(nonnull NSString *)password withError:(NSError *__autoreleasing  _Nullable * _Nullable)error {
+- (NSArray *)parseIdentrityFile:(NSString *)identityFilePath password:(nonnull NSString *)password withError:(NSError *__autoreleasing  _Nullable * _Nullable)error {
     NSError * identityReadError;
     NSData * identityContents = [NSData dataWithContentsOfFile:identityFilePath options:NSDataReadingUncached error:&identityReadError];
     if ( identityContents.length == 0 ) {
@@ -65,12 +77,7 @@ NS_ASSUME_NONNULL_END
     identityImportOptions[(id)kSecImportExportPassphrase] = password ? : @"";
     
 #if SEC_OS_OSX_INCLUDES
-    // Create a temp keychain and import the private key into it
-    SecKeychainRef keychain = [CRHTTPS getKeychainWithError:error];
-    if ( *error != nil ) {
-        return nil;
-    }
-    identityImportOptions[(id)kSecImportExportKeychain] = (__bridge id)keychain;
+    identityImportOptions[(id)kSecImportExportKeychain] = (__bridge id)self.keychain;
 #endif
     
     OSStatus identityImportStatus = SecPKCS12Import((__bridge CFDataRef)identityContents, (__bridge CFDictionaryRef)identityImportOptions, &identityImportItems);
@@ -90,12 +97,6 @@ NS_ASSUME_NONNULL_END
             *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:errorCode userInfo:@{NSLocalizedDescriptionKey: errorMessage, CRHTTPSIdentityPathKey: identityFilePath ? : @"(null)"}];
         }
         
-#if SEC_OS_OSX_INCLUDES
-        if ( keychain != NULL ) {
-            SecKeychainDelete(keychain);
-            CFRelease(keychain);
-        }
-#endif
         return nil;
     }
 
@@ -110,7 +111,7 @@ NS_ASSUME_NONNULL_END
     return result;
 }
 
-+ (NSArray *)parseCertificateFile:(NSString *)certificatePath certificateKeyFile:(NSString *)certificateKeyPath withError:(NSError *__autoreleasing  _Nullable * _Nullable)error {
+- (NSArray *)parseCertificateFile:(NSString *)certificatePath certificateKeyFile:(NSString *)certificateKeyPath withError:(NSError *__autoreleasing  _Nullable * _Nullable)error {
     
     NSError * certReadError;
     NSData * certContents = [NSData dataWithContentsOfFile:certificatePath options:NSDataReadingUncached error:&certReadError];
@@ -131,6 +132,7 @@ NS_ASSUME_NONNULL_END
     }
     
 #if !SEC_OS_OSX_INCLUDES
+    
     NSString *password = NSUUID.UUID.UUIDString;
     
     NSString *identityPath = [self creaIdentrityFileWithPassword:password certificate:certContents certificateKey:keyContents withError:error];
@@ -140,7 +142,9 @@ NS_ASSUME_NONNULL_END
     
     NSArray *result = [self parseIdentrityFile:identityPath password:password withError:error];
     [NSFileManager.defaultManager removeItemAtPath:identityPath error:nil];
+    
     return result;
+    
 #else
     
     CFArrayRef certificateImportItems = NULL;
@@ -162,23 +166,13 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
     
-    // Create a temp keychain and import the private key into it
-    SecKeychainRef keychain = [CRHTTPS getKeychainWithError:error];
-    if ( *error != nil ) {
-        return nil;
-    }
-    
     // Import the key into the keychain
     CFArrayRef keyImportItems = NULL;
-    OSStatus keyImportStatus = SecItemImport((__bridge CFDataRef)keyContents , NULL, NULL, NULL, 0, NULL, keychain, &keyImportItems);
+    OSStatus keyImportStatus = SecItemImport((__bridge CFDataRef)keyContents , NULL, NULL, NULL, 0, NULL, self.keychain, &keyImportItems);
     if ( keyImportStatus != errSecSuccess ) {
         if ( error != nil ) {
             NSString *secErrorMessage = (NSString *)CFBridgingRelease(SecCopyErrorMessageString(keyImportStatus, NULL));
             *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidPrivateKeyError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to parse private key file. %@",), secErrorMessage], CRHTTPSCertificatePathKey: certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
-        }
-        if ( keychain != NULL ) {
-            SecKeychainDelete(keychain);
-            CFRelease(keychain);
         }
         return nil;
     }
@@ -189,23 +183,16 @@ NS_ASSUME_NONNULL_END
         if ( error != nil ) {
             *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidPrivateKeyError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Expected a private key, but got %@ instead.",), (__bridge id)key], CRHTTPSCertificatePathKey: certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
         }
-        if ( keychain != NULL ) {
-            SecKeychainDelete(keychain);
-            CFRelease(keychain);
-        }
         return nil;
     }
     
     // Create an identity from the keychain and the certificate
     SecIdentityRef identity;
-    OSStatus identityCreationStatus = SecIdentityCreateWithCertificate(keychain, certificate, &identity);
+    OSStatus identityCreationStatus = SecIdentityCreateWithCertificate(self.keychain, certificate, &identity);
     if ( identityCreationStatus != errSecSuccess ) {
         if ( error != nil ) {
             NSString *secErrorMessage = (NSString *)CFBridgingRelease(SecCopyErrorMessageString(identityCreationStatus, NULL));
             *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSCreateIdentityError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to get a suitable identity. %@",), secErrorMessage], CRHTTPSCertificatePathKey: certificatePath ? : @"(null)", CRHTTPSCertificateKeyPathKey: certificateKeyPath ? : @"(null)"}];
-        }
-        if ( keychain != NULL ) {
-            SecKeychainDelete(keychain);
         }
         return nil;
     }
@@ -215,39 +202,62 @@ NS_ASSUME_NONNULL_END
     [result addObjectsFromArray:(__bridge NSArray * _Nonnull)(certificateImportItems)];
     result[0] = (__bridge id _Nonnull)(identity);
     
-    // Cleanup
-    if ( keychain != NULL ) {
-        SecKeychainDelete(keychain);
-        CFRelease(keychain);
-    }
-    
     return result;
 #endif
 }
 
 #if SEC_OS_OSX_INCLUDES
-+ (SecKeychainRef)getKeychainWithError:(NSError * _Nullable __autoreleasing * _Nullable)error {
-    
-    NSString *keychainPath = [NSTemporaryDirectory() stringByAppendingPathComponent:NSUUID.UUID.UUIDString];
-    NSString *keychainPassword = NSUUID.UUID.UUIDString;
 
+- (instancetype)init {
+    self = [super init];
+    if ( self != nil ) {
+        // Create a temp keychain and import the private key into it
+        self.keychain = [self setupKeychain];
+    }
+    return self;
+}
+
+- (void)dealloc {
+    if ( _keychain !=  NULL ) {
+        SecKeychainDelete(_keychain);
+        CFRelease(_keychain);
+        _keychain = NULL;
+    }
+}
+
+- (NSString *)keychainPath {
+    if ( _keychainPath.length == 0 ) {
+        _keychainPath = [NSTemporaryDirectory() stringByAppendingPathComponent:NSUUID.UUID.UUIDString];
+    }
+    return _keychainPath;
+}
+
+- (NSString *)keychainPassword {
+    if ( _keychainPassword.length == 0 ) {
+        _keychainPassword = NSUUID.UUID.UUIDString;
+    }
+    return _keychainPassword;
+}
+
+- (SecKeychainRef)setupKeychain {
+
+    NSString *keychainPath = self.keychainPath;
+    NSString *keychainPassword = self.keychainPassword;
+
+//    NSError error;
     SecAccessRef access = NULL;
     OSStatus accessCreationStatus = SecAccessCreate((CFStringRef)keychainPath.lastPathComponent, NULL, &access);
     if ( accessCreationStatus != errSecSuccess ) {
-        if ( error != nil ) {
-            NSString *secErrorString = (NSString *)CFBridgingRelease(SecCopyErrorMessageString(accessCreationStatus, NULL));
-            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInternalError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to create keychain. %@",), secErrorString]}];
-        }
+//        NSString *secErrorString = (NSString *)CFBridgingRelease(SecCopyErrorMessageString(accessCreationStatus, NULL));
+//        error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInternalError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to create keychain. %@",), secErrorString]}];
         return NULL;
     }
   
     SecKeychainRef keychain = NULL;
     OSStatus keychainCreationStatus = SecKeychainCreate(keychainPath.UTF8String, (UInt32)keychainPassword.length, keychainPassword.UTF8String, NO, access, &keychain);
     if ( keychainCreationStatus != errSecSuccess ) {
-        if ( error != nil ) {
-            NSString *secErrorString = (NSString *)CFBridgingRelease(SecCopyErrorMessageString(keychainCreationStatus, NULL));
-            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInternalError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to create keychain. %@",), secErrorString]}];
-        }
+//        NSString *secErrorString = (NSString *)CFBridgingRelease(SecCopyErrorMessageString(keychainCreationStatus, NULL));
+//        error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInternalError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to create keychain. %@",), secErrorString]}];
         return NULL;
     }
     
@@ -256,7 +266,7 @@ NS_ASSUME_NONNULL_END
 
 #else
 
-+ (NSString *)creaIdentrityFileWithPassword:(NSString *)password certificate:(NSData *)certificate certificateKey:(NSData *)certificateKey withError:(NSError * _Nullable __autoreleasing * _Nullable)error {
+- (NSString *)creaIdentrityFileWithPassword:(NSString *)password certificate:(NSData *)certificate certificateKey:(NSData *)certificateKey withError:(NSError * _Nullable __autoreleasing * _Nullable)error {
     
     // Attempt to parse cert as DER encoded
     const unsigned char *cert_data = (unsigned char *)certificate.bytes;
@@ -331,6 +341,7 @@ NS_ASSUME_NONNULL_END
     
     return identityPath;
 }
+
 #endif
 
 @end

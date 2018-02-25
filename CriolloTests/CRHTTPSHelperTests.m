@@ -1,5 +1,5 @@
 //
-//  CRHTTPSTests.m
+//  CRHTTPSHelperTests.m
 //  Criollo
 //
 //  Created by Cătălin Stan on 11/09/2017.
@@ -7,28 +7,32 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "CRHTTPS.h"
+#import "CRHTTPSHelper.h"
 
-#if !SEC_OS_OSX_INCLUDES
-typedef CFTypeRef SecKeychainRef;
-#endif
+#if SEC_OS_OSX_INCLUDES
 
-#define InvalidPath     @"/path/that/does/not/exist"
-#define JunkPath        [self pathForSampleFile:@"CRHTTPSTests.junk"]
+@interface CRHTTPSHelper ()
 
-@interface CRHTTPS()
-
-+ (SecKeychainRef _Nullable)getKeychainWithError:(NSError * _Nullable __autoreleasing * _Nullable)error;
+@property (nonatomic) SecKeychainRef keychain;
 
 @end
 
-@interface CRHTTPSTests : XCTestCase
+#else
+
+typedef CFTypeRef SecKeychainRef;
+
+#endif
+
+#define InvalidPath     @"/path/that/does/not/exist"
+#define JunkPath        [self pathForSampleFile:@"CRHTTPSHelperTests.junk"]
+
+@interface CRHTTPSHelperTests : XCTestCase
 
 - (NSString *)pathForSampleFile:(NSString *)samplefile;
 
 @end
 
-@implementation CRHTTPSTests
+@implementation CRHTTPSHelperTests
 
 - (NSString *)pathForSampleFile:(NSString *)samplefile {
     NSBundle *bundle = [NSBundle bundleForClass:self.class];
@@ -36,17 +40,10 @@ typedef CFTypeRef SecKeychainRef;
 }
 
 #if SEC_OS_OSX_INCLUDES
-- (void)testGetKeychain  {
-    NSError *error = nil;
-    SecKeychainRef keychain = [CRHTTPS getKeychainWithError:&error];
-    XCTAssertNil(error, @"No errors should be returned.");
-    XCTAssertNotNil((__bridge id)keychain, @"Custom keychains should NOT return nil on OSX.");
-    
-    OSStatus status = SecKeychainDelete(keychain);
-    XCTAssertNotEqual(errSecInvalidKeychain, status, @"Deleting custom keychains should not attept to delete the user default keychain.");
-    XCTAssertEqual(errSecSuccess, status, @"Deleting custom keychains should succeed.");
-    
-    CFRelease(keychain);
+- (void)testSetupKeychain  {
+    CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+    SecKeychainRef keychain = httpsHelper.keychain;
+    XCTAssertNotNil((__bridge id)keychain, @"Custom keychains should NOT return nil.");
 }
 #endif
 
@@ -55,9 +52,11 @@ typedef CFTypeRef SecKeychainRef;
     
     // Test invalid file path
     {
+        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+        
         NSString *path = InvalidPath;
         NSError *error = nil;
-        NSArray *items = [CRHTTPS parseIdentrityFile:path password:password withError:&error];
+        NSArray *items = [httpsHelper parseIdentrityFile:path password:password withError:&error];
 
         XCTAssertNotNil(error, @"Parsing a non-existent identity file should result in an error.");
         XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
@@ -67,9 +66,11 @@ typedef CFTypeRef SecKeychainRef;
 
     // Test junk data
     {
+        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+
         NSString *path = JunkPath;
         NSError *error = nil;
-        NSArray *items = [CRHTTPS parseIdentrityFile:path password:password withError:&error];
+        NSArray *items = [httpsHelper parseIdentrityFile:path password:password withError:&error];
 
         XCTAssertNotNil(error, @"Parsing an invalid identity file should result in an error.");
         XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
@@ -79,9 +80,11 @@ typedef CFTypeRef SecKeychainRef;
     
     // Test valid identity file but incorrect password
     {
-        NSString *path = [self pathForSampleFile:@"CRHTTPSTests.p12"];
+        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+
+        NSString *path = [self pathForSampleFile:@"CRHTTPSHelperTests.p12"];
         NSError *error = nil;
-        NSArray *items = [CRHTTPS parseIdentrityFile:path password:@"wrongpassword" withError:&error];
+        NSArray *items = [httpsHelper parseIdentrityFile:path password:@"wrongpassword" withError:&error];
         
         XCTAssertNotNil(error, @"Parsing a valid identity file with an incorrect password should result in an error.");
         XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
@@ -91,9 +94,11 @@ typedef CFTypeRef SecKeychainRef;
     
     // Test valid identity file and correct password
     {
-        NSString *path = [self pathForSampleFile:@"CRHTTPSTests.p12"];
+        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+
+        NSString *path = [self pathForSampleFile:@"CRHTTPSHelperTests.p12"];
         NSError *error = nil;
-        NSArray *items = [CRHTTPS parseIdentrityFile:path password:password withError:&error];
+        NSArray *items = [httpsHelper parseIdentrityFile:path password:password withError:&error];
         
         NSUInteger expectedItemsCount = 3; // [identity, cert (intermediate), cert (root)]
 
@@ -109,18 +114,20 @@ typedef CFTypeRef SecKeychainRef;
 }
 
 - (void)testParseCertificateAndPrivateKeyFiles {
-    NSString *PEMCertificatePath = [self pathForSampleFile:@"CRHTTPSTests.pem"];
-    NSString *DERCertificatePath = [self pathForSampleFile:@"CRHTTPSTests.der"];
-    NSString *PEMKeyPath = [self pathForSampleFile:@"CRHTTPSTests.key.pem"];
-    NSString *DERKeyPath = [self pathForSampleFile:@"CRHTTPSTests.key.der"];
-    NSString *PEMBundlePath = [self pathForSampleFile:@"CRHTTPSTests.bundle.pem"];
+    NSString *PEMCertificatePath = [self pathForSampleFile:@"CRHTTPSHelperTests.pem"];
+    NSString *DERCertificatePath = [self pathForSampleFile:@"CRHTTPSHelperTests.der"];
+    NSString *PEMKeyPath = [self pathForSampleFile:@"CRHTTPSHelperTests.key.pem"];
+    NSString *DERKeyPath = [self pathForSampleFile:@"CRHTTPSHelperTests.key.der"];
+    NSString *PEMBundlePath = [self pathForSampleFile:@"CRHTTPSHelperTests.bundle.pem"];
     
     // Test invalid certificate path
     {
+        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+
         NSString *certificate = InvalidPath;
         NSString *key = InvalidPath;
         NSError *error = nil;
-        NSArray *items = [CRHTTPS parseCertificateFile:certificate certificateKeyFile:key withError:&error];
+        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
 
         XCTAssertNotNil(error, @"Parsing a non-existent certificate file should result in an error.");
         XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
@@ -130,10 +137,12 @@ typedef CFTypeRef SecKeychainRef;
 
     // Test valid certificate path but invalid key path
     {
+        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+
         NSString *certificate = JunkPath;
         NSString *key = InvalidPath;
         NSError *error = nil;
-        NSArray *items = [CRHTTPS parseCertificateFile:certificate certificateKeyFile:key withError:&error];
+        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
 
         XCTAssertNotNil(error, @"Parsing a non-existent private key file should result in an error.");
         XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
@@ -143,10 +152,12 @@ typedef CFTypeRef SecKeychainRef;
 
     // Test junk certificate file
     {
+        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+
         NSString *certificate = JunkPath;
         NSString *key = JunkPath;
         NSError *error = nil;
-        NSArray *items = [CRHTTPS parseCertificateFile:certificate certificateKeyFile:key withError:&error];
+        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
 
         XCTAssertNotNil(error, @"Parsing an invalid certificate file should result in an error.");
         XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
@@ -156,10 +167,12 @@ typedef CFTypeRef SecKeychainRef;
 
     // Test valid certificate path but junk key
     {
+        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+
         NSString *certificate = PEMCertificatePath;
         NSString *key = JunkPath;
         NSError *error = nil;
-        NSArray *items = [CRHTTPS parseCertificateFile:certificate certificateKeyFile:key withError:&error];
+        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
 
         XCTAssertNotNil(error, @"Parsing an invalid key file should result in an error.");
         XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
@@ -169,10 +182,12 @@ typedef CFTypeRef SecKeychainRef;
 
     // Test PEM-encoded certificate and key
     {
+        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+
         NSString *certificate = PEMCertificatePath;
         NSString *key = PEMKeyPath;
         NSError *error = nil;
-        NSArray *items = [CRHTTPS parseCertificateFile:certificate certificateKeyFile:key withError:&error];
+        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
         
         NSUInteger expectedItemsCount = 1; // [identity]
         
@@ -186,10 +201,12 @@ typedef CFTypeRef SecKeychainRef;
     
     // Test DER-encoded certificate and key
     {
+        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+
         NSString *certificate = DERCertificatePath;
         NSString *key = DERKeyPath;
         NSError *error = nil;
-        NSArray *items = [CRHTTPS parseCertificateFile:certificate certificateKeyFile:key withError:&error];
+        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
         
         NSUInteger expectedItemsCount = 1; // [identity]
         
@@ -203,10 +220,12 @@ typedef CFTypeRef SecKeychainRef;
     
     // Test PEM-encoded certificate and DER-encoded key
     {
+        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+
         NSString *certificate = PEMCertificatePath;
         NSString *key = DERKeyPath;
         NSError *error = nil;
-        NSArray *items = [CRHTTPS parseCertificateFile:certificate certificateKeyFile:key withError:&error];
+        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
         
         NSUInteger expectedItemsCount = 1; // [identity]
         
@@ -220,10 +239,12 @@ typedef CFTypeRef SecKeychainRef;
     
     // Test DER-encoded certificate and PEM-encoded key
     {
+        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+
         NSString *certificate = DERCertificatePath;
         NSString *key = PEMKeyPath;
         NSError *error = nil;
-        NSArray *items = [CRHTTPS parseCertificateFile:certificate certificateKeyFile:key withError:&error];
+        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
         
         NSUInteger expectedItemsCount = 1; // [identity]
         
@@ -237,10 +258,12 @@ typedef CFTypeRef SecKeychainRef;
 
     // Test PEM-encoded chained certificate bundle and key
     {
+        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+
         NSString *certificate = PEMBundlePath;
         NSString *key = PEMKeyPath;
         NSError *error = nil;
-        NSArray *items = [CRHTTPS parseCertificateFile:certificate certificateKeyFile:key withError:&error];
+        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
 
         NSUInteger expectedItemsCount;
 #if SEC_OS_OSX_INCLUDES
@@ -263,10 +286,12 @@ typedef CFTypeRef SecKeychainRef;
     
     // Test PEM-encoded chained certificate bundle and DER-encoded key
     {
+        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+
         NSString *certificate = PEMBundlePath;
         NSString *key = DERKeyPath;
         NSError *error = nil;
-        NSArray *items = [CRHTTPS parseCertificateFile:certificate certificateKeyFile:key withError:&error];
+        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
         
         NSUInteger expectedItemsCount;
 #if SEC_OS_OSX_INCLUDES

@@ -8,7 +8,7 @@
 
 #import "CRServer_Internal.h"
 #import "CRHTTPServer.h"
-#import "CRHTTPS.h"
+#import "CRHTTPSHelper.h"
 #import "CRHTTPConnection.h"
 #import "CRConnection_Internal.h"
 #import "CRHTTPServerConfiguration.h"
@@ -19,10 +19,9 @@
 
 @interface CRHTTPServer () <GCDAsyncSocketDelegate>
 
+@property (nonatomic, strong, nullable) CRHTTPSHelper *httpsHelper;
 @property (nonatomic, strong, nullable) NSArray *certificates;
 @property (nonatomic, strong, nullable) NSDictionary <NSString *, NSObject *> *tlsSettings;
-
-- (nullable NSArray *)fetchIdentityWithError:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
 @end
 
@@ -47,8 +46,23 @@
 
 - (BOOL)startListening:(NSError *__autoreleasing  _Nullable *)error portNumber:(NSUInteger)portNumber interface:(NSString *)interface {
     if ( self.isSecure ) {
-        NSError * certificateParsingError;
-        self.certificates = [self fetchIdentityWithError:&certificateParsingError];
+        
+        self.certificates = nil;
+        self.httpsHelper = [CRHTTPSHelper new];
+        
+        if ( self.identityPath.length > 0 ) {
+            self.certificates = [self.httpsHelper parseIdentrityFile:self.identityPath password:self.password withError:error];
+        } else if ( self.certificatePath.length > 0 && self.certificateKeyPath.length > 0 ) {
+            self.certificates = [self.httpsHelper parseCertificateFile:self.certificatePath certificateKeyFile:self.certificateKeyPath withError:error];
+        } else if ( error != NULL ) {
+            NSDictionary *info = @{
+                                   NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse credential settings.",),
+                                   CRHTTPSIdentityPathKey: self.identityPath ? : @"(null)",
+                                   CRHTTPSCertificatePathKey: self.certificatePath ? : @"(null)",
+                                   CRHTTPSCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"
+                                   };
+            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSMissingCredentialsError userInfo:info];
+        }
       
         // Clear sensitive data from memory
         self.identityPath = nil;
@@ -57,7 +71,6 @@
         self.certificateKeyPath = nil;
         
         if ( self.certificates == nil ) {
-            *error = certificateParsingError;
             self.isSecure = NO;
             return NO;
         }
@@ -70,25 +83,6 @@
     }
     
     return [super startListening:error portNumber:portNumber interface:interface];
-}
-
-- (NSArray *)fetchIdentityWithError:(NSError *__autoreleasing  _Nullable *)error {    
-    if ( self.identityPath.length > 0 ) {
-        return [CRHTTPS parseIdentrityFile:self.identityPath password:self.password withError:error];
-    } else if ( self.certificatePath.length > 0 && self.certificateKeyPath.length > 0 ) {
-        return [CRHTTPS parseCertificateFile:self.certificatePath certificateKeyFile:self.certificateKeyPath withError:error];
-    } else {
-        if ( error != nil ) {
-            NSDictionary *info = @{
-                NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse credential settings.",),
-                CRHTTPSIdentityPathKey: self.identityPath ? : @"(null)",
-                CRHTTPSCertificatePathKey: self.certificatePath ? : @"(null)",
-                CRHTTPSCertificateKeyPathKey: self.certificateKeyPath ? : @"(null)"
-            };
-            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSMissingCredentialsError userInfo:info];
-        }
-        return nil;
-    }
 }
 
 

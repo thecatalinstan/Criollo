@@ -12,25 +12,25 @@
 		4A02E33A1F92A8A60055A4F8 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A02E2EA1F92A7F30055A4F8 /* GCDAsyncSocket.h */; };
 		4A02E33B1F92A8A60055A4F8 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A02E2EA1F92A7F30055A4F8 /* GCDAsyncSocket.h */; };
 		4A22CEB11F99514F00BA1DD9 /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A22CEB01F99514F00BA1DD9 /* openssl.framework */; };
-		4A2F43CC1F659FE400A466D5 /* CRHTTPS.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A2F43CA1F659FE400A466D5 /* CRHTTPS.h */; };
-		4A2F43CD1F659FE400A466D5 /* CRHTTPS.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A2F43CA1F659FE400A466D5 /* CRHTTPS.h */; };
-		4A2F43CE1F659FE400A466D5 /* CRHTTPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F43CB1F659FE400A466D5 /* CRHTTPS.m */; };
-		4A2F43D71F65AE9C00A466D5 /* CRHTTPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F43CB1F659FE400A466D5 /* CRHTTPS.m */; };
-		4A63BB021F96BE850062D930 /* CRHTTPSTests.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF41F96BD5C0062D930 /* CRHTTPSTests.pem */; };
-		4A63BB031F96BE850062D930 /* CRHTTPSTests.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEF1F96BD5C0062D930 /* CRHTTPSTests.der */; };
-		4A63BB041F96BE850062D930 /* CRHTTPSTests.key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF61F96BD5C0062D930 /* CRHTTPSTests.key.pem */; };
-		4A63BB051F96BE850062D930 /* CRHTTPSTests.key.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF11F96BD5C0062D930 /* CRHTTPSTests.key.der */; };
-		4A63BB061F96BE850062D930 /* CRHTTPSTests.bundle.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEC1F96BD5C0062D930 /* CRHTTPSTests.bundle.pem */; };
-		4A63BB081F96BE850062D930 /* CRHTTPSTests.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF21F96BD5C0062D930 /* CRHTTPSTests.p12 */; };
-		4A63BB091F96BE850062D930 /* CRHTTPSTests.junk in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF01F96BD5C0062D930 /* CRHTTPSTests.junk */; };
+		4A2F43CC1F659FE400A466D5 /* CRHTTPSHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A2F43CA1F659FE400A466D5 /* CRHTTPSHelper.h */; };
+		4A2F43CD1F659FE400A466D5 /* CRHTTPSHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A2F43CA1F659FE400A466D5 /* CRHTTPSHelper.h */; };
+		4A2F43CE1F659FE400A466D5 /* CRHTTPSHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F43CB1F659FE400A466D5 /* CRHTTPSHelper.m */; };
+		4A2F43D71F65AE9C00A466D5 /* CRHTTPSHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F43CB1F659FE400A466D5 /* CRHTTPSHelper.m */; };
+		4A63BB021F96BE850062D930 /* CRHTTPSHelperTests.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF41F96BD5C0062D930 /* CRHTTPSHelperTests.pem */; };
+		4A63BB031F96BE850062D930 /* CRHTTPSHelperTests.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEF1F96BD5C0062D930 /* CRHTTPSHelperTests.der */; };
+		4A63BB041F96BE850062D930 /* CRHTTPSHelperTests.key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF61F96BD5C0062D930 /* CRHTTPSHelperTests.key.pem */; };
+		4A63BB051F96BE850062D930 /* CRHTTPSHelperTests.key.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF11F96BD5C0062D930 /* CRHTTPSHelperTests.key.der */; };
+		4A63BB061F96BE850062D930 /* CRHTTPSHelperTests.bundle.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEC1F96BD5C0062D930 /* CRHTTPSHelperTests.bundle.pem */; };
+		4A63BB081F96BE850062D930 /* CRHTTPSHelperTests.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF21F96BD5C0062D930 /* CRHTTPSHelperTests.p12 */; };
+		4A63BB091F96BE850062D930 /* CRHTTPSHelperTests.junk in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF01F96BD5C0062D930 /* CRHTTPSHelperTests.junk */; };
 		4A63BB0A1F96BE850062D930 /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF51F96BD5C0062D930 /* Readme.md */; };
-		4A63BB0B1F96BE8A0062D930 /* CRHTTPSTests.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF41F96BD5C0062D930 /* CRHTTPSTests.pem */; };
-		4A63BB0C1F96BE8A0062D930 /* CRHTTPSTests.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEF1F96BD5C0062D930 /* CRHTTPSTests.der */; };
-		4A63BB0D1F96BE8A0062D930 /* CRHTTPSTests.key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF61F96BD5C0062D930 /* CRHTTPSTests.key.pem */; };
-		4A63BB0E1F96BE8A0062D930 /* CRHTTPSTests.key.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF11F96BD5C0062D930 /* CRHTTPSTests.key.der */; };
-		4A63BB0F1F96BE8A0062D930 /* CRHTTPSTests.bundle.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEC1F96BD5C0062D930 /* CRHTTPSTests.bundle.pem */; };
-		4A63BB111F96BE8A0062D930 /* CRHTTPSTests.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF21F96BD5C0062D930 /* CRHTTPSTests.p12 */; };
-		4A63BB121F96BE8A0062D930 /* CRHTTPSTests.junk in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF01F96BD5C0062D930 /* CRHTTPSTests.junk */; };
+		4A63BB0B1F96BE8A0062D930 /* CRHTTPSHelperTests.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF41F96BD5C0062D930 /* CRHTTPSHelperTests.pem */; };
+		4A63BB0C1F96BE8A0062D930 /* CRHTTPSHelperTests.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEF1F96BD5C0062D930 /* CRHTTPSHelperTests.der */; };
+		4A63BB0D1F96BE8A0062D930 /* CRHTTPSHelperTests.key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF61F96BD5C0062D930 /* CRHTTPSHelperTests.key.pem */; };
+		4A63BB0E1F96BE8A0062D930 /* CRHTTPSHelperTests.key.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF11F96BD5C0062D930 /* CRHTTPSHelperTests.key.der */; };
+		4A63BB0F1F96BE8A0062D930 /* CRHTTPSHelperTests.bundle.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEC1F96BD5C0062D930 /* CRHTTPSHelperTests.bundle.pem */; };
+		4A63BB111F96BE8A0062D930 /* CRHTTPSHelperTests.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF21F96BD5C0062D930 /* CRHTTPSHelperTests.p12 */; };
+		4A63BB121F96BE8A0062D930 /* CRHTTPSHelperTests.junk in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF01F96BD5C0062D930 /* CRHTTPSHelperTests.junk */; };
 		4A63BB131F96BE8A0062D930 /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF51F96BD5C0062D930 /* Readme.md */; };
 		4A84C76F1F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */; };
 		4A84C7701F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */; };
@@ -66,8 +66,8 @@
 		4ABB1E0F1F9E6F4700480EC7 /* CRFCGIRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA37C731BE38E69008D89CA /* CRFCGIRecord.m */; };
 		4ABB1E101F9E6F5000480EC7 /* CRHTTPServer.h in Headers */ = {isa = PBXBuildFile; fileRef = AD61E9741BDD7FDF00F5BD17 /* CRHTTPServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4ABB1E111F9E6F5700480EC7 /* CRHTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = AD61E9751BDD7FDF00F5BD17 /* CRHTTPServer.m */; };
-		4ABB1E121F9E6F6200480EC7 /* CRHTTPS.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A2F43CA1F659FE400A466D5 /* CRHTTPS.h */; };
-		4ABB1E131F9E6F6800480EC7 /* CRHTTPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F43CB1F659FE400A466D5 /* CRHTTPS.m */; };
+		4ABB1E121F9E6F6200480EC7 /* CRHTTPSHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A2F43CA1F659FE400A466D5 /* CRHTTPSHelper.h */; };
+		4ABB1E131F9E6F6800480EC7 /* CRHTTPSHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F43CB1F659FE400A466D5 /* CRHTTPSHelper.m */; };
 		4ABB1E141F9E6F6D00480EC7 /* CRHTTPServerConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = ADA37C871BE3C713008D89CA /* CRHTTPServerConfiguration.h */; };
 		4ABB1E151F9E6F7100480EC7 /* CRHTTPServerConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA37C881BE3C713008D89CA /* CRHTTPServerConfiguration.m */; };
 		4ABB1E161F9E6F7400480EC7 /* CRHTTPConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = AD61E9781BDD80C100F5BD17 /* CRHTTPConnection.h */; };
@@ -116,26 +116,26 @@
 		4ABB1E411F9E707D00480EC7 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A02E2EA1F92A7F30055A4F8 /* GCDAsyncSocket.h */; };
 		4ABB1E421F9E708400480EC7 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A02E2E91F92A7F30055A4F8 /* GCDAsyncSocket.m */; };
 		4ABB1E431F9E709B00480EC7 /* CRHTTPServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */; };
-		4ABB1E441F9E70A700480EC7 /* CRHTTPSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */; };
+		4ABB1E441F9E70A700480EC7 /* CRHTTPSHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AD0AD581F6662AA00943DC3 /* CRHTTPSHelperTests.m */; };
 		4ABB1E451F9E70AA00480EC7 /* CRMimeTypeHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */; };
 		4ABB1E461F9E70AD00480EC7 /* CRNibTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD1D44E11F375DE100C5D260 /* CRNibTests.m */; };
 		4ABB1E471F9E70B000480EC7 /* CRViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD1D44F71F376DED00C5D260 /* CRViewTests.m */; };
 		4ABB1E4B1F9E72B500480EC7 /* libssl-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ABB1E491F9E72B500480EC7 /* libssl-tvOS.a */; };
 		4ABB1E4C1F9E72B500480EC7 /* libcrypto-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ABB1E4A1F9E72B500480EC7 /* libcrypto-tvOS.a */; };
-		4ABB1E511F9E772000480EC7 /* CRHTTPSTests.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF41F96BD5C0062D930 /* CRHTTPSTests.pem */; };
-		4ABB1E521F9E772000480EC7 /* CRHTTPSTests.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEF1F96BD5C0062D930 /* CRHTTPSTests.der */; };
-		4ABB1E531F9E772000480EC7 /* CRHTTPSTests.key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF61F96BD5C0062D930 /* CRHTTPSTests.key.pem */; };
-		4ABB1E541F9E772000480EC7 /* CRHTTPSTests.key.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF11F96BD5C0062D930 /* CRHTTPSTests.key.der */; };
-		4ABB1E551F9E772000480EC7 /* CRHTTPSTests.bundle.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEC1F96BD5C0062D930 /* CRHTTPSTests.bundle.pem */; };
-		4ABB1E561F9E772000480EC7 /* CRHTTPSTests.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF21F96BD5C0062D930 /* CRHTTPSTests.p12 */; };
-		4ABB1E571F9E772000480EC7 /* CRHTTPSTests.junk in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF01F96BD5C0062D930 /* CRHTTPSTests.junk */; };
+		4ABB1E511F9E772000480EC7 /* CRHTTPSHelperTests.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF41F96BD5C0062D930 /* CRHTTPSHelperTests.pem */; };
+		4ABB1E521F9E772000480EC7 /* CRHTTPSHelperTests.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEF1F96BD5C0062D930 /* CRHTTPSHelperTests.der */; };
+		4ABB1E531F9E772000480EC7 /* CRHTTPSHelperTests.key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF61F96BD5C0062D930 /* CRHTTPSHelperTests.key.pem */; };
+		4ABB1E541F9E772000480EC7 /* CRHTTPSHelperTests.key.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF11F96BD5C0062D930 /* CRHTTPSHelperTests.key.der */; };
+		4ABB1E551F9E772000480EC7 /* CRHTTPSHelperTests.bundle.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEC1F96BD5C0062D930 /* CRHTTPSHelperTests.bundle.pem */; };
+		4ABB1E561F9E772000480EC7 /* CRHTTPSHelperTests.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF21F96BD5C0062D930 /* CRHTTPSHelperTests.p12 */; };
+		4ABB1E571F9E772000480EC7 /* CRHTTPSHelperTests.junk in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF01F96BD5C0062D930 /* CRHTTPSHelperTests.junk */; };
 		4ABB1E5A1F9E772800480EC7 /* random.random in Resources */ = {isa = PBXBuildFile; fileRef = AD96F7571F1A43AE00C8D075 /* random.random */; };
 		4ABB1E5B1F9E772800480EC7 /* empty.empty in Resources */ = {isa = PBXBuildFile; fileRef = AD96F7541F1A436A00C8D075 /* empty.empty */; };
 		4ABB1E5C1F9E772800480EC7 /* unknown.unknown in Resources */ = {isa = PBXBuildFile; fileRef = AD96F74F1F1A3F8000C8D075 /* unknown.unknown */; };
 		4ABB1E5D1F9E772F00480EC7 /* CRNibTests.html in Resources */ = {isa = PBXBuildFile; fileRef = AD1D44E71F375F8D00C5D260 /* CRNibTests.html */; };
 		4ABB1E5E1F9E773400480EC7 /* CRViewTests.html in Resources */ = {isa = PBXBuildFile; fileRef = AD1D44F31F376DD500C5D260 /* CRViewTests.html */; };
-		4AD0AD591F6662AA00943DC3 /* CRHTTPSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */; };
-		4AD0AD5A1F6662AA00943DC3 /* CRHTTPSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */; };
+		4AD0AD591F6662AA00943DC3 /* CRHTTPSHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AD0AD581F6662AA00943DC3 /* CRHTTPSHelperTests.m */; };
+		4AD0AD5A1F6662AA00943DC3 /* CRHTTPSHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AD0AD581F6662AA00943DC3 /* CRHTTPSHelperTests.m */; };
 		AD001ADA1D4555A500DE4AC9 /* CRRoute_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */; };
 		AD001ADD1D4555E000DE4AC9 /* CRRoute_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */; };
 		AD001AE01D455BA300DE4AC9 /* CRRouteMatchingResult.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001ADE1D455BA300DE4AC9 /* CRRouteMatchingResult.h */; };
@@ -357,16 +357,16 @@
 		4A02E2E91F92A7F30055A4F8 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = Libraries/CocoaAsyncSocket/Source/GCD/GCDAsyncSocket.m; sourceTree = SOURCE_ROOT; };
 		4A02E2EA1F92A7F30055A4F8 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = Source/GCD/GCDAsyncSocket.h; sourceTree = "<group>"; };
 		4A22CEB01F99514F00BA1DD9 /* openssl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = openssl.framework; path = Libraries/OpenSSL/openssl.framework; sourceTree = "<group>"; };
-		4A2F43CA1F659FE400A466D5 /* CRHTTPS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRHTTPS.h; sourceTree = "<group>"; };
-		4A2F43CB1F659FE400A466D5 /* CRHTTPS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPS.m; sourceTree = "<group>"; };
-		4A63BAEC1F96BD5C0062D930 /* CRHTTPSTests.bundle.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSTests.bundle.pem; sourceTree = "<group>"; };
-		4A63BAEF1F96BD5C0062D930 /* CRHTTPSTests.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = CRHTTPSTests.der; sourceTree = "<group>"; };
-		4A63BAF01F96BD5C0062D930 /* CRHTTPSTests.junk */ = {isa = PBXFileReference; lastKnownFileType = file; path = CRHTTPSTests.junk; sourceTree = "<group>"; };
-		4A63BAF11F96BD5C0062D930 /* CRHTTPSTests.key.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = CRHTTPSTests.key.der; sourceTree = "<group>"; };
-		4A63BAF21F96BD5C0062D930 /* CRHTTPSTests.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = CRHTTPSTests.p12; sourceTree = "<group>"; };
-		4A63BAF41F96BD5C0062D930 /* CRHTTPSTests.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSTests.pem; sourceTree = "<group>"; };
+		4A2F43CA1F659FE400A466D5 /* CRHTTPSHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRHTTPSHelper.h; sourceTree = "<group>"; };
+		4A2F43CB1F659FE400A466D5 /* CRHTTPSHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPSHelper.m; sourceTree = "<group>"; };
+		4A63BAEC1F96BD5C0062D930 /* CRHTTPSHelperTests.bundle.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSHelperTests.bundle.pem; sourceTree = "<group>"; };
+		4A63BAEF1F96BD5C0062D930 /* CRHTTPSHelperTests.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = CRHTTPSHelperTests.der; sourceTree = "<group>"; };
+		4A63BAF01F96BD5C0062D930 /* CRHTTPSHelperTests.junk */ = {isa = PBXFileReference; lastKnownFileType = file; path = CRHTTPSHelperTests.junk; sourceTree = "<group>"; };
+		4A63BAF11F96BD5C0062D930 /* CRHTTPSHelperTests.key.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = CRHTTPSHelperTests.key.der; sourceTree = "<group>"; };
+		4A63BAF21F96BD5C0062D930 /* CRHTTPSHelperTests.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = CRHTTPSHelperTests.p12; sourceTree = "<group>"; };
+		4A63BAF41F96BD5C0062D930 /* CRHTTPSHelperTests.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSHelperTests.pem; sourceTree = "<group>"; };
 		4A63BAF51F96BD5C0062D930 /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
-		4A63BAF61F96BD5C0062D930 /* CRHTTPSTests.key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSTests.key.pem; sourceTree = "<group>"; };
+		4A63BAF61F96BD5C0062D930 /* CRHTTPSHelperTests.key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSHelperTests.key.pem; sourceTree = "<group>"; };
 		4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRHTTPServerTests.m; sourceTree = "<group>"; };
 		4A96B1851F95576F0091B193 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "Libraries/OpenSSL-for-iPhone/lib/libcrypto.a"; sourceTree = "<group>"; };
 		4A96B1861F95576F0091B193 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "Libraries/OpenSSL-for-iPhone/lib/libssl.a"; sourceTree = "<group>"; };
@@ -375,7 +375,7 @@
 		4ABB1E491F9E72B500480EC7 /* libssl-tvOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libssl-tvOS.a"; path = "Libraries/OpenSSL/lib/libssl-tvOS.a"; sourceTree = "<group>"; };
 		4ABB1E4A1F9E72B500480EC7 /* libcrypto-tvOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libcrypto-tvOS.a"; path = "Libraries/OpenSSL/lib/libcrypto-tvOS.a"; sourceTree = "<group>"; };
 		4ABB1E7C1F9E7A8500480EC7 /* CriolloTVApp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CriolloTVApp.xcodeproj; path = Criollo/Apps/CriolloTVApp.xcodeproj; sourceTree = "<group>"; };
-		4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPSTests.m; sourceTree = "<group>"; };
+		4AD0AD581F6662AA00943DC3 /* CRHTTPSHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPSHelperTests.m; sourceTree = "<group>"; };
 		AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRoute_Internal.h; sourceTree = "<group>"; };
 		AD001ADE1D455BA300DE4AC9 /* CRRouteMatchingResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRouteMatchingResult.h; sourceTree = "<group>"; };
 		AD001ADF1D455BA300DE4AC9 /* CRRouteMatchingResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRouteMatchingResult.m; sourceTree = "<group>"; };
@@ -537,19 +537,19 @@
 			path = Libraries/CocoaAsyncSocket;
 			sourceTree = "<group>";
 		};
-		4A63BB011F96BDFC0062D930 /* CRHTTPSTests */ = {
+		4A63BB011F96BDFC0062D930 /* CRHTTPSHelperTests */ = {
 			isa = PBXGroup;
 			children = (
-				4A63BAF41F96BD5C0062D930 /* CRHTTPSTests.pem */,
-				4A63BAEF1F96BD5C0062D930 /* CRHTTPSTests.der */,
-				4A63BAF61F96BD5C0062D930 /* CRHTTPSTests.key.pem */,
-				4A63BAF11F96BD5C0062D930 /* CRHTTPSTests.key.der */,
-				4A63BAEC1F96BD5C0062D930 /* CRHTTPSTests.bundle.pem */,
-				4A63BAF21F96BD5C0062D930 /* CRHTTPSTests.p12 */,
-				4A63BAF01F96BD5C0062D930 /* CRHTTPSTests.junk */,
+				4A63BAF41F96BD5C0062D930 /* CRHTTPSHelperTests.pem */,
+				4A63BAEF1F96BD5C0062D930 /* CRHTTPSHelperTests.der */,
+				4A63BAF61F96BD5C0062D930 /* CRHTTPSHelperTests.key.pem */,
+				4A63BAF11F96BD5C0062D930 /* CRHTTPSHelperTests.key.der */,
+				4A63BAEC1F96BD5C0062D930 /* CRHTTPSHelperTests.bundle.pem */,
+				4A63BAF21F96BD5C0062D930 /* CRHTTPSHelperTests.p12 */,
+				4A63BAF01F96BD5C0062D930 /* CRHTTPSHelperTests.junk */,
 				4A63BAF51F96BD5C0062D930 /* Readme.md */,
 			);
-			path = CRHTTPSTests;
+			path = CRHTTPSHelperTests;
 			sourceTree = "<group>";
 		};
 		4A96B1821F95576F0091B193 /* Frameworks */ = {
@@ -576,7 +576,7 @@
 			isa = PBXGroup;
 			children = (
 				4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */,
-				4AD0AD581F6662AA00943DC3 /* CRHTTPSTests.m */,
+				4AD0AD581F6662AA00943DC3 /* CRHTTPSHelperTests.m */,
 				AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */,
 				AD1D44E11F375DE100C5D260 /* CRNibTests.m */,
 				AD1D44F71F376DED00C5D260 /* CRViewTests.m */,
@@ -641,8 +641,8 @@
 			children = (
 				AD61E9741BDD7FDF00F5BD17 /* CRHTTPServer.h */,
 				AD61E9751BDD7FDF00F5BD17 /* CRHTTPServer.m */,
-				4A2F43CA1F659FE400A466D5 /* CRHTTPS.h */,
-				4A2F43CB1F659FE400A466D5 /* CRHTTPS.m */,
+				4A2F43CA1F659FE400A466D5 /* CRHTTPSHelper.h */,
+				4A2F43CB1F659FE400A466D5 /* CRHTTPSHelper.m */,
 				ADA37C871BE3C713008D89CA /* CRHTTPServerConfiguration.h */,
 				ADA37C881BE3C713008D89CA /* CRHTTPServerConfiguration.m */,
 				AD61E9781BDD80C100F5BD17 /* CRHTTPConnection.h */,
@@ -688,7 +688,7 @@
 		AD96F74D1F1A3F8000C8D075 /* Samples */ = {
 			isa = PBXGroup;
 			children = (
-				4A63BB011F96BDFC0062D930 /* CRHTTPSTests */,
+				4A63BB011F96BDFC0062D930 /* CRHTTPSHelperTests */,
 				AD96F74E1F1A3F8000C8D075 /* CRMimeTypeHelper */,
 				AD1D44E61F375F8D00C5D260 /* CRNibTests */,
 				AD1D44F21F376DD500C5D260 /* CRViewTests */,
@@ -842,7 +842,7 @@
 				4ABB1E021F9E6EF200480EC7 /* CRViewController.h in Headers */,
 				4ABB1DF71F9E6EB200480EC7 /* CRRouteMatchingResult_Internal.h in Headers */,
 				4ABB1DF41F9E6E3600480EC7 /* CRRoute_Internal.h in Headers */,
-				4ABB1E121F9E6F6200480EC7 /* CRHTTPS.h in Headers */,
+				4ABB1E121F9E6F6200480EC7 /* CRHTTPSHelper.h in Headers */,
 				4ABB1E221F9E6FC100480EC7 /* CRApplication.h in Headers */,
 				4ABB1E1E1F9E6F9F00480EC7 /* NSString+Criollo.h in Headers */,
 				4ABB1E271F9E6FDC00480EC7 /* CRServerConfiguration.h in Headers */,
@@ -912,7 +912,7 @@
 				AD001ADD1D4555E000DE4AC9 /* CRRoute_Internal.h in Headers */,
 				ADEBD0251C6C9D5F00F91D28 /* CRMimeTypeHelper.h in Headers */,
 				AD60BA401C0389F800118EED /* CRNib.h in Headers */,
-				4A2F43CD1F659FE400A466D5 /* CRHTTPS.h in Headers */,
+				4A2F43CD1F659FE400A466D5 /* CRHTTPSHelper.h in Headers */,
 				AD9F740B1C8D815100D5DE5C /* CRRequestRange_Internal.h in Headers */,
 				AD5FFFDE1BF0030000A57FE9 /* CRFCGIRecord.h in Headers */,
 				AD5FFFF61BF0031E00A57FE9 /* CRResponse.h in Headers */,
@@ -965,7 +965,7 @@
 				AD001ADA1D4555A500DE4AC9 /* CRRoute_Internal.h in Headers */,
 				ADEBD0241C6C9D5F00F91D28 /* CRMimeTypeHelper.h in Headers */,
 				AD60BA3F1C0389F800118EED /* CRNib.h in Headers */,
-				4A2F43CC1F659FE400A466D5 /* CRHTTPS.h in Headers */,
+				4A2F43CC1F659FE400A466D5 /* CRHTTPSHelper.h in Headers */,
 				ADAB16641C8C4E90001E104C /* CRRequestRange_Internal.h in Headers */,
 				AD61E9811BDD880C00F5BD17 /* CRFCGIConnection.h in Headers */,
 				ADB693001BE53FD400656BEC /* CRFCGIRequest.h in Headers */,
@@ -1207,15 +1207,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4ABB1E531F9E772000480EC7 /* CRHTTPSTests.key.pem in Resources */,
-				4ABB1E521F9E772000480EC7 /* CRHTTPSTests.der in Resources */,
-				4ABB1E511F9E772000480EC7 /* CRHTTPSTests.pem in Resources */,
+				4ABB1E531F9E772000480EC7 /* CRHTTPSHelperTests.key.pem in Resources */,
+				4ABB1E521F9E772000480EC7 /* CRHTTPSHelperTests.der in Resources */,
+				4ABB1E511F9E772000480EC7 /* CRHTTPSHelperTests.pem in Resources */,
 				4ABB1E5D1F9E772F00480EC7 /* CRNibTests.html in Resources */,
-				4ABB1E551F9E772000480EC7 /* CRHTTPSTests.bundle.pem in Resources */,
-				4ABB1E561F9E772000480EC7 /* CRHTTPSTests.p12 in Resources */,
+				4ABB1E551F9E772000480EC7 /* CRHTTPSHelperTests.bundle.pem in Resources */,
+				4ABB1E561F9E772000480EC7 /* CRHTTPSHelperTests.p12 in Resources */,
 				4ABB1E5E1F9E773400480EC7 /* CRViewTests.html in Resources */,
-				4ABB1E541F9E772000480EC7 /* CRHTTPSTests.key.der in Resources */,
-				4ABB1E571F9E772000480EC7 /* CRHTTPSTests.junk in Resources */,
+				4ABB1E541F9E772000480EC7 /* CRHTTPSHelperTests.key.der in Resources */,
+				4ABB1E571F9E772000480EC7 /* CRHTTPSHelperTests.junk in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1223,13 +1223,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A63BB021F96BE850062D930 /* CRHTTPSTests.pem in Resources */,
-				4A63BB031F96BE850062D930 /* CRHTTPSTests.der in Resources */,
-				4A63BB041F96BE850062D930 /* CRHTTPSTests.key.pem in Resources */,
-				4A63BB051F96BE850062D930 /* CRHTTPSTests.key.der in Resources */,
-				4A63BB061F96BE850062D930 /* CRHTTPSTests.bundle.pem in Resources */,
-				4A63BB081F96BE850062D930 /* CRHTTPSTests.p12 in Resources */,
-				4A63BB091F96BE850062D930 /* CRHTTPSTests.junk in Resources */,
+				4A63BB021F96BE850062D930 /* CRHTTPSHelperTests.pem in Resources */,
+				4A63BB031F96BE850062D930 /* CRHTTPSHelperTests.der in Resources */,
+				4A63BB041F96BE850062D930 /* CRHTTPSHelperTests.key.pem in Resources */,
+				4A63BB051F96BE850062D930 /* CRHTTPSHelperTests.key.der in Resources */,
+				4A63BB061F96BE850062D930 /* CRHTTPSHelperTests.bundle.pem in Resources */,
+				4A63BB081F96BE850062D930 /* CRHTTPSHelperTests.p12 in Resources */,
+				4A63BB091F96BE850062D930 /* CRHTTPSHelperTests.junk in Resources */,
 				4A63BB0A1F96BE850062D930 /* Readme.md in Resources */,
 				AD1D44EA1F37600D00C5D260 /* CRNibTests.html in Resources */,
 				AD1D44F51F376DDE00C5D260 /* CRViewTests.html in Resources */,
@@ -1248,13 +1248,13 @@
 				AD1D44F11F37600E00C5D260 /* unknown.unknown in Resources */,
 				AD1D44EF1F37600E00C5D260 /* random.random in Resources */,
 				AD1D44F01F37600E00C5D260 /* empty.empty in Resources */,
-				4A63BB0B1F96BE8A0062D930 /* CRHTTPSTests.pem in Resources */,
-				4A63BB0C1F96BE8A0062D930 /* CRHTTPSTests.der in Resources */,
-				4A63BB0D1F96BE8A0062D930 /* CRHTTPSTests.key.pem in Resources */,
-				4A63BB0E1F96BE8A0062D930 /* CRHTTPSTests.key.der in Resources */,
-				4A63BB0F1F96BE8A0062D930 /* CRHTTPSTests.bundle.pem in Resources */,
-				4A63BB111F96BE8A0062D930 /* CRHTTPSTests.p12 in Resources */,
-				4A63BB121F96BE8A0062D930 /* CRHTTPSTests.junk in Resources */,
+				4A63BB0B1F96BE8A0062D930 /* CRHTTPSHelperTests.pem in Resources */,
+				4A63BB0C1F96BE8A0062D930 /* CRHTTPSHelperTests.der in Resources */,
+				4A63BB0D1F96BE8A0062D930 /* CRHTTPSHelperTests.key.pem in Resources */,
+				4A63BB0E1F96BE8A0062D930 /* CRHTTPSHelperTests.key.der in Resources */,
+				4A63BB0F1F96BE8A0062D930 /* CRHTTPSHelperTests.bundle.pem in Resources */,
+				4A63BB111F96BE8A0062D930 /* CRHTTPSHelperTests.p12 in Resources */,
+				4A63BB121F96BE8A0062D930 /* CRHTTPSHelperTests.junk in Resources */,
 				4A63BB131F96BE8A0062D930 /* Readme.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1290,7 +1290,7 @@
 				4ABB1E1F1F9E6FA400480EC7 /* NSString+Criollo.m in Sources */,
 				4ABB1E261F9E6FD800480EC7 /* CRServer.m in Sources */,
 				4ABB1E3D1F9E705C00480EC7 /* CRStaticFileManager.m in Sources */,
-				4ABB1E131F9E6F6800480EC7 /* CRHTTPS.m in Sources */,
+				4ABB1E131F9E6F6800480EC7 /* CRHTTPSHelper.m in Sources */,
 				4ABB1E331F9E702800480EC7 /* CRRequest.m in Sources */,
 				4ABB1E031F9E6EFB00480EC7 /* CRViewController.m in Sources */,
 				4ABB1E091F9E6F1B00480EC7 /* CRFCGIConnection.m in Sources */,
@@ -1324,7 +1324,7 @@
 				4ABB1E461F9E70AD00480EC7 /* CRNibTests.m in Sources */,
 				4ABB1E471F9E70B000480EC7 /* CRViewTests.m in Sources */,
 				4ABB1E451F9E70AA00480EC7 /* CRMimeTypeHelperTests.m in Sources */,
-				4ABB1E441F9E70A700480EC7 /* CRHTTPSTests.m in Sources */,
+				4ABB1E441F9E70A700480EC7 /* CRHTTPSHelperTests.m in Sources */,
 				4ABB1E431F9E709B00480EC7 /* CRHTTPServerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1333,7 +1333,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4AD0AD591F6662AA00943DC3 /* CRHTTPSTests.m in Sources */,
+				4AD0AD591F6662AA00943DC3 /* CRHTTPSHelperTests.m in Sources */,
 				AD1D44F81F376DED00C5D260 /* CRViewTests.m in Sources */,
 				AD1D44E21F375DE100C5D260 /* CRNibTests.m in Sources */,
 				4A84C76F1F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */,
@@ -1345,7 +1345,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4AD0AD5A1F6662AA00943DC3 /* CRHTTPSTests.m in Sources */,
+				4AD0AD5A1F6662AA00943DC3 /* CRHTTPSHelperTests.m in Sources */,
 				AD1D44F91F3772ED00C5D260 /* CRViewTests.m in Sources */,
 				AD1D44E91F37600300C5D260 /* CRNibTests.m in Sources */,
 				4A84C7701F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */,
@@ -1382,7 +1382,7 @@
 				4A02E3391F92A89C0055A4F8 /* GCDAsyncSocket.m in Sources */,
 				AD60BA481C03977300118EED /* CRView.m in Sources */,
 				ADAD52641D3E484900DDFBB5 /* CRRouteController.m in Sources */,
-				4A2F43D71F65AE9C00A466D5 /* CRHTTPS.m in Sources */,
+				4A2F43D71F65AE9C00A466D5 /* CRHTTPSHelper.m in Sources */,
 				AD60BA4E1C03990500118EED /* CRViewController.m in Sources */,
 				AD5FFFF91BF0031E00A57FE9 /* CRRoute.m in Sources */,
 				AD60BA421C0389F800118EED /* CRNib.m in Sources */,
@@ -1413,7 +1413,7 @@
 				AD61E98E1BDD8C8E00F5BD17 /* CRRequest.m in Sources */,
 				AD61E98C1BDD8C8E00F5BD17 /* CRMessage.m in Sources */,
 				ADAB16621C8C49DB001E104C /* CRRequestRange.m in Sources */,
-				4A2F43CE1F659FE400A466D5 /* CRHTTPS.m in Sources */,
+				4A2F43CE1F659FE400A466D5 /* CRHTTPSHelper.m in Sources */,
 				AD8D1E471C0CF4F700A3763A /* NSString+Criollo.m in Sources */,
 				AD61E9841BDD880C00F5BD17 /* CRFCGIServer.m in Sources */,
 				ADADAB601BEEF28E000FBE6B /* CRRoute.m in Sources */,

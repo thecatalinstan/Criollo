@@ -1,5 +1,5 @@
 //
-//  CRHTTPS.h
+//  CRHTTPSHelper.h
 //  Criollo
 //
 //  Created by Cătălin Stan on 10/09/2017.
@@ -24,10 +24,10 @@ FOUNDATION_EXPORT NSString * const CRHTTPSIdentityPathKey;
 FOUNDATION_EXPORT NSString * const CRHTTPSCertificatePathKey;
 FOUNDATION_EXPORT NSString * const CRHTTPSCertificateKeyPathKey;
 
-@interface CRHTTPS : NSObject
+@interface CRHTTPSHelper : NSObject
 
-+ (nullable NSArray *)parseIdentrityFile:(NSString *)identityFilePath password:(NSString *)password withError:(NSError * _Nullable __autoreleasing * _Nullable)error;
-+ (nullable NSArray *)parseCertificateFile:(NSString *)certificatePath certificateKeyFile:(NSString *)certificateKeyPath withError:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (nullable NSArray *)parseIdentrityFile:(NSString *)identityFilePath password:(NSString *)password withError:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (nullable NSArray *)parseCertificateFile:(NSString *)certificatePath certificateKeyFile:(NSString *)certificateKeyPath withError:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
 @end
 
