@@ -22,7 +22,11 @@ NSString * const CRHTTPSIdentityPathKey                  = @"CRHTTPSIdentityPath
 NSString * const CRHTTPSCertificatePathKey               = @"CRHTTPSCertificatePath";
 NSString * const CRHTTPSCertificateKeyPathKey            = @"CRHTTPSCertificateKeyPath";
 
-#if !SEC_OS_OSX_INCLUDES
+#if SEC_OS_OSX_INCLUDES
+
+OSStatus keychainCallback(SecKeychainEvent keychainEvent, SecKeychainCallbackInfo *info, void * __nullable context);
+
+#else
 
 #import <openssl/bio.h>
 #import <openssl/err.h>
@@ -211,8 +215,7 @@ NS_ASSUME_NONNULL_END
 - (instancetype)init {
     self = [super init];
     if ( self != nil ) {
-        // Create a temp keychain and import the private key into it
-        self.keychain = [self setupKeychain];
+        _keychain = [self setupKeychain];
     }
     return self;
 }
@@ -222,6 +225,8 @@ NS_ASSUME_NONNULL_END
         SecKeychainDelete(_keychain);
         CFRelease(_keychain);
         _keychain = NULL;
+        
+        SecKeychainRemoveCallback((SecKeychainCallback)keychainCallback);
     }
 }
 
@@ -244,20 +249,20 @@ NS_ASSUME_NONNULL_END
     NSString *keychainPath = self.keychainPath;
     NSString *keychainPassword = self.keychainPassword;
 
-//    NSError error;
     SecAccessRef access = NULL;
     OSStatus accessCreationStatus = SecAccessCreate((CFStringRef)keychainPath.lastPathComponent, NULL, &access);
     if ( accessCreationStatus != errSecSuccess ) {
-//        NSString *secErrorString = (NSString *)CFBridgingRelease(SecCopyErrorMessageString(accessCreationStatus, NULL));
-//        error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInternalError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to create keychain. %@",), secErrorString]}];
         return NULL;
     }
   
     SecKeychainRef keychain = NULL;
     OSStatus keychainCreationStatus = SecKeychainCreate(keychainPath.UTF8String, (UInt32)keychainPassword.length, keychainPassword.UTF8String, NO, access, &keychain);
     if ( keychainCreationStatus != errSecSuccess ) {
-//        NSString *secErrorString = (NSString *)CFBridgingRelease(SecCopyErrorMessageString(keychainCreationStatus, NULL));
-//        error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInternalError userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat: NSLocalizedString(@"Unable to create keychain. %@",), secErrorString]}];
+        return NULL;
+    }
+    
+    OSStatus callbackStatus = SecKeychainAddCallback((SecKeychainCallback)keychainCallback, kSecEveryEventMask, (__bridge void *)self);
+    if ( callbackStatus != errSecSuccess ) {
         return NULL;
     }
     
@@ -345,3 +350,20 @@ NS_ASSUME_NONNULL_END
 #endif
 
 @end
+
+#if SEC_OS_OSX_INCLUDES
+
+OSStatus keychainCallback(SecKeychainEvent keychainEvent, SecKeychainCallbackInfo *info, void * __nullable context) {
+    CRHTTPSHelper *httpsHelper = (__bridge CRHTTPSHelper *)context;
+    if ( info->keychain != httpsHelper.keychain )
+        return errSecInvalidKeychain;
+    
+    OSStatus status = errSecSuccess;
+    if ( keychainEvent == kSecLockEvent ) {
+        status = SecKeychainUnlock(info->keychain, (UInt32)httpsHelper.keychainPassword.length, httpsHelper.keychainPassword.UTF8String, TRUE);
+    }
+    
+    return status;
+}
+
+#endif
