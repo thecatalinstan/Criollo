@@ -85,5 +85,10 @@
     return [super startListening:error portNumber:portNumber interface:interface];
 }
 
+- (void)stopListening {
+    self.httpsHelper = nil;
+    [super stopListening];
+}
+
 
 @end
