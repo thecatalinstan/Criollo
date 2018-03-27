@@ -8,5 +8,5 @@
 
 import Criollo
 
-CRApplicationMain(Process.argc, nil, AppDelegate());
+CRApplicationMain(Int32(CommandLine.arguments.count), nil, AppDelegate())
 

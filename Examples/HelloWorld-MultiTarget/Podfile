@@ -1,16 +1,25 @@
 use_frameworks!
 
 target 'HelloWorld' do
-    platform :osx, '10.9'
-    pod 'Criollo', '~> 0.1.0'
+  platform :osx, '10.10'
+  pod 'Criollo', :git => '../../', :branch => 'develop'
+  pod 'CSSystemInfoHelper', '~> 1.4'
 end
 
 target 'HelloWorld-Cocoa' do
-    platform :osx, '10.9'
-    pod 'Criollo', '~> 0.1.0'
+  platform :osx, '10.10'
+  pod 'Criollo', :git => '../../', :branch => 'develop'
+  pod 'CSSystemInfoHelper', '~> 1.4'
 end
 
 target 'HelloWorld-iOS' do
-    platform :ios, '8.0'
-		pod 'Criollo', '~> 0.1.0'
+  platform :ios, '8.0'
+  pod 'Criollo', :git => '../../', :branch => 'develop'
+  pod 'CSSystemInfoHelper', '~> 1.4'
+end
+
+target 'HelloWorld-tvOS' do
+  platform :tvos, '9.0'
+  pod 'Criollo', :git => '../../', :branch => 'develop'
+  pod 'CSSystemInfoHelper', '~> 1.4'
 end

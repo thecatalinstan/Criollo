@@ -6,19 +6,11 @@
 //
 //
 
+#import <CSSystemInfoHelper/CSSystemInfoHelper.h>
+
 #import "CommonRequestHandler.h"
 
-#import <sys/utsname.h>
-
-@interface CommonRequestHandler () {
-    __block dispatch_once_t identifyBlockOnceToken;
-    __block dispatch_once_t helloWorldBlockOnceToken;
-    __block dispatch_once_t jsonHelloWorldBlockOnceToken;
-    __block dispatch_once_t statusBlockOnceToken;
-    __block dispatch_once_t redirectBlockOnceToken;
-}
-
-@property (strong) NSString* uname;
+@interface CommonRequestHandler ()
 
 @end
 
@@ -33,19 +25,9 @@
     return _defaultHandler;
 }
 
-- (instancetype)init {
-    self = [super init];
-    if ( self != nil ) {
-        struct utsname systemInfo;
-        uname(&systemInfo);
-        _uname = [NSString stringWithFormat:@"%s %s %s %s %s", systemInfo.sysname, systemInfo.nodename, systemInfo.release, systemInfo.version, systemInfo.machine];
-    }
-    return self;
-}
-
 - (CRRouteBlock)identifyBlock {
     __block CRRouteBlock _identifyBlock;
-    dispatch_once(&identifyBlockOnceToken, ^{
+    if ( _identifyBlock == nil ) {
         NSBundle *bundle = [NSBundle mainBundle];
         _identifyBlock = ^(CRRequest* request, CRResponse* response, CRRouteCompletionBlock completionHandler) {
             [response setValue:[NSString stringWithFormat:@"%@, %@ build %@", bundle.bundleIdentifier, [bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [bundle objectForInfoDictionaryKey:@"CFBundleVersion"]] forHTTPHeaderField:@"Server"];
@@ -57,37 +39,37 @@
 
             completionHandler();
         };
-    });
+    };
     return _identifyBlock;
 }
 
 - (CRRouteBlock) helloWorldBlock {
     __block CRRouteBlock _helloWorldBlock;
-    dispatch_once(&helloWorldBlockOnceToken, ^{
+    if ( _helloWorldBlock == nil ) {
         _helloWorldBlock = ^(CRRequest* request, CRResponse* response, CRRouteCompletionBlock completionHandler) {
             [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
             [response sendString:@"Hello World"];
             completionHandler();
         };
-    });
+    };
     return _helloWorldBlock;
 }
 
 - (CRRouteBlock)jsonHelloWorldBlock {
     __block CRRouteBlock _jsonHelloWorldBlock;
-    dispatch_once(&jsonHelloWorldBlockOnceToken, ^{
+    if ( _jsonHelloWorldBlock == nil ) {
         _jsonHelloWorldBlock = ^(CRRequest* request, CRResponse* response, CRRouteCompletionBlock completionHandler) {
             [response setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-type"];
             [response send:@{@"status": @YES, @"message": @"Hello World"}];
             completionHandler();
         };
-    });
+    };
     return _jsonHelloWorldBlock;
 }
 
 - (CRRouteBlock)statusBlock {
     __block CRRouteBlock _statusBlock;
-    dispatch_once(&statusBlockOnceToken, ^{
+    if ( _statusBlock == nil ) {
         _statusBlock = ^(CRRequest* request, CRResponse* response, CRRouteCompletionBlock completionHandler) {
 
             NSDate *startTime = [NSDate date];
@@ -148,7 +130,7 @@
 
             // System info
             [responseString appendString:@"<hr/>"];
-            [responseString appendFormat:@"<small>%@</small><br/>", _uname];
+            [responseString appendFormat:@"<small>%@</small><br/>", CSSystemInfoHelper.sharedHelper.systemInfoString];
             [responseString appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
 
             // HTML
@@ -160,21 +142,24 @@
             
             completionHandler();
         };
-    });
+    };
     return _statusBlock;
 }
 
 - (CRRouteBlock)redirectBlock {
     __block CRRouteBlock _redirectBlock;
-    dispatch_once(&redirectBlockOnceToken, ^{
+    if ( _redirectBlock == nil ) {
         _redirectBlock = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-            NSURL* redirectURL = [NSURL URLWithString:(request.query[@"redirect"] ? : @"")];
-            if ( redirectURL ) {
+            if ( request.query[@"redirect"] ) {
+                NSURL* redirectURL = [NSURL URLWithString:request.query[@"redirect"]];
                 [response redirectToURL:redirectURL];
+            } else {
+                [response setStatusCode:501 description:nil];
+                [response send:@"No redirect URL provided."];
             }
             completionHandler();
         };
-    });
+    };
     return _redirectBlock;
 }
 

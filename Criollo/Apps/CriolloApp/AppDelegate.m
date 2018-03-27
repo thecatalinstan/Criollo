@@ -15,7 +15,11 @@
 
 #define PortNumber          10781
 #define LogConnections          0
-#define LogRequests             1
+#define LogRequests             0
+#define HTTPS                   0
+#define HTTPS_PKS12             0
+#define HTTPS_PEM               0
+#define HTTPS_DER               0
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -36,18 +40,34 @@ NS_ASSUME_NONNULL_END
     Class serverClass = isFastCGI ? [CRFCGIServer class] : [CRHTTPServer class];
     self.server = [[serverClass alloc] initWithDelegate:self];
 
+#if HTTPS
     if ( !isFastCGI ) {
-        ((CRHTTPServer *)self.server).isSecure = NO;
-        ((CRHTTPServer *)self.server).certificatePath = [[NSBundle mainBundle] pathForResource:@"cert" ofType:@"pem"];
-        ((CRHTTPServer *)self.server).certificateKeyPath = [[NSBundle mainBundle] pathForResource:@"key" ofType:@"pem"];
+        // Setup HTTPS
+        CRHTTPServer *server = (CRHTTPServer *)self.server;
+        server.isSecure = YES;
+        
+#if HTTPS_PKS12
+        // Credentials: PKCS#12 Identity and password
+        server.identityPath = [NSBundle.mainBundle pathForResource:@"criollo_local" ofType:@"p12"];
+        server.password = @"123456";
+#elif HTTPS_PEM
+        // Credentials: PEM-encoded certificate and public key
+        server.certificatePath = [NSBundle.mainBundle pathForResource:@"cert" ofType:@"pem"];
+        server.certificateKeyPath = [NSBundle.mainBundle pathForResource:@"key" ofType:@"pem"];
+#elif HTTPS_DER
+        // Credentials: DER-encoded certificate and public key
+        server.certificatePath = [NSBundle.mainBundle pathForResource:@"cert" ofType:@"der"];
+        server.certificateKeyPath = [NSBundle.mainBundle pathForResource:@"key" ofType:@"der"];
+#endif
     }
+#endif
 
     backgroundQueue = dispatch_queue_create(self.className.UTF8String, DISPATCH_QUEUE_SERIAL);
     dispatch_set_target_queue(backgroundQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
 
-    NSString* bundleIdentifier = [NSBundle mainBundle].bundleIdentifier;
-    NSString* shortVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-    NSString* buildNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+    NSString* bundleIdentifier = NSBundle.mainBundle.bundleIdentifier;
+    NSString* shortVersion = [NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    NSString* buildNumber = [NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleVersion"];
 
     // Add a header that says who we are :)
     [self.server add:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
@@ -80,7 +100,7 @@ NS_ASSUME_NONNULL_END
     }];
 
     // Serve static files from "/Public" (relative to bundle)
-    NSString* staticFilesPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"];
+    NSString* staticFilesPath = [NSBundle.mainBundle.resourcePath stringByAppendingPathComponent:@"Public"];
     [self.server mount:@"/static" directoryAtPath:staticFilesPath options:CRStaticDirectoryServingOptionsCacheFiles];
 
     // Redirecter

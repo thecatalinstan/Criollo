@@ -8,6 +8,16 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [0.5.0](https://github.com/thecatalinstan/Criollo/releases/tag/0.5.0) (03/27/2018)
+
+**Released on Tuesday, March 27, 2018**. This release makes Criollo available for tvOS, adds HTTPS support on all platforms, implements a number of tests, as well as addresses a number of bugs.
+
+No developer facing API's have been altered, however there and a number of changes:
+
+* OS targets are now: macOS 10.10, iOS 8.0, tvOS 9.0
+* HTTPS on iOS and tvOS is implemented using `openssl-1.1.0f`
+* Examples and bundled code have been updated to Xcode 9, Swift 4 and Criollo 0.5.0
+
 ## [0.4.17](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.17) (07/26/2017)
 
 **Released on Wednesday, July 26, 2017**. This is a maintenance and update release that aims to address various issues arising from Xcode and SDK updates.
