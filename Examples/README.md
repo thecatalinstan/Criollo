@@ -23,6 +23,12 @@ You should have previous knowledge of developing for the platforms as well as of
 
 - [https://github.com/thecatalinstan/Criollo/tree/master/Examples/HelloWorld-MultiTarget](https://github.com/thecatalinstan/Criollo/tree/master/Examples/HelloWorld-MultiTarget).
 
+## LongRequest
+
+This example demonstrates how to handle request that could potentially take longer that the builtin time limit to complete.
+
+- [https://github.com/thecatalinstan/Criollo/tree/master/Examples/LongRequest](https://github.com/thecatalinstan/Criollo/tree/master/Examples/LongRequest)
+
 ## SecureHTTPServer
 
 This example demonstrates how to setup an HTTPS server in an iOS app. The same of setting up a secure web server is also valid for an Apple TV app or  a Mac app, be it Cocoa or `launchd`, Swift or Objective-C.
