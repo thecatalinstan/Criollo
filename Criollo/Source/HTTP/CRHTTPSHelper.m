@@ -49,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #if SEC_OS_OSX_INCLUDES
 
-@property (nonatomic) SecKeychainRef keychain;
+@property (nonatomic, nullable) SecKeychainRef keychain;
 
 @property (nonatomic, strong, readonly) NSString *keychainPassword;
 @property (nonatomic, strong, readonly) NSString *keychainPath;
