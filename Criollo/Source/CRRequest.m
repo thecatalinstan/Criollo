@@ -416,14 +416,17 @@
     NSString* contentType = _env[@"HTTP_CONTENT_TYPE"];
     if ([contentType hasPrefix:CRRequestTypeMultipart]) {
         if ( ! _multipartBoundary ) {
+            
+            __block NSString *boundary;
             NSArray<NSString*>* headerComponents = [contentType componentsSeparatedByString:CRRequestHeaderSeparator];
             [headerComponents enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 obj = [obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
                 if ( ![obj hasPrefix:CRRequestBoundaryParameter] ) {
                     return;
                 }
-                _multipartBoundary = [[obj componentsSeparatedByString:CRRequestValueSeparator][1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                boundary = [[obj componentsSeparatedByString:CRRequestValueSeparator][1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
             }];
+            _multipartBoundary = boundary;
         }
     }
     return _multipartBoundary;
