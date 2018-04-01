@@ -4,14 +4,14 @@ xcode_project: Criollo.xcodeproj
 
 script:
 # Frameworks Build
-  - xcodebuild clean build -project Criollo.xcodeproj -scheme "Criollo macOS" CODE_SIGNING_REQUIRED=NO
-  - xcodebuild clean build -project Criollo.xcodeproj -scheme "Criollo iOS" CODE_SIGNING_REQUIRED=NO
-  - xcodebuild clean build -project Criollo.xcodeproj -scheme "Criollo tvOS" CODE_SIGNING_REQUIRED=NO
+  - xcodebuild clean build -quiet -project Criollo.xcodeproj -scheme "Criollo macOS" CODE_SIGNING_REQUIRED=NO
+  - xcodebuild clean build -quiet -project Criollo.xcodeproj -scheme "Criollo iOS" CODE_SIGNING_REQUIRED=NO
+  - xcodebuild clean build -quiet -project Criollo.xcodeproj -scheme "Criollo tvOS" CODE_SIGNING_REQUIRED=NO
 
 # Frameworks Tests
-  - xcodebuild clean test -project Criollo.xcodeproj -scheme "Criollo macOS" CODE_SIGNING_REQUIRED=NO
-  - xcodebuild clean test -destination 'platform=iOS Simulator,name=iPhone X' -project Criollo.xcodeproj -scheme "Criollo iOS" CODE_SIGNING_REQUIRED=NO
-  - xcodebuild clean test -destination 'platform=tvOS Simulator,name=Apple TV' -project Criollo.xcodeproj -scheme "Criollo tvOS" CODE_SIGNING_REQUIRED=NO
+  - xcodebuild clean test -quiet -project Criollo.xcodeproj -scheme "Criollo macOS" CODE_SIGNING_REQUIRED=NO
+  - xcodebuild clean test -quiet -destination 'platform=iOS Simulator,name=iPhone X' -project Criollo.xcodeproj -scheme "Criollo iOS" CODE_SIGNING_REQUIRED=NO
+  - xcodebuild clean test -quiet -destination 'platform=tvOS Simulator,name=Apple TV' -project Criollo.xcodeproj -scheme "Criollo tvOS" CODE_SIGNING_REQUIRED=NO
 
 # Apps
   - xcodebuild clean build -quiet -project Criollo.xcodeproj -scheme "Criollo macOS App" CODE_SIGNING_REQUIRED=NO
