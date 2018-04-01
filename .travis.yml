@@ -19,21 +19,39 @@ script:
   - xcodebuild clean build -project Criollo.xcodeproj -scheme "Criollo tvOS App" CODE_SIGNING_REQUIRED=NO
 
 # Examples
-  - cd Examples/HelloWorld && pod install && xcodebuild clean build -workspace HelloWorld.xcworkspace -scheme "HelloWorld" CODE_SIGNING_REQUIRED=NO
+  - cd Examples
 
-  - cd Examples/HelloWorld-MultiTarget && pod install && xcodebuild clean build -workspace HelloWorld.xcworkspace -scheme "HelloWorld" CODE_SIGNING_REQUIRED=NO
-  - cd Examples/HelloWorld-MultiTarget && pod install && xcodebuild clean build -workspace HelloWorld.xcworkspace -scheme "HelloWorld-Cocoa" CODE_SIGNING_REQUIRED=NO
-  - cd Examples/HelloWorld-MultiTarget && pod install && xcodebuild clean build -destination 'platform=iOS Simulator,name=iPhone X' -workspace HelloWorld.xcworkspace -scheme "HelloWorld-iOS" CODE_SIGNING_REQUIRED=NO
-  - cd Examples/HelloWorld-MultiTarget && pod install && xcodebuild clean build -destination 'platform=tvOS Simulator,name=Apple TV' -workspace HelloWorld.xcworkspace -scheme "HelloWorld-tvOS" CODE_SIGNING_REQUIRED=NO
+  - cd HelloWorld
+  - pod install && xcodebuild clean build -workspace HelloWorld.xcworkspace -scheme "HelloWorld" CODE_SIGNING_REQUIRED=NO
+  - cd ../
 
-  - cd Examples/HelloWorld-ObjC && pod install && xcodebuild clean build -workspace HelloWorld-ObjC.xcworkspace -scheme "HelloWorld-ObjC" CODE_SIGNING_REQUIRED=NO
+  - cd HelloWorld-MultiTarget
+  - pod install && xcodebuild clean build -workspace HelloWorld.xcworkspace -scheme "HelloWorld" CODE_SIGNING_REQUIRED=NO
+  - pod install && xcodebuild clean build -workspace HelloWorld.xcworkspace -scheme "HelloWorld-Cocoa" CODE_SIGNING_REQUIRED=NO
+  - pod install && xcodebuild clean build -destination 'platform=iOS Simulator,name=iPhone X' -workspace HelloWorld.xcworkspace -scheme "HelloWorld-iOS" CODE_SIGNING_REQUIRED=NO
+  - pod install && xcodebuild clean build -destination 'platform=tvOS Simulator,name=Apple TV' -workspace HelloWorld.xcworkspace -scheme "HelloWorld-tvOS" CODE_SIGNING_REQUIRED=NO
+  - cd ../
 
-  - cd Examples/HelloWorld-Swift && pod install && xcodebuild clean build -workspace HelloWorld-Swift.xcworkspace -scheme "HelloWorld-Swift" CODE_SIGNING_REQUIRED=NO
+  - cd HelloWorld-ObjC
+  - pod install && xcodebuild clean build -workspace HelloWorld-ObjC.xcworkspace -scheme "HelloWorld-ObjC" CODE_SIGNING_REQUIRED=NO
+  - cd ../
 
-  - cd Examples/LongRequest && pod install && xcodebuild clean build -workspace LongRequest.xcworkspace -scheme "LongRequest" CODE_SIGNING_REQUIRED=NO
+  - cd HelloWorld-Swift
+  - pod install && xcodebuild clean build -workspace HelloWorld-Swift.xcworkspace -scheme "HelloWorld-Swift" CODE_SIGNING_REQUIRED=NO
+  - cd ../
 
-  - cd Examples/SecureHTTPServer && pod install && xcodebuild clean build -destination 'platform=iOS Simulator,name=iPhone X' -workspace SecureHTTPServer.xcworkspace -scheme "SecureHTTPServer" CODE_SIGNING_REQUIRED=NO
+  - cd LongRequest
+  - pod install && xcodebuild clean build -workspace LongRequest.xcworkspace -scheme "LongRequest" CODE_SIGNING_REQUIRED=NO
+  - cd ../
 
-  - cd Examples/ServerStats && pod install && xcodebuild clean build -workspace CriolloServerStats.xcworkspace -scheme "CriolloServerStats" CODE_SIGNING_REQUIRED=NO
+  - cd SecureHTTPServer
+  - pod install && xcodebuild clean build -destination 'platform=iOS Simulator,name=iPhone X' -workspace SecureHTTPServer.xcworkspace -scheme "SecureHTTPServer" CODE_SIGNING_REQUIRED=NO
+  - cd ../
+
+  - cd ServerStats
+  - pod install && xcodebuild clean build -workspace CriolloServerStats.xcworkspace -scheme "CriolloServerStats" CODE_SIGNING_REQUIRED=NO
+  - cd ../
+
+  - cd ../
 
 
