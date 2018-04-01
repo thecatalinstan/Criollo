@@ -1,0 +1,6 @@
+osx_image: xcode9.3beta
+language: objective-c
+xcode_project: Criollo.xcodeproj
+xcode_scheme: 
+  - ‘Criollo macOS’
+  - ‘Criollo iOS’
