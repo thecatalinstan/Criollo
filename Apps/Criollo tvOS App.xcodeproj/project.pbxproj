@@ -41,7 +41,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4ABB1E6A1F9E7A8500480EC7 /* CriolloTVApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CriolloTVApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4ABB1E6A1F9E7A8500480EC7 /* Criollo tvOS App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Criollo tvOS App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4ABB1E6D1F9E7A8500480EC7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4ABB1E6F1F9E7A8500480EC7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		4ABB1E721F9E7A8500480EC7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -59,7 +59,7 @@
 		4ABB1E9E1F9E7CAB00480EC7 /* HelloWorldViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelloWorldViewController.swift; sourceTree = "<group>"; };
 		4ABB1EA21F9E7D0200480EC7 /* HelloWorldViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = HelloWorldViewController.html; path = Shared/HelloWorldViewController.html; sourceTree = SOURCE_ROOT; };
 		4ABB1EA31F9E7D0200480EC7 /* MultiRouteViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = MultiRouteViewController.html; path = Shared/MultiRouteViewController.html; sourceTree = SOURCE_ROOT; };
-		4ABB1EA91F9E7D5B00480EC7 /* CriolloTVApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CriolloTVApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		4ABB1EA91F9E7D5B00480EC7 /* Criollo-tvOS-App-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Criollo-tvOS-App-Bridging-Header.h"; sourceTree = "<group>"; };
 		4ABB1EAA1F9E7D5B00480EC7 /* SystemInfoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemInfoHelper.h; path = Shared/SystemInfoHelper.h; sourceTree = SOURCE_ROOT; };
 		4ABB1EAB1F9E7D5B00480EC7 /* SystemInfoHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemInfoHelper.m; path = Shared/SystemInfoHelper.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -79,7 +79,7 @@
 		4ABB1E611F9E7A8500480EC7 = {
 			isa = PBXGroup;
 			children = (
-				4ABB1E6C1F9E7A8500480EC7 /* CriolloTVApp */,
+				4ABB1E6C1F9E7A8500480EC7 /* Criollo tvOS App */,
 				4ABB1E6B1F9E7A8500480EC7 /* Products */,
 				4ABB1E891F9E7B0D00480EC7 /* Frameworks */,
 			);
@@ -88,12 +88,12 @@
 		4ABB1E6B1F9E7A8500480EC7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4ABB1E6A1F9E7A8500480EC7 /* CriolloTVApp.app */,
+				4ABB1E6A1F9E7A8500480EC7 /* Criollo tvOS App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4ABB1E6C1F9E7A8500480EC7 /* CriolloTVApp */ = {
+		4ABB1E6C1F9E7A8500480EC7 /* Criollo tvOS App */ = {
 			isa = PBXGroup;
 			children = (
 				4ABB1E6D1F9E7A8500480EC7 /* AppDelegate.swift */,
@@ -106,13 +106,13 @@
 				4ABB1E711F9E7A8500480EC7 /* Main.storyboard */,
 				4ABB1E761F9E7A8500480EC7 /* Info.plist */,
 				4ABB1E741F9E7A8500480EC7 /* Assets.xcassets */,
-				4ABB1EA91F9E7D5B00480EC7 /* CriolloTVApp-Bridging-Header.h */,
+				4ABB1EA91F9E7D5B00480EC7 /* Criollo-tvOS-App-Bridging-Header.h */,
 				4ABB1EAA1F9E7D5B00480EC7 /* SystemInfoHelper.h */,
 				4ABB1EAB1F9E7D5B00480EC7 /* SystemInfoHelper.m */,
 				4ABB1E8D1F9E7B9600480EC7 /* Certificates */,
 				4ABB1E981F9E7C4B00480EC7 /* Public */,
 			);
-			path = CriolloTVApp;
+			path = "Criollo tvOS App";
 			sourceTree = "<group>";
 		};
 		4ABB1E891F9E7B0D00480EC7 /* Frameworks */ = {
@@ -148,9 +148,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4ABB1E691F9E7A8500480EC7 /* CriolloTVApp */ = {
+		4ABB1E691F9E7A8500480EC7 /* Criollo tvOS App */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4ABB1E791F9E7A8500480EC7 /* Build configuration list for PBXNativeTarget "CriolloTVApp" */;
+			buildConfigurationList = 4ABB1E791F9E7A8500480EC7 /* Build configuration list for PBXNativeTarget "Criollo tvOS App" */;
 			buildPhases = (
 				4ABB1E661F9E7A8500480EC7 /* Sources */,
 				4ABB1E671F9E7A8500480EC7 /* Frameworks */,
@@ -161,9 +161,9 @@
 			);
 			dependencies = (
 			);
-			name = CriolloTVApp;
+			name = "Criollo tvOS App";
 			productName = CriolloTVApp;
-			productReference = 4ABB1E6A1F9E7A8500480EC7 /* CriolloTVApp.app */;
+			productReference = 4ABB1E6A1F9E7A8500480EC7 /* Criollo tvOS App.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -179,11 +179,11 @@
 					4ABB1E691F9E7A8500480EC7 = {
 						CreatedOnToolsVersion = 9.0.1;
 						LastSwiftMigration = 0900;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
-			buildConfigurationList = 4ABB1E651F9E7A8500480EC7 /* Build configuration list for PBXProject "CriolloTVApp" */;
+			buildConfigurationList = 4ABB1E651F9E7A8500480EC7 /* Build configuration list for PBXProject "Criollo tvOS App" */;
 			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -196,7 +196,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4ABB1E691F9E7A8500480EC7 /* CriolloTVApp */,
+				4ABB1E691F9E7A8500480EC7 /* Criollo tvOS App */,
 			);
 		};
 /* End PBXProject section */
@@ -359,12 +359,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = CriolloTVApp/Info.plist;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				INFOPLIST_FILE = "Criollo tvOS App/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloTVApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "CriolloTVApp/CriolloTVApp-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Criollo tvOS App/Criollo-tvOS-App-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -378,12 +379,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = CriolloTVApp/Info.plist;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				INFOPLIST_FILE = "Criollo tvOS App/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloTVApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "CriolloTVApp/CriolloTVApp-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Criollo tvOS App/Criollo-tvOS-App-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
@@ -393,7 +395,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4ABB1E651F9E7A8500480EC7 /* Build configuration list for PBXProject "CriolloTVApp" */ = {
+		4ABB1E651F9E7A8500480EC7 /* Build configuration list for PBXProject "Criollo tvOS App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4ABB1E771F9E7A8500480EC7 /* Debug */,
@@ -402,7 +404,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4ABB1E791F9E7A8500480EC7 /* Build configuration list for PBXNativeTarget "CriolloTVApp" */ = {
+		4ABB1E791F9E7A8500480EC7 /* Build configuration list for PBXNativeTarget "Criollo tvOS App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4ABB1E7A1F9E7A8500480EC7 /* Debug */,
