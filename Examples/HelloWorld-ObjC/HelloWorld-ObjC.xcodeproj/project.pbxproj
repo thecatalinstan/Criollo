@@ -168,6 +168,7 @@
 				TargetAttributes = {
 					ADE3DDA31BFE003900844DC9 = {
 						CreatedOnToolsVersion = 7.1.1;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -375,6 +376,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A24EF449AA6AA45E93FA77B1 /* Pods-HelloWorld-ObjC.debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "HelloWorld-ObjC/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -387,6 +389,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 573BCA773F4A1418D96AE094 /* Pods-HelloWorld-ObjC.release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "HelloWorld-ObjC/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";

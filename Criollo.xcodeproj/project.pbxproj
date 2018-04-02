@@ -316,12 +316,26 @@
 			remoteGlobalIDString = 4ABB1DD91F9E6B0900480EC7;
 			remoteInfo = "Criollo-tvos";
 		};
-		4ABB1E871F9E7AB400480EC7 /* PBXContainerItemProxy */ = {
+		4AE7077020715315005166FB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 4ABB1E7C1F9E7A8500480EC7 /* CriolloTVApp.xcodeproj */;
+			containerPortal = 4AE7076C20715315005166FB /* Criollo iOS App.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AD5B3C511CA820B5000988B7;
+			remoteInfo = "Criollo iOS App";
+		};
+		4AE7077620715315005166FB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4AE7077220715315005166FB /* Criollo macOS App.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = ADC1A5C01CA30F49009A4A19;
+			remoteInfo = "Criollo macOS App";
+		};
+		4AE7077C20715315005166FB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4AE7077820715315005166FB /* Criollo tvOS App.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4ABB1E6A1F9E7A8500480EC7;
-			remoteInfo = CriolloTVApp;
+			remoteInfo = "Criollo tvOS App";
 		};
 		AD030FE11F0C02C900BD9FE4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -336,20 +350,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = AD5FFFCB1BF0024D00A57FE9;
 			remoteInfo = "Criollo iOS";
-		};
-		AD35A82B1D411246005BD4A9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AD5B3C661CA820B5000988B7 /* Criollo iOS App.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = AD5B3C511CA820B5000988B7;
-			remoteInfo = "Criollo iOS App";
-		};
-		ADAD526E1D3E4FBD00DDFBB5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ADC1A5D41CA30F49009A4A19 /* Criollo macOS App.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = ADC1A5C01CA30F49009A4A19;
-			remoteInfo = "Criollo macOS App";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -374,8 +374,10 @@
 		4ABB1DE21F9E6B0A00480EC7 /* CriolloTests tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CriolloTests tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4ABB1E491F9E72B500480EC7 /* libssl-tvOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libssl-tvOS.a"; path = "Libraries/OpenSSL/lib/libssl-tvOS.a"; sourceTree = "<group>"; };
 		4ABB1E4A1F9E72B500480EC7 /* libcrypto-tvOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libcrypto-tvOS.a"; path = "Libraries/OpenSSL/lib/libcrypto-tvOS.a"; sourceTree = "<group>"; };
-		4ABB1E7C1F9E7A8500480EC7 /* CriolloTVApp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CriolloTVApp.xcodeproj; path = Criollo/Apps/CriolloTVApp.xcodeproj; sourceTree = "<group>"; };
 		4AD0AD581F6662AA00943DC3 /* CRHTTPSHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPSHelperTests.m; sourceTree = "<group>"; };
+		4AE7076C20715315005166FB /* Criollo iOS App.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "Criollo iOS App.xcodeproj"; sourceTree = "<group>"; };
+		4AE7077220715315005166FB /* Criollo macOS App.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "Criollo macOS App.xcodeproj"; sourceTree = "<group>"; };
+		4AE7077820715315005166FB /* Criollo tvOS App.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "Criollo tvOS App.xcodeproj"; sourceTree = "<group>"; };
 		AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRoute_Internal.h; sourceTree = "<group>"; };
 		AD001ADE1D455BA300DE4AC9 /* CRRouteMatchingResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRouteMatchingResult.h; sourceTree = "<group>"; };
 		AD001ADF1D455BA300DE4AC9 /* CRRouteMatchingResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRouteMatchingResult.m; sourceTree = "<group>"; };
@@ -399,7 +401,6 @@
 		AD2A35481C47FA8000E30387 /* CRUploadedFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRUploadedFile.m; sourceTree = "<group>"; };
 		AD4AE7701BDAB1C300B9F221 /* CRConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRConnection.h; sourceTree = "<group>"; };
 		AD4AE7711BDAB1C300B9F221 /* CRConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRConnection.m; sourceTree = "<group>"; };
-		AD5B3C661CA820B5000988B7 /* Criollo iOS App.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Criollo iOS App.xcodeproj"; path = "Criollo/Apps/Criollo iOS App.xcodeproj"; sourceTree = "<group>"; };
 		AD5FFFCC1BF0024D00A57FE9 /* Criollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Criollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD609C5E1BDA7A4C0003E702 /* Criollo.podSpec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Criollo.podSpec; sourceTree = SOURCE_ROOT; };
 		AD60BA3D1C0389F800118EED /* CRNib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRNib.h; sourceTree = "<group>"; };
@@ -457,7 +458,6 @@
 		ADADAB5E1BEEF28E000FBE6B /* CRRoute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRoute.m; sourceTree = "<group>"; };
 		ADB692FE1BE53FD400656BEC /* CRFCGIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFCGIRequest.h; sourceTree = "<group>"; };
 		ADB692FF1BE53FD400656BEC /* CRFCGIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRFCGIRequest.m; sourceTree = "<group>"; };
-		ADC1A5D41CA30F49009A4A19 /* Criollo macOS App.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Criollo macOS App.xcodeproj"; path = "Criollo/Apps/Criollo macOS App.xcodeproj"; sourceTree = "<group>"; };
 		ADD2B60A1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSHTTPCookie+Criollo.h"; sourceTree = "<group>"; };
 		ADD2B60B1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSHTTPCookie+Criollo.m"; sourceTree = "<group>"; };
 		ADE99FB51C6B40E10080B1FA /* CRStaticDirectoryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRStaticDirectoryManager.h; sourceTree = "<group>"; };
@@ -564,10 +564,26 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		4ABB1E841F9E7AB400480EC7 /* Products */ = {
+		4AE7076D20715315005166FB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4ABB1E881F9E7AB400480EC7 /* CriolloTVApp.app */,
+				4AE7077120715315005166FB /* Criollo iOS App.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4AE7077320715315005166FB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4AE7077720715315005166FB /* Criollo macOS App.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4AE7077920715315005166FB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4AE7077D20715315005166FB /* Criollo tvOS App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -605,11 +621,11 @@
 		AD5B3C7D1CA821E9000988B7 /* Apps */ = {
 			isa = PBXGroup;
 			children = (
-				4ABB1E7C1F9E7A8500480EC7 /* CriolloTVApp.xcodeproj */,
-				ADC1A5D41CA30F49009A4A19 /* Criollo macOS App.xcodeproj */,
-				AD5B3C661CA820B5000988B7 /* Criollo iOS App.xcodeproj */,
+				4AE7076C20715315005166FB /* Criollo iOS App.xcodeproj */,
+				4AE7077220715315005166FB /* Criollo macOS App.xcodeproj */,
+				4AE7077820715315005166FB /* Criollo tvOS App.xcodeproj */,
 			);
-			name = Apps;
+			path = Apps;
 			sourceTree = "<group>";
 		};
 		AD60BA3C1C0389A400118EED /* Routing */ = {
@@ -704,22 +720,6 @@
 				AD96F74F1F1A3F8000C8D075 /* unknown.unknown */,
 			);
 			path = CRMimeTypeHelper;
-			sourceTree = "<group>";
-		};
-		ADAD526B1D3E4FBD00DDFBB5 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				ADAD526F1D3E4FBD00DDFBB5 /* Criollo macOS App.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		ADAD52721D3E552700DDFBB5 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				AD35A82C1D411246005BD4A9 /* Criollo iOS App.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		ADEDB3471AEFBCF700A26AF1 = {
@@ -1144,16 +1144,16 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = ADAD52721D3E552700DDFBB5 /* Products */;
-					ProjectRef = AD5B3C661CA820B5000988B7 /* Criollo iOS App.xcodeproj */;
+					ProductGroup = 4AE7076D20715315005166FB /* Products */;
+					ProjectRef = 4AE7076C20715315005166FB /* Criollo iOS App.xcodeproj */;
 				},
 				{
-					ProductGroup = ADAD526B1D3E4FBD00DDFBB5 /* Products */;
-					ProjectRef = ADC1A5D41CA30F49009A4A19 /* Criollo macOS App.xcodeproj */;
+					ProductGroup = 4AE7077320715315005166FB /* Products */;
+					ProjectRef = 4AE7077220715315005166FB /* Criollo macOS App.xcodeproj */;
 				},
 				{
-					ProductGroup = 4ABB1E841F9E7AB400480EC7 /* Products */;
-					ProjectRef = 4ABB1E7C1F9E7A8500480EC7 /* CriolloTVApp.xcodeproj */;
+					ProductGroup = 4AE7077920715315005166FB /* Products */;
+					ProjectRef = 4AE7077820715315005166FB /* Criollo tvOS App.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -1169,25 +1169,25 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		4ABB1E881F9E7AB400480EC7 /* CriolloTVApp.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = CriolloTVApp.app;
-			remoteRef = 4ABB1E871F9E7AB400480EC7 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		AD35A82C1D411246005BD4A9 /* Criollo iOS App.app */ = {
+		4AE7077120715315005166FB /* Criollo iOS App.app */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.application;
 			path = "Criollo iOS App.app";
-			remoteRef = AD35A82B1D411246005BD4A9 /* PBXContainerItemProxy */;
+			remoteRef = 4AE7077020715315005166FB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		ADAD526F1D3E4FBD00DDFBB5 /* Criollo macOS App.app */ = {
+		4AE7077720715315005166FB /* Criollo macOS App.app */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.application;
 			path = "Criollo macOS App.app";
-			remoteRef = ADAD526E1D3E4FBD00DDFBB5 /* PBXContainerItemProxy */;
+			remoteRef = 4AE7077620715315005166FB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4AE7077D20715315005166FB /* Criollo tvOS App.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "Criollo tvOS App.app";
+			remoteRef = 4AE7077C20715315005166FB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -1467,7 +1467,6 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1489,6 +1488,7 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
+				VALID_ARCHS = arm64;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1505,7 +1505,6 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1525,6 +1524,7 @@
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = arm64;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1540,7 +1540,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1571,7 +1571,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -1597,11 +1597,9 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = JNX7A8G939;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1615,7 +1613,6 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -1630,10 +1627,8 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = JNX7A8G939;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -1642,7 +1637,6 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -1742,7 +1736,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv7 arm64";
+				VALID_ARCHS = "arm64 armv7 armv7s";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1785,7 +1779,7 @@
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 arm64";
+				VALID_ARCHS = "arm64 armv7 armv7s";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};

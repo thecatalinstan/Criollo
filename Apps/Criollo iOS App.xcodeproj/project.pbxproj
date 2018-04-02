@@ -63,7 +63,7 @@
 		AD23B7361D3FC7100056170D /* MultiRouteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiRouteViewController.swift; sourceTree = "<group>"; };
 		AD23B7381D3FC71C0056170D /* MultiRouteViewController.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = MultiRouteViewController.html; path = Shared/MultiRouteViewController.html; sourceTree = SOURCE_ROOT; };
 		AD41ECD11CB42D1C00133C8D /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
-		AD41ECDB1CB4330000133C8D /* CriolloiOSApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CriolloiOSApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		AD41ECDB1CB4330000133C8D /* Criollo-iOS-App-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Criollo-iOS-App-Bridging-Header.h"; sourceTree = "<group>"; };
 		AD41ECDC1CB4330100133C8D /* SystemInfoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemInfoHelper.h; path = Shared/SystemInfoHelper.h; sourceTree = SOURCE_ROOT; };
 		AD41ECDD1CB4330100133C8D /* SystemInfoHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemInfoHelper.m; path = Shared/SystemInfoHelper.m; sourceTree = SOURCE_ROOT; };
 		AD554DA01CAC9A95002182A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -115,7 +115,7 @@
 		AD5B3C481CA820B5000988B7 = {
 			isa = PBXGroup;
 			children = (
-				AD5B3C531CA820B5000988B7 /* CriolloiOSApp */,
+				AD5B3C531CA820B5000988B7 /* Criollo iOS App */,
 				AD5B3C521CA820B5000988B7 /* Products */,
 				ADAD526A1D3E4F0400DDFBB5 /* Frameworks */,
 			);
@@ -129,7 +129,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AD5B3C531CA820B5000988B7 /* CriolloiOSApp */ = {
+		AD5B3C531CA820B5000988B7 /* Criollo iOS App */ = {
 			isa = PBXGroup;
 			children = (
 				AD5B3C541CA820B5000988B7 /* AppDelegate.swift */,
@@ -143,13 +143,13 @@
 				AD5B3C5D1CA820B5000988B7 /* LaunchScreen.storyboard */,
 				AD5B3C601CA820B5000988B7 /* Info.plist */,
 				AD554DA01CAC9A95002182A4 /* Assets.xcassets */,
-				AD41ECDB1CB4330000133C8D /* CriolloiOSApp-Bridging-Header.h */,
+				AD41ECDB1CB4330000133C8D /* Criollo-iOS-App-Bridging-Header.h */,
 				AD41ECDC1CB4330100133C8D /* SystemInfoHelper.h */,
 				AD41ECDD1CB4330100133C8D /* SystemInfoHelper.m */,
 				4AF762281F93C4A80061EFC9 /* Certificates */,
 				AD41ECD01CB42D1C00133C8D /* Public */,
 			);
-			path = CriolloiOSApp;
+			path = "Criollo iOS App";
 			sourceTree = "<group>";
 		};
 		ADAD526A1D3E4F0400DDFBB5 /* Frameworks */ = {
@@ -196,6 +196,7 @@
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = JNX7A8G939;
 						LastSwiftMigration = 0900;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -380,15 +381,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_STYLE = Manual;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = CriolloiOSApp/Info.plist;
+				INFOPLIST_FILE = "Criollo iOS App/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloiOSApp;
 				PRODUCT_NAME = "Criollo iOS App";
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "CriolloiOSApp/CriolloiOSApp-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Criollo iOS App/Criollo-iOS-App-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -400,15 +401,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_STYLE = Manual;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = CriolloiOSApp/Info.plist;
+				INFOPLIST_FILE = "Criollo iOS App/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.criollo.CriolloiOSApp;
 				PRODUCT_NAME = "Criollo iOS App";
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "CriolloiOSApp/CriolloiOSApp-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Criollo iOS App/Criollo-iOS-App-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
