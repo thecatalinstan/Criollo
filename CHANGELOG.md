@@ -8,6 +8,10 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [0.5.2](https://github.com/thecatalinstan/Criollo/releases/tag/0.5.2) (04/02/2018)
+
+**Released on Monday, April 4, 2018**. This is a service release that adds Tavis-CI.
+
 ## [0.5.1](https://github.com/thecatalinstan/Criollo/releases/tag/0.5.1) (03/31/2018)
 
 **Released on Saturday, March 31, 2018**. This is a service release that fixes Xcode 9.3 warnings.
