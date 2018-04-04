@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.author                  =   { "Cătălin Stan" => "catalin.stan@me.com" }
   s.social_media_url        =   "http://twitter.com/criolloio"
 
-  s.source                  =  { :git => "https://github.com/thecatalinstan/Criollo.git", :tag => s.version }
+  s.source                  =  { :git => "https://github.com/thecatalinstan/Criollo.git", :tag => s.version, :submodules => true }
 
   s.module_name             = "Criollo"
 
