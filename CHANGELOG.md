@@ -1,16 +1,20 @@
 # Change Log
 
-This file includes all notable changes to Criollo.
-
-*Please note that during this early stage of development, **APIs are extremely prone to non-backward-compatible changes.** Please consult this file for the specifics, before you upgrade.*
+This file includes all notable changes to Criollo. Please consult this file for the specifics, before you upgrade.
 
 Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [0.5.3](https://github.com/thecatalinstan/Criollo/releases/tag/0.5.3) (04/04/2018)
+
+**Released on Wednesday, April 4, 2018**. This is a service release that adds Travis CI pod validation and splits the bundled OpenSSL libraries into a different submodule.
+
+No APIs are changed.
+
 ## [0.5.2](https://github.com/thecatalinstan/Criollo/releases/tag/0.5.2) (04/02/2018)
 
-**Released on Monday, April 4, 2018**. This is a service release that adds Tavis-CI.
+**Released on Monday, April 2, 2018**. This is a service release that adds Travis CI.
 
 ## [0.5.1](https://github.com/thecatalinstan/Criollo/releases/tag/0.5.1) (03/31/2018)
 
