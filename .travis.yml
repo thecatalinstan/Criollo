@@ -2,6 +2,6 @@ osx_image: xcode9.3beta
 language: objective-c
 xcode_project: Criollo.xcodeproj
 
-script: build.sh
+script: ./build.sh
 
 
