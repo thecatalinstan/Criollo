@@ -2,6 +2,6 @@ platform :osx, '10.10'
 use_frameworks!
 
 target 'LongRequest' do
-  pod 'Criollo', :git => '../../', :branch => 'develop'
+  pod 'Criollo', :git => '../../'
 end
 
