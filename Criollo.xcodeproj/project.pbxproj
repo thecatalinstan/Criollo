@@ -621,8 +621,8 @@
 		AD5B3C7D1CA821E9000988B7 /* Apps */ = {
 			isa = PBXGroup;
 			children = (
-				4AE7076C20715315005166FB /* Criollo iOS App.xcodeproj */,
 				4AE7077220715315005166FB /* Criollo macOS App.xcodeproj */,
+				4AE7076C20715315005166FB /* Criollo iOS App.xcodeproj */,
 				4AE7077820715315005166FB /* Criollo tvOS App.xcodeproj */,
 			);
 			path = Apps;
