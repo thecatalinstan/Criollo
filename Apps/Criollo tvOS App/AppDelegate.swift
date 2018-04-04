@@ -143,9 +143,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
             // Output some nice info to the console
             
             // Get server ip address
-            let address:NSString! = SystemInfoHelper.ipAddress() as NSString!
+            let address = SystemInfoHelper.ipAddress()
             // Set the base url. This is only for logging
-            self.baseURL = URL(string: "http\(self.server.isSecure ? "s" :"")://\(address!):\(PortNumber)")
+            self.baseURL = URL(string: "http\(self.server.isSecure ? "s" :"")://\(address):\(PortNumber)")
             
             // Log the paths we can handle
             
