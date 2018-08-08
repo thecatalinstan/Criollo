@@ -289,7 +289,7 @@ NS_ASSUME_NONNULL_END
         NSArray<NSURL*>* sortedPaths =[paths sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"absoluteString" ascending:YES]]];
         [CRApp logFormat:@"Available paths are:"];
         [sortedPaths enumerateObjectsUsingBlock:^(NSURL * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            dispatch_async( backgroundQueue, ^{
+            dispatch_async( self->backgroundQueue, ^{
                 [CRApp logFormat:@" * %@", obj.absoluteString];
             });
         }];
