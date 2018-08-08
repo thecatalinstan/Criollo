@@ -6,6 +6,12 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [0.5.5](https://github.com/thecatalinstan/Criollo/releases/tag/0.5.5) (08/09/2018)
+
+**Released on Thursday, August 9, 2018**. This is a service release that updates project settings for Xcode compatibility.
+
+No APIs are changed.
+
 ## [0.5.4](https://github.com/thecatalinstan/Criollo/releases/tag/0.5.4) (04/04/2018)
 
 **Released on Wednesday, April 4, 2018**. This is a service release that finalizes previous refactoring and cleanup endeavors.
