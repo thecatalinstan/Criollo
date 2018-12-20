@@ -9,7 +9,7 @@
 @import Criollo;
 @import Cocoa;
 
-@interface AppDelegate : NSObject <CRApplicationDelegate>
+@interface AppDelegate : NSObject <CRApplicationDelegate, CRSocketDelegate>
 
 @end
 
