@@ -53,6 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)listen:(NSString * _Nullable)interface port:(NSUInteger)port error:(NSError * __autoreleasing *)error;
 
++ (BOOL)getSocketAddr:(struct sockaddr *)sa address:(NSString * __autoreleasing * _Nonnull)address port:(NSUInteger * _Nonnull)port error:(NSError * _Nonnull __autoreleasing * _Nonnull)error;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -336,6 +336,16 @@ NS_ASSUME_NONNULL_END
 - (void)socket:(CRSocket *)sock didAccept:(int)fd addr:(struct sockaddr *)sa len:(socklen_t)len {
 #if DEBUG
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    
+    NSError *error;
+    NSString *address;
+    NSUInteger port;
+    
+    if ( ![CRSocket getSocketAddr:sa address:&address port:&port error:&error] ) {
+        NSLog(@" *** %@", error);
+    } else {
+        NSLog(@" *** %@:%lu", address, (unsigned long)port);
+    }
 #endif
 }
 

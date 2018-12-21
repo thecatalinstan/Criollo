@@ -137,12 +137,11 @@
             }
             
             if ( socket->_delegateProvidesAcceptHandler ) {
-//                struct sockaddr *sa = calloc(1, sizeof(struct sockaddr));
-//                memcpy(sa, (struct sockaddr *)&in_addr, sizeof(struct sockaddr));
-                struct sockaddr *sa = (struct sockaddr *)&in_addr;
+                struct sockaddr *sa = calloc(1, sizeof(struct sockaddr));
+                memcpy(sa, (struct sockaddr *)&in_addr, sizeof(struct sockaddr));
                 dispatch_async(socket->_delegateQueue, ^{
                     [socket->_delegate socket:socket didAccept:new_sock addr:sa len:in_len];
-//                    free(sa);
+                    free(sa);
                 });
             }
             
@@ -152,6 +151,9 @@
                 
                 // reading is done
                 if ( available <= 0 ) {
+                    dispatch_source_cancel(read_src);
+                    shutdown(new_sock, SHUT_RDWR);
+                    close(new_sock);
                     return;
                 }
                 
@@ -166,7 +168,7 @@
                     if ( bytes_read <= 0 ) {
                         perror("recv");
                         dispatch_source_cancel(read_src);
-                        shutdown(new_sock, 2);
+                        shutdown(new_sock, SHUT_RDWR);
                         close(new_sock);
                         return;
                     }
@@ -186,6 +188,7 @@
                         if ( error != 0 ) {
                             fprintf(stderr, "dispatch_write: %s", strerror(error));
                         }
+                        dispatch_source_cancel(read_src);
                         shutdown(new_sock, SHUT_RDWR);
                         close(new_sock);
                     });
@@ -229,6 +232,41 @@
     }
     
     return YES;
+}
+
++ (BOOL)getSocketAddr:(struct sockaddr *)sa address:(NSString **)address port:(NSUInteger *)port error:(NSError **)error {
+    if ( address == NULL || port == NULL ) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Address or port pointer missing" userInfo:nil];
+    }
+
+    in_port_t p;
+    void *addr;
+    if ( sa->sa_family == AF_INET ) {
+        addr = &(((struct sockaddr_in *)sa)->sin_addr);
+        p = ((struct sockaddr_in *)sa)->sin_port;
+    } else {
+        addr = &(((struct sockaddr_in6 *)sa)->sin6_addr);
+        p = ((struct sockaddr_in6 *)sa)->sin6_port;
+    }
+    
+    char *buf = calloc(1, sa->sa_len);
+    const char *res = inet_ntop(sa->sa_family, addr, buf, sa->sa_len);
+    if ( res == NULL ) {
+        goto error;
+    }
+    
+    *address = [NSString stringWithCString:buf encoding:NSASCIIStringEncoding];
+    *port = (NSUInteger)p;
+    
+    return YES;
+  
+error:
+    if ( error != NULL ) {
+        *error = [NSError errorWithDomain:CRSocketErrorDomain code:CRUnableToResolveAddress userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%s", strerror(errno)]}];
+    }
+    
+    return NO;
+    
 }
 
 @end
