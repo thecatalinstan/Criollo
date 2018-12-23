@@ -356,5 +356,12 @@ NS_ASSUME_NONNULL_END
 #endif
 }
 
+- (void)socket:(nonnull CRSocket *)sock didDisconnect:(int)fd {
+#if DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+}
+
+
 
 @end

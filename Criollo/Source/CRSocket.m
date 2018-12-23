@@ -23,6 +23,7 @@
 
 @property (nonatomic) BOOL delegateProvidesAcceptHandler;
 @property (nonatomic) BOOL delegateProvidesReadHandler;
+@property (nonatomic) BOOL delegateProvidesDisconnectHandler;
 
 @property (nonatomic) int descriptor;
 @property (nonatomic, strong) dispatch_queue_t queue;
@@ -31,6 +32,8 @@
 @property (nonatomic, strong) dispatch_source_t readSource;
 
 - (BOOL)fillAddrinfo:(struct addrinfo **)ai forInterface:(NSString *)interface serviceName:(NSString *)serviceName error:(NSError * _Nullable __autoreleasing *)error;
+
+- (void)close:(int)fd;
 
 @end
 
@@ -43,6 +46,7 @@
         
         _delegateProvidesAcceptHandler = [_delegate respondsToSelector:@selector(socket:didAccept:addr:len:)];
         _delegateProvidesReadHandler = [_delegate respondsToSelector:@selector(socket:didReadData:size:descriptor:)];
+        _delegateProvidesDisconnectHandler = [_delegate respondsToSelector:@selector(socket:didDisconnect:)];
         
         _descriptor = -1;
         _queue = nil;
@@ -145,15 +149,19 @@
                 });
             }
             
+            if ( !socket->_delegateProvidesReadHandler ) {
+                [socket close:new_sock];
+                return;
+            }
+            
             dispatch_source_t read_src = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, new_sock, 0, socket->_queue);
             dispatch_source_set_event_handler(read_src, ^{
                 size_t available = dispatch_source_get_data(read_src);
                 
-                // reading is done
+                // disconnected
                 if ( available <= 0 ) {
                     dispatch_source_cancel(read_src);
-                    shutdown(new_sock, SHUT_RDWR);
-                    close(new_sock);
+                    [socket close:new_sock];
                     return;
                 }
                 
@@ -168,19 +176,14 @@
                     if ( bytes_read <= 0 ) {
                         perror("recv");
                         dispatch_source_cancel(read_src);
-                        shutdown(new_sock, SHUT_RDWR);
-                        close(new_sock);
+                        [socket close:new_sock];
                         return;
                     }
                     
-                    if ( socket->_delegateProvidesReadHandler ) {
-                        dispatch_async(socket->_delegateQueue, ^{
-                            [socket->_delegate socket:socket didReadData:buf size:bytes_read descriptor:new_sock];
-                            free(buf);
-                        });
-                    } else {
+                    dispatch_async(socket->_delegateQueue, ^{
+                        [socket->_delegate socket:socket didReadData:buf size:bytes_read descriptor:new_sock];
                         free(buf);
-                    }
+                    });
                     
                     char *msg = "HTTP/1.1 200 OK\nContent-type:text/plain\n\nHello World!\n";
                     dispatch_data_t res = dispatch_data_create(msg, strlen(msg), NULL, DISPATCH_DATA_DESTRUCTOR_DEFAULT);
@@ -189,8 +192,7 @@
                             fprintf(stderr, "dispatch_write: %s", strerror(error));
                         }
                         dispatch_source_cancel(read_src);
-                        shutdown(new_sock, SHUT_RDWR);
-                        close(new_sock);
+                        [socket close:new_sock];
                     });
                     
                     total_read += bytes_read;
@@ -205,6 +207,21 @@
     dispatch_resume(_readSource);
     
     return YES;
+}
+
+- (void)close:(int)fd {
+    shutdown(fd, SHUT_RDWR);
+    close(fd);
+    
+    if ( !_delegateProvidesDisconnectHandler ) {
+        return;
+    }
+    
+    __weak CRSocket *weak_socket = self;
+    dispatch_async(_delegateQueue, ^{
+        CRSocket *socket = weak_socket;
+        [socket->_delegate socket:socket didDisconnect:fd];
+    });
 }
 
 #pragma mark - Tools
@@ -258,15 +275,17 @@
     *address = [NSString stringWithCString:buf encoding:NSASCIIStringEncoding];
     *port = (NSUInteger)p;
     
+    free(buf);
+    
     return YES;
   
 error:
     if ( error != NULL ) {
         *error = [NSError errorWithDomain:CRSocketErrorDomain code:CRUnableToResolveAddress userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%s", strerror(errno)]}];
     }
+    free(buf);
     
     return NO;
-    
 }
 
 @end
