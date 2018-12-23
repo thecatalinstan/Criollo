@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol CRSocketDelegate <NSObject>
 
+@optional
+
 /**
  Called when a listening socket has accepted a new connection.
 
@@ -32,6 +34,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)socket:(CRSocket *)sock didAccept:(int)fd addr:(struct sockaddr *)sa len:(socklen_t)len;
 
+/**
+ Called when a socket has closed a multiplexed file descriptor
+
+ @param sock The listening `CRSocket` object accepting the connection.
+ @param fd  The file descriptor of the multiplexed socket
+ */
+- (void)socket:(CRSocket *)sock didDisconnect:(int)fd;
+
+@required
 
 /**
  Called when data has become available on a multiplexed descriptor of a scoket.
