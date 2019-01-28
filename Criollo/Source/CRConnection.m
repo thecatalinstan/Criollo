@@ -197,7 +197,10 @@ static const NSData * CRLFCRLFData;
         return;
     }
     
-    CRRequest* firstRequest = self.requests.firstObject;
+    CRRequest* firstRequest;
+    @synchronized (self) {
+        firstRequest = self.requests.firstObject;
+    }
     if ( firstRequest == nil || [firstRequest isEqual:request] ) {
         request.bufferedResponseData = nil;
         [self.socket writeData:data withTimeout:self.server.configuration.CRConnectionWriteTimeout tag:CRConnectionSocketTagSendingResponse];
@@ -217,7 +220,11 @@ static const NSData * CRLFCRLFData;
     CRConnection * __weak connection = self;
     [self.delegate connection:self didFinishRequest:request response:request.response];
     dispatch_async(self.isolationQueue, ^{
-        [connection.requests removeObject:request];
+        if (connection != nil) {
+            @synchronized (connection) {
+                [connection.requests removeObject:request];
+            }
+        }
     });
 }
 
