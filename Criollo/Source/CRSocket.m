@@ -14,6 +14,7 @@
 
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <netinet/tcp.h>
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -75,14 +76,37 @@
     int yes=1;
     if ( setsockopt(_descriptor, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) == -1 ) {
         if ( error != NULL ) {
-            *error = [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%s", strerror(errno)] }];
+            *error = [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"SO_REUSEADDR: %s", strerror(errno)] }];
         }
         return NO;
     }
-    
+    if ( setsockopt(_descriptor, SOL_SOCKET, SO_REUSEPORT, &yes, sizeof(yes)) == -1 ) {
+        if ( error != NULL ) {
+            *error = [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"SO_REUSEPORT: %s", strerror(errno)] }];
+        }
+        return -1;
+    }
+    if ( setsockopt(_descriptor, SOL_SOCKET, SO_NOSIGPIPE, &yes, sizeof(yes)) == -1 ) {
+        if ( error != NULL ) {
+            *error = [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"SO_NOSIGPIPE: %s", strerror(errno)] }];
+        }
+        return -1;
+    }
+    if ( setsockopt(_descriptor, IPPROTO_TCP, TCP_NODELAY, &yes, sizeof(yes)) == -1 ) {
+        if ( error != NULL ) {
+            *error = [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"TCP_NODELAY: %s", strerror(errno)] }];
+        }
+        return -1;
+    }
+    if ( setsockopt(_descriptor, SOL_SOCKET, SO_KEEPALIVE, &yes, sizeof(yes)) == -1 ) {
+        if ( error != NULL ) {
+            *error = [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"SO_KEEPALIVE: %s", strerror(errno)] }];
+        }
+        return -1;
+    }
     if ( fcntl(_descriptor, F_SETFL, O_NONBLOCK) == -1 ) {
         if ( error != NULL ) {
-            *error = [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%s", strerror(errno)] }];
+            *error = [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"O_NONBLOCK: %s", strerror(errno)] }];
         }
         return NO;
     }
@@ -136,7 +160,22 @@
                 return;
             }
             
+            int yes=1;
+            if ( setsockopt(new_sock, SOL_SOCKET, SO_KEEPALIVE, &yes, sizeof(yes)) == -1 ) {
+                perror("SO_KEEPALIVE");
+                return;
+            }
+            if ( setsockopt(new_sock, SOL_SOCKET, SO_NOSIGPIPE, &yes, sizeof(yes)) == -1 ) {
+                perror("SO_NOSIGPIPE");
+                return;
+            }
+            if ( setsockopt(new_sock, IPPROTO_TCP, TCP_NODELAY, &yes, sizeof(yes)) == -1 ) {
+                perror("TCP_NODELAY");
+                return;
+            }
+            
             if ( fcntl(new_sock, F_SETFL, O_NONBLOCK) == -1 ) {
+                perror("fcntl");
                 return;
             }
             
@@ -165,12 +204,13 @@
                     return;
                 }
                 
+                void *buf = calloc(1, available);
+                
                 size_t total_read = 0;
                 while(total_read < available) {
-                    void *buf = calloc(1, available - total_read);
                     size_t bytes_read;
                     do {
-                        bytes_read = recv(new_sock, buf, available, 0);
+                        bytes_read = recv(new_sock, buf + total_read, available - total_read, 0);
                     } while ( bytes_read <= 0 && errno == EAGAIN );
                     
                     if ( bytes_read <= 0 ) {
@@ -180,23 +220,31 @@
                         return;
                     }
                     
-                    dispatch_async(socket->_delegateQueue, ^{
-                        [socket->_delegate socket:socket didReadData:buf size:bytes_read descriptor:new_sock];
-                        free(buf);
-                    });
-                    
-                    char *msg = "HTTP/1.1 200 OK\nContent-type:text/plain\n\nHello World!\n";
-                    dispatch_data_t res = dispatch_data_create(msg, strlen(msg), NULL, DISPATCH_DATA_DESTRUCTOR_DEFAULT);
-                    dispatch_write(new_sock, res, socket->_queue, ^(dispatch_data_t  _Nullable data, int error) {
-                        if ( error != 0 ) {
-                            fprintf(stderr, "dispatch_write: %s", strerror(error));
-                        }
-                        dispatch_source_cancel(read_src);
-                        [socket close:new_sock];
-                    });
-                    
                     total_read += bytes_read;
                 }
+                
+                dispatch_async(socket->_delegateQueue, ^{
+                    [socket->_delegate socket:socket didReadData:buf size:total_read descriptor:new_sock];
+                    free(buf);
+                    int should_close = (strstr(buf, "Connection: close") != NULL || strstr(buf, "HTTP/1.0") != NULL);
+                    char *msg = "HTTP/1.1 200 OK\nContent-type:text/plain\nContent-length:12\n\nHello World!\n";
+                    size_t msg_len = strlen(msg);
+                    size_t total_written = 0;
+                    while (total_written < msg_len) {
+                        size_t bytes_written;
+                        do {
+                            bytes_written = send(new_sock, msg + total_written, msg_len - total_written, 0);
+                        } while ( bytes_written <= 0 && errno == EAGAIN );
+                        total_written += bytes_written;
+                    }
+                    
+                    if ( should_close ) {
+                        dispatch_source_cancel(read_src);
+                        [socket close:new_sock];
+                    }
+                    
+                    free(buf);
+                });
                 
                 return;
             });
