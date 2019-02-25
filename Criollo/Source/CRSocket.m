@@ -139,9 +139,9 @@
     
     _readSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, _descriptor, 0, _queue);
     
-    __weak CRSocket *weak_socket = self;
+    __weak typeof(self) __weak_self = self;
     dispatch_source_set_event_handler (_readSource, ^{
-        CRSocket *socket  = weak_socket;
+        CRSocket *socket  = __weak_self;
         
         unsigned long current = 0;
         unsigned long total = dispatch_source_get_data(socket->_readSource);
@@ -157,6 +157,7 @@
             } while ( new_sock == -1 && errno == EAGAIN );
             
             if ( new_sock == -1 ) {
+                perror("accept");
                 return;
             }
             
@@ -204,7 +205,7 @@
                     return;
                 }
                 
-                void *buf = calloc(1, available);
+                void *buf = calloc(available, sizeof(char));
                 
                 size_t total_read = 0;
                 while(total_read < available) {
@@ -214,6 +215,7 @@
                     } while ( bytes_read <= 0 && errno == EAGAIN );
                     
                     if ( bytes_read <= 0 ) {
+                        free(buf);
                         perror("recv");
                         dispatch_source_cancel(read_src);
                         [socket close:new_sock];
