@@ -32,6 +32,9 @@
 		4A63BB111F96BE8A0062D930 /* CRHTTPSHelperTests.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF21F96BD5C0062D930 /* CRHTTPSHelperTests.p12 */; };
 		4A63BB121F96BE8A0062D930 /* CRHTTPSHelperTests.junk in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF01F96BD5C0062D930 /* CRHTTPSHelperTests.junk */; };
 		4A63BB131F96BE8A0062D930 /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF51F96BD5C0062D930 /* Readme.md */; };
+		4A689EE1222FD4C70074DEA3 /* CRRouterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A689EE0222FD4C70074DEA3 /* CRRouterTests.m */; };
+		4A689EE2222FD4C70074DEA3 /* CRRouterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A689EE0222FD4C70074DEA3 /* CRRouterTests.m */; };
+		4A689EE3222FD4C70074DEA3 /* CRRouterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A689EE0222FD4C70074DEA3 /* CRRouterTests.m */; };
 		4A84C76F1F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */; };
 		4A84C7701F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */; };
 		4ABB1DE31F9E6B0A00480EC7 /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ABB1DDA1F9E6B0900480EC7 /* Criollo.framework */; };
@@ -367,6 +370,7 @@
 		4A63BAF41F96BD5C0062D930 /* CRHTTPSHelperTests.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSHelperTests.pem; sourceTree = "<group>"; };
 		4A63BAF51F96BD5C0062D930 /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
 		4A63BAF61F96BD5C0062D930 /* CRHTTPSHelperTests.key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSHelperTests.key.pem; sourceTree = "<group>"; };
+		4A689EE0222FD4C70074DEA3 /* CRRouterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRRouterTests.m; sourceTree = "<group>"; };
 		4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRHTTPServerTests.m; sourceTree = "<group>"; };
 		4A96B1851F95576F0091B193 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "Libraries/OpenSSL-for-iPhone/lib/libcrypto.a"; sourceTree = "<group>"; };
 		4A96B1861F95576F0091B193 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "Libraries/OpenSSL-for-iPhone/lib/libssl.a"; sourceTree = "<group>"; };
@@ -598,6 +602,7 @@
 				AD1D44F71F376DED00C5D260 /* CRViewTests.m */,
 				AD030FDF1F0C02C900BD9FE4 /* Info.plist */,
 				AD96F74D1F1A3F8000C8D075 /* Samples */,
+				4A689EE0222FD4C70074DEA3 /* CRRouterTests.m */,
 			);
 			path = CriolloTests;
 			sourceTree = "<group>";
@@ -1324,6 +1329,7 @@
 				4ABB1E461F9E70AD00480EC7 /* CRNibTests.m in Sources */,
 				4ABB1E471F9E70B000480EC7 /* CRViewTests.m in Sources */,
 				4ABB1E451F9E70AA00480EC7 /* CRMimeTypeHelperTests.m in Sources */,
+				4A689EE3222FD4C70074DEA3 /* CRRouterTests.m in Sources */,
 				4ABB1E441F9E70A700480EC7 /* CRHTTPSHelperTests.m in Sources */,
 				4ABB1E431F9E709B00480EC7 /* CRHTTPServerTests.m in Sources */,
 			);
@@ -1336,6 +1342,7 @@
 				4AD0AD591F6662AA00943DC3 /* CRHTTPSHelperTests.m in Sources */,
 				AD1D44F81F376DED00C5D260 /* CRViewTests.m in Sources */,
 				AD1D44E21F375DE100C5D260 /* CRNibTests.m in Sources */,
+				4A689EE1222FD4C70074DEA3 /* CRRouterTests.m in Sources */,
 				4A84C76F1F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */,
 				AD7F2F711F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */,
 			);
@@ -1348,6 +1355,7 @@
 				4AD0AD5A1F6662AA00943DC3 /* CRHTTPSHelperTests.m in Sources */,
 				AD1D44F91F3772ED00C5D260 /* CRViewTests.m in Sources */,
 				AD1D44E91F37600300C5D260 /* CRNibTests.m in Sources */,
+				4A689EE2222FD4C70074DEA3 /* CRRouterTests.m in Sources */,
 				4A84C7701F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */,
 				AD7F2F721F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */,
 			);
