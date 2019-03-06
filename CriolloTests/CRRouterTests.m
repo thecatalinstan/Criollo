@@ -14,6 +14,14 @@
 #import "CRRouter_Internal.h"
 #import "CRRouteMatchingResult.h"
 #import "CRRouteMatchingResult_Internal.h"
+#import "CRMessage.h"
+#import "CRMessage_Internal.h"
+#import "CRRequest.h"
+#import "CRRequest_Internal.h"
+#import "CRResponse.h"
+#import "CRResponse_Internal.h"
+#import "CRRouteMatchingResult.h"
+#import "CRRouteMatchingResult_Internal.h"
 
 @interface CRRouterTests : XCTestCase
 
@@ -23,16 +31,12 @@ static CRRouteBlock noop;
 
 @implementation CRRouterTests
 
-- (void)setUp {
-    [super setUp];
-    noop = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-        completionHandler();
-    };
-}
 
 - (void)testPlaceholderRoutes {
+    
+    CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler){};
     CRRouter *router = [[CRRouter alloc] init];
-    CRRoute *route = [[CRRoute alloc] initWithBlock:noop method:CRHTTPMethodAll path:@"/routes/:foo" recursive:NO];
+    CRRoute *route = [[CRRoute alloc] initWithBlock:block method:CRHTTPMethodAll path:@"/routes/:foo" recursive:NO];
     [router addRoute:route];
     
     NSArray<NSString *> *paths = @[
@@ -42,14 +46,25 @@ static CRRouteBlock noop;
                                    @"/routes/AbCd",
                                    @"/routes/1234abcd",
                                    @"/routes/A-b-C-d",
-                                   @"/routes/A.b.C.d"
+                                   @"/routes/A.b.C.d",
+                                   @"/routes/A+b+C+d",
+                                   @"/routes/A%20b%20C%20d",
+                                   @"/routes/A_b_C_d"
                                    ];
     
     for (NSString *path in paths ) {
-        NSArray<CRRouteMatchingResult *> *routes = [router routesForPath:path method:CRHTTPMethodGet];
-        XCTAssertNotNil(routes);
-        XCTAssertEqual(1, routes.count, @"Path %@ should match 1 routes", path);
-        XCTAssertTrue(routes.firstObject.route == route);
+        NSArray<CRRouteMatchingResult *> *matches = [router routesForPath:path method:CRHTTPMethodGet];
+        XCTAssertNotNil(matches);
+        XCTAssertEqual(1, matches.count, @"Path %@ should match 1 routes", path);
+        
+        CRRouteMatchingResult *result = matches.firstObject;
+        XCTAssertTrue(result.route == route);
+        
+        NSString *foo = result.matches.firstObject;
+        XCTAssertNotNil(foo);
+
+        NSString *expectedFoo = path.lastPathComponent;
+        XCTAssertTrue([expectedFoo isEqualToString:foo]);
     }
 }
 
