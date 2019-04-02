@@ -34,12 +34,13 @@
     } else {
         NSMutableString* mutableContents = self.contents.mutableCopy;
         [vars enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) { @autoreleasepool {
+            NSString *replacement = obj;
             if ( ![obj isKindOfClass:[NSString class]] ) {
-                return;
+                replacement = [obj description];
             }
-            [mutableContents replaceOccurrencesOfString:[NSString stringWithFormat:CRViewVariableFormat, key] withString:obj options:0 range:NSMakeRange(0, mutableContents.length)];
+            [mutableContents replaceOccurrencesOfString:[NSString stringWithFormat:CRViewVariableFormat, key] withString:replacement options:0 range:NSMakeRange(0, mutableContents.length)];
         }}];
-        return mutableContents;
+        return mutableContents.copy;
     }
 }
 

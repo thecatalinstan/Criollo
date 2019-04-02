@@ -36,13 +36,13 @@
     CRRouteBlock statusBlock = [CommonRequestHandler defaultHandler].statusBlock;
     CRRouteBlock redirectBlock = [CommonRequestHandler defaultHandler].redirectBlock;
 
-    [self.server addBlock:identifyBlock];
-    [self.server addBlock:helloBlock forPath:@"/"];
-    [self.server addBlock:jsonHelloBlock forPath:@"/json"];
-    [self.server addBlock:statusBlock forPath:@"/status" HTTPMethod:CRHTTPMethodGet];
-    [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller"];
-    [self.server mountStaticDirectoryAtPath:[[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"] forPath:@"/static" options:CRStaticDirectoryServingOptionsCacheFiles];
-    [self.server addBlock:redirectBlock forPath:@"/redirect" HTTPMethod:CRHTTPMethodGet];
+    [self.server add:identifyBlock];
+    [self.server add:@"/" block:helloBlock];
+    [self.server add:@"/json" block:jsonHelloBlock];
+    [self.server get:@"/status" block:statusBlock];
+    [self.server add:@"/controller" viewController:HelloWorldViewController.class withNibName:nil bundle:nil];
+    [self.server mount:@"/static" directoryAtPath:[NSBundle.mainBundle.resourcePath stringByAppendingPathComponent:@"Public"] options:CRStaticDirectoryServingOptionsCacheFiles];
+    [self.server get:@"/redirect" block:redirectBlock];
 
     [self willChangeValueForKey:@"isConnected"];
     _isConnected = NO;
@@ -93,23 +93,25 @@
     _isDisconnected = NO;
     [self didChangeValueForKey:@"isDisconnected"];
 
-    [self.server stopListening];
-    
-    [self willChangeValueForKey:@"isConnected"];
-    _isConnected = NO;
-    [self didChangeValueForKey:@"isConnected"];
-
-    [self willChangeValueForKey:@"isDisconnected"];
-    _isDisconnected = YES;
-    [self didChangeValueForKey:@"isDisconnected"];
-
-    [self serverDidStopListening];
+    [self.server closeAllConnections:^{
+        [self.server stopListening];
+        
+        [self willChangeValueForKey:@"isConnected"];
+        _isConnected = NO;
+        [self didChangeValueForKey:@"isConnected"];
+        
+        [self willChangeValueForKey:@"isDisconnected"];
+        _isDisconnected = YES;
+        [self didChangeValueForKey:@"isDisconnected"];
+        
+        [self serverDidStopListening];        
+    }];
 }
 
 - (void)closeAllConnections {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        [self.server closeAllConnections];
+        [self.server closeAllConnections:nil];
     });
 }
 
@@ -117,23 +119,11 @@
     [self logFormat:@"Started HTTP server at %@", URL.absoluteString];
 
     // Get the list of paths
-    NSDictionary<NSString*, NSMutableArray<CRRoute*>*>* routes = [[self.server valueForKey:@"routes"] mutableCopy];
-    NSMutableSet<NSURL*>* paths = [NSMutableSet set];
-    [routes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<CRRoute *> * _Nonnull obj, BOOL * _Nonnull stop) {
-        if ( [key hasSuffix:@"*"] ) {
-            return;
-        }
-        NSString* path = [key substringFromIndex:[key rangeOfString:@"/"].location + 1];
-        [paths addObject:[self.baseURL URLByAppendingPathComponent:path]];
-    }];
-
-    NSArray<NSURL*>* sortedPaths =[paths sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"absoluteString" ascending:YES]]];
-
+    NSArray<NSString *> *paths = [[self.server valueForKeyPath:@"routes.@distinctUnionOfObjects.path"] sortedArrayUsingSelector:@selector(compare:)];
     [self logFormat:@"Available paths are:"];
-    [sortedPaths enumerateObjectsUsingBlock:^(NSURL * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [self logFormat:@" * %@", obj.absoluteString];
+    [paths enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self logFormat:@" * %@", [self.baseURL URLByAppendingPathComponent:[obj substringFromIndex:1]]];
     }];
-
 }
 
 - (void)serverDidFailToStartWithError:(NSError *)error {

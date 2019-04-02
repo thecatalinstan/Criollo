@@ -1,12 +1,44 @@
 # Change Log
 
-This file includes all notable changes to Criollo.
-
-*Please note that during this early stage of development, **APIs are extremely prone to non-backward-compatible changes.** Please consult this file for the specifics, before you upgrade.*
+This file includes all notable changes to Criollo. Please consult this file for the specifics, before you upgrade.
 
 Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
+
+## [0.5.5](https://github.com/thecatalinstan/Criollo/releases/tag/0.5.5) (08/09/2018)
+
+**Released on Thursday, August 9, 2018**. This is a service release that updates project settings for Xcode compatibility.
+
+No APIs are changed.
+
+## [0.5.4](https://github.com/thecatalinstan/Criollo/releases/tag/0.5.4) (04/04/2018)
+
+**Released on Wednesday, April 4, 2018**. This is a service release that finalizes previous refactoring and cleanup endeavors.
+
+No APIs are changed.
+
+## [0.5.3](https://github.com/thecatalinstan/Criollo/releases/tag/0.5.3) (04/04/2018)
+
+**Released on Wednesday, April 4, 2018**. This is a service release that adds Travis CI pod validation and splits the bundled OpenSSL libraries into a different submodule.
+
+No APIs are changed.
+
+## [0.5.2](https://github.com/thecatalinstan/Criollo/releases/tag/0.5.2) (04/02/2018)
+
+**Released on Monday, April 2, 2018**. This is a service release that adds Travis CI.
+
+## [0.5.1](https://github.com/thecatalinstan/Criollo/releases/tag/0.5.1) (03/31/2018)
+
+**Released on Saturday, March 31, 2018**. This is a service release that fixes Xcode 9.3 warnings.
+
+##  [0.5.0](https://github.com/thecatalinstan/Criollo/releases/tag/0.5.0) (03/27/2018)
+
+**Released on Tuesday, March 27, 2018**. This release makes Criollo available for tvOS, adds HTTPS support on all platforms, implements a number of tests, as well as addresses a number of bugs.
+
+## [0.4.17](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.17) (07/26/2017)
+
+**Released on Wednesday, July 26, 2017**. This is a maintenance and update release that aims to address various issues arising from Xcode and SDK updates.
 
 ## [0.4.16](https://github.com/thecatalinstan/Criollo/releases/tag/0.4.16) (03/21/2017)
 

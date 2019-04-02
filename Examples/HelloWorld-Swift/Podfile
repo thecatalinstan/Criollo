@@ -1,9 +1,8 @@
-platform :osx, '10.9'
+platform :osx, '10.10'
 use_frameworks!
 
 target 'HelloWorld-Swift' do
-
-	pod 'Criollo', '~> 0.1.0'
-
+  pod 'Criollo', :git => '../../', :submodules => true
+  pod 'CSSystemInfoHelper', '~> 1.4'
 end
 

@@ -20,6 +20,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRRequest ()
 
+@property (nonatomic, readwrite, strong) NSURL * URL;
+@property (nonatomic, readwrite) CRHTTPMethod method;
+@property (nonatomic, readwrite, strong) NSDictionary<NSString *, NSString *> * env;
+@property (nonatomic, readwrite, strong) NSDictionary<NSString *, NSString *> * query;
+@property (nonatomic, readwrite, strong, nullable) NSDictionary<NSString *, NSString *> * cookies;
+@property (nonatomic, readwrite, nullable) CRRequestRange * range;
+
 @property (nonatomic, readonly) BOOL shouldCloseConnection;
 
 @property (nonatomic, strong, nullable) NSMutableData * bufferedBodyData;
@@ -44,7 +51,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)setFileHeader:(NSDictionary *)headerFields forKey:(NSString *)key;
 - (BOOL)appendFileData:(NSData *)data forKey:(NSString *)key;
 
-- (void)setEnv:(NSDictionary<NSString *,NSString *> *)envDictionary;
+- (void)parseQueryString;
+- (void)parseCookiesHeader;
+- (void)parseRangeHeader;
+
 - (void)setEnv:(NSString *)obj forKey:(NSString *)key;
 
 - (void)setQuery:(NSString *)obj forKey:(NSString *)key;

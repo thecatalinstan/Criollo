@@ -26,16 +26,9 @@
 #define CRFileHeaderContentTypeKey      @"content-type"
 
 @implementation CRRequest {
-    __strong NSMutableDictionary* _env;
-
-    __block NSString * _multipartBoundary;
-    __block dispatch_once_t _multipartBoundaryOnceToken;
-
-    __block NSString * _multipartBoundaryPrefixedString;
-    __block dispatch_once_t _multipartBoundaryPrefixedStringOnceToken;
-
-    __block NSData * _multipartBoundaryPrefixedData;
-    __block dispatch_once_t _multipartBoundaryPrefixedDataOnceToken;
+    NSString * _multipartBoundary;
+    NSString * _multipartBoundaryPrefixedString;
+    NSData * _multipartBoundaryPrefixedData;
 
     NSString* currentMultipartBodyKey;
     NSString* currentMultipartFileKey;
@@ -52,22 +45,25 @@
 - (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL *)URL version:(CRHTTPVersion)version connection:(CRConnection * _Nullable)connection {
     return [self initWithMethod:method URL:URL version:version connection:connection env:nil];
 }
+
 - (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL *)URL version:(CRHTTPVersion)version connection:(CRConnection *)connection env:(NSDictionary *)env {
     self = [super init];
     if ( self != nil ) {
-        _method = method;
+        self.method = method;
         if ( connection ) {
-            _connection = connection;
+            self.connection = connection;
         }
         if ( URL ) {
             self.message = CFBridgingRelease( CFHTTPMessageCreateRequest(NULL, (__bridge CFStringRef)NSStringFromCRHTTPMethod(_method), (__bridge CFURLRef)URL, (__bridge CFStringRef)NSStringFromCRHTTPVersion(version)) );
         }
-        if ( env == nil ) {
-            _env = [NSMutableDictionary dictionary];
+        if ( env != nil ) {
+            self.env = [NSMutableDictionary dictionaryWithDictionary:env];
         } else {
-            [self setEnv:env];
+            self.env = [NSMutableDictionary dictionary];
         }
-        _query = [NSMutableDictionary dictionary];
+        [self parseQueryString];
+        [self parseCookiesHeader];
+        [self parseRangeHeader];
     }
     return self;
 }
@@ -80,21 +76,11 @@
     return CFHTTPMessageAppendBytes((__bridge CFHTTPMessageRef)self.message, data.bytes, data.length);
 }
 
-- (NSDictionary<NSString *,NSString *> *)env {
-    return _env;
-}
-
-- (void)setEnv:(NSDictionary<NSString *,NSString *> *)envDictionary {
-    if ( [envDictionary isKindOfClass:[NSMutableDictionary class]] ) {
-        _env = (NSMutableDictionary*)envDictionary;
-    } else {
-        _env = envDictionary.mutableCopy;
-    }
-
+- (void)parseQueryString {
     // Parse request query string
-    NSMutableDictionary<NSString *,NSString *> *query = _query ? _query.mutableCopy : [NSMutableDictionary dictionary];
-    if ( _env[@"QUERY_STRING"] != nil ) {
-        NSArray<NSString *> *queryVars = [_env[@"QUERY_STRING"] componentsSeparatedByString:CRRequestKeySeparator];
+    NSMutableDictionary<NSString *,NSString *> *query = self.query ? self.query.mutableCopy : [NSMutableDictionary dictionary];
+    if ( self.env[@"QUERY_STRING"] != nil ) {
+        NSArray<NSString *> *queryVars = [self.env[@"QUERY_STRING"] componentsSeparatedByString:CRRequestKeySeparator];
         [queryVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) { @autoreleasepool {
             NSArray<NSString *> *queryVarComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
             NSString *key = queryVarComponents[0].stringByDecodingURLEncodedString.stringByRemovingPercentEncoding ? : (queryVarComponents[0].stringByDecodingURLEncodedString ? : queryVarComponents[0]);
@@ -102,31 +88,35 @@
             query[key] = value;
         }}];
     }
-    _query = query;
+    self.query = query;
+}
 
+- (void)parseCookiesHeader {
     // Parse request cookies
     NSMutableDictionary<NSString *,NSString *> *cookies = [NSMutableDictionary dictionary];
-    if ( _env[@"HTTP_COOKIE"] != nil ) {
-        NSArray<NSString *> *cookieStrings = [_env[@"HTTP_COOKIE"] componentsSeparatedByString:CRRequestHeaderSeparator];
+    if ( self.env[@"HTTP_COOKIE"] != nil ) {
+        NSArray<NSString *> *cookieStrings = [self.env[@"HTTP_COOKIE"] componentsSeparatedByString:CRRequestHeaderSeparator];
         [cookieStrings enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) { @autoreleasepool {
             NSArray<NSString *> *cookieComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
             cookies[cookieComponents[0]] = cookieComponents.count > 1 ? cookieComponents[1] : @"";
         }}];
     }
-    _cookies = cookies;
+    self.cookies = cookies;
+}
 
+- (void)parseRangeHeader {
     // Parse Range header
-    if ( _env[@"HTTP_RANGE"] != nil ) {
-        _range = [CRRequestRange reuestRangeWithRangesSpecifier:_env[@"HTTP_RANGE"]];
+    if ( self.env[@"HTTP_RANGE"] != nil ) {
+        self.range = [CRRequestRange reuestRangeWithRangesSpecifier:self.env[@"HTTP_RANGE"]];
     }
 }
 
 - (void)setEnv:(NSString *)obj forKey:(NSString *)key {
-    [_env setObject:obj forKey:key];
+    ((NSMutableDictionary *)self.env)[key] = obj;
 }
 
 - (void)setQuery:(NSString *)obj forKey:(NSString *)key {
-    [((NSMutableDictionary *)_query) setObject:obj forKey:key];
+    ((NSMutableDictionary *)self.query)[key] = obj;
 }
 
 - (NSString *)description {
@@ -191,10 +181,12 @@
     if ( currentMultipartFileKey != nil ) {
         result = [self appendFileData:data forKey:currentMultipartFileKey];
     } else {
-        result = NO;
-        *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestFileWriteError userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to append MIME data",)}];
+        if ( error != nil ) {
+            *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestFileWriteError userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to append MIME data",)}];
+            result = NO;
+        }
     }
-        
+
     return result;
 }
 
@@ -423,16 +415,19 @@
 - (NSString *)multipartBoundary {
     NSString* contentType = _env[@"HTTP_CONTENT_TYPE"];
     if ([contentType hasPrefix:CRRequestTypeMultipart]) {
-        dispatch_once(&_multipartBoundaryOnceToken, ^{
+        if ( ! _multipartBoundary ) {
+            
+            __block NSString *boundary;
             NSArray<NSString*>* headerComponents = [contentType componentsSeparatedByString:CRRequestHeaderSeparator];
             [headerComponents enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 obj = [obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
                 if ( ![obj hasPrefix:CRRequestBoundaryParameter] ) {
                     return;
                 }
-                _multipartBoundary = [[obj componentsSeparatedByString:CRRequestValueSeparator][1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                boundary = [[obj componentsSeparatedByString:CRRequestValueSeparator][1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
             }];
-        });
+            _multipartBoundary = boundary;
+        }
     }
     return _multipartBoundary;
 }
@@ -447,19 +442,15 @@
 }
 
 - (NSString *)multipartBoundaryPrefixedString {
-    if ( self.multipartBoundary.length > 0 ) {
-        dispatch_once(&_multipartBoundaryPrefixedStringOnceToken, ^{
-            _multipartBoundaryPrefixedString = [NSString stringWithFormat:@"%@%@", CRRequestBoundaryPrefix, self.multipartBoundary];
-        });
+    if ( self.multipartBoundary.length > 0 && !_multipartBoundaryPrefixedString ) {
+        _multipartBoundaryPrefixedString = [NSString stringWithFormat:@"%@%@", CRRequestBoundaryPrefix, self.multipartBoundary];
     }
     return _multipartBoundaryPrefixedString;
 }
 
 - (NSData *)multipartBoundaryPrefixedData {
-    if ( self.multipartBoundaryPrefixedString.length > 0 ) {
-        dispatch_once(&_multipartBoundaryPrefixedDataOnceToken, ^{
-            _multipartBoundaryPrefixedData = [NSData dataWithBytesNoCopy:(void *)self.multipartBoundaryPrefixedString.UTF8String length:self.multipartBoundaryPrefixedString.length freeWhenDone:NO];
-        });
+    if ( self.multipartBoundaryPrefixedString.length > 0 && !_multipartBoundaryPrefixedData ) {
+        _multipartBoundaryPrefixedData = [NSData dataWithBytesNoCopy:(void *)self.multipartBoundaryPrefixedString.UTF8String length:self.multipartBoundaryPrefixedString.length freeWhenDone:NO];
     }
     return _multipartBoundaryPrefixedData;
 }

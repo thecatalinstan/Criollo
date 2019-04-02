@@ -119,16 +119,16 @@ static const NSData * CRLFCRLFData;
     }
 
     NSString * contentType = self.currentRequest.env[@"HTTP_CONTENT_TYPE"];
-    if ([contentType hasPrefix:CRRequestTypeMultipart]) {
+    if ([contentType hasPrefix:CRRequestTypeURLEncoded]) {
+        // URL-encoded requests are parsed after we have all the data
+        [self bufferBodyData:data forRequest:self.currentRequest];
+    } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
         NSError* multipartParsingError;
         if ( ![self.currentRequest parseMultipartBodyDataChunk:data error:&multipartParsingError] ) {
             [CRApp logErrorFormat:@"%@" , multipartParsingError];
         }
     } else if ([contentType hasPrefix:CRRequestTypeJSON]) {
         // JSON requests are parsed after we have all the data
-        [self bufferBodyData:data forRequest:self.currentRequest];
-    } else if ([contentType hasPrefix:CRRequestTypeURLEncoded]) {
-        // URL-encoded requests are parsed after we have all the data
         [self bufferBodyData:data forRequest:self.currentRequest];
     } else {
         NSError* mimeParsingError;
@@ -198,7 +198,7 @@ static const NSData * CRLFCRLFData;
     }
     
     CRRequest* firstRequest = self.requests.firstObject;
-    if ( [firstRequest isEqual:request] || self.requests.count == 0 ) {
+    if ( firstRequest == nil || [firstRequest isEqual:request] ) {
         request.bufferedResponseData = nil;
         [self.socket writeData:data withTimeout:self.server.configuration.CRConnectionWriteTimeout tag:CRConnectionSocketTagSendingResponse];
         if ( request.shouldCloseConnection ) {

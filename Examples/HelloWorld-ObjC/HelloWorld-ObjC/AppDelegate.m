@@ -6,8 +6,9 @@
 //  Copyright © 2015 Catalin Stan. All rights reserved.
 //
 
+#import <CSSystemInfoHelper/CSSystemInfoHelper.h>
+
 #import "AppDelegate.h"
-#import "utils.h"
 #import "HelloWorldViewController.h"
 #import "MultipartViewController.h"
 
@@ -38,7 +39,7 @@
     NSBundle *bundle = [NSBundle mainBundle];
 
     // Add a header that says who we are :)
-    [self.server addBlock:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
+    [self.server add:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
         [response setValue:[NSString stringWithFormat:@"%@, %@ build %@", bundle.bundleIdentifier, [bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [bundle objectForInfoDictionaryKey:@"CFBundleVersion"]] forHTTPHeaderField:@"Server"];
 
         if ( ! request.cookies[@"session_cookie"] ) {
@@ -55,7 +56,7 @@
         [response send:@"Hello World"];
         completionHandler();
     };
-    [self.server addBlock:helloBlock forPath:@"/"];
+    [self.server add:@"/" block:helloBlock];
 
     // Prints a hello world JSON object as application/json
     CRRouteBlock jsonHelloBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler ) {
@@ -63,10 +64,9 @@
         [response send:@{@"status":@(YES), @"mesage": @"Hello world"}];
         completionHandler();
     };
-    [self.server addBlock:jsonHelloBlock forPath:@"/json"];
+    [self.server add:@"/json" block:jsonHelloBlock];
 
     // Prints some more info as text/html
-    NSString *uname = systemInfo();
     CRRouteBlock statusBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler ) {
 
         NSDate *startTime = [NSDate date];
@@ -126,7 +126,7 @@
 
         // System info
         [responseString appendString:@"<hr/>"];
-        [responseString appendFormat:@"<small>%@</small><br/>", uname];
+        [responseString appendFormat:@"<small>%@</small><br/>", CSSystemInfoHelper.sharedHelper.systemInfoString];
         [responseString appendFormat:@"<small>Task took: %.4fms</small>", [startTime timeIntervalSinceNow] * -1000];
 
         // HTML
@@ -139,30 +139,30 @@
         completionHandler();
 
     };
-    [self.server addBlock:statusBlock forPath:@"/status"];
+    [self.server add:@"/status" block:statusBlock];
 
-    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+    [self.server post:@"/post" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         [response setValue:@"text/plain" forHTTPHeaderField:@"Content-type"];
         [response sendString:[NSString stringWithFormat:@"%@\r\n\r\n--%@\r\n\r\n--", request, request.body]];
-    } forPath:@"/post" HTTPMethod:CRHTTPMethodPost];
-
-    [self.server addController:[MultipartViewController class] withNibName:@"MultipartViewController" bundle:nil forPath:@"/multipart"];
-    [self.server addController:[HelloWorldViewController class] withNibName:@"HelloWorldViewController" bundle:nil forPath:@"/controller" HTTPMethod:CRHTTPMethodAll recursive:YES];
-
+    }];
+    
+    [self.server add:@"/multipart" viewController:[MultipartViewController class] withNibName:nil bundle:nil];
+    [self.server add:@"/controller" viewController:[HelloWorldViewController class] withNibName:nil bundle:nil recursive:YES method:CRHTTPMethodAll];
+    
     // Serve static files from "/Public" (relative to bundle)
     NSString* staticFilesPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"Public"];
-    [self.server mountStaticDirectoryAtPath:staticFilesPath forPath:@"/static" options:CRStaticDirectoryServingOptionsCacheFiles];
+    [self.server mount:@"/static" directoryAtPath:staticFilesPath options:CRStaticDirectoryServingOptionsCacheFiles];
 
     // Redirecter
-    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+    [self.server get:@"/redirect" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         NSURL* redirectURL = [NSURL URLWithString:(request.query[@"redirect"] ? : @"")];
         if ( redirectURL ) {
             [response redirectToURL:redirectURL];
         }
         completionHandler();
-    } forPath:@"/redirect" HTTPMethod:CRHTTPMethodGet];
+    }];
 
-    [self.server mountStaticDirectoryAtPath:@"~" forPath:@"/pub" options:CRStaticDirectoryServingOptionsAutoIndex];
+    [self.server mount:@"/pub" directoryAtPath:@"~" options:CRStaticDirectoryServingOptionsAutoIndex];
 
     // Start listening
     NSError *serverError;
@@ -170,31 +170,23 @@
 
         // Output some nice info to the console
 
-        // Get server ip address
-        NSString *address;
-        BOOL result = getIPAddress(&address);
-        if ( !result ) {
-            address = @"127.0.0.1";
-        }
-
         // Set the base url. This is only for logging
-        self.baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d", address, PortNumber]];
+        self.baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d", CSSystemInfoHelper.sharedHelper.IPAddress, PortNumber]];
 
         [CRApp logFormat:@"Started HTTP server at %@", self.baseURL.absoluteString];
 
         // Get the list of paths
-        NSDictionary<NSString*, NSMutableArray<CRRoute*>*>* routes = [[self.server valueForKey:@"routes"] mutableCopy];
-        NSMutableSet<NSURL*>* paths = [NSMutableSet set];
+        NSArray<CRRoute *> *routes = [[self.server valueForKey:@"routes"] mutableCopy];
+        NSMutableSet<NSURL *> *paths = [NSMutableSet set];
 
-        [routes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<CRRoute *> * _Nonnull obj, BOOL * _Nonnull stop) {
-            if ( [key hasSuffix:@"*"] ) {
+        [routes enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString *path = [obj valueForKey:@"path"];
+            if ( path == nil )
                 return;
-            }
-            NSString* path = [key substringFromIndex:[key rangeOfString:@"/"].location + 1];
             [paths addObject:[self.baseURL URLByAppendingPathComponent:path]];
         }];
-
-        NSArray<NSURL*>* sortedPaths =[paths sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"absoluteString" ascending:YES]]];
+   
+        NSArray<NSURL *> *sortedPaths =[paths sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"absoluteString" ascending:YES]]];
         [CRApp logFormat:@"Available paths are:"];
         [sortedPaths enumerateObjectsUsingBlock:^(NSURL * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [CRApp logFormat:@" * %@", obj.absoluteString];

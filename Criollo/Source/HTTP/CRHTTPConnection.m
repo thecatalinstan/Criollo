@@ -66,7 +66,6 @@
         env[@"SERVER_NAME"] = env[@"HTTP_HOST"];
     }
 
-//    env[@"SERVER_SOFTWARE"] = @"";
     env[@"REQUEST_METHOD"] = NSStringFromCRHTTPMethod(self.currentRequest.method);
     env[@"SERVER_PROTOCOL"] = NSStringFromCRHTTPVersion(self.currentRequest.version);
     env[@"REQUEST_URI"] = self.currentRequest.URL.absoluteString;
@@ -74,10 +73,14 @@
     env[@"SCRIPT_NAME"] = self.currentRequest.URL.path;
     env[@"QUERY_STRING"] = self.currentRequest.URL.query;
     env[@"REMOTE_ADDR"] = self.socket.connectedHost;
-    env[@"REMOTE_PORT"] = @(self.socket.connectedPort);
+    env[@"REMOTE_PORT"] = @(self.socket.connectedPort).stringValue;
     env[@"SERVER_ADDR"] = self.socket.localHost;
-    env[@"SERVER_PORT"] = @(self.socket.localPort);
-    [self.currentRequest setEnv:env];
+    env[@"SERVER_PORT"] = @(self.socket.localPort).stringValue;
+    
+    self.currentRequest.env = env;
+    [self.currentRequest parseQueryString];
+    [self.currentRequest parseCookiesHeader];
+    [self.currentRequest parseRangeHeader];
 
     [super didReceiveCompleteRequestHeaders];
 
@@ -147,11 +150,7 @@
                         NSString* hostSpec = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes + hostSpecRange.location length:hostSpecRange.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
 
                         // TODO: request.URL should be parsed using no memcpy and using the actual scheme
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-                        NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", hostSpec, pathSpec]];
-#else
                         NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http%@://%@%@", ((CRHTTPServer *)self.server).isSecure ? @"s" : @"", hostSpec, pathSpec]];
-#endif
                         CRRequest* request = [[CRRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self];
                         CRHTTPConnection * __weak connection = self;
                         dispatch_async(self.isolationQueue, ^{

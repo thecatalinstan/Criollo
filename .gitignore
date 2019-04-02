@@ -19,7 +19,9 @@ DerivedData
 
 .DS_Store
 *.swp
+
+Docs
+
 Pods
 Podfile.lock
-HelloWorld*.xcworkspace
-Docs
+Examples/*/*.xcworkspace

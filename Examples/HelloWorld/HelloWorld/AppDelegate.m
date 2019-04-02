@@ -22,7 +22,7 @@
     self.server = [[CRHTTPServer alloc] init];
 
     // Add a middleware that sets the 'Server' header and two cookies
-    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+    [self.server add:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
 
         // The the Server header to the main bundle identifier
         [response setValue:[NSBundle mainBundle].bundleIdentifier forHTTPHeaderField:@"Server"];
@@ -40,22 +40,22 @@
     }];
 
     // Add the route block for "GET /"
-    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+    [self.server get:@"/" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
 
         // Send string (the default Content-Type is text/plain)
         [response sendString:@"Hello world!"];
 
         // Call the next block
         completionHandler();
-    } forPath:@"/" HTTPMethod:CRHTTPMethodGet];
+    }];
 
     // Send MIME Type for .nfo files
     [[CRMimeTypeHelper sharedHelper] setMimeType:@"text/plain; charset=utf-8" forExtension:@"nfo"];
 
     // Expose the contents of the home dir "~" at "/pub"
-    [self.server mountStaticDirectoryAtPath:@"~" forPath:@"/pub" options:CRStaticDirectoryServingOptionsCacheFiles|CRStaticDirectoryServingOptionsAutoIndex];
+    [self.server mount:@"/pub" directoryAtPath:@"~" options:CRStaticDirectoryServingOptionsCacheFiles|CRStaticDirectoryServingOptionsAutoIndex];
 
-    [self.server addBlock:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
+    [self.server add:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
         NSUInteger statusCode = request.response.statusCode;
         NSString* contentLength = [request.response valueForHTTPHeaderField:@"Content-Length"];
         NSString* userAgent = request.env[@"HTTP_USER_AGENT"];

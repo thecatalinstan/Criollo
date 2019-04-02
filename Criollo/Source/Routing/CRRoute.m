@@ -45,23 +45,23 @@
 
         if ( self.path != nil ) {
             __block BOOL isRegex = NO;
-            _pathKeys = [NSMutableArray array];
-            NSMutableArray<NSString *> * pathRegexComponents = [NSMutableArray array];
+            NSMutableArray<NSString *> *pathRegexComponents = [NSMutableArray array];
+            NSMutableArray<NSString *> *pathKeys = [NSMutableArray array];
             [self.path.pathComponents enumerateObjectsUsingBlock:^(NSString * _Nonnull component, NSUInteger idx, BOOL * _Nonnull stop) {
                 if ( [component hasPrefix:@":"] ) {
                     NSString *keyName = [component substringFromIndex:1];
                     if ( keyName.length == 0 ) {
                         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:NSLocalizedString(@"Invalid path variable name at position %lu",), idx]  userInfo:nil];
                     }
-                    [((NSMutableArray *)_pathKeys) addObject:keyName];
-                    [pathRegexComponents addObject:@"([a-zA-Z0-9\\+\\-_%]+)"];
+                    [pathKeys addObject:keyName];
+                    [pathRegexComponents addObject:@"([a-zA-Z0-9\\+\\-_%\\.]+)"];
                     isRegex = YES;
                 } else {
                     NSCharacterSet* regexChars = [NSCharacterSet characterSetWithCharactersInString:@"[]()*+|{}\\"];
                     NSRange range = [component rangeOfCharacterFromSet:regexChars];
                     if ( range.location != NSNotFound ) {
-                        NSString *keyName = @(_pathKeys.count).stringValue;
-                        [((NSMutableArray *)_pathKeys) addObject:keyName];
+                        NSString *keyName = @(pathKeys.count).stringValue;
+                        [pathKeys addObject:keyName];
                         if ( [component hasPrefix:@"("] && [component hasSuffix:@")"] ) {
                             [pathRegexComponents addObject:component];
                         } else {
@@ -73,6 +73,8 @@
                     }
                 }
             }];
+            _pathKeys = pathKeys;
+            
             if ( isRegex ) {
                 NSError *regexError;
                 NSMutableString *pattern = [NSMutableString stringWithString:@"^" ];
