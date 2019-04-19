@@ -303,6 +303,7 @@
 		ADEDB3A61AEFCC6400A26AF1 /* NSDate+RFC1123.m in Sources */ = {isa = PBXBuildFile; fileRef = ADEDB3601AEFBD8800A26AF1 /* NSDate+RFC1123.m */; };
 		ADEDB3A71AEFCC8B00A26AF1 /* CRApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB34E1AEFBD8800A26AF1 /* CRApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ADEDB3AA1AEFCC8B00A26AF1 /* NSDate+RFC1123.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB35F1AEFBD8800A26AF1 /* NSDate+RFC1123.h */; };
+		F306C201226A24FF00846DC5 /* CRHTTPConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F306C200226A24FF00846DC5 /* CRHTTPConnectionTests.m */; };
 		F38D59022254115700CD8DC8 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F38D58FF2254113B00CD8DC8 /* CocoaAsyncSocket.framework */; };
 /* End PBXBuildFile section */
 
@@ -451,7 +452,7 @@
 		AD61E9741BDD7FDF00F5BD17 /* CRHTTPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRHTTPServer.h; sourceTree = "<group>"; };
 		AD61E9751BDD7FDF00F5BD17 /* CRHTTPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPServer.m; sourceTree = "<group>"; };
 		AD61E9781BDD80C100F5BD17 /* CRHTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRHTTPConnection.h; sourceTree = "<group>"; };
-		AD61E9791BDD80C100F5BD17 /* CRHTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPConnection.m; sourceTree = "<group>"; };
+		AD61E9791BDD80C100F5BD17 /* CRHTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPConnection.m; sourceTree = "<group>"; };
 		AD61E97D1BDD880C00F5BD17 /* CRFCGIConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFCGIConnection.h; sourceTree = "<group>"; };
 		AD61E97E1BDD880C00F5BD17 /* CRFCGIConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRFCGIConnection.m; sourceTree = "<group>"; };
 		AD61E97F1BDD880C00F5BD17 /* CRFCGIServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFCGIServer.h; sourceTree = "<group>"; };
@@ -512,6 +513,7 @@
 		ADEDB3761AEFC0B000A26AF1 /* Criollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Criollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADEDB37A1AEFC0B000A26AF1 /* Criollo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Criollo-Info.plist"; sourceTree = "<group>"; };
 		ADEDB37B1AEFC0B000A26AF1 /* Criollo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Criollo.h; path = ../Criollo.h; sourceTree = "<group>"; };
+		F306C200226A24FF00846DC5 /* CRHTTPConnectionTests.m */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPConnectionTests.m; sourceTree = "<group>"; };
 		F38D58EA2254113700CD8DC8 /* CocoaAsyncSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CocoaAsyncSocket.xcodeproj; path = ../CocoaAsyncSocket/CocoaAsyncSocket.xcodeproj; sourceTree = "<group>"; };
 		F38D58F62254113B00CD8DC8 /* CocoaAsyncSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CocoaAsyncSocket.xcodeproj; path = ../../CocoaAsyncSocket/CocoaAsyncSocket.xcodeproj; sourceTree = "<group>"; };
 		F38D5903225411A800CD8DC8 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
@@ -624,6 +626,7 @@
 		AD030FDC1F0C02C900BD9FE4 /* CriolloTests */ = {
 			isa = PBXGroup;
 			children = (
+				F306C200226A24FF00846DC5 /* CRHTTPConnectionTests.m */,
 				4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */,
 				4AD0AD581F6662AA00943DC3 /* CRHTTPSHelperTests.m */,
 				AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */,
@@ -1190,6 +1193,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = ADEDB3471AEFBCF700A26AF1;
@@ -1439,6 +1443,7 @@
 				4AD0AD591F6662AA00943DC3 /* CRHTTPSHelperTests.m in Sources */,
 				AD1D44F81F376DED00C5D260 /* CRViewTests.m in Sources */,
 				AD1D44E21F375DE100C5D260 /* CRNibTests.m in Sources */,
+				F306C201226A24FF00846DC5 /* CRHTTPConnectionTests.m in Sources */,
 				4A689EE1222FD4C70074DEA3 /* CRRouterTests.m in Sources */,
 				4A84C76F1F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */,
 				AD7F2F711F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */,
