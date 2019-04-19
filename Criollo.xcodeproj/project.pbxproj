@@ -417,7 +417,7 @@
 		AD61E9741BDD7FDF00F5BD17 /* CRHTTPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRHTTPServer.h; sourceTree = "<group>"; };
 		AD61E9751BDD7FDF00F5BD17 /* CRHTTPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPServer.m; sourceTree = "<group>"; };
 		AD61E9781BDD80C100F5BD17 /* CRHTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRHTTPConnection.h; sourceTree = "<group>"; };
-		AD61E9791BDD80C100F5BD17 /* CRHTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPConnection.m; sourceTree = "<group>"; };
+		AD61E9791BDD80C100F5BD17 /* CRHTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPConnection.m; sourceTree = "<group>"; };
 		AD61E97D1BDD880C00F5BD17 /* CRFCGIConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFCGIConnection.h; sourceTree = "<group>"; };
 		AD61E97E1BDD880C00F5BD17 /* CRFCGIConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRFCGIConnection.m; sourceTree = "<group>"; };
 		AD61E97F1BDD880C00F5BD17 /* CRFCGIServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFCGIServer.h; sourceTree = "<group>"; };
