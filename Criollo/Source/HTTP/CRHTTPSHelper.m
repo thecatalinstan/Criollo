@@ -311,8 +311,9 @@ NS_ASSUME_NONNULL_END
     }
     
     NSString *identityPath = [NSTemporaryDirectory() stringByAppendingPathComponent:NSUUID.UUID.UUIDString];
-    
-    PKCS12 *p12 = PKCS12_create(password.UTF8String, identityPath.lastPathComponent.UTF8String, key, cert, NULL, 0, 0, 0, 0, 0);
+    char * passwordUTF8 = (char *)password.UTF8String;
+    char * identityPathComponentUTF8 = (char *)identityPath.lastPathComponent.UTF8String;
+    PKCS12 *p12 = PKCS12_create(passwordUTF8, identityPathComponentUTF8, key, cert, NULL, 0, 0, 0, 0, 0);
     if ( p12 == NULL ) {
         ERR_print_errors_fp(stderr);
         char *err = ERR_error_string(ERR_get_error(), NULL);

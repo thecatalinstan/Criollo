@@ -1,1 +1,2 @@
 github "robbiehanson/CocoaAsyncSocket" ~> 7.6.4
+github "krzyzanowskim/OpenSSL" ~> 1.0.219

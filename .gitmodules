@@ -1,4 +1,0 @@
-[submodule "Libraries/OpenSSL"]
-	path = Libraries/OpenSSL
-	url = https://github.com/thecatalinstan/Criollo.OpenSSL.git
-	branch = master

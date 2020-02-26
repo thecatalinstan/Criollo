@@ -116,8 +116,6 @@
 		4ABB1E451F9E70AA00480EC7 /* CRMimeTypeHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */; };
 		4ABB1E461F9E70AD00480EC7 /* CRNibTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD1D44E11F375DE100C5D260 /* CRNibTests.m */; };
 		4ABB1E471F9E70B000480EC7 /* CRViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD1D44F71F376DED00C5D260 /* CRViewTests.m */; };
-		4ABB1E4B1F9E72B500480EC7 /* libssl-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ABB1E491F9E72B500480EC7 /* libssl-tvOS.a */; };
-		4ABB1E4C1F9E72B500480EC7 /* libcrypto-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ABB1E4A1F9E72B500480EC7 /* libcrypto-tvOS.a */; };
 		4ABB1E511F9E772000480EC7 /* CRHTTPSHelperTests.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF41F96BD5C0062D930 /* CRHTTPSHelperTests.pem */; };
 		4ABB1E521F9E772000480EC7 /* CRHTTPSHelperTests.der in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAEF1F96BD5C0062D930 /* CRHTTPSHelperTests.der */; };
 		4ABB1E531F9E772000480EC7 /* CRHTTPSHelperTests.key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A63BAF61F96BD5C0062D930 /* CRHTTPSHelperTests.key.pem */; };
@@ -135,7 +133,7 @@
 		51CDC2F02406C40600A7853E /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51CDC2EF2406C40600A7853E /* CocoaAsyncSocket.framework */; };
 		51CDC2F22406C41900A7853E /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51CDC2F12406C41900A7853E /* CocoaAsyncSocket.framework */; };
 		51CDC2F42406C42200A7853E /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51CDC2F32406C42200A7853E /* CocoaAsyncSocket.framework */; };
-		51CDC45C2406CA3200A7853E /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A22CEB01F99514F00BA1DD9 /* openssl.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		51CDC4722406CCF000A7853E /* OpenSSL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51CDC46E2406CCF000A7853E /* OpenSSL.framework */; };
 		AD001ADA1D4555A500DE4AC9 /* CRRoute_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */; };
 		AD001ADD1D4555E000DE4AC9 /* CRRoute_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */; };
 		AD001AE01D455BA300DE4AC9 /* CRRouteMatchingResult.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001ADE1D455BA300DE4AC9 /* CRRouteMatchingResult.h */; };
@@ -354,7 +352,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4A22CEB01F99514F00BA1DD9 /* openssl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = openssl.framework; path = Libraries/OpenSSL/openssl.framework; sourceTree = "<group>"; };
 		4A2F43CA1F659FE400A466D5 /* CRHTTPSHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRHTTPSHelper.h; sourceTree = "<group>"; };
 		4A2F43CB1F659FE400A466D5 /* CRHTTPSHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPSHelper.m; sourceTree = "<group>"; };
 		4A63BAEC1F96BD5C0062D930 /* CRHTTPSHelperTests.bundle.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSHelperTests.bundle.pem; sourceTree = "<group>"; };
@@ -367,12 +364,8 @@
 		4A63BAF61F96BD5C0062D930 /* CRHTTPSHelperTests.key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSHelperTests.key.pem; sourceTree = "<group>"; };
 		4A689EE0222FD4C70074DEA3 /* CRRouterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRRouterTests.m; sourceTree = "<group>"; };
 		4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRHTTPServerTests.m; sourceTree = "<group>"; };
-		4A96B1851F95576F0091B193 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "Libraries/OpenSSL-for-iPhone/lib/libcrypto.a"; sourceTree = "<group>"; };
-		4A96B1861F95576F0091B193 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "Libraries/OpenSSL-for-iPhone/lib/libssl.a"; sourceTree = "<group>"; };
 		4ABB1DDA1F9E6B0900480EC7 /* Criollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Criollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4ABB1DE21F9E6B0A00480EC7 /* CriolloTests tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CriolloTests tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4ABB1E491F9E72B500480EC7 /* libssl-tvOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libssl-tvOS.a"; path = "Libraries/OpenSSL/lib/libssl-tvOS.a"; sourceTree = "<group>"; };
-		4ABB1E4A1F9E72B500480EC7 /* libcrypto-tvOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libcrypto-tvOS.a"; path = "Libraries/OpenSSL/lib/libcrypto-tvOS.a"; sourceTree = "<group>"; };
 		4AD0AD581F6662AA00943DC3 /* CRHTTPSHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPSHelperTests.m; sourceTree = "<group>"; };
 		4AE7076C20715315005166FB /* Criollo iOS App.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "Criollo iOS App.xcodeproj"; sourceTree = "<group>"; };
 		4AE7077220715315005166FB /* Criollo macOS App.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "Criollo macOS App.xcodeproj"; sourceTree = "<group>"; };
@@ -380,7 +373,7 @@
 		51CDC2EF2406C40600A7853E /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaAsyncSocket.framework; path = Carthage/Build/iOS/CocoaAsyncSocket.framework; sourceTree = "<group>"; };
 		51CDC2F12406C41900A7853E /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaAsyncSocket.framework; path = Carthage/Build/Mac/CocoaAsyncSocket.framework; sourceTree = "<group>"; };
 		51CDC2F32406C42200A7853E /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaAsyncSocket.framework; path = Carthage/Build/tvOS/CocoaAsyncSocket.framework; sourceTree = "<group>"; };
-		51CDC4582406C96100A7853E /* OpenSSL */ = {isa = PBXFileReference; lastKnownFileType = folder; name = OpenSSL; path = Libraries/OpenSSL; sourceTree = "<group>"; };
+		51CDC46E2406CCF000A7853E /* OpenSSL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenSSL.framework; path = Carthage/Build/iOS/OpenSSL.framework; sourceTree = "<group>"; };
 		AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRoute_Internal.h; sourceTree = "<group>"; };
 		AD001ADE1D455BA300DE4AC9 /* CRRouteMatchingResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRouteMatchingResult.h; sourceTree = "<group>"; };
 		AD001ADF1D455BA300DE4AC9 /* CRRouteMatchingResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRouteMatchingResult.m; sourceTree = "<group>"; };
@@ -484,8 +477,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				51CDC2F42406C42200A7853E /* CocoaAsyncSocket.framework in Frameworks */,
-				4ABB1E4B1F9E72B500480EC7 /* libssl-tvOS.a in Frameworks */,
-				4ABB1E4C1F9E72B500480EC7 /* libcrypto-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,7 +509,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				51CDC2F02406C40600A7853E /* CocoaAsyncSocket.framework in Frameworks */,
-				51CDC45C2406CA3200A7853E /* openssl.framework in Frameworks */,
+				51CDC4722406CCF000A7853E /* OpenSSL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -551,14 +542,10 @@
 		4A96B1821F95576F0091B193 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				51CDC46E2406CCF000A7853E /* OpenSSL.framework */,
 				51CDC2EF2406C40600A7853E /* CocoaAsyncSocket.framework */,
 				51CDC2F12406C41900A7853E /* CocoaAsyncSocket.framework */,
 				51CDC2F32406C42200A7853E /* CocoaAsyncSocket.framework */,
-				4ABB1E4A1F9E72B500480EC7 /* libcrypto-tvOS.a */,
-				4ABB1E491F9E72B500480EC7 /* libssl-tvOS.a */,
-				4A22CEB01F99514F00BA1DD9 /* openssl.framework */,
-				4A96B1851F95576F0091B193 /* libcrypto.a */,
-				4A96B1861F95576F0091B193 /* libssl.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -733,15 +720,6 @@
 			);
 			sourceTree = "<group>";
 		};
-		ADEDB3681AEFBE2C00A26AF1 /* Libraries */ = {
-			isa = PBXGroup;
-			children = (
-				51CDC4582406C96100A7853E /* OpenSSL */,
-			);
-			name = Libraries;
-			path = ..;
-			sourceTree = "<group>";
-		};
 		ADEDB3771AEFC0B000A26AF1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -759,7 +737,6 @@
 			isa = PBXGroup;
 			children = (
 				ADEDB3AB1AEFCCCD00A26AF1 /* Source */,
-				ADEDB3681AEFBE2C00A26AF1 /* Libraries */,
 				ADEDB3791AEFC0B000A26AF1 /* Supporting Files */,
 			);
 			path = Criollo;
@@ -1481,12 +1458,9 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Libraries/OpenSSL/include/**";
+				HEADER_SEARCH_PATHS = "";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Libraries/OpenSSL/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -1522,12 +1496,9 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Libraries/OpenSSL/include/**";
+				HEADER_SEARCH_PATHS = "";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Libraries/OpenSSL/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -1726,7 +1697,6 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Libraries/OpenSSL",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1774,7 +1744,6 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Libraries/OpenSSL",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				GCC_NO_COMMON_BLOCKS = YES;
