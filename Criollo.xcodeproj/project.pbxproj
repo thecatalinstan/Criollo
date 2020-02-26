@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4A22CEB11F99514F00BA1DD9 /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A22CEB01F99514F00BA1DD9 /* openssl.framework */; };
 		4A2F43CC1F659FE400A466D5 /* CRHTTPSHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A2F43CA1F659FE400A466D5 /* CRHTTPSHelper.h */; };
 		4A2F43CD1F659FE400A466D5 /* CRHTTPSHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A2F43CA1F659FE400A466D5 /* CRHTTPSHelper.h */; };
 		4A2F43CE1F659FE400A466D5 /* CRHTTPSHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F43CB1F659FE400A466D5 /* CRHTTPSHelper.m */; };
@@ -136,6 +135,7 @@
 		51CDC2F02406C40600A7853E /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51CDC2EF2406C40600A7853E /* CocoaAsyncSocket.framework */; };
 		51CDC2F22406C41900A7853E /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51CDC2F12406C41900A7853E /* CocoaAsyncSocket.framework */; };
 		51CDC2F42406C42200A7853E /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51CDC2F32406C42200A7853E /* CocoaAsyncSocket.framework */; };
+		51CDC45C2406CA3200A7853E /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A22CEB01F99514F00BA1DD9 /* openssl.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		AD001ADA1D4555A500DE4AC9 /* CRRoute_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */; };
 		AD001ADD1D4555E000DE4AC9 /* CRRoute_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */; };
 		AD001AE01D455BA300DE4AC9 /* CRRouteMatchingResult.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001ADE1D455BA300DE4AC9 /* CRRouteMatchingResult.h */; };
@@ -518,7 +518,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				51CDC2F02406C40600A7853E /* CocoaAsyncSocket.framework in Frameworks */,
-				4A22CEB11F99514F00BA1DD9 /* openssl.framework in Frameworks */,
+				51CDC45C2406CA3200A7853E /* openssl.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
