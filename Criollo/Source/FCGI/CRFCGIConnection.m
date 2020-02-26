@@ -17,7 +17,7 @@
 #import "CRFCGIRequest.h"
 #import "CRRequest_Internal.h"
 #import "CRFCGIRecord.h"
-#import "GCDAsyncSocket.h"
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

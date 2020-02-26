@@ -13,7 +13,7 @@
 #import "CRConnection_Internal.h"
 #import "CRHTTPServer.h"
 #import "CRHTTPServerConfiguration.h"
-#import "GCDAsyncSocket.h"
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import "NSDate+RFC1123.h"
 
 @interface CRHTTPResponse ()

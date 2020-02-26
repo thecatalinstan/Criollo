@@ -17,7 +17,7 @@
 #import "CRMessage_Internal.h"
 #import "CRFCGIRequest.h"
 #import "CRFCGIRecord.h"
-#import "GCDAsyncSocket.h"
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 
 NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) {
     NSString* protocolStatusName;

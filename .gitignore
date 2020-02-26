@@ -22,6 +22,11 @@ DerivedData
 
 Docs
 
-Pods
 Podfile.lock
 Examples/*/*.xcworkspace
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage

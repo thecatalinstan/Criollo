@@ -151,7 +151,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
 
             // Get the list of paths from the registered routes
             let paths = NSMutableSet()
-            let routes:NSArray! = self.server.value(forKeyPath: "routes") as! NSArray
+            let routes: NSArray = self.server.value(forKeyPath: "routes") as! NSArray
             for ( route ) in routes {
                 let path:String? = (route as AnyObject).path
                 if ( path != nil ) {
@@ -206,7 +206,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
 
     func server(_ server: CRServer, didFinish request: CRRequest) {
         if ( LogRequests ) {
-            let env:NSDictionary! = request.value(forKey: "env") as! NSDictionary
+            let env: NSDictionary = request.value(forKey: "env") as! NSDictionary
             NSLog(" * \(request.response!.connection!.remoteAddress) \(request.description) - \(request.response!.statusCode) - \(String(describing: env["HTTP_USER_AGENT"]!))")
         }
         SystemInfoHelper.addRequest()

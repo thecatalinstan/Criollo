@@ -12,7 +12,7 @@
 #import "CRHTTPConnection.h"
 #import "CRConnection_Internal.h"
 #import "CRHTTPServerConfiguration.h"
-#import "GCDAsyncSocket.h"
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import "CRApplication.h"
 
 #import <Security/Security.h>

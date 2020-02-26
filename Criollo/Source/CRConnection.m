@@ -12,7 +12,7 @@
 #import "CRServer.h"
 #import "CRServer_Internal.h"
 #import "CRServerConfiguration.h"
-#import "GCDAsyncSocket.h"
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import "CRRequest.h"
 #import "CRRequest_Internal.h"
 #import "CRResponse.h"

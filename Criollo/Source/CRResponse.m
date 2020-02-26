@@ -15,7 +15,7 @@
 #import "CRConnection.h"
 #import "CRConnection_Internal.h"
 #import "CRRequest.h"
-#import "GCDAsyncSocket.h"
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import "NSDate+RFC1123.h"
 #import "NSHTTPCookie+Criollo.h"
 
