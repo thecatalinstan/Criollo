@@ -133,7 +133,7 @@
 		51CDC2F02406C40600A7853E /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51CDC2EF2406C40600A7853E /* CocoaAsyncSocket.framework */; };
 		51CDC2F22406C41900A7853E /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51CDC2F12406C41900A7853E /* CocoaAsyncSocket.framework */; };
 		51CDC2F42406C42200A7853E /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51CDC2F32406C42200A7853E /* CocoaAsyncSocket.framework */; };
-		51CDC4722406CCF000A7853E /* OpenSSL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51CDC46E2406CCF000A7853E /* OpenSSL.framework */; };
+		51CDC7882406DEE800A7853E /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51CDC7872406DEE800A7853E /* openssl.framework */; };
 		AD001ADA1D4555A500DE4AC9 /* CRRoute_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */; };
 		AD001ADD1D4555E000DE4AC9 /* CRRoute_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */; };
 		AD001AE01D455BA300DE4AC9 /* CRRouteMatchingResult.h in Headers */ = {isa = PBXBuildFile; fileRef = AD001ADE1D455BA300DE4AC9 /* CRRouteMatchingResult.h */; };
@@ -373,7 +373,7 @@
 		51CDC2EF2406C40600A7853E /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaAsyncSocket.framework; path = Carthage/Build/iOS/CocoaAsyncSocket.framework; sourceTree = "<group>"; };
 		51CDC2F12406C41900A7853E /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaAsyncSocket.framework; path = Carthage/Build/Mac/CocoaAsyncSocket.framework; sourceTree = "<group>"; };
 		51CDC2F32406C42200A7853E /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaAsyncSocket.framework; path = Carthage/Build/tvOS/CocoaAsyncSocket.framework; sourceTree = "<group>"; };
-		51CDC46E2406CCF000A7853E /* OpenSSL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenSSL.framework; path = Carthage/Build/iOS/OpenSSL.framework; sourceTree = "<group>"; };
+		51CDC7872406DEE800A7853E /* openssl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openssl.framework; sourceTree = "<group>"; };
 		AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRoute_Internal.h; sourceTree = "<group>"; };
 		AD001ADE1D455BA300DE4AC9 /* CRRouteMatchingResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRouteMatchingResult.h; sourceTree = "<group>"; };
 		AD001ADF1D455BA300DE4AC9 /* CRRouteMatchingResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRouteMatchingResult.m; sourceTree = "<group>"; };
@@ -509,7 +509,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				51CDC2F02406C40600A7853E /* CocoaAsyncSocket.framework in Frameworks */,
-				51CDC4722406CCF000A7853E /* OpenSSL.framework in Frameworks */,
+				51CDC7882406DEE800A7853E /* openssl.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -542,7 +542,7 @@
 		4A96B1821F95576F0091B193 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				51CDC46E2406CCF000A7853E /* OpenSSL.framework */,
+				51CDC7872406DEE800A7853E /* openssl.framework */,
 				51CDC2EF2406C40600A7853E /* CocoaAsyncSocket.framework */,
 				51CDC2F12406C41900A7853E /* CocoaAsyncSocket.framework */,
 				51CDC2F32406C42200A7853E /* CocoaAsyncSocket.framework */,
@@ -1460,7 +1460,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = "";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -1498,7 +1497,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = "";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -1698,6 +1696,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1745,6 +1744,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
