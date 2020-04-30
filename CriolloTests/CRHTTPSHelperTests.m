@@ -19,7 +19,7 @@
 
 #else
 
-typedef CFTypeRef SecKeychainRef;
+#define SecKeychainRef CFTypeRef;
 
 #endif
 
