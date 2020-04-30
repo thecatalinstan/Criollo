@@ -1106,9 +1106,10 @@
 		ADEDB3481AEFBCF800A26AF1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = NO;
 				CLASSPREFIX = CR;
 				LastSwiftUpdateCheck = 0710;
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = "Cătălin Stan";
 				TargetAttributes = {
 					4ABB1DD91F9E6B0900480EC7 = {
