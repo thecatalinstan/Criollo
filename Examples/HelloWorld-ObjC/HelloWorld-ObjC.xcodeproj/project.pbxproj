@@ -146,7 +146,6 @@
 				ADE3DDC51BFE00EB00844DC9 /* Embed Frameworks */,
 				ADE99FBE1C6B82B60080B1FA /* Copy Public Resources */,
 				B794408A1D097358385AE0F1 /* [CP] Embed Pods Frameworks */,
-				2975CBD498FCB1A87068E2FE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -203,21 +202,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2975CBD498FCB1A87068E2FE /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld-ObjC/Pods-HelloWorld-ObjC-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		B0D80C57A32B0964DFDB3743 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -242,7 +226,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld-ObjC/Pods-HelloWorld-ObjC-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-HelloWorld-ObjC/Pods-HelloWorld-ObjC-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CSSystemInfoHelper/CSSystemInfoHelper.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
 				"${BUILT_PRODUCTS_DIR}/Criollo/Criollo.framework",
@@ -255,7 +239,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld-ObjC/Pods-HelloWorld-ObjC-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HelloWorld-ObjC/Pods-HelloWorld-ObjC-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

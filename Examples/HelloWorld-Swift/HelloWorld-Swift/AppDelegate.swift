@@ -21,7 +21,7 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
     
     func applicationDidFinishLaunching(_ notification: Notification) {
 
-        self.app = CRApp as! CRApplication
+        self.app = CRApp as? CRApplication
 
         // Create the server and add some handlers to do some work
         self.server = CRHTTPServer(delegate:self)
@@ -142,21 +142,14 @@ class AppDelegate: NSObject, CRApplicationDelegate, CRServerDelegate {
             
             // Output some nice info to the console
             self.baseURL = NSURL(string: "http://\(CSSystemInfoHelper.shared().ipAddress):\(PortNumber)")
-
-            let paths = NSMutableSet()
-            let routes:NSArray! = self.server!.value(forKeyPath: "routes") as! NSArray
-            for ( route ) in routes {
-                let path:String? = (route as AnyObject).path
-                if ( path != nil ) {
-                    let pathURL:URL! = self.baseURL!.appendingPathComponent(path!)
-                    paths.add(pathURL)
-                }
-            }
-    
-            let sortedPaths = paths.sortedArray(using: [NSSortDescriptor(key:"absoluteString", ascending:true)] )
+            
             print("Available paths are:")
-            for ( path ) in sortedPaths {
-                print(" * \(path)")
+            let paths = self.server.value(forKeyPath: "routes.path") as! NSArray as! [String?]
+            for path in paths {
+                guard path != nil else {
+                    continue
+                }
+                print(self.baseURL.appendingPathComponent(path!)!)
             }
         } else {
             self.app.logError("Failed to start HTTP server. \(String(describing: serverError?.localizedDescription))")

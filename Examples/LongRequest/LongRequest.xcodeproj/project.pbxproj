@@ -110,7 +110,6 @@
 				4AC38AEF2030BD4F00136D13 /* Frameworks */,
 				4AC38AF02030BD4F00136D13 /* Resources */,
 				9F680314C031518A33689140 /* [CP] Embed Pods Frameworks */,
-				BAC34F15FF4F8AE1ABCD04CC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -192,7 +191,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-LongRequest/Pods-LongRequest-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-LongRequest/Pods-LongRequest-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
 				"${BUILT_PRODUCTS_DIR}/Criollo/Criollo.framework",
 			);
@@ -203,22 +202,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LongRequest/Pods-LongRequest-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BAC34F15FF4F8AE1ABCD04CC /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LongRequest/Pods-LongRequest-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LongRequest/Pods-LongRequest-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

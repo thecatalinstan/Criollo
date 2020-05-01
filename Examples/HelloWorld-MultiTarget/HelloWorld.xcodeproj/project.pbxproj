@@ -389,7 +389,6 @@
 				4A47B4A01F9E807100D25FB6 /* Resources */,
 				4A79197F1F9E8BEF00F4D709 /* Public Resources */,
 				14E67CEF11F76D1501F4D9C6 /* [CP] Embed Pods Frameworks */,
-				AD4C8AB886BB76E1AA7C05C6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -411,7 +410,6 @@
 				AD04F4E31BF249DB00456D38 /* Embed Frameworks */,
 				ADD6801E1C6CC54A00FC41EE /* Public Resources */,
 				4403040B8DB12FEEAB5D5E8F /* [CP] Embed Pods Frameworks */,
-				443635E4A06014F5B3367CB3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -432,7 +430,6 @@
 				ADC331F81BF0FF6C00DFCF6B /* Resources */,
 				ADD6801C1C6CC51A00FC41EE /* Public Resources */,
 				CDEDFC406715C6F065638E10 /* [CP] Embed Pods Frameworks */,
-				FE6A5B0005A5661F672CE6BD /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -454,7 +451,6 @@
 				ADC3323A1BF1070D00DFCF6B /* Embed Frameworks */,
 				ADD6801A1C6CC4FE00FC41EE /* Public Resources */,
 				C93AB56E65969A0838C29462 /* [CP] Embed Pods Frameworks */,
-				9E0C92F00E48AE5C2707AAE9 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -579,7 +575,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld-tvOS/Pods-HelloWorld-tvOS-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-HelloWorld-tvOS/Pods-HelloWorld-tvOS-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CSSystemInfoHelper-tvOS/CSSystemInfoHelper.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket-tvOS/CocoaAsyncSocket.framework",
 				"${BUILT_PRODUCTS_DIR}/Criollo-tvOS/Criollo.framework",
@@ -592,7 +588,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld-tvOS/Pods-HelloWorld-tvOS-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HelloWorld-tvOS/Pods-HelloWorld-tvOS-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		4403040B8DB12FEEAB5D5E8F /* [CP] Embed Pods Frameworks */ = {
@@ -601,7 +597,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld-iOS/Pods-HelloWorld-iOS-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-HelloWorld-iOS/Pods-HelloWorld-iOS-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CSSystemInfoHelper-iOS/CSSystemInfoHelper.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket-iOS/CocoaAsyncSocket.framework",
 				"${BUILT_PRODUCTS_DIR}/Criollo-iOS/Criollo.framework",
@@ -614,52 +610,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld-iOS/Pods-HelloWorld-iOS-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		443635E4A06014F5B3367CB3 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld-iOS/Pods-HelloWorld-iOS-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9E0C92F00E48AE5C2707AAE9 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld/Pods-HelloWorld-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		AD4C8AB886BB76E1AA7C05C6 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld-tvOS/Pods-HelloWorld-tvOS-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HelloWorld-iOS/Pods-HelloWorld-iOS-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		BEF4EFAF883499138AC2F912 /* [CP] Check Pods Manifest.lock */ = {
@@ -704,7 +655,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld/Pods-HelloWorld-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-HelloWorld/Pods-HelloWorld-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CSSystemInfoHelper-macOS/CSSystemInfoHelper.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket-macOS/CocoaAsyncSocket.framework",
 				"${BUILT_PRODUCTS_DIR}/Criollo-macOS/Criollo.framework",
@@ -717,7 +668,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld/Pods-HelloWorld-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HelloWorld/Pods-HelloWorld-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CDEDFC406715C6F065638E10 /* [CP] Embed Pods Frameworks */ = {
@@ -726,7 +677,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld-Cocoa/Pods-HelloWorld-Cocoa-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-HelloWorld-Cocoa/Pods-HelloWorld-Cocoa-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CSSystemInfoHelper-macOS/CSSystemInfoHelper.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket-macOS/CocoaAsyncSocket.framework",
 				"${BUILT_PRODUCTS_DIR}/Criollo-macOS/Criollo.framework",
@@ -739,7 +690,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld-Cocoa/Pods-HelloWorld-Cocoa-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HelloWorld-Cocoa/Pods-HelloWorld-Cocoa-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D63B82DC76F25998CD241580 /* [CP] Check Pods Manifest.lock */ = {
@@ -758,21 +709,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FE6A5B0005A5661F672CE6BD /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloWorld-Cocoa/Pods-HelloWorld-Cocoa-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

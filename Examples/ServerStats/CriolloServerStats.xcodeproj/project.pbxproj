@@ -99,7 +99,6 @@
 				4A3724861F7CD5F90081A696 /* Frameworks */,
 				4A3724871F7CD5F90081A696 /* Resources */,
 				8542A310EDEB26E1DAB7186D /* [CP] Embed Pods Frameworks */,
-				115386BF10C50CC0624AC6B6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -174,28 +173,13 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		115386BF10C50CC0624AC6B6 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CriolloServerStats/Pods-CriolloServerStats-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		8542A310EDEB26E1DAB7186D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-CriolloServerStats/Pods-CriolloServerStats-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-CriolloServerStats/Pods-CriolloServerStats-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CSSystemInfoHelper/CSSystemInfoHelper.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
 				"${BUILT_PRODUCTS_DIR}/Criollo/Criollo.framework",
@@ -208,7 +192,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CriolloServerStats/Pods-CriolloServerStats-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CriolloServerStats/Pods-CriolloServerStats-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
