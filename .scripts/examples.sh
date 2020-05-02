@@ -46,4 +46,8 @@ pod install --silent
 xcodebuild clean build -quiet -workspace CriolloServerStats.xcworkspace -scheme "CriolloServerStats" CODE_SIGNING_REQUIRED=NO || exit $PIPESTATUS
 cd ../
 
+# cleanup
 cd ../
+rm -rf Examples/*/Pods
+rm -rf Examples/*/Podfile.lock
+rm -rf Examples/*/*.xcworkspace
