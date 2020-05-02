@@ -29,10 +29,10 @@
         [self addRoutes];
     }
 
-    // This is just so that the black text field updates :)
+    // This is just so that the text field updates :)
     [[NSNotificationCenter defaultCenter] addObserverForName:NewRequestNotification object:nil queue:NSOperationQueue.currentQueue usingBlock:^(NSNotification * _Nonnull note) {
         [self willChangeValueForKey:@"lastLogMessage"];
-        _lastLogMessage = note.object;
+        self->_lastLogMessage = note.object;
         [self didChangeValueForKey:@"lastLogMessage"];
     }];
 }
