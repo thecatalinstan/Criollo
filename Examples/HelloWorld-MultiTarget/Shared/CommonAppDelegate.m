@@ -97,11 +97,11 @@
         [self.server stopListening];
         
         [self willChangeValueForKey:@"isConnected"];
-        _isConnected = NO;
+        self->_isConnected = NO;
         [self didChangeValueForKey:@"isConnected"];
         
         [self willChangeValueForKey:@"isDisconnected"];
-        _isDisconnected = YES;
+        self->_isDisconnected = YES;
         [self didChangeValueForKey:@"isDisconnected"];
         
         [self serverDidStopListening];        

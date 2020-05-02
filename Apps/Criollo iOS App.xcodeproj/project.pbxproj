@@ -202,7 +202,7 @@
 			};
 			buildConfigurationList = AD5B3C4C1CA820B5000988B7 /* Build configuration list for PBXProject "Criollo iOS App" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,

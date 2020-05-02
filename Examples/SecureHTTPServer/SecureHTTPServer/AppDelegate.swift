@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
     var port = 10781
     var baseURL = URL(string: "http://127.0.0.1:10781/")
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         self.interface = CSSystemInfoHelper.shared().ipAddress
         self.server = CRHTTPServer(delegate: self)

@@ -54,7 +54,7 @@
                         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:NSLocalizedString(@"Invalid path variable name at position %lu",), idx]  userInfo:nil];
                     }
                     [pathKeys addObject:keyName];
-                    [pathRegexComponents addObject:@"([a-zA-Z0-9\\+\\-_%]+)"];
+                    [pathRegexComponents addObject:@"([a-zA-Z0-9\\+\\-_%\\.]+)"];
                     isRegex = YES;
                 } else {
                     NSCharacterSet* regexChars = [NSCharacterSet characterSetWithCharactersInString:@"[]()*+|{}\\"];

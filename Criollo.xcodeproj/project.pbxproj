@@ -36,6 +36,9 @@
 		4A6EA3BC21CA6BD300BCB435 /* CRSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6EA3BA21CA6BD300BCB435 /* CRSocket.m */; };
 		4A6EA3C021CA6BDF00BCB435 /* CRSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A6EA3B921CA6BD300BCB435 /* CRSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4A6EA3C121CA6BDF00BCB435 /* CRSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A6EA3B921CA6BD300BCB435 /* CRSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4A689EE1222FD4C70074DEA3 /* CRRouterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A689EE0222FD4C70074DEA3 /* CRRouterTests.m */; };
+		4A689EE2222FD4C70074DEA3 /* CRRouterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A689EE0222FD4C70074DEA3 /* CRRouterTests.m */; };
+		4A689EE3222FD4C70074DEA3 /* CRRouterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A689EE0222FD4C70074DEA3 /* CRRouterTests.m */; };
 		4A84C76F1F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */; };
 		4A84C7701F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */; };
 		4ABB1DE31F9E6B0A00480EC7 /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ABB1DDA1F9E6B0900480EC7 /* Criollo.framework */; };
@@ -373,6 +376,7 @@
 		4A63BAF61F96BD5C0062D930 /* CRHTTPSHelperTests.key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSHelperTests.key.pem; sourceTree = "<group>"; };
 		4A6EA3B921CA6BD300BCB435 /* CRSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRSocket.h; sourceTree = "<group>"; };
 		4A6EA3BA21CA6BD300BCB435 /* CRSocket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRSocket.m; sourceTree = "<group>"; };
+		4A689EE0222FD4C70074DEA3 /* CRRouterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRRouterTests.m; sourceTree = "<group>"; };
 		4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRHTTPServerTests.m; sourceTree = "<group>"; };
 		4A96B1851F95576F0091B193 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "Libraries/OpenSSL-for-iPhone/lib/libcrypto.a"; sourceTree = "<group>"; };
 		4A96B1861F95576F0091B193 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "Libraries/OpenSSL-for-iPhone/lib/libssl.a"; sourceTree = "<group>"; };
@@ -604,6 +608,7 @@
 				AD1D44F71F376DED00C5D260 /* CRViewTests.m */,
 				AD030FDF1F0C02C900BD9FE4 /* Info.plist */,
 				AD96F74D1F1A3F8000C8D075 /* Samples */,
+				4A689EE0222FD4C70074DEA3 /* CRRouterTests.m */,
 			);
 			path = CriolloTests;
 			sourceTree = "<group>";
@@ -1114,7 +1119,7 @@
 			attributes = {
 				CLASSPREFIX = CR;
 				LastSwiftUpdateCheck = 0710;
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = "Cătălin Stan";
 				TargetAttributes = {
 					4ABB1DD91F9E6B0900480EC7 = {
@@ -1145,7 +1150,7 @@
 			};
 			buildConfigurationList = ADEDB34B1AEFBCF800A26AF1 /* Build configuration list for PBXProject "Criollo" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -1335,6 +1340,7 @@
 				4ABB1E461F9E70AD00480EC7 /* CRNibTests.m in Sources */,
 				4ABB1E471F9E70B000480EC7 /* CRViewTests.m in Sources */,
 				4ABB1E451F9E70AA00480EC7 /* CRMimeTypeHelperTests.m in Sources */,
+				4A689EE3222FD4C70074DEA3 /* CRRouterTests.m in Sources */,
 				4ABB1E441F9E70A700480EC7 /* CRHTTPSHelperTests.m in Sources */,
 				4ABB1E431F9E709B00480EC7 /* CRHTTPServerTests.m in Sources */,
 			);
@@ -1347,6 +1353,7 @@
 				4AD0AD591F6662AA00943DC3 /* CRHTTPSHelperTests.m in Sources */,
 				AD1D44F81F376DED00C5D260 /* CRViewTests.m in Sources */,
 				AD1D44E21F375DE100C5D260 /* CRNibTests.m in Sources */,
+				4A689EE1222FD4C70074DEA3 /* CRRouterTests.m in Sources */,
 				4A84C76F1F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */,
 				AD7F2F711F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */,
 			);
@@ -1359,6 +1366,7 @@
 				4AD0AD5A1F6662AA00943DC3 /* CRHTTPSHelperTests.m in Sources */,
 				AD1D44F91F3772ED00C5D260 /* CRViewTests.m in Sources */,
 				AD1D44E91F37600300C5D260 /* CRNibTests.m in Sources */,
+				4A689EE2222FD4C70074DEA3 /* CRRouterTests.m in Sources */,
 				4A84C7701F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */,
 				AD7F2F721F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */,
 			);
@@ -1502,7 +1510,7 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
-				VALID_ARCHS = arm64;
+				VALID_ARCHS = "$(ARCHS_STANDARD)";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1540,7 +1548,7 @@
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = arm64;
+				VALID_ARCHS = "$(ARCHS_STANDARD)";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1752,7 +1760,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "arm64 armv7 armv7s";
+				VALID_ARCHS = "$(ARCHS_STANDARD)";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1795,7 +1803,7 @@
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "arm64 armv7 armv7s";
+				VALID_ARCHS = "$(ARCHS_STANDARD)";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
