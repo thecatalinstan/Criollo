@@ -148,22 +148,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
             self.baseURL = URL(string: "http\(self.server.isSecure ? "s" :"")://\(address):\(PortNumber)")
             
             // Log the paths we can handle
-            
-            // Get the list of paths from the registered routes
-            let paths = NSMutableSet()
-            let routes:NSArray! = self.server.value(forKeyPath: "routes") as? NSArray
-            for ( route ) in routes {
-                let path:String? = (route as AnyObject).path
-                if ( path != nil ) {
-                    let pathURL:URL! = self.baseURL.appendingPathComponent(path!)
-                    paths.add(pathURL)
-                }
-            }
-            
-            let sortedPaths = paths.sortedArray(using: [NSSortDescriptor(key:"absoluteString", ascending:true)] )
             print("Available paths are:")
-            for ( path ) in sortedPaths {
-                print(" * \(path)")
+            let paths = self.server.value(forKeyPath: "routes.path") as! NSArray as! [String?]
+            for path in paths {
+                guard path != nil else {
+                    continue
+                }
+                print(" * \(self.baseURL.appendingPathComponent(path!))")
             }
         } else {
             print("Failed to start HTTP server. \(serverError!.localizedDescription)")

@@ -50,7 +50,7 @@
     XCTAssertFalse(server.workerQueueIsDefaultQueue);
 }
 
-- (void)test_startListening_CustomWorkerQueue_IsNotSetAfterStartListening {
+- (void)test_startListening_CustomWorkerQueue_SetAfterStartListeningThrows {
     CRServerCreate();
 
     XCTAssertTrue([server startListening]);
