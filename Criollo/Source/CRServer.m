@@ -19,6 +19,11 @@
 #import "CRRoute.h"
 #import "CRViewController.h"
 
+static NSString *const CRServerDefaultWorkerQueueName = @"CRServerDefaultWorkerQueue";
+
+static NSString *const IsListeningKey = @"isListening";
+static NSString *const WorkerQueueKey = @"workerQueue";
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CRServer () <GCDAsyncSocketDelegate, CRConnectionDelegate>
@@ -28,11 +33,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) dispatch_queue_t socketDelegateQueue;
 @property (nonatomic, strong) dispatch_queue_t acceptedSocketDelegateTargetQueue;
 
-@property (nonatomic, strong) NSOperationQueue* workerQueue;
-
 - (CRConnection *)newConnectionWithSocket:(GCDAsyncSocket *)socket;
 
+- (NSOperationQueue *)createDefaultWorkerQueue NS_WARN_UNUSED_RESULT;
 @end
+
 NS_ASSUME_NONNULL_END
 
 @implementation CRServer
@@ -92,48 +97,58 @@ NS_ASSUME_NONNULL_END
     self.acceptedSocketDelegateTargetQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"AcceptedSocketDelegateTargetQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
     dispatch_set_target_queue(self.acceptedSocketDelegateTargetQueue, dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0));
 
-    self.workerQueue = [[NSOperationQueue alloc] init];
-    if ( [self.workerQueue respondsToSelector:@selector(qualityOfService)] ) {
-        self.workerQueue.qualityOfService = NSQualityOfServiceUserInitiated;
+    if (self.workerQueue == nil) {
+        _workerQueue = [self createDefaultWorkerQueue];
+        _workerQueueIsDefaultQueue = YES;
     }
-    self.workerQueue.maxConcurrentOperationCount = NSOperationQueueDefaultMaxConcurrentOperationCount;
 
     self.connections = [NSMutableArray array];
     self.socket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:self.socketDelegateQueue];
 
-    if ( [self.delegate respondsToSelector:@selector(serverWillStartListening:)] ) {
+    [self willChangeValueForKey:IsListeningKey];
+    
+    if ([self.delegate respondsToSelector:@selector(serverWillStartListening:)]) {
         dispatch_async(self.delegateQueue, ^{
             [self.delegate serverWillStartListening:self];
         });
     }
 
     BOOL listening = [self.socket acceptOnInterface:self.configuration.CRServerInterface port:self.configuration.CRServerPort error:error];
-    if ( listening && [self.delegate respondsToSelector:@selector(serverDidStartListening:)] ) {
+    if (listening && [self.delegate respondsToSelector:@selector(serverDidStartListening:)]) {
         dispatch_async(self.delegateQueue, ^{
             [self.delegate serverDidStartListening:self];
         });
     }
-
+    
+    _isListening = listening;
+    [self didChangeValueForKey:IsListeningKey];
+    
     return listening;
 }
 
 - (void)stopListening {
-
-    if ( [self.delegate respondsToSelector:@selector(serverWillStopListening:)] ) {
+    [self willChangeValueForKey:IsListeningKey];
+    
+    if ([self.delegate respondsToSelector:@selector(serverWillStopListening:)]) {
         dispatch_async(self.delegateQueue, ^{
             [self.delegate serverWillStopListening:self];
         });
     }
 
     [self.workerQueue cancelAllOperations];
+    
+    self.socket.delegate = nil;
     [self.socket disconnect];
 
-    if ( [self.delegate respondsToSelector:@selector(serverDidStopListening:)] ) {
-        dispatch_async(self.delegateQueue, ^{
-            [self.delegate serverDidStopListening:self];
-        });
+    _isListening = NO;
+    
+    if(self.workerQueueIsDefaultQueue) {
+        self.workerQueue = nil;
+        _workerQueueIsDefaultQueue = NO;
     }
     
+
+    [self didChangeValueForKey:IsListeningKey];
 }
 
 #pragma mark - Connections
@@ -211,6 +226,28 @@ NS_ASSUME_NONNULL_END
     dispatch_async(self.isolationQueue, ^(){
         [server.connections removeObject:connection];
     });
+}
+
+#pragma mark - Queues
+
+- (NSOperationQueue *)createDefaultWorkerQueue {
+    NSOperationQueue *workerQueue = [[NSOperationQueue alloc] init];
+    if ( [workerQueue respondsToSelector:@selector(qualityOfService)] ) {
+        workerQueue.qualityOfService = NSQualityOfServiceUserInitiated;
+    }
+    workerQueue.maxConcurrentOperationCount = NSOperationQueueDefaultMaxConcurrentOperationCount;
+    workerQueue.name = [NSBundle.mainBundle.bundleIdentifier stringByAppendingPathExtension:CRServerDefaultWorkerQueueName];
+    return workerQueue;
+}
+
+- (void)setWorkerQueue:(NSOperationQueue *)workerQueue {
+    if (self.isListening) {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Cannot set the worker queue after the server has started listening." userInfo:nil];
+    }
+    
+    [self willChangeValueForKey:WorkerQueueKey];
+    _workerQueue = workerQueue;
+    [self didChangeValueForKey:WorkerQueueKey];
 }
 
 @end

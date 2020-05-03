@@ -11,12 +11,16 @@
 @class CRConnection;
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface CRServer ()
 
 @property (nonatomic, strong) CRServerConfiguration * configuration;
 @property (nonatomic, strong) NSMutableArray<CRConnection *> * connections;
 
+@property (nonatomic, readonly) BOOL workerQueueIsDefaultQueue;
+
 - (void)didCloseConnection:(CRConnection *)connection;
 
 @end
+
 NS_ASSUME_NONNULL_END
