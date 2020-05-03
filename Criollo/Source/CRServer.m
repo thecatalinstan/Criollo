@@ -19,6 +19,7 @@
 #import "CRRoute.h"
 #import "CRViewController.h"
 
+static NSUInteger const InitialConnectionCapacity = 1 << 10;
 static NSString *const CRServerDefaultWorkerQueueName = @"CRServerDefaultWorkerQueue";
 
 static NSString *const IsListeningKey = @"isListening";
@@ -102,7 +103,7 @@ NS_ASSUME_NONNULL_END
         _workerQueueIsDefaultQueue = YES;
     }
 
-    self.connections = [NSMutableArray array];
+    self.connections = [NSMutableArray arrayWithCapacity:InitialConnectionCapacity];
     self.socket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:self.socketDelegateQueue];
 
     [self willChangeValueForKey:IsListeningKey];
