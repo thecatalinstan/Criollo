@@ -17,7 +17,7 @@ cd HelloWorld-MultiTarget
 pod install --silent
 xcodebuild clean build -quiet -workspace HelloWorld.xcworkspace -scheme "HelloWorld" CODE_SIGNING_REQUIRED=NO || exit $PIPESTATUS
 xcodebuild clean build -quiet -workspace HelloWorld.xcworkspace -scheme "HelloWorld-Cocoa" CODE_SIGNING_REQUIRED=NO || exit $PIPESTATUS
-xcodebuild clean build -quiet -destination 'platform=iOS Simulator,name=iPhone 11' -workspace HelloWorld.xcworkspace -scheme "HelloWorld-iOS" CODE_SIGNING_REQUIRED=NO || exit $PIPESTATUS
+xcodebuild clean build -quiet -destination 'platform=iOS Simulator,name=iPhone 8' -workspace HelloWorld.xcworkspace -scheme "HelloWorld-iOS" CODE_SIGNING_REQUIRED=NO || exit $PIPESTATUS
 xcodebuild clean build -quiet -destination 'platform=tvOS Simulator,name=Apple TV' -workspace HelloWorld.xcworkspace -scheme "HelloWorld-tvOS" CODE_SIGNING_REQUIRED=NO || exit $PIPESTATUS
 cd ../
 
@@ -38,7 +38,7 @@ cd ../
 
 cd SecureHTTPServer
 pod install --silent
-xcodebuild clean build -quiet -destination 'platform=iOS Simulator,name=iPhone 11' -workspace SecureHTTPServer.xcworkspace -scheme "SecureHTTPServer" CODE_SIGNING_REQUIRED=NO || exit $PIPESTATUS
+xcodebuild clean build -quiet -destination 'platform=iOS Simulator,name=iPhone 8' -workspace SecureHTTPServer.xcworkspace -scheme "SecureHTTPServer" CODE_SIGNING_REQUIRED=NO || exit $PIPESTATUS
 cd ../
 
 cd ServerStats
