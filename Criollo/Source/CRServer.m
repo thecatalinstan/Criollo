@@ -29,10 +29,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRServer () <GCDAsyncSocketDelegate, CRConnectionDelegate>
 
-@property (nonatomic, strong) GCDAsyncSocket* socket;
 @property (nonatomic, strong) dispatch_queue_t isolationQueue;
 @property (nonatomic, strong) dispatch_queue_t socketDelegateQueue;
 @property (nonatomic, strong) dispatch_queue_t acceptedSocketDelegateTargetQueue;
+@property (nonatomic, strong, nullable) GCDAsyncSocket* socket;
 
 - (CRConnection *)newConnectionWithSocket:(GCDAsyncSocket *)socket;
 
@@ -140,6 +140,7 @@ NS_ASSUME_NONNULL_END
     
     self.socket.delegate = nil;
     [self.socket disconnect];
+    self.socket = nil;
 
     _isListening = NO;
     
