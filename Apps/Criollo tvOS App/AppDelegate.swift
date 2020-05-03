@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
     var server:CRHTTPServer!
     var baseURL:URL!
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Create the server and add some handlers to do some work
         self.server = CRHTTPServer(delegate:self)
         
