@@ -80,9 +80,8 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)writeData:(NSData *)data finish:(BOOL)flag {
-
-    if ( self.finished ) {
-        return;
+    if (self.finished) {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Response is already finished" userInfo:nil];
     }
 
     NSMutableData* dataToSend = [self initialResponseData];
