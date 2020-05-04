@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSMutableArray<CRConnection *> * connections;
 
 @property (nonatomic, readonly) BOOL workerQueueIsDefaultQueue;
+@property (nonatomic, readonly) BOOL delegateQueueIsDefaultQueue;
 
 - (void)didCloseConnection:(CRConnection *)connection;
 

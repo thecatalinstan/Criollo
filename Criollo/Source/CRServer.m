@@ -56,13 +56,20 @@ NS_ASSUME_NONNULL_END
     if ( self != nil ) {
         _configuration = [[CRServerConfiguration alloc] init];
         _delegate = delegate;
+        
         _delegateQueue = delegateQueue;
-        if ( _delegateQueue == nil ) {
-            _delegateQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"ServerDelegateQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
-            dispatch_set_target_queue(_delegateQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
+        if (_delegateQueue == nil) {
+            _delegateQueue = [self createDefaultDelegateQueue];
+            _delegateQueueIsDefaultQueue = YES;
         }
     }
     return self;
+}
+
+- (void)dealloc {
+    if (_delegateQueueIsDefaultQueue) {
+        _delegateQueue = nil;
+    }
 }
 
 #pragma mark - Listening
@@ -276,6 +283,10 @@ NS_ASSUME_NONNULL_END
     }
     
     return queue;
+}
+
+- (dispatch_queue_t)createDefaultDelegateQueue {
+    return [self createQueueWithName:@"CRServerDefaultDelegateQueue" concurrent:NO qos:QOS_CLASS_BACKGROUND];
 }
 
 - (NSOperationQueue *)createDefaultWorkerQueue {

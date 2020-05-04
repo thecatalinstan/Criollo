@@ -12,12 +12,44 @@
 #import "CRServer_Internal.h"
 
 #define CRServerCreate() CRServer *server = [CRServer new]
+#define CRServerDestroy() server = nil
 
 @interface CRServerTests : XCTestCase
 
 @end
 
 @implementation CRServerTests
+
+- (void)test_init_DefaultDelegateQueue_IsCreated {
+    CRServerCreate();
+    XCTAssertNotNil(server.delegateQueue);
+    XCTAssertTrue(server.delegateQueueIsDefaultQueue);
+}
+
+- (void)test_dealloc_DefaultDelegateQueue_IsDestroyed {
+    CRServerCreate();
+    CRServerDestroy();
+    XCTAssertNil(server.delegateQueue);
+}
+
+- (void)test_init_CustomDelegateQueue_IsSet {
+    dispatch_queue_t queue = dispatch_queue_create(NULL, NULL);
+    XCTAssertNotNil(queue);
+    
+    CRServer *server = [[CRServer alloc] initWithDelegate:nil delegateQueue:queue];
+    XCTAssertEqual(queue, server.delegateQueue);
+    XCTAssertFalse(server.delegateQueueIsDefaultQueue);
+}
+
+- (void)test_dealloc_CustomDelegateQueue_IsNotDestroyed {
+    dispatch_queue_t queue = dispatch_queue_create(NULL, NULL);
+    XCTAssertNotNil(queue);
+    
+    CRServer *server = [[CRServer alloc] initWithDelegate:nil delegateQueue:queue];
+    CRServerDestroy();
+    
+    XCTAssertNotNil(queue);
+}
 
 - (void)test_queueLabelForName_NilNameNilBundle_ReturnsNil {
     CRServerCreate();
@@ -75,7 +107,7 @@
     XCTAssertFalse(out == NULL);
 }
 
-- (void)test_CreateQueueWithNameConcurrentQOS_NilName_ReturnsNonnull {
+- (void)test_createQueueWithNameConcurrentQOS_NilName_ReturnsNonnull {
     CRServerCreate();
     dispatch_queue_t q = [server createQueueWithName:nil concurrent:NO qos:QOS_CLASS_UNSPECIFIED];
     
