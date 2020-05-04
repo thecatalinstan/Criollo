@@ -20,7 +20,12 @@
 #import "CRViewController.h"
 
 static NSUInteger const InitialConnectionCapacity = 1 << 10;
+
 static NSString *const CRServerDefaultWorkerQueueName = @"CRServerDefaultWorkerQueue";
+static NSString *const CRServerDefaultDelegateQueueName = @"CRServerDefaultDelegateQueue";
+static NSString *const CRServerIsolationQueueName = @"CRServerIsolationQueue";
+static NSString *const CRServerSocketDelegateQueueName = @"CRServerSocketDelegateQueue";
+static NSString *const CRServerAcceptedSocketDelegateTargetQueueName = @"CRServerAcceptedSocketDelegateTargetQueue";
 
 static NSString *const IsListeningKey = @"isListening";
 static NSString *const WorkerQueueKey = @"workerQueue";
@@ -29,14 +34,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRServer () <GCDAsyncSocketDelegate, CRConnectionDelegate>
 
-@property (nonatomic, strong) dispatch_queue_t isolationQueue;
-@property (nonatomic, strong) dispatch_queue_t socketDelegateQueue;
-@property (nonatomic, strong) dispatch_queue_t acceptedSocketDelegateTargetQueue;
-@property (nonatomic, strong, nullable) GCDAsyncSocket* socket;
-
+@property (nonatomic, strong, nullable) GCDAsyncSocket *socket;
 - (CRConnection *)newConnectionWithSocket:(GCDAsyncSocket *)socket;
 
 - (NSOperationQueue *)createDefaultWorkerQueue NS_WARN_UNUSED_RESULT;
+- (dispatch_queue_t)createDefaultDelegateQueue NS_WARN_UNUSED_RESULT;
+
+- (dispatch_queue_t)createIsolationQueue NS_WARN_UNUSED_RESULT;
+- (dispatch_queue_t)createSocketDelegateQueue NS_WARN_UNUSED_RESULT;
+- (dispatch_queue_t)createAcceptedSocketDelegateTargetQueue NS_WARN_UNUSED_RESULT;
+
 @end
 
 NS_ASSUME_NONNULL_END
@@ -56,7 +63,6 @@ NS_ASSUME_NONNULL_END
     if ( self != nil ) {
         _configuration = [[CRServerConfiguration alloc] init];
         _delegate = delegate;
-        
         _delegateQueue = delegateQueue;
         if (_delegateQueue == nil) {
             _delegateQueue = [self createDefaultDelegateQueue];
@@ -87,62 +93,57 @@ NS_ASSUME_NONNULL_END
 }
 
 - (BOOL)startListening:(NSError *__autoreleasing *)error portNumber:(NSUInteger)portNumber interface:(NSString *)interface {
-
-    if ( portNumber != 0 ) {
+    if (portNumber != 0 ) {
         self.configuration.CRServerPort = portNumber;
     }
 
-    if ( interface.length != 0 ) {
+    if (interface.length != 0 ) {
         self.configuration.CRServerInterface = interface;
     }
-
-    self.isolationQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"ServerIsolationQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
-    dispatch_set_target_queue(self.isolationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
-
-    self.socketDelegateQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"SocketDelegateQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_CONCURRENT);
-    dispatch_set_target_queue(self.socketDelegateQueue, dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0));
-
-    self.acceptedSocketDelegateTargetQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:@"AcceptedSocketDelegateTargetQueue"] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
-    dispatch_set_target_queue(self.acceptedSocketDelegateTargetQueue, dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0));
 
     if (self.workerQueue == nil) {
         _workerQueue = [self createDefaultWorkerQueue];
         _workerQueueIsDefaultQueue = YES;
     }
-
-    self.connections = [NSMutableArray arrayWithCapacity:InitialConnectionCapacity];
-    self.socket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:self.socketDelegateQueue];
-
-    [self willChangeValueForKey:IsListeningKey];
     
+    self.isolationQueue = [self createIsolationQueue];
+    self.socketDelegateQueue = [self createSocketDelegateQueue];
+    self.acceptedSocketDelegateTargetQueue = [self createSocketDelegateQueue];
+
+    self.socket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:self.socketDelegateQueue];
+    self.connections = [NSMutableArray arrayWithCapacity:InitialConnectionCapacity];
+
     if ([self.delegate respondsToSelector:@selector(serverWillStartListening:)]) {
         dispatch_async(self.delegateQueue, ^{
             [self.delegate serverWillStartListening:self];
         });
     }
-
-    BOOL listening = [self.socket acceptOnInterface:self.configuration.CRServerInterface port:self.configuration.CRServerPort error:error];
-    if (listening && [self.delegate respondsToSelector:@selector(serverDidStartListening:)]) {
+    
+    [self willChangeValueForKey:IsListeningKey];
+    if(!(_isListening = [self.socket acceptOnInterface:self.configuration.CRServerInterface port:self.configuration.CRServerPort error:error])) {
+        [self stopListening];
+        return NO;
+    }
+    [self didChangeValueForKey:IsListeningKey];
+    
+    if (self.isListening && [self.delegate respondsToSelector:@selector(serverDidStartListening:)]) {
         dispatch_async(self.delegateQueue, ^{
             [self.delegate serverDidStartListening:self];
         });
     }
     
-    _isListening = listening;
-    [self didChangeValueForKey:IsListeningKey];
-    
-    return listening;
+    return YES;
 }
 
 - (void)stopListening {
-    [self willChangeValueForKey:IsListeningKey];
-    
     if ([self.delegate respondsToSelector:@selector(serverWillStopListening:)]) {
         dispatch_async(self.delegateQueue, ^{
             [self.delegate serverWillStopListening:self];
         });
     }
 
+    [self willChangeValueForKey:IsListeningKey];
+    
     [self.workerQueue cancelAllOperations];
     
     self.socket.delegate = nil;
@@ -155,8 +156,10 @@ NS_ASSUME_NONNULL_END
         self.workerQueue = nil;
         _workerQueueIsDefaultQueue = NO;
     }
+    self.isolationQueue = nil;
+    self.socketDelegateQueue = nil;
+    self.acceptedSocketDelegateTargetQueue = nil;
     
-
     [self didChangeValueForKey:IsListeningKey];
 }
 
@@ -182,7 +185,7 @@ NS_ASSUME_NONNULL_END
 #pragma mark - GCDAsyncSocketDelegate
 
 - (void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket {
-    dispatch_queue_t acceptedSocketDelegateQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:[NSString stringWithFormat:@"SocketDelegateQueue-%hu", newSocket.connectedPort]] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_CONCURRENT);
+    dispatch_queue_t acceptedSocketDelegateQueue = dispatch_queue_create([[NSBundle.mainBundle.bundleIdentifier stringByAppendingPathExtension:[NSString stringWithFormat:@"SocketDelegateQueue-%hu", newSocket.connectedPort]] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_CONCURRENT);
     dispatch_set_target_queue(acceptedSocketDelegateQueue, self.acceptedSocketDelegateTargetQueue);
     newSocket.delegateQueue = acceptedSocketDelegateQueue;
 
@@ -198,6 +201,7 @@ NS_ASSUME_NONNULL_END
             [server.delegate server:server didAcceptConnection:connection];
         });
     }
+    
     [connection startReading];
 }
 
@@ -286,7 +290,19 @@ NS_ASSUME_NONNULL_END
 }
 
 - (dispatch_queue_t)createDefaultDelegateQueue {
-    return [self createQueueWithName:@"CRServerDefaultDelegateQueue" concurrent:NO qos:QOS_CLASS_BACKGROUND];
+    return [self createQueueWithName:CRServerDefaultDelegateQueueName concurrent:NO qos:QOS_CLASS_BACKGROUND];
+}
+
+- (dispatch_queue_t)createIsolationQueue {
+    return [self createQueueWithName:CRServerIsolationQueueName concurrent:NO qos:QOS_CLASS_DEFAULT];
+}
+
+- (dispatch_queue_t)createSocketDelegateQueue {
+    return [self createQueueWithName:CRServerSocketDelegateQueueName concurrent:YES qos:QOS_CLASS_USER_INTERACTIVE];
+}
+
+- (dispatch_queue_t)createAcceptedSocketDelegateTargetQueue {
+    return [self createQueueWithName:CRServerAcceptedSocketDelegateTargetQueueName concurrent:NO qos:QOS_CLASS_USER_INITIATED];
 }
 
 - (NSOperationQueue *)createDefaultWorkerQueue {
