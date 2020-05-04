@@ -224,15 +224,13 @@ NS_ASSUME_NONNULL_END
 
                         NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", host, path]];
                         CRFCGIRequest* request = [[CRFCGIRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self env:currentRequestParams];
-                        CRFCGIConnection * __weak connection = self;
-                        dispatch_async(self.isolationQueue, ^{
-                            [connection.requests addObject:request];
-                        });
                         request.requestID = currentRequestID;
                         request.requestRole = currentRequestRole;
                         request.requestFlags = currentRequestFlags;
+                        
+                        [self addRequest:request];
                         self.currentRequest = request;
-
+                        
                         [self didReceiveCompleteRequestHeaders];
                     }
                         break;

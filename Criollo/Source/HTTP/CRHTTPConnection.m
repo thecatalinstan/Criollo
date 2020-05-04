@@ -152,10 +152,7 @@
                         // TODO: request.URL should be parsed using no memcpy and using the actual scheme
                         NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http%@://%@%@", ((CRHTTPServer *)self.server).isSecure ? @"s" : @"", hostSpec, pathSpec]];
                         CRRequest* request = [[CRRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self];
-                        CRHTTPConnection * __weak connection = self;
-                        dispatch_async(self.isolationQueue, ^{
-                            [connection.requests addObject:request];
-                        });
+                        [self addRequest:request];
                         self.currentRequest = request;
                     } else {
                         result = NO;
