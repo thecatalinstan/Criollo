@@ -21,6 +21,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)didCloseConnection:(CRConnection *)connection;
 
+#pragma mark - Queues
+
+- (NSString * _Nullable)queueLabelForName:(NSString * _Nullable)name bundleIdentifier:(NSString * _Nullable)bundleIndentifier;
+- (void)getDispatchQueueLabel:(const char *_Nullable* _Nonnull)dispatchLabel forQueueLabel:(NSString * _Nullable)label;
+
+- (dispatch_queue_t)createQueueWithName:(NSString * _Nullable)name concurrent:(BOOL)concurrent qos:(qos_class_t)qos;
+
 @end
 
 NS_ASSUME_NONNULL_END

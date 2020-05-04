@@ -19,6 +19,69 @@
 
 @implementation CRServerTests
 
+- (void)test_queueLabelForName_NilNameNilBundle_ReturnsNil {
+    CRServerCreate();
+    XCTAssertNil([server queueLabelForName:nil bundleIdentifier:nil]);
+}
+
+- (void)test_queueLabelForName_NonnullNameNilBundle_ReturnsName {
+    CRServerCreate();
+    
+    NSString *name = NSUUID.UUID.UUIDString;
+    NSString *label = [server queueLabelForName:name bundleIdentifier:nil];
+    XCTAssertNotNil(label);
+    
+    XCTAssertEqualObjects(name, label);
+}
+
+- (void)test_queueLabelForName_NonnullNameNonnullBundle_ReturnsReverseDNSBundleAndName {
+    CRServerCreate();
+    
+    NSString *name = NSUUID.UUID.UUIDString;
+    NSString *bundleIdentifier = NSBundle.mainBundle.bundleIdentifier ?: @"com.example.bundle";
+    NSString *label = [server queueLabelForName:name bundleIdentifier:bundleIdentifier];
+    XCTAssertNotNil(label);
+    
+    NSString *expected = [bundleIdentifier stringByAppendingPathExtension:name];
+    XCTAssertEqualObjects(expected, label);
+}
+
+- (void)test_getDispatchQueueLabelForQueueLabel_NilLabelReturnsNULL {
+    CRServerCreate();
+    
+    const char *out = "foo";
+    [server getDispatchQueueLabel:&out forQueueLabel:nil];
+    
+    XCTAssertTrue(out == NULL);
+}
+
+- (void)test_getDispatchQueueLabelForQueueLabel_ASCIILabelReturnsAllCharacters {
+    CRServerCreate();
+    
+    const char *in = "foobarbaz";
+    const char *out;
+    [server getDispatchQueueLabel:&out forQueueLabel:[NSString stringWithCString:in encoding:NSASCIIStringEncoding]];
+    
+    XCTAssertEqual(0, strcmp(in, out));
+}
+
+- (void)test_getDispatchQueueLabelForQueueLabel_UTF8LabelReturnsNotNull {
+    CRServerCreate();
+    
+    const char *in = "🕸🎸🍻🤷🏻‍♂️";
+    const char *out;
+    [server getDispatchQueueLabel:&out forQueueLabel:[NSString stringWithUTF8String:in]];
+    
+    XCTAssertFalse(out == NULL);
+}
+
+- (void)test_CreateQueueWithNameConcurrentQOS_NilName_ReturnsNonnull {
+    CRServerCreate();
+    dispatch_queue_t q = [server createQueueWithName:nil concurrent:NO qos:QOS_CLASS_UNSPECIFIED];
+    
+    XCTAssertNotNil(q);
+}
+
 - (void)test_startListening_DefaultWorkerQueue_IsCreated {
     CRServerCreate();
     
