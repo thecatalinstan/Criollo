@@ -13,29 +13,63 @@
 
 #define CRServerCreate() CRServer *server = [CRServer new]
 
+#define CRServerCreateWithDelegateQueue() dispatch_queue_t queue = dispatch_queue_create(NULL, NULL); CRServer *server = [[CRServer alloc] initWithDelegate:nil delegateQueue:queue]
+
+#define CRServerDestroy() server = nil
+
+#define CRServerStart() NSError *error; while(![server startListening:&error portNumber:(2000 + (NSUInteger)arc4random_uniform(3000))]) { NSLog(@" *** %@", error); error = nil;}
+
+#define CRServerStop() [server stopListening]
+
 @interface CRServerTests : XCTestCase
 
 @end
 
 @implementation CRServerTests
 
-- (void)test_startListening_DefaultWorkerQueue_IsCreated {
+- (void)test_init_DefaultDelegateQueue_IsCreated {
     CRServerCreate();
     
-    XCTAssertTrue([server startListening]);
+    XCTAssertNotNil(server.delegateQueue);
+    XCTAssertTrue(server.delegateQueueIsDefaultQueue);
+}
+
+- (void)test_init_CustomDelegateQueue_IsSet {
+    CRServerCreateWithDelegateQueue();
+    
+    XCTAssertEqual(queue, server.delegateQueue);
+    XCTAssertFalse(server.delegateQueueIsDefaultQueue);
+}
+
+- (void)test_dealloc_DefaultDelegateQueue_IsDestroyed {
+    CRServerCreate();
+    CRServerDestroy();
+    
+    XCTAssertNil(server.delegateQueue);
+}
+
+- (void)test_dealloc_CustomDelegateQueue_IsNotDestroyed {
+    CRServerCreateWithDelegateQueue();
+    CRServerDestroy();
+    
+    XCTAssertNotNil(queue);
+}
+
+- (void)test_startListening_IsListening_ReturnsTrue {
+    CRServerCreate();
+    CRServerStart();
+    
+    XCTAssertTrue(server.isListening);
+}
+
+- (void)test_startListening_DefaultWorkerQueue_IsCreated {
+    CRServerCreate();
+    CRServerStart();
     
     XCTAssertNotNil(server.workerQueue);
     XCTAssertTrue(server.workerQueueIsDefaultQueue);
-}
-
-- (void)test_stopListening_DefaultWorkerQueue_IsDestroyed {
-    CRServerCreate();
     
-    XCTAssertTrue([server startListening]);
-    [server stopListening];
-    
-    XCTAssertNil(server.workerQueue);
-    XCTAssertFalse(server.workerQueueIsDefaultQueue);
+    CRServerStop();
 }
 
 - (void)test_startListening_CustomWorkerQueue_IsSet {
@@ -44,19 +78,56 @@
     NSOperationQueue *queue = [NSOperationQueue new];
     server.workerQueue = queue;
     
-    XCTAssertTrue([server startListening]);
+    CRServerStart();
     
     XCTAssertEqual(queue, server.workerQueue);
     XCTAssertFalse(server.workerQueueIsDefaultQueue);
+        
+    CRServerStop();
 }
 
-- (void)test_startListening_CustomWorkerQueue_SetAfterStartListeningThrows {
+- (void)test_startListening_IsolationQueue_IsCreated {
     CRServerCreate();
-
-    XCTAssertTrue([server startListening]);
+    CRServerStart();
     
-    NSOperationQueue *queue = [NSOperationQueue new];
-    XCTAssertThrows(server.workerQueue = queue);
+    XCTAssertNotNil(server.isolationQueue);
+    
+    CRServerStop();
+}
+
+- (void)test_startListening_SocketDelegateQueue_IsCreated {
+    CRServerCreate();
+    CRServerStart();
+    
+    XCTAssertNotNil(server.socketDelegateQueue);
+    
+    CRServerStop();
+}
+
+- (void)test_startListening_AcceptedSocketDelegateTargetQueue_IsCreated {
+    CRServerCreate();
+    CRServerStart();
+    
+    XCTAssertNotNil(server.acceptedSocketDelegateTargetQueue);
+    
+    CRServerStop();
+}
+
+- (void)test_stopListening_IsListening_ReturnsFalse {
+    CRServerCreate();
+    CRServerStart();
+    CRServerStop();
+    
+    XCTAssertFalse(server.isListening);
+}
+
+- (void)test_stopListening_DefaultWorkerQueue_IsDestroyed {
+    CRServerCreate();
+    CRServerStart();
+    CRServerStop();
+    
+    XCTAssertNil(server.workerQueue);
+    XCTAssertFalse(server.workerQueueIsDefaultQueue);
 }
 
 - (void)test_stopListening_CustomWorkerQueue_IsNotDestroyed {
@@ -65,12 +136,111 @@
     NSOperationQueue *queue = [NSOperationQueue new];
     server.workerQueue = queue;
     
-    XCTAssertTrue([server startListening]);
-    [server stopListening];
+    CRServerStart();
+    CRServerStop();
     
     XCTAssertNotNil(server.workerQueue);
     XCTAssertEqual(queue, server.workerQueue);
     XCTAssertFalse(server.workerQueueIsDefaultQueue);
+}
+
+- (void)test_stopListening_IsolationQueue_IsDestroyed {
+    CRServerCreate();
+    CRServerStart();
+    CRServerStop();
+    
+    XCTAssertNil(server.isolationQueue);
+}
+
+- (void)test_stopListening_SocketDelegateQueue_IsDestroyed {
+    CRServerCreate();
+    CRServerStart();
+    CRServerStop();
+    
+    XCTAssertNil(server.socketDelegateQueue);
+}
+
+- (void)test_stopListening_AcceptedSocketDelegateTargetQueue_IsDestroyed {
+    CRServerCreate();
+    CRServerStart();
+    CRServerStop();
+    
+    XCTAssertNil(server.acceptedSocketDelegateTargetQueue);
+}
+
+- (void)test_setWorkerQueue_SetAfterStartListening_Throws {
+    CRServerCreate();
+    CRServerStart();
+    
+    NSOperationQueue *queue = [NSOperationQueue new];
+    XCTAssertThrows(server.workerQueue = queue);
+        
+    CRServerStop();
+}
+
+- (void)test_queueLabelForName_NilNameNilBundle_ReturnsNil {
+    CRServerCreate();
+    
+    XCTAssertNil([server queueLabelForName:nil bundleIdentifier:nil]);
+}
+
+- (void)test_queueLabelForName_NonnullNameNilBundle_ReturnsName {
+    CRServerCreate();
+    
+    NSString *name = NSUUID.UUID.UUIDString;
+    NSString *label = [server queueLabelForName:name bundleIdentifier:nil];
+    XCTAssertNotNil(label);
+    
+    XCTAssertEqualObjects(name, label);
+}
+
+- (void)test_queueLabelForName_NonnullNameNonnullBundle_ReturnsReverseDNSBundleAndName {
+    CRServerCreate();
+    
+    NSString *name = NSUUID.UUID.UUIDString;
+    NSString *bundleIdentifier = NSBundle.mainBundle.bundleIdentifier ?: @"com.example.bundle";
+    NSString *label = [server queueLabelForName:name bundleIdentifier:bundleIdentifier];
+    XCTAssertNotNil(label);
+    
+    NSString *expected = [bundleIdentifier stringByAppendingPathExtension:name];
+    XCTAssertEqualObjects(expected, label);
+}
+
+- (void)test_getDispatchQueueLabelForQueueLabel_NilLabelReturnsNULL {
+    CRServerCreate();
+    
+    const char *out = "foo";
+    [server getDispatchQueueLabel:&out forQueueLabel:nil];
+    
+    XCTAssertTrue(out == NULL);
+}
+
+- (void)test_getDispatchQueueLabelForQueueLabel_ASCIILabelReturnsAllCharacters {
+    CRServerCreate();
+    
+    const char *in = "foobarbaz";
+    const char *out;
+    [server getDispatchQueueLabel:&out forQueueLabel:[NSString stringWithCString:in encoding:NSASCIIStringEncoding]];
+    
+    XCTAssertEqual(0, strcmp(in, out));
+}
+
+- (void)test_getDispatchQueueLabelForQueueLabel_UTF8LabelReturnsNotNull {
+    CRServerCreate();
+    
+    const char *in = "🕸🎸🍻🤷🏻‍♂️";
+    const char *out;
+    [server getDispatchQueueLabel:&out forQueueLabel:[NSString stringWithUTF8String:in]];
+    
+    XCTAssertFalse(out == NULL);
+}
+
+- (void)test_createQueueWithNameConcurrentQOS_NilName_ReturnsNonnull {
+    CRServerCreate();
+    
+    dispatch_queue_t q = [server createQueueWithName:nil concurrent:NO qos:QOS_CLASS_UNSPECIFIED];
+    
+    XCTAssertNotNil(q);
 }
 
 @end
