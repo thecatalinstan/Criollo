@@ -85,16 +85,28 @@
 - (void)test_startListening_DefaultWorkerQueue_IsCreated {
     CRServerCreate();
     
-    XCTAssertTrue([server startListening]);
+    NSError *error;
+    BOOL res = [server startListening:&error];
+    XCTAssertTrue(res);
+    if (!res) {
+        NSLog(@" *** %@", error);
+    }
     
     XCTAssertNotNil(server.workerQueue);
     XCTAssertTrue(server.workerQueueIsDefaultQueue);
+    
+    [server stopListening];
 }
 
 - (void)test_stopListening_DefaultWorkerQueue_IsDestroyed {
     CRServerCreate();
     
-    XCTAssertTrue([server startListening]);
+    NSError *error;
+    BOOL res = [server startListening:&error];
+    XCTAssertTrue(res);
+    if (!res) {
+        NSLog(@" *** %@", error);
+    }
     [server stopListening];
     
     XCTAssertNil(server.workerQueue);
@@ -107,19 +119,33 @@
     NSOperationQueue *queue = [NSOperationQueue new];
     server.workerQueue = queue;
     
-    XCTAssertTrue([server startListening]);
+    NSError *error;
+    BOOL res = [server startListening:&error];
+    XCTAssertTrue(res);
+    if (!res) {
+        NSLog(@" *** %@", error);
+    }
     
     XCTAssertEqual(queue, server.workerQueue);
     XCTAssertFalse(server.workerQueueIsDefaultQueue);
+        
+    [server stopListening];
 }
 
 - (void)test_startListening_CustomWorkerQueue_SetAfterStartListeningThrows {
     CRServerCreate();
 
-    XCTAssertTrue([server startListening]);
+    NSError *error;
+    BOOL res = [server startListening:&error];
+    XCTAssertTrue(res);
+    if (!res) {
+        NSLog(@" *** %@", error);
+    }
     
     NSOperationQueue *queue = [NSOperationQueue new];
     XCTAssertThrows(server.workerQueue = queue);
+        
+    [server stopListening];
 }
 
 - (void)test_stopListening_CustomWorkerQueue_IsNotDestroyed {
@@ -128,7 +154,13 @@
     NSOperationQueue *queue = [NSOperationQueue new];
     server.workerQueue = queue;
     
-    XCTAssertTrue([server startListening]);
+    NSError *error;
+    BOOL res = [server startListening:&error];
+    XCTAssertTrue(res);
+    if (!res) {
+        NSLog(@" *** %@", error);
+    }
+    
     [server stopListening];
     
     XCTAssertNotNil(server.workerQueue);
