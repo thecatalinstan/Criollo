@@ -197,7 +197,10 @@ static const NSData * CRLFCRLFData;
         return;
     }
     
-    CRRequest* firstRequest = self.requests.firstObject;
+    __block CRRequest* firstRequest;
+    dispatch_sync(self.isolationQueue, ^{
+        firstRequest = self.requests.firstObject;
+    });
     if ( firstRequest == nil || [firstRequest isEqual:request] ) {
         request.bufferedResponseData = nil;
         [self.socket writeData:data withTimeout:self.server.configuration.CRConnectionWriteTimeout tag:CRConnectionSocketTagSendingResponse];
