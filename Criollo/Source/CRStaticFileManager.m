@@ -322,10 +322,10 @@ NS_ASSUME_NONNULL_END
                 }
 
             } else {
-
+                __block BOOL didStartSendingFile = NO;
                 dispatch_io_t fileReadChannel = dispatch_io_create_with_path(DISPATCH_IO_RANDOM, filePath.UTF8String, O_RDONLY, 0, fileReadingQueue,  ^(int error) {
                     @autoreleasepool {
-                        if ( error ) {
+                        if (error && !didStartSendingFile) {
                             NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
                             userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"There was an error releasing the file read channel.",);
                             userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
@@ -362,22 +362,13 @@ NS_ASSUME_NONNULL_END
                             return;
                         }
 
-                        if ( error ) {
-                            NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
-                            userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"There was an error releasing the file read channel.",);
-                            userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
-                            userInfo[NSFilePathErrorKey] = filePath;
-                            NSString* underlyingErrorDescription = [NSString stringWithCString:strerror(error) encoding:NSUTF8StringEncoding];
-                            if ( underlyingErrorDescription.length > 0 ) {
-                                NSError* underlyingError = [NSError errorWithDomain:NSPOSIXErrorDomain code:@(error).integerValue userInfo:@{NSLocalizedDescriptionKey: underlyingErrorDescription}];
-                                userInfo[NSUnderlyingErrorKey] = underlyingError;
-                            }
-                            NSError* fileReadError = [NSError errorWithDomain:CRStaticFileManagerErrorDomain code:CRStaticFileManagerReleaseFailedError userInfo:userInfo];
-                            [CRStaticFileManager errorHandlerBlockForError:fileReadError](request, response, completionHandler);
+                        if (error) {
+                            dispatch_io_close(fileReadChannel, DISPATCH_IO_STOP);
                             return;
                         }
 
                         if (data) {
+                            didStartSendingFile = YES;
                             [response writeData:(NSData*)data];
                         }
 
