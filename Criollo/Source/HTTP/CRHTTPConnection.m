@@ -48,7 +48,7 @@
 - (void)didReceiveCompleteRequestHeaders {
     // Create ENV from HTTP headers
     NSMutableDictionary* env = [NSMutableDictionary dictionary];
-    [self.currentRequest.allHTTPHeaderFields enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+    [self.requestBeingReceived.allHTTPHeaderFields enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         @autoreleasepool {
             NSString* headerName = [@"HTTP_" stringByAppendingString:[key.uppercaseString stringByReplacingOccurrencesOfString:@"-" withString:@"_"]];
             [env setObject:obj forKey:headerName];
@@ -66,21 +66,21 @@
         env[@"SERVER_NAME"] = env[@"HTTP_HOST"];
     }
 
-    env[@"REQUEST_METHOD"] = NSStringFromCRHTTPMethod(self.currentRequest.method);
-    env[@"SERVER_PROTOCOL"] = NSStringFromCRHTTPVersion(self.currentRequest.version);
-    env[@"REQUEST_URI"] = self.currentRequest.URL.absoluteString;
-    env[@"DOCUMENT_URI"] = self.currentRequest.URL.path;
-    env[@"SCRIPT_NAME"] = self.currentRequest.URL.path;
-    env[@"QUERY_STRING"] = self.currentRequest.URL.query;
+    env[@"REQUEST_METHOD"] = NSStringFromCRHTTPMethod(self.requestBeingReceived.method);
+    env[@"SERVER_PROTOCOL"] = NSStringFromCRHTTPVersion(self.requestBeingReceived.version);
+    env[@"REQUEST_URI"] = self.requestBeingReceived.URL.absoluteString;
+    env[@"DOCUMENT_URI"] = self.requestBeingReceived.URL.path;
+    env[@"SCRIPT_NAME"] = self.requestBeingReceived.URL.path;
+    env[@"QUERY_STRING"] = self.requestBeingReceived.URL.query;
     env[@"REMOTE_ADDR"] = self.socket.connectedHost;
     env[@"REMOTE_PORT"] = @(self.socket.connectedPort).stringValue;
     env[@"SERVER_ADDR"] = self.socket.localHost;
     env[@"SERVER_PORT"] = @(self.socket.localPort).stringValue;
     
-    self.currentRequest.env = env;
-    [self.currentRequest parseQueryString];
-    [self.currentRequest parseCookiesHeader];
-    [self.currentRequest parseRangeHeader];
+    self.requestBeingReceived.env = env;
+    [self.requestBeingReceived parseQueryString];
+    [self.requestBeingReceived parseCookiesHeader];
+    [self.requestBeingReceived parseRangeHeader];
 
     [super didReceiveCompleteRequestHeaders];
 
@@ -89,7 +89,7 @@
     }
 
     CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.server.configuration;
-    requestBodyLength = [self.currentRequest valueForHTTPHeaderField:@"Content-Length"].integerValue;
+    requestBodyLength = [self.requestBeingReceived valueForHTTPHeaderField:@"Content-Length"].integerValue;
     if ( requestBodyLength > 0 ) {
         NSUInteger bytesToRead = requestBodyLength < config.CRRequestBodyBufferSize ? requestBodyLength : config.CRRequestBodyBufferSize;
         [self.socket readDataToLength:bytesToRead withTimeout:config.CRHTTPConnectionReadBodyTimeout tag:CRHTTPConnectionSocketTagReadingRequestBody];
@@ -153,7 +153,7 @@
                         NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http%@://%@%@", ((CRHTTPServer *)self.server).isSecure ? @"s" : @"", hostSpec, pathSpec]];
                         CRRequest* request = [[CRRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self];
                         [self addRequest:request];
-                        self.currentRequest = request;
+                        self.requestBeingReceived = request;
                     } else {
                         result = NO;
                     }
@@ -174,13 +174,13 @@
 
         NSRange remainingDataRange = NSMakeRange(rangeOfFirstNewline.location + rangeOfFirstNewline.length, data.length - rangeOfFirstNewline.location - rangeOfFirstNewline.length);
         NSData* remainingData = [NSData dataWithBytesNoCopy:(void *)data.bytes + remainingDataRange.location length:remainingDataRange.length freeWhenDone:NO];
-        if ( ! [self.currentRequest appendData:remainingData] ) {
+        if ( ! [self.requestBeingReceived appendData:remainingData] ) {
             [self.socket disconnect];
             return;
         }
 
         // We've read the request headers
-        if ( self.currentRequest.headersComplete ) {
+        if ( self.requestBeingReceived.headersComplete ) {
             [self didReceiveCompleteRequestHeaders];
         } else {
             [self.socket disconnect];

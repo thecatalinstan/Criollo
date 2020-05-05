@@ -101,7 +101,7 @@ static const NSData * CRLFCRLFData;
     _socket.delegate = nil;
     _socket = nil;
     
-    _currentRequest = nil;
+    _requestBeingReceived = nil;
     _firstRequest = nil;
     
     _requests = nil;
@@ -127,7 +127,7 @@ static const NSData * CRLFCRLFData;
 #pragma mark - Data
 
 - (void)startReading {
-    self.currentRequest = nil;
+    self.requestBeingReceived = nil;
 }
 
 - (void)didReceiveCompleteRequestHeaders {
@@ -141,21 +141,21 @@ static const NSData * CRLFCRLFData;
         return;
     }
 
-    NSString * contentType = self.currentRequest.env[@"HTTP_CONTENT_TYPE"];
+    NSString * contentType = self.requestBeingReceived.env[@"HTTP_CONTENT_TYPE"];
     if ([contentType hasPrefix:CRRequestTypeURLEncoded]) {
         // URL-encoded requests are parsed after we have all the data
-        [self bufferBodyData:data forRequest:self.currentRequest];
+        [self bufferBodyData:data forRequest:self.requestBeingReceived];
     } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
         NSError* multipartParsingError;
-        if ( ![self.currentRequest parseMultipartBodyDataChunk:data error:&multipartParsingError] ) {
+        if ( ![self.requestBeingReceived parseMultipartBodyDataChunk:data error:&multipartParsingError] ) {
             [CRApp logErrorFormat:@"%@" , multipartParsingError];
         }
     } else if ([contentType hasPrefix:CRRequestTypeJSON]) {
         // JSON requests are parsed after we have all the data
-        [self bufferBodyData:data forRequest:self.currentRequest];
+        [self bufferBodyData:data forRequest:self.requestBeingReceived];
     } else {
         NSError* mimeParsingError;
-        if ( ![self.currentRequest parseMIMEBodyDataChunk:data error:&mimeParsingError] ) {
+        if ( ![self.requestBeingReceived parseMIMEBodyDataChunk:data error:&mimeParsingError] ) {
             [CRApp logErrorFormat:@"%@" , mimeParsingError];
         }
     }
@@ -167,24 +167,24 @@ static const NSData * CRLFCRLFData;
     }
 
     // Parse request body
-    NSUInteger contentLength = [self.currentRequest.env[@"HTTP_CONTENT_LENGTH"] integerValue];
+    NSUInteger contentLength = [self.requestBeingReceived.env[@"HTTP_CONTENT_LENGTH"] integerValue];
     if ( contentLength > 0 ) {
         NSError* bodyParsingError;
-        NSString* contentType = self.currentRequest.env[@"HTTP_CONTENT_TYPE"];
+        NSString* contentType = self.requestBeingReceived.env[@"HTTP_CONTENT_TYPE"];
 
         BOOL result = YES;
 
         if ([contentType hasPrefix:CRRequestTypeJSON]) {
-            result = [self.currentRequest parseJSONBodyData:&bodyParsingError];
+            result = [self.requestBeingReceived parseJSONBodyData:&bodyParsingError];
         } else if ([contentType hasPrefix:CRRequestTypeURLEncoded]) {
-            result = [self.currentRequest parseURLEncodedBodyData:&bodyParsingError];
+            result = [self.requestBeingReceived parseURLEncodedBodyData:&bodyParsingError];
         } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
             // multipart/form-data requests are parsed as they come in and not once the
             // request hast been fully received ;)
         } else {
             // other mime types are assumed to be files and will be treated just like
             // multipart request files. What we need to do here is to reset the target
-            [self.currentRequest clearBodyParsingTargets];
+            [self.requestBeingReceived clearBodyParsingTargets];
         }
 
         if ( !result ) {
@@ -193,9 +193,9 @@ static const NSData * CRLFCRLFData;
     }
 
     CRResponse* response = [self responseWithHTTPStatusCode:200];
-    self.currentRequest.response = response;
-    response.request = self.currentRequest;
-    [self.delegate connection:self didReceiveRequest:self.currentRequest response:response];
+    self.requestBeingReceived.response = response;
+    response.request = self.requestBeingReceived;
+    [self.delegate connection:self didReceiveRequest:self.requestBeingReceived response:response];
     [self startReading];
 }
 
