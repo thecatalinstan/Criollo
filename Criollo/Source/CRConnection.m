@@ -22,15 +22,22 @@
 #include <sys/sysctl.h>
 #import "NSDate+RFC1123.h"
 
-#define CRConnectionSocketTagSendingResponse                        20
+static int const CRConnectionSocketTagSendingResponse = 20;
+
+static NSUInteger const InitialRequestsCapacity = 1 << 8;
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface CRConnection () <GCDAsyncSocketDelegate>
+
+@property (nonatomic, strong) NSLock *requestsLock;
+@property (nonatomic, strong) NSMutableArray<CRRequest *> * requests;
 
 - (void)bufferBodyData:(NSData *)data forRequest:(CRRequest *)request;
 - (void)bufferResponseData:(NSData *)data forRequest:(CRRequest *)request;
 
 @end
+
 NS_ASSUME_NONNULL_END
 
 @implementation CRConnection
@@ -74,37 +81,53 @@ static const NSData * CRLFCRLFData;
 - (instancetype)initWithSocket:(GCDAsyncSocket *)socket server:(CRServer *)server {
     self = [super init];
     if (self != nil) {
-        if ( server ) {
-            self.server = server;
-        }
-        if ( socket ) {
-            self.socket = socket;
-        }
-        self.socket.delegate = self;
-        self.requests = [NSMutableArray array];
+        _server = server;
+        _socket = socket;
+        _socket.delegate = self;
+        
+        _requests = [NSMutableArray arrayWithCapacity:InitialRequestsCapacity];
+        _requestsLock = [NSLock new];
 
         _remoteAddress = self.socket.connectedHost;
         _remotePort = self.socket.connectedPort;
         _localAddress = self.socket.localHost;
         _localPort = self.socket.localPort;
-
-        _isolationQueue = dispatch_queue_create([[[NSBundle mainBundle].bundleIdentifier stringByAppendingPathExtension:[NSString stringWithFormat:@"CRConnection-IsolationQueue-%lu", (unsigned long)self.hash]] cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
-        dispatch_set_target_queue(self.isolationQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
     }
     return self;
 }
 
 - (void)dealloc {
+    [_socket disconnect];
+    _socket.delegate = nil;
     _socket = nil;
-    _currentRequest = nil;
+    
+    _requestBeingReceived = nil;
+    _firstRequest = nil;
+    
     _requests = nil;
-    _isolationQueue = nil;
+    _requestsLock = nil;
+}
+
+- (void)addRequest:(CRRequest *)request {
+    [self.requestsLock lock];
+    [self.requests addObject:request];
+    if (self.requests.count == 1) {
+        self.firstRequest = request;
+    }
+    [self.requestsLock unlock];
+}
+
+- (void)removeRequest:(CRRequest *)request {
+    [self.requestsLock lock];
+    [self.requests removeObject:request];
+    self.firstRequest = self.requests.firstObject;
+    [self.requestsLock unlock];
 }
 
 #pragma mark - Data
 
 - (void)startReading {
-    self.currentRequest = nil;
+    self.requestBeingReceived = nil;
 }
 
 - (void)didReceiveCompleteRequestHeaders {
@@ -114,54 +137,54 @@ static const NSData * CRLFCRLFData;
 }
 
 - (void)didReceiveRequestBodyData:(NSData *)data {
-    if ( self.willDisconnect ) {
+    if (self.willDisconnect) {
         return;
     }
 
-    NSString * contentType = self.currentRequest.env[@"HTTP_CONTENT_TYPE"];
+    NSString * contentType = self.requestBeingReceived.env[@"HTTP_CONTENT_TYPE"];
     if ([contentType hasPrefix:CRRequestTypeURLEncoded]) {
         // URL-encoded requests are parsed after we have all the data
-        [self bufferBodyData:data forRequest:self.currentRequest];
+        [self bufferBodyData:data forRequest:self.requestBeingReceived];
     } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
         NSError* multipartParsingError;
-        if ( ![self.currentRequest parseMultipartBodyDataChunk:data error:&multipartParsingError] ) {
+        if ( ![self.requestBeingReceived parseMultipartBodyDataChunk:data error:&multipartParsingError] ) {
             [CRApp logErrorFormat:@"%@" , multipartParsingError];
         }
     } else if ([contentType hasPrefix:CRRequestTypeJSON]) {
         // JSON requests are parsed after we have all the data
-        [self bufferBodyData:data forRequest:self.currentRequest];
+        [self bufferBodyData:data forRequest:self.requestBeingReceived];
     } else {
         NSError* mimeParsingError;
-        if ( ![self.currentRequest parseMIMEBodyDataChunk:data error:&mimeParsingError] ) {
+        if ( ![self.requestBeingReceived parseMIMEBodyDataChunk:data error:&mimeParsingError] ) {
             [CRApp logErrorFormat:@"%@" , mimeParsingError];
         }
     }
 }
 
 - (void)didReceiveCompleteRequest {
-    if ( self.willDisconnect ) {
+    if (self.willDisconnect) {
         return;
     }
 
     // Parse request body
-    NSUInteger contentLength = [self.currentRequest.env[@"HTTP_CONTENT_LENGTH"] integerValue];
+    NSUInteger contentLength = [self.requestBeingReceived.env[@"HTTP_CONTENT_LENGTH"] integerValue];
     if ( contentLength > 0 ) {
         NSError* bodyParsingError;
-        NSString* contentType = self.currentRequest.env[@"HTTP_CONTENT_TYPE"];
+        NSString* contentType = self.requestBeingReceived.env[@"HTTP_CONTENT_TYPE"];
 
         BOOL result = YES;
 
         if ([contentType hasPrefix:CRRequestTypeJSON]) {
-            result = [self.currentRequest parseJSONBodyData:&bodyParsingError];
+            result = [self.requestBeingReceived parseJSONBodyData:&bodyParsingError];
         } else if ([contentType hasPrefix:CRRequestTypeURLEncoded]) {
-            result = [self.currentRequest parseURLEncodedBodyData:&bodyParsingError];
+            result = [self.requestBeingReceived parseURLEncodedBodyData:&bodyParsingError];
         } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
             // multipart/form-data requests are parsed as they come in and not once the
             // request hast been fully received ;)
         } else {
             // other mime types are assumed to be files and will be treated just like
             // multipart request files. What we need to do here is to reset the target
-            [self.currentRequest clearBodyParsingTargets];
+            [self.requestBeingReceived clearBodyParsingTargets];
         }
 
         if ( !result ) {
@@ -170,14 +193,14 @@ static const NSData * CRLFCRLFData;
     }
 
     CRResponse* response = [self responseWithHTTPStatusCode:200];
-    self.currentRequest.response = response;
-    response.request = self.currentRequest;
-    [self.delegate connection:self didReceiveRequest:self.currentRequest response:response];
+    self.requestBeingReceived.response = response;
+    response.request = self.requestBeingReceived;
+    [self.delegate connection:self didReceiveRequest:self.requestBeingReceived response:response];
     [self startReading];
 }
 
 - (void)bufferBodyData:(NSData *)data forRequest:(CRRequest *)request {
-    if ( self.willDisconnect ) {
+    if (self.willDisconnect) {
         return;
     }
 
@@ -193,12 +216,12 @@ static const NSData * CRLFCRLFData;
 }
 
 - (void)sendDataToSocket:(NSData *)data forRequest:(CRRequest *)request {
-    if ( self.willDisconnect ) {
+    if (self.willDisconnect) {
         return;
     }
     
-    CRRequest* firstRequest = self.requests.firstObject;
-    if ( firstRequest == nil || [firstRequest isEqual:request] ) {
+    
+    if ( request == self.firstRequest ) {
         request.bufferedResponseData = nil;
         [self.socket writeData:data withTimeout:self.server.configuration.CRConnectionWriteTimeout tag:CRConnectionSocketTagSendingResponse];
         if ( request.shouldCloseConnection ) {
@@ -214,11 +237,8 @@ static const NSData * CRLFCRLFData;
 }
 
 - (void)didFinishResponseForRequest:(CRRequest *)request {
-    CRConnection * __weak connection = self;
     [self.delegate connection:self didFinishRequest:request response:request.response];
-    dispatch_async(self.isolationQueue, ^{
-        [connection.requests removeObject:request];
-    });
+    [self removeRequest:request];
 }
 
 #pragma mark - State
@@ -230,23 +250,15 @@ static const NSData * CRLFCRLFData;
 #pragma mark - GCDAsyncSocketDelegate
 
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {
-    CRConnection * __weak connection = self;
-    switch (tag) {
-        case CRConnectionSocketTagSendingResponse: {
-            dispatch_async(self.isolationQueue, ^{ @autoreleasepool {
-                if ( connection.requests.count > 0 && !self.willDisconnect ) {
-                    CRRequest* request = connection.requests.firstObject;
-                    if ( request.bufferedResponseData.length > 0 ) {
-                        dispatch_async(sock.delegateQueue, ^{
-                            [connection sendDataToSocket:request.bufferedResponseData forRequest:request];
-                        });
-                    }
-                }
-            }});
-        } break;
-
-        default:
-            break;
+    if (self.willDisconnect) {
+        return;
+    }
+    
+    if (tag == CRConnectionSocketTagSendingResponse) {
+        NSData *bufferedResponseData = self.firstRequest.bufferedResponseData;
+        if (bufferedResponseData.length > 0) {
+            [self sendDataToSocket:bufferedResponseData forRequest:self.firstRequest];
+        }
     }
 }
 
