@@ -18,21 +18,21 @@
 #import "CRMimeTypeHelper.h"
 #import "CRRequestRange.h"
 
-#define CRStaticFileServingReadBuffer                              (8 * 1024 * 1024)
-#define CRStaticFileServingReadThreshold                           (8 * 64 * 1024)
-
-#define CRStaticFileManagerErrorDomain                             @"CRStaticFileManagerErrorDomain"
-
-#define CRStaticFileManagerReleaseFailedError                      101
-#define CRStaticFileManagerFileReadError                           102
-#define CRStaticFileManagerFileIsDirectoryError                    103
-
-#define CRStaticFileManagerRestrictedFileTypeError                 201
-#define CRStaticFileManagerRangeNotSatisfiableError                202
-
-#define CRStaticFileManagerNotImplementedError                     999
-
 NS_ASSUME_NONNULL_BEGIN
+
+static NSUInteger const CRStaticFileServingReadBuffer = 8e+6;
+static NSUInteger const CRStaticFileServingReadThreshold = 8 * 64 * 1024;
+
+static NSErrorDomain const CRStaticFileManagerErrorDomain = @"CRStaticFileManagerErrorDomain";
+
+static NSUInteger const CRStaticFileManagerReleaseFailedError           = 101;
+static NSUInteger const CRStaticFileManagerFileReadError                = 102;
+static NSUInteger const CRStaticFileManagerFileIsDirectoryError         = 103;
+
+static NSUInteger const CRStaticFileManagerRestrictedFileTypeError      = 201;
+static NSUInteger const CRStaticFileManagerRangeNotSatisfiableError     = 202;
+
+static NSUInteger const CRStaticFileManagerNotImplementedError          = 999;
 
 static NSString * CRStaticFileContentDispositionNoneValue = @"none";
 static NSString * CRStaticFileContentDispositionInlineValue = @"inline";
