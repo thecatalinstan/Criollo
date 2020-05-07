@@ -25,12 +25,13 @@ static NSUInteger const CRStaticFileServingReadThreshold = 8 * 64 * 1024;
 
 static NSErrorDomain const CRStaticFileManagerErrorDomain = @"CRStaticFileManagerErrorDomain";
 
-__attribute__((unused)) static NSUInteger const CRStaticFileManagerReleaseFailedError           = 101;
+static NSUInteger const CRStaticFileManagerReleaseFailedError           = 101;
 static NSUInteger const CRStaticFileManagerFileReadError                = 102;
 static NSUInteger const CRStaticFileManagerFileIsDirectoryError         = 103;
 
-static NSUInteger const CRStaticFileManagerRestrictedFileTypeError      = 201;
-static NSUInteger const CRStaticFileManagerRangeNotSatisfiableError     = 202;
+static NSUInteger const CRStaticFileManagerNullFileTypeError            = 201;
+static NSUInteger const CRStaticFileManagerRestrictedFileTypeError      = 202;
+static NSUInteger const CRStaticFileManagerRangeNotSatisfiableError     = 203;
 
 static NSUInteger const CRStaticFileManagerNotImplementedError          = 999;
 
@@ -43,22 +44,8 @@ NS_INLINE CRStaticFileContentDisposition CRStaticFileContentDispositionMake(NSSt
 
 @interface CRStaticFileManager ()
 
-@property (nonatomic, readonly) NSString * filePath;
-@property (nonatomic, readonly) NSDictionary * attributes;
-@property (nonatomic, readonly, strong, nullable) NSError* attributesError;
-
-@property (nonatomic, readonly) BOOL shouldCache;
-@property (nonatomic, readonly) BOOL shouldFollowSymLinks;
-
-@property (nonatomic, strong) NSString* fileName;
-@property (nonatomic, strong) NSString* contentType;
-@property (nonatomic) CRStaticFileContentDisposition contentDisposition;
-
-@property (nonatomic, readonly) CRStaticFileServingOptions options;
-@property (nonatomic, readonly, strong) dispatch_queue_t fileReadingQueue;
-
-+ (CRRouteBlock)errorHandlerBlockForError:(NSError *)error;
 + (CRRouteBlock)servingBlockForFileAtPath:(NSString *)filePath fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition fileSize:(NSUInteger)fileSize shouldCache:(BOOL)shouldCache fileReadingQueue:(dispatch_queue_t)fileReadingQueue;
+- (CRRouteBlock)errorHandlerBlockForError:(NSError *)error;
 
 NS_ASSUME_NONNULL_END
 
@@ -66,125 +53,87 @@ NS_ASSUME_NONNULL_END
 
 @implementation CRStaticFileManager
 
-- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString *)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition attributes:(NSDictionary *)attributes {
-
+- (instancetype)initWithFileAtPath:(NSString *)filePath
+                           options:(CRStaticFileServingOptions)options
+                          fileName:(NSString *)fileName
+                       contentType:(NSString *)contentType
+                contentDisposition:(CRStaticFileContentDisposition)contentDisposition
+                        attributes:(NSDictionary *)attributes {
+    
     self = [super init];
     if ( self != nil ) {
-
-        // Sanitize path
-        _filePath = filePath.stringByStandardizingPath;
-
-        // Initialize convenience properties
-        _options = options;
-        _shouldCache = _options & CRStaticFileServingOptionsCache;
-        _shouldFollowSymLinks = _options & CRStaticFileServingOptionsFollowSymlinks;
-
-        // Expand symlinks if needed
-        if ( _shouldFollowSymLinks ) {
-            _filePath = [_filePath stringByResolvingSymlinksInPath];
+        filePath = filePath.stringByStandardizingPath;
+        if (options & CRStaticFileServingOptionsFollowSymlinks) {
+            filePath = filePath.stringByResolvingSymlinksInPath;
         }
-
-        if ( fileName ) {
-            _fileName = fileName;
-        } else {
-            _fileName = filePath.lastPathComponent;
-        }
-
-        if ( contentType ) {
-            _contentType = contentType;
-        } else {
-            _contentType = [[CRMimeTypeHelper sharedHelper] mimeTypeForFileAtPath:_filePath];
-        }
-
-        if ( contentDisposition != CRStaticFileContentDispositionNone ) {
-            _contentDisposition = contentDisposition;
-        } else {
-            _contentDisposition = [_contentType isEqualToString:@"application/octet-stream"] ? CRStaticFileContentDispositionAttachment : CRStaticFileContentDispositionInline;
-        }
-
-        // Initialize the attributes
-        if ( attributes ) {
-            _attributes = attributes;
-        } else {
-            NSError* attributesError;
-            _attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:_filePath error:&attributesError];
-            if ( attributesError ) {
-                _attributesError = attributesError;
+        fileName = fileName ?: filePath.lastPathComponent;
+        contentType = contentType ?: [CRMimeTypeHelper.sharedHelper mimeTypeForFileAtPath:filePath];
+        if (contentDisposition == CRStaticFileContentDispositionNone) {
+            if ([contentType isEqualToString:@"application/octet-stream"]) {
+                contentDisposition = CRStaticFileContentDispositionAttachment;
+            } else {
+                contentDisposition = CRStaticFileContentDispositionInline;
             }
         }
-
-        // Create and configure queues
-        NSString* fileReadingQueueLabel = [NSString stringWithFormat:@"%@-%@-fileReadngQueue", NSStringFromClass(self.class), _fileName];
-        _fileReadingQueue = dispatch_queue_create(fileReadingQueueLabel.UTF8String, DISPATCH_QUEUE_SERIAL);
-        dispatch_set_target_queue(_fileReadingQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0));
-
-        NSString * fileType = _attributes == nil || _attributesError != nil ? nil : _attributes.fileType;
-        NSUInteger fileSize = @(_attributes.fileSize).integerValue;
-
-        CRStaticFileManager * __weak manager = self;
-        _routeBlock = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) { @autoreleasepool {
-                if ( !fileType ) {
-                    [CRStaticFileManager errorHandlerBlockForError:manager.attributesError](request, response, completionHandler);
-                } else if ( [fileType isEqualToString:NSFileTypeDirectory] ) {
-
-                    NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
-                    userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"The requested file is a directory.",);
-                    userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
-                    userInfo[NSFilePathErrorKey] = manager.filePath;
-                    NSError* fileIsDirectoryError = [NSError errorWithDomain:CRStaticFileManagerErrorDomain code:CRStaticFileManagerFileIsDirectoryError userInfo:userInfo];
-                    [CRStaticFileManager errorHandlerBlockForError:fileIsDirectoryError](request, response, completionHandler);
-
-                } else if ( [fileType isEqualToString:NSFileTypeRegular] ) {
-
-                    [CRStaticFileManager servingBlockForFileAtPath:manager.filePath fileName:manager.fileName contentType:manager.contentType contentDisposition:manager.contentDisposition fileSize:fileSize shouldCache:manager.shouldCache fileReadingQueue:manager.fileReadingQueue](request, response, completionHandler);
-
-                } else {
-
-                    NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
-                    userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:NSLocalizedString(@"Files of type “%@” are restricted.",), fileType];
-                    userInfo[NSURLErrorFailingURLErrorKey] = request.URL;
-                    userInfo[NSFilePathErrorKey] = manager.filePath;
-                    NSError* restrictedFileTypeError = [NSError errorWithDomain:CRStaticFileManagerErrorDomain code:CRStaticFileManagerRestrictedFileTypeError userInfo:userInfo];
-                    [CRStaticFileManager errorHandlerBlockForError:restrictedFileTypeError](request, response, completionHandler);
-                    
-                }
+    
+        NSError *error;
+        if ((attributes = attributes ?: [NSFileManager.defaultManager attributesOfItemAtPath:filePath error:&error]) ) {
+            NSUInteger code = 0;
+            NSString *fileType, *description;
+            if(!(fileType = attributes.fileType)) {
+                code = CRStaticFileManagerNullFileTypeError;
+                description = @"Unable to determine the requested file's type.";
+            } else if ([fileType isEqualToString:NSFileTypeDirectory]) {
+                code = CRStaticFileManagerFileIsDirectoryError;
+                description = @"The requested file is a directory.";
+            } else if (![fileType isEqualToString:NSFileTypeRegular]) {
+                code = CRStaticFileManagerRestrictedFileTypeError;
+                description = [NSString stringWithFormat:@"Files of type “%@” are restricted.", fileType];
             }
-        };
+            error = [self errorWithCode:code description:description path:filePath];
+        }
+        
+        if (error) {
+            _routeBlock = [self errorHandlerBlockForError:error];
+        } else {
+            _routeBlock = [self servingBlockForFileAtPath:filePath
+                                                 fileName:fileName
+                                              contentType:contentType
+                                       contentDisposition:contentDisposition
+                                                 fileSize:(NSUInteger)attributes.fileSize
+                                              shouldCache:(options & CRStaticFileServingOptionsCache)];
+            
+        }
     }
     return self;
 }
 
-+ (CRRouteBlock)errorHandlerBlockForError:(NSError *)error {
-    return ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-        @autoreleasepool {
-            NSUInteger statusCode = 500;
-            if ( [error.domain isEqualToString:NSCocoaErrorDomain] ) {
-                switch ( error.code ) {
-                    case NSFileReadNoSuchFileError:
-                        statusCode = 404;
-                        break;
-                    case NSFileReadNoPermissionError:
-                        statusCode = 403;
-                        break;
-                    default:
-                        break;
-                }
-            } else if ([error.domain isEqualToString:CRStaticFileManagerErrorDomain] ) {
-                switch ( error.code ) {
-                    case CRStaticFileManagerNotImplementedError:
-                        statusCode = 501;
-                        break;
-                    case CRStaticFileManagerRangeNotSatisfiableError:
-                        statusCode = 416;
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            [CRRouter errorHandlingBlockWithStatus:statusCode error:error](request, response, completionHandler);
+- (CRRouteBlock)errorHandlerBlockForError:(NSError *)error {
+    NSUInteger statusCode = 500;
+    if ([error.domain isEqualToString:NSCocoaErrorDomain]) {
+        switch ( error.code ) {
+            case NSFileReadNoSuchFileError:
+                statusCode = 404;
+                break;
+            case NSFileReadNoPermissionError:
+                statusCode = 403;
+                break;
+            default:
+                break;
         }
-    };
+    } else if ([error.domain isEqualToString:CRStaticFileManagerErrorDomain] ) {
+        switch ( error.code ) {
+            case CRStaticFileManagerNotImplementedError:
+                statusCode = 501;
+                break;
+            case CRStaticFileManagerRangeNotSatisfiableError:
+                statusCode = 416;
+                break;
+            default:
+                break;
+        }
+    }
+    return [CRRouter errorHandlingBlockWithStatus:statusCode error:error];
 }
 
 + (CRRouteBlock)servingBlockForFileAtPath:(NSString *)filePath fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition fileSize:(NSUInteger)fileSize shouldCache:(BOOL)shouldCache fileReadingQueue:(nonnull dispatch_queue_t)fileReadingQueue {
@@ -321,7 +270,14 @@ NS_ASSUME_NONNULL_END
     };
 }
 
-#pragma mark - Convenience Initializers
+- (NSError *)errorWithCode:(NSUInteger)code description:(NSString *)description path:(NSString *)path {
+    return [NSError errorWithDomain:CRStaticFileManagerErrorDomain code:code userInfo:@{
+        NSLocalizedDescriptionKey: description,
+        NSFilePathErrorKey: path
+    }];
+}
+
+#pragma mark - Convenience Class Initializers
 
 + (instancetype)managerWithFileAtPath:(NSString *)filePath {
     return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:0 fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
@@ -346,6 +302,8 @@ NS_ASSUME_NONNULL_END
 + (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition attributes:(NSDictionary * _Nullable)attributes {
     return [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition attributes:attributes];
 }
+
+#pragma mark - Convenience Initializers
 
 - (instancetype)init {
     return  [self initWithFileAtPath:@"" options:0 fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];

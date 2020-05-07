@@ -14,19 +14,63 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly, copy) CRRouteBlock routeBlock;
 
+#pragma mark - Convenience Class Initializers
+
 + (instancetype)managerWithFileAtPath:(NSString *)filePath;
-+ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options;
-+ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName;
-+ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType;
-+ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
-+ (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition attributes:(NSDictionary * _Nullable)attributes;
+
++ (instancetype)managerWithFileAtPath:(NSString *)filePath
+                              options:(CRStaticFileServingOptions)options;
+
++ (instancetype)managerWithFileAtPath:(NSString *)filePath
+                              options:(CRStaticFileServingOptions)options
+                             fileName:(NSString * _Nullable)fileName;
+
++ (instancetype)managerWithFileAtPath:(NSString *)filePath
+                              options:(CRStaticFileServingOptions)options
+                             fileName:(NSString * _Nullable)fileName
+                          contentType:(NSString * _Nullable)contentType;
+
++ (instancetype)managerWithFileAtPath:(NSString *)filePath
+                              options:(CRStaticFileServingOptions)options
+                             fileName:(NSString * _Nullable)fileName
+                          contentType:(NSString * _Nullable)contentType
+                   contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
+
++ (instancetype)managerWithFileAtPath:(NSString *)filePath
+                              options:(CRStaticFileServingOptions)options
+                             fileName:(NSString * _Nullable)fileName
+                          contentType:(NSString * _Nullable)contentType
+                   contentDisposition:(CRStaticFileContentDisposition)contentDisposition
+                           attributes:(NSDictionary * _Nullable)attributes;
+
+#pragma mark - Convenience Initializers
 
 - (instancetype)initWithFileAtPath:(NSString *)filePath;
-- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options;
-- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName;
-- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType;
-- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
-- (instancetype)initWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition attributes:(NSDictionary * _Nullable)attributes;
+
+- (instancetype)initWithFileAtPath:(NSString *)filePath
+                           options:(CRStaticFileServingOptions)options;
+
+- (instancetype)initWithFileAtPath:(NSString *)filePath
+                           options:(CRStaticFileServingOptions)options
+                          fileName:(NSString * _Nullable)fileName;
+
+- (instancetype)initWithFileAtPath:(NSString *)filePath
+                           options:(CRStaticFileServingOptions)options
+                          fileName:(NSString * _Nullable)fileName
+                       contentType:(NSString * _Nullable)contentType;
+
+- (instancetype)initWithFileAtPath:(NSString *)filePath
+                           options:(CRStaticFileServingOptions)options
+                          fileName:(NSString * _Nullable)fileName
+                       contentType:(NSString * _Nullable)contentType
+                contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
+
+- (instancetype)initWithFileAtPath:(NSString *)filePath
+                           options:(CRStaticFileServingOptions)options
+                          fileName:(NSString * _Nullable)fileName
+                       contentType:(NSString * _Nullable)contentType
+                contentDisposition:(CRStaticFileContentDisposition)contentDisposition
+                        attributes:(NSDictionary * _Nullable)attributes NS_DESIGNATED_INITIALIZER;
 
 NS_ASSUME_NONNULL_END
 
