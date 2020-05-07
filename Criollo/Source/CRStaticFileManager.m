@@ -25,7 +25,7 @@ static NSUInteger const CRStaticFileServingReadThreshold = 8 * 64 * 1024;
 
 static NSErrorDomain const CRStaticFileManagerErrorDomain = @"CRStaticFileManagerErrorDomain";
 
-static NSUInteger const CRStaticFileManagerReleaseFailedError           = 101;
+__attribute__((unused)) static NSUInteger const CRStaticFileManagerReleaseFailedError           = 101;
 static NSUInteger const CRStaticFileManagerFileReadError                = 102;
 static NSUInteger const CRStaticFileManagerFileIsDirectoryError         = 103;
 
@@ -42,6 +42,17 @@ NS_INLINE NSString * NSStringFromCRStaticFileContentDisposition(CRStaticFileCont
 NS_INLINE CRStaticFileContentDisposition CRStaticFileContentDispositionMake(NSString * contentDispositionName);
 
 @interface CRStaticFileManager ()
+
+@property (nonatomic, readonly) NSString * filePath;
+@property (nonatomic, readonly) NSDictionary * attributes;
+@property (nonatomic, readonly, strong, nullable) NSError* attributesError;
+
+@property (nonatomic, readonly) BOOL shouldCache;
+@property (nonatomic, readonly) BOOL shouldFollowSymLinks;
+
+@property (nonatomic, strong) NSString* fileName;
+@property (nonatomic, strong) NSString* contentType;
+@property (nonatomic) CRStaticFileContentDisposition contentDisposition;
 
 @property (nonatomic, readonly) CRStaticFileServingOptions options;
 @property (nonatomic, readonly, strong) dispatch_queue_t fileReadingQueue;
@@ -111,12 +122,9 @@ NS_ASSUME_NONNULL_END
         NSUInteger fileSize = @(_attributes.fileSize).integerValue;
 
         CRStaticFileManager * __weak manager = self;
-        _routeBlock = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
-            @autoreleasepool {
+        _routeBlock = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) { @autoreleasepool {
                 if ( !fileType ) {
-
                     [CRStaticFileManager errorHandlerBlockForError:manager.attributesError](request, response, completionHandler);
-
                 } else if ( [fileType isEqualToString:NSFileTypeDirectory] ) {
 
                     NSMutableDictionary* userInfo = [NSMutableDictionary dictionary];
@@ -252,7 +260,6 @@ NS_ASSUME_NONNULL_END
                     }
                     completionHandler();
                 }
-
             } else {
                 __block BOOL didStartSendingFile = NO;
                 dispatch_io_t fileReadChannel = dispatch_io_create_with_path(DISPATCH_IO_RANDOM, filePath.UTF8String, O_RDONLY, 0, fileReadingQueue,  ^(int error) {
@@ -366,7 +373,7 @@ NS_ASSUME_NONNULL_END
 
 @end
 
-NS_INLINE NSString * NSStringFromCRStaticFileContentDisposition(CRStaticFileContentDisposition contentDisposition) {
+NSString * NSStringFromCRStaticFileContentDisposition(CRStaticFileContentDisposition contentDisposition) {
     switch (contentDisposition) {
         case CRStaticFileContentDispositionNone:
             return CRStaticFileContentDispositionNoneValue;
@@ -377,7 +384,7 @@ NS_INLINE NSString * NSStringFromCRStaticFileContentDisposition(CRStaticFileCont
     }
 }
 
-NS_INLINE CRStaticFileContentDisposition CRStaticFileContentDispositionMake(NSString * contentDispositionName) {
+__attribute__((unused)) CRStaticFileContentDisposition CRStaticFileContentDispositionMake(NSString * contentDispositionName) {
     CRStaticFileContentDisposition contentDisposition;
     if ( [contentDispositionName isEqualToString:CRStaticFileContentDispositionInlineValue] ) {
         contentDisposition = CRStaticFileContentDispositionInline;

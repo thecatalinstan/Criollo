@@ -10,22 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-FOUNDATION_EXPORT NSString * NSStringFromCRStaticFileContentDisposition(CRStaticFileContentDisposition contentDisposition);
-FOUNDATION_EXPORT CRStaticFileContentDisposition CRStaticFileContentDispositionMake(NSString * contentDispositionName);
-
 @interface CRStaticFileManager : NSObject
 
-@property (nonatomic, readonly) NSString * filePath;
-@property (nonatomic, readonly) NSDictionary * attributes;
-@property (nonatomic, readonly, strong, nullable) NSError* attributesError;
 @property (nonatomic, readonly, copy) CRRouteBlock routeBlock;
-
-@property (nonatomic, readonly) BOOL shouldCache;
-@property (nonatomic, readonly) BOOL shouldFollowSymLinks;
-
-@property (nonatomic, strong) NSString* fileName;
-@property (nonatomic, strong) NSString* contentType;
-@property (nonatomic) CRStaticFileContentDisposition contentDisposition;
 
 + (instancetype)managerWithFileAtPath:(NSString *)filePath;
 + (instancetype)managerWithFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options;
