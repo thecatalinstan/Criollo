@@ -38,28 +38,8 @@ static NSString * CRStaticFileContentDispositionNoneValue = @"none";
 static NSString * CRStaticFileContentDispositionInlineValue = @"inline";
 static NSString * CRStaticFileContentDispositionAttachmentValue = @"attachment";
 
-NSString * NSStringFromCRStaticFileContentDisposition(CRStaticFileContentDisposition contentDisposition) {
-    switch (contentDisposition) {
-        case CRStaticFileContentDispositionNone:
-            return CRStaticFileContentDispositionNoneValue;
-        case CRStaticFileContentDispositionInline:
-            return CRStaticFileContentDispositionInlineValue;
-        case CRStaticFileContentDispositionAttachment:
-            return CRStaticFileContentDispositionAttachmentValue;
-    }
-}
-
-CRStaticFileContentDisposition CRStaticFileContentDispositionMake(NSString * contentDispositionName) {
-    CRStaticFileContentDisposition contentDisposition;
-    if ( [contentDispositionName isEqualToString:CRStaticFileContentDispositionInlineValue] ) {
-        contentDisposition = CRStaticFileContentDispositionInline;
-    } else if ( [contentDispositionName isEqualToString:CRStaticFileContentDispositionAttachmentValue] ) {
-        contentDisposition = CRStaticFileContentDispositionAttachment;
-    } else {
-        contentDisposition = CRStaticFileContentDispositionNone;
-    }
-    return contentDisposition;
-}
+NS_INLINE NSString * NSStringFromCRStaticFileContentDisposition(CRStaticFileContentDisposition contentDisposition);
+NS_INLINE CRStaticFileContentDisposition CRStaticFileContentDispositionMake(NSString * contentDispositionName);
 
 @interface CRStaticFileManager ()
 
@@ -383,3 +363,26 @@ NS_ASSUME_NONNULL_END
 }
 
 @end
+
+NS_INLINE NSString * NSStringFromCRStaticFileContentDisposition(CRStaticFileContentDisposition contentDisposition) {
+    switch (contentDisposition) {
+        case CRStaticFileContentDispositionNone:
+            return CRStaticFileContentDispositionNoneValue;
+        case CRStaticFileContentDispositionInline:
+            return CRStaticFileContentDispositionInlineValue;
+        case CRStaticFileContentDispositionAttachment:
+            return CRStaticFileContentDispositionAttachmentValue;
+    }
+}
+
+NS_INLINE CRStaticFileContentDisposition CRStaticFileContentDispositionMake(NSString * contentDispositionName) {
+    CRStaticFileContentDisposition contentDisposition;
+    if ( [contentDispositionName isEqualToString:CRStaticFileContentDispositionInlineValue] ) {
+        contentDisposition = CRStaticFileContentDispositionInline;
+    } else if ( [contentDispositionName isEqualToString:CRStaticFileContentDispositionAttachmentValue] ) {
+        contentDisposition = CRStaticFileContentDispositionAttachment;
+    } else {
+        contentDisposition = CRStaticFileContentDispositionNone;
+    }
+    return contentDisposition;
+}
