@@ -7,6 +7,7 @@
 //
 
 #import "CRStaticFileManager.h"
+#import "CRStaticFileManager_Internal.h"
 #import "CRServer.h"
 #import "CRServer_Internal.h"
 #import "CRRequest.h"
@@ -21,8 +22,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-static NSUInteger const DispatchReadBufferSize = ((unsigned long long)8 * 1024 * 1024);
 static NSUInteger const SendFileSizeThreshold = ((unsigned long long)8 * 64 * 1024);
+
+static NSUInteger const DispatchIOLoWater = ((unsigned long long)2 * 1024 * 1024);
+static NSUInteger const DispatchIOHiWater = ((unsigned long long)8 * 1024 * 1024);
 
 static NSErrorDomain const CRStaticFileManagerErrorDomain = @"CRStaticFileManagerErrorDomain";
 
@@ -77,54 +80,39 @@ NS_ASSUME_NONNULL_END
         
          __weak typeof (self) wself = self;
         _routeBlock = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock _Nonnull completion) {
-            
-            NSError *error;
-            NSDictionary<NSFileAttributeKey, id> *attr = attributes;
-            if (!attr && !(attr = [NSFileManager.defaultManager attributesOfItemAtPath:path error:&error])) {
-                goto error;
-            }
-            
-            if (![wself canHandleFileType:attr.fileType path:path error:&error]) {
-                goto error;
-            }
-                    
-            if (![wself serveFileAtPath:path fileName:fileName contentType:contentType contentDisposition:contentDisposition size:attr.fileSize cached:(options & CRStaticFileServingOptionsCache) request:request response:response completion:completion error:&error]) {
-                goto error;
-            }
-            
-            return;
-            
-        error:
-            [wself handleErrorResponse:error request:request response:response completion:completion];
+            [wself handleRequestForFileAtPath:path options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition attributes:attributes request:request response:response completion:completion];
         };
     }
     return self;
 }
 
-- (void)handleErrorResponse:(NSError *)error request:(CRRequest *)request response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion {
-    [CRRouter handleErrorResponse:HTTPStatusCodeForError(error) error:error request:request response:response completion:completion];
-}
-
-- (BOOL)serveFileAtPath:(NSString *)path
-               fileName:(NSString *)fileName
-            contentType:(NSString *)contentType
-     contentDisposition:(CRStaticFileContentDisposition)contentDisposition
-                   size:(unsigned long long)size
-                 cached:(BOOL)cached
-                request:(CRRequest *)request
-               response:(CRResponse *)response
-             completion:(CRRouteCompletionBlock)completion
-                  error:(NSError *__autoreleasing *)error {
-    
-    NSError *err;
+- (void)handleRequestForFileAtPath:(NSString *)path
+                           options:(CRStaticFileServingOptions)options
+                          fileName:(NSString *)fileName
+                       contentType:(NSString *)contentType
+                contentDisposition:(CRStaticFileContentDisposition)contentDisposition
+                        attributes:(NSDictionary<NSFileAttributeKey, id> *)attributes
+                           request:(CRRequest *)request
+                          response:(CRResponse *)response
+                        completion:(CRRouteCompletionBlock)completion  {
     NSRange requestDataRange;
     BOOL partial;
+    NSDictionary<NSString *, NSString *> *headers;
+    
+    NSError *error;
+    
+    if (!attributes && !(attributes = [NSFileManager.defaultManager attributesOfItemAtPath:path error:&error])) {
+        goto error;
+    }
+    
+    if (![self canHandleFileType:attributes.fileType path:path error:&error]) {
+        goto error;
+    }
     
     // Configure the response headers before we actually start serving the file
-    CRRequestRange *requestRange = request.range;
-    NSDictionary<NSString *, NSString *> *headers = [self responseHeadersForByteRangeSet:requestRange.byteRangeSet path:path fileName:fileName contentType:contentType contentDisposition:contentDisposition size:size bytesUnit:requestRange.bytesUnit dataRange:&requestDataRange partial:&partial error:&err];
+    headers = [self responseHeadersForByteRangeSet: request.range.byteRangeSet path:path fileName:fileName contentType:contentType contentDisposition:contentDisposition size:attributes.fileSize bytesUnit: request.range.bytesUnit dataRange:&requestDataRange partial:&partial error:&error];
     [response setAllHTTPHeaderFields:headers];
-    if (err) {
+    if (error) {
         goto error;
     }
     
@@ -134,23 +122,27 @@ NS_ASSUME_NONNULL_END
     }
         
     // Read synchronously if the file size is below threshold
-    if ( size <= SendFileSizeThreshold ) {
-        if(![self sendFileAtPath:path dataRange:requestDataRange cached:cached response:response  completion:completion error:&err]) {
+    if ( attributes.fileSize <= SendFileSizeThreshold ) {
+        if(![self sendFileAtPath:path dataRange:requestDataRange cached:(options & CRStaticFileServingOptionsCache) response:response  completion:completion error:&error]) {
             goto error;
         }
     } else {
-        if(![self dispatchFileAtPath:path size:size dataRange:requestDataRange request:request response:response completion:completion error:&err]) {
+        if(![self dispatchFileAtPath:path size:attributes.fileSize dataRange:requestDataRange request:request response:response completion:completion error:&error]) {
             goto error;
         }
     }
-    
-    return YES;
+        
+    return;
     
 error:
-    if(error != NULL) {
-        *error = err;
-    }
-    return NO;
+    [self handleError:error request:request response:response completion:completion];
+}
+
+- (void)handleError:(NSError *)error
+            request:(CRRequest *)request
+           response:(CRResponse *)response
+         completion:(CRRouteCompletionBlock)completion {
+    [CRRouter handleErrorResponse:HTTPStatusCodeForError(error) error:error request:request response:response completion:completion];
 }
 
 - (BOOL)sendFileAtPath:(NSString *)path
@@ -205,8 +197,8 @@ error:
     dispatch_set_target_queue(queue, dispatch_get_global_queue(QOS_CLASS_UTILITY, 0));
     
     dispatch_io_t channel = dispatch_io_create_with_path(DISPATCH_IO_RANDOM, path.UTF8String, O_RDONLY, 0, queue, cleanup);
-    dispatch_io_set_low_water(channel, SendFileSizeThreshold);
-    dispatch_io_set_high_water(channel, DispatchReadBufferSize);
+    dispatch_io_set_low_water(channel, DispatchIOLoWater);
+    dispatch_io_set_high_water(channel, DispatchIOHiWater);
         
     dispatch_io_handler_t read = ^(bool done, dispatch_data_t data, int errnum) {
         if (request.connection == nil || response.connection == nil) {
