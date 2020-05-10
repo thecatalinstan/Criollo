@@ -14,15 +14,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRStaticFileManager ()
 
-- (void)handleRequestForFileAtPath:(NSString *)path
-                           options:(CRStaticFileServingOptions)options
-                          fileName:(NSString *)fileName
-                       contentType:(NSString *)contentType
-                contentDisposition:(CRStaticFileContentDisposition)contentDisposition
-                        attributes:(NSDictionary<NSFileAttributeKey, id> *)attributes
-                           request:(CRRequest *)request
-                          response:(CRResponse *)response
-                        completion:(CRRouteCompletionBlock)completion;
+- (void)handleFileAtPath:(NSString *)path
+                 options:(CRStaticFileServingOptions)options
+                fileName:(NSString *)fileName
+             contentType:(NSString *)contentType
+      contentDisposition:(CRStaticFileContentDisposition)contentDisposition
+              attributes:(NSDictionary<NSFileAttributeKey, id> *)attributes
+                 request:(CRRequest *)request
+                response:(CRResponse *)response
+              completion:(CRRouteCompletionBlock)completion;
 
 - (void)handleError:(NSError *)error
             request:(CRRequest *)request

@@ -80,21 +80,21 @@ NS_ASSUME_NONNULL_END
         
          __weak typeof (self) wself = self;
         _routeBlock = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock _Nonnull completion) {
-            [wself handleRequestForFileAtPath:path options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition attributes:attributes request:request response:response completion:completion];
+            [wself handleFileAtPath:path options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition attributes:attributes request:request response:response completion:completion];
         };
     }
     return self;
 }
 
-- (void)handleRequestForFileAtPath:(NSString *)path
-                           options:(CRStaticFileServingOptions)options
-                          fileName:(NSString *)fileName
-                       contentType:(NSString *)contentType
-                contentDisposition:(CRStaticFileContentDisposition)contentDisposition
-                        attributes:(NSDictionary<NSFileAttributeKey, id> *)attributes
-                           request:(CRRequest *)request
-                          response:(CRResponse *)response
-                        completion:(CRRouteCompletionBlock)completion  {
+- (void)handleFileAtPath:(NSString *)path
+                 options:(CRStaticFileServingOptions)options
+                fileName:(NSString *)fileName
+             contentType:(NSString *)contentType
+      contentDisposition:(CRStaticFileContentDisposition)contentDisposition
+              attributes:(NSDictionary<NSFileAttributeKey, id> *)attributes
+                 request:(CRRequest *)request
+                response:(CRResponse *)response
+              completion:(CRRouteCompletionBlock)completion  {
     NSRange requestDataRange;
     BOOL partial;
     NSDictionary<NSString *, NSString *> *headers;
