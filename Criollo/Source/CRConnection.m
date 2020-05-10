@@ -103,9 +103,6 @@ static const NSData * CRLFCRLFData;
     
     _requestBeingReceived = nil;
     _firstRequest = nil;
-    
-    _requests = nil;
-    _requestsLock = nil;
 }
 
 - (void)addRequest:(CRRequest *)request {

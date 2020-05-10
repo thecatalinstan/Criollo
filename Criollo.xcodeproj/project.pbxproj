@@ -291,6 +291,10 @@
 		ADAD52641D3E484900DDFBB5 /* CRRouteController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADAD52601D3E484900DDFBB5 /* CRRouteController.m */; };
 		ADADAB5F1BEEF28E000FBE6B /* CRRoute.h in Headers */ = {isa = PBXBuildFile; fileRef = ADADAB5D1BEEF28E000FBE6B /* CRRoute.h */; };
 		ADADAB601BEEF28E000FBE6B /* CRRoute.m in Sources */ = {isa = PBXBuildFile; fileRef = ADADAB5E1BEEF28E000FBE6B /* CRRoute.m */; };
+		ADB32F8724680015005D729A /* CRStaticFileManager_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = ADB32F8624680015005D729A /* CRStaticFileManager_Internal.h */; };
+		ADB32F8824680015005D729A /* CRStaticFileManager_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = ADB32F8624680015005D729A /* CRStaticFileManager_Internal.h */; };
+		ADB32F8924680015005D729A /* CRStaticFileManager_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = ADB32F8624680015005D729A /* CRStaticFileManager_Internal.h */; };
+		ADB32F8E246802D0005D729A /* CRStaticFileManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB32F8D246802D0005D729A /* CRStaticFileManagerTests.m */; };
 		ADB693001BE53FD400656BEC /* CRFCGIRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = ADB692FE1BE53FD400656BEC /* CRFCGIRequest.h */; };
 		ADB693011BE53FD400656BEC /* CRFCGIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB692FF1BE53FD400656BEC /* CRFCGIRequest.m */; };
 		ADD2B60C1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = ADD2B60A1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h */; };
@@ -464,6 +468,8 @@
 		ADAD52601D3E484900DDFBB5 /* CRRouteController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CRRouteController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		ADADAB5D1BEEF28E000FBE6B /* CRRoute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRoute.h; sourceTree = "<group>"; };
 		ADADAB5E1BEEF28E000FBE6B /* CRRoute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRoute.m; sourceTree = "<group>"; };
+		ADB32F8624680015005D729A /* CRStaticFileManager_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRStaticFileManager_Internal.h; sourceTree = "<group>"; };
+		ADB32F8D246802D0005D729A /* CRStaticFileManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRStaticFileManagerTests.m; sourceTree = "<group>"; };
 		ADB692FE1BE53FD400656BEC /* CRFCGIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFCGIRequest.h; sourceTree = "<group>"; };
 		ADB692FF1BE53FD400656BEC /* CRFCGIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRFCGIRequest.m; sourceTree = "<group>"; };
 		ADD2B60A1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSHTTPCookie+Criollo.h"; sourceTree = "<group>"; };
@@ -599,15 +605,16 @@
 		AD030FDC1F0C02C900BD9FE4 /* CriolloTests */ = {
 			isa = PBXGroup;
 			children = (
+				AD96F74D1F1A3F8000C8D075 /* Samples */,
 				4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */,
 				4AD0AD581F6662AA00943DC3 /* CRHTTPSHelperTests.m */,
 				AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */,
 				AD1D44E11F375DE100C5D260 /* CRNibTests.m */,
 				AD1D44F71F376DED00C5D260 /* CRViewTests.m */,
 				AD030FDF1F0C02C900BD9FE4 /* Info.plist */,
-				AD96F74D1F1A3F8000C8D075 /* Samples */,
 				4A689EE0222FD4C70074DEA3 /* CRRouterTests.m */,
 				AD0BCC62245EBCEE0014A920 /* CRServerTests.m */,
+				ADB32F8D246802D0005D729A /* CRStaticFileManagerTests.m */,
 			);
 			path = CriolloTests;
 			sourceTree = "<group>";
@@ -824,6 +831,7 @@
 				ADE99FB51C6B40E10080B1FA /* CRStaticDirectoryManager.h */,
 				ADE99FB61C6B40E10080B1FA /* CRStaticDirectoryManager.m */,
 				AD9BE7F21C91B9A400CE52B0 /* CRStaticFileManager.h */,
+				ADB32F8624680015005D729A /* CRStaticFileManager_Internal.h */,
 				AD9BE7F31C91B9A400CE52B0 /* CRStaticFileManager.m */,
 				AD2A35471C47FA8000E30387 /* CRUploadedFile.h */,
 				ADED0FD31DB7A1E700E2CDE9 /* CRUploadedFile_Internal.h */,
@@ -856,6 +864,7 @@
 				4ABB1E221F9E6FC100480EC7 /* CRApplication.h in Headers */,
 				4ABB1E1E1F9E6F9F00480EC7 /* NSString+Criollo.h in Headers */,
 				4ABB1E271F9E6FDC00480EC7 /* CRServerConfiguration.h in Headers */,
+				ADB32F8924680015005D729A /* CRStaticFileManager_Internal.h in Headers */,
 				4ABB1E3F1F9E706900480EC7 /* CRUploadedFile_Internal.h in Headers */,
 				4ABB1E371F9E704300480EC7 /* CRResponse.h in Headers */,
 				4ABB1E381F9E704800480EC7 /* CRResponse_Internal.h in Headers */,
@@ -909,6 +918,7 @@
 				AD63F83D1BFEB114003815DC /* CRResponse_Internal.h in Headers */,
 				AD5FFFF21BF0031E00A57FE9 /* CRMessage.h in Headers */,
 				AD63F8311BFEA782003815DC /* CRConnection_Internal.h in Headers */,
+				ADB32F8824680015005D729A /* CRStaticFileManager_Internal.h in Headers */,
 				ADED0FD51DB7A1E700E2CDE9 /* CRUploadedFile_Internal.h in Headers */,
 				AD5FFFDA1BF0030000A57FE9 /* CRFCGIRequest.h in Headers */,
 				AD5FFFE21BF0030700A57FE9 /* CRHTTPServerConfiguration.h in Headers */,
@@ -962,6 +972,7 @@
 				AD63F83C1BFEB114003815DC /* CRResponse_Internal.h in Headers */,
 				AD61E98F1BDD8C8E00F5BD17 /* CRResponse.h in Headers */,
 				AD63F8301BFEA782003815DC /* CRConnection_Internal.h in Headers */,
+				ADB32F8724680015005D729A /* CRStaticFileManager_Internal.h in Headers */,
 				ADED0FD41DB7A1E700E2CDE9 /* CRUploadedFile_Internal.h in Headers */,
 				AD4AE7721BDAB1C300B9F221 /* CRConnection.h in Headers */,
 				ADEDB37C1AEFC0B000A26AF1 /* Criollo.h in Headers */,
@@ -1345,6 +1356,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADB32F8E246802D0005D729A /* CRStaticFileManagerTests.m in Sources */,
 				4AD0AD591F6662AA00943DC3 /* CRHTTPSHelperTests.m in Sources */,
 				AD1D44F81F376DED00C5D260 /* CRViewTests.m in Sources */,
 				AD1D44E21F375DE100C5D260 /* CRNibTests.m in Sources */,

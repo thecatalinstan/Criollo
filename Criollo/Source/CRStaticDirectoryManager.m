@@ -121,7 +121,7 @@ static const NSDateFormatter *dateFormatter;
                     if ( manager.shouldFollowSymLinks ) {
                         options |= CRStaticFileServingOptionsFollowSymlinks;
                     }
-                    CRStaticFileManager* staticFileManager = [CRStaticFileManager managerWithFileAtPath:requestedAbsolutePath options:options fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone];
+                    CRStaticFileManager* staticFileManager = [CRStaticFileManager managerWithFileAtPath:requestedAbsolutePath options:options fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:itemAttributes];
                     staticFileManager.routeBlock(request, response, completionHandler);
                 }
             }

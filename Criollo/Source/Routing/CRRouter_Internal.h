@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)executeRoutes:(NSArray<CRRouteMatchingResult *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response withCompletion:(CRRouteCompletionBlock)completionBlock;
 - (void)executeRoutes:(NSArray<CRRouteMatchingResult *> *)routes forRequest:(CRRequest *)request response:(CRResponse *)response withCompletion:(CRRouteCompletionBlock)completionBlock notFoundBlock:(CRRouteBlock _Nullable)notFoundBlock;
 
++ (void)handleErrorResponse:(NSUInteger)statusCode error:(NSError *)error request:(CRRequest *)request response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion;
+
 @end
 
 NS_ASSUME_NONNULL_END
