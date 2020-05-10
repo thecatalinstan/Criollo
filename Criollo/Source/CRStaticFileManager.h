@@ -16,61 +16,61 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Convenience Class Initializers
 
-+ (instancetype)managerWithFileAtPath:(NSString *)filePath;
++ (instancetype)managerWithFileAtPath:(NSString *)path;
 
-+ (instancetype)managerWithFileAtPath:(NSString *)filePath
++ (instancetype)managerWithFileAtPath:(NSString *)path
                               options:(CRStaticFileServingOptions)options;
 
-+ (instancetype)managerWithFileAtPath:(NSString *)filePath
++ (instancetype)managerWithFileAtPath:(NSString *)path
                               options:(CRStaticFileServingOptions)options
                              fileName:(NSString * _Nullable)fileName;
 
-+ (instancetype)managerWithFileAtPath:(NSString *)filePath
++ (instancetype)managerWithFileAtPath:(NSString *)path
                               options:(CRStaticFileServingOptions)options
                              fileName:(NSString * _Nullable)fileName
                           contentType:(NSString * _Nullable)contentType;
 
-+ (instancetype)managerWithFileAtPath:(NSString *)filePath
++ (instancetype)managerWithFileAtPath:(NSString *)path
                               options:(CRStaticFileServingOptions)options
                              fileName:(NSString * _Nullable)fileName
                           contentType:(NSString * _Nullable)contentType
                    contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
 
-+ (instancetype)managerWithFileAtPath:(NSString *)filePath
++ (instancetype)managerWithFileAtPath:(NSString *)path
                               options:(CRStaticFileServingOptions)options
                              fileName:(NSString * _Nullable)fileName
                           contentType:(NSString * _Nullable)contentType
                    contentDisposition:(CRStaticFileContentDisposition)contentDisposition
-                           attributes:(NSDictionary * _Nullable)attributes;
+                           attributes:(NSDictionary<NSFileAttributeKey, id> * _Nullable)attributes;
 
 #pragma mark - Convenience Initializers
 
-- (instancetype)initWithFileAtPath:(NSString *)filePath;
+- (instancetype)initWithFileAtPath:(NSString *)path;
 
-- (instancetype)initWithFileAtPath:(NSString *)filePath
+- (instancetype)initWithFileAtPath:(NSString *)path
                            options:(CRStaticFileServingOptions)options;
 
-- (instancetype)initWithFileAtPath:(NSString *)filePath
+- (instancetype)initWithFileAtPath:(NSString *)path
                            options:(CRStaticFileServingOptions)options
                           fileName:(NSString * _Nullable)fileName;
 
-- (instancetype)initWithFileAtPath:(NSString *)filePath
+- (instancetype)initWithFileAtPath:(NSString *)path
                            options:(CRStaticFileServingOptions)options
                           fileName:(NSString * _Nullable)fileName
                        contentType:(NSString * _Nullable)contentType;
 
-- (instancetype)initWithFileAtPath:(NSString *)filePath
+- (instancetype)initWithFileAtPath:(NSString *)path
                            options:(CRStaticFileServingOptions)options
                           fileName:(NSString * _Nullable)fileName
                        contentType:(NSString * _Nullable)contentType
                 contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
 
-- (instancetype)initWithFileAtPath:(NSString *)filePath
+- (instancetype)initWithFileAtPath:(NSString *)path
                            options:(CRStaticFileServingOptions)options
                           fileName:(NSString * _Nullable)fileName
                        contentType:(NSString * _Nullable)contentType
                 contentDisposition:(CRStaticFileContentDisposition)contentDisposition
-                        attributes:(NSDictionary * _Nullable)attributes NS_DESIGNATED_INITIALIZER;
+                        attributes:(NSDictionary<NSFileAttributeKey, id> * _Nullable)attributes NS_DESIGNATED_INITIALIZER;
 
 NS_ASSUME_NONNULL_END
 
