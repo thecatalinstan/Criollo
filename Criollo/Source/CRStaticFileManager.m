@@ -16,9 +16,10 @@
 #import "CRResponse_Internal.h"
 #import "CRConnection.h"
 #import "CRConnection_Internal.h"
-#import "CRMimeTypeHelper.h"
 #import "CRRequestRange.h"
+#import "CRRequestRange_Internal.h"
 #import "CRRouter_Internal.h"
+#import "CRMimeTypeHelper.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -29,7 +30,6 @@ static NSUInteger const DispatchIOHiWater = ((unsigned long long)8 * 1024 * 1024
 
 static NSErrorDomain const CRStaticFileManagerErrorDomain = @"CRStaticFileManagerErrorDomain";
 
-static NSUInteger const CRStaticFileManagerFileReadError                = 102;
 static NSUInteger const CRStaticFileManagerFileIsDirectoryError         = 103;
 
 static NSUInteger const CRStaticFileManagerNullFileTypeError            = 201;
@@ -121,12 +121,12 @@ NS_ASSUME_NONNULL_END
     }
         
     // Read synchronously if the file size is below threshold
-    if ( _attributes.fileSize <= SendFileSizeThreshold ) {
-        if(![self sendFileDataRange:requestDataRange response:response completion:completion error:&error]) {
+    if (_attributes.fileSize <= SendFileSizeThreshold) {
+        if(![self sendFileDataRange:requestDataRange partial:partial response:response completion:completion error:&error]) {
             goto error;
         }
     } else {
-        if(![self dispatchDataRange:requestDataRange request:request response:response completion:completion error:&error]) {
+        if(![self dispatchDataRange:requestDataRange partial:partial request:request response:response completion:completion error:&error]) {
             goto error;
         }
     }
@@ -137,23 +137,54 @@ error:
     [self handleError:error request:request response:response completion:completion];
 }
 
-- (BOOL)sendFileDataRange:(NSRange)dataRange response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion error:(NSError *__autoreleasing *)error {
+- (BOOL)sendFileDataRange:(NSRange)dataRange partial:(BOOL)partial response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion error:(NSError *__autoreleasing *)error {
+
+    off_t offset = partial ? dataRange.location : 0;
+    size_t length = partial ? dataRange.length : _attributes.fileSize;
+        
     NSData *data;
-    if (!(data = [NSData dataWithContentsOfFile:_path options:((_options & CRStaticFileServingOptionsCache) ? NSDataReadingMappedIfSafe : NSDataReadingUncached) error:error])) {
-        return NO;
+    size_t read;
+    void *buf = NULL;
+    
+    FILE *handle;
+    if (!(handle = fopen(_path.UTF8String, "r"))) {
+        goto error;
     }
     
-    if (dataRange.location != NSNotFound) {
-        data = [NSData dataWithBytesNoCopy:(void *)data.bytes + dataRange.location length:dataRange.length freeWhenDone:NO];
+    if(0 != fseeko(handle, offset, SEEK_SET)) {
+        goto error;
     }
     
+    buf = calloc(length, sizeof(char));
+    if(length != (read = fread(buf, sizeof(char), length, handle))) {
+        if (ferror(handle)) {
+            goto error;
+        } else if (feof(handle)) {
+            length = read;
+            buf = realloc(buf, length);
+        }
+    }
+    
+    if(0 != fclose(handle)) {
+        goto error;
+    }
+
+    data = [NSData dataWithBytesNoCopy:buf length:length freeWhenDone:YES];
+    [response setValue:@(data.length).stringValue forHTTPHeaderField:@"Content-Length"];
     [response sendData:data];
     completion();
     
     return YES;
+error:
+    free(buf);
+    if (error != NULL) {
+        *error = [self errorWithErrNum:errno];
+    }
+    
+    return NO;
 }
 
-- (BOOL)dispatchDataRange:(NSRange)dataRange request:(CRRequest *)request response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion error:(NSError *__autoreleasing *)error {
+- (BOOL)dispatchDataRange:(NSRange)dataRange partial:(BOOL)partial request:(CRRequest *)request response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion error:(NSError *__autoreleasing *)error {
 
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     
@@ -165,10 +196,7 @@ error:
     
     void (^cleanup)(int) = ^(int errnum) {
         if (errnum && !didStartSendingFile) {
-            NSMutableDictionary<NSErrorUserInfoKey, id> *info = [NSMutableDictionary dictionaryWithCapacity:1];
-            info[NSLocalizedDescriptionKey] = [NSString stringWithCString:strerror(errnum) encoding:NSUTF8StringEncoding];
-            NSError *underlyingError = [NSError errorWithDomain:NSPOSIXErrorDomain code:(NSUInteger)errnum userInfo:info];
-            err = [wself errorWithCode:CRStaticFileManagerFileReadError description:NSLocalizedString(@"File read channel released with error.",) underlyingError:underlyingError];
+            err = [wself errorWithErrNum:errnum];
             result = NO;
         }
          
@@ -204,9 +232,8 @@ error:
         }
     };
     
-    BOOL range = dataRange.location != NSNotFound;
-    off_t offset = range ? dataRange.location : 0;
-    size_t length = range ? dataRange.length : _attributes.fileSize;
+    off_t offset = partial ? dataRange.location : 0;
+    size_t length = partial ? dataRange.length : _attributes.fileSize;
     dispatch_io_read(channel, offset, length, queue, read);
     
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
@@ -262,7 +289,6 @@ error:
     
     // In any case, let the client know that we can handle byte ranges
     headers[@"Accept-Ranges"] = CRRequestRange.acceptRangesSpec;
-    
             
     // We do not (yet) support multipart byte-ranges so bailout early with a
     // "not implemented" errpr
@@ -280,6 +306,8 @@ error:
         
     // If we cannot satisfy the byte range, return an error
     if (![requestByteRange isSatisfiableForFileSize:size dataRange:&requestDataRange]) {
+        // set the the unsatisfyiable conent range header
+        headers[@"Content-range"] =  [NSString stringWithFormat:@"%@ %@", range.bytesUnit, [requestByteRange contentRangeSpecForFileSize:size satisfiable:NO dataRange:requestDataRange]];
         NSString *description = [NSString stringWithFormat:NSLocalizedString(@"The requested byte-range %@-%@ / %lu could not be satisfied.",), requestByteRange.firstBytePos, requestByteRange.lastBytePos, size];
         err = [self errorWithCode:CRStaticFileManagerRangeNotSatisfiableError description:description underlyingError:nil];
         goto done;
@@ -287,6 +315,7 @@ error:
     
     headers[@"Content-Range"] = [NSString stringWithFormat:@"%@ %@", range.bytesUnit, [requestByteRange contentRangeSpecForFileSize:size satisfiable:YES dataRange:requestDataRange]];
     headers[@"Content-Length"] = [requestByteRange contentLengthSpecForFileSize:size satisfiable:YES dataRange:requestDataRange];
+    headers[@"Connection"] = @"close";
     
 done:
     if (dataRange != NULL) {
@@ -302,6 +331,12 @@ done:
     }
     
     return headers;
+}
+
+- (NSError *)errorWithErrNum:(int)errnum {
+    NSMutableDictionary<NSErrorUserInfoKey, id> *info = [NSMutableDictionary dictionaryWithCapacity:1];
+    info[NSLocalizedDescriptionKey] = [NSString stringWithCString:strerror(errnum) encoding:NSUTF8StringEncoding];
+    return [NSError errorWithDomain:NSPOSIXErrorDomain code:(NSUInteger)errnum userInfo:info];
 }
 
 - (NSError *)errorWithCode:(NSUInteger)code description:(NSString *)description underlyingError:(NSError * _Nullable)underlyingError {

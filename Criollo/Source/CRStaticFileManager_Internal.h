@@ -15,14 +15,15 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CRStaticFileManager ()
 
 - (void)handleRequest:(CRRequest *)request response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion;
-- (BOOL)sendFileDataRange:(NSRange)dataRange response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion error:(NSError *__autoreleasing *)error;
-- (BOOL)dispatchDataRange:(NSRange)dataRange request:(CRRequest *)request response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion error:(NSError *__autoreleasing *)error;
+- (BOOL)sendFileDataRange:(NSRange)dataRange partial:(BOOL)partial response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion error:(NSError *__autoreleasing *)error;
+- (BOOL)dispatchDataRange:(NSRange)dataRange partial:(BOOL)partial request:(CRRequest *)request response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion error:(NSError *__autoreleasing *)error;
 
 - (void)handleError:(NSError *)error request:(CRRequest *)request response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion;
 
 - (BOOL)canHandleFileType:(NSString *)fileType error:(NSError *__autoreleasing *)error;
 - (NSDictionary<NSString *, NSString *> *)responseHeadersForRange:(CRRequestRange *)range dataRange:(NSRange *)dataRange partial:(BOOL *)partial error:(NSError *__autoreleasing *)error;
 
+- (NSError *)errorWithErrNum:(int)errnum;
 - (NSError *)errorWithCode:(NSUInteger)code description:(NSString *)description underlyingError:(NSError * _Nullable)underlyingError;
 
 @end
