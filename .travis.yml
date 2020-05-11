@@ -9,6 +9,7 @@ osx_image:
 language: objective-c
 xcode_project: Criollo.xcodeproj
 script: 
+  - ./.scripts/analyze.sh
   - ./.scripts/build.sh
   - ./.scripts/tests.sh
   - ./.scripts/apps.sh
