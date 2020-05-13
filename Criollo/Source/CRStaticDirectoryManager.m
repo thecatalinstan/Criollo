@@ -26,14 +26,14 @@ static NSString * const CRStaticDirectoryManagerErrorDomain = @"CRStaticDirector
 #define CRStaticDirectoryManagerDirectoryListingForbiddenError          201
 #define CRStaticDirectoryManagerNotImplementedError                     999
 
-static NSUInteger const IndexFileNameLength = 70;
-static NSUInteger const IndexFileSizeLength = 20;
+//static NSUInteger const IndexFileNameLength = 70;
+//static NSUInteger const IndexFileSizeLength = 20;
 
-static NSString * const IndexHTMLFormat = @"<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"/><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><title>%@</title></head><body><h1>Index of %@</h1><hr/><pre>%@</pre><hr/><small><i>Directory index took %.4fms to generate</i></small></body></html>";
-static NSString * const IndexParentDirLinkFormat = @"<a href=\"%@\">../</a>\n";
-static NSString * const IndexRowFormat = @"<a href=\"%@%@%@\" title=\"%@\">%@%@</a>%@ %@ %@%@\n";
+static NSString * const IndexHTMLFormat = @"<html><head><title>%@</title></head><body><h1>Index of %@</h1><hr><pre>%@%@</pre><hr><small><i>Directory index took %.4fms to generate</i></small></body></html>";
+static NSString * const IndexLinkFormat = @"<a href=\"%@\">%@</a>";
 
 static NSDateFormatter *dateFormatter;
+static NSByteCountFormatter *byteFormatter;
 
 @interface CRStaticDirectoryManager ()
 
@@ -68,6 +68,7 @@ NS_ASSUME_NONNULL_END
 - (void)handleRequest:(CRRequest *)request response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion {
     // Determine the absolute and relative requested file paths
     NSString *requestedPath = request.env[@"DOCUMENT_URI"];
+    
     NSString *relativePath = [requestedPath pathRelativeToPath:_prefix];
     NSString *absolutePath = [_path stringByAppendingPathComponent:relativePath].stringByStandardizingPath;
     if (_options & CRStaticFileServingOptionsFollowSymlinks) {
@@ -124,52 +125,35 @@ error:
     }];
     
     NSMutableString *index = [NSMutableString stringWithCapacity:1024];
-    
-    // Display ".." link
-    if (relativePath.length && ![requestedPath hasSuffix:_prefix] ) {
-        [index appendFormat:IndexParentDirLinkFormat, requestedPath.stringByDeletingLastPathComponent];
-    }
-    
     for (NSURL *item in contents) {
-        NSNumber *dir, *size;
-        if(![item getResourceValue:&dir forKey:NSURLIsDirectoryKey error:nil]) {
-            continue;
-        }
-        if(![item getResourceValue:&size forKey:NSURLFileSizeKey error:nil]) {
-            continue;
-        }
-
-        BOOL isDirectory = dir.boolValue;
-        NSString *fileSize = size.stringValue ?: @"-";
+        NSNumber *dir;
+        [item getResourceValue:&dir forKey:NSURLIsDirectoryKey error:nil];
+        BOOL isDir = dir.boolValue;
         
-        NSDate *mtime;
-        [item getResourceValue:&mtime forKey:NSURLContentModificationDateKey error:nil];
-        NSString* fileModificationDate = [dateFormatter stringFromDate:mtime];
+        NSNumber *fileSize;
+        [item getResourceValue:&fileSize forKey:NSURLFileSizeKey error:nil];
+        NSString *size = fileSize.longLongValue > 0 ? [byteFormatter stringFromByteCount:fileSize.longLongValue] : @"-";
+                
+        NSDate *modificationDate;
+        [item getResourceValue:&modificationDate forKey:NSURLContentModificationDateKey error:nil];
+        NSString *mtime = [dateFormatter stringFromDate:modificationDate];
         
-        NSString* fileName = item.lastPathComponent;
-        NSString* fullName = [fileName stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
-        NSString* fileNamePadding;
-        if ( fileName.length > IndexFileNameLength ) {
-            fileName = [fileName substringToIndex:IndexFileNameLength - (isDirectory ? 1 : 0)];
-            fileNamePadding = @"";
-        } else {
-            fileNamePadding = [@"" stringByPaddingToLength:IndexFileNameLength - fileName.length - (isDirectory ? 1 : 0) withString:@" " startingAtIndex:0];
-        }
+        NSString *name = [NSString stringWithFormat:@"%@%@", item.lastPathComponent, isDir ? CRPathSeparator : @""];
+        NSString *href = [[requestedPath stringByAppendingPathComponent:name] stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLPathAllowedCharacterSet];
+        NSString *link = [NSString stringWithFormat:IndexLinkFormat, href, name];
         
-        
-        
-        NSString* fileSizePadding;
-        if ( fileSize.length > IndexFileSizeLength ) {
-            fileSize =  [fileSize substringToIndex:IndexFileSizeLength];
-            fileSizePadding = @"";
-        } else {
-            fileSizePadding = [@"" stringByPaddingToLength:IndexFileSizeLength - fileSize.length withString:@" " startingAtIndex:0];
-        }
-        
-        [index appendFormat:IndexRowFormat, requestedPath, [requestedPath isEqualToString:CRPathSeparator] ? @"" : CRPathSeparator, fileName, fullName, fileName, isDirectory ? CRPathSeparator : @"", fileNamePadding, fileModificationDate, fileSizePadding, fileSize];
+        [index appendFormat:@"%@%@%@%@\n", link, @" ", mtime, size];
     }
     
-    NSString *responseString = [NSString stringWithFormat:IndexHTMLFormat, requestedPath, requestedPath, index, [NSDate.date timeIntervalSinceDate:start] * 1000];
+    // Display "../" link
+    NSString *parentLink;
+    if (relativePath.length && ![requestedPath hasSuffix:_prefix]) {
+        parentLink = [[NSString stringWithFormat:IndexLinkFormat, requestedPath.stringByDeletingLastPathComponent, @"../"] stringByAppendingString:@"\n"];
+    } else {
+        parentLink = @"";
+    }
+    
+    NSString *responseString = [NSString stringWithFormat:IndexHTMLFormat, requestedPath, requestedPath, parentLink, index, [NSDate.date timeIntervalSinceDate:start] * 1000];
     NSData *responseData = [responseString dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
     
     [response setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
@@ -202,7 +186,15 @@ error:
     dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
     dateFormatter.timeZone = [NSTimeZone defaultTimeZone];
-    dateFormatter.dateFormat = @"dd-MMM-yyyy HH:mm:ss";
+//    dateFormatter.dateFormat = @"dd-MMM-yyyy HH:mm:ss";
+    dateFormatter.dateStyle = NSDateFormatterShortStyle;
+    dateFormatter.timeStyle = NSDateFormatterShortStyle;
+    dateFormatter.doesRelativeDateFormatting = YES;
+    
+    byteFormatter = [[NSByteCountFormatter alloc] init];
+    byteFormatter.includesUnit = YES;
+    byteFormatter.includesCount = YES;
+    byteFormatter.includesActualByteCount = NO;
 }
 
 + (instancetype)managerWithDirectoryAtPath:(NSString *)path prefix:(NSString *)prefix {
