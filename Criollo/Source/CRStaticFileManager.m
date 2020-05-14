@@ -17,10 +17,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-static NSUInteger const SendFileSizeThreshold = ((unsigned long long)8 * 64 * 1024);
+static NSUInteger const SendFileSizeThreshold = ((unsigned long long)512 * 1024);
 
-static NSUInteger const DispatchIOLoWater = ((unsigned long long)2 * 1024 * 1024);
-static NSUInteger const DispatchIOHiWater = ((unsigned long long)8 * 1024 * 1024);
+static NSUInteger const DispatchIOLoWater = ((unsigned long long)512 * 1024);
+static NSUInteger const DispatchIOHiWater = ((unsigned long long)8192 * 1024);
 
 static NSErrorDomain const CRStaticFileManagerErrorDomain = @"CRStaticFileManagerErrorDomain";
 static NSUInteger const CRStaticFileManagerFileIsDirectoryError         = 103;
