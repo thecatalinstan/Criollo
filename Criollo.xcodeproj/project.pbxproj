@@ -318,6 +318,7 @@
 		ADEDB3A61AEFCC6400A26AF1 /* NSDate+RFC1123.m in Sources */ = {isa = PBXBuildFile; fileRef = ADEDB3601AEFBD8800A26AF1 /* NSDate+RFC1123.m */; };
 		ADEDB3A71AEFCC8B00A26AF1 /* CRApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB34E1AEFBD8800A26AF1 /* CRApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ADEDB3AA1AEFCC8B00A26AF1 /* NSDate+RFC1123.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB35F1AEFBD8800A26AF1 /* NSDate+RFC1123.h */; };
+		F306C201226A24FF00846DC5 /* CRHTTPConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F306C200226A24FF00846DC5 /* CRHTTPConnectionTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -491,6 +492,7 @@
 		ADEDB3761AEFC0B000A26AF1 /* Criollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Criollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADEDB37A1AEFC0B000A26AF1 /* Criollo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Criollo-Info.plist"; sourceTree = "<group>"; };
 		ADEDB37B1AEFC0B000A26AF1 /* Criollo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Criollo.h; path = ../Criollo.h; sourceTree = "<group>"; };
+		F306C200226A24FF00846DC5 /* CRHTTPConnectionTests.m */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPConnectionTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -609,6 +611,7 @@
 		AD030FDC1F0C02C900BD9FE4 /* CriolloTests */ = {
 			isa = PBXGroup;
 			children = (
+				F306C200226A24FF00846DC5 /* CRHTTPConnectionTests.m */,
 				AD96F74D1F1A3F8000C8D075 /* Samples */,
 				4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */,
 				4AD0AD581F6662AA00943DC3 /* CRHTTPSHelperTests.m */,
@@ -1165,6 +1168,7 @@
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = ADEDB3471AEFBCF700A26AF1;
@@ -1367,6 +1371,7 @@
 				4AD0AD591F6662AA00943DC3 /* CRHTTPSHelperTests.m in Sources */,
 				AD1D44F81F376DED00C5D260 /* CRViewTests.m in Sources */,
 				AD1D44E21F375DE100C5D260 /* CRNibTests.m in Sources */,
+				F306C201226A24FF00846DC5 /* CRHTTPConnectionTests.m in Sources */,
 				4A689EE1222FD4C70074DEA3 /* CRRouterTests.m in Sources */,
 				4A84C76F1F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */,
 				AD0BCC63245EBCEE0014A920 /* CRServerTests.m in Sources */,
