@@ -13,6 +13,11 @@
 #define InvalidPath     @"/path/that/does/not/exist"
 #define JunkPath        [self pathForSampleFile:@"CRHTTPSHelperTests.junk"]
 
+#define CRHTTPServerCreate() CRHTTPServer *server = [CRHTTPServer new]
+#define CRHTTPServerDestroy() server = nil
+#define CRHTTPServerStart() NSError *error; while(![server startListening:&error portNumber:(2000 + (NSUInteger)arc4random_uniform(3000))] && [error.domain isEqualToString:NSPOSIXErrorDomain] && error.code == EADDRINUSE) { NSLog(@" *** %@", error); error = nil;}
+#define CRHTTPServerStop() [server stopListening]
+
 @interface CRHTTPServer ()
 
 @property (nonatomic, strong) NSArray *certificates;
@@ -33,17 +38,18 @@
 }
 
 - (void)testSecureCRHTTPServerWithNoCredentialFiles {
-    CRHTTPServer *server = [CRHTTPServer new];
+    CRHTTPServerCreate();
     server.isSecure = YES;
     
-    NSError *error;
-    [server startListening:&error];
+    CRHTTPServerStart();
     NSArray *items = server.certificates;
     
     XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with no credential files should result in an error.");
     XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"Secure CRHTTPServer errors should have the domain CRHTTPSErrorDomain.");
     XCTAssertEqual(error.code, CRHTTPSMissingCredentialsError, @"Setting up a secure CRHTTPServer with no credential files should yield CRHTTPSMissingCredentialsError errors.");
     XCTAssertNil(items, @"Resulting items array should be nil");
+    
+    CRHTTPServerStop();
 }
 
 - (void)testSecureCRHTTPServerWithIdentityFile {
@@ -51,12 +57,11 @@
     
     // Test invalid file path
     {
-        CRHTTPServer *server = [CRHTTPServer new];
+        CRHTTPServerCreate();
         server.isSecure = YES;
         server.identityPath = InvalidPath;
         
-        NSError *error;
-        [server startListening:&error];
+        CRHTTPServerStart();
         NSArray *items = server.certificates;
         
         XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with a non-existent identity file should result in an error.");
@@ -67,12 +72,11 @@
     
     // Test junk data
     {
-        CRHTTPServer *server = [CRHTTPServer new];
+        CRHTTPServerCreate();
         server.isSecure = YES;
         server.identityPath = JunkPath;
         
-        NSError *error;
-        [server startListening:&error];
+        CRHTTPServerStart();
         NSArray *items = server.certificates;
         
         XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with a malformed file should result in an error.");
@@ -83,13 +87,12 @@
     
     // Test valid identity file but incorrect password
     {
-        CRHTTPServer *server = [CRHTTPServer new];
+        CRHTTPServerCreate();
         server.isSecure = YES;
         server.identityPath = [self pathForSampleFile:@"CRHTTPSHelperTests.p12"];
         server.password = @"wrongpassword";
         
-        NSError *error;
-        [server startListening:&error];
+        CRHTTPServerStart();
         NSArray *items = server.certificates;
         
         XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with an incorrect password should result in an error.");
@@ -100,13 +103,12 @@
     
     // Test valid identity file and correct password
     {
-        CRHTTPServer *server = [CRHTTPServer new];
+        CRHTTPServerCreate();
         server.isSecure = YES;
         server.identityPath = [self pathForSampleFile:@"CRHTTPSHelperTests.p12"];
         server.password = password;
         
-        NSError *error;
-        [server startListening:&error];
+        CRHTTPServerStart();
         NSArray *items = server.certificates;
         
         NSUInteger expectedItemsCount = 3; // [identity, cert (intermediate), cert (root)]
@@ -130,13 +132,12 @@
     
     // Test invalid certificate path
     {
-        CRHTTPServer *server = [CRHTTPServer new];
+        CRHTTPServerCreate();
         server.isSecure = YES;
         server.certificatePath = InvalidPath;
         server.certificateKeyPath = InvalidPath;
         
-        NSError *error;
-        [server startListening:&error];
+        CRHTTPServerStart();
         NSArray *items = server.certificates;
         
         XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with a non-existent certificate file should result in an error.");
@@ -147,13 +148,12 @@
     
     // Test valid certificate path but invalid key path
     {
-        CRHTTPServer *server = [CRHTTPServer new];
+        CRHTTPServerCreate();
         server.isSecure = YES;
         server.certificatePath = JunkPath;
         server.certificateKeyPath = InvalidPath;
         
-        NSError *error;
-        [server startListening:&error];
+        CRHTTPServerStart();
         NSArray *items = server.certificates;
         
         XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with a non-existent private key file should result in an error.");
@@ -164,13 +164,12 @@
     
     // Test junk certificate file
     {
-        CRHTTPServer *server = [CRHTTPServer new];
+        CRHTTPServerCreate();
         server.isSecure = YES;
         server.certificatePath = JunkPath;
         server.certificateKeyPath = JunkPath;
         
-        NSError *error;
-        [server startListening:&error];
+        CRHTTPServerStart();
         NSArray *items = server.certificates;
         
         XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer an invalid certificate file should result in an error.");
@@ -181,13 +180,12 @@
     
     // Test valid certificate path but junk key
     {
-        CRHTTPServer *server = [CRHTTPServer new];
+        CRHTTPServerCreate();
         server.isSecure = YES;
         server.certificatePath = PEMCertificatePath;
         server.certificateKeyPath = JunkPath;
         
-        NSError *error;
-        [server startListening:&error];
+        CRHTTPServerStart();
         NSArray *items = server.certificates;
         
         XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with an invalid key file should result in an error.");
@@ -198,13 +196,12 @@
     
     // Test PEM-encoded certificate and key
     {
-        CRHTTPServer *server = [CRHTTPServer new];
+        CRHTTPServerCreate();
         server.isSecure = YES;
         server.certificatePath = PEMCertificatePath;
         server.certificateKeyPath = PEMKeyPath;
         
-        NSError *error;
-        [server startListening:&error];
+        CRHTTPServerStart();
         NSArray *items = server.certificates;
         
         NSUInteger expectedItemsCount = 1; // [identity]
@@ -219,13 +216,12 @@
     
     // Test DER-encoded certificate and key
     {
-        CRHTTPServer *server = [CRHTTPServer new];
+        CRHTTPServerCreate();
         server.isSecure = YES;
         server.certificatePath = DERCertificatePath;
         server.certificateKeyPath = DERKeyPath;
         
-        NSError *error;
-        [server startListening:&error];
+        CRHTTPServerStart();
         NSArray *items = server.certificates;
         
         NSUInteger expectedItemsCount = 1; // [identity]
@@ -240,13 +236,12 @@
     
     // Test PEM-encoded certificate and DER-encoded key
     {
-        CRHTTPServer *server = [CRHTTPServer new];
+        CRHTTPServerCreate();
         server.isSecure = YES;
         server.certificatePath = PEMCertificatePath;
         server.certificateKeyPath = DERKeyPath;
         
-        NSError *error;
-        [server startListening:&error];
+        CRHTTPServerStart();
         NSArray *items = server.certificates;
         
         NSUInteger expectedItemsCount = 1; // [identity]
@@ -261,13 +256,12 @@
     
     // Test DER-encoded certificate and PEM-encoded key
     {
-        CRHTTPServer *server = [CRHTTPServer new];
+        CRHTTPServerCreate();
         server.isSecure = YES;
         server.certificatePath = DERCertificatePath;
         server.certificateKeyPath = PEMKeyPath;
         
-        NSError *error;
-        [server startListening:&error];
+        CRHTTPServerStart();
         NSArray *items = server.certificates;
         
         NSUInteger expectedItemsCount = 1; // [identity]
@@ -282,13 +276,12 @@
     
     // Test PEM-encoded chained certificate bundle and key
     {
-        CRHTTPServer *server = [CRHTTPServer new];
+        CRHTTPServerCreate();
         server.isSecure = YES;
         server.certificatePath = PEMBundlePath;
         server.certificateKeyPath = PEMKeyPath;
         
-        NSError *error;
-        [server startListening:&error];
+        CRHTTPServerStart();
         NSArray *items = server.certificates;
         
         
@@ -313,13 +306,12 @@
     
     // Test PEM-encoded chained certificate bundle and DER-encoded key
     {
-        CRHTTPServer *server = [CRHTTPServer new];
+        CRHTTPServerCreate();
         server.isSecure = YES;
         server.certificatePath = PEMBundlePath;
         server.certificateKeyPath = DERKeyPath;
         
-        NSError *error;
-        [server startListening:&error];
+        CRHTTPServerStart();
         NSArray *items = server.certificates;
         
         
