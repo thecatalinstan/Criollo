@@ -28,7 +28,7 @@ static NSUInteger const InitialRequestsCapacity = 1 << 8;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CRConnection () <GCDAsyncSocketDelegate>
+@interface CRConnection ()
 
 @property (nonatomic, strong) NSLock *requestsLock;
 @property (nonatomic, strong) NSMutableArray<CRRequest *> * requests;

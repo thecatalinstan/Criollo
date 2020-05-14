@@ -140,7 +140,7 @@
                     NSRange rangeOfHostHeader = [data rangeOfData:[@"Host: " dataUsingEncoding:NSUTF8StringEncoding] options:0 range:NSMakeRange(0, data.length)];
 
                     if ( rangeOfHostHeader.location != NSNotFound || version == CRHTTPVersion1_0 ) {
-                        NSString* hostSpec = @"www.example.com";
+                        NSString* hostSpec = @"localhost";
                         if (rangeOfHostHeader.location != NSNotFound) {
                             NSRange rangeOfNewLineAfterHost = [data rangeOfData:[CRConnection CRLFData] options:0 range:NSMakeRange(rangeOfHostHeader.location + rangeOfHostHeader.length, data.length - rangeOfHostHeader.location - rangeOfHostHeader.length)];
                             

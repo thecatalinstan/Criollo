@@ -12,72 +12,55 @@
 #import "CRRequest.h"
 #import "GCDAsyncSocket.h"
 
-#define http11Header @"GET /myendpoint HTTP/1.1\r\n\
-Host: www.criollo.com\r\n\
+#define CRHTTPConnectionCreate() CRHTTPConnection *connection = [[CRHTTPConnection alloc] init]
+
+#define HTTP11Header ([@"GET /myendpoint HTTP/1.1\r\n\
+Host: criollo.io\r\n\
 Connection: keep-alive\r\n\
 Cache-Control: max-age=0\r\n\
 Upgrade-Insecure-Requests: 1\r\n\
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36\r\n\
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3\r\n\
 Accept-Encoding: gzip, deflate\r\n\
-Accept-Language: en-US,en;q=0.9\r\n"
+Accept-Language: en-US,en;q=0.9\r\n" dataUsingEncoding:NSUTF8StringEncoding])
 
-#define http10Header @"GET /myendpoint HTTP/1.0\r\n\
+#define HTTP10Header ([@"GET /myendpoint HTTP/1.0\r\n\
 Connection: keep-alive\r\n\
 Cache-Control: max-age=0\r\n\
 Upgrade-Insecure-Requests: 1\r\n\
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36\r\n\
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3\r\n\
 Accept-Encoding: gzip, deflate\r\n\
-Accept-Language: en-US,en;q=0.9\r\n"
+Accept-Language: en-US,en;q=0.9\r\n" dataUsingEncoding:NSUTF8StringEncoding])
 
-@interface CRHTTPConnection (PrivateTesting) <GCDAsyncSocketDelegate>
-@end
 
 @interface CRHTTPConnectionTests : XCTestCase
 
 @end
 
 @implementation CRHTTPConnectionTests
-{
-    CRHTTPConnection *sut;
-}
-
-- (void)setUp {
-    sut = [[CRHTTPConnection alloc] init];
-}
-
-- (void)tearDown {
-    sut = nil;
-}
-
-- (NSData *) dataFromHeaderString:(NSString *)string
-{
-    return [string dataUsingEncoding:NSUTF8StringEncoding];
-}
 
 - (void)testSocketDidReadData_WithHTTPVersion10_ShouldNotThrow {
-    NSData *data = [self dataFromHeaderString:http10Header];
+    CRHTTPConnectionCreate();
     
-    XCTAssertNoThrow([sut socket:(GCDAsyncSocket * _Nonnull)nil didReadData:data withTag:CRHTTPConnectionSocketTagBeginReadingRequest]);
+    XCTAssertNoThrow([connection socket:(GCDAsyncSocket * _Nonnull)nil didReadData:HTTP10Header withTag:CRHTTPConnectionSocketTagBeginReadingRequest]);
 }
 
 - (void)testSocketDidReadData_WithHTTPVersion10_ShouldCreateRequest {
-    NSData *data = [self dataFromHeaderString:http10Header];
+    CRHTTPConnectionCreate();
     
-    [sut socket:(GCDAsyncSocket * _Nonnull)nil didReadData:data withTag:CRHTTPConnectionSocketTagBeginReadingRequest];
-    
-    XCTAssertNotNil(sut.currentRequest, "Nil HTTP Version 1.0 request");
+    [connection socket:connection.socket didReadData:HTTP10Header withTag:CRHTTPConnectionSocketTagBeginReadingRequest];
+
+    XCTAssertNotNil(connection.requestBeingReceived, "Nil HTTP Version 1.0 request");
 }
 
 - (void)testSocketDidReadData_WithHTTPVersion11_ShouldCreateRequest {
-    NSData *data = [self dataFromHeaderString:http11Header];
+    CRHTTPConnectionCreate();
     
-    [sut socket:(GCDAsyncSocket * _Nonnull)nil didReadData:data withTag:CRHTTPConnectionSocketTagBeginReadingRequest];
+    [connection socket:connection.socket didReadData:HTTP11Header withTag:CRHTTPConnectionSocketTagBeginReadingRequest];
     
-    XCTAssertNotNil(sut.currentRequest, "Nil HTTP Version 1.1 request");
-    XCTAssertEqualObjects(sut.currentRequest.URL.host, @"www.criollo.com", @"Incorrect host for HTTP 1.1 request");
+    XCTAssertNotNil(connection.requestBeingReceived, "Nil HTTP Version 1.1 request");
+    XCTAssertEqualObjects(connection.requestBeingReceived.URL.host, @"criollo.io", @"Incorrect host for HTTP 1.1 request");
 }
-
 
 @end
