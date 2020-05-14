@@ -208,8 +208,6 @@ NS_ASSUME_NONNULL_END
         case CRFCGIConnectionSocketTagReadRecordHeader:
             currentRecord = [[CRFCGIRecord alloc] initWithHeaderData:data];
 
-//            NSLog(@" * Header: %@ %hu", NSStringFromCRFCGIRecordType(currentRecord.type), currentRecord.contentLength);
-
             // Process the record header
             if (currentRecord.contentLength == 0) {
 

@@ -17,7 +17,7 @@
 
 #import <Security/Security.h>
 
-@interface CRHTTPServer () <GCDAsyncSocketDelegate>
+@interface CRHTTPServer ()
 
 @property (nonatomic, strong, nullable) CRHTTPSHelper *httpsHelper;
 @property (nonatomic, strong, nullable) NSArray *certificates;
