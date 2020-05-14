@@ -23,8 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 NS_INLINE NSUInteger HTTPStatusCodeForError(NSError *error);
 
 static NSString * const CRStaticDirectoryManagerErrorDomain = @"CRStaticDirectoryManagerErrorDomain";
-#define CRStaticDirectoryManagerDirectoryListingForbiddenError          201
-#define CRStaticDirectoryManagerNotImplementedError                     999
+static NSUInteger const CRStaticDirectoryManagerDirectoryListingForbiddenError = 201;
+static NSUInteger const CRStaticDirectoryManagerNotImplementedError = 999;
 
 static int const IndexNameLength = 70;
 static int const IndexTimeLength = 20;
