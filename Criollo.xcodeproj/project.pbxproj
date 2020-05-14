@@ -297,6 +297,8 @@
 		ADB32F8E246802D0005D729A /* CRStaticFileManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB32F8D246802D0005D729A /* CRStaticFileManagerTests.m */; };
 		ADB693001BE53FD400656BEC /* CRFCGIRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = ADB692FE1BE53FD400656BEC /* CRFCGIRequest.h */; };
 		ADB693011BE53FD400656BEC /* CRFCGIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB692FF1BE53FD400656BEC /* CRFCGIRequest.m */; };
+		ADC29ADE246D37E1007D443E /* CRStaticDirectoryManager_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = ADC29ADD246D37E1007D443E /* CRStaticDirectoryManager_Internal.h */; };
+		ADC29AE0246D3977007D443E /* CRStaticDirectoryManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC29ADF246D3977007D443E /* CRStaticDirectoryManagerTests.m */; };
 		ADD2B60C1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = ADD2B60A1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h */; };
 		ADD2B60D1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m in Sources */ = {isa = PBXBuildFile; fileRef = ADD2B60B1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m */; };
 		ADD2B60E1BFE70C300E2E632 /* NSHTTPCookie+Criollo.m in Sources */ = {isa = PBXBuildFile; fileRef = ADD2B60B1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m */; };
@@ -472,6 +474,8 @@
 		ADB32F8D246802D0005D729A /* CRStaticFileManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRStaticFileManagerTests.m; sourceTree = "<group>"; };
 		ADB692FE1BE53FD400656BEC /* CRFCGIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFCGIRequest.h; sourceTree = "<group>"; };
 		ADB692FF1BE53FD400656BEC /* CRFCGIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRFCGIRequest.m; sourceTree = "<group>"; };
+		ADC29ADD246D37E1007D443E /* CRStaticDirectoryManager_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRStaticDirectoryManager_Internal.h; sourceTree = "<group>"; };
+		ADC29ADF246D3977007D443E /* CRStaticDirectoryManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CRStaticDirectoryManagerTests.m; path = CriolloTests/CRStaticDirectoryManagerTests.m; sourceTree = SOURCE_ROOT; };
 		ADD2B60A1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSHTTPCookie+Criollo.h"; sourceTree = "<group>"; };
 		ADD2B60B1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSHTTPCookie+Criollo.m"; sourceTree = "<group>"; };
 		ADE99FB51C6B40E10080B1FA /* CRStaticDirectoryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRStaticDirectoryManager.h; sourceTree = "<group>"; };
@@ -829,6 +833,8 @@
 				AD63F83B1BFEB114003815DC /* CRResponse_Internal.h */,
 				AD61E98A1BDD8C8E00F5BD17 /* CRResponse.m */,
 				ADE99FB51C6B40E10080B1FA /* CRStaticDirectoryManager.h */,
+				ADC29ADD246D37E1007D443E /* CRStaticDirectoryManager_Internal.h */,
+				ADC29ADF246D3977007D443E /* CRStaticDirectoryManagerTests.m */,
 				ADE99FB61C6B40E10080B1FA /* CRStaticDirectoryManager.m */,
 				AD9BE7F21C91B9A400CE52B0 /* CRStaticFileManager.h */,
 				ADB32F8624680015005D729A /* CRStaticFileManager_Internal.h */,
@@ -969,6 +975,7 @@
 				ADA37C741BE38E69008D89CA /* CRFCGIRecord.h in Headers */,
 				AD19695E1B626EF90098CA89 /* CRServer.h in Headers */,
 				ADAD52591D3E31AC00DDFBB5 /* CRRouter.h in Headers */,
+				ADC29ADE246D37E1007D443E /* CRStaticDirectoryManager_Internal.h in Headers */,
 				AD63F83C1BFEB114003815DC /* CRResponse_Internal.h in Headers */,
 				AD61E98F1BDD8C8E00F5BD17 /* CRResponse.h in Headers */,
 				AD63F8301BFEA782003815DC /* CRConnection_Internal.h in Headers */,
@@ -1364,6 +1371,7 @@
 				4A84C76F1F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */,
 				AD0BCC63245EBCEE0014A920 /* CRServerTests.m in Sources */,
 				AD7F2F711F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */,
+				ADC29AE0246D3977007D443E /* CRStaticDirectoryManagerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

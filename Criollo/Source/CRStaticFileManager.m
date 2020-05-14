@@ -8,16 +8,10 @@
 
 #import "CRStaticFileManager.h"
 #import "CRStaticFileManager_Internal.h"
-#import "CRServer.h"
-#import "CRServer_Internal.h"
+
 #import "CRRequest.h"
-#import "CRRequest_Internal.h"
 #import "CRResponse.h"
-#import "CRResponse_Internal.h"
-#import "CRConnection.h"
-#import "CRConnection_Internal.h"
 #import "CRRequestRange.h"
-#import "CRRequestRange_Internal.h"
 #import "CRRouter_Internal.h"
 #import "CRMimeTypeHelper.h"
 
@@ -29,13 +23,10 @@ static NSUInteger const DispatchIOLoWater = ((unsigned long long)2 * 1024 * 1024
 static NSUInteger const DispatchIOHiWater = ((unsigned long long)8 * 1024 * 1024);
 
 static NSErrorDomain const CRStaticFileManagerErrorDomain = @"CRStaticFileManagerErrorDomain";
-
 static NSUInteger const CRStaticFileManagerFileIsDirectoryError         = 103;
-
 static NSUInteger const CRStaticFileManagerNullFileTypeError            = 201;
 static NSUInteger const CRStaticFileManagerRestrictedFileTypeError      = 202;
 static NSUInteger const CRStaticFileManagerRangeNotSatisfiableError     = 203;
-
 static NSUInteger const CRStaticFileManagerNotImplementedError          = 999;
 
 static NSString * CRStaticFileContentDispositionNoneValue = @"none";

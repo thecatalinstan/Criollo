@@ -7,9 +7,8 @@
 //
 
 #import "CRStaticDirectoryManager.h"
+#import "CRStaticFileManager_Internal.h"
 
-#import "CRServer.h"
-#import "CRServer_Internal.h"
 #import "CRRequest.h"
 #import "CRResponse.h"
 #import "CRStaticFileManager.h"
