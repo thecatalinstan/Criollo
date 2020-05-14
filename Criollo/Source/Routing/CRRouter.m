@@ -32,59 +32,63 @@ NS_ASSUME_NONNULL_END
 
 @implementation CRRouter
 
+
 + (CRRouteBlock)errorHandlingBlockWithStatus:(NSUInteger)statusCode error:(NSError *)error {
-    return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
-        @autoreleasepool {
-            [response setStatusCode:statusCode description:nil];
-            [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+    return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) { @autoreleasepool {
+        [self handleErrorResponse:statusCode error:error request:request response:response completion:completionHandler];
+    }};
+}
 
-            NSMutableString* responseString = [NSMutableString string];
-
++ (void)handleErrorResponse:(NSUInteger)statusCode error:(NSError *)error request:(CRRequest *)request response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion {
+    
+    [response setStatusCode:statusCode description:nil];
+    [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
+    
+    NSMutableString* responseString = [NSMutableString stringWithCapacity:1024];
+    
 #if DEBUG
-            NSError* err;
-            if (error == nil) {
-                NSMutableDictionary* mutableUserInfo = [NSMutableDictionary dictionaryWithCapacity:2];
-                NSString* errorDescription;
-                switch (statusCode) {
-                    case 404:
-                        errorDescription = [NSString stringWithFormat:NSLocalizedString(@"No routes defined for “%@%@%@”",), NSStringFromCRHTTPMethod(request.method), request.URL.path, [request.URL.path hasSuffix:CRPathSeparator] ? @"" : CRPathSeparator];
-                        break;
-                }
-                if ( errorDescription ) {
-                    mutableUserInfo[NSLocalizedDescriptionKey] = errorDescription;
-                }
-                mutableUserInfo[NSURLErrorFailingURLErrorKey] = request.URL;
-                err = [NSError errorWithDomain:CRServerErrorDomain code:statusCode userInfo:mutableUserInfo];
-            } else {
-                err = error;
-            }
-
-            // Error details
-            [responseString appendFormat:@"%@ %lu\n%@\n", err.domain, (long)err.code, err.localizedDescription];
-
-            // Error user-info
-            if ( err.userInfo.count > 0 ) {
-                [responseString appendString:@"\nUser Info\n"];
-                [err.userInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-                    [responseString appendFormat:@"%@: %@\n", key, obj];
-                }];
-            }
-
-            // Stack trace
-            [responseString appendString:@"\nStack Trace\n"];
-            [[NSThread callStackSymbols] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                [responseString appendFormat:@"%@\n", obj];
-            }];
-#else
-            [responseString appendFormat:@"Cannot %@ %@", NSStringFromCRHTTPMethod(request.method), request.URL.path];
-#endif
-            
-            [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
-            [response sendString:responseString];
-            
-            completionHandler();
+    NSError* err;
+    if (error == nil) {
+        NSMutableDictionary* mutableUserInfo = [NSMutableDictionary dictionaryWithCapacity:2];
+        NSString* errorDescription;
+        switch (statusCode) {
+            case 404:
+                errorDescription = [NSString stringWithFormat:NSLocalizedString(@"No routes defined for “%@%@%@”",), NSStringFromCRHTTPMethod(request.method), request.URL.path, [request.URL.path hasSuffix:CRPathSeparator] ? @"" : CRPathSeparator];
+                break;
         }
-    };
+        if ( errorDescription ) {
+            mutableUserInfo[NSLocalizedDescriptionKey] = errorDescription;
+        }
+        mutableUserInfo[NSURLErrorFailingURLErrorKey] = request.URL;
+        err = [NSError errorWithDomain:CRServerErrorDomain code:statusCode userInfo:mutableUserInfo];
+    } else {
+        err = error;
+    }
+    
+    // Error details
+    [responseString appendFormat:@"%@ %lu\n%@\n", err.domain, (long)err.code, err.localizedDescription];
+    
+    // Error user-info
+    if ( err.userInfo.count > 0 ) {
+        [responseString appendString:@"\nUser Info\n"];
+        [err.userInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            [responseString appendFormat:@"%@: %@\n", key, obj];
+        }];
+    }
+    
+    // Stack trace
+    [responseString appendString:@"\nStack Trace\n"];
+    [[NSThread callStackSymbols] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [responseString appendFormat:@"%@\n", obj];
+    }];
+#else
+    [responseString appendFormat:@"Cannot %@ %@", NSStringFromCRHTTPMethod(request.method), request.URL.path];
+#endif
+    
+    [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
+    [response sendString:responseString];
+    
+    completion();
 }
 
 - (instancetype)init {
@@ -117,6 +121,10 @@ NS_ASSUME_NONNULL_END
 
 - (void)post:(NSString *)path block:(CRRouteBlock)block {
     [self add:path block:block recursive:NO method:CRHTTPMethodPost];
+}
+  
+- (void)patch:(NSString *)path block:(CRRouteBlock)block {
+    [self add:path block:block recursive:NO method:CRHTTPMethodPatch];
 }
 
 - (void)put:(NSString *)path block:(CRRouteBlock)block {

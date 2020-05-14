@@ -137,6 +137,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)put:(NSString * _Nullable)path block:(CRRouteBlock)block;
 
+
+/**
+ Adds a block to a pathspec, for the PATCH method, non-recursively.
+
+ @param path  The path specification.
+ @param block The `CRRouteBlock` to be executed.
+ */
+- (void)patch:(NSString *)path block:(CRRouteBlock)block;
+  
 /**
  Adds a block to a pathspec, for the DELETE method, non-recursively.
 

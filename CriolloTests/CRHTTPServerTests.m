@@ -341,8 +341,6 @@
         XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[2]), @"The third item in the array should be a SecCertificateRef");
 #endif
     }
-    
 }
 
 @end
-

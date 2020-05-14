@@ -10,6 +10,10 @@
 #import "CRRequestRange_Internal.h"
 #import "CRRequest_Internal.h"
 
+/// Parse a requested byte range
+/// @see: https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.1
+NS_INLINE NSRange NSRangeFromCRRequesByteRange(CRRequestByteRange *byteRange, NSUInteger fileSize);
+
 @implementation CRRequestByteRange
 
 - (instancetype)init {
@@ -19,7 +23,7 @@
 - (instancetype)initWithByteRangeSpec:(NSString *)byteRangeSpec {
     self = [super init];
     if ( self != nil ) {
-        NSArray<NSString *>* byteRangeSpecComponents = [byteRangeSpec componentsSeparatedByString:@"-"];
+        NSArray<NSString *> *byteRangeSpecComponents = [byteRangeSpec componentsSeparatedByString:@"-"];
         if( byteRangeSpecComponents.count == 2 ) {
             _firstBytePos = byteRangeSpecComponents[0];
             _lastBytePos = byteRangeSpecComponents[1];
@@ -34,39 +38,18 @@
     return description;
 }
 
-// Parse a requested byte range (see: https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.1)
-- (NSRange)dataRangeForFileSize:(NSUInteger)fileSize {
-    NSRange dataRange = NSMakeRange(NSNotFound, 0);
-
-    if ( self.firstBytePos.length > 0 ) {
-        // byte-range
-        dataRange.location = self.firstBytePos.integerValue;
-        if ( self.lastBytePos.length > 0 ) {
-            dataRange.length = self.lastBytePos.integerValue - self.firstBytePos.integerValue + 1;
-        } else {
-            dataRange.length = fileSize - dataRange.location;
-        }
-    } else {
-        // suffix-range
-        dataRange.length = self.lastBytePos.integerValue;
-        if ( fileSize >= dataRange.length ) {
-            dataRange.location = fileSize - dataRange.length;
-        }
+- (BOOL)isSatisfiableForFileSize:(unsigned long long)fileSize dataRange:(NSRange *)dataRange {
+    NSRange range = NSRangeFromCRRequesByteRange(self, fileSize);
+    if (dataRange != NULL) {
+        *dataRange = range;
     }
-
-    return dataRange;
+    return range.location != NSNotFound && range.length > 0 && range.location + range.length <= fileSize;
 }
 
-- (BOOL)isSatisfiableForFileSize:(NSUInteger)fileSize {
-    NSRange dataRange = [self dataRangeForFileSize:fileSize];
-    return dataRange.length > 0 && dataRange.location != NSNotFound && dataRange.location + dataRange.length <= fileSize;
-}
-
-- (NSString *)contentRangeSpecForFileSize:(NSUInteger)fileSize {
+- (NSString *)contentRangeSpecForFileSize:(unsigned long long)fileSize satisfiable:(BOOL)flag dataRange:(NSRange)dataRange {
     NSString* contentRangeSpec;
     NSString* fileSizeString = fileSize == UINT_MAX ? @"*" : @(fileSize).stringValue;
-    if ([self isSatisfiableForFileSize:fileSize] ) {
-        NSRange dataRange = [self dataRangeForFileSize:fileSize];
+    if (flag) {
         contentRangeSpec = [NSString stringWithFormat:@"%lu-%lu/%@", (unsigned long)dataRange.location, (unsigned long)(dataRange.location + dataRange.length - 1), fileSizeString];
     } else {
         contentRangeSpec = [NSString stringWithFormat:@"*/%@", fileSizeString];
@@ -74,10 +57,9 @@
     return contentRangeSpec;
 }
 
-- (NSString *)contentLengthSpecForFileSize:(NSUInteger)fileSize {
+- (NSString *)contentLengthSpecForFileSize:(unsigned long long)fileSize satisfiable:(BOOL)flag dataRange:(NSRange)dataRange {
     NSString* contentLengthSpec;
-    if ([self isSatisfiableForFileSize:fileSize] ) {
-        NSRange dataRange = [self dataRangeForFileSize:fileSize];
+    if (flag) {
         contentLengthSpec = @(dataRange.length).stringValue;
     } else {
         contentLengthSpec = @(fileSize).stringValue;
@@ -85,13 +67,12 @@
     return contentLengthSpec;
 }
 
-
 @end
 
 @implementation CRRequestRange
 
-static const NSArray<NSString *> *acceptedRangeUnits;
-static const NSString * acceptRangesSpec;
+static NSArray<NSString *> *acceptedRangeUnits;
+static NSString *acceptRangesSpec;
 
 + (void)initialize {
     acceptedRangeUnits = @[@"bytes"];
@@ -148,10 +129,14 @@ static const NSString * acceptRangesSpec;
     return description;
 }
 
-- (BOOL)isSatisfiableForFileSize:(NSUInteger)fileSize {
-    __block BOOL isSatisfiable = [[CRRequestRange acceptedRangeUnits] containsObject:self.bytesUnit] && self.byteRangeSet.count > 0;
+- (BOOL)isSatisfiableForFileSize:(unsigned long long)fileSize {
+    if (![CRRequestRange.acceptedRangeUnits containsObject:self.bytesUnit] || !self.byteRangeSet.firstObject) {
+        return NO;
+    }
+ 
+    __block BOOL isSatisfiable = YES;
     [self.byteRangeSet enumerateObjectsUsingBlock:^(CRRequestByteRange * _Nonnull byteRange, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ( ![byteRange isSatisfiableForFileSize:fileSize] ) {
+        if (![byteRange isSatisfiableForFileSize:fileSize dataRange:NULL]) {
             isSatisfiable = NO;
             *stop = YES;
         }
@@ -160,3 +145,23 @@ static const NSString * acceptRangesSpec;
 }
 
 @end
+
+NSRange NSRangeFromCRRequesByteRange(CRRequestByteRange *byteRange, NSUInteger fileSize) {
+    NSRange dataRange = NSMakeRange(NSNotFound, 0);
+    if ( byteRange.firstBytePos.length > 0 ) {
+        // byte-range
+        dataRange.location = byteRange.firstBytePos.integerValue;
+        if ( byteRange.lastBytePos.length > 0 ) {
+            dataRange.length = byteRange.lastBytePos.integerValue - byteRange.firstBytePos.integerValue + 1;
+        } else {
+            dataRange.length = fileSize - dataRange.location;
+        }
+    } else {
+        // suffix-range
+        dataRange.length = byteRange.lastBytePos.integerValue;
+        if ( fileSize >= dataRange.length ) {
+            dataRange.location = fileSize - dataRange.length;
+        }
+    }
+    return dataRange;
+}

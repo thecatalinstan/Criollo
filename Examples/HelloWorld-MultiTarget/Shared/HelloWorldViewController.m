@@ -8,6 +8,8 @@
 
 #import "HelloWorldViewController.h"
 
+#import <CSSystemInfoHelper/CSSystemInfoHelper.h>
+
 @implementation HelloWorldViewController
 
 - (void)viewDidLoad {
@@ -22,7 +24,9 @@
         [text appendFormat:@"%@: %@\n", key, obj];
     }];
     [text appendString:@"</pre>"];
+    
     self.vars[@"text"] = text;
+    self.vars[@"info"] = CSSystemInfoHelper.sharedHelper.systemInfoString;
 
     return [super presentViewControllerWithRequest:request response:response];
 }

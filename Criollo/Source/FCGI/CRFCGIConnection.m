@@ -67,7 +67,7 @@ NS_ASSUME_NONNULL_END
 
     // Create HTTP headers from FCGI Params
     NSMutableData* headersData = [NSMutableData data];
-    [self.currentRequest.env enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+    [self.requestBeingReceived.env enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         @autoreleasepool {
             if ( ![key hasPrefix:@"HTTP_"] ) {
                 return;
@@ -90,12 +90,12 @@ NS_ASSUME_NONNULL_END
         }
     }];
 
-    [self.currentRequest appendData:headersData];
-    [self.currentRequest appendData:[CRConnection CRLFData]];
+    [self.requestBeingReceived appendData:headersData];
+    [self.requestBeingReceived appendData:[CRConnection CRLFData]];
 
     [super didReceiveCompleteRequestHeaders];
 
-    currentRequestBodyLength = [self.currentRequest.env[@"CONTENT_LENGTH"] integerValue];
+    currentRequestBodyLength = [self.requestBeingReceived.env[@"CONTENT_LENGTH"] integerValue];
     CRFCGIServerConfiguration* config = (CRFCGIServerConfiguration*)self.server.configuration;
     [self.socket readDataToLength:CRFCGIRecordHeaderLength withTimeout:config.CRFCGIConnectionReadRecordTimeout tag:CRFCGIConnectionSocketTagReadRecordHeader];
 }
@@ -224,15 +224,13 @@ NS_ASSUME_NONNULL_END
 
                         NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", host, path]];
                         CRFCGIRequest* request = [[CRFCGIRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self env:currentRequestParams];
-                        CRFCGIConnection * __weak connection = self;
-                        dispatch_async(self.isolationQueue, ^{
-                            [connection.requests addObject:request];
-                        });
                         request.requestID = currentRequestID;
                         request.requestRole = currentRequestRole;
                         request.requestFlags = currentRequestFlags;
-                        self.currentRequest = request;
-
+                        
+                        [self addRequest:request];
+                        self.requestBeingReceived = request;
+                        
                         [self didReceiveCompleteRequestHeaders];
                     }
                         break;

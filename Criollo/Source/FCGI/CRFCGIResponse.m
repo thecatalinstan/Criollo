@@ -80,8 +80,7 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)writeData:(NSData *)data finish:(BOOL)flag {
-
-    if ( self.finished ) {
+    if (self.finished) {
         @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Response is already finished" userInfo:nil];
     }
 

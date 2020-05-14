@@ -177,7 +177,7 @@
 }
 
 - (void)writeData:(NSData *)data finish:(BOOL)flag {
-    if ( flag ) {
+    if (flag) {
         _finished = YES;
     }
     _hasWrittenBodyData = YES;
