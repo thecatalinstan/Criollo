@@ -26,11 +26,13 @@ static NSString * const CRStaticDirectoryManagerErrorDomain = @"CRStaticDirector
 #define CRStaticDirectoryManagerDirectoryListingForbiddenError          201
 #define CRStaticDirectoryManagerNotImplementedError                     999
 
-//static NSUInteger const IndexFileNameLength = 70;
-//static NSUInteger const IndexFileSizeLength = 20;
+static int const IndexNameLength = 70;
+static int const IndexTimeLength = 20;
+static int const IndexSizeLength = 10;
 
 static NSString * const IndexHTMLFormat = @"<html><head><title>%@</title></head><body><h1>Index of %@</h1><hr><pre>%@%@</pre><hr><small><i>Directory index took %.4fms to generate</i></small></body></html>";
 static NSString * const IndexLinkFormat = @"<a href=\"%@\">%@</a>";
+static NSString * const IndexRowFormat = @"<a href=\"%@\">%@%@</a>%@ %-*s %*s\n";
 
 static NSDateFormatter *dateFormatter;
 static NSByteCountFormatter *byteFormatter;
@@ -128,7 +130,6 @@ error:
     for (NSURL *item in contents) {
         NSNumber *dir;
         [item getResourceValue:&dir forKey:NSURLIsDirectoryKey error:nil];
-        BOOL isDir = dir.boolValue;
         
         NSNumber *fileSize;
         [item getResourceValue:&fileSize forKey:NSURLFileSizeKey error:nil];
@@ -138,11 +139,20 @@ error:
         [item getResourceValue:&modificationDate forKey:NSURLContentModificationDateKey error:nil];
         NSString *mtime = [dateFormatter stringFromDate:modificationDate];
         
-        NSString *name = [NSString stringWithFormat:@"%@%@", item.lastPathComponent, isDir ? CRPathSeparator : @""];
+        NSString *name = item.lastPathComponent;
         NSString *href = [[requestedPath stringByAppendingPathComponent:name] stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLPathAllowedCharacterSet];
-        NSString *link = [NSString stringWithFormat:IndexLinkFormat, href, name];
         
-        [index appendFormat:@"%@%@%@%@\n", link, @" ", mtime, size];
+        NSString *padding = @"";
+        if (name.length > IndexNameLength) {
+            name = [name substringToIndex:IndexNameLength];
+        } else {
+            padding = [padding stringByPaddingToLength:(IndexNameLength - name.length) withString:@" " startingAtIndex:0];
+        }
+        
+        [index appendFormat:IndexRowFormat,
+         href, name, dir.boolValue ? CRPathSeparator : @" ", padding,
+         IndexTimeLength, mtime.UTF8String,
+         IndexSizeLength, size.UTF8String];
     }
     
     // Display "../" link
@@ -186,10 +196,7 @@ error:
     dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
     dateFormatter.timeZone = [NSTimeZone defaultTimeZone];
-//    dateFormatter.dateFormat = @"dd-MMM-yyyy HH:mm:ss";
-    dateFormatter.dateStyle = NSDateFormatterShortStyle;
-    dateFormatter.timeStyle = NSDateFormatterShortStyle;
-    dateFormatter.doesRelativeDateFormatting = YES;
+    dateFormatter.dateFormat = @"dd-MMM-yyyy HH:mm:ss";
     
     byteFormatter = [[NSByteCountFormatter alloc] init];
     byteFormatter.includesUnit = YES;
