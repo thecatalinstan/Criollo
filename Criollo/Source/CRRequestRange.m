@@ -23,7 +23,7 @@ NS_INLINE NSRange NSRangeFromCRRequesByteRange(CRRequestByteRange *byteRange, NS
 - (instancetype)initWithByteRangeSpec:(NSString *)byteRangeSpec {
     self = [super init];
     if ( self != nil ) {
-        NSArray<NSString *>* byteRangeSpecComponents = [byteRangeSpec componentsSeparatedByString:@"-"];
+        NSArray<NSString *> *byteRangeSpecComponents = [byteRangeSpec componentsSeparatedByString:@"-"];
         if( byteRangeSpecComponents.count == 2 ) {
             _firstBytePos = byteRangeSpecComponents[0];
             _lastBytePos = byteRangeSpecComponents[1];

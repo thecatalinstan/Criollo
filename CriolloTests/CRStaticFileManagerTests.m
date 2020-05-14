@@ -17,8 +17,4 @@
 
 @implementation CRStaticFileManagerTests
 
-- (void)test_init {
-    
-}
-
 @end
