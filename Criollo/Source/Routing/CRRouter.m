@@ -49,18 +49,17 @@ NS_ASSUME_NONNULL_END
 #if DEBUG
     NSError* err;
     if (error == nil) {
-        NSMutableDictionary* mutableUserInfo = [NSMutableDictionary dictionaryWithCapacity:2];
+        NSURL *requestURL = request.URL;
+        NSMutableDictionary* info = [NSMutableDictionary dictionaryWithCapacity:2];
         NSString* errorDescription;
         switch (statusCode) {
             case 404:
-                errorDescription = [NSString stringWithFormat:NSLocalizedString(@"No routes defined for “%@%@%@”",), NSStringFromCRHTTPMethod(request.method), request.URL.path, [request.URL.path hasSuffix:CRPathSeparator] ? @"" : CRPathSeparator];
+                errorDescription = [NSString stringWithFormat:NSLocalizedString(@"No routes defined for “%@%@%@”",), NSStringFromCRHTTPMethod(request.method), requestURL.path, [requestURL.path hasSuffix:CRPathSeparator] ? @"" : CRPathSeparator];
                 break;
         }
-        if ( errorDescription ) {
-            mutableUserInfo[NSLocalizedDescriptionKey] = errorDescription;
-        }
-        mutableUserInfo[NSURLErrorFailingURLErrorKey] = request.URL;
-        err = [NSError errorWithDomain:CRServerErrorDomain code:statusCode userInfo:mutableUserInfo];
+        info[NSLocalizedDescriptionKey] = errorDescription;
+        info[NSURLErrorFailingURLErrorKey] = requestURL;
+        err = [NSError errorWithDomain:CRServerErrorDomain code:statusCode userInfo:info];
     } else {
         err = error;
     }
@@ -85,7 +84,7 @@ NS_ASSUME_NONNULL_END
     [responseString appendFormat:@"Cannot %@ %@", NSStringFromCRHTTPMethod(request.method), request.URL.path];
 #endif
     
-    [response setValue:@(responseString.length).stringValue forHTTPHeaderField:@"Content-Length"];
+    [response setValue:[NSString stringWithFormat:@"%lu", (unsigned long)responseString.length] forHTTPHeaderField:@"Content-Length"];
     [response sendString:responseString];
     
     completion();
@@ -94,7 +93,7 @@ NS_ASSUME_NONNULL_END
 - (instancetype)init {
     self = [super init];
     if ( self != nil ) {
-        _routes = [NSMutableArray array];
+        _routes = [NSMutableArray arrayWithCapacity:UINT8_MAX];
         _notFoundBlock = [CRRouter errorHandlingBlockWithStatus:404 error:nil];
     }
     return self;

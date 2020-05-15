@@ -46,41 +46,38 @@
 }
 
 - (void)didReceiveCompleteRequestHeaders {
+    CRRequest *request = self.requestBeingReceived;
+    
     // Create ENV from HTTP headers
-    NSMutableDictionary* env = [NSMutableDictionary dictionary];
-    [self.requestBeingReceived.allHTTPHeaderFields enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        @autoreleasepool {
-            NSString* headerName = [@"HTTP_" stringByAppendingString:[key.uppercaseString stringByReplacingOccurrencesOfString:@"-" withString:@"_"]];
-            [env setObject:obj forKey:headerName];
-        }
+    NSDictionary<NSString*, NSString*> *headers = request.allHTTPHeaderFields;
+    NSMutableDictionary* env = [NSMutableDictionary dictionaryWithCapacity:headers.count];
+    [request.allHTTPHeaderFields enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        NSString* headerName = [@"HTTP_" stringByAppendingString:[key.uppercaseString stringByReplacingOccurrencesOfString:@"-" withString:@"_"]];
+        env[headerName] = obj;
     }];
 
-    if ( env[@"HTTP_CONTENT_LENGTH"] ) {
-        env[@"CONTENT_LENGTH"] = env[@"HTTP_CONTENT_LENGTH"];
-    }
-    if ( env[@"HTTP_CONTENT_TYPE"] ) {
-        env[@"CONTENT_TYPE"] = env[@"HTTP_CONTENT_TYPE"];
-    }
-
-    if ( env[@"HTTP_HOST"]) {
-        env[@"SERVER_NAME"] = env[@"HTTP_HOST"];
-    }
-
+    env[@"CONTENT_LENGTH"] = env[@"HTTP_CONTENT_LENGTH"];
+    env[@"CONTENT_TYPE"] = env[@"HTTP_CONTENT_TYPE"];
+    env[@"SERVER_NAME"] = env[@"HTTP_HOST"];
     env[@"REQUEST_METHOD"] = NSStringFromCRHTTPMethod(self.requestBeingReceived.method);
     env[@"SERVER_PROTOCOL"] = NSStringFromCRHTTPVersion(self.requestBeingReceived.version);
-    env[@"REQUEST_URI"] = self.requestBeingReceived.URL.absoluteString;
-    env[@"DOCUMENT_URI"] = self.requestBeingReceived.URL.path;
-    env[@"SCRIPT_NAME"] = self.requestBeingReceived.URL.path;
-    env[@"QUERY_STRING"] = self.requestBeingReceived.URL.query;
-    env[@"REMOTE_ADDR"] = self.socket.connectedHost;
-    env[@"REMOTE_PORT"] = @(self.socket.connectedPort).stringValue;
-    env[@"SERVER_ADDR"] = self.socket.localHost;
-    env[@"SERVER_PORT"] = @(self.socket.localPort).stringValue;
     
-    self.requestBeingReceived.env = env;
-    [self.requestBeingReceived parseQueryString];
-    [self.requestBeingReceived parseCookiesHeader];
-    [self.requestBeingReceived parseRangeHeader];
+    GCDAsyncSocket *socket = self.socket;
+    env[@"SERVER_ADDR"] = socket.localHost;
+    env[@"SERVER_PORT"] = [NSString stringWithFormat:@"%hu", socket.localPort];
+    env[@"REMOTE_ADDR"] = socket.connectedHost;
+    env[@"REMOTE_PORT"] = [NSString stringWithFormat:@"%hu", socket.connectedPort];
+    
+    NSURL *requestURL = request.URL;
+    env[@"REQUEST_URI"] = requestURL.absoluteString;
+    env[@"DOCUMENT_URI"] = requestURL.path;
+    env[@"SCRIPT_NAME"] = requestURL.path;
+    env[@"QUERY_STRING"] = requestURL.query;
+    
+    request.env = env;
+    [request parseQueryString];
+    [request parseCookiesHeader];
+    [request parseRangeHeader];
 
     [super didReceiveCompleteRequestHeaders];
 
@@ -89,8 +86,8 @@
     }
 
     CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.server.configuration;
-    requestBodyLength = [self.requestBeingReceived valueForHTTPHeaderField:@"Content-Length"].integerValue;
-    if ( requestBodyLength > 0 ) {
+    requestBodyLength = [env[@"CONTENT_LENGTH"] integerValue];
+    if (requestBodyLength > 0) {
         NSUInteger bytesToRead = requestBodyLength < config.CRRequestBodyBufferSize ? requestBodyLength : config.CRRequestBodyBufferSize;
         [self.socket readDataToLength:bytesToRead withTimeout:config.CRHTTPConnectionReadBodyTimeout tag:CRHTTPConnectionSocketTagReadingRequestBody];
     } else {
@@ -107,7 +104,6 @@
 #pragma mark - GCDAsyncSocketDelegate
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData*)data withTag:(long)tag {
-
     didPerformInitialRead = YES;
     CRHTTPServerConfiguration* config = (CRHTTPServerConfiguration*)self.server.configuration;
 
