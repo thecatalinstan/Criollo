@@ -7,12 +7,13 @@
 //
 
 #import "CRConnection.h"
+#import "GCDAsyncSocket.h"
 
-@class GCDAsyncSocket, CRServer, CRRequest;
+@class CRServer, CRRequest;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CRConnection ()
+@interface CRConnection () <GCDAsyncSocketDelegate>
 
 @property (nonatomic, strong, nullable) GCDAsyncSocket* socket;
 @property (nonatomic, weak) CRServer* server;

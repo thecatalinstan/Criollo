@@ -208,8 +208,6 @@ NS_ASSUME_NONNULL_END
         case CRFCGIConnectionSocketTagReadRecordHeader:
             currentRecord = [[CRFCGIRecord alloc] initWithHeaderData:data];
 
-//            NSLog(@" * Header: %@ %hu", NSStringFromCRFCGIRecordType(currentRecord.type), currentRecord.contentLength);
-
             // Process the record header
             if (currentRecord.contentLength == 0) {
 
@@ -220,10 +218,18 @@ NS_ASSUME_NONNULL_END
                         NSString* methodSpec = currentRequestParams[@"REQUEST_METHOD"];
                         NSString* path = currentRequestParams[@"DOCUMENT_URI"];
                         NSString* versionSpec = currentRequestParams[@"SERVER_PROTOCOL"];
-                        NSString* host = currentRequestParams[@"HTTP_HOST"];
+                        CRHTTPVersion version = CRHTTPVersionMake(versionSpec);
+                        NSString* host;
+                        if (!(host = currentRequestParams[@"HTTP_HOST"])) {
+                            if (version != CRHTTPVersion1_0) {
+                                [sock disconnectAfterWriting];
+                                break;
+                            }
+                            host = @"localhost";
+                        }
 
                         NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", host, path]];
-                        CRFCGIRequest* request = [[CRFCGIRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self env:currentRequestParams];
+                        CRFCGIRequest* request = [[CRFCGIRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:version connection:self env:currentRequestParams];
                         request.requestID = currentRequestID;
                         request.requestRole = currentRequestRole;
                         request.requestFlags = currentRequestFlags;
