@@ -30,7 +30,7 @@ the logic canbeapplied to virtually any authentication method.
 
 The main idea is to add the `CRRouteBlock` that performs the authentication (validation/challenge) on all the route paths that will require it, and to NOT proceed with the route, unless authorization succeeds. This effectively means not calling the `CRRouteCompletionBlock` if authentication fails.
 
-- [https://github.com/thecatalinstan/Criollo/tree/master/Examples/HTTPAuthentication(https://github.com/thecatalinstan/Criollo/tree/master/Examples/HTTPAuthentication).
+- [https://github.com/thecatalinstan/Criollo/tree/master/Examples/HTTPAuthentication](https://github.com/thecatalinstan/Criollo/tree/master/Examples/HTTPAuthentication).
 
 
 ## LongRequest
