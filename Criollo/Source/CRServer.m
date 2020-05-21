@@ -161,6 +161,12 @@ NS_ASSUME_NONNULL_END
     self.acceptedSocketDelegateTargetQueue = nil;
     
     [self didChangeValueForKey:IsListeningKey];
+    
+    if ([self.delegate respondsToSelector:@selector(serverDidStopListening:)]) {
+        dispatch_async(self.delegateQueue, ^{
+            [self.delegate serverDidStopListening:self];
+        });
+    }
 }
 
 #pragma mark - Connections

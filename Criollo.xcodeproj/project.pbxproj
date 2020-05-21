@@ -179,6 +179,9 @@
 		AD3BF7B91CC00AD400F1054D /* Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB37B1AEFC0B000A26AF1 /* Criollo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD4AE7721BDAB1C300B9F221 /* CRConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = AD4AE7701BDAB1C300B9F221 /* CRConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD4AE7731BDAB1C300B9F221 /* CRConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4AE7711BDAB1C300B9F221 /* CRConnection.m */; };
+		AD542C0E247668F8000E5CEC /* CRServerDelegateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD542C0D247668F8000E5CEC /* CRServerDelegateTests.m */; };
+		AD542C0F24766906000E5CEC /* CRServerDelegateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD542C0D247668F8000E5CEC /* CRServerDelegateTests.m */; };
+		AD542C1024766907000E5CEC /* CRServerDelegateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD542C0D247668F8000E5CEC /* CRServerDelegateTests.m */; };
 		AD5FFFD41BF002F300A57FE9 /* CRFCGIServer.h in Headers */ = {isa = PBXBuildFile; fileRef = AD61E97F1BDD880C00F5BD17 /* CRFCGIServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD5FFFD51BF0030000A57FE9 /* CRFCGIServer.m in Sources */ = {isa = PBXBuildFile; fileRef = AD61E9801BDD880C00F5BD17 /* CRFCGIServer.m */; };
 		AD5FFFD61BF0030000A57FE9 /* CRFCGIServerConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = ADA37C8B1BE3C7A0008D89CA /* CRFCGIServerConfiguration.h */; };
@@ -421,6 +424,7 @@
 		AD2A35481C47FA8000E30387 /* CRUploadedFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRUploadedFile.m; sourceTree = "<group>"; };
 		AD4AE7701BDAB1C300B9F221 /* CRConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRConnection.h; sourceTree = "<group>"; };
 		AD4AE7711BDAB1C300B9F221 /* CRConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRConnection.m; sourceTree = "<group>"; };
+		AD542C0D247668F8000E5CEC /* CRServerDelegateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRServerDelegateTests.m; sourceTree = "<group>"; };
 		AD5FFFCC1BF0024D00A57FE9 /* Criollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Criollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD609C5E1BDA7A4C0003E702 /* Criollo.podSpec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Criollo.podSpec; sourceTree = SOURCE_ROOT; };
 		AD60BA3D1C0389F800118EED /* CRNib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRNib.h; sourceTree = "<group>"; };
@@ -628,6 +632,7 @@
 				AD030FDF1F0C02C900BD9FE4 /* Info.plist */,
 				4A689EE0222FD4C70074DEA3 /* CRRouterTests.m */,
 				AD0BCC62245EBCEE0014A920 /* CRServerTests.m */,
+				AD542C0D247668F8000E5CEC /* CRServerDelegateTests.m */,
 				ADB32F8D246802D0005D729A /* CRStaticFileManagerTests.m */,
 			);
 			path = CriolloTests;
@@ -1368,6 +1373,7 @@
 				4ABB1E451F9E70AA00480EC7 /* CRMimeTypeHelperTests.m in Sources */,
 				4A689EE3222FD4C70074DEA3 /* CRRouterTests.m in Sources */,
 				4ABB1E441F9E70A700480EC7 /* CRHTTPSHelperTests.m in Sources */,
+				AD542C1024766907000E5CEC /* CRServerDelegateTests.m in Sources */,
 				4ABB1E431F9E709B00480EC7 /* CRHTTPServerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1376,6 +1382,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD542C0E247668F8000E5CEC /* CRServerDelegateTests.m in Sources */,
 				ADB32F8E246802D0005D729A /* CRStaticFileManagerTests.m in Sources */,
 				ADC29AF7246D7313007D443E /* CRFCGIConnectionTests.m in Sources */,
 				4AD0AD591F6662AA00943DC3 /* CRHTTPSHelperTests.m in Sources */,
@@ -1402,6 +1409,7 @@
 				AD1D44E91F37600300C5D260 /* CRNibTests.m in Sources */,
 				4A689EE2222FD4C70074DEA3 /* CRRouterTests.m in Sources */,
 				4A84C7701F97E6FE001CC0A5 /* CRHTTPServerTests.m in Sources */,
+				AD542C0F24766906000E5CEC /* CRServerDelegateTests.m in Sources */,
 				AD7F2F721F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
