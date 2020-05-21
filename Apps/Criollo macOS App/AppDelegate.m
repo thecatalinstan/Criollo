@@ -314,6 +314,23 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)serverWillStartListening:(CRServer *)server {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+- (void)serverDidStartListening:(CRServer *)server {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+- (void)serverWillStopListening:(CRServer *)server {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+- (void)serverDidStopListening:(CRServer *)server {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+
 #if LogConnections
 - (void)server:(CRServer *)server didAcceptConnection:(CRConnection *)connection {
     NSString* remoteAddress = connection.remoteAddress.copy;
