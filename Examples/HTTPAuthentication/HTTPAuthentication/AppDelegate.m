@@ -20,6 +20,8 @@ static uint16_t const port = 10781;
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     self.server = [[CRHTTPServer alloc] init];
     self.server.delegate = self;
     
@@ -28,17 +30,14 @@ static uint16_t const port = 10781;
     // Authentication filter
     [self.server add:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completion) {
         
-        // The user is authenticated, proceed
         if ([wself validateAuthotization:request.env[@"HTTP_AUTHORIZATION"]]) {
+            // The user is authenticated, proceed with the route execution
             completion();
-            return;
+        } else {
+            [wself sendAuthenticationChallenge:response];
+            // Do not call the completion block as we do not want to proceed
+            // with processing the next blocksin this route.
         }
-        
-        // Send an unauthorized (401), followed by a WWW-Authenticate header
-        [response setStatusCode:401 description:nil];
-        [response setValue:[NSString stringWithFormat:@"Basic realm=\"%@\"", @"asdfasdf"] forHTTPHeaderField:@"WWW-Authenticate"];
-        [response setValue:@"0" forHTTPHeaderField:@"Content-Length"];
-        [response finish];
     }];
     
     // Hello world /
@@ -51,12 +50,14 @@ static uint16_t const port = 10781;
     [self.server mount:@"/pub" directoryAtPath:@"~" options:CRStaticDirectoryServingOptionsAutoIndex];
     
     // Static file /info.plist
-    [self.server mount:@"/Info.plist"
+    [self.server mount:@"/info.plist"
             fileAtPath:[NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"Contents/Info.plist"]
                options:CRStaticFileServingOptionsCache
               fileName:@"Info.plist"
            contentType:@"application/xml"
     contentDisposition:CRStaticFileContentDispositionInline];
+    
+    //
     
     // Quit app /quit
     [self.server get:@"/quit" block:^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completion) {
@@ -75,10 +76,53 @@ static uint16_t const port = 10781;
     }
 }
 
+#pragma mark - Authentication
+
+- (void)sendAuthenticationChallenge:(CRResponse *)response {
+    // Send an unauthorized (401), followed by a WWW-Authenticate header
+    [response setStatusCode:401 description:nil];
+    [response setValue:[NSString stringWithFormat:@"Basic realm=\"%@ on %@\"", NSBundle.mainBundle.bundlePath.lastPathComponent, NSHost.currentHost.name] forHTTPHeaderField:@"WWW-Authenticate"];
+    [response setValue:@"0" forHTTPHeaderField:@"Content-Length"];
+    [response finish];
+}
+
+- (BOOL)validateAuthotization:(NSString *)authorization {
+    authorization = [authorization componentsSeparatedByString:@" "].lastObject;
+    if (!authorization.length) {
+        return NO;
+    }
+    
+    // This should be done more rigurously to support multiple encodings
+    NSData *data;
+    if (!(data = [[NSData alloc] initWithBase64EncodedString:authorization options:NSDataBase64DecodingIgnoreUnknownCharacters])) {
+        return NO;
+    }
+    
+    if (!(authorization = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding])) {
+        return NO;
+    }
+    
+    // For the purspose of this demo, we'll allow any credentials
+    return YES;
+}
+
+-(CRApplicationTerminateReply)applicationShouldTerminate:(CRApplication *)sender {
+    [self.server closeAllConnections:^{
+        [self.server stopListening];
+        [sender replyToApplicationShouldTerminate:YES];
+    }];
+    return CRTerminateLater;
+}
+
+- (void)applicationWillTerminate:(NSNotification *)notification {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
 #pragma mark - CRServerDelegate
 
 - (void)serverDidStartListening:(CRServer *)server {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    // List the current paths
     NSURL *baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d", interface, port]];
     NSArray<NSString *> * routePaths = [self.server valueForKeyPath:@"routes.path"];
     NSMutableArray<NSURL *> *paths = [NSMutableArray arrayWithCapacity:routePaths.count];
@@ -95,26 +139,8 @@ static uint16_t const port = 10781;
     }];
 }
 
-#pragma mark - Authentication
-
-- (BOOL)validateAuthotization:(NSString *)authorization {
-    authorization = [authorization componentsSeparatedByString:@" "].lastObject;
-    if (!authorization.length) {
-        return NO;
-    }
-    
-    // This should be done more rigurously to support multiple languages
-    NSData *data;
-    if (!(data = [[NSData alloc] initWithBase64EncodedString:authorization options:NSDataBase64DecodingIgnoreUnknownCharacters])) {
-        return NO;
-    }
-    
-    if (!(authorization = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding])) {
-        return NO;
-    }
-    
-    // For the purspose of this demo, we'll allow any credentials
-    return YES;
+- (void)serverDidStopListening:(CRServer *)server {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 @end
