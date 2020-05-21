@@ -31,6 +31,11 @@ pod install --silent
 xcodebuild clean build -quiet -workspace HelloWorld-Swift.xcworkspace -scheme "HelloWorld-Swift" CODE_SIGNING_REQUIRED=NO || exit $PIPESTATUS
 cd ../
 
+cd HTTPAuthentication
+pod install --silent
+xcodebuild clean build -quiet -workspace HTTPAuthentication.xcworkspace -scheme "HTTPAuthentication" CODE_SIGNING_REQUIRED=NO || exit $PIPESTATUS
+cd ../
+
 cd LongRequest
 pod install --silent
 xcodebuild clean build -quiet -workspace LongRequest.xcworkspace -scheme "LongRequest" CODE_SIGNING_REQUIRED=NO || exit $PIPESTATUS
