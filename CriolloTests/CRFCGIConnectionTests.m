@@ -10,7 +10,8 @@
 #import "CRFCGIConnection.h"
 #import "CRConnection_Internal.h"
 #import "CRRequest.h"
-#import "GCDAsyncSocket.h"
+
+@class GCDAsyncSocket;
 
 #define CRFCGIConnectionCreate() CRFCGIConnection *connection = [[CRFCGIConnection alloc] init]
 

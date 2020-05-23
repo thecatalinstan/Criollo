@@ -131,7 +131,7 @@ error:
 - (BOOL)sendFileDataRange:(NSRange)dataRange partial:(BOOL)partial response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion error:(NSError *__autoreleasing *)error {
 
     off_t offset = partial ? dataRange.location : 0;
-    size_t length = partial ? dataRange.length : _attributes.fileSize;
+    size_t length = partial ? dataRange.length : (size_t)_attributes.fileSize;
         
     NSData *data;
     size_t read;
@@ -224,7 +224,7 @@ error:
     };
     
     off_t offset = partial ? dataRange.location : 0;
-    size_t length = partial ? dataRange.length : _attributes.fileSize;
+    size_t length = partial ? dataRange.length : (size_t)_attributes.fileSize;
     dispatch_io_read(channel, offset, length, queue, read);
     
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);

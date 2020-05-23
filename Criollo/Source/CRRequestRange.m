@@ -39,7 +39,7 @@ NS_INLINE NSRange NSRangeFromCRRequesByteRange(CRRequestByteRange *byteRange, NS
 }
 
 - (BOOL)isSatisfiableForFileSize:(unsigned long long)fileSize dataRange:(NSRange *)dataRange {
-    NSRange range = NSRangeFromCRRequesByteRange(self, fileSize);
+    NSRange range = NSRangeFromCRRequesByteRange(self, (NSUInteger)fileSize);
     if (dataRange != NULL) {
         *dataRange = range;
     }

@@ -6,8 +6,11 @@
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-#import "CRMessage_Internal.h"
 #import "CRResponse.h"
+
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
+
+#import "CRMessage_Internal.h"
 #import "CRResponse_Internal.h"
 #import "CRApplication.h"
 #import "CRServer.h"
@@ -15,7 +18,6 @@
 #import "CRConnection.h"
 #import "CRConnection_Internal.h"
 #import "CRRequest.h"
-#import "GCDAsyncSocket.h"
 #import "NSDate+RFC1123.h"
 #import "NSHTTPCookie+Criollo.h"
 

@@ -7,7 +7,8 @@
 //
 
 #import "CRConnection.h"
-#import "GCDAsyncSocket.h"
+
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 
 @class CRServer, CRRequest;
 

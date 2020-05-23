@@ -1,6 +1,7 @@
+use_frameworks!
+install! 'cocoapods', :generate_multiple_pod_projects => true
 
 target 'SecureHTTPServer' do
-  use_frameworks!
   platform :ios, '8.0'
 
   pod 'Criollo', :git => '../../', :submodules => true
