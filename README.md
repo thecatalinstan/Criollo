@@ -46,11 +46,11 @@ server.password = "123456"
 
 // Credentials: PEM-encoded certificate and public key
 server.certificatePath = Bundle.main.path(forResource: "certificate", ofType: "pem")
-server.certificateKeyPath = Bundle.main.path(forResource: "key", ofType: "pem")
+server.privateKeyPath = Bundle.main.path(forResource: "key", ofType: "pem")
 
 // Credentials: DER-encoded certificate and public key
 server.certificatePath = Bundle.main.path(forResource: "certificate", ofType: "der")
-server.certificateKeyPath = Bundle.main.path(forResource: "key", ofType: "der")
+server.privateKeyPath = Bundle.main.path(forResource: "key", ofType: "der")
 ```
 
 ... and in Objective-C:
@@ -64,11 +64,11 @@ server.password = @"password";
         
 // Credentials: PEM-encoded certificate and public key
 server.certificatePath = [NSBundle.mainBundle pathForResource:@"certificate" ofType:@"pem"];
-server.certificateKeyPath = [NSBundle.mainBundle pathForResource:@"key" ofType:@"pem"];
+server.privateKeyPath = [NSBundle.mainBundle pathForResource:@"key" ofType:@"pem"];
         
 // Credentials: DER-encoded certificate and public key
 server.certificatePath = [NSBundle.mainBundle pathForResource:@"certificate" ofType:@"der"];
-server.certificateKeyPath = [NSBundle.mainBundle pathForResource:@"key" ofType:@"der"];
+server.privateKeyPath = [NSBundle.mainBundle pathForResource:@"key" ofType:@"der"];
 ```
 
 ### Routing

@@ -34,11 +34,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
         //
         //        // Credentials: PEM-encoded certificate and public key
         //        self.server.certificatePath = Bundle.main.path(forResource: "cert", ofType: "pem")
-        //        self.server.certificateKeyPath = Bundle.main.path(forResource: "key", ofType: "pem")
+        //        self.server.privateKeyPath = Bundle.main.path(forResource: "key", ofType: "pem")
         //
         //        // Credentials: DER-encoded certificate and public key
         //        self.server.certificatePath = Bundle.main.path(forResource: "cert", ofType: "der")
-        //        self.server.certificateKeyPath = Bundle.main.path(forResource: "key", ofType: "der")
+        //        self.server.privateKeyPath = Bundle.main.path(forResource: "key", ofType: "der")
         
         let bundle:Bundle! = Bundle.main
         

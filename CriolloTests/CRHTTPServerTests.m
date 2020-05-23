@@ -188,7 +188,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = InvalidPath;
-    server.certificateKeyPath = InvalidPath;
+    server.privateKeyPath = InvalidPath;
     
     CRHTTPServerStart();
     
@@ -203,7 +203,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = InvalidPath;
-    server.certificateKeyPath = InvalidPath;
+    server.privateKeyPath = InvalidPath;
     
     CRHTTPServerStart();
     
@@ -216,7 +216,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = JunkPath;
-    server.certificateKeyPath = InvalidPath;
+    server.privateKeyPath = InvalidPath;
     
     CRHTTPServerStart();
     
@@ -231,7 +231,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = JunkPath;
-    server.certificateKeyPath = InvalidPath;
+    server.privateKeyPath = InvalidPath;
     
     CRHTTPServerStart();
 
@@ -244,7 +244,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = JunkPath;
-    server.certificateKeyPath = JunkPath;
+    server.privateKeyPath = JunkPath;
     
     CRHTTPServerStart();
     
@@ -259,7 +259,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = JunkPath;
-    server.certificateKeyPath = JunkPath;
+    server.privateKeyPath = JunkPath;
     
     CRHTTPServerStart();
 
@@ -272,7 +272,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = PEMCertificatePath;
-    server.certificateKeyPath = JunkPath;
+    server.privateKeyPath = JunkPath;
     
     CRHTTPServerStart();
     
@@ -287,7 +287,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = PEMCertificatePath;
-    server.certificateKeyPath = JunkPath;
+    server.privateKeyPath = JunkPath;
     
     CRHTTPServerStart();
 
@@ -300,7 +300,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = PEMCertificatePath;
-    server.certificateKeyPath = PEMKeyPath;
+    server.privateKeyPath = PEMKeyPath;
     
     CRHTTPServerStart();
     XCTAssertNil(error, @"Setting up a secure CRHTTPServer with properly formatted certificate and key files should not result in an error.");
@@ -312,7 +312,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = PEMCertificatePath;
-    server.certificateKeyPath = PEMKeyPath;
+    server.privateKeyPath = PEMKeyPath;
     
     CRHTTPServerStart();
     NSArray *items = server.certificates;
@@ -327,7 +327,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = DERCertificatePath;
-    server.certificateKeyPath = DERKeyPath;
+    server.privateKeyPath = DERKeyPath;
     
     CRHTTPServerStart();
     
@@ -342,7 +342,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = DERCertificatePath;
-    server.certificateKeyPath = DERKeyPath;
+    server.privateKeyPath = DERKeyPath;
     
     CRHTTPServerStart();
     NSArray *items = server.certificates;
@@ -359,7 +359,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = PEMCertificatePath;
-    server.certificateKeyPath = DERKeyPath;
+    server.privateKeyPath = DERKeyPath;
 
     CRHTTPServerStart();
 
@@ -374,7 +374,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = PEMCertificatePath;
-    server.certificateKeyPath = DERKeyPath;
+    server.privateKeyPath = DERKeyPath;
 
     CRHTTPServerStart();
     NSArray *items = server.certificates;
@@ -391,7 +391,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = DERCertificatePath;
-    server.certificateKeyPath = PEMKeyPath;
+    server.privateKeyPath = PEMKeyPath;
     
     CRHTTPServerStart();
     
@@ -406,7 +406,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = DERCertificatePath;
-    server.certificateKeyPath = PEMKeyPath;
+    server.privateKeyPath = PEMKeyPath;
     
     CRHTTPServerStart();
     NSArray *items = server.certificates;
@@ -423,7 +423,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = PEMBundlePath;
-    server.certificateKeyPath = PEMKeyPath;
+    server.privateKeyPath = PEMKeyPath;
     
     CRHTTPServerStart();
     
@@ -442,7 +442,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = PEMBundlePath;
-    server.certificateKeyPath = PEMKeyPath;
+    server.privateKeyPath = PEMKeyPath;
     
     CRHTTPServerStart();
     NSArray *items = server.certificates;
@@ -462,7 +462,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = PEMBundlePath;
-    server.certificateKeyPath = DERKeyPath;
+    server.privateKeyPath = DERKeyPath;
     
     CRHTTPServerStart();
 
@@ -481,7 +481,7 @@
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = PEMBundlePath;
-    server.certificateKeyPath = DERKeyPath;
+    server.privateKeyPath = DERKeyPath;
     
     CRHTTPServerStart();
     NSArray *items = server.certificates;

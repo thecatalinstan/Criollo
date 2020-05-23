@@ -71,7 +71,7 @@
     
     self.server.isSecure = YES;
     self.server.certificatePath = [NSBundle.mainBundle pathForResource:@"SecureHTTPServer.bundle" ofType:@"pem"];
-    self.server.certificateKeyPath = [NSBundle.mainBundle pathForResource:@"SecureHTTPServer.key" ofType:@"pem"];
+    self.server.privateKeyPath = [NSBundle.mainBundle pathForResource:@"SecureHTTPServer.key" ofType:@"pem"];
     
     [self.server startListening];
 }

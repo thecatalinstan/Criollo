@@ -11,7 +11,7 @@ Criollo makes it as painlessly as possible:
 ```swift
 // Secure with PEM certificate and key
 server.certificatePath = Bundle.main.path(forResource: "SecureHTTPServer.bundle", ofType: "pem")
-server.certificateKeyPath = Bundle.main.path(forResource: "SecureHTTPServer.key", ofType: "pem")
+server.privateKeyPath = Bundle.main.path(forResource: "SecureHTTPServer.key", ofType: "pem")
 ```
 
 or 
