@@ -7,11 +7,22 @@
 //
 
 #import <XCTest/XCTest.h>
+
 #import "CRHTTPServer.h"
 #import "CRHTTPSHelper.h"
 
-#define InvalidPath     @"/path/that/does/not/exist"
-#define JunkPath        [self pathForSampleFile:@"CRHTTPSHelperTests.junk"]
+#define InvalidPath         @"/path/that/does/not/exist"
+#define JunkPath            [self pathForSampleFile:@"CRHTTPSHelperTests.junk"]
+
+#define PEMCertificatePath  [self pathForSampleFile:@"CRHTTPSHelperTests.pem"];
+#define PEMKeyPath          [self pathForSampleFile:@"CRHTTPSHelperTests.key.pem"];
+#define PEMBundlePath       [self pathForSampleFile:@"CRHTTPSHelperTests.bundle.pem"];
+
+#define DERCertificatePath  [self pathForSampleFile:@"CRHTTPSHelperTests.der"];
+#define DERKeyPath          [self pathForSampleFile:@"CRHTTPSHelperTests.key.der"];
+
+#define PKCS12IdentityPath  [self pathForSampleFile:@"CRHTTPSHelperTests.p12"]
+#define PKCS12Password      @"password"
 
 #define CRHTTPServerCreate() CRHTTPServer *server = [CRHTTPServer new]
 #define CRHTTPServerDestroy() server = nil
@@ -19,9 +30,7 @@
 #define CRHTTPServerStop() [server stopListening]
 
 @interface CRHTTPServer ()
-
 @property (nonatomic, strong) NSArray *certificates;
-
 @end
 
 @interface CRHTTPServerTests : XCTestCase
@@ -37,302 +46,455 @@
     return [bundle.resourcePath stringByAppendingPathComponent:samplefile];
 }
 
-- (void)testSecureCRHTTPServerWithNoCredentialFiles {
+- (void)test_isSecure_NoCredentials_failsWithMissingCredentialsError {
     CRHTTPServerCreate();
     server.isSecure = YES;
     
     CRHTTPServerStart();
-    NSArray *items = server.certificates;
     
     XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with no credential files should result in an error.");
     XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"Secure CRHTTPServer errors should have the domain CRHTTPSErrorDomain.");
     XCTAssertEqual(error.code, CRHTTPSMissingCredentialsError, @"Setting up a secure CRHTTPServer with no credential files should yield CRHTTPSMissingCredentialsError errors.");
-    XCTAssertNil(items, @"Resulting items array should be nil");
     
     CRHTTPServerStop();
 }
 
-- (void)testSecureCRHTTPServerWithIdentityFile {
-    NSString *password = @"password";
+- (void)test_isSecure_NoCredentials_yieldsNilCertificatesArray {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
     
-    // Test invalid file path
-    {
-        CRHTTPServerCreate();
-        server.isSecure = YES;
-        server.identityPath = InvalidPath;
-        
-        CRHTTPServerStart();
-        NSArray *items = server.certificates;
-        
-        XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with a non-existent identity file should result in an error.");
-        XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"Secure CRHTTPServer errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidIdentityError, @"Non-existent identity files should yield CRHTTPSInvalidIdentityError errors.");
-        XCTAssertNil(items, @"Resulting items array should be nil");
-    }
+    CRHTTPServerStart();
     
-    // Test junk data
-    {
-        CRHTTPServerCreate();
-        server.isSecure = YES;
-        server.identityPath = JunkPath;
-        
-        CRHTTPServerStart();
-        NSArray *items = server.certificates;
-        
-        XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with a malformed file should result in an error.");
-        XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"Secure CRHTTPServer errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidIdentityError, @"Malformed identity files should yield CRHTTPSInvalidIdentityError errors.");
-        XCTAssertNil(items, @"Resulting items array should be nil");
-    }
+    XCTAssertNil(server.certificates, @"Resulting items array should be nil");
     
-    // Test valid identity file but incorrect password
-    {
-        CRHTTPServerCreate();
-        server.isSecure = YES;
-        server.identityPath = [self pathForSampleFile:@"CRHTTPSHelperTests.p12"];
-        server.password = @"wrongpassword";
-        
-        CRHTTPServerStart();
-        NSArray *items = server.certificates;
-        
-        XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with an incorrect password should result in an error.");
-        XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"Secure CRHTTPServer errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidPasswordError, @"Authentication failures should yield CRHTTPSInvalidPasswordError errors.");
-        XCTAssertNil(items, @"Resulting items array should be nil");
-    }
-    
-    // Test valid identity file and correct password
-    {
-        CRHTTPServerCreate();
-        server.isSecure = YES;
-        server.identityPath = [self pathForSampleFile:@"CRHTTPSHelperTests.p12"];
-        server.password = password;
-        
-        CRHTTPServerStart();
-        NSArray *items = server.certificates;
-        
-        NSUInteger expectedItemsCount = 3; // [identity, cert (intermediate), cert (root)]
-        
-        XCTAssertNil(error, @"Setting up a secure CRHTTPServer with a properly formatted identity file should not result in an error.");
-        XCTAssertNotNil(items, @"Resulting items array should not be nil");
-        XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
-        
-        XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
-        XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[1]), @"The second item in the array should be a SecCertificateRef");
-        XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[2]), @"The third item in the array should be a SecCertificateRef");
-    }
+    CRHTTPServerStop();
 }
 
-- (void)testSecureCRHTTPServerWithCertificateAndPrivateKeyFiles {
-    NSString *PEMCertificatePath = [self pathForSampleFile:@"CRHTTPSHelperTests.pem"];
-    NSString *DERCertificatePath = [self pathForSampleFile:@"CRHTTPSHelperTests.der"];
-    NSString *PEMKeyPath = [self pathForSampleFile:@"CRHTTPSHelperTests.key.pem"];
-    NSString *DERKeyPath = [self pathForSampleFile:@"CRHTTPSHelperTests.key.der"];
-    NSString *PEMBundlePath = [self pathForSampleFile:@"CRHTTPSHelperTests.bundle.pem"];
+- (void)test_isSecure_InvalidIdentityPath_failsWithInvalidIdentityError {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.identityPath = InvalidPath;
     
-    // Test invalid certificate path
-    {
-        CRHTTPServerCreate();
-        server.isSecure = YES;
-        server.certificatePath = InvalidPath;
-        server.certificateKeyPath = InvalidPath;
-        
-        CRHTTPServerStart();
-        NSArray *items = server.certificates;
-        
-        XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with a non-existent certificate file should result in an error.");
-        XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"Secure CRHTTPServer errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidCertificateError, @"Non-existent certificate files should yield CRHTTPSInvalidCertificateError errors.");
-        XCTAssertNil(items, @"Resulting items array should be nil");
-    }
+    CRHTTPServerStart();
     
-    // Test valid certificate path but invalid key path
-    {
-        CRHTTPServerCreate();
-        server.isSecure = YES;
-        server.certificatePath = JunkPath;
-        server.certificateKeyPath = InvalidPath;
-        
-        CRHTTPServerStart();
-        NSArray *items = server.certificates;
-        
-        XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with a non-existent private key file should result in an error.");
-        XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"Secure CRHTTPServer errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidPrivateKeyError, @"Non-existent private key files should yield CRHTTPSInvalidPrivateKeyError errors.");
-        XCTAssertNil(items, @"Resulting items array should be nil");
-    }
+    XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with a non-existent identity file should result in an error.");
+    XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"Secure CRHTTPServer errors should have the domain CRHTTPSErrorDomain.");
+    XCTAssertEqual(error.code, CRHTTPSInvalidIdentityError, @"Non-existent identity files should yield CRHTTPSInvalidIdentityError errors.");
     
-    // Test junk certificate file
-    {
-        CRHTTPServerCreate();
-        server.isSecure = YES;
-        server.certificatePath = JunkPath;
-        server.certificateKeyPath = JunkPath;
-        
-        CRHTTPServerStart();
-        NSArray *items = server.certificates;
-        
-        XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer an invalid certificate file should result in an error.");
-        XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"Secure CRHTTPServer errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidCertificateError, @"Invalid certificate files should yield CRHTTPSInvalidCertificateError errors.");
-        XCTAssertNil(items, @"Resulting items array should be nil");
-    }
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_InvalidIdentityPath_yieldsNilCertificatesArray {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.identityPath = InvalidPath;
     
-    // Test valid certificate path but junk key
-    {
-        CRHTTPServerCreate();
-        server.isSecure = YES;
-        server.certificatePath = PEMCertificatePath;
-        server.certificateKeyPath = JunkPath;
-        
-        CRHTTPServerStart();
-        NSArray *items = server.certificates;
-        
-        XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with an invalid key file should result in an error.");
-        XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"Secure CRHTTPServer errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidPrivateKeyError, @"Invalid key files should yield CRHTTPSInvalidPrivateKeyError errors.");
-        XCTAssertNil(items, @"Resulting items array should be nil");
-    }
+    CRHTTPServerStart();
     
-    // Test PEM-encoded certificate and key
-    {
-        CRHTTPServerCreate();
-        server.isSecure = YES;
-        server.certificatePath = PEMCertificatePath;
-        server.certificateKeyPath = PEMKeyPath;
-        
-        CRHTTPServerStart();
-        NSArray *items = server.certificates;
-        
-        NSUInteger expectedItemsCount = 1; // [identity]
-        
-        XCTAssertNil(error, @"Setting up a secure CRHTTPServer with properly formatted certificate and key files should not result in an error.");
-        
-        XCTAssertNotNil(items, @"Resulting items array should not be nil");
-        XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
-        
-        XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
-    }
+    XCTAssertNil(server.certificates, @"Resulting items array should be nil");
     
-    // Test DER-encoded certificate and key
-    {
-        CRHTTPServerCreate();
-        server.isSecure = YES;
-        server.certificatePath = DERCertificatePath;
-        server.certificateKeyPath = DERKeyPath;
-        
-        CRHTTPServerStart();
-        NSArray *items = server.certificates;
-        
-        NSUInteger expectedItemsCount = 1; // [identity]
-        
-        XCTAssertNil(error, @"Setting up a secure CRHTTPServer with properly formatted certificate and key files should not result in an error.");
-        
-        XCTAssertNotNil(items, @"Resulting items array should not be nil");
-        XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
-        
-        XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
-    }
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_MalformedIdentity_failsWithInvalidIdentityError {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.identityPath = JunkPath;
     
-    // Test PEM-encoded certificate and DER-encoded key
-    {
-        CRHTTPServerCreate();
-        server.isSecure = YES;
-        server.certificatePath = PEMCertificatePath;
-        server.certificateKeyPath = DERKeyPath;
-        
-        CRHTTPServerStart();
-        NSArray *items = server.certificates;
-        
-        NSUInteger expectedItemsCount = 1; // [identity]
-        
-        XCTAssertNil(error, @"Setting up a secure CRHTTPServer with properly formatted certificate and key files should not result in an error.");
-        
-        XCTAssertNotNil(items, @"Resulting items array should not be nil");
-        XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
-        
-        XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
-    }
+    CRHTTPServerStart();
     
-    // Test DER-encoded certificate and PEM-encoded key
-    {
-        CRHTTPServerCreate();
-        server.isSecure = YES;
-        server.certificatePath = DERCertificatePath;
-        server.certificateKeyPath = PEMKeyPath;
-        
-        CRHTTPServerStart();
-        NSArray *items = server.certificates;
-        
-        NSUInteger expectedItemsCount = 1; // [identity]
-        
-        XCTAssertNil(error, @"Setting up a secure CRHTTPServer with properly formatted certificate and key files should not result in an error.");
-        
-        XCTAssertNotNil(items, @"Resulting items array should not be nil");
-        XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
-        
-        XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
-    }
+    XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with a malformed file should result in an error.");
+    XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"Secure CRHTTPServer errors should have the domain CRHTTPSErrorDomain.");
+    XCTAssertEqual(error.code, CRHTTPSInvalidIdentityError, @"Malformed identity files should yield CRHTTPSInvalidIdentityError errors.");
+
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_MalformedIdentity_yieldsNilCertificatesArray {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.identityPath = InvalidPath;
     
-    // Test PEM-encoded chained certificate bundle and key
-    {
-        CRHTTPServerCreate();
-        server.isSecure = YES;
-        server.certificatePath = PEMBundlePath;
-        server.certificateKeyPath = PEMKeyPath;
+    CRHTTPServerStart();
+    
+    XCTAssertNil(server.certificates, @"Resulting items array should be nil");
+    
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_ValidIdentityWrongPassword_failsWithInvalidPasswordError {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.identityPath = PKCS12IdentityPath;
+    server.password = @"wrongpassword";
+    
+    CRHTTPServerStart();
+    
+    XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with an incorrect password should result in an error.");
+    XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"Secure CRHTTPServer errors should have the domain CRHTTPSErrorDomain.");
+    XCTAssertEqual(error.code, CRHTTPSInvalidPasswordError, @"Authentication failures should yield CRHTTPSInvalidPasswordError errors.");
+
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_ValidIdentityWrongPassword_yieldsNilCertificatesArray {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.identityPath = PKCS12IdentityPath;
+    server.password = @"wrongpassword";
+    
+    CRHTTPServerStart();
+
+    XCTAssertNil(server.certificates, @"Resulting items array should be nil");
+    
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_ValidIdentityAndPassword_succeeds {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.identityPath = PKCS12IdentityPath;
+    server.password = PKCS12Password;
+    
+    CRHTTPServerStart();
+    
+    XCTAssertNil(error, @"Setting up a secure CRHTTPServer with a properly formatted identity file should not result in an error.");
+    
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_ValidIdentityAndPassword_yeldsCorrectCertificatesArray {
+    NSUInteger expectedItemsCount = 3; // [identity, cert (intermediate), cert (root)]
+
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.identityPath = PKCS12IdentityPath;
+    server.password = PKCS12Password;
         
-        CRHTTPServerStart();
-        NSArray *items = server.certificates;
+    CRHTTPServerStart();
+    NSArray *items = server.certificates;
         
+    XCTAssertNotNil(items, @"Resulting items array should not be nil");
+    XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
+    
+    XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
+    XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[1]), @"The second item in the array should be a SecCertificateRef");
+    XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[2]), @"The third item in the array should be a SecCertificateRef");
+    
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_InvalidCertificatePath_failsWithInvalidCertificateError {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = InvalidPath;
+    server.certificateKeyPath = InvalidPath;
+    
+    CRHTTPServerStart();
+    
+    XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with a non-existent certificate file should result in an error.");
+    XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"Secure CRHTTPServer errors should have the domain CRHTTPSErrorDomain.");
+    XCTAssertEqual(error.code, CRHTTPSInvalidCertificateError, @"Non-existent certificate files should yield CRHTTPSInvalidCertificateError errors.");
+    
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_InvalidCertificatePath_yieldsNilCertificatesArray {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = InvalidPath;
+    server.certificateKeyPath = InvalidPath;
+    
+    CRHTTPServerStart();
+    
+    XCTAssertNil(server.certificates, @"Resulting items array should be nil");
+    
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_ValidCertificatePathInvalidPrivateKeyPath_failsWithInvalidPrivateKeyError {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = JunkPath;
+    server.certificateKeyPath = InvalidPath;
+    
+    CRHTTPServerStart();
+    
+    XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with a non-existent private key file should result in an error.");
+    XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"Secure CRHTTPServer errors should have the domain CRHTTPSErrorDomain.");
+    XCTAssertEqual(error.code, CRHTTPSInvalidPrivateKeyError, @"Non-existent private key files should yield CRHTTPSInvalidPrivateKeyError errors.");
+    
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_ValidCertificatePathInvalidPrivateKeyPath_yieldsNilCertificatesArray {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = JunkPath;
+    server.certificateKeyPath = InvalidPath;
+    
+    CRHTTPServerStart();
+
+    XCTAssertNil(server.certificates, @"Resulting items array should be nil");
+    
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_MalformedCertificate_failsWithInvalidCertificateError {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = JunkPath;
+    server.certificateKeyPath = JunkPath;
+    
+    CRHTTPServerStart();
+    
+    XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer an invalid certificate file should result in an error.");
+    XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"Secure CRHTTPServer errors should have the domain CRHTTPSErrorDomain.");
+    XCTAssertEqual(error.code, CRHTTPSInvalidCertificateError, @"Invalid certificate files should yield CRHTTPSInvalidCertificateError errors.");
+
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_MalformedCertificate_yieldsNilCertificatesArray {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = JunkPath;
+    server.certificateKeyPath = JunkPath;
+    
+    CRHTTPServerStart();
+
+    XCTAssertNil(server.certificates, @"Resulting items array should be nil");
+    
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_ValidCertificateMalformedPrivateKey_failsWithInvalidPrivateKeyError {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = PEMCertificatePath;
+    server.certificateKeyPath = JunkPath;
+    
+    CRHTTPServerStart();
+    
+    XCTAssertNotNil(error, @"Setting up a secure CRHTTPServer with an invalid key file should result in an error.");
+    XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"Secure CRHTTPServer errors should have the domain CRHTTPSErrorDomain.");
+    XCTAssertEqual(error.code, CRHTTPSInvalidPrivateKeyError, @"Invalid key files should yield CRHTTPSInvalidPrivateKeyError errors.");
+    
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_ValidCertificateMalformedPrivateKey_yieldsNilCertificatesArray {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = PEMCertificatePath;
+    server.certificateKeyPath = JunkPath;
+    
+    CRHTTPServerStart();
+
+    XCTAssertNil(server.certificates, @"Resulting items array should be nil");
+    
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_ValidPEMCertificateAndPrivateKey_succeeds {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = PEMCertificatePath;
+    server.certificateKeyPath = PEMKeyPath;
+    
+    CRHTTPServerStart();
+    XCTAssertNil(error, @"Setting up a secure CRHTTPServer with properly formatted certificate and key files should not result in an error.");
+}
+
+- (void)test_isSecure_ValidPEMCertificateAndPrivateKey_yeldsCorrectCertificatesArray {
+    NSUInteger expectedItemsCount = 1; // [identity]
+    
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = PEMCertificatePath;
+    server.certificateKeyPath = PEMKeyPath;
+    
+    CRHTTPServerStart();
+    NSArray *items = server.certificates;
+    
+    XCTAssertNotNil(items, @"Resulting items array should not be nil");
+    XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
+ 
+    XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
+}
+
+- (void)test_isSecure_ValidDERCertificateAndPrivateKey_succeeds {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = DERCertificatePath;
+    server.certificateKeyPath = DERKeyPath;
+    
+    CRHTTPServerStart();
+    
+    XCTAssertNil(error, @"Setting up a secure CRHTTPServer with properly formatted certificate and key files should not result in an error.");
+    
+    CRHTTPServerStop();
+}
+ 
+- (void)test_isSecure_ValidDERCertificateAndPrivateKey_yeldsCorrectCertificatesArray {
+    NSUInteger expectedItemsCount = 1; // [identity]
+
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = DERCertificatePath;
+    server.certificateKeyPath = DERKeyPath;
+    
+    CRHTTPServerStart();
+    NSArray *items = server.certificates;
         
-        NSUInteger expectedItemsCount;
+    XCTAssertNotNil(items, @"Resulting items array should not be nil");
+    XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
+    
+    XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
+    
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_ValidPEMCertificateAndDERPrivateKey_succeeds {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = PEMCertificatePath;
+    server.certificateKeyPath = DERKeyPath;
+
+    CRHTTPServerStart();
+
+    XCTAssertNil(error, @"Setting up a secure CRHTTPServer with properly formatted certificate and key files should not result in an error.");
+
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_ValidPEMCertificateAndDERPrivateKey_yeldsCorrectCertificatesArray {
+    NSUInteger expectedItemsCount = 1; // [identity]
+
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = PEMCertificatePath;
+    server.certificateKeyPath = DERKeyPath;
+
+    CRHTTPServerStart();
+    NSArray *items = server.certificates;
+
+    XCTAssertNotNil(items, @"Resulting items array should not be nil");
+    XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
+
+    XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
+    
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_ValidDERCertificateAndPEMPrivateKey_succeeds {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = DERCertificatePath;
+    server.certificateKeyPath = PEMKeyPath;
+    
+    CRHTTPServerStart();
+    
+    XCTAssertNil(error, @"Setting up a secure CRHTTPServer with properly formatted certificate and key files should not result in an error.");
+    
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_ValidDERCertificateAndPEMPrivateKey_yeldsCorrectCertificatesArray {
+    NSUInteger expectedItemsCount = 1; // [identity]
+
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = DERCertificatePath;
+    server.certificateKeyPath = PEMKeyPath;
+    
+    CRHTTPServerStart();
+    NSArray *items = server.certificates;
+    
+    XCTAssertNotNil(items, @"Resulting items array should not be nil");
+    XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
+    
+    XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
+    
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_ValidPEMFullchainCertificateAndPEMPrivateKey_succeeds {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = PEMBundlePath;
+    server.certificateKeyPath = PEMKeyPath;
+    
+    CRHTTPServerStart();
+    
+    XCTAssertNil(error, @"Setting up a secure CRHTTPServer with properly formatted certificate and key files should not result in an error.");
+    
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_ValidPEMFullchainCertificateAndPEMPrivateKey_yeldsCorrectCertificatesArray {
 #if SEC_OS_OSX_INCLUDES
-        expectedItemsCount = 3; // [identity, cert (intermediate), cert (root)]
+    NSUInteger expectedItemsCount = 3; // [identity, cert (intermediate), cert (root)]
 #else
-        expectedItemsCount = 1; // [identity]
+    NSUInteger expectedItemsCount = 1; // [identity]
 #endif
-        
-        XCTAssertNil(error, @"Setting up a secure CRHTTPServer with properly formatted certificate and key files should not result in an error.");
-        
-        XCTAssertNotNil(items, @"Resulting items array should not be nil");
-        XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
-        
-        XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
-#if SEC_OS_OSX_INCLUDES
-        XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[1]), @"The second item in the array should be a SecCertificateRef");
-        XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[2]), @"The third item in the array should be a SecCertificateRef");
-#endif
-    }
     
-    // Test PEM-encoded chained certificate bundle and DER-encoded key
-    {
-        CRHTTPServerCreate();
-        server.isSecure = YES;
-        server.certificatePath = PEMBundlePath;
-        server.certificateKeyPath = DERKeyPath;
-        
-        CRHTTPServerStart();
-        NSArray *items = server.certificates;
-        
-        
-        NSUInteger expectedItemsCount;
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = PEMBundlePath;
+    server.certificateKeyPath = PEMKeyPath;
+    
+    CRHTTPServerStart();
+    NSArray *items = server.certificates;
+    
+    XCTAssertNotNil(items, @"Resulting items array should not be nil");
+    XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
+    
+    XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
+    
 #if SEC_OS_OSX_INCLUDES
-        expectedItemsCount = 3; // [identity, cert (intermediate), cert (root)]
+    XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[1]), @"The second item in the array should be a SecCertificateRef");
+    XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[2]), @"The third item in the array should be a SecCertificateRef");
+#endif
+}
+
+- (void)test_isSecure_ValidPEMFullchainCertificateAndDERPrivateKey_succeeds {
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = PEMBundlePath;
+    server.certificateKeyPath = DERKeyPath;
+    
+    CRHTTPServerStart();
+
+    XCTAssertNil(error, @"Setting up a secure CRHTTPServer with properly formatted certificate and key files should not result in an error.");
+    
+    CRHTTPServerStop();
+}
+
+- (void)test_isSecure_ValidPEMFullchainCertificateAndDERPrivateKey_yeldsCorrectCertificatesArray {
+#if SEC_OS_OSX_INCLUDES
+    NSUInteger expectedItemsCount = 3; // [identity, cert (intermediate), cert (root)]
 #else
-        expectedItemsCount = 1; // [identity]
+    NSUInteger expectedItemsCount = 1; // [identity]
 #endif
-        
-        XCTAssertNil(error, @"Setting up a secure CRHTTPServer with properly formatted certificate and key files should not result in an error.");
-        
-        XCTAssertNotNil(items, @"Resulting items array should not be nil");
-        XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
-        
-        XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
+    
+    CRHTTPServerCreate();
+    server.isSecure = YES;
+    server.certificatePath = PEMBundlePath;
+    server.certificateKeyPath = DERKeyPath;
+    
+    CRHTTPServerStart();
+    NSArray *items = server.certificates;
+    
+    XCTAssertNotNil(items, @"Resulting items array should not be nil");
+    XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
+    
+    XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
+    
 #if SEC_OS_OSX_INCLUDES
-        XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[1]), @"The second item in the array should be a SecCertificateRef");
-        XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[2]), @"The third item in the array should be a SecCertificateRef");
+    XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[1]), @"The second item in the array should be a SecCertificateRef");
+    XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[2]), @"The third item in the array should be a SecCertificateRef");
 #endif
-    }
 }
 
 @end
