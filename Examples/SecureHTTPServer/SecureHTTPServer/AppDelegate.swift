@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
         
         // Secure with PEM certificate and key
         self.server?.certificatePath = Bundle.main.path(forResource: "SecureHTTPServer.bundle", ofType: "pem")
-        self.server?.certificateKeyPath = Bundle.main.path(forResource: "SecureHTTPServer.key", ofType: "pem")
+        self.server?.privateKeyPath = Bundle.main.path(forResource: "SecureHTTPServer.key", ofType: "pem")
         
         // Secure with PKCS#12 identity and password.
 //        self.server?.identityPath = Bundle.main.path(forResource: "SecureHTTPServer", ofType: "p12")

@@ -26,8 +26,8 @@ FOUNDATION_EXPORT NSString * const CRHTTPSCertificateKeyPathKey;
 
 @interface CRHTTPSHelper : NSObject
 
-- (nullable NSArray *)parseIdentrityFile:(NSString *)identityFilePath password:(NSString *)password withError:(NSError * _Nullable __autoreleasing * _Nullable)error;
-- (nullable NSArray *)parseCertificateFile:(NSString *)certificatePath certificateKeyFile:(NSString *)certificateKeyPath withError:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (nullable NSArray *)parseIdentrityFile:(NSString *)identityFilePath password:(NSString *)password error:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (nullable NSArray *)parseCertificateFile:(NSString *)certificatePath privateKeyFile:(NSString *)privateKeyPath error:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
 @end
 

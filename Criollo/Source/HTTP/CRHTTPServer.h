@@ -18,6 +18,6 @@
 @property (nonatomic, strong, nullable) NSString *identityPath;
 @property (nonatomic, strong, nullable) NSString *password;
 @property (nonatomic, strong, nullable) NSString *certificatePath;
-@property (nonatomic, strong, nullable) NSString *certificateKeyPath;
+@property (nonatomic, strong, nullable) NSString *privateKeyPath;
 
 @end

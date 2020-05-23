@@ -53,11 +53,11 @@ NS_ASSUME_NONNULL_END
 #elif HTTPS_PEM
         // Credentials: PEM-encoded certificate and public key
         server.certificatePath = [NSBundle.mainBundle pathForResource:@"cert" ofType:@"pem"];
-        server.certificateKeyPath = [NSBundle.mainBundle pathForResource:@"key" ofType:@"pem"];
+        server.privateKeyPath = [NSBundle.mainBundle pathForResource:@"key" ofType:@"pem"];
 #elif HTTPS_DER
         // Credentials: DER-encoded certificate and public key
         server.certificatePath = [NSBundle.mainBundle pathForResource:@"cert" ofType:@"der"];
-        server.certificateKeyPath = [NSBundle.mainBundle pathForResource:@"key" ofType:@"der"];
+        server.privateKeyPath = [NSBundle.mainBundle pathForResource:@"key" ofType:@"der"];
 #endif
     }
 #endif

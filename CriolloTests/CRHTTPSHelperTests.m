@@ -10,26 +10,28 @@
 #import "CRHTTPSHelper.h"
 
 #if SEC_OS_OSX_INCLUDES
-
 @interface CRHTTPSHelper ()
-
 @property (nonatomic) SecKeychainRef keychain;
-
 @end
-
-#else
-
-#define SecKeychainRef CFTypeRef;
-
 #endif
 
-#define InvalidPath     @"/path/that/does/not/exist"
-#define JunkPath        [self pathForSampleFile:@"CRHTTPSHelperTests.junk"]
+#define InvalidPath         @"/path/that/does/not/exist"
+#define JunkPath            [self pathForSampleFile:@"CRHTTPSHelperTests.junk"]
+
+#define PEMCertificatePath  [self pathForSampleFile:@"CRHTTPSHelperTests.pem"]
+#define PEMKeyPath          [self pathForSampleFile:@"CRHTTPSHelperTests.key.pem"]
+#define PEMBundlePath       [self pathForSampleFile:@"CRHTTPSHelperTests.bundle.pem"]
+
+#define DERCertificatePath  [self pathForSampleFile:@"CRHTTPSHelperTests.der"]
+#define DERKeyPath          [self pathForSampleFile:@"CRHTTPSHelperTests.key.der"]
+
+#define PKCS12IdentityPath  [self pathForSampleFile:@"CRHTTPSHelperTests.p12"]
+#define PKCS12Password      @"password"
+
+#define CRHTTPSHelperCreate() CRHTTPSHelper *helper = [CRHTTPSHelper new]
 
 @interface CRHTTPSHelperTests : XCTestCase
-
 - (NSString *)pathForSampleFile:(NSString *)samplefile;
-
 @end
 
 @implementation CRHTTPSHelperTests
@@ -40,277 +42,244 @@
 }
 
 #if SEC_OS_OSX_INCLUDES
-- (void)testSetupKeychain  {
-    CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
-    SecKeychainRef keychain = httpsHelper.keychain;
-    XCTAssertNotNil((__bridge id)keychain, @"Custom keychains should NOT return nil.");
+- (void)test_keychain_notNil  {
+    XCTAssertNotNil((__bridge id)CRHTTPSHelper.new.keychain, @"Custom keychains should NOT return nil.");
 }
 #endif
 
-- (void)testParseIdentityFile {
-    NSString *password = @"password";
-    
-    // Test invalid file path
-    {
-        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
-        
-        NSString *path = InvalidPath;
-        NSError *error = nil;
-        NSArray *items = [httpsHelper parseIdentrityFile:path password:password withError:&error];
+- (void)test_parseIdentityFile_InvalidPath_failsWithInvalidIdentityError {
+    NSError *error;
+    [CRHTTPSHelper.new parseIdentrityFile:InvalidPath password:PKCS12Password error:&error];
 
-        XCTAssertNotNil(error, @"Parsing a non-existent identity file should result in an error.");
-        XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidIdentityError, @"Non-existent identity files should yield CRHTTPSInvalidIdentityError errors.");
-        XCTAssertNil(items, @"Resulting items array should be nil");
-    }
-
-    // Test junk data
-    {
-        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
-
-        NSString *path = JunkPath;
-        NSError *error = nil;
-        NSArray *items = [httpsHelper parseIdentrityFile:path password:password withError:&error];
-
-        XCTAssertNotNil(error, @"Parsing an invalid identity file should result in an error.");
-        XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidIdentityError, @"Malformed identity files should yield CRHTTPSInvalidIdentityError errors.");
-        XCTAssertNil(items, @"Resulting items array should be nil");
-    }
-    
-    // Test valid identity file but incorrect password
-    {
-        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
-
-        NSString *path = [self pathForSampleFile:@"CRHTTPSHelperTests.p12"];
-        NSError *error = nil;
-        NSArray *items = [httpsHelper parseIdentrityFile:path password:@"wrongpassword" withError:&error];
-        
-        XCTAssertNotNil(error, @"Parsing a valid identity file with an incorrect password should result in an error.");
-        XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidPasswordError, @"Authentication failures should yield CRHTTPSInvalidIdentityError errors.");
-        XCTAssertNil(items, @"Resulting items array should be nil");
-    }
-    
-    // Test valid identity file and correct password
-    {
-        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
-
-        NSString *path = [self pathForSampleFile:@"CRHTTPSHelperTests.p12"];
-        NSError *error = nil;
-        NSArray *items = [httpsHelper parseIdentrityFile:path password:password withError:&error];
-        
-        NSUInteger expectedItemsCount = 3; // [identity, cert (intermediate), cert (root)]
-
-        XCTAssertNil(error, @"Parsing a properly formatted identity file should not result in an error.");
-     
-        XCTAssertNotNil(items, @"Resulting items array should not be nil");
-        XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
-        
-        XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
-        XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[1]), @"The second item in the array should be a SecCertificateRef");
-        XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[2]), @"The third item in the array should be a SecCertificateRef");
-    }
+    XCTAssertNotNil(error, @"Parsing a non-existent identity file should result in an error.");
+    XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
+    XCTAssertEqual(error.code, CRHTTPSInvalidIdentityError, @"Non-existent identity files should yield CRHTTPSInvalidIdentityError errors.");
 }
 
-- (void)testParseCertificateAndPrivateKeyFiles {
-    NSString *PEMCertificatePath = [self pathForSampleFile:@"CRHTTPSHelperTests.pem"];
-    NSString *DERCertificatePath = [self pathForSampleFile:@"CRHTTPSHelperTests.der"];
-    NSString *PEMKeyPath = [self pathForSampleFile:@"CRHTTPSHelperTests.key.pem"];
-    NSString *DERKeyPath = [self pathForSampleFile:@"CRHTTPSHelperTests.key.der"];
-    NSString *PEMBundlePath = [self pathForSampleFile:@"CRHTTPSHelperTests.bundle.pem"];
+- (void)test_parseIdentityFile_InvalidPath_yieldsNilCertificatesArray {
+    XCTAssertNil([CRHTTPSHelper.new parseIdentrityFile:InvalidPath password:PKCS12Password error:nil], @"Resulting items array should be nil");
+}
+
+- (void)test_parseIdentityFile_MalformedIdentityFile_failsWithInvalidIdentityError {
+    NSError *error;
+    [CRHTTPSHelper.new parseIdentrityFile:JunkPath password:PKCS12Password error:&error];
     
-    // Test invalid certificate path
-    {
-        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+    XCTAssertNotNil(error, @"Parsing an invalid identity file should result in an error.");
+    XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
+    XCTAssertEqual(error.code, CRHTTPSInvalidIdentityError, @"Malformed identity files should yield CRHTTPSInvalidIdentityError errors.");
+}
 
-        NSString *certificate = InvalidPath;
-        NSString *key = InvalidPath;
-        NSError *error = nil;
-        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
+- (void)test_parseIdentityFile_MalformedIdentityFile_yieldsNilCertificatesArray {
+    XCTAssertNil([CRHTTPSHelper.new parseIdentrityFile:JunkPath password:PKCS12Password error:nil], @"Resulting items array should be nil");
+}
 
-        XCTAssertNotNil(error, @"Parsing a non-existent certificate file should result in an error.");
-        XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidCertificateError, @"Non-existent certificate files should yield CRHTTPSInvalidCertificateError errors.");
-        XCTAssertNil(items, @"Resulting items array should be nil");
-    }
-
-    // Test valid certificate path but invalid key path
-    {
-        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
-
-        NSString *certificate = JunkPath;
-        NSString *key = InvalidPath;
-        NSError *error = nil;
-        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
-
-        XCTAssertNotNil(error, @"Parsing a non-existent private key file should result in an error.");
-        XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidPrivateKeyError, @"Non-existent private key files should yield CRHTTPSInvalidPrivateKeyError errors.");
-        XCTAssertNil(items, @"Resulting items array should be nil");
-    }
-
-    // Test junk certificate file
-    {
-        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
-
-        NSString *certificate = JunkPath;
-        NSString *key = JunkPath;
-        NSError *error = nil;
-        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
-
-        XCTAssertNotNil(error, @"Parsing an invalid certificate file should result in an error.");
-        XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidCertificateError, @"Invalid certificate files should yield CRHTTPSInvalidCertificateError errors.");
-        XCTAssertNil(items, @"Resulting items array should be nil");
-    }
-
-    // Test valid certificate path but junk key
-    {
-        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
-
-        NSString *certificate = PEMCertificatePath;
-        NSString *key = JunkPath;
-        NSError *error = nil;
-        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
-
-        XCTAssertNotNil(error, @"Parsing an invalid key file should result in an error.");
-        XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
-        XCTAssertEqual(error.code, CRHTTPSInvalidPrivateKeyError, @"Invalid key files should yield CRHTTPSInvalidPrivateKeyError errors.");
-        XCTAssertNil(items, @"Resulting items array should be nil");
-    }
-
-    // Test PEM-encoded certificate and key
-    {
-        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
-
-        NSString *certificate = PEMCertificatePath;
-        NSString *key = PEMKeyPath;
-        NSError *error = nil;
-        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
-        
-        NSUInteger expectedItemsCount = 1; // [identity]
-        
-        XCTAssertNil(error, @"Parsing properly formatted certificate and key files should not result in an error.");
-        
-        XCTAssertNotNil(items, @"Resulting items array should not be nil");
-        XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
-        
-        XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
-    }
+- (void)test_parseIdentityFile_ValidIdentityFileWrongPassword_failsWithInvalidPasswordError {
+    NSError *error;
+    [CRHTTPSHelper.new parseIdentrityFile:PKCS12IdentityPath password:@"wrongpassword" error:&error];
     
-    // Test DER-encoded certificate and key
-    {
-        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+    XCTAssertNotNil(error, @"Parsing a valid identity file with an incorrect password should result in an error.");
+    XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
+    XCTAssertEqual(error.code, CRHTTPSInvalidPasswordError, @"Authentication failures should yield CRHTTPSInvalidIdentityError errors.");
+}
 
-        NSString *certificate = DERCertificatePath;
-        NSString *key = DERKeyPath;
-        NSError *error = nil;
-        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
-        
-        NSUInteger expectedItemsCount = 1; // [identity]
-        
-        XCTAssertNil(error, @"Parsing properly formatted certificate and key files should not result in an error.");
-        
-        XCTAssertNotNil(items, @"Resulting items array should not be nil");
-        XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
-        
-        XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
-    }
+- (void)test_parseIdentityFile_ValidIdentityFileWrongPassword_yieldsNilCertificatesArray {
+    XCTAssertNil([CRHTTPSHelper.new parseIdentrityFile:PKCS12IdentityPath password:@"wrongpassword" error:nil], @"Resulting items array should be nil");
+}
+
+- (void)test_parseIdentityFile_ValidIdentityFileAndPassword_succeedsWithNoError {
+    NSError *error;
+    [CRHTTPSHelper.new parseIdentrityFile:PKCS12IdentityPath password:PKCS12Password error:&error];
+
+    XCTAssertNil(error, @"Parsing a properly formatted identity file should not result in an error.");
+}
+
+- (void)test_parseIdentityFile_ValidIdentityFileAndPassword_yieldsCorrectCertificatesArray {
+    NSUInteger expectedItemsCount = 3; // [identity, cert (intermediate), cert (root)]
+
+    NSArray *items = [CRHTTPSHelper.new parseIdentrityFile:PKCS12IdentityPath password:PKCS12Password error:nil];
     
-    // Test PEM-encoded certificate and DER-encoded key
-    {
-        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
-
-        NSString *certificate = PEMCertificatePath;
-        NSString *key = DERKeyPath;
-        NSError *error = nil;
-        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
-        
-        NSUInteger expectedItemsCount = 1; // [identity]
-        
-        XCTAssertNil(error, @"Parsing properly formatted certificate and key files should not result in an error.");
-        
-        XCTAssertNotNil(items, @"Resulting items array should not be nil");
-        XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
-        
-        XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
-    }
+    XCTAssertNotNil(items, @"Resulting items array should not be nil");
+    XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
     
-    // Test DER-encoded certificate and PEM-encoded key
-    {
-        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+    XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
+    XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[1]), @"The second item in the array should be a SecCertificateRef");
+    XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[2]), @"The third item in the array should be a SecCertificateRef");
+}
 
-        NSString *certificate = DERCertificatePath;
-        NSString *key = PEMKeyPath;
-        NSError *error = nil;
-        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
-        
-        NSUInteger expectedItemsCount = 1; // [identity]
-        
-        XCTAssertNil(error, @"Parsing properly formatted certificate and key files should not result in an error.");
-        
-        XCTAssertNotNil(items, @"Resulting items array should not be nil");
-        XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
-        
-        XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
-    }
+- (void)test_parseCertificateFilePrivateKeyFile_InvalidCertificatePath_failsWithInvalidCertificateError {
+        NSError *error;
+    [CRHTTPSHelper.new parseCertificateFile:InvalidPath privateKeyFile:InvalidPath error:&error];
 
-    // Test PEM-encoded chained certificate bundle and key
-    {
-        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+    XCTAssertNotNil(error, @"Parsing a non-existent certificate file should result in an error.");
+    XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
+    XCTAssertEqual(error.code, CRHTTPSInvalidCertificateError, @"Non-existent certificate files should yield CRHTTPSInvalidCertificateError errors.");
+}
 
-        NSString *certificate = PEMBundlePath;
-        NSString *key = PEMKeyPath;
-        NSError *error = nil;
-        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
+- (void)test_parseCertificateFilePrivateKeyFile_InvalidCertificatePath_yieldsNilCertificatesArray {
+    XCTAssertNil([CRHTTPSHelper.new parseCertificateFile:InvalidPath privateKeyFile:InvalidPath error:nil], @"Resulting items array should be nil");
+}
 
-        NSUInteger expectedItemsCount;
+- (void)test_parseCertificateFilePrivateKeyFile_ValidCertificatePathInvalidKeyPath_failsWithInvalidPrivateKeyError {
+    NSError *error;
+    [CRHTTPSHelper.new parseCertificateFile:JunkPath privateKeyFile:InvalidPath error:&error];
+
+    XCTAssertNotNil(error, @"Parsing a non-existent private key file should result in an error.");
+    XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
+    XCTAssertEqual(error.code, CRHTTPSInvalidPrivateKeyError, @"Non-existent private key files should yield CRHTTPSInvalidPrivateKeyError errors.");
+}
+
+- (void)test_parseCertificateFilePrivateKeyFile_ValidCertificatePathInvalidKeyPath_yieldsNilCertificatesArray {
+    XCTAssertNil([CRHTTPSHelper.new parseCertificateFile:JunkPath privateKeyFile:InvalidPath error:nil], @"Resulting items array should be nil");
+}
+
+- (void)test_parseCertificateFilePrivateKeyFile_MalformedCertificate_failsWithInvalidCertificateError {
+    NSError *error;
+    [CRHTTPSHelper.new parseCertificateFile:JunkPath privateKeyFile:JunkPath error:&error];
+
+    XCTAssertNotNil(error, @"Parsing an invalid certificate file should result in an error.");
+    XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
+    XCTAssertEqual(error.code, CRHTTPSInvalidCertificateError, @"Invalid certificate files should yield CRHTTPSInvalidCertificateError errors.");
+}
+
+- (void)test_parseCertificateFilePrivateKeyFile_MalformedCertificate_yieldsNilCertificatesArray {
+    XCTAssertNil([CRHTTPSHelper.new parseCertificateFile:JunkPath privateKeyFile:JunkPath error:nil], @"Resulting items array should be nil");
+}
+
+- (void)test_parseCertificateFilePrivateKeyFile_ValidCertificateMalformedPrivateKey_failsWithInvalidPrivateKeyError {
+    NSError *error;
+    [CRHTTPSHelper.new parseCertificateFile:PEMCertificatePath privateKeyFile:JunkPath error:&error];
+
+    XCTAssertNotNil(error, @"Parsing an invalid key file should result in an error.");
+    XCTAssertEqualObjects(error.domain, CRHTTPSErrorDomain, @"CRHTTPS errors should have the domain CRHTTPSErrorDomain.");
+    XCTAssertEqual(error.code, CRHTTPSInvalidPrivateKeyError, @"Invalid key files should yield CRHTTPSInvalidPrivateKeyError errors.");
+}
+
+- (void)test_parseCertificateFilePrivateKeyFile_ValidCertificateMalformedPrivateKey_yieldsNilCertificatesArray {
+    XCTAssertNil([CRHTTPSHelper.new parseCertificateFile:PEMCertificatePath privateKeyFile:JunkPath error:nil], @"Resulting items array should be nil");
+}
+
+- (void)test_parseCertificateFilePrivateKeyFile_ValidPEMCertificateAndPrivateKey_succeedsWithNoError {
+    NSError *error;
+    [CRHTTPSHelper.new parseCertificateFile:PEMCertificatePath privateKeyFile:PEMKeyPath error:&error];
+    
+    XCTAssertNil(error, @"Parsing properly formatted certificate and key files should not result in an error.");
+}
+
+- (void)test_parseCertificateFilePrivateKeyFile_ValidPEMCertificateAndPrivateKey_yieldsCorrectCertificatesArray {
+    NSUInteger expectedItemsCount = 1; // [identity]
+
+    NSArray *items = [CRHTTPSHelper.new parseCertificateFile:PEMCertificatePath privateKeyFile:PEMKeyPath error:nil];
+    
+    XCTAssertNotNil(items, @"Resulting items array should not be nil");
+    XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
+    
+    XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
+}
+
+- (void)test_parseCertificateFilePrivateKeyFile_ValidDERCertificateAndPrivateKey_succeedsWithNoError {
+    NSError *error;
+    [CRHTTPSHelper.new parseCertificateFile:DERCertificatePath privateKeyFile:DERKeyPath error:&error];
+    
+    XCTAssertNil(error, @"Parsing properly formatted certificate and key files should not result in an error.");
+}
+
+- (void)test_parseCertificateFilePrivateKeyFile_ValidDERCertificateAndPrivateKey_yieldsCorrectCertificatesArray {
+    NSUInteger expectedItemsCount = 1; // [identity]
+
+    NSArray *items = [CRHTTPSHelper.new parseCertificateFile:DERCertificatePath privateKeyFile:DERKeyPath error:nil];
+    
+    XCTAssertNotNil(items, @"Resulting items array should not be nil");
+    XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
+    
+    XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
+}
+
+- (void)test_parseCertificateFilePrivateKeyFile_ValidPEMCertificateAndDERPrivateKey_succeedsWithNoError {
+    NSError *error;
+    [CRHTTPSHelper.new parseCertificateFile:PEMCertificatePath privateKeyFile:DERKeyPath error:&error];
+    
+    XCTAssertNil(error, @"Parsing properly formatted certificate and key files should not result in an error.");
+}
+
+- (void)test_parseCertificateFilePrivateKeyFile_ValidPEMCertificateAndDERPrivateKey_yieldsCorrectCertificatesArray {
+    NSUInteger expectedItemsCount = 1; // [identity]
+
+    NSArray *items = [CRHTTPSHelper.new parseCertificateFile:PEMCertificatePath privateKeyFile:DERKeyPath error:nil];
+    
+    XCTAssertNotNil(items, @"Resulting items array should not be nil");
+    XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
+    
+    XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
+}
+
+- (void)test_parseCertificateFilePrivateKeyFile_ValidDERCertificateAndPEMPrivateKey_succeedsWithNoError {
+    NSError *error;
+    [CRHTTPSHelper.new parseCertificateFile:DERCertificatePath privateKeyFile:PEMKeyPath error:&error];
+    
+    XCTAssertNil(error, @"Parsing properly formatted certificate and key files should not result in an error.");
+}
+
+- (void)test_parseCertificateFilePrivateKeyFile_ValidDERCertificateAndPEMPrivateKey_yieldsCorrectCertificatesArray {
+    NSUInteger expectedItemsCount = 1; // [identity]
+
+    NSArray *items = [CRHTTPSHelper.new parseCertificateFile:DERCertificatePath privateKeyFile:PEMKeyPath error:nil];
+    
+    XCTAssertNotNil(items, @"Resulting items array should not be nil");
+    XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
+    
+    XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
+}
+
+- (void)test_parseCertificateFilePrivateKeyFile_ValidPEMFullchainCertificateAndPrivateKey_succeedsWithNoError {
+    NSError *error;
+    [CRHTTPSHelper.new parseCertificateFile:PEMBundlePath privateKeyFile:PEMKeyPath error:&error];
+    
+    XCTAssertNil(error, @"Parsing properly formatted certificate and key files should not result in an error.");
+}
+
+- (void)test_parseCertificateFilePrivateKeyFile_ValidPEMFullchainCertificateAndPrivateKey_yieldsCorrectCertificatesArray {
 #if SEC_OS_OSX_INCLUDES
-        expectedItemsCount = 3; // [identity, cert (intermediate), cert (root)]
+    NSUInteger expectedItemsCount = 3; // [identity, cert (intermediate), cert (root)]
 #else
-        expectedItemsCount = 1; // [identity]
+    NSUInteger expectedItemsCount = 1; // [identity]
 #endif
-
-        XCTAssertNil(error, @"Parsing properly formatted certificate and key files should not result in an error.");
-
-        XCTAssertNotNil(items, @"Resulting items array should not be nil");
-        XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
-
-        XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
-#if SEC_OS_OSX_INCLUDES
-        XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[1]), @"The second item in the array should be a SecCertificateRef");
-        XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[2]), @"The third item in the array should be a SecCertificateRef");
-#endif
-    }
     
-    // Test PEM-encoded chained certificate bundle and DER-encoded key
-    {
-        CRHTTPSHelper *httpsHelper = [CRHTTPSHelper new];
+    NSArray *items = [CRHTTPSHelper.new parseCertificateFile:PEMBundlePath privateKeyFile:PEMKeyPath error:nil];
+    
+    XCTAssertNotNil(items, @"Resulting items array should not be nil");
+    XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
+    
+    XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
+#if SEC_OS_OSX_INCLUDES
+    XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[1]), @"The second item in the array should be a SecCertificateRef");
+    XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[2]), @"The third item in the array should be a SecCertificateRef");
+#endif
+}
 
-        NSString *certificate = PEMBundlePath;
-        NSString *key = DERKeyPath;
-        NSError *error = nil;
-        NSArray *items = [httpsHelper parseCertificateFile:certificate certificateKeyFile:key withError:&error];
-        
-        NSUInteger expectedItemsCount;
+- (void)test_parseCertificateFilePrivateKeyFile_ValidPEMFullchainCertificateAndDERPrivateKey_succeedsWithNoError {
+    NSError *error;
+    [CRHTTPSHelper.new parseCertificateFile:PEMBundlePath privateKeyFile:DERKeyPath error:&error];
+    
+    XCTAssertNil(error, @"Parsing properly formatted certificate and key files should not result in an error.");
+}
+
+- (void)test_parseCertificateFilePrivateKeyFile_ValidPEMFullchainCertificateAndDERPrivateKey_yieldsCorrectCertificatesArray {
 #if SEC_OS_OSX_INCLUDES
-        expectedItemsCount = 3; // [identity, cert (intermediate), cert (root)]
+    NSUInteger expectedItemsCount = 3; // [identity, cert (intermediate), cert (root)]
 #else
-        expectedItemsCount = 1; // [identity]
+    NSUInteger expectedItemsCount = 1; // [identity]
 #endif
-        
-        XCTAssertNil(error, @"Parsing properly formatted certificate and key files should not result in an error.");
-        
-        XCTAssertNotNil(items, @"Resulting items array should not be nil");
-        XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
-        
-        XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
+    
+    NSArray *items = [CRHTTPSHelper.new parseCertificateFile:PEMBundlePath privateKeyFile:DERKeyPath error:nil];
+    
+    XCTAssertNotNil(items, @"Resulting items array should not be nil");
+    XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
+    
+    XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
 #if SEC_OS_OSX_INCLUDES
-        XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[1]), @"The second item in the array should be a SecCertificateRef");
-        XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[2]), @"The third item in the array should be a SecCertificateRef");
+    XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[1]), @"The second item in the array should be a SecCertificateRef");
+    XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[2]), @"The third item in the array should be a SecCertificateRef");
 #endif
-    }
 }
 
 @end
