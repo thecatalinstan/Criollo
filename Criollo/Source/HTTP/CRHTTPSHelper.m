@@ -68,7 +68,7 @@ NS_ASSUME_NONNULL_END
 
 @implementation CRHTTPSHelper
 
-- (NSArray *)parseIdentrityFile:(NSString *)identityFilePath password:(nonnull NSString *)password withError:(NSError *__autoreleasing  _Nullable * _Nullable)error {
+- (NSArray *)parseIdentrityFile:(NSString *)identityFilePath password:(nonnull NSString *)password error:(NSError *__autoreleasing  _Nullable * _Nullable)error {
     NSError * identityReadError;
     NSData * identityContents = [NSData dataWithContentsOfFile:identityFilePath options:NSDataReadingUncached error:&identityReadError];
     if (identityContents.length == 0) {
@@ -121,7 +121,7 @@ NS_ASSUME_NONNULL_END
     return result;
 }
 
-- (NSArray *)parseCertificateFile:(NSString *)certificatePath certificateKeyFile:(NSString *)certificateKeyPath withError:(NSError *__autoreleasing  _Nullable * _Nullable)error {
+- (NSArray *)parseCertificateFile:(NSString *)certificatePath privateKeyFile:(NSString *)certificateKeyPath error:(NSError *__autoreleasing  _Nullable * _Nullable)error {
     
     NSError * certReadError;
     NSData * certContents = [NSData dataWithContentsOfFile:certificatePath options:NSDataReadingUncached error:&certReadError];
@@ -150,7 +150,7 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
     
-    NSArray *result = [self parseIdentrityFile:identityPath password:password withError:error];
+    NSArray *result = [self parseIdentrityFile:identityPath password:password error:error];
     [NSFileManager.defaultManager removeItemAtPath:identityPath error:nil];
     
     return result;

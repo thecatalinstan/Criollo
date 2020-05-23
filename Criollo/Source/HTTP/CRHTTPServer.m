@@ -53,9 +53,9 @@
         self.httpsHelper = [CRHTTPSHelper new];
         
         if ( self.identityPath.length > 0 ) {
-            self.certificates = [self.httpsHelper parseIdentrityFile:self.identityPath password:self.password withError:error];
+            self.certificates = [self.httpsHelper parseIdentrityFile:self.identityPath password:self.password error:error];
         } else if ( self.certificatePath.length > 0 && self.certificateKeyPath.length > 0 ) {
-            self.certificates = [self.httpsHelper parseCertificateFile:self.certificatePath certificateKeyFile:self.certificateKeyPath withError:error];
+            self.certificates = [self.httpsHelper parseCertificateFile:self.certificatePath privateKeyFile:self.certificateKeyPath error:error];
         } else if ( error != NULL ) {
             NSDictionary *info = @{
                 NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse credential settings.",),
