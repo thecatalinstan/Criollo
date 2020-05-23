@@ -399,7 +399,7 @@
     [bodyVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) { @autoreleasepool {
         NSArray<NSString *> *bodyVarComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
         NSString *key = bodyVarComponents[0].stringByDecodingURLEncodedString.stringByRemovingPercentEncoding ? : (bodyVarComponents[0].stringByDecodingURLEncodedString ? : bodyVarComponents[0]);
-        NSString *value = bodyVarComponents.count > 1 ? (bodyVarComponents[1].stringByDecodingURLEncodedString.stringByRemovingPercentEncoding ? : (bodyVarComponents[0].stringByDecodingURLEncodedString ? : bodyVarComponents[1])) : @"";
+        NSString *value = bodyVarComponents.count > 1 ? (bodyVarComponents[1].stringByDecodingURLEncodedString.stringByRemovingPercentEncoding ? : (bodyVarComponents[1].stringByDecodingURLEncodedString ? : bodyVarComponents[1])) : @"";
         body[key] = value;
     }}];
     _body = body;
