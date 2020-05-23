@@ -14,11 +14,11 @@
 #define InvalidPath         @"/path/that/does/not/exist"
 #define JunkPath            [self pathForSampleFile:@"CRHTTPSHelperTests.junk"]
 
-#define PEMCertificatePath  [self pathForSampleFile:@"CRHTTPSHelperTests.pem"];
-#define PEMKeyPath          [self pathForSampleFile:@"CRHTTPSHelperTests.key.pem"];
-#define PEMBundlePath       [self pathForSampleFile:@"CRHTTPSHelperTests.bundle.pem"];
+#define PEMCertificatePath  [self pathForSampleFile:@"CRHTTPSHelperTests.pem"]
+#define PEMKeyPath          [self pathForSampleFile:@"CRHTTPSHelperTests.key.pem"]
+#define PEMBundlePath       [self pathForSampleFile:@"CRHTTPSHelperTests.bundle.pem"]
 
-#define DERCertificatePath  [self pathForSampleFile:@"CRHTTPSHelperTests.der"];
+#define DERCertificatePath  [self pathForSampleFile:@"CRHTTPSHelperTests.der"]
 #define DERKeyPath          [self pathForSampleFile:@"CRHTTPSHelperTests.key.der"];
 
 #define PKCS12IdentityPath  [self pathForSampleFile:@"CRHTTPSHelperTests.p12"]
@@ -150,7 +150,7 @@
     CRHTTPServerStop();
 }
 
-- (void)test_isSecure_ValidIdentityAndPassword_succeeds {
+- (void)test_isSecure_ValidIdentityAndPassword_succeedsWithNoError {
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.identityPath = PKCS12IdentityPath;
@@ -296,7 +296,7 @@
     CRHTTPServerStop();
 }
 
-- (void)test_isSecure_ValidPEMCertificateAndPrivateKey_succeeds {
+- (void)test_isSecure_ValidPEMCertificateAndPrivateKey_succeedsWithNoError {
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = PEMCertificatePath;
@@ -323,7 +323,7 @@
     XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
 }
 
-- (void)test_isSecure_ValidDERCertificateAndPrivateKey_succeeds {
+- (void)test_isSecure_ValidDERCertificateAndPrivateKey_succeedsWithNoError {
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = DERCertificatePath;
@@ -355,7 +355,7 @@
     CRHTTPServerStop();
 }
 
-- (void)test_isSecure_ValidPEMCertificateAndDERPrivateKey_succeeds {
+- (void)test_isSecure_ValidPEMCertificateAndDERPrivateKey_succeedsWithNoError {
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = PEMCertificatePath;
@@ -387,7 +387,7 @@
     CRHTTPServerStop();
 }
 
-- (void)test_isSecure_ValidDERCertificateAndPEMPrivateKey_succeeds {
+- (void)test_isSecure_ValidDERCertificateAndPEMPrivateKey_succeedsWithNoError {
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = DERCertificatePath;
@@ -419,7 +419,7 @@
     CRHTTPServerStop();
 }
 
-- (void)test_isSecure_ValidPEMFullchainCertificateAndPEMPrivateKey_succeeds {
+- (void)test_isSecure_ValidPEMFullchainCertificateAndPEMPrivateKey_succeedsWithNoError {
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = PEMBundlePath;
@@ -458,7 +458,7 @@
 #endif
 }
 
-- (void)test_isSecure_ValidPEMFullchainCertificateAndDERPrivateKey_succeeds {
+- (void)test_isSecure_ValidPEMFullchainCertificateAndDERPrivateKey_succeedsWithNoError {
     CRHTTPServerCreate();
     server.isSecure = YES;
     server.certificatePath = PEMBundlePath;

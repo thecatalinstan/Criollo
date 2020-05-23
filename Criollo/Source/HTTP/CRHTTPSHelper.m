@@ -71,8 +71,14 @@ NS_ASSUME_NONNULL_END
 - (NSArray *)parseIdentrityFile:(NSString *)identityFilePath password:(nonnull NSString *)password withError:(NSError *__autoreleasing  _Nullable * _Nullable)error {
     NSError * identityReadError;
     NSData * identityContents = [NSData dataWithContentsOfFile:identityFilePath options:NSDataReadingUncached error:&identityReadError];
-    if ( identityContents.length == 0 ) {
-        *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidIdentityError userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse PKCS12 identity file.",), NSUnderlyingErrorKey: identityReadError, CRHTTPSIdentityPathKey: identityFilePath ? : @"(null)"}];
+    if (identityContents.length == 0) {
+        if (error != NULL) {
+            NSMutableDictionary<NSErrorUserInfoKey, id> *info = [NSMutableDictionary dictionaryWithCapacity:3];
+            info[NSLocalizedDescriptionKey] = NSLocalizedString(@"Unable to parse PKCS12 identity file.",);
+            info[NSUnderlyingErrorKey] = identityReadError;
+            info[CRHTTPSIdentityPathKey] = identityFilePath;
+            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidIdentityError userInfo:info];
+        }
         return nil;
     }
     
