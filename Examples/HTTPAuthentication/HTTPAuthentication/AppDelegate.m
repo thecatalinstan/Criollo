@@ -101,6 +101,8 @@ static uint16_t const port = 10781;
     if (!(authorization = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding])) {
         return NO;
     }
+	
+    NSLog(@"%s %@", __PRETTY_FUNCTION__, authorization);
     
     // For the purspose of this demo, we'll allow any credentials
     return YES;
