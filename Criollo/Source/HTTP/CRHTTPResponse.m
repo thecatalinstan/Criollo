@@ -6,14 +6,16 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
+#import "CRHTTPResponse.h"
+
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
+
 #import "CRMessage_Internal.h"
 #import "CRResponse_Internal.h"
-#import "CRHTTPResponse.h"
 #import "CRHTTPConnection.h"
 #import "CRConnection_Internal.h"
 #import "CRHTTPServer.h"
 #import "CRHTTPServerConfiguration.h"
-#import "GCDAsyncSocket.h"
 #import "NSDate+RFC1123.h"
 
 @interface CRHTTPResponse ()

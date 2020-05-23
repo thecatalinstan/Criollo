@@ -10,7 +10,8 @@
 #import "CRHTTPConnection.h"
 #import "CRConnection_Internal.h"
 #import "CRRequest.h"
-#import "GCDAsyncSocket.h"
+
+@class GCDAsyncSocket;
 
 #define CRHTTPConnectionCreate() CRHTTPConnection *connection = [[CRHTTPConnection alloc] init]
 

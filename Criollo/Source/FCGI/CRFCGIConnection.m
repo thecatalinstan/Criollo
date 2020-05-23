@@ -6,9 +6,12 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
+#import "CRFCGIConnection.h"
+
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
+
 #import "CRResponse_Internal.h"
 #import "CRFCGIResponse.h"
-#import "CRFCGIConnection.h"
 #import "CRConnection_Internal.h"
 #import "CRApplication.h"
 #import "CRServer_Internal.h"
@@ -17,7 +20,6 @@
 #import "CRFCGIRequest.h"
 #import "CRRequest_Internal.h"
 #import "CRFCGIRecord.h"
-#import "GCDAsyncSocket.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

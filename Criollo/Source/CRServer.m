@@ -7,10 +7,12 @@
 //
 
 #import "CRServer.h"
+
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
+
 #import "CRServer_Internal.h"
 #import "CRRouter_Internal.h"
 #import "CRServerConfiguration.h"
-#import "GCDAsyncSocket.h"
 #import "CRConnection.h"
 #import "CRConnection_Internal.h"
 #import "CRMessage_Internal.h"
