@@ -22,7 +22,6 @@
 		ADC081211D3EBD2B00E9E05D /* MultiRouteViewController.html in Resources */ = {isa = PBXBuildFile; fileRef = ADC081201D3EBD2B00E9E05D /* MultiRouteViewController.html */; };
 		ADC1A5C51CA30F49009A4A19 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC1A5C41CA30F49009A4A19 /* AppDelegate.m */; };
 		ADC1A5C81CA30F49009A4A19 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC1A5C71CA30F49009A4A19 /* main.m */; };
-		ADC1A5CA1CA30F49009A4A19 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADC1A5C91CA30F49009A4A19 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -61,7 +60,6 @@
 		ADC1A5C31CA30F49009A4A19 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		ADC1A5C41CA30F49009A4A19 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		ADC1A5C71CA30F49009A4A19 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		ADC1A5C91CA30F49009A4A19 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ADC1A5CE1CA30F49009A4A19 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -124,7 +122,6 @@
 				ADC081181D3E712200E9E05D /* APIController.h */,
 				ADC081191D3E712200E9E05D /* APIController.m */,
 				ADC1A5C71CA30F49009A4A19 /* main.m */,
-				ADC1A5C91CA30F49009A4A19 /* Assets.xcassets */,
 				ADC1A5CE1CA30F49009A4A19 /* Info.plist */,
 				AD554D911CAC97C7002182A4 /* HelloWorldViewController.h */,
 				AD554D931CAC97C7002182A4 /* HelloWorldViewController.m */,
@@ -212,7 +209,6 @@
 				4AF762301F93C5B00061EFC9 /* key.der in Resources */,
 				4AF7622F1F93C5B00061EFC9 /* criollo_local.p12 in Resources */,
 				4AF762321F93C5B00061EFC9 /* cert.pem in Resources */,
-				ADC1A5CA1CA30F49009A4A19 /* Assets.xcassets in Resources */,
 				4AF762311F93C5B00061EFC9 /* cert.der in Resources */,
 				ADC081211D3EBD2B00E9E05D /* MultiRouteViewController.html in Resources */,
 				AD554D991CAC97C7002182A4 /* HelloWorldViewController.html in Resources */,
@@ -289,6 +285,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				WARNING_CFLAGS = "-Wpartial-availability";
 			};
 			name = Debug;
@@ -345,7 +342,7 @@
 		ADC1A5D21CA30F49009A4A19 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "Criollo macOS App/Info.plist";
 				LD_NO_PIE = YES;
@@ -358,7 +355,7 @@
 		ADC1A5D31CA30F49009A4A19 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_OPTIMIZATION_LEVEL = fast;
 				INFOPLIST_FILE = "Criollo macOS App/Info.plist";
