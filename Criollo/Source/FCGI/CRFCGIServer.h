@@ -6,6 +6,8 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 #import "CRServer.h"
 
 @interface CRFCGIServer : CRServer

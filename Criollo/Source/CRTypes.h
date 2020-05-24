@@ -5,6 +5,7 @@
 //  Created by Cătălin Stan on 11/20/15.
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
+#import <Foundation/Foundation.h>
 
 #define CRPathSeparator                     @"/"
 #define CRPathAnyPath                       @"*"

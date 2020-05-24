@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 #import "CRMessage.h"
 
 // Mime types of the requests we support body parsing for

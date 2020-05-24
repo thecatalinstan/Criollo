@@ -713,6 +713,7 @@
 				AD0BCC62245EBCEE0014A920 /* CRServerTests.m */,
 				AD542C0D247668F8000E5CEC /* CRServerDelegateTests.m */,
 				ADB32F8D246802D0005D729A /* CRStaticFileManagerTests.m */,
+				ADC29ADF246D3977007D443E /* CRStaticDirectoryManagerTests.m */,
 			);
 			path = CriolloTests;
 			sourceTree = "<group>";
@@ -938,7 +939,6 @@
 				AD61E98A1BDD8C8E00F5BD17 /* CRResponse.m */,
 				ADE99FB51C6B40E10080B1FA /* CRStaticDirectoryManager.h */,
 				ADC29ADD246D37E1007D443E /* CRStaticDirectoryManager_Internal.h */,
-				ADC29ADF246D3977007D443E /* CRStaticDirectoryManagerTests.m */,
 				ADE99FB61C6B40E10080B1FA /* CRStaticDirectoryManager.m */,
 				AD9BE7F21C91B9A400CE52B0 /* CRStaticFileManager.h */,
 				ADB32F8624680015005D729A /* CRStaticFileManager_Internal.h */,

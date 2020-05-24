@@ -6,6 +6,8 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 #import "CRServerConfiguration.h"
 
 @interface CRHTTPServerConfiguration : CRServerConfiguration

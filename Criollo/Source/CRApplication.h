@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Catalin Stan. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 /**
  * These constants define wether a Criollo app should terminate or not and are
  * are used by the CRApplicationDelegate method `applicationShouldTerminate`.

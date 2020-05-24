@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 #import "CRMessage.h"
 
 // Initial size of the response body data object

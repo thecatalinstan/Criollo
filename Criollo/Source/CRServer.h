@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Cătălin Stan. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 #import "CRTypes.h"
 #import "CRRouter.h"
 
