@@ -13,6 +13,7 @@ let package = Package(
     products: [
         .library(
             name: "Criollo",
+            type: .dynamic,
             targets: ["Criollo"]),
     ],
     dependencies: [
@@ -21,8 +22,9 @@ let package = Package(
     targets: [
         .target(
             name: "Criollo",            
+            dependencies: ["CocoaAsyncSocket"],
             path: "Criollo/",
-            publicHeadersPath: ""),
+            publicHeadersPath: "Criollo"),
 
         .testTarget(name: "CriolloTests",
                     dependencies: ["Criollo"],
