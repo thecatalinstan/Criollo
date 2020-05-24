@@ -15,11 +15,9 @@
 		4AC710A21F994D6000CCE070 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4AC710A01F994D6000CCE070 /* Main.storyboard */; };
 		4AC710A41F994D6000CCE070 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4AC710A31F994D6000CCE070 /* Assets.xcassets */; };
 		4AC710A71F994D6000CCE070 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4AC710A51F994D6000CCE070 /* LaunchScreen.storyboard */; };
-		F59B00B8BCCDA0047F72D4A5 /* Pods_SecureHTTPServer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD4B9C2D8563518E8B72435D /* Pods_SecureHTTPServer.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0A5758F3D38605C8F5872910 /* Pods-SecureHTTPServer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureHTTPServer.release.xcconfig"; path = "Pods/Target Support Files/Pods-SecureHTTPServer/Pods-SecureHTTPServer.release.xcconfig"; sourceTree = "<group>"; };
 		4A22CEB31F99554A00BA1DD9 /* SecureHTTPServer.bundle.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SecureHTTPServer.bundle.pem; sourceTree = "<group>"; };
 		4A22CEB41F99554A00BA1DD9 /* SecureHTTPServer.key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SecureHTTPServer.key.pem; sourceTree = "<group>"; };
 		4A22CEB51F99554A00BA1DD9 /* SecureHTTPServer.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = SecureHTTPServer.p12; sourceTree = "<group>"; };
@@ -30,8 +28,6 @@
 		4AC710A31F994D6000CCE070 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4AC710A61F994D6000CCE070 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4AC710A81F994D6000CCE070 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BD4B9C2D8563518E8B72435D /* Pods_SecureHTTPServer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SecureHTTPServer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		EE6703EB4B40D8BBC776DC2F /* Pods-SecureHTTPServer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureHTTPServer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SecureHTTPServer/Pods-SecureHTTPServer.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,7 +35,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F59B00B8BCCDA0047F72D4A5 /* Pods_SecureHTTPServer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,8 +57,6 @@
 				4AC7109B1F994D6000CCE070 /* SecureHTTPServer */,
 				4A22CEB21F99554A00BA1DD9 /* Certificates */,
 				4AC7109A1F994D6000CCE070 /* Products */,
-				7C48492BF3BF709030DCCD8E /* Pods */,
-				FCA8634FB6CADF47A208AA21 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -88,23 +81,6 @@
 			path = SecureHTTPServer;
 			sourceTree = "<group>";
 		};
-		7C48492BF3BF709030DCCD8E /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				EE6703EB4B40D8BBC776DC2F /* Pods-SecureHTTPServer.debug.xcconfig */,
-				0A5758F3D38605C8F5872910 /* Pods-SecureHTTPServer.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		FCA8634FB6CADF47A208AA21 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				BD4B9C2D8563518E8B72435D /* Pods_SecureHTTPServer.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -112,11 +88,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4AC710AB1F994D6000CCE070 /* Build configuration list for PBXNativeTarget "SecureHTTPServer" */;
 			buildPhases = (
-				7D707F053E00E4CFBE64B005 /* [CP] Check Pods Manifest.lock */,
 				4AC710951F994D5F00CCE070 /* Sources */,
 				4AC710961F994D5F00CCE070 /* Frameworks */,
 				4AC710971F994D5F00CCE070 /* Resources */,
-				B5D60050C67C9BCFF50E3D80 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -177,49 +151,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		7D707F053E00E4CFBE64B005 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SecureHTTPServer-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B5D60050C67C9BCFF50E3D80 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SecureHTTPServer/Pods-SecureHTTPServer-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/CSSystemInfoHelper/CSSystemInfoHelper.framework",
-				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
-				"${BUILT_PRODUCTS_DIR}/Criollo/Criollo.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CSSystemInfoHelper.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Criollo.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SecureHTTPServer/Pods-SecureHTTPServer-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4AC710951F994D5F00CCE070 /* Sources */ = {
@@ -366,7 +297,6 @@
 		};
 		4AC710AC1F994D6000CCE070 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EE6703EB4B40D8BBC776DC2F /* Pods-SecureHTTPServer.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "";
@@ -383,7 +313,6 @@
 		};
 		4AC710AD1F994D6000CCE070 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0A5758F3D38605C8F5872910 /* Pods-SecureHTTPServer.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "";

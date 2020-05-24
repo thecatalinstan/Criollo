@@ -11,7 +11,6 @@
 		4A37248E1F7CD5F90081A696 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A37248D1F7CD5F90081A696 /* AppDelegate.m */; };
 		4A3724931F7CD5F90081A696 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A3724921F7CD5F90081A696 /* Assets.xcassets */; };
 		4A3724991F7CD5F90081A696 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A3724981F7CD5F90081A696 /* main.m */; };
-		892685734944F591B5CA0D15 /* Pods_CriolloServerStats.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56D83A89B90D0D8E96774A58 /* Pods_CriolloServerStats.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,9 +21,6 @@
 		4A3724921F7CD5F90081A696 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4A3724971F7CD5F90081A696 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4A3724981F7CD5F90081A696 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		56D83A89B90D0D8E96774A58 /* Pods_CriolloServerStats.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CriolloServerStats.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		76C3EB1310BF0F72958314AD /* Pods-CriolloServerStats.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CriolloServerStats.release.xcconfig"; path = "Pods/Target Support Files/Pods-CriolloServerStats/Pods-CriolloServerStats.release.xcconfig"; sourceTree = "<group>"; };
-		B7A9A78E0AEAA7EB56D8CC7C /* Pods-CriolloServerStats.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CriolloServerStats.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CriolloServerStats/Pods-CriolloServerStats.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,7 +28,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				892685734944F591B5CA0D15 /* Pods_CriolloServerStats.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,8 +39,6 @@
 			children = (
 				4A37248B1F7CD5F90081A696 /* CriolloServerStats */,
 				4A37248A1F7CD5F90081A696 /* Products */,
-				EB2178D78DAC960442292DB3 /* Pods */,
-				63360CF1094ED2A6F0B19034 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -70,23 +63,6 @@
 			path = CriolloServerStats;
 			sourceTree = "<group>";
 		};
-		63360CF1094ED2A6F0B19034 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				56D83A89B90D0D8E96774A58 /* Pods_CriolloServerStats.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		EB2178D78DAC960442292DB3 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				B7A9A78E0AEAA7EB56D8CC7C /* Pods-CriolloServerStats.debug.xcconfig */,
-				76C3EB1310BF0F72958314AD /* Pods-CriolloServerStats.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -94,11 +70,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4A37249D1F7CD5F90081A696 /* Build configuration list for PBXNativeTarget "CriolloServerStats" */;
 			buildPhases = (
-				04BE38934AAA9470239F1831 /* [CP] Check Pods Manifest.lock */,
 				4A3724851F7CD5F90081A696 /* Sources */,
 				4A3724861F7CD5F90081A696 /* Frameworks */,
 				4A3724871F7CD5F90081A696 /* Resources */,
-				8542A310EDEB26E1DAB7186D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -153,49 +127,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		04BE38934AAA9470239F1831 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-CriolloServerStats-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8542A310EDEB26E1DAB7186D /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CriolloServerStats/Pods-CriolloServerStats-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/CSSystemInfoHelper/CSSystemInfoHelper.framework",
-				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
-				"${BUILT_PRODUCTS_DIR}/Criollo/Criollo.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CSSystemInfoHelper.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Criollo.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CriolloServerStats/Pods-CriolloServerStats-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4A3724851F7CD5F90081A696 /* Sources */ = {
@@ -321,7 +252,6 @@
 		};
 		4A37249E1F7CD5F90081A696 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B7A9A78E0AEAA7EB56D8CC7C /* Pods-CriolloServerStats.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "";
@@ -336,7 +266,6 @@
 		};
 		4A37249F1F7CD5F90081A696 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 76C3EB1310BF0F72958314AD /* Pods-CriolloServerStats.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "";

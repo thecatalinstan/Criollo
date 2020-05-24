@@ -7,20 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5DB193CD3793874B7F357C15 /* Pods_HTTPAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20AB8D97BEE7F4C71D5C2EA2 /* Pods_HTTPAuthentication.framework */; };
 		ADBB1D31247137F000D4F51F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADBB1D30247137F000D4F51F /* AppDelegate.m */; };
 		ADBB1D39247137F300D4F51F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADBB1D38247137F300D4F51F /* main.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		20AB8D97BEE7F4C71D5C2EA2 /* Pods_HTTPAuthentication.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HTTPAuthentication.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9725DE62C856AE1428B3E333 /* Pods-HTTPAuthentication.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HTTPAuthentication.debug.xcconfig"; path = "Target Support Files/Pods-HTTPAuthentication/Pods-HTTPAuthentication.debug.xcconfig"; sourceTree = "<group>"; };
 		ADBB1D2C247137F000D4F51F /* HTTPAuthentication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HTTPAuthentication.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADBB1D2F247137F000D4F51F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		ADBB1D30247137F000D4F51F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		ADBB1D37247137F300D4F51F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ADBB1D38247137F300D4F51F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		E60EBBF499E5C07E45D3790D /* Pods-HTTPAuthentication.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HTTPAuthentication.release.xcconfig"; path = "Target Support Files/Pods-HTTPAuthentication/Pods-HTTPAuthentication.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -28,28 +24,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5DB193CD3793874B7F357C15 /* Pods_HTTPAuthentication.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		9A88374F5267E1F4BA21C87B /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				20AB8D97BEE7F4C71D5C2EA2 /* Pods_HTTPAuthentication.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		ADBB1D23247137F000D4F51F = {
 			isa = PBXGroup;
 			children = (
 				ADBB1D2E247137F000D4F51F /* HTTPAuthentication */,
 				ADBB1D2D247137F000D4F51F /* Products */,
 				B027AE5FB1611177DF697CDC /* Pods */,
-				9A88374F5267E1F4BA21C87B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -75,8 +61,6 @@
 		B027AE5FB1611177DF697CDC /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				9725DE62C856AE1428B3E333 /* Pods-HTTPAuthentication.debug.xcconfig */,
-				E60EBBF499E5C07E45D3790D /* Pods-HTTPAuthentication.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -88,11 +72,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = ADBB1D3D247137F300D4F51F /* Build configuration list for PBXNativeTarget "HTTPAuthentication" */;
 			buildPhases = (
-				1636E69DB7657852427C6470 /* [CP] Check Pods Manifest.lock */,
 				ADBB1D28247137F000D4F51F /* Sources */,
 				ADBB1D29247137F000D4F51F /* Frameworks */,
 				ADBB1D2A247137F000D4F51F /* Resources */,
-				3B87317E8618C2DFA3AFBC06 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -145,48 +127,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		1636E69DB7657852427C6470 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-HTTPAuthentication-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		3B87317E8618C2DFA3AFBC06 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HTTPAuthentication/Pods-HTTPAuthentication-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HTTPAuthentication/Pods-HTTPAuthentication-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HTTPAuthentication/Pods-HTTPAuthentication-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		ADBB1D28247137F000D4F51F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -232,8 +172,8 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_STYLE = Manual;
 				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -292,8 +232,8 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_STYLE = Manual;
 				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -315,7 +255,6 @@
 		};
 		ADBB1D3E247137F300D4F51F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9725DE62C856AE1428B3E333 /* Pods-HTTPAuthentication.debug.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = HTTPAuthentication/Info.plist;
@@ -331,7 +270,6 @@
 		};
 		ADBB1D3F247137F300D4F51F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E60EBBF499E5C07E45D3790D /* Pods-HTTPAuthentication.release.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = HTTPAuthentication/Info.plist;
