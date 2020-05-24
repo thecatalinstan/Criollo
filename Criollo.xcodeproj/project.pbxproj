@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4A22CEB11F99514F00BA1DD9 /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A22CEB01F99514F00BA1DD9 /* openssl.framework */; };
 		4A2F43CC1F659FE400A466D5 /* CRHTTPSHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A2F43CA1F659FE400A466D5 /* CRHTTPSHelper.h */; };
 		4A2F43CD1F659FE400A466D5 /* CRHTTPSHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A2F43CA1F659FE400A466D5 /* CRHTTPSHelper.h */; };
 		4A2F43CE1F659FE400A466D5 /* CRHTTPSHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F43CB1F659FE400A466D5 /* CRHTTPSHelper.m */; };
@@ -316,6 +315,8 @@
 		ADD2B60D1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m in Sources */ = {isa = PBXBuildFile; fileRef = ADD2B60B1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m */; };
 		ADD2B60E1BFE70C300E2E632 /* NSHTTPCookie+Criollo.m in Sources */ = {isa = PBXBuildFile; fileRef = ADD2B60B1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m */; };
 		ADD2B60F1BFE70C900E2E632 /* NSHTTPCookie+Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = ADD2B60A1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h */; };
+		ADD8B8EA247A623600BE6F94 /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A22CEB01F99514F00BA1DD9 /* openssl.framework */; };
+		ADD8B8EB247A623600BE6F94 /* openssl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4A22CEB01F99514F00BA1DD9 /* openssl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		ADE99FB71C6B40E10080B1FA /* CRStaticDirectoryManager.h in Headers */ = {isa = PBXBuildFile; fileRef = ADE99FB51C6B40E10080B1FA /* CRStaticDirectoryManager.h */; };
 		ADE99FB81C6B40E10080B1FA /* CRStaticDirectoryManager.h in Headers */ = {isa = PBXBuildFile; fileRef = ADE99FB51C6B40E10080B1FA /* CRStaticDirectoryManager.h */; };
 		ADE99FB91C6B40E10080B1FA /* CRStaticDirectoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE99FB61C6B40E10080B1FA /* CRStaticDirectoryManager.m */; };
@@ -405,6 +406,20 @@
 			remoteGlobalIDString = 9FC41F121B9D965000578BEB;
 			remoteInfo = "Mac CocoaAsyncSocket";
 		};
+		ADD8B8E8247A622900BE6F94 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AD7009DD24792E7900F3C06A /* CocoaAsyncSocket.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6CD9900F1B77868C0011A685;
+			remoteInfo = "iOS CocoaAsyncSocket";
+		};
+		ADD8B8EC247A628F00BE6F94 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AD7009DD24792E7900F3C06A /* CocoaAsyncSocket.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7D8B70C31BCFA15700D8E273;
+			remoteInfo = "tvOS CocoaAsyncSocket";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -426,6 +441,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				AD7009F22479305300F3C06A /* CocoaAsyncSocket.framework in Embed Frameworks */,
+				ADD8B8EB247A623600BE6F94 /* openssl.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -614,7 +630,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD7009F12479305300F3C06A /* CocoaAsyncSocket.framework in Frameworks */,
-				4A22CEB11F99514F00BA1DD9 /* openssl.framework in Frameworks */,
+				ADD8B8EA247A623600BE6F94 /* openssl.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1113,6 +1129,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				ADD8B8ED247A628F00BE6F94 /* PBXTargetDependency */,
 			);
 			name = "Criollo tvOS";
 			productName = "Criollo-tvos";
@@ -1186,6 +1203,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				ADD8B8E9247A622900BE6F94 /* PBXTargetDependency */,
 			);
 			name = "Criollo iOS";
 			productName = CriolloiOS;
@@ -1225,21 +1243,15 @@
 				TargetAttributes = {
 					4ABB1DD91F9E6B0900480EC7 = {
 						CreatedOnToolsVersion = 9.0.1;
-						ProvisioningStyle = Automatic;
 					};
 					4ABB1DE11F9E6B0A00480EC7 = {
 						CreatedOnToolsVersion = 9.0.1;
-						ProvisioningStyle = Automatic;
 					};
 					AD030FDA1F0C02C900BD9FE4 = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = JNX7A8G939;
-						ProvisioningStyle = Automatic;
 					};
 					AD030FEB1F0C037500BD9FE4 = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = JNX7A8G939;
-						ProvisioningStyle = Automatic;
 					};
 					AD5FFFCB1BF0024D00A57FE9 = {
 						CreatedOnToolsVersion = 7.1;
@@ -1620,6 +1632,16 @@
 			name = "Mac CocoaAsyncSocket";
 			targetProxy = AD7009EF24792EE000F3C06A /* PBXContainerItemProxy */;
 		};
+		ADD8B8E9247A622900BE6F94 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "iOS CocoaAsyncSocket";
+			targetProxy = ADD8B8E8247A622900BE6F94 /* PBXContainerItemProxy */;
+		};
+		ADD8B8ED247A628F00BE6F94 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "tvOS CocoaAsyncSocket";
+			targetProxy = ADD8B8EC247A628F00BE6F94 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -1633,7 +1655,6 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1673,7 +1694,6 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1711,7 +1731,6 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1742,7 +1761,6 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
