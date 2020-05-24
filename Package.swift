@@ -23,10 +23,10 @@ let package = Package(
         .target(
             name: "Criollo",            
             dependencies: ["CocoaAsyncSocket"],
-            path: "Criollo/",
+            path: "Criollo",
             publicHeadersPath: "Criollo",
             cSettings: [
-                .headerSearchPath("Criollo/Sources/**"),
+                .headerSearchPath("Criollo"),
                 .headerSearchPath("CocoaAsyncSocket")]),
 
         .testTarget(name: "CriolloTests",
