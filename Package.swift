@@ -24,9 +24,13 @@ let package = Package(
             name: "Criollo",            
             dependencies: ["CocoaAsyncSocket"],
             path: "Criollo",
-            publicHeadersPath: "Criollo",
+            publicHeadersPath: "Criollo/Criollo/Source",
             cSettings: [
-                .headerSearchPath("Criollo/**"),
+                .headerSearchPath("Criollo/Criollo/Source"),
+                .headerSearchPath("Criollo/Criollo/Source/Extensions"),
+                .headerSearchPath("Criollo/Criollo/Source/FCGI"),
+                .headerSearchPath("Criollo/Criollo/Source/HTTP"),
+                .headerSearchPath("Criollo/Criollo/Source/Routing"),
                 .headerSearchPath("CocoaAsyncSocket")]),
 
         .testTarget(name: "CriolloTests",
