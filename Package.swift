@@ -22,15 +22,17 @@ let package = Package(
     targets: [
         .target(
             name: "Criollo",            
-            dependencies: ["CocoaAsyncSocket"],
+            dependencies: [
+                "CocoaAsyncSocket"
+            ],        
             path: "Criollo",
-            publicHeadersPath: "Criollo/Source",
+            publicHeadersPath: "Source",
             cSettings: [
-                .headerSearchPath("Criollo/Source"),
-                .headerSearchPath("Criollo/Source/Extensions"),
-                .headerSearchPath("Criollo/Source/FCGI"),
-                .headerSearchPath("Criollo/Source/HTTP"),
-                .headerSearchPath("Criollo/Source/Routing"),
+                .headerSearchPath("Source"),
+                .headerSearchPath("Source/Extensions"),
+                .headerSearchPath("Source/FCGI"),
+                .headerSearchPath("Source/HTTP"),
+                .headerSearchPath("Source/Routing"),
                 .headerSearchPath("CocoaAsyncSocket")]),
 
         .testTarget(name: "CriolloTests",
