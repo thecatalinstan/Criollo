@@ -26,7 +26,7 @@ let package = Package(
                 "CocoaAsyncSocket"
             ],        
             path: "Criollo",
-            publicHeadersPath: "Source",
+            publicHeadersPath: "include",
             cSettings: [
                 .headerSearchPath("Source"),
                 .headerSearchPath("Source/Extensions"),
