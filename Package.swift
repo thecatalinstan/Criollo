@@ -32,8 +32,7 @@ let package = Package(
                 .headerSearchPath("Source/Extensions"),
                 .headerSearchPath("Source/FCGI"),
                 .headerSearchPath("Source/HTTP"),
-                .headerSearchPath("Source/Routing"),
-                .headerSearchPath("CocoaAsyncSocket")]),
+                .headerSearchPath("Source/Routing")]),
 
         .testTarget(name: "CriolloTests",
                     dependencies: ["Criollo"],
