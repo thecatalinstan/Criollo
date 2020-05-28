@@ -36,7 +36,7 @@ typedef NSUInteger CRError;
  *
  * @see https://developer.apple.com/reference/appkit/nsapplicationdelegate
  */
-@protocol CRApplicationDelegate <NSObject>
+@protocol CRApplicationDelegate
 
 @required
 /**
