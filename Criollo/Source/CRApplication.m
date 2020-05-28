@@ -8,13 +8,14 @@
 
 #import "CRApplication.h"
 
-NSString* const Criollo = @"Criollo";
-NSString* const CRErrorDomain = @"CRErrorDomain";
+NS_ASSUME_NONNULL_BEGIN
 
-NSUInteger const CRErrorNone = 0;
-NSUInteger const CRErrorSigTERM = 1007;
+NSString* const CRErrorDomain               = @"CRErrorDomain";
+NSUInteger const CRErrorNone                = 0;
+NSUInteger const CRErrorSigTERM             = 1007;
 
-NSString* const CRApplicationRunLoopMode = @"NSDefaultRunLoopMode";
+NSString* const Criollo                     = @"Criollo";
+NSString* const CRApplicationRunLoopMode    = @"NSDefaultRunLoopMode";
 
 NSString* const CRApplicationWillFinishLaunchingNotification = @"CRApplicationWillFinishLaunchingNotification";
 NSString* const CRApplicationDidFinishLaunchingNotification = @"CRApplicationDidFinishLaunchingNotification";
@@ -24,17 +25,14 @@ NSString* const CRApplicationDidReceiveSignalNotification = @"CRApplicationDidRe
 CRApplication* CRApp;
 
 @interface CRApplication () {
-    __strong id<CRApplicationDelegate> _delegate;
-
     BOOL shouldKeepRunning;
     BOOL firstRunCompleted;
 
     BOOL waitingOnTerminateLaterReply;
     NSTimer* waitingOnTerminateLaterReplyTimer;
-
-    CFRunLoopObserverRef mainRunLoopObserver;
 }
 
+@property (nonatomic, readwrite, weak) id<CRApplicationDelegate> delegate;
 @property (nonatomic, readonly, nonnull) NSMutableArray<dispatch_source_t> * dispatchSources;
 
 - (void)startRunLoop;
@@ -46,6 +44,8 @@ CRApplication* CRApp;
 - (void)waitingOnTerminateLaterReplyTimerCallback;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 dispatch_source_t CRApplicationInstallSignalHandler(int sig) {
     @autoreleasepool {
@@ -79,12 +79,6 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 
 @implementation CRApplication
 
-#pragma mark - Properties
-
-- (id<CRApplicationDelegate>) delegate {
-    return _delegate;
-}
-
 - (void)setDelegate:(id<CRApplicationDelegate>)delegate {
     if ( _delegate ) {
         [[NSNotificationCenter defaultCenter] removeObserver:_delegate];
@@ -109,14 +103,16 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 + (CRApplication *)sharedApplication {
 	Class class;
 
-	if( ! CRApp ) {
-		if( ! ( class = [NSBundle mainBundle].principalClass ) ) {
+	if(!CRApp) {
+		if(!(class = [NSBundle mainBundle].principalClass)) {
 			NSLog(@"Main bundle does not define an existing principal class: %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSPrincipalClass"]);
 			class = self;
 		}
-		if( ! [class isSubclassOfClass:self.class] ) {
+        
+		if(![class isSubclassOfClass:self.class]) {
 			NSLog(@"Principal class (%@) of main bundle is not subclass of %@", NSStringFromClass(class), NSStringFromClass(self.class) );
 		}
+        
 		CRApp = [class new];
 	}
 
@@ -124,23 +120,11 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 }
 
 - (instancetype)init {
-    self = [super init];
-    if ( self != nil ) {
-        CRApp = self;
-        _dispatchSources = [NSMutableArray array];
-        [[NSNotificationCenter defaultCenter] addObserverForName:CRApplicationDidReceiveSignalNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-            NSLog(@"Got signal %@.", note.object);
-            int signal = [note.object intValue];
-            if ( signal == SIGTERM || signal == SIGINT || signal == SIGQUIT ) {
-                [CRApp terminate:nil];
-            }
-        }];
-    }
-    return self;
+    return [self initWithDelegate:nil];
 }
 
 - (instancetype)initWithDelegate:(id<CRApplicationDelegate>)delegate {
-    self = [self init];
+    self = [super init];
     if ( self != nil ) {
         self.delegate = delegate;
     }
@@ -165,7 +149,6 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 - (void)startRunLoop {
     shouldKeepRunning = YES;
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationDidFinishLaunchingNotification object:self];
     [[NSRunLoop mainRunLoop] addTimer:[NSTimer timerWithTimeInterval:[[NSDate distantFuture] timeIntervalSinceNow] target:self selector:@selector(stop) userInfo:nil repeats:YES] forMode:CRApplicationRunLoopMode];
 
     while ( shouldKeepRunning && [[NSRunLoop mainRunLoop] runMode:CRApplicationRunLoopMode beforeDate:[NSDate distantFuture]] );
@@ -218,7 +201,10 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 
 - (void)run {
     [self finishLaunching];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationDidFinishLaunchingNotification object:self];
+    
     [self startRunLoop];
+    
     [self terminate:nil];
 }
 
@@ -227,7 +213,6 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 }
 
 - (void)finishLaunching {
-	// Let observers know that initialization is complete
 	[[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationWillFinishLaunchingNotification object:self];
 }
 

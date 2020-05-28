@@ -18,14 +18,14 @@ typedef NS_ENUM(NSUInteger, CRApplicationTerminateReply) {
     CRTerminateLater  = 2
 };
 
+typedef NSUInteger CRError;
+
+@class CRApplication;
+
 NS_ASSUME_NONNULL_BEGIN
 
 FOUNDATION_EXPORT NSString * const Criollo;
 FOUNDATION_EXPORT NSString * const CRErrorDomain;
-
-typedef NSUInteger CRError;
-
-@class CRApplication;
 
 /**
  * The CRApplicationDelegate protocol defines the methods that may be implemented
@@ -79,12 +79,12 @@ FOUNDATION_EXPORT int CRApplicationMain(int argc, const char * _Nullable argv[_N
 
 @interface CRApplication : NSObject
 
-@property (nonatomic, assign) id<CRApplicationDelegate> delegate;
+@property (nonatomic, readonly, weak) id<CRApplicationDelegate> delegate;
+@property (class, nonatomic, readonly, strong) CRApplication *sharedApplication;
 
-+ (CRApplication *)sharedApplication;
+- (instancetype)initWithDelegate:(id<CRApplicationDelegate> _Nullable)delegate NS_DESIGNATED_INITIALIZER;
 
-- (instancetype)initWithDelegate:(id<CRApplicationDelegate> _Nullable)delegate;
-
+- (void)finishLaunching NS_REQUIRES_SUPER;
 - (void)run;
 - (void)stop:(id _Nullable)sender;
 - (void)terminate:(id _Nullable)sender;
