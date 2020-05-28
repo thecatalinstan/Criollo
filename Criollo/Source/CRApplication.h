@@ -22,9 +22,6 @@ typedef NS_ENUM(NSUInteger, CRApplicationTerminateReply) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-FOUNDATION_EXPORT NSString * const Criollo;
-FOUNDATION_EXPORT NSString * const CRErrorDomain;
-
 /**
  * The CRApplicationDelegate protocol defines the methods that may be implemented
  * by delegates of CRApplication objects. It is mean to mimic the behavior of 

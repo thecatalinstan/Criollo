@@ -10,11 +10,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-NSString* const CRErrorDomain               = @"CRErrorDomain";
-NSUInteger const CRErrorNone                = 0;
-NSUInteger const CRErrorSigTERM             = 1007;
-
-NSString* const Criollo                     = @"Criollo";
 NSString* const CRApplicationRunLoopMode    = @"NSDefaultRunLoopMode";
 
 NSNotificationName const CRApplicationWillFinishLaunchingNotification = @"CRApplicationWillFinishLaunchingNotification";
@@ -183,7 +178,6 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
             [self quit];
             break;
     }
-
 }
 
 - (void)replyToApplicationShouldTerminate:(BOOL)shouldTerminate {
