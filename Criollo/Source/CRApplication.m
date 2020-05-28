@@ -17,10 +17,10 @@ NSUInteger const CRErrorSigTERM             = 1007;
 NSString* const Criollo                     = @"Criollo";
 NSString* const CRApplicationRunLoopMode    = @"NSDefaultRunLoopMode";
 
-NSString* const CRApplicationWillFinishLaunchingNotification = @"CRApplicationWillFinishLaunchingNotification";
-NSString* const CRApplicationDidFinishLaunchingNotification = @"CRApplicationDidFinishLaunchingNotification";
-NSString* const CRApplicationWillTerminateNotification = @"CRApplicationWillTerminateNotification";
-NSString* const CRApplicationDidReceiveSignalNotification = @"CRApplicationDidReceiveSignal";
+NSNotificationName const CRApplicationWillFinishLaunchingNotification = @"CRApplicationWillFinishLaunchingNotification";
+NSNotificationName const CRApplicationDidFinishLaunchingNotification = @"CRApplicationDidFinishLaunchingNotification";
+NSNotificationName const CRApplicationWillTerminateNotification = @"CRApplicationWillTerminateNotification";
+NSNotificationName const CRApplicationDidReceiveSignalNotification = @"CRApplicationDidReceiveSignal";
 
 CRApplication* CRApp;
 
@@ -41,7 +41,7 @@ CRApplication* CRApp;
 - (void)quit;
 - (void)cancelTermination;
 
-- (void)waitingOnTerminateLaterReplyTimerCallback;
+- (void)waitingOnTerminateLaterReplyTimerCallback:(NSTimer *)timer;
 
 @end
 
@@ -87,13 +87,13 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     
     _delegate = delegate;
     
-    if ( [_delegate respondsToSelector:@selector(applicationWillFinishLaunching:)] ) {
+    if ( [(id)_delegate respondsToSelector:@selector(applicationWillFinishLaunching:)] ) {
         [[NSNotificationCenter defaultCenter] addObserver:_delegate selector:@selector(applicationWillFinishLaunching:) name:CRApplicationWillFinishLaunchingNotification object:nil];
     }
-    if ( [_delegate respondsToSelector:@selector(applicationDidFinishLaunching:)] ) {
+    if ( [(id)_delegate respondsToSelector:@selector(applicationDidFinishLaunching:)] ) {
         [[NSNotificationCenter defaultCenter] addObserver:_delegate selector:@selector(applicationDidFinishLaunching:) name:CRApplicationDidFinishLaunchingNotification object:nil];
     }
-    if ( [_delegate respondsToSelector:@selector(applicationWillTerminate:)] ) {
+    if ( [(id)_delegate respondsToSelector:@selector(applicationWillTerminate:)] ) {
         [[NSNotificationCenter defaultCenter] addObserver:_delegate selector:@selector(applicationWillTerminate:) name:CRApplicationWillTerminateNotification object:nil];
     }
 }
@@ -142,7 +142,7 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     [self startRunLoop];
 }
 
-- (void)waitingOnTerminateLaterReplyTimerCallback {
+- (void)waitingOnTerminateLaterReplyTimerCallback:(NSTimer *)timer {
     [self terminate:nil];
 }
 
@@ -162,7 +162,7 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     [self performSelectorOnMainThread:@selector(stop:) withObject:nil waitUntilDone:YES];
     
     CRApplicationTerminateReply reply = CRTerminateNow;
-    if ( [_delegate respondsToSelector:@selector(applicationShouldTerminate:)]) {
+    if ( [(id)_delegate respondsToSelector:@selector(applicationShouldTerminate:)]) {
         reply = [_delegate applicationShouldTerminate:self];
     }
     
@@ -173,7 +173,7 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
             
         case CRTerminateLater:
             waitingOnTerminateLaterReply = YES;
-            waitingOnTerminateLaterReplyTimer = [NSTimer timerWithTimeInterval:1.0f target:self selector:@selector(waitingOnTerminateLaterReplyTimerCallback) userInfo:nil repeats:NO];
+            waitingOnTerminateLaterReplyTimer = [NSTimer timerWithTimeInterval:1.0f target:self selector:@selector(waitingOnTerminateLaterReplyTimerCallback:) userInfo:nil repeats:NO];
             [[NSRunLoop mainRunLoop] addTimer:waitingOnTerminateLaterReplyTimer forMode:CRApplicationRunLoopMode];
             while (waitingOnTerminateLaterReply && [[NSRunLoop mainRunLoop] runMode:CRApplicationRunLoopMode beforeDate:[NSDate distantFuture]]);
             break;
@@ -233,8 +233,8 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
     BOOL shouldLog = YES;
 
-    if ( [self.delegate respondsToSelector:@selector(application:shouldLogString:)] ) {
-        [self.delegate application:self shouldLogString:formattedString];
+    if ( [(id)_delegate respondsToSelector:@selector(application:shouldLogString:)] ) {
+        [(id)_delegate application:self shouldLogString:formattedString];
     }
 
     if ( shouldLog ) {
@@ -257,7 +257,7 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
     BOOL shouldLog = YES;
 
-    if ( [self.delegate respondsToSelector:@selector(application:shouldLogError:)] ) {
+    if ( [(id)_delegate respondsToSelector:@selector(application:shouldLogError:)] ) {
         [self.delegate application:self shouldLogError:formattedString];
     }
 

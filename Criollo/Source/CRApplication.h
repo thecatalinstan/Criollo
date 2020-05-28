@@ -18,8 +18,6 @@ typedef NS_ENUM(NSUInteger, CRApplicationTerminateReply) {
     CRTerminateLater  = 2
 };
 
-typedef NSUInteger CRError;
-
 @class CRApplication;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -34,7 +32,7 @@ FOUNDATION_EXPORT NSString * const CRErrorDomain;
  *
  * @see https://developer.apple.com/reference/appkit/nsapplicationdelegate
  */
-@protocol CRApplicationDelegate <NSObject>
+@protocol CRApplicationDelegate
 
 @required
 /**
@@ -68,9 +66,9 @@ FOUNDATION_EXPORT NSString * const CRErrorDomain;
 
 FOUNDATION_EXPORT NSString * const CRApplicationRunLoopMode;
 
-FOUNDATION_EXPORT NSString * const CRApplicationWillFinishLaunchingNotification;
-FOUNDATION_EXPORT NSString * const CRApplicationDidFinishLaunchingNotification;
-FOUNDATION_EXPORT NSString * const CRApplicationWillTerminateNotification;
+FOUNDATION_EXPORT NSNotificationName const CRApplicationWillFinishLaunchingNotification;
+FOUNDATION_EXPORT NSNotificationName const CRApplicationDidFinishLaunchingNotification;
+FOUNDATION_EXPORT NSNotificationName const CRApplicationWillTerminateNotification;
 
 FOUNDATION_EXPORT NSString* const CRApplicationDidReceiveSignalNotification;
 
