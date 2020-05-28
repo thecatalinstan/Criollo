@@ -8,7 +8,7 @@
 
 #import "CRResponse.h"
 
-#import <CocoaAsyncSocket/GCDAsyncSocket.h>
+@import CocoaAsyncSocket;
 
 #import "CRMessage_Internal.h"
 #import "CRResponse_Internal.h"
