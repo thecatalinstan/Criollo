@@ -8,7 +8,7 @@
 
 #import "CRConnection.h"
 
-@import CocoaAsyncSocket;
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 
 @class CRServer, CRRequest;
 

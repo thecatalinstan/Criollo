@@ -8,7 +8,7 @@
 
 #import "CRFCGIResponse.h"
 
-@import CocoaAsyncSocket;
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 
 #import "CRResponse_Internal.h"
 #import "CRApplication.h"

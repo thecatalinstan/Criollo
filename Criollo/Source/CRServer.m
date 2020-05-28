@@ -8,7 +8,7 @@
 
 #import "CRServer.h"
 
-@import CocoaAsyncSocket;
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 
 #import "CRServer_Internal.h"
 #import "CRRouter_Internal.h"

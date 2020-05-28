@@ -8,7 +8,7 @@
 
 #import "CRHTTPConnection.h"
 
-@import CocoaAsyncSocket;
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 
 #import "CRConnection_Internal.h"
 #import "CRApplication.h"
