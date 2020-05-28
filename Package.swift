@@ -16,17 +16,18 @@ let package = Package(
             type: .dynamic,
             targets: ["Criollo"]),
     ],
-    // dependencies: [
-    //     .package(name:"CocoaAsyncSocket", url: "https://github.com/robbiehanson/CocoaAsyncSocket", from: "7.6.4"),
-    // ],
+    dependencies: [
+        .package(name:"CocoaAsyncSocket", url: "https://github.com/robbiehanson/CocoaAsyncSocket", from: "7.6.4"),
+    ],
     targets: [
         .target(
             name: "Criollo",            
-            // dependencies: [
-            //     "CocoaAsyncSocket"
-            // ],        
+            dependencies: [
+                "CocoaAsyncSocket"
+            ],   
             path: "Criollo",
-            publicHeadersPath: "include",
+            exclude: ["../Libraries"],
+            publicHeadersPath: "spm-includes",
             cSettings: [
                 .headerSearchPath("Source"),
                 .headerSearchPath("Source/Extensions"),
