@@ -20,14 +20,9 @@ typedef NS_ENUM(NSUInteger, CRApplicationTerminateReply) {
     CRTerminateLater  = 2
 };
 
-NS_ASSUME_NONNULL_BEGIN
-
-FOUNDATION_EXPORT NSString * const Criollo;
-FOUNDATION_EXPORT NSString * const CRErrorDomain;
-
-typedef NSUInteger CRError;
-
 @class CRApplication;
+
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  * The CRApplicationDelegate protocol defines the methods that may be implemented
@@ -63,29 +58,23 @@ typedef NSUInteger CRError;
 - (CRApplicationTerminateReply)applicationShouldTerminate:(CRApplication *)sender;
 - (void)applicationWillTerminate:(NSNotification *)notification;
 
-- (BOOL)application:(CRApplication *)application shouldLogError:(NSString*)errorString;
-- (BOOL)application:(CRApplication *)application shouldLogString:(NSString*)string;
-
 @end
 
-FOUNDATION_EXPORT NSString * const CRApplicationRunLoopMode;
-
-FOUNDATION_EXPORT NSString * const CRApplicationWillFinishLaunchingNotification;
-FOUNDATION_EXPORT NSString * const CRApplicationDidFinishLaunchingNotification;
-FOUNDATION_EXPORT NSString * const CRApplicationWillTerminateNotification;
-
-FOUNDATION_EXPORT NSString* const CRApplicationDidReceiveSignalNotification;
+FOUNDATION_EXPORT NSNotificationName const CRApplicationWillFinishLaunchingNotification;
+FOUNDATION_EXPORT NSNotificationName const CRApplicationDidFinishLaunchingNotification;
+FOUNDATION_EXPORT NSNotificationName const CRApplicationWillTerminateNotification;
 
 FOUNDATION_EXPORT id CRApp;
 FOUNDATION_EXPORT int CRApplicationMain(int argc, const char * _Nullable argv[_Nullable], id<CRApplicationDelegate> delegate);
 
 @interface CRApplication : NSObject
 
-@property (nonatomic, assign) id<CRApplicationDelegate> delegate;
+@property (nonatomic, readonly, weak) id<CRApplicationDelegate> delegate;
+@property (class, nonatomic, readonly, strong) CRApplication *sharedApplication;
 
-+ (CRApplication *)sharedApplication;
+- (instancetype)initWithDelegate:(id<CRApplicationDelegate> _Nullable)delegate NS_DESIGNATED_INITIALIZER;
 
-- (instancetype)initWithDelegate:(id<CRApplicationDelegate> _Nullable)delegate;
+- (void)finishLaunching NS_REQUIRES_SUPER;
 
 - (void)run;
 - (void)stop:(id _Nullable)sender;
@@ -101,4 +90,5 @@ FOUNDATION_EXPORT int CRApplicationMain(int argc, const char * _Nullable argv[_N
 - (void)logErrorFormat:(NSString *)format args:(va_list)args;
 
 @end
+
 NS_ASSUME_NONNULL_END
