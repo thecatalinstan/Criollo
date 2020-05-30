@@ -36,6 +36,11 @@ NS_ASSUME_NONNULL_END
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [CRApplication.sharedApplication terminate:nil];
+    });
+    
     BOOL isFastCGI = [[NSUserDefaults standardUserDefaults] boolForKey:@"FastCGI"];
     Class serverClass = isFastCGI ? [CRFCGIServer class] : [CRHTTPServer class];
     self.server = [[serverClass alloc] initWithDelegate:self];
@@ -263,19 +268,16 @@ NS_ASSUME_NONNULL_END
 }
 
 - (CRApplicationTerminateReply)applicationShouldTerminate:(CRApplication *)sender {
-    static CRApplicationTerminateReply reply;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        reply = CRTerminateLater;
-        [self.server closeAllConnections:^{
-            reply = CRTerminateNow;
-        }];
-    });
-    return reply;
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [self.server closeAllConnections:^{
+        [self.server stopListening];
+        [sender replyToApplicationShouldTerminate:CRTerminateNow];
+    }];
+    return CRTerminateLater;
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
-    [self.server stopListening];
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)startServer {
