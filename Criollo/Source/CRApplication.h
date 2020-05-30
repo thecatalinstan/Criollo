@@ -56,9 +56,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (CRApplicationTerminateReply)applicationShouldTerminate:(CRApplication *)sender;
 - (void)applicationWillTerminate:(NSNotification *)notification;
 
-- (BOOL)application:(CRApplication *)application shouldLogError:(NSString*)errorString;
-- (BOOL)application:(CRApplication *)application shouldLogString:(NSString*)string;
-
 @end
 
 FOUNDATION_EXPORT NSNotificationName const CRApplicationWillFinishLaunchingNotification;
@@ -76,6 +73,7 @@ FOUNDATION_EXPORT int CRApplicationMain(int argc, const char * _Nullable argv[_N
 - (instancetype)initWithDelegate:(id<CRApplicationDelegate> _Nullable)delegate NS_DESIGNATED_INITIALIZER;
 
 - (void)finishLaunching NS_REQUIRES_SUPER;
+
 - (void)run;
 - (void)stop:(id _Nullable)sender;
 - (void)terminate:(id _Nullable)sender;
@@ -90,4 +88,5 @@ FOUNDATION_EXPORT int CRApplicationMain(int argc, const char * _Nullable argv[_N
 - (void)logErrorFormat:(NSString *)format args:(va_list)args;
 
 @end
+
 NS_ASSUME_NONNULL_END

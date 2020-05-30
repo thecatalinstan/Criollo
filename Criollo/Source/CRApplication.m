@@ -19,10 +19,7 @@ static NSNotificationName const CRApplicationDidReceiveSignalNotification = @"CR
 
 CRApplication* CRApp;
 
-@interface CRApplication () {
-    BOOL waitingOnTerminateLaterReply;
-    NSTimer* waitingOnTerminateLaterReplyTimer;
-}
+@interface CRApplication ()
 
 @property (nonatomic, readwrite, weak) id<CRApplicationDelegate> delegate;
 
@@ -32,15 +29,13 @@ CRApplication* CRApp;
 - (void)quit;
 - (void)cancelTermination;
 
-- (void)waitingOnTerminateLaterReplyTimerCallback:(NSTimer *)timer;
-
 @end
 
 NS_ASSUME_NONNULL_END
 
 void CRHandleSignal(int sig) {
     signal(sig, SIG_IGN);
-    [[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationDidReceiveSignalNotification object:@(sig)];
+    [CRApplication.sharedApplication terminate:nil];
     signal(sig, CRHandleSignal);
 }
 
@@ -49,9 +44,9 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     signal(SIGINT, CRHandleSignal);
     signal(SIGQUIT, CRHandleSignal);
     signal(SIGTSTP, CRHandleSignal);
-
-    [[[CRApplication alloc] initWithDelegate:delegate] run];
     
+    [[[CRApplication alloc] initWithDelegate:delegate] run];
+            
     return EXIT_SUCCESS;
 }
 
@@ -82,7 +77,7 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 	Class class;
 
 	if(!CRApp) {
-		if(!(class = [NSBundle mainBundle].principalClass)) {
+        if(!(class = NSBundle.mainBundle.principalClass)) {
 			NSLog(@"Main bundle does not define an existing principal class: %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSPrincipalClass"]);
 			class = self;
 		}
@@ -120,13 +115,7 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     [self startRunLoop];
 }
 
-- (void)waitingOnTerminateLaterReplyTimerCallback:(NSTimer *)timer {
-    [self terminate:nil];
-}
-
 - (void)startRunLoop {
-    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(didReceiveSignalNotification:) name:CRApplicationDidReceiveSignalNotification object:nil];
-    
     [[NSRunLoop mainRunLoop] addTimer:[NSTimer timerWithTimeInterval:[[NSDate distantFuture] timeIntervalSinceNow] target:self selector:@selector(stop) userInfo:nil repeats:YES] forMode:CRApplicationRunLoopMode];
 
     while ([[NSRunLoop mainRunLoop] runMode:CRApplicationRunLoopMode beforeDate:[NSDate distantFuture]] );
@@ -140,20 +129,17 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     [self performSelectorOnMainThread:@selector(stop:) withObject:nil waitUntilDone:YES];
     
     CRApplicationTerminateReply reply = CRTerminateNow;
-    if ( [(id)_delegate respondsToSelector:@selector(applicationShouldTerminate:)]) {
+    if ([(id)_delegate respondsToSelector:@selector(applicationShouldTerminate:)]) {
         reply = [_delegate applicationShouldTerminate:self];
     }
     
-    switch ( reply ) {
+    switch (reply) {
         case CRTerminateCancel:
             [self cancelTermination];
             break;
             
         case CRTerminateLater:
-            waitingOnTerminateLaterReply = YES;
-            waitingOnTerminateLaterReplyTimer = [NSTimer timerWithTimeInterval:1.0f target:self selector:@selector(waitingOnTerminateLaterReplyTimerCallback:) userInfo:nil repeats:NO];
-            [[NSRunLoop mainRunLoop] addTimer:waitingOnTerminateLaterReplyTimer forMode:CRApplicationRunLoopMode];
-            while (waitingOnTerminateLaterReply && [[NSRunLoop mainRunLoop] runMode:CRApplicationRunLoopMode beforeDate:[NSDate distantFuture]]);
+            [self startRunLoop];
             break;
             
         case CRTerminateNow:
@@ -164,9 +150,6 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 }
 
 - (void)replyToApplicationShouldTerminate:(BOOL)shouldTerminate {
-    waitingOnTerminateLaterReply = NO;
-    [waitingOnTerminateLaterReplyTimer invalidate];
-    
     [self performSelectorOnMainThread:@selector(stop:) withObject:nil waitUntilDone:YES];
     
     if (shouldTerminate) {
@@ -193,10 +176,6 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 	[[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationWillFinishLaunchingNotification object:self];
 }
 
-- (void)didReceiveSignalNotification:(NSNotification *)notification {
-    [self terminate:notification];
-}
-
 #pragma mark - Output
 
 - (void)log:(NSString *)string {
@@ -212,15 +191,7 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 
 - (void)logFormat:(NSString *)format args:(va_list)args {
     NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
-    BOOL shouldLog = YES;
-
-    if ( [(id)_delegate respondsToSelector:@selector(application:shouldLogString:)] ) {
-        [(id)_delegate application:self shouldLogString:formattedString];
-    }
-
-    if ( shouldLog ) {
-        [[NSFileHandle fileHandleWithStandardOutput] writeData: [[formattedString stringByAppendingString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-    }
+    [[NSFileHandle fileHandleWithStandardOutput] writeData: [[formattedString stringByAppendingString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding]];
 }
 
 - (void)logError:(NSString *)string {
@@ -236,16 +207,7 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 
 - (void)logErrorFormat:(NSString *)format args:(va_list)args {
     NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
-    BOOL shouldLog = YES;
-
-    if ( [(id)_delegate respondsToSelector:@selector(application:shouldLogError:)] ) {
-        [self.delegate application:self shouldLogError:formattedString];
-    }
-
-    if ( shouldLog ) {
-        [[NSFileHandle fileHandleWithStandardError] writeData: [[formattedString stringByAppendingString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-    }
+    [[NSFileHandle fileHandleWithStandardError] writeData: [[formattedString stringByAppendingString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding]];
 }
-
 
 @end
