@@ -61,13 +61,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-FOUNDATION_EXPORT NSString * const CRApplicationRunLoopMode;
-
 FOUNDATION_EXPORT NSNotificationName const CRApplicationWillFinishLaunchingNotification;
 FOUNDATION_EXPORT NSNotificationName const CRApplicationDidFinishLaunchingNotification;
 FOUNDATION_EXPORT NSNotificationName const CRApplicationWillTerminateNotification;
-
-FOUNDATION_EXPORT NSString* const CRApplicationDidReceiveSignalNotification;
 
 FOUNDATION_EXPORT id CRApp;
 FOUNDATION_EXPORT int CRApplicationMain(int argc, const char * _Nullable argv[_Nullable], id<CRApplicationDelegate> delegate);

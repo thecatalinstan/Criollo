@@ -10,25 +10,21 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-NSString* const CRApplicationRunLoopMode    = @"NSDefaultRunLoopMode";
-
 NSNotificationName const CRApplicationWillFinishLaunchingNotification = @"CRApplicationWillFinishLaunchingNotification";
 NSNotificationName const CRApplicationDidFinishLaunchingNotification = @"CRApplicationDidFinishLaunchingNotification";
 NSNotificationName const CRApplicationWillTerminateNotification = @"CRApplicationWillTerminateNotification";
-NSNotificationName const CRApplicationDidReceiveSignalNotification = @"CRApplicationDidReceiveSignal";
+
+static NSString* const CRApplicationRunLoopMode    = @"NSDefaultRunLoopMode";
+static NSNotificationName const CRApplicationDidReceiveSignalNotification = @"CRApplicationDidReceiveSignal";
 
 CRApplication* CRApp;
 
 @interface CRApplication () {
-    BOOL shouldKeepRunning;
-    BOOL firstRunCompleted;
-
     BOOL waitingOnTerminateLaterReply;
     NSTimer* waitingOnTerminateLaterReplyTimer;
 }
 
 @property (nonatomic, readwrite, weak) id<CRApplicationDelegate> delegate;
-@property (nonatomic, readonly, nonnull) NSMutableArray<dispatch_source_t> * dispatchSources;
 
 - (void)startRunLoop;
 - (void)stopRunLoop;
@@ -42,33 +38,20 @@ CRApplication* CRApp;
 
 NS_ASSUME_NONNULL_END
 
-dispatch_source_t CRApplicationInstallSignalHandler(int sig) {
-    @autoreleasepool {
-        signal(sig, SIG_IGN);
-        dispatch_source_t signalSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, sig, 0, dispatch_get_main_queue());
-        dispatch_source_set_event_handler(signalSource, ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationDidReceiveSignalNotification object:@(sig)];
-        });
-        dispatch_resume(signalSource);
-        return signalSource;
-    }
-};
+void CRHandleSignal(int sig) {
+    signal(sig, SIG_IGN);
+    [[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationDidReceiveSignalNotification object:@(sig)];
+    signal(sig, CRHandleSignal);
+}
 
 int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> delegate) {
-    @autoreleasepool {
-        CRApplication* app = [[CRApplication alloc] initWithDelegate:delegate];
+    signal(SIGTERM, CRHandleSignal);
+    signal(SIGINT, CRHandleSignal);
+    signal(SIGQUIT, CRHandleSignal);
+    signal(SIGTSTP, CRHandleSignal);
 
-        [app.dispatchSources addObject:CRApplicationInstallSignalHandler(SIGTERM)];
-        [app.dispatchSources addObject:CRApplicationInstallSignalHandler(SIGINT)];
-        [app.dispatchSources addObject:CRApplicationInstallSignalHandler(SIGQUIT)];
-        [app.dispatchSources addObject:CRApplicationInstallSignalHandler(SIGTSTP)];
-
-        [app run];
-
-        [app.dispatchSources enumerateObjectsUsingBlock:^(dispatch_source_t  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            dispatch_source_cancel(obj);
-        }];
-    }
+    [[[CRApplication alloc] initWithDelegate:delegate] run];
+    
     return EXIT_SUCCESS;
 }
 
@@ -142,11 +125,11 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 }
 
 - (void)startRunLoop {
-    shouldKeepRunning = YES;
-
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(didReceiveSignalNotification:) name:CRApplicationDidReceiveSignalNotification object:nil];
+    
     [[NSRunLoop mainRunLoop] addTimer:[NSTimer timerWithTimeInterval:[[NSDate distantFuture] timeIntervalSinceNow] target:self selector:@selector(stop) userInfo:nil repeats:YES] forMode:CRApplicationRunLoopMode];
 
-    while ( shouldKeepRunning && [[NSRunLoop mainRunLoop] runMode:CRApplicationRunLoopMode beforeDate:[NSDate distantFuture]] );
+    while ([[NSRunLoop mainRunLoop] runMode:CRApplicationRunLoopMode beforeDate:[NSDate distantFuture]] );
 }
 
 - (void)stopRunLoop {
@@ -186,7 +169,7 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     
     [self performSelectorOnMainThread:@selector(stop:) withObject:nil waitUntilDone:YES];
     
-    if ( shouldTerminate ) {        
+    if (shouldTerminate) {
         [self quit];
     } else {
         [self cancelTermination];
@@ -195,7 +178,7 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 
 - (void)run {
     [self finishLaunching];
-    [[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationDidFinishLaunchingNotification object:self];
+    [NSNotificationCenter.defaultCenter postNotificationName:CRApplicationDidFinishLaunchingNotification object:self];
     
     [self startRunLoop];
     
@@ -208,6 +191,10 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 
 - (void)finishLaunching {
 	[[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationWillFinishLaunchingNotification object:self];
+}
+
+- (void)didReceiveSignalNotification:(NSNotification *)notification {
+    [self terminate:notification];
 }
 
 #pragma mark - Output
