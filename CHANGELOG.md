@@ -6,6 +6,43 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [1.0.0](https://github.com/thecatalinstan/Criollo/releases/tag/1.0.0) (07/05/2020)
+
+**Released on Sunday, July 5, 2020**. This release marks a point where Criollo has reached maturity and stability. The release contains a few improvement and stabilization refactors, bug fixes for all known issues, as well as general purpose updates in dependencies and Xcode projects.
+
+### Tweaks and improvements
+
+* `CRApplication` was refactored with focus on improving the initialization, termination and signal handling workflows. [ #62](https://github.com/thecatalinstan/Criollo/pull/62)
+
+* Static file and directory serving was refactored to provide better I/O and memory performance, improved error handling, as well as a cleaner code architecture. [ #53](https://github.com/thecatalinstan/Criollo/pull/53) and [ #54](https://github.com/thecatalinstan/Criollo/pull/54)
+
+* Added the _HTTPAuthenticator_ example to showcase how HTTP header based authorization and routing can be performed. [ #37](https://github.com/thecatalinstan/Criollo/issue/37) and [ #56](https://github.com/thecatalinstan/Criollo/pull/56).
+
+* _CocoaAsyncSocket_ was updated to commit [72e0fa9](https://github.com/robbiehanson/CocoaAsyncSocket/commit/72e0fa9e62d56e5bbb3f67e9cfd5aa85841735bc).
+
+
+### API Changes
+
+* `CRServer`'s `workerQueueProperty` has been made public, in order to allow furher customization of the server's threading model. [ #27](https://github.com/thecatalinstan/Criollo/issues/27)
+
+* Added `-patch:block:` convenience method to `CRRouter`. [ #42](https://github.com/thecatalinstan/Criollo/pull/42)
+
+
+### Bugfixes
+
+* Fixed an error parsing URL encoded request body [ #30](https://github.com/thecatalinstan/Criollo/issues/30)
+
+* Fixed a crash caused by an unhandled exception in the file server, if content being served changed while being read [ #35](https://github.com/thecatalinstan/Criollo/issues/35)
+
+* Fixed a bug whereby placeholder route definitions did not match `.` [ #38](https://github.com/thecatalinstan/Criollo/issues/38)
+
+* Fixed inccorect handling of HTTP/1.0 requests that did not include a `Host` header [ #40](https://github.com/thecatalinstan/Criollo/pull/40)
+
+* Fixed inclusion of `GCDAsyncSocket` that could cause issues when integration Criollo via CocoaPods [ #45](https://github.com/thecatalinstan/Criollo/issues/45)
+
+* Fixed an issue that caused `CRServerDelegate`'s `-serverDidStopListening:` not to get called [ #57](https://github.com/thecatalinstan/Criollo/issues/57)
+
+
 ## [0.5.5](https://github.com/thecatalinstan/Criollo/releases/tag/0.5.5) (08/09/2018)
 
 **Released on Thursday, August 9, 2018**. This is a service release that updates project settings for Xcode compatibility.
