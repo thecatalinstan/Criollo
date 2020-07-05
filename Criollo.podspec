@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   s.version                 =  "1.0.0"
   s.license                 =  "MIT"
 
-  s.summary                 =  "A powerful Cocoa based web application framework for macS, iOS and tvOS."
+  s.summary                 =  "A powerful Cocoa web framework and HTTP server for macS, iOS and tvOS."
 
   s.homepage                =  "https://criollo.io/"
   s.author                  =   { "Cătălin Stan" => "catalin.stan@me.com" }
