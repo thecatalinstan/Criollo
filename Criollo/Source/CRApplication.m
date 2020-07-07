@@ -18,6 +18,7 @@ static NSString* const CRApplicationRunLoopMode    = @"NSDefaultRunLoopMode";
 static NSNotificationName const CRApplicationDidReceiveSignalNotification = @"CRApplicationDidReceiveSignal";
 
 CRApplication* CRApp;
+static id<CRApplicationDelegate> CRAppDelegate;
 
 @interface CRApplication ()
 
@@ -45,8 +46,9 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
     signal(SIGQUIT, CRHandleSignal);
     signal(SIGTSTP, CRHandleSignal);
     
-    [[[CRApplication alloc] initWithDelegate:delegate] run];
-            
+    CRAppDelegate = delegate;
+    [[CRApplication sharedApplication] run];
+    
     return EXIT_SUCCESS;
 }
 
@@ -75,7 +77,6 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 
 + (CRApplication *)sharedApplication {
 	Class class;
-
 	if(!CRApp) {
         if(!(class = NSBundle.mainBundle.principalClass)) {
 			NSLog(@"Main bundle does not define an existing principal class: %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSPrincipalClass"]);
@@ -86,9 +87,8 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 			NSLog(@"Principal class (%@) of main bundle is not subclass of %@", NSStringFromClass(class), NSStringFromClass(self.class) );
 		}
         
-		CRApp = [class new];
+        CRApp = [[class alloc] initWithDelegate:CRAppDelegate];
 	}
-
 	return CRApp;
 }
 
@@ -190,8 +190,7 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 }
 
 - (void)logFormat:(NSString *)format args:(va_list)args {
-    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
-    [[NSFileHandle fileHandleWithStandardOutput] writeData: [[formattedString stringByAppendingString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+    [self logFormat:format args:args fileHandle:NSFileHandle.fileHandleWithStandardOutput];
 }
 
 - (void)logError:(NSString *)string {
@@ -206,8 +205,17 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 }
 
 - (void)logErrorFormat:(NSString *)format args:(va_list)args {
-    NSString* formattedString = [[NSString alloc] initWithFormat:format arguments:args];
-    [[NSFileHandle fileHandleWithStandardError] writeData: [[formattedString stringByAppendingString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+    [self logFormat:format args:args fileHandle:NSFileHandle.fileHandleWithStandardError];
 }
 
+- (void)logFormat:(NSString *)format args:(va_list)args fileHandle:(NSFileHandle *)fileHandle {
+    NSString *string = [[NSString alloc] initWithFormat:format arguments:args];
+    assert(string != nil);
+    
+    NSData *data = [[string stringByAppendingString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding];
+    assert(data != nil);
+        
+    [fileHandle writeData:data];
+}
+    
 @end

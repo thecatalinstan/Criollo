@@ -311,6 +311,9 @@
 		ADC29AF7246D7313007D443E /* CRFCGIConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC29AF3246D7306007D443E /* CRFCGIConnectionTests.m */; };
 		ADC29AF8246D7313007D443E /* CRFCGIConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC29AF3246D7306007D443E /* CRFCGIConnectionTests.m */; };
 		ADC29AF9246D7314007D443E /* CRFCGIConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC29AF3246D7306007D443E /* CRFCGIConnectionTests.m */; };
+		ADC2A33724B50B35009A310A /* CRApplicationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC2A33624B50B35009A310A /* CRApplicationTests.m */; };
+		ADC2A33824B50B35009A310A /* CRApplicationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC2A33624B50B35009A310A /* CRApplicationTests.m */; };
+		ADC2A33924B50B35009A310A /* CRApplicationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC2A33624B50B35009A310A /* CRApplicationTests.m */; };
 		ADD2B60C1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = ADD2B60A1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h */; };
 		ADD2B60D1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m in Sources */ = {isa = PBXBuildFile; fileRef = ADD2B60B1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m */; };
 		ADD2B60E1BFE70C300E2E632 /* NSHTTPCookie+Criollo.m in Sources */ = {isa = PBXBuildFile; fileRef = ADD2B60B1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m */; };
@@ -572,6 +575,7 @@
 		ADC29ADD246D37E1007D443E /* CRStaticDirectoryManager_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRStaticDirectoryManager_Internal.h; sourceTree = "<group>"; };
 		ADC29ADF246D3977007D443E /* CRStaticDirectoryManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CRStaticDirectoryManagerTests.m; path = CriolloTests/CRStaticDirectoryManagerTests.m; sourceTree = SOURCE_ROOT; };
 		ADC29AF3246D7306007D443E /* CRFCGIConnectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRFCGIConnectionTests.m; sourceTree = "<group>"; };
+		ADC2A33624B50B35009A310A /* CRApplicationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRApplicationTests.m; sourceTree = "<group>"; };
 		ADD2B60A1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSHTTPCookie+Criollo.h"; sourceTree = "<group>"; };
 		ADD2B60B1BFE70AE00E2E632 /* NSHTTPCookie+Criollo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSHTTPCookie+Criollo.m"; sourceTree = "<group>"; };
 		ADE99FB51C6B40E10080B1FA /* CRStaticDirectoryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRStaticDirectoryManager.h; sourceTree = "<group>"; };
@@ -713,6 +717,7 @@
 				AD0BCC62245EBCEE0014A920 /* CRServerTests.m */,
 				AD542C0D247668F8000E5CEC /* CRServerDelegateTests.m */,
 				ADB32F8D246802D0005D729A /* CRStaticFileManagerTests.m */,
+				ADC2A33624B50B35009A310A /* CRApplicationTests.m */,
 			);
 			path = CriolloTests;
 			sourceTree = "<group>";
@@ -1479,6 +1484,7 @@
 				AD0BCC68245EBD5D0014A920 /* CRServerTests.m in Sources */,
 				ADC29AF6246D730C007D443E /* CRHTTPConnectionTests.m in Sources */,
 				AD7009F82479320800F3C06A /* CRStaticFileManagerTests.m in Sources */,
+				ADC2A33924B50B35009A310A /* CRApplicationTests.m in Sources */,
 				4ABB1E471F9E70B000480EC7 /* CRViewTests.m in Sources */,
 				ADC29AF9246D7314007D443E /* CRFCGIConnectionTests.m in Sources */,
 				4ABB1E451F9E70AA00480EC7 /* CRMimeTypeHelperTests.m in Sources */,
@@ -1506,6 +1512,7 @@
 				AD0BCC63245EBCEE0014A920 /* CRServerTests.m in Sources */,
 				AD7F2F711F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */,
 				ADC29AE0246D3977007D443E /* CRStaticDirectoryManagerTests.m in Sources */,
+				ADC2A33724B50B35009A310A /* CRApplicationTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1518,6 +1525,7 @@
 				AD0BCC67245EBD5C0014A920 /* CRServerTests.m in Sources */,
 				ADC29AF5246D730B007D443E /* CRHTTPConnectionTests.m in Sources */,
 				AD7009F72479320700F3C06A /* CRStaticFileManagerTests.m in Sources */,
+				ADC2A33824B50B35009A310A /* CRApplicationTests.m in Sources */,
 				AD1D44F91F3772ED00C5D260 /* CRViewTests.m in Sources */,
 				ADC29AF8246D7313007D443E /* CRFCGIConnectionTests.m in Sources */,
 				AD1D44E91F37600300C5D260 /* CRNibTests.m in Sources */,
