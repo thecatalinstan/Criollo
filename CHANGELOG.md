@@ -6,6 +6,10 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [1.0.1](https://github.com/thecatalinstan/Criollo/releases/tag/1.0.1) (07/07/2020)
+
+**Released on Tuesday, July 7, 2020**. This is a hotfix release that fixes a minor bug whereby the `CRApp` global is not initialized correctly.
+
 ## [1.0.0](https://github.com/thecatalinstan/Criollo/releases/tag/1.0.0) (07/05/2020)
 
 **Released on Sunday, July 5, 2020**. This release marks a point where Criollo has reached maturity and stability. The release contains a few improvement and stabilization refactors, bug fixes for all known issues, as well as general purpose updates in dependencies and Xcode projects.
