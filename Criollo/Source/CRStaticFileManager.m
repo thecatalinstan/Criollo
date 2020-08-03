@@ -299,7 +299,7 @@ error:
     if (![requestByteRange isSatisfiableForFileSize:size dataRange:&requestDataRange]) {
         // set the the unsatisfyiable conent range header
         headers[@"Content-range"] =  [NSString stringWithFormat:@"%@ %@", range.bytesUnit, [requestByteRange contentRangeSpecForFileSize:size satisfiable:NO dataRange:requestDataRange]];
-        NSString *description = [NSString stringWithFormat:NSLocalizedString(@"The requested byte-range %@-%@ / %lu could not be satisfied.",), requestByteRange.firstBytePos, requestByteRange.lastBytePos, size];
+        NSString *description = [NSString stringWithFormat:NSLocalizedString(@"The requested byte-range %@-%@ / %lld could not be satisfied.",), requestByteRange.firstBytePos, requestByteRange.lastBytePos, size];
         err = [self errorWithCode:CRStaticFileManagerRangeNotSatisfiableError description:description underlyingError:nil];
         goto done;
     }
