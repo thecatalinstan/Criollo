@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, strong) NSDictionary<NSString *, NSString *> * query;
 @property (nonatomic, readonly, strong, nullable) NSDictionary<NSString *, NSString *> * cookies;
 @property (nonatomic, readonly, strong, nullable) id body;
-@property (nonatomic, readonly, strong, nullable) NSDictionary<NSString *, CRUploadedFile *> * files;
+@property (nonatomic, readonly, strong, nullable) NSDictionary<NSString *, id> * files;
 
 @property (nonatomic, readonly, nullable) CRRequestRange * range;
 

@@ -84,7 +84,7 @@
         [queryVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) { @autoreleasepool {
             NSArray<NSString *> *queryVarComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
             NSString *key = queryVarComponents[0].stringByDecodingURLEncodedString.stringByRemovingPercentEncoding ? : (queryVarComponents[0].stringByDecodingURLEncodedString ? : queryVarComponents[0]);
-            NSString *value = queryVarComponents.count > 1 ? (queryVarComponents[1].stringByDecodingURLEncodedString.stringByRemovingPercentEncoding ? : (queryVarComponents[1].stringByDecodingURLEncodedString ? : queryVarComponents[1])) : @"";
+            NSString *value = queryVarComponents.count > 1 ? (queryVarComponents[1].stringByDecodingURLEncodedString.stringByRemovingPercentEncoding ? : (queryVarComponents[0].stringByDecodingURLEncodedString ? : queryVarComponents[1])) : @"";
             query[key] = value;
         }}];
     }
@@ -278,7 +278,13 @@
 
                 // Close any file output streams
                 if ( currentMultipartFileKey != nil ) {
-                    [self.files[currentMultipartFileKey] finishWriting];
+                    if ([self.files[currentMultipartFileKey] isKindOfClass:[NSMutableArray class]]) {
+                        for (CRUploadedFile* file in (NSMutableArray *)self.files[currentMultipartFileKey]) {
+                            [file finishWriting];
+                        }
+                    } else {
+                        [self.files[currentMultipartFileKey] finishWriting];
+                    }
                 }
 
                 // Set the target for the value
@@ -369,7 +375,23 @@
     CRUploadedFile * file = [[CRUploadedFile alloc] initWithName:headerFields[CRFileHeaderFilenameKey]];
     file.mimeType = headerFields[CRFileHeaderContentTypeKey];
 
-    ((NSMutableDictionary *)self.files)[key] = file;
+    if ([self.files objectForKey:key]) {
+        id obj = [self.files objectForKey:key];
+        
+        if ([obj isKindOfClass:[CRUploadedFile class]]) {
+            
+            NSMutableArray * fileArray = [NSMutableArray array];
+            
+            [fileArray addObject:(CRUploadedFile *)obj];
+            [fileArray addObject:file];
+            
+            [self.files setValue:fileArray forKey:key];
+        } else if ([obj isKindOfClass:[NSMutableArray class]]) {
+            [obj addObject:file];
+        }
+    } else {
+        ((NSMutableDictionary *)self.files)[key] = file;
+    }
 
     return YES;
 }
@@ -378,8 +400,16 @@
     if ( self.files[key] == nil ) {
         return NO;
     }
-
-    [self.files[key] appendData:data];
+    
+    if ([self.files[key] isKindOfClass:[NSMutableArray class]]) {
+        
+        CRUploadedFile *lastFile = [(NSMutableArray *)[self.files objectForKey:key] lastObject];
+        
+        [lastFile appendData:data];
+    } else { 
+        [(CRUploadedFile *)self.files[key] appendData:data];
+    }
+    
     return YES;
 }
 
@@ -399,7 +429,7 @@
     [bodyVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) { @autoreleasepool {
         NSArray<NSString *> *bodyVarComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
         NSString *key = bodyVarComponents[0].stringByDecodingURLEncodedString.stringByRemovingPercentEncoding ? : (bodyVarComponents[0].stringByDecodingURLEncodedString ? : bodyVarComponents[0]);
-        NSString *value = bodyVarComponents.count > 1 ? (bodyVarComponents[1].stringByDecodingURLEncodedString.stringByRemovingPercentEncoding ? : (bodyVarComponents[1].stringByDecodingURLEncodedString ? : bodyVarComponents[1])) : @"";
+        NSString *value = bodyVarComponents.count > 1 ? (bodyVarComponents[1].stringByDecodingURLEncodedString.stringByRemovingPercentEncoding ? : (bodyVarComponents[0].stringByDecodingURLEncodedString ? : bodyVarComponents[1])) : @"";
         body[key] = value;
     }}];
     _body = body;
@@ -458,11 +488,20 @@
 - (void)dealloc {
     // Delete temporary files created by multipart uploadds
     if ( self.files.count != 0 ) {
-        [self.files enumerateKeysAndObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSString * _Nonnull key, CRUploadedFile * _Nonnull obj, BOOL * _Nonnull stop) {
-            NSURL * temporaryFileURL = obj.temporaryFileURL;
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
-            });
+        [self.files enumerateKeysAndObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSString * _Nonnull key, id _Nonnull obj, BOOL * _Nonnull stop) {
+            if ([obj isKindOfClass:[NSMutableArray class]]) {
+                for (CRUploadedFile* file in (NSMutableArray *)obj) {
+                    NSURL * temporaryFileURL = ((CRUploadedFile *)file).temporaryFileURL;
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                        [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
+                    });
+                }
+            } else {
+                NSURL * temporaryFileURL = ((CRUploadedFile *)obj).temporaryFileURL;
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                    [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
+                });
+            }
         }];
     }
 
