@@ -136,6 +136,10 @@
                     CRHTTPVersion version = CRHTTPVersionMake(versionSpec);
 
                     NSRange rangeOfHostHeader = [data rangeOfData:[@"Host: " dataUsingEncoding:NSUTF8StringEncoding] options:0 range:NSMakeRange(0, data.length)];
+					
+                    // Since HTTP header fields are case-insensitive (https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2), we have to check for both `Host` and `host`.
+                    if ( rangeOfHostHeader.location == NSNotFound )
+                        rangeOfHostHeader = [data rangeOfData:[@"host: " dataUsingEncoding:NSUTF8StringEncoding] options:0 range:NSMakeRange(0, data.length)];
 
                     if ( rangeOfHostHeader.location != NSNotFound || version == CRHTTPVersion1_0 ) {
                         NSString* hostSpec = @"localhost";
