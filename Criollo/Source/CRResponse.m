@@ -13,11 +13,11 @@
 #import <Criollo/CRConnection.h>
 #import <Criollo/CRRequest.h>
 #import <Criollo/CRServer.h>
-#import <Criollo/CRServerConfiguration.h>
 
 #import "CRConnection_Internal.h"
 #import "CRMessage_Internal.h"
 #import "CRResponse_Internal.h"
+#import "CRServerConfiguration.h"
 #import "NSDate+RFC1123.h"
 #import "NSHTTPCookie+Criollo.h"
 

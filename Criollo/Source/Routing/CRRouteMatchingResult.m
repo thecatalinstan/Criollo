@@ -6,10 +6,9 @@
 //  Copyright © 2016 Cătălin Stan. All rights reserved.
 //
 
-#import <Criollo/CRRouteMatchingResult.h>
+#import "CRRouteMatchingResult.h"
 
-#import <Criollo/CRRoute.h>
-
+#import "CRRoute.h"
 #import "CRRouteMatchingResult_Internal.h"
 
 @implementation CRRouteMatchingResult

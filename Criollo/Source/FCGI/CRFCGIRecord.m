@@ -6,7 +6,7 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import <Criollo/CRFCGIRecord.h>
+#import "CRFCGIRecord.h"
 
 NSString* NSStringFromCRFCGIVersion(CRFCGIVersion version) {
     NSString* versionName;

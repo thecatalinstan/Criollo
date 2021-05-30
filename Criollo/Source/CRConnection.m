@@ -13,7 +13,6 @@
 #import <Criollo/CRRequest.h>
 #import <Criollo/CRResponse.h>
 #import <Criollo/CRServer.h>
-#import <Criollo/CRServerConfiguration.h>
 #import <sys/sysctl.h>
 #import <sys/types.h>
 
@@ -21,6 +20,7 @@
 #import "CRRequest_Internal.h"
 #import "CRResponse_Internal.h"
 #import "CRServer_Internal.h"
+#import "CRServerConfiguration.h"
 #import "NSDate+RFC1123.h"
 
 static int const CRConnectionSocketTagSendingResponse = 20;

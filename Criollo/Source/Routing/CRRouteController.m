@@ -10,11 +10,11 @@
 
 #import <Criollo/CRRequest.h>
 #import <Criollo/CRResponse.h>
-#import <Criollo/CRRoute.h>
-#import <Criollo/CRRouteMatchingResult.h>
 
 #import "CRRequest_Internal.h"
 #import "CRResponse_Internal.h"
+#import "CRRoute.h"
+#import "CRRouteMatchingResult.h"
 #import "CRRouter_Internal.h"
 #import "NSString+Criollo.h"
 

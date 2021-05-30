@@ -26,29 +26,7 @@
     XCTAssertEqual(CRApp, sharedApplication);
 }
 
-- (void)test_CRApplicatioMain__CRAppShouldNotBeNil {
-    [NSThread detachNewThreadSelector:@selector(applicationMain) toTarget:self withObject:nil];
-    
-    sleep(1);
-    
-    XCTAssertNotNil(CRApp);
-}
-
-- (void)test_CRApplicationMain__CRAppShouldBeIdenticalToSharedApplication {
-    [NSThread detachNewThreadSelector:@selector(applicationMain) toTarget:self withObject:nil];
-    
-    sleep(1);
-    
-    XCTAssertEqual(CRApp, CRApplication.sharedApplication);
-
-}
-
-
 - (void)applicationDidFinishLaunching:(nonnull NSNotification *)notification {
-}
-
-- (void)applicationMain {
-    CRApplicationMain(0, NULL, self);
 }
 
 @end

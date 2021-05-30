@@ -10,13 +10,13 @@
 
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import <Criollo/CRApplication.h>
-#import <Criollo/CRFCGIConnection.h>
-#import <Criollo/CRFCGIRecord.h>
-#import <Criollo/CRFCGIRequest.h>
 #import <Criollo/CRFCGIServer.h>
-#import <Criollo/CRFCGIServerConfiguration.h>
 
 #import "CRConnection_Internal.h"
+#import "CRFCGIConnection.h"
+#import "CRFCGIRecord.h"
+#import "CRFCGIRequest.h"
+#import "CRFCGIServerConfiguration.h"
 #import "CRMessage_Internal.h"
 #import "CRResponse_Internal.h"
 #import "CRServer_Internal.h"

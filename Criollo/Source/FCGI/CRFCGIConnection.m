@@ -6,17 +6,17 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import <Criollo/CRFCGIConnection.h>
+#import "CRFCGIConnection.h"
 
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import <Criollo/CRApplication.h>
-#import <Criollo/CRFCGIRecord.h>
-#import <Criollo/CRFCGIRequest.h>
 #import <Criollo/CRFCGIResponse.h>
 #import <Criollo/CRFCGIServer.h>
-#import <Criollo/CRFCGIServerConfiguration.h>
 
 #import "CRConnection_Internal.h"
+#import "CRFCGIRecord.h"
+#import "CRFCGIRequest.h"
+#import "CRFCGIServerConfiguration.h"
 #import "CRRequest_Internal.h"
 #import "CRResponse_Internal.h"
 #import "CRServer_Internal.h"

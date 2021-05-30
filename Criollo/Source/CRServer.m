@@ -12,14 +12,14 @@
 #import <Criollo/CRConnection.h>
 #import <Criollo/CRRequest.h>
 #import <Criollo/CRResponse.h>
-#import <Criollo/CRRoute.h>
-#import <Criollo/CRServerConfiguration.h>
 #import <Criollo/CRViewController.h>
 
 #import "CRConnection_Internal.h"
 #import "CRMessage_Internal.h"
+#import "CRRoute.h"
 #import "CRRouter_Internal.h"
 #import "CRServer_Internal.h"
+#import "CRServerConfiguration.h"
 
 static NSUInteger const InitialConnectionCapacity = 1 << 10;
 

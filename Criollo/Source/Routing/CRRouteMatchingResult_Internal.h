@@ -6,7 +6,7 @@
 //  Copyright © 2016 Cătălin Stan. All rights reserved.
 //
 
-#import <Criollo/CRRouteMatchingResult.h>
+#import "CRRouteMatchingResult.h"
 
 @class CRRoute;
 

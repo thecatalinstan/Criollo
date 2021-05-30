@@ -6,7 +6,7 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import <Criollo/CRRoute.h>
+#import "CRRoute.h"
 
 #import <Criollo/CRRequest.h>
 #import <Criollo/CRResponse.h>

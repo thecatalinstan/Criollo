@@ -6,7 +6,7 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import <Criollo/CRFCGIServerConfiguration.h>
+#import "CRFCGIServerConfiguration.h"
 
 // Defaults
 NSUInteger const CRFCGIConnectionDefaultReadRecordTimeout = 5;

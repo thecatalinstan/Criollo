@@ -6,7 +6,7 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import <Criollo/CRServerConfiguration.h>
+#import "CRServerConfiguration.h"
 
 @interface CRHTTPServerConfiguration : CRServerConfiguration
 

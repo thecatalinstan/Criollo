@@ -8,10 +8,9 @@
 
 #import <Criollo/CRFCGIServer.h>
 
-#import <Criollo/CRFCGIConnection.h>
-#import <Criollo/CRFCGIServerConfiguration.h>
-
 #import "CRConnection_Internal.h"
+#import "CRFCGIConnection.h"
+#import "CRFCGIServerConfiguration.h"
 #import "CRServer_Internal.h"
 
 @implementation CRFCGIServer
