@@ -6,20 +6,20 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRFCGIConnection.h"
+#import <Criollo/CRFCGIConnection.h>
 
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
+#import <Criollo/CRApplication.h>
+#import <Criollo/CRFCGIRecord.h>
+#import <Criollo/CRFCGIRequest.h>
+#import <Criollo/CRFCGIResponse.h>
+#import <Criollo/CRFCGIServer.h>
+#import <Criollo/CRFCGIServerConfiguration.h>
 
-#import "CRResponse_Internal.h"
-#import "CRFCGIResponse.h"
 #import "CRConnection_Internal.h"
-#import "CRApplication.h"
-#import "CRServer_Internal.h"
-#import "CRFCGIServer.h"
-#import "CRFCGIServerConfiguration.h"
-#import "CRFCGIRequest.h"
 #import "CRRequest_Internal.h"
-#import "CRFCGIRecord.h"
+#import "CRResponse_Internal.h"
+#import "CRServer_Internal.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

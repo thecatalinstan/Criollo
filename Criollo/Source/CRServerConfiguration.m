@@ -6,7 +6,7 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRServerConfiguration.h"
+#import <Criollo/CRServerConfiguration.h>
 
 // Defaults
 NSString* const CRServerDefaultInterface = @"";

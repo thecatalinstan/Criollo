@@ -6,18 +6,17 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRHTTPServer.h"
+#import <Criollo/CRHTTPServer.h>
 
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
-
-#import "CRServer_Internal.h"
-#import "CRHTTPSHelper.h"
-#import "CRHTTPConnection.h"
-#import "CRConnection_Internal.h"
-#import "CRHTTPServerConfiguration.h"
-#import "CRApplication.h"
-
+#import <Criollo/CRApplication.h>
+#import <Criollo/CRHTTPConnection.h>
+#import <Criollo/CRHTTPServerConfiguration.h>
+#import <Criollo/CRHTTPSHelper.h>
 #import <Security/Security.h>
+
+#import "CRConnection_Internal.h"
+#import "CRServer_Internal.h"
 
 @interface CRHTTPServer ()
 

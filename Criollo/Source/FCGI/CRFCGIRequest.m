@@ -6,7 +6,7 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRFCGIRequest.h"
+#import <Criollo/CRFCGIRequest.h>
 
 NSString* NSStringFromCRFCGIRequestRole(CRFCGIRequestRole requestRole) {
     NSString* requestRoleName;

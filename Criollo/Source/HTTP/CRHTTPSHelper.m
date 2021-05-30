@@ -6,7 +6,7 @@
 //  Copyright © 2017 Cătălin Stan. All rights reserved.
 //
 
-#import "CRHTTPSHelper.h"
+#import <Criollo/CRHTTPSHelper.h>
 
 NSString * const CRHTTPSErrorDomain                      = @"CRHTTPSErrorDomain";
 

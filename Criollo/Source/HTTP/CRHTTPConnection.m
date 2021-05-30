@@ -6,21 +6,21 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRHTTPConnection.h"
+#import <Criollo/CRHTTPConnection.h>
 
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
+#import <Criollo/CRApplication.h>
+#import <Criollo/CRHTTPResponse.h>
+#import <Criollo/CRHTTPServer.h>
+#import <Criollo/CRHTTPServerConfiguration.h>
+#import <Criollo/CRMessage.h>
+#import <Criollo/CRRequest.h>
 
 #import "CRConnection_Internal.h"
-#import "CRApplication.h"
-#import "CRHTTPServer.h"
-#import "CRServer_Internal.h"
-#import "CRHTTPServerConfiguration.h"
-#import "CRMessage.h"
 #import "CRMessage_Internal.h"
-#import "CRRequest.h"
 #import "CRRequest_Internal.h"
 #import "CRResponse_Internal.h"
-#import "CRHTTPResponse.h"
+#import "CRServer_Internal.h"
 
 @interface CRHTTPConnection () {
     NSUInteger requestBodyLength;

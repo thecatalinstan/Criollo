@@ -6,15 +6,14 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRServer.h"
+#import <Criollo/CRServer.h>
 
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
-
-#import "CRConnection.h"
+#import <Criollo/CRConnection.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CRServer ()  <GCDAsyncSocketDelegate, CRConnectionDelegate>
+@interface CRServer () <GCDAsyncSocketDelegate, CRConnectionDelegate>
 
 @property (nonatomic, strong) CRServerConfiguration * configuration;
 @property (nonatomic, strong) NSMutableArray<CRConnection *> * connections;

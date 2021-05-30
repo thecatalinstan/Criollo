@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Catalin Stan. All rights reserved.
 //
 
-#import "CRApplication.h"
+#import <Criollo/CRApplication.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

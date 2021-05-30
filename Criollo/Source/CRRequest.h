@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-#import "CRMessage.h"
+#import <Criollo/CRMessage.h>
 
 // Mime types of the requests we support body parsing for
 #define CRRequestTypeJSON                   @"application/json"

@@ -6,7 +6,7 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRRequest.h"
+#import <Criollo/CRRequest.h>
 
 #define CRRequestHeaderNameSeparator        @":"
 #define CRRequestHeaderSeparator            @";"

@@ -6,12 +6,14 @@
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-#import "CRViewController.h"
+#import <Criollo/CRViewController.h>
+
+#import <Criollo/CRNib.h>
+#import <Criollo/CRRequest.h>
+#import <Criollo/CRResponse.h>
+#import <Criollo/CRView.h>
+
 #import "CRRouter_Internal.h"
-#import "CRView.h"
-#import "CRNib.h"
-#import "CRRequest.h"
-#import "CRResponse.h"
 #import "NSString+Criollo.h"
 
 NS_ASSUME_NONNULL_BEGIN

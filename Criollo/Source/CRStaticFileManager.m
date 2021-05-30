@@ -6,14 +6,15 @@
 //  Copyright © 2016 Cătălin Stan. All rights reserved.
 //
 
-#import "CRStaticFileManager.h"
-#import "CRStaticFileManager_Internal.h"
+#import <Criollo/CRStaticFileManager.h>
 
-#import "CRRequest.h"
-#import "CRResponse.h"
-#import "CRRequestRange.h"
+#import <Criollo/CRMimeTypeHelper.h>
+#import <Criollo/CRRequest.h>
+#import <Criollo/CRRequestRange.h>
+#import <Criollo/CRResponse.h>
+
 #import "CRRouter_Internal.h"
-#import "CRMimeTypeHelper.h"
+#import "CRStaticFileManager_Internal.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

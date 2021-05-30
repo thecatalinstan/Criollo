@@ -6,18 +6,20 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRRoute.h"
-#import "CRRoute_Internal.h"
-#import "CRTypes.h"
-#import "CRServer_Internal.h"
-#import "CRRouteController.h"
-#import "CRViewController.h"
-#import "CRRequest.h"
+#import <Criollo/CRRoute.h>
+
+#import <Criollo/CRRequest.h>
+#import <Criollo/CRResponse.h>
+#import <Criollo/CRRouteController.h>
+#import <Criollo/CRStaticDirectoryManager.h>
+#import <Criollo/CRStaticFileManager.h>
+#import <Criollo/CRTypes.h>
+#import <Criollo/CRViewController.h>
+
 #import "CRRequest_Internal.h"
-#import "CRResponse.h"
 #import "CRResponse_Internal.h"
-#import "CRStaticDirectoryManager.h"
-#import "CRStaticFileManager.h"
+#import "CRRoute_Internal.h"
+#import "CRServer_Internal.h"
 
 @interface CRRoute ()
 

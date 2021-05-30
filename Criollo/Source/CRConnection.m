@@ -6,22 +6,21 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRConnection.h"
+#import <Criollo/CRConnection.h>
 
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
+#import <Criollo/CRApplication.h>
+#import <Criollo/CRRequest.h>
+#import <Criollo/CRResponse.h>
+#import <Criollo/CRServer.h>
+#import <Criollo/CRServerConfiguration.h>
+#import <sys/sysctl.h>
+#import <sys/types.h>
 
 #import "CRConnection_Internal.h"
-#import "CRApplication.h"
-#import "CRServer.h"
-#import "CRServer_Internal.h"
-#import "CRServerConfiguration.h"
-#import "CRRequest.h"
 #import "CRRequest_Internal.h"
-#import "CRResponse.h"
 #import "CRResponse_Internal.h"
-
-#include <sys/types.h>
-#include <sys/sysctl.h>
+#import "CRServer_Internal.h"
 #import "NSDate+RFC1123.h"
 
 static int const CRConnectionSocketTagSendingResponse = 20;

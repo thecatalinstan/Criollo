@@ -6,20 +6,20 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRFCGIResponse.h"
+#import <Criollo/CRFCGIResponse.h>
 
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
+#import <Criollo/CRApplication.h>
+#import <Criollo/CRFCGIConnection.h>
+#import <Criollo/CRFCGIRecord.h>
+#import <Criollo/CRFCGIRequest.h>
+#import <Criollo/CRFCGIServer.h>
+#import <Criollo/CRFCGIServerConfiguration.h>
 
-#import "CRResponse_Internal.h"
-#import "CRApplication.h"
-#import "CRFCGIServer.h"
-#import "CRServer_Internal.h"
-#import "CRFCGIServerConfiguration.h"
-#import "CRFCGIConnection.h"
 #import "CRConnection_Internal.h"
 #import "CRMessage_Internal.h"
-#import "CRFCGIRequest.h"
-#import "CRFCGIRecord.h"
+#import "CRResponse_Internal.h"
+#import "CRServer_Internal.h"
 
 NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) {
     NSString* protocolStatusName;

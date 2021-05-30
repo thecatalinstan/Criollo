@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-#import "CRTypes.h"
-#import "CRRouteController.h"
+#import <Criollo/CRRouteController.h>
+#import <Criollo/CRTypes.h>
 
 @class CRView, CRRequest, CRResponse;
 

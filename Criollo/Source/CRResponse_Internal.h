@@ -6,9 +6,10 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRResponse.h"
+#import <Criollo/CRResponse.h>
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface CRResponse ()
 
 @property (nonatomic, assign) NSUInteger proposedStatusCode;
@@ -29,4 +30,5 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)buildHeaders;
 
 @end
+
 NS_ASSUME_NONNULL_END

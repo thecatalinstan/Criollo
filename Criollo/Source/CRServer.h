@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRTypes.h"
-#import "CRRouter.h"
+#import <Criollo/CRRouter.h>
+#import <Criollo/CRTypes.h>
 
 #define CRServerErrorDomain                   @"CRServerErrorDomain"
 #define CRServerSocketError                   2001
@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)serverDidStopListening:(CRServer *)server;
 
 - (void)server:(CRServer *)server didAcceptConnection:(CRConnection *)connection;
-- (void)server:(CRServer  *)server didCloseConnection:(CRConnection *)connection;
+- (void)server:(CRServer *)server didCloseConnection:(CRConnection *)connection;
 
 - (void)server:(CRServer *)server didReceiveRequest:(CRRequest *)request;
 - (void)server:(CRServer *)server didFinishRequest:(CRRequest *)request;

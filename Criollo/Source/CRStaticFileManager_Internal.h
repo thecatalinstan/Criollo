@@ -6,7 +6,7 @@
 //  Copyright © 2020 Cătălin Stan. All rights reserved.
 //
 
-#import "CRStaticFileManager.h"
+#import <Criollo/CRStaticFileManager.h>
 
 @class CRRequestRange;
 

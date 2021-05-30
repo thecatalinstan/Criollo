@@ -7,7 +7,7 @@
 //
 
 
-#import "CRServer.h"
+#import <Criollo/CRServer.h>
 
 @class CRHTTPServerConfiguration;
 

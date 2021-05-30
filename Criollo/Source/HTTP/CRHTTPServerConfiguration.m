@@ -6,7 +6,7 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRHTTPServerConfiguration.h"
+#import <Criollo/CRHTTPServerConfiguration.h>
 
 // Defaults
 NSUInteger const CRHTTPConnectionDefaultReadHeaderTimeout = 2;

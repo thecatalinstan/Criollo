@@ -6,7 +6,7 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRFCGIRecord.h"
+#import <Criollo/CRFCGIRecord.h>
 
 NSString* NSStringFromCRFCGIVersion(CRFCGIVersion version) {
     NSString* versionName;
@@ -59,11 +59,13 @@ NSString* NSStringFromCRFCGIRecordType(CRFCGIRecordType recordType) {
 }
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface CRFCGIRecord ()
 
 @property (nonatomic, readonly, copy) NSData *headerProtocolData;
 
 @end
+
 NS_ASSUME_NONNULL_END
 
 @implementation CRFCGIRecord

@@ -6,19 +6,20 @@
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-#import "CRMessage_Internal.h"
-#import "CRRequest.h"
-#import "CRRequest_Internal.h"
-#import "CRConnection.h"
-#import "CRConnection_Internal.h"
-#import "CRServer.h"
-#import "CRServer_Internal.h"
-#import "CRRequestRange.h"
-#import "CRRequestRange_Internal.h"
-#import "CRUploadedFile.h"
-#import "CRUploadedFile_Internal.h"
-#import "CRApplication.h"
+#import <Criollo/CRRequest.h>
 
+#import <Criollo/CRApplication.h>
+#import <Criollo/CRConnection.h>
+#import <Criollo/CRRequestRange.h>
+#import <Criollo/CRServer.h>
+#import <Criollo/CRUploadedFile.h>
+
+#import "CRConnection_Internal.h"
+#import "CRMessage_Internal.h"
+#import "CRRequest_Internal.h"
+#import "CRRequestRange_Internal.h"
+#import "CRServer_Internal.h"
+#import "CRUploadedFile_Internal.h"
 #import "NSString+Criollo.h"
 
 #define CRFileHeaderNameKey             @"name"

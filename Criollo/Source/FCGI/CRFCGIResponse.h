@@ -6,7 +6,7 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRResponse.h"
+#import <Criollo/CRResponse.h>
 
 typedef UInt32  CRFCGIApplicationStatus;
 

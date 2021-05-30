@@ -6,8 +6,9 @@
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
+#import <Criollo/CRTypes.h>
+
 #import "NSString+Criollo.h"
-#import "CRTypes.h"
 
 @implementation NSString (Criollo)
 
