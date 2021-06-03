@@ -17,7 +17,10 @@
 
 @property (nonatomic, strong, nullable) NSString *identityPath;
 @property (nonatomic, strong, nullable) NSString *password;
+
+#if SEC_OS_OSX_INCLUDES
 @property (nonatomic, strong, nullable) NSString *certificatePath;
 @property (nonatomic, strong, nullable) NSString *privateKeyPath;
+#endif
 
 @end
