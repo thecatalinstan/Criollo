@@ -46,32 +46,38 @@
 }
 
 - (BOOL)startListening:(NSError *__autoreleasing  _Nullable *)error portNumber:(NSUInteger)portNumber interface:(NSString *)interface {
-    if ( self.isSecure ) {
-        
+    if (self.isSecure) {
         self.certificates = nil;
         self.httpsHelper = [CRHTTPSHelper new];
         
-        if ( self.identityPath.length > 0 ) {
+        if (self.identityPath.length > 0) {
             self.certificates = [self.httpsHelper parseIdentrityFile:self.identityPath password:self.password error:error];
-        } else if ( self.certificatePath.length > 0 && self.privateKeyPath.length > 0 ) {
+        }
+#if SEC_OS_OSX_INCLUDES
+        else if (self.certificatePath.length > 0 && self.privateKeyPath.length > 0) {
             self.certificates = [self.httpsHelper parseCertificateFile:self.certificatePath privateKeyFile:self.privateKeyPath error:error];
-        } else if ( error != NULL ) {
-            NSDictionary *info = @{
+        }
+#endif
+        else if (error) {
+            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSMissingCredentialsError userInfo:@{
                 NSLocalizedDescriptionKey: NSLocalizedString(@"Unable to parse credential settings.",),
                 CRHTTPSIdentityPathKey: self.identityPath ? : @"(null)",
+#if SEC_OS_OSX_INCLUDES
                 CRHTTPSCertificatePathKey: self.certificatePath ? : @"(null)",
                 CRHTTPSCertificateKeyPathKey: self.privateKeyPath ? : @"(null)"
-            };
-            *error = [[NSError alloc] initWithDomain:CRHTTPSErrorDomain code:CRHTTPSMissingCredentialsError userInfo:info];
+#endif
+            }];
         }
       
         // Clear sensitive data from memory
         self.identityPath = nil;
         self.password = nil;
+#if SEC_OS_OSX_INCLUDES
         self.certificatePath = nil;
         self.privateKeyPath = nil;
+#endif
         
-        if ( self.certificates == nil ) {
+        if (self.certificates == nil) {
             self.isSecure = NO;
             return NO;
         }

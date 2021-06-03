@@ -13,10 +13,6 @@
 		4ABB1E751F9E7A8500480EC7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4ABB1E741F9E7A8500480EC7 /* Assets.xcassets */; };
 		4ABB1E8A1F9E7B0D00480EC7 /* Criollo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ABB1E8B1F9E7B0D00480EC7 /* Criollo.framework */; };
 		4ABB1E931F9E7C4400480EC7 /* criollo_local.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 4ABB1E8E1F9E7C4400480EC7 /* criollo_local.p12 */; };
-		4ABB1E941F9E7C4400480EC7 /* key.der in Resources */ = {isa = PBXBuildFile; fileRef = 4ABB1E8F1F9E7C4400480EC7 /* key.der */; };
-		4ABB1E951F9E7C4400480EC7 /* cert.der in Resources */ = {isa = PBXBuildFile; fileRef = 4ABB1E901F9E7C4400480EC7 /* cert.der */; };
-		4ABB1E961F9E7C4400480EC7 /* cert.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4ABB1E911F9E7C4400480EC7 /* cert.pem */; };
-		4ABB1E971F9E7C4400480EC7 /* key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4ABB1E921F9E7C4400480EC7 /* key.pem */; };
 		4ABB1E9F1F9E7CAB00480EC7 /* APIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ABB1E9B1F9E7CAB00480EC7 /* APIController.swift */; };
 		4ABB1EA01F9E7CAB00480EC7 /* MultiRouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ABB1E9C1F9E7CAB00480EC7 /* MultiRouteViewController.swift */; };
 		4ABB1EA11F9E7CAB00480EC7 /* HelloWorldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ABB1E9E1F9E7CAB00480EC7 /* HelloWorldViewController.swift */; };
@@ -49,10 +45,6 @@
 		4ABB1E761F9E7A8500480EC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4ABB1E8B1F9E7B0D00480EC7 /* Criollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Criollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4ABB1E8E1F9E7C4400480EC7 /* criollo_local.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = criollo_local.p12; sourceTree = "<group>"; };
-		4ABB1E8F1F9E7C4400480EC7 /* key.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = key.der; sourceTree = "<group>"; };
-		4ABB1E901F9E7C4400480EC7 /* cert.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = cert.der; sourceTree = "<group>"; };
-		4ABB1E911F9E7C4400480EC7 /* cert.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cert.pem; sourceTree = "<group>"; };
-		4ABB1E921F9E7C4400480EC7 /* key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = key.pem; sourceTree = "<group>"; };
 		4ABB1E991F9E7C7E00480EC7 /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
 		4ABB1E9B1F9E7CAB00480EC7 /* APIController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIController.swift; sourceTree = "<group>"; };
 		4ABB1E9C1F9E7CAB00480EC7 /* MultiRouteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiRouteViewController.swift; sourceTree = "<group>"; };
@@ -126,11 +118,7 @@
 		4ABB1E8D1F9E7B9600480EC7 /* Certificates */ = {
 			isa = PBXGroup;
 			children = (
-				4ABB1E901F9E7C4400480EC7 /* cert.der */,
-				4ABB1E911F9E7C4400480EC7 /* cert.pem */,
 				4ABB1E8E1F9E7C4400480EC7 /* criollo_local.p12 */,
-				4ABB1E8F1F9E7C4400480EC7 /* key.der */,
-				4ABB1E921F9E7C4400480EC7 /* key.pem */,
 			);
 			name = Certificates;
 			path = ../Shared/Certificates;
@@ -207,14 +195,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				4ABB1E751F9E7A8500480EC7 /* Assets.xcassets in Resources */,
-				4ABB1E951F9E7C4400480EC7 /* cert.der in Resources */,
 				4ABB1EA71F9E7D0300480EC7 /* MultiRouteViewController.html in Resources */,
-				4ABB1E961F9E7C4400480EC7 /* cert.pem in Resources */,
 				4ABB1EA61F9E7D0300480EC7 /* HelloWorldViewController.html in Resources */,
-				4ABB1E941F9E7C4400480EC7 /* key.der in Resources */,
 				4ABB1E931F9E7C4400480EC7 /* criollo_local.p12 in Resources */,
 				4ABB1E731F9E7A8500480EC7 /* Main.storyboard in Resources */,
-				4ABB1E971F9E7C4400480EC7 /* key.pem in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
