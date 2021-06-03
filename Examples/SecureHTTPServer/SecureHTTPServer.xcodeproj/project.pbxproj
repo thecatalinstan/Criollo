@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4A22CEB61F99554B00BA1DD9 /* SecureHTTPServer.bundle.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A22CEB31F99554A00BA1DD9 /* SecureHTTPServer.bundle.pem */; };
-		4A22CEB71F99554B00BA1DD9 /* SecureHTTPServer.key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4A22CEB41F99554A00BA1DD9 /* SecureHTTPServer.key.pem */; };
 		4A22CEB81F99554B00BA1DD9 /* SecureHTTPServer.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 4A22CEB51F99554A00BA1DD9 /* SecureHTTPServer.p12 */; };
 		4AC7109D1F994D6000CCE070 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AC7109C1F994D6000CCE070 /* AppDelegate.swift */; };
 		4AC7109F1F994D6000CCE070 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AC7109E1F994D6000CCE070 /* ViewController.swift */; };
@@ -18,8 +16,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4A22CEB31F99554A00BA1DD9 /* SecureHTTPServer.bundle.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SecureHTTPServer.bundle.pem; sourceTree = "<group>"; };
-		4A22CEB41F99554A00BA1DD9 /* SecureHTTPServer.key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SecureHTTPServer.key.pem; sourceTree = "<group>"; };
 		4A22CEB51F99554A00BA1DD9 /* SecureHTTPServer.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = SecureHTTPServer.p12; sourceTree = "<group>"; };
 		4AC710991F994D6000CCE070 /* SecureHTTPServer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SecureHTTPServer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AC7109C1F994D6000CCE070 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -44,8 +40,6 @@
 		4A22CEB21F99554A00BA1DD9 /* Certificates */ = {
 			isa = PBXGroup;
 			children = (
-				4A22CEB31F99554A00BA1DD9 /* SecureHTTPServer.bundle.pem */,
-				4A22CEB41F99554A00BA1DD9 /* SecureHTTPServer.key.pem */,
 				4A22CEB51F99554A00BA1DD9 /* SecureHTTPServer.p12 */,
 			);
 			path = Certificates;
@@ -143,8 +137,6 @@
 			files = (
 				4AC710A71F994D6000CCE070 /* LaunchScreen.storyboard in Resources */,
 				4AC710A41F994D6000CCE070 /* Assets.xcassets in Resources */,
-				4A22CEB71F99554B00BA1DD9 /* SecureHTTPServer.key.pem in Resources */,
-				4A22CEB61F99554B00BA1DD9 /* SecureHTTPServer.bundle.pem in Resources */,
 				4A22CEB81F99554B00BA1DD9 /* SecureHTTPServer.p12 in Resources */,
 				4AC710A21F994D6000CCE070 /* Main.storyboard in Resources */,
 			);
