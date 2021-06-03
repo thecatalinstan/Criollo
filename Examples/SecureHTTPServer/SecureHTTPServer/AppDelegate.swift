@@ -27,14 +27,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
         
         // Setup HTTPS
         self.server?.isSecure = true
-        
-        // Secure with PEM certificate and key
-        self.server?.certificatePath = Bundle.main.path(forResource: "SecureHTTPServer.bundle", ofType: "pem")
-        self.server?.privateKeyPath = Bundle.main.path(forResource: "SecureHTTPServer.key", ofType: "pem")
-        
+                
         // Secure with PKCS#12 identity and password.
-//        self.server?.identityPath = Bundle.main.path(forResource: "SecureHTTPServer", ofType: "p12")
-//        self.server?.password = "password"
+        self.server?.identityPath = Bundle.main.path(forResource: "SecureHTTPServer", ofType: "p12")
+        self.server?.password = "password"
         
         self.server?.get("/", block: { (req, res, next) in
             res.send("Hello over HTTPS.")

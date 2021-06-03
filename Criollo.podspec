@@ -23,10 +23,10 @@ Pod::Spec.new do |s|
   s.osx.deployment_target   = "10.10"
   s.osx.weak_frameworks     = "Foundation"
 
-  s.ios.deployment_target   = "8.0"
+  s.ios.deployment_target   = "12.0"
   s.ios.vendored_frameworks = "Libraries/OpenSSL/openssl.framework"
 
-  s.tvos.deployment_target  = "9.0"
+  s.tvos.deployment_target  = "12.0"
   s.tvos.vendored_libraries = "Libraries/OpenSSL/lib/libcrypto-tvOS.a", "Libraries/OpenSSL/lib/libssl-tvOS.a"
   s.tvos.preserve_paths     = 'Libraries/OpenSSL/include/openssl/*.h', 'Libraries/OpenSSL/include/LICENSE'
   s.tvos.xcconfig           = { 'HEADER_SEARCH_PATHS' => "${PODS_ROOT}/#{s.name}/Libraries/OpenSSL/include/**" }
