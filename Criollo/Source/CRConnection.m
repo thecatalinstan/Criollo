@@ -61,14 +61,6 @@ static const NSData * CRLFCRLFData;
 
 #pragma mark - Responses
 
-- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode {
-    return [self responseWithHTTPStatusCode:HTTPStatusCode description:nil version:CRHTTPVersion1_1];
-}
-
-- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description {
-    return [self responseWithHTTPStatusCode:HTTPStatusCode description:description version:CRHTTPVersion1_1];
-}
-
 - (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(CRHTTPVersion)version {
     return [[CRResponse alloc] initWithConnection:self HTTPStatusCode:HTTPStatusCode description:description version:version];
 }
@@ -191,7 +183,7 @@ static const NSData * CRLFCRLFData;
         }
     }
 
-    CRResponse* response = [self responseWithHTTPStatusCode:200];
+    CRResponse* response = [self responseWithHTTPStatusCode:200 description:nil version:self.requestBeingReceived.version];
     self.requestBeingReceived.response = response;
     response.request = self.requestBeingReceived;
     [self.delegate connection:self didReceiveRequest:self.requestBeingReceived response:response];

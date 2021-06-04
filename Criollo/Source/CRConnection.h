@@ -11,6 +11,7 @@
 @class CRConnection, GCDAsyncSocket, CRServer, CRRequest, CRResponse;
 
 NS_ASSUME_NONNULL_BEGIN
+
 @protocol CRConnectionDelegate <NSObject>
 
 - (void)connection:(CRConnection *)connection didReceiveRequest:(CRRequest *)request response:(CRResponse *)response;
@@ -28,4 +29,5 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSUInteger localPort;
 
 @end
+
 NS_ASSUME_NONNULL_END
