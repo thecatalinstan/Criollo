@@ -6,9 +6,6 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#define CRPathSeparator                     @"/"
-#define CRPathAnyPath                       @"*"
-
 NS_ASSUME_NONNULL_BEGIN
 
 /**
@@ -46,7 +43,7 @@ typedef NS_ENUM(NSUInteger, CRHTTPMethod) {
      */
     CRHTTPMethodGet,
     /**
-     *  The POST HTTP request method. (Post)
+     *  The POST HTTP request method. (POST)
      */
     CRHTTPMethodPost,
     /**

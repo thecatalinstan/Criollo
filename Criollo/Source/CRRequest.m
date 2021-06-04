@@ -13,6 +13,7 @@
 #import <Criollo/CRRequestRange.h>
 #import <Criollo/CRServer.h>
 #import <Criollo/CRUploadedFile.h>
+#import <objc/runtime.h>
 
 #import "CRConnection_Internal.h"
 #import "CRMessage_Internal.h"
@@ -22,9 +23,46 @@
 #import "CRUploadedFile_Internal.h"
 #import "NSString+Criollo.h"
 
-#define CRFileHeaderNameKey             @"name"
-#define CRFileHeaderFilenameKey         @"filename"
-#define CRFileHeaderContentTypeKey      @"content-type"
+static NSString * const CRFileHeaderNameKey = @"name";
+static NSString * const CRFileHeaderFilenameKey = @"filename";
+static NSString * const CRFileHeaderContentTypeKey = @"content-type";
+
+NSString * const CRRequestHeaderNameSeparator = @":";
+NSString * const CRRequestHeaderSeparator = @";";
+NSString * const CRRequestHeaderArraySeparator = @",";
+NSString * const CRRequestKeySeparator = @"&";
+NSString * const CRRequestValueSeparator = @"=";
+NSString * const CRRequestBoundaryParameter = @"boundary";
+NSString * const CRRequestBoundaryPrefix = @"--";
+
+NSErrorDomain const CRRequestErrorDomain = @"CRRequestErrorDomain";
+
+CRRequestContentType const CRRequestContentTypeJSON = @"application/json";
+CRRequestContentType const CRRequestContentTypeURLEncoded = @"application/x-www-form-urlencoded";
+CRRequestContentType const CRRequestContentTypeMultipart = @"multipart/form-data";
+CRRequestContentType const CRRequestContentTypeOther = @"";
+
+@implementation NSString (CRRequestContentType)
+
+- (CRRequestContentType)requestContentType {
+    static void * const requestContentTypeKey = (void *)&requestContentTypeKey;
+    CRRequestContentType contentType;
+    if (!(contentType = objc_getAssociatedObject(self, requestContentTypeKey))) {
+        if ([self hasPrefix:CRRequestContentTypeJSON]) {
+            contentType = CRRequestContentTypeJSON;
+        } else if ([self hasPrefix:CRRequestContentTypeURLEncoded]) {
+            contentType = CRRequestContentTypeURLEncoded;
+        } else if ([self hasPrefix:CRRequestContentTypeMultipart]) {
+            contentType = CRRequestContentTypeMultipart;
+        } else {
+            contentType = CRRequestContentTypeOther;
+        }
+        objc_setAssociatedObject(self, requestContentTypeKey, contentType, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return contentType;
+}
+
+@end
 
 @implementation CRRequest {
     NSString * _multipartBoundary;
@@ -414,20 +452,17 @@
 }
 
 - (NSString *)multipartBoundary {
-    NSString* contentType = _env[@"HTTP_CONTENT_TYPE"];
-    if ([contentType hasPrefix:CRRequestTypeMultipart]) {
-        if ( ! _multipartBoundary ) {
+    NSString *contentType;
+    if (!_multipartBoundary && (contentType = _env[@"HTTP_CONTENT_TYPE"]).requestContentType == CRRequestContentTypeMultipart) {
+        NSArray<NSString*> *headerComponents = [contentType componentsSeparatedByString:CRRequestHeaderSeparator];
+        for (__strong NSString *obj in headerComponents) {
+            obj = [obj stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceCharacterSet];
+            if (![obj hasPrefix:CRRequestBoundaryParameter]) {
+                continue;
+            }
             
-            __block NSString *boundary;
-            NSArray<NSString*>* headerComponents = [contentType componentsSeparatedByString:CRRequestHeaderSeparator];
-            [headerComponents enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                obj = [obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                if ( ![obj hasPrefix:CRRequestBoundaryParameter] ) {
-                    return;
-                }
-                boundary = [[obj componentsSeparatedByString:CRRequestValueSeparator][1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-            }];
-            _multipartBoundary = boundary;
+            _multipartBoundary = [[obj componentsSeparatedByString:CRRequestValueSeparator].firstObject stringByTrimmingCharactersInSet:NSCharacterSet .whitespaceAndNewlineCharacterSet];
+            break;
         }
     }
     return _multipartBoundary;
@@ -457,8 +492,9 @@
 }
 
 - (void)dealloc {
+    // TODO: find a nicer way to cleanup
     // Delete temporary files created by multipart uploadds
-    if ( self.files.count != 0 ) {
+    if (self.files.count != 0) {
         [self.files enumerateKeysAndObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSString * _Nonnull key, CRUploadedFile * _Nonnull obj, BOOL * _Nonnull stop) {
             NSURL * temporaryFileURL = obj.temporaryFileURL;
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{

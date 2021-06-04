@@ -8,15 +8,15 @@
 
 #import <Criollo/CRRequest.h>
 
-#define CRRequestHeaderNameSeparator        @":"
-#define CRRequestHeaderSeparator            @";"
-#define CRRequestHeaderArraySeparator       @","
-#define CRRequestKeySeparator               @"&"
-#define CRRequestValueSeparator             @"="
-#define CRRequestBoundaryParameter          @"boundary"
-#define CRRequestBoundaryPrefix             @"--"
-
 NS_ASSUME_NONNULL_BEGIN
+
+FOUNDATION_EXPORT NSString * const CRRequestHeaderNameSeparator;
+FOUNDATION_EXPORT NSString * const CRRequestHeaderSeparator;
+FOUNDATION_EXPORT NSString * const CRRequestHeaderArraySeparator;
+FOUNDATION_EXPORT NSString * const CRRequestKeySeparator;
+FOUNDATION_EXPORT NSString * const CRRequestValueSeparator;
+FOUNDATION_EXPORT NSString * const CRRequestBoundaryParameter;
+FOUNDATION_EXPORT NSString * const CRRequestBoundaryPrefix;
 
 @interface CRRequest ()
 

@@ -21,6 +21,8 @@
 #import "CRServer_Internal.h"
 #import "CRServerConfiguration.h"
 
+NSErrorDomain const CRServerErrorDomain = @"CRServerErrorDomain";
+
 static NSUInteger const InitialConnectionCapacity = 1 << 10;
 
 static NSString *const CRServerDefaultWorkerQueueName = @"CRServerDefaultWorkerQueue";

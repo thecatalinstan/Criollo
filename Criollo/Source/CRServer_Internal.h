@@ -16,7 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CRServer () <GCDAsyncSocketDelegate, CRConnectionDelegate>
 
 @property (nonatomic, strong) CRServerConfiguration * configuration;
+
+//TODO: Consider using NSSet or NSHashTable instead
 @property (nonatomic, strong) NSMutableArray<CRConnection *> * connections;
+
 - (void)didCloseConnection:(CRConnection *)connection;
 
 #pragma mark - Queues

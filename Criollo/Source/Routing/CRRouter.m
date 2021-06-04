@@ -56,7 +56,7 @@ NS_ASSUME_NONNULL_END
         NSString* errorDescription;
         switch (statusCode) {
             case 404:
-                errorDescription = [NSString stringWithFormat:NSLocalizedString(@"No routes defined for “%@%@%@”",), NSStringFromCRHTTPMethod(request.method), requestURL.path, [requestURL.path hasSuffix:CRPathSeparator] ? @"" : CRPathSeparator];
+                errorDescription = [NSString stringWithFormat:NSLocalizedString(@"No routes defined for “%@%@%@”",), NSStringFromCRHTTPMethod(request.method), requestURL.path, [requestURL.path hasSuffix:CRRoutePathSeparator] ? @"" : CRRoutePathSeparator];
                 break;
         }
         info[NSLocalizedDescriptionKey] = errorDescription;

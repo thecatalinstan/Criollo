@@ -9,12 +9,15 @@
 #import <Criollo/CRRouter.h>
 #import <Criollo/CRTypes.h>
 
-#define CRServerErrorDomain                   @"CRServerErrorDomain"
-#define CRServerSocketError                   2001
-
 @class CRServer, CRServerConfiguration, GCDAsyncSocket, CRConnection, CRRequest, CRResponse, CRRoute;
 
 NS_ASSUME_NONNULL_BEGIN
+
+FOUNDATION_EXPORT NSErrorDomain const CRServerErrorDomain;
+
+NS_ERROR_ENUM(CRServerErrorDomain) {
+    CRServerSocketError = 2001,
+};
 
 @protocol CRServerDelegate <NSObject>
 
@@ -46,6 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithDelegate:(id<CRServerDelegate> _Nullable)delegate;
 - (instancetype)initWithDelegate:(id<CRServerDelegate> _Nullable)delegate delegateQueue:(dispatch_queue_t _Nullable)delegateQueue NS_DESIGNATED_INITIALIZER;
 
+// TODO: Move error param to the end
 - (BOOL)startListening;
 - (BOOL)startListening:(NSError * _Nullable __autoreleasing * _Nullable)error;
 - (BOOL)startListening:(NSError * _Nullable __autoreleasing * _Nullable)error portNumber:(NSUInteger)portNumber;

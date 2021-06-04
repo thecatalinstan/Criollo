@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define CRFCGIRecordHeaderLength 8
+FOUNDATION_EXPORT UInt8 CRFCGIRecordHeaderLength;
 
 typedef NS_ENUM(UInt8, CRFCGIVersion) {
     CRFCGIVersion1 = 1

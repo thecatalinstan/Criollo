@@ -8,7 +8,7 @@
 
 #import <Criollo/CRNib.h>
 
-#define CRNibExtension      @"html"
+static NSString * const CRNibExtension = @"html";
 
 @implementation CRNib
 

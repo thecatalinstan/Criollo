@@ -12,6 +12,7 @@
 #import <Criollo/CRResponse.h>
 #import <Criollo/CRStaticFileManager.h>
 
+#import "CRRoute.h"
 #import "CRRouter_Internal.h"
 #import "CRStaticFileManager_Internal.h"
 #import "CRStaticFileManager_Internal.h"
@@ -70,7 +71,7 @@ NS_ASSUME_NONNULL_END
     // Determine the absolute and relative requested file paths
     NSString *requestedPath = request.env[@"DOCUMENT_URI"];
     
-    NSString *relativePath = [requestedPath pathRelativeToPath:_prefix];
+    NSString *relativePath = [requestedPath pathRelativeToPath:_prefix separator:CRRoutePathSeparator];
     NSString *absolutePath = [_path stringByAppendingPathComponent:relativePath].stringByStandardizingPath;
     if (_options & CRStaticFileServingOptionsFollowSymlinks) {
         absolutePath = absolutePath.stringByResolvingSymlinksInPath;
@@ -149,7 +150,7 @@ error:
         }
         
         [index appendFormat:IndexRowFormat,
-         href, name, dir.boolValue ? CRPathSeparator : @" ", padding,
+         href, name, dir.boolValue ? CRRoutePathSeparator : @" ", padding,
          IndexTimeLength, mtime.UTF8String,
          IndexSizeLength, size.UTF8String];
     }
@@ -212,7 +213,7 @@ error:
 }
 
 - (instancetype)init {
-    return  [self initWithDirectoryAtPath:NSBundle.mainBundle.bundlePath prefix:CRPathSeparator options:0];
+    return  [self initWithDirectoryAtPath:NSBundle.mainBundle.bundlePath prefix:CRRoutePathSeparator options:0];
 }
 
 - (instancetype)initWithDirectoryAtPath:(NSString *)path prefix:(NSString *)prefix {

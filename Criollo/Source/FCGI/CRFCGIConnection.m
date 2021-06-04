@@ -21,6 +21,9 @@
 #import "CRResponse_Internal.h"
 #import "CRServer_Internal.h"
 
+static long const CRFCGIConnectionSocketTagReadRecordHeader = 11;
+static long const CRFCGIConnectionSocketTagReadRecordContent = 12;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CRFCGIConnection () {
@@ -66,7 +69,6 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)didReceiveCompleteRequestHeaders {
-
     // Create HTTP headers from FCGI Params
     NSMutableData* headersData = [NSMutableData data];
     [self.requestBeingReceived.env enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
@@ -267,9 +269,6 @@ NS_ASSUME_NONNULL_END
             break;
 
         case CRFCGIConnectionSocketTagReadRecordContent:
-
-//            NSLog(@" * Content: %@ %lu", NSStringFromCRFCGIRecordType(currentRecord.type), data.length);
-
             // Process the header content data
             switch (currentRecord.type) {
                 case CRFCGIRecordTypeBeginRequest:

@@ -8,6 +8,9 @@
 
 #import <Criollo/CRResponse.h>
 
+/// Initial size of the response body data object
+FOUNDATION_EXPORT NSUInteger const CRResponseDataInitialCapacity;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CRResponse ()

@@ -21,6 +21,8 @@
 #import "NSDate+RFC1123.h"
 #import "NSHTTPCookie+Criollo.h"
 
+NSUInteger const CRResponseDataInitialCapacity = 1<<16;
+
 @interface CRResponse ()
 
 @property (nonatomic, strong, nullable) NSMutableDictionary<NSString *, NSHTTPCookie *> *HTTPCookies;

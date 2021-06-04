@@ -12,6 +12,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+FOUNDATION_EXPORT NSString * const CRRoutePathSeparator;
+
 @interface CRRoute : NSObject
 
 @property (nonatomic) CRHTTPMethod method;

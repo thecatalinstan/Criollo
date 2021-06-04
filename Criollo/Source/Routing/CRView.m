@@ -8,7 +8,7 @@
 
 #import <Criollo/CRView.h>
 
-#define CRViewVariableFormat @"{{%@}}"
+static NSString * const CRViewVariableFormat = @"{{%@}}";
 
 @interface CRView ()
 

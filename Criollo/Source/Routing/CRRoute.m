@@ -21,6 +21,9 @@
 #import "CRRoute_Internal.h"
 #import "CRServer_Internal.h"
 
+NSString * const CRRoutePathSeparator = @"/";
+static NSString * const CRPathAnyPath = @"*";
+
 @interface CRRoute ()
 
 @end
@@ -71,7 +74,7 @@
                         }
                         isRegex = YES;
                     } else {
-                        [pathRegexComponents addObject:[component isEqualToString:CRPathSeparator] ? @"" : component];
+                        [pathRegexComponents addObject:[component isEqualToString:CRRoutePathSeparator] ? @"" : component];
                     }
                 }
             }];
@@ -80,7 +83,7 @@
             if ( isRegex ) {
                 NSError *regexError;
                 NSMutableString *pattern = [NSMutableString stringWithString:@"^" ];
-                [pattern appendString:[pathRegexComponents componentsJoinedByString:CRPathSeparator]];
+                [pattern appendString:[pathRegexComponents componentsJoinedByString:CRRoutePathSeparator]];
                 if ( !self.recursive ) {
                     [pattern appendString:@"$"];
                 }

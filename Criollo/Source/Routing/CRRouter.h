@@ -8,8 +8,6 @@
 
 #import <Criollo/CRTypes.h>
 
-#define CRPathVarsKey       @"vars"
-
 @class CRRoute, CRRouteMatchingResult;
 
 NS_ASSUME_NONNULL_BEGIN

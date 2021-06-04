@@ -15,6 +15,7 @@
 #import <Criollo/CRRequest.h>
 
 #import "CRConnection_Internal.h"
+#import "CRHTTPConnection_Internal.h"
 #import "CRHTTPResponse.h"
 #import "CRHTTPServerConfiguration.h"
 #import "CRMessage_Internal.h"

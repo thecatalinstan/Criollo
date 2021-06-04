@@ -16,6 +16,6 @@
 @property (nonatomic, readonly, copy) NSString *uppercaseFirstLetterString;
 @property (nonatomic, readonly, copy) NSString *stringbyFormattingHTTPHeader;
 
-- (NSString *)pathRelativeToPath:(NSString *)path;
+- (NSString *)pathRelativeToPath:(NSString *)path separator:(NSString *)separator;
 
 @end

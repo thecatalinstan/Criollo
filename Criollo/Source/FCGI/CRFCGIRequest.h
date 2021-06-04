@@ -8,7 +8,6 @@
 
 #import <Criollo/CRRequest.h>
 
-#define CRFCGIRequestFlagKeepAlive   1
 
 typedef NS_ENUM(UInt8, CRFCGIRequestRole) {
     CRFCGIRequestRoleResponder = 1,
@@ -16,7 +15,9 @@ typedef NS_ENUM(UInt8, CRFCGIRequestRole) {
     CRFCGIRequestRoleFilter = 3
 };
 
-typedef UInt8 CRFCGIRequestFlags;
+typedef NS_OPTIONS(NSUInteger, CRFCGIRequestFlags) {
+    CRFCGIRequestFlagKeepAlive = 1 << 0,
+};
 
 NS_ASSUME_NONNULL_BEGIN
 

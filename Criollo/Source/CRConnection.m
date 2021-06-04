@@ -140,15 +140,15 @@ static const NSData * CRLFCRLFData;
     }
 
     NSString * contentType = self.requestBeingReceived.env[@"HTTP_CONTENT_TYPE"];
-    if ([contentType hasPrefix:CRRequestTypeURLEncoded]) {
+    if (contentType.requestContentType == CRRequestContentTypeURLEncoded) {
         // URL-encoded requests are parsed after we have all the data
         [self bufferBodyData:data forRequest:self.requestBeingReceived];
-    } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
+    } else if (contentType.requestContentType == CRRequestContentTypeMultipart) {
         NSError* multipartParsingError;
-        if ( ![self.requestBeingReceived parseMultipartBodyDataChunk:data error:&multipartParsingError] ) {
+        if (![self.requestBeingReceived parseMultipartBodyDataChunk:data error:&multipartParsingError]) {
             [CRApp logErrorFormat:@"%@" , multipartParsingError];
         }
-    } else if ([contentType hasPrefix:CRRequestTypeJSON]) {
+    } else if (contentType.requestContentType == CRRequestContentTypeJSON) {
         // JSON requests are parsed after we have all the data
         [self bufferBodyData:data forRequest:self.requestBeingReceived];
     } else {
@@ -172,11 +172,11 @@ static const NSData * CRLFCRLFData;
 
         BOOL result = YES;
 
-        if ([contentType hasPrefix:CRRequestTypeJSON]) {
+        if (contentType.requestContentType == CRRequestContentTypeJSON) {
             result = [self.requestBeingReceived parseJSONBodyData:&bodyParsingError];
-        } else if ([contentType hasPrefix:CRRequestTypeURLEncoded]) {
+        } else if (contentType.requestContentType == CRRequestContentTypeURLEncoded) {
             result = [self.requestBeingReceived parseURLEncodedBodyData:&bodyParsingError];
-        } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
+        } else if (contentType.requestContentType == CRRequestContentTypeMultipart) {
             // multipart/form-data requests are parsed as they come in and not once the
             // request hast been fully received ;)
         } else {
@@ -186,6 +186,7 @@ static const NSData * CRLFCRLFData;
         }
 
         if ( !result ) {
+            // TODO: Propagate the error, do not log from here
             [CRApp logErrorFormat:@"%@" , bodyParsingError];
         }
     }
