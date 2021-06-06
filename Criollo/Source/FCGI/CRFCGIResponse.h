@@ -8,7 +8,7 @@
 
 #import <Criollo/CRResponse.h>
 
-typedef UInt32  CRFCGIApplicationStatus;
+typedef UInt32 CRFCGIApplicationStatus;
 
 typedef NS_ENUM(UInt8, CRFCGIProtocolStatus) {
     CRFCGIProtocolStatusRequestComplete = 0,

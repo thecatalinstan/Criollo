@@ -36,11 +36,12 @@
     return self;
 }
 
-- (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket {
-    CRHTTPConnection* connection = [[CRHTTPConnection alloc] initWithSocket:socket server:self];
+- (CRConnection*)acceptConnectionWithSocket:(GCDAsyncSocket*)socket delegate:(id<CRConnectionDelegate> _Nullable)delegate {
+    CRHTTPConnection* connection = [[CRHTTPConnection alloc] initWithSocket:socket server:self delegate:delegate];
     
-    if ( self.isSecure )
+    if (self.isSecure) {
         [connection.socket startTLS:self.tlsSettings];
+    }
     
     return connection;
 }

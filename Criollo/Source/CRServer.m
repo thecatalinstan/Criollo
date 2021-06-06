@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CRServer ()
 
 @property (nonatomic, strong, nullable) GCDAsyncSocket *socket;
-- (CRConnection *)newConnectionWithSocket:(GCDAsyncSocket *)socket;
+- (CRConnection *)acceptConnectionWithSocket:(GCDAsyncSocket *)socket delegate:(id<CRConnectionDelegate> _Nullable)delegate;
 
 - (NSOperationQueue *)createDefaultWorkerQueue NS_WARN_UNUSED_RESULT;
 - (dispatch_queue_t)createDefaultDelegateQueue NS_WARN_UNUSED_RESULT;
@@ -188,9 +188,7 @@ NS_ASSUME_NONNULL_END
     }});
 }
 
-- (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket {
-    return [[CRConnection alloc] initWithSocket:socket server:self];
-}
+- (CRConnection*)acceptConnectionWithSocket:(GCDAsyncSocket*)socket delegate:(id<CRConnectionDelegate> _Nullable)delegate CR_OBJC_ABSTRACT;
 
 #pragma mark - GCDAsyncSocketDelegate
 
@@ -199,14 +197,12 @@ NS_ASSUME_NONNULL_END
     dispatch_set_target_queue(acceptedSocketDelegateQueue, self.acceptedSocketDelegateTargetQueue);
     newSocket.delegateQueue = acceptedSocketDelegateQueue;
 
-    CRConnection* connection = [self newConnectionWithSocket:newSocket];
-    connection.delegate = self;
-
+    CRConnection* connection = [self acceptConnectionWithSocket:newSocket delegate:self];
     CRServer * __weak server = self;
     dispatch_async(self.isolationQueue, ^(){
         [server.connections addObject:connection];
     });
-    if ( [self.delegate respondsToSelector:@selector(server:didAcceptConnection:)]) {
+    if ([self.delegate respondsToSelector:@selector(server:didAcceptConnection:)]) {
         dispatch_async(self.delegateQueue, ^{
             [server.delegate server:server didAcceptConnection:connection];
         });
@@ -221,7 +217,7 @@ NS_ASSUME_NONNULL_END
     CRServer * __weak server = self;
     [self.workerQueue addOperationWithBlock:^{ @autoreleasepool {
         NSArray<CRRouteMatchingResult *> * routes = [server routesForPath:request.URL.path method:request.method];
-        [server executeRoutes:routes forRequest:request response:response withCompletion:^{} notFoundBlock:server.notFoundBlock];
+        [server executeRoutes:routes request:request response:response withCompletion:^{} notFoundBlock:server.notFoundBlock];
     }}];
     if ( [self.delegate respondsToSelector:@selector(server:didReceiveRequest:)] ) {
         dispatch_async(self.delegateQueue, ^{ @autoreleasepool {

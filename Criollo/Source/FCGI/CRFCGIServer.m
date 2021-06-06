@@ -23,8 +23,8 @@
     return self;
 }
 
-- (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket {
-    return [[CRFCGIConnection alloc] initWithSocket:socket server:self];
+- (CRConnection *)acceptConnectionWithSocket:(GCDAsyncSocket*)socket delegate:(id<CRConnectionDelegate> _Nullable)delegate {
+    return [[CRFCGIConnection alloc] initWithSocket:socket server:self delegate:delegate];
 }
 
 @end

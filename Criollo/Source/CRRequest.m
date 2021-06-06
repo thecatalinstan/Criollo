@@ -21,6 +21,7 @@
 #import "CRRequestRange_Internal.h"
 #import "CRServer_Internal.h"
 #import "CRUploadedFile_Internal.h"
+#import "NSData+CRLF.h"
 #import "NSString+Criollo.h"
 
 static NSString * const CRFileHeaderNameKey = @"name";
@@ -238,8 +239,8 @@ CRRequestContentType const CRRequestContentTypeOther = @"";
 
     if ( nextBoundaryRange.location != NSNotFound ) {                                   // We have a boundary
 
-        NSData* CRLFData = [CRConnection CRLFData];
-        NSData* CRLFCRLFData = [CRConnection CRLFCRLFData];
+        NSData* CRLFData = NSData.CRLF;
+        NSData* CRLFCRLFData = NSData.CRLFCRLF;
 
         // Check if we have something before the boundary
         if ( nextBoundaryRange.location != 0 ) {                                        // There is an existing chunk

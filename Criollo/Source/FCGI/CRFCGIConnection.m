@@ -20,9 +20,12 @@
 #import "CRRequest_Internal.h"
 #import "CRResponse_Internal.h"
 #import "CRServer_Internal.h"
+#import "NSData+CRLF.h"
 
-static long const CRFCGIConnectionSocketTagReadRecordHeader = 11;
-static long const CRFCGIConnectionSocketTagReadRecordContent = 12;
+typedef NS_ENUM(long, CRFCGIConnectionSocketTag) {
+    CRFCGIConnectionSocketTagReadRecordHeader = 11,
+    CRFCGIConnectionSocketTagReadRecordContent = 12,
+};
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -50,8 +53,6 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Data
 
 - (void)startReading {
-    [super startReading];
-
     currentRequestBodyLength = 0;
     currentRequestBodyReceivedBytesLength = 0;
 
@@ -68,10 +69,10 @@ NS_ASSUME_NONNULL_END
     [self.socket readDataToLength:CRFCGIRecordHeaderLength withTimeout:timeout tag:CRFCGIConnectionSocketTagReadRecordHeader];
 }
 
-- (void)didReceiveCompleteRequestHeaders {
+- (void)didReceiveCompleteHeaders:(CRRequest *)request {
     // Create HTTP headers from FCGI Params
     NSMutableData* headersData = [NSMutableData data];
-    [self.requestBeingReceived.env enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+    [request.env enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         @autoreleasepool {
             if ( ![key hasPrefix:@"HTTP_"] ) {
                 return;
@@ -90,16 +91,14 @@ NS_ASSUME_NONNULL_END
 
             NSData* headerData = [[NSString stringWithFormat:@"%@: %@", headerName, obj] dataUsingEncoding:NSUTF8StringEncoding];
             [headersData appendData:headerData];
-            [headersData appendData:[CRConnection CRLFData]];
+            [headersData appendData:NSData.CRLF];
         }
     }];
 
-    [self.requestBeingReceived appendData:headersData];
-    [self.requestBeingReceived appendData:[CRConnection CRLFData]];
+    [request appendData:headersData];
+    [request appendData:NSData.CRLF];
 
-    [super didReceiveCompleteRequestHeaders];
-
-    currentRequestBodyLength = [self.requestBeingReceived.env[@"CONTENT_LENGTH"] integerValue];
+    currentRequestBodyLength = [request.env[@"CONTENT_LENGTH"] integerValue];
     CRFCGIServerConfiguration* config = (CRFCGIServerConfiguration*)self.server.configuration;
     [self.socket readDataToLength:CRFCGIRecordHeaderLength withTimeout:config.CRFCGIConnectionReadRecordTimeout tag:CRFCGIConnectionSocketTagReadRecordHeader];
 }
@@ -241,14 +240,14 @@ NS_ASSUME_NONNULL_END
                         [self addRequest:request];
                         self.requestBeingReceived = request;
                         
-                        [self didReceiveCompleteRequestHeaders];
+                        [self didReceiveCompleteHeaders:request];
                     }
                         break;
 
                     case CRFCGIRecordTypeStdIn: {
 
                         if ( currentRequestBodyLength == currentRequestBodyReceivedBytesLength ) {
-                            [self didReceiveCompleteRequest];
+                            [self didReceiveCompleteRequest:self.requestBeingReceived];
                         } else {
                             [self.socket disconnectAfterWriting];
                         }
@@ -298,7 +297,7 @@ NS_ASSUME_NONNULL_END
                 case CRFCGIRecordTypeStdIn: {
 
                     NSData* currentRecordContentData = [NSData dataWithBytesNoCopy:(void *)data.bytes length:currentRecord.contentLength freeWhenDone:NO];
-                    [self didReceiveRequestBodyData:currentRecordContentData];
+                    [self didReceiveBodyData:currentRecordContentData request:self.requestBeingReceived];
 
                     currentRequestBodyReceivedBytesLength += currentRecord.contentLength;
 

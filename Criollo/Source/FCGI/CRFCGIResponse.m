@@ -103,11 +103,11 @@ NS_ASSUME_NONNULL_END
     [super finish];
 
     NSMutableData* dataToSend = [self initialResponseData];
-
+    
     // End request record
     [dataToSend appendData:self.endRequestRecordData];
 
-    [self.connection sendDataToSocket:dataToSend forRequest:self.request];
+    [self.connection sendData:dataToSend request:self.request];
 }
 
 - (NSData*)FCGIRecordDataWithContentData:(NSData *)data {
@@ -185,10 +185,11 @@ NS_ASSUME_NONNULL_END
     return recordData;
 }
 
+//TODO: Move to CRResponse
 - (NSMutableData*)initialResponseData {
     NSMutableData* dataToSend = [NSMutableData dataWithCapacity:CRResponseDataInitialCapacity];
 
-    if ( !self.alreadySentHeaders ) {
+    if (!self.alreadySentHeaders) {
         [self buildHeaders];
         self.bodyData = nil;
         NSData* headersSerializedData = self.serializedData;

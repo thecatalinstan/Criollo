@@ -35,20 +35,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) BOOL willDisconnect;
 
-+ (NSData *)CRLFData;
-+ (NSData *)CRLFCRLFData;
-
-- (instancetype)initWithSocket:(GCDAsyncSocket * _Nullable)socket server:(CRServer * _Nullable)server NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithSocket:(GCDAsyncSocket * _Nullable)socket
+                        server:(CRServer * _Nullable)server
+                      delegate:(id<CRConnectionDelegate> _Nullable)delegate
+NS_DESIGNATED_INITIALIZER;
 
 - (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString * _Nullable)description version:(CRHTTPVersion)version;
 
-- (void)startReading NS_REQUIRES_SUPER;
+- (void)startReading;
+- (void)didReceiveCompleteHeaders:(CRRequest *)request;
+- (void)didReceiveBodyData:(NSData *)data request:(CRRequest *)request;
+- (void)didReceiveCompleteRequest:(CRRequest *)request;
 
-- (void)didReceiveCompleteRequestHeaders;
-- (void)didReceiveRequestBodyData:(NSData *)data;
-- (void)didReceiveCompleteRequest;
-
-- (void)sendDataToSocket:(NSData *)data forRequest:(CRRequest *)request;
+- (void)sendData:(NSData *)data request:(CRRequest *)request;
 - (void)didFinishResponseForRequest:(CRRequest *)request;
 
 @end
