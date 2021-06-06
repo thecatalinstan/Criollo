@@ -6,9 +6,13 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRResponse.h"
+#import <Criollo/CRResponse.h>
+
+/// Initial size of the response body data object
+FOUNDATION_EXPORT NSUInteger const CRResponseDataInitialCapacity;
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface CRResponse ()
 
 @property (nonatomic, assign) NSUInteger proposedStatusCode;
@@ -29,4 +33,5 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)buildHeaders;
 
 @end
+
 NS_ASSUME_NONNULL_END

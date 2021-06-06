@@ -37,14 +37,4 @@
     XCTAssertTrue([nib.data isEqualToData:nibData], "Data read manually should be the same as the data read by [CRNib init].");
 }
 
-- (void)testCRNibDataReadPerformance {
-    NSBundle *bundle = [NSBundle bundleForClass:[CRNibTests class]];
-    XCTAssertNotNil(bundle, "The bundle for the test case should not be nil.");
-    
-    [self measureBlock:^{
-        CRNib *nib = [[CRNib alloc] initWithNibNamed:NSStringFromClass(self.class) bundle:bundle];
-        XCTAssertTrue(nib.data.length > 0, "Data read by [CRNib init] from the file should be non-zero length.");
-    }];
-}
-
 @end

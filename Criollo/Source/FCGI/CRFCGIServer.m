@@ -6,25 +6,25 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRFCGIServer.h"
-#import "CRServer_Internal.h"
-#import "CRFCGIConnection.h"
+#import <Criollo/CRFCGIServer.h>
+
 #import "CRConnection_Internal.h"
+#import "CRFCGIConnection.h"
 #import "CRFCGIServerConfiguration.h"
+#import "CRServer_Internal.h"
 
 @implementation CRFCGIServer
 
 - (instancetype)initWithDelegate:(id<CRServerDelegate>)delegate delegateQueue:(dispatch_queue_t)delegateQueue {
     self = [super initWithDelegate:delegate delegateQueue:delegateQueue];
-    if ( self != nil ) {
+    if (self != nil) {
         self.configuration = [[CRFCGIServerConfiguration alloc] init];
     }
     return self;
 }
 
 - (CRConnection*)newConnectionWithSocket:(GCDAsyncSocket*)socket {
-    CRFCGIConnection* connection = [[CRFCGIConnection alloc] initWithSocket:socket server:self];
-    return connection;
+    return [[CRFCGIConnection alloc] initWithSocket:socket server:self];
 }
 
 @end

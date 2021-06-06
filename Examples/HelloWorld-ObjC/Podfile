@@ -1,9 +1,9 @@
-platform :osx, '10.10'
 use_frameworks!
 install! 'cocoapods', :generate_multiple_pod_projects => true
 
 target 'HelloWorld-ObjC' do
+	platform :osx, '10.10'
 	pod 'Criollo', :git => '../../', :submodules => true
-  pod 'CSSystemInfoHelper', '~> 1.4'
+	pod 'CSSystemInfoHelper', '~> 1.4'
 end
 

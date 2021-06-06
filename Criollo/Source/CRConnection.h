@@ -6,13 +6,14 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
+#import <Criollo/CRTypes.h>
 #import <Foundation/Foundation.h>
-
-#import "CRTypes.h"
 
 @class CRConnection, GCDAsyncSocket, CRServer, CRRequest, CRResponse;
 
 NS_ASSUME_NONNULL_BEGIN
+
+// TODO: Remove inheritance from NSObject
 @protocol CRConnectionDelegate <NSObject>
 
 - (void)connection:(CRConnection *)connection didReceiveRequest:(CRRequest *)request response:(CRResponse *)response;
@@ -30,4 +31,5 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSUInteger localPort;
 
 @end
+
 NS_ASSUME_NONNULL_END

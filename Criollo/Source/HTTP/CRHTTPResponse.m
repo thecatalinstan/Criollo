@@ -8,14 +8,14 @@
 
 #import "CRHTTPResponse.h"
 
-@import CocoaAsyncSocket;
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
+#import <Criollo/CRHTTPServer.h>
 
+#import "CRConnection_Internal.h"
+#import "CRHTTPConnection.h"
+#import "CRHTTPServerConfiguration.h"
 #import "CRMessage_Internal.h"
 #import "CRResponse_Internal.h"
-#import "CRHTTPConnection.h"
-#import "CRConnection_Internal.h"
-#import "CRHTTPServer.h"
-#import "CRHTTPServerConfiguration.h"
 #import "NSDate+RFC1123.h"
 
 @interface CRHTTPResponse ()

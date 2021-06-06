@@ -6,8 +6,9 @@
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
+#import <Criollo/CRTypes.h>
+
 #import "NSString+Criollo.h"
-#import "CRTypes.h"
 
 @implementation NSString (Criollo)
 
@@ -36,14 +37,13 @@
     return [words componentsJoinedByString:@"-"];
 }
 
-- (NSString *)pathRelativeToPath:(NSString *)path {
-    
-    if ( [path isEqualToString:CRPathSeparator] ) {
+- (NSString *)pathRelativeToPath:(NSString *)path separator:(NSString *)separator {
+    if ([path isEqualToString:separator] ) {
         return self;
     }
 
     NSUInteger relativePathStart = [self rangeOfString:path options:NSBackwardsSearch].location;
-    if ( relativePathStart == NSNotFound ) {
+    if (relativePathStart == NSNotFound) {
         relativePathStart = 0;
     }
 
@@ -54,8 +54,8 @@
         relativePath = @"";
     }
 
-    if ( ![relativePath hasPrefix:CRPathSeparator] ) {
-        relativePath = [CRPathSeparator stringByAppendingString:relativePath ? : @""];
+    if (![relativePath hasPrefix:separator]) {
+        relativePath = [separator stringByAppendingString:relativePath ? : @""];
     }
 
     return relativePath;

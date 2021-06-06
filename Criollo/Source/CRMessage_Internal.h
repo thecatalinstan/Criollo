@@ -6,9 +6,10 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRMessage.h"
+#import <Criollo/CRMessage.h>
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface CRMessage ()
 
 @property (nonatomic, readonly) NSData* serializedData;
@@ -18,4 +19,5 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSArray<NSString *>*)acceptedHTTPMethods;
 
 @end
+
 NS_ASSUME_NONNULL_END

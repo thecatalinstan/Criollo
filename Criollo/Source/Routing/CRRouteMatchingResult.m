@@ -7,8 +7,9 @@
 //
 
 #import "CRRouteMatchingResult.h"
-#import "CRRouteMatchingResult_Internal.h"
+
 #import "CRRoute.h"
+#import "CRRouteMatchingResult_Internal.h"
 
 @implementation CRRouteMatchingResult
 

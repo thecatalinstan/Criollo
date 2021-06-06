@@ -7,17 +7,22 @@
 //
 
 #import "CRRoute.h"
-#import "CRRoute_Internal.h"
-#import "CRTypes.h"
-#import "CRServer_Internal.h"
-#import "CRRouteController.h"
-#import "CRViewController.h"
-#import "CRRequest.h"
+
+#import <Criollo/CRRequest.h>
+#import <Criollo/CRResponse.h>
+#import <Criollo/CRRouteController.h>
+#import <Criollo/CRStaticDirectoryManager.h>
+#import <Criollo/CRStaticFileManager.h>
+#import <Criollo/CRTypes.h>
+#import <Criollo/CRViewController.h>
+
 #import "CRRequest_Internal.h"
-#import "CRResponse.h"
 #import "CRResponse_Internal.h"
-#import "CRStaticDirectoryManager.h"
-#import "CRStaticFileManager.h"
+#import "CRRoute_Internal.h"
+#import "CRServer_Internal.h"
+
+NSString * const CRRoutePathSeparator = @"/";
+static NSString * const CRPathAnyPath = @"*";
 
 @interface CRRoute ()
 
@@ -69,7 +74,7 @@
                         }
                         isRegex = YES;
                     } else {
-                        [pathRegexComponents addObject:[component isEqualToString:CRPathSeparator] ? @"" : component];
+                        [pathRegexComponents addObject:[component isEqualToString:CRRoutePathSeparator] ? @"" : component];
                     }
                 }
             }];
@@ -78,7 +83,7 @@
             if ( isRegex ) {
                 NSError *regexError;
                 NSMutableString *pattern = [NSMutableString stringWithString:@"^" ];
-                [pattern appendString:[pathRegexComponents componentsJoinedByString:CRPathSeparator]];
+                [pattern appendString:[pathRegexComponents componentsJoinedByString:CRRoutePathSeparator]];
                 if ( !self.recursive ) {
                     [pattern appendString:@"$"];
                 }

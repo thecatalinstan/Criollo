@@ -6,7 +6,8 @@
 //  Copyright © 2016 Cătălin Stan. All rights reserved.
 //
 
-#import "CRMimeTypeHelper.h"
+#import <Criollo/CRMimeTypeHelper.h>
+
 #if TARGET_OS_IPHONE || TARGET_OS_SIMULATOR
 #import <MobileCoreServices/MobileCoreServices.h>
 #else

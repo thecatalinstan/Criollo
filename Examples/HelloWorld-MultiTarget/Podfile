@@ -14,13 +14,13 @@ target 'HelloWorld-Cocoa' do
 end
 
 target 'HelloWorld-iOS' do
-  platform :ios, '8.0'
+  platform :ios, '12.0'
   pod 'Criollo', :git => '../../', :submodules => true
   pod 'CSSystemInfoHelper', '~> 1.4'
 end
 
 target 'HelloWorld-tvOS' do
-  platform :tvos, '9.0'
+  platform :tvos, '12.0'
   pod 'Criollo', :git => '../../', :submodules => true
   pod 'CSSystemInfoHelper', '~> 1.4'
 end

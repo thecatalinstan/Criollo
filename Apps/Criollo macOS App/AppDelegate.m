@@ -15,7 +15,7 @@
 
 #define PortNumber          10781
 #define LogConnections          0
-#define LogRequests             0
+#define LogRequests             1
 #define HTTPS                   0
 #define HTTPS_PKS12             0
 #define HTTPS_PEM               0
@@ -36,11 +36,6 @@ NS_ASSUME_NONNULL_END
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [CRApplication.sharedApplication terminate:nil];
-    });
-    
     BOOL isFastCGI = [[NSUserDefaults standardUserDefaults] boolForKey:@"FastCGI"];
     Class serverClass = isFastCGI ? [CRFCGIServer class] : [CRHTTPServer class];
     self.server = [[serverClass alloc] initWithDelegate:self];
@@ -268,7 +263,7 @@ NS_ASSUME_NONNULL_END
 }
 
 - (CRApplicationTerminateReply)applicationShouldTerminate:(CRApplication *)sender {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [CRApp logFormat:@"%s", __PRETTY_FUNCTION__];
     [self.server closeAllConnections:^{
         [self.server stopListening];
         [sender replyToApplicationShouldTerminate:CRTerminateNow];
@@ -277,7 +272,7 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [CRApp logFormat:@"%s", __PRETTY_FUNCTION__];
 }
 
 - (void)startServer {
@@ -317,21 +312,20 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)serverWillStartListening:(CRServer *)server {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [CRApp logFormat:@"%s", __PRETTY_FUNCTION__];
 }
 
 - (void)serverDidStartListening:(CRServer *)server {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [CRApp logFormat:@"%s", __PRETTY_FUNCTION__];
 }
 
 - (void)serverWillStopListening:(CRServer *)server {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [CRApp logFormat:@"%s", __PRETTY_FUNCTION__];
 }
 
 - (void)serverDidStopListening:(CRServer *)server {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [CRApp logFormat:@"%s", __PRETTY_FUNCTION__];
 }
-
 
 #if LogConnections
 - (void)server:(CRServer *)server didAcceptConnection:(CRConnection *)connection {

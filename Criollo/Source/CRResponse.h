@@ -6,18 +6,14 @@
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
-#import "CRMessage.h"
-
-// Initial size of the response body data object
-#define CRResponseDataInitialCapacity       (1 * 64 * 1024)
+#import <Criollo/CRMessage.h>
 
 @class CRRequest, CRConnection;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface CRResponse : CRMessage
 
-NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak, nullable) CRConnection *connection;
 @property (nonatomic, weak, nullable) CRRequest *request;
 

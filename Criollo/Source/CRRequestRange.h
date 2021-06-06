@@ -6,9 +6,8 @@
 //  Copyright © 2016 Cătălin Stan. All rights reserved.
 //
 
+#import <Criollo/CRTypes.h>
 #import <Foundation/Foundation.h>
-
-#import "CRTypes.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

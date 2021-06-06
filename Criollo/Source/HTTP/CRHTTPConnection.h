@@ -6,15 +6,7 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
-#import "CRConnection.h"
-
-@class CRRequest, CRResponse;
-
-#define CRHTTPConnectionSocketTagBeginReadingRequest                  10
-#define CRHTTPConnectionSocketTagReadingRequestHeader                 11
-#define CRHTTPConnectionSocketTagReadingRequestBody                   12
+#import <Criollo/CRConnection.h>
 
 @interface CRHTTPConnection : CRConnection
 

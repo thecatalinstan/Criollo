@@ -1,8 +1,8 @@
-platform :osx, '10.10'
 use_frameworks!
 install! 'cocoapods', :generate_multiple_pod_projects => true
 
 target 'HelloWorld' do
+  platform :osx, '10.10'
   pod 'Criollo', :git => '../../', :submodules => true
 end
 

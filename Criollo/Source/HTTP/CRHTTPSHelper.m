@@ -6,45 +6,37 @@
 //  Copyright © 2017 Cătălin Stan. All rights reserved.
 //
 
-#import "CRHTTPSHelper.h"
+#import <Criollo/CRHTTPSHelper.h>
 
 NSString * const CRHTTPSErrorDomain                      = @"CRHTTPSErrorDomain";
 
 NSUInteger const CRHTTPSInternalError                    = 1000;
-NSUInteger const CRHTTPSInvalidCertificateError          = 1001;
-NSUInteger const CRHTTPSInvalidPrivateKeyError           = 1002;
 NSUInteger const CRHTTPSInvalidIdentityError             = 1003;
 NSUInteger const CRHTTPSInvalidPasswordError             = 1004;
 NSUInteger const CRHTTPSMissingCredentialsError          = 1005;
-NSUInteger const CRHTTPSCreateIdentityError              = 1006;
 
 NSString * const CRHTTPSIdentityPathKey                  = @"CRHTTPSIdentityPath";
-NSString * const CRHTTPSCertificatePathKey               = @"CRHTTPSCertificatePath";
-NSString * const CRHTTPSCertificateKeyPathKey            = @"CRHTTPSCertificateKeyPath";
 
 #if SEC_OS_OSX_INCLUDES
 
+NSUInteger const CRHTTPSInvalidCertificateError          = 1001;
+NSUInteger const CRHTTPSInvalidPrivateKeyError           = 1002;
+NSUInteger const CRHTTPSCreateIdentityError              = 1006;
+
+NSString * const CRHTTPSCertificatePathKey               = @"CRHTTPSCertificatePath";
+NSString * const CRHTTPSCertificateKeyPathKey            = @"CRHTTPSCertificateKeyPath";
+
 OSStatus keychainCallback(SecKeychainEvent keychainEvent, SecKeychainCallbackInfo *info, void * __nullable context);
-
-#else
-
-#import <openssl/bio.h>
-#import <openssl/err.h>
-#import <openssl/pem.h>
-#import <openssl/pkcs12.h>
-#import <openssl/x509.h>
 
 #endif
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CRHTTPSHelper () {
-    
 #if SEC_OS_OSX_INCLUDES
     NSString *_keychainPassword;
     NSString *_keychainPath;
 #endif
-    
 }
 
 #if SEC_OS_OSX_INCLUDES
@@ -55,10 +47,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSString *keychainPath;
 
 - (SecKeychainRef _Nullable)setupKeychain;
-
-#else
-
-- (NSString * _Nullable)creaIdentrityFileWithPassword:(NSString *)password certificate:(NSData *)certificate certificateKey:(NSData *)certificateKey withError:(NSError *__autoreleasing  _Nullable * _Nullable)error;
 
 #endif
 
@@ -121,8 +109,9 @@ NS_ASSUME_NONNULL_END
     return result;
 }
 
+#if SEC_OS_OSX_INCLUDES
+
 - (NSArray *)parseCertificateFile:(NSString *)certificatePath privateKeyFile:(NSString *)privateKeyPath error:(NSError *__autoreleasing  _Nullable * _Nullable)error {
-    
     NSError * certReadError;
     NSData * certContents = [NSData dataWithContentsOfFile:certificatePath options:NSDataReadingUncached error:&certReadError];
     if ( certContents.length == 0 ) {
@@ -140,22 +129,6 @@ NS_ASSUME_NONNULL_END
         }
         return nil;
     }
-    
-#if !SEC_OS_OSX_INCLUDES
-    
-    NSString *password = NSUUID.UUID.UUIDString;
-    
-    NSString *identityPath = [self creaIdentrityFileWithPassword:password certificate:certContents certificateKey:keyContents withError:error];
-    if ( identityPath.length == 0 ) {
-        return nil;
-    }
-    
-    NSArray *result = [self parseIdentrityFile:identityPath password:password error:error];
-    [NSFileManager.defaultManager removeItemAtPath:identityPath error:nil];
-    
-    return result;
-    
-#else
     
     CFArrayRef certificateImportItems = NULL;
     OSStatus certificateImportStatus = SecItemImport((__bridge CFDataRef)certContents , NULL, NULL, NULL, 0, NULL, NULL, &certificateImportItems);
@@ -213,10 +186,7 @@ NS_ASSUME_NONNULL_END
     result[0] = (__bridge id _Nonnull)(identity);
     
     return result;
-#endif
 }
-
-#if SEC_OS_OSX_INCLUDES
 
 - (instancetype)init {
     self = [super init];
@@ -275,84 +245,6 @@ NS_ASSUME_NONNULL_END
     return keychain;
 }
 
-#else
-
-- (NSString *)creaIdentrityFileWithPassword:(NSString *)password certificate:(NSData *)certificate certificateKey:(NSData *)certificateKey withError:(NSError * _Nullable __autoreleasing * _Nullable)error {
-    
-    // Attempt to parse cert as DER encoded
-    const unsigned char *cert_data = (unsigned char *)certificate.bytes;
-    X509 *cert = d2i_X509(NULL, &cert_data, certificate.length);
-    if ( cert == NULL ) {
-        // Attempt to parse cert as PEM encoded
-        BIO *bpCert = BIO_new_mem_buf(certificate.bytes, (int)certificate.length);
-        cert = PEM_read_bio_X509(bpCert, NULL, NULL, NULL);
-        if ( cert == NULL ) {
-            char *err = ERR_error_string(ERR_get_error(), NULL);
-            if ( error != nil ) {
-                *error = [NSError errorWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidCertificateError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
-            }
-            BIO_free(bpCert);
-            return nil;
-        }
-        BIO_free(bpCert);
-    }
-
-    // Attempt to parse key as DER encoded
-    const unsigned char *key_data = (unsigned char *)certificateKey.bytes;
-    EVP_PKEY *key = d2i_AutoPrivateKey(NULL, &key_data, certificateKey.length);
-    if ( key == NULL ) {
-        // Attempt to parse key as PEM encoded
-        BIO *bpkey = BIO_new_mem_buf(certificateKey.bytes, (int)certificateKey.length);
-        key = PEM_read_bio_PrivateKey(bpkey, NULL, NULL, NULL);
-        if ( key == NULL ) {
-            char *err = ERR_error_string(ERR_get_error(), NULL);
-            if ( error != nil ) {
-                *error = [NSError errorWithDomain:CRHTTPSErrorDomain code:CRHTTPSInvalidPrivateKeyError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
-            }
-            X509_free(cert);
-            BIO_free(bpkey);
-            return nil;
-        }
-        BIO_free(bpkey);
-    }
-    
-    NSString *identityPath = [NSTemporaryDirectory() stringByAppendingPathComponent:NSUUID.UUID.UUIDString];
-    
-    PKCS12 *p12 = PKCS12_create(password.UTF8String, identityPath.lastPathComponent.UTF8String, key, cert, NULL, 0, 0, 0, 0, 0);
-    if ( p12 == NULL ) {
-        ERR_print_errors_fp(stderr);
-        char *err = ERR_error_string(ERR_get_error(), NULL);
-        if ( error != nil ) {
-            *error = [NSError errorWithDomain:CRHTTPSErrorDomain code:CRHTTPSCreateIdentityError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
-        }
-        X509_free(cert);
-        EVP_PKEY_free(key);
-        return nil;
-    }
-
-    X509_free(cert);
-    EVP_PKEY_free(key);
-    
-    FILE *fpIdentity = fopen(identityPath.UTF8String, "wb");
-    if ( fpIdentity == NULL ) {
-        ERR_print_errors_fp(stderr);
-        char *err = ERR_error_string(ERR_get_error(), NULL);
-        if ( error != nil ) {
-            *error = [NSError errorWithDomain:CRHTTPSErrorDomain code:CRHTTPSCreateIdentityError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithUTF8String:err] ? : @"(null)"}];
-        }
-        X509_free(cert);
-        EVP_PKEY_free(key);
-        return nil;
-    }
-    
-    i2d_PKCS12_fp(fpIdentity, p12);
-    
-    fclose(fpIdentity);
-    PKCS12_free(p12);
-    
-    return identityPath;
-}
-
 #endif
 
 @end
@@ -361,12 +253,14 @@ NS_ASSUME_NONNULL_END
 
 OSStatus keychainCallback(SecKeychainEvent keychainEvent, SecKeychainCallbackInfo *info, void * __nullable context) {
     CRHTTPSHelper *httpsHelper = (__bridge CRHTTPSHelper *)context;
-    if ( info->keychain != httpsHelper.keychain )
+    if (info->keychain != httpsHelper.keychain) {
         return errSecInvalidKeychain;
+    }
     
     OSStatus status = errSecSuccess;
-    if ( keychainEvent == kSecLockEvent ) {
-        status = SecKeychainUnlock(info->keychain, (UInt32)httpsHelper.keychainPassword.length, httpsHelper.keychainPassword.UTF8String, TRUE);
+    if (keychainEvent == kSecLockEvent) {
+        NSString *password = httpsHelper.keychainPassword;
+        status = SecKeychainUnlock(info->keychain, (UInt32)password.length, password.UTF8String, TRUE);
     }
     
     return status;

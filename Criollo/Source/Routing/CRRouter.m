@@ -1,24 +1,26 @@
 //
-//  CRRoutingCenter.m
+//  CRRouter.m
 //  Criollo
 //
 //  Created by Cătălin Stan on 19/07/16.
 //  Copyright © 2016 Cătălin Stan. All rights reserved.
 //
 
-#import "CRRouter.h"
-#import "CRRouter_Internal.h"
+#import <Criollo/CRRouter.h>
+
+#import <Criollo/CRMessage.h>
+#import <Criollo/CRRequest.h>
+#import <Criollo/CRResponse.h>
+#import <Criollo/CRServer.h>
+
+#import "CRMessage_Internal.h"
+#import "CRRequest_Internal.h"
+#import "CRResponse_Internal.h"
 #import "CRRoute.h"
 #import "CRRoute_Internal.h"
 #import "CRRouteMatchingResult.h"
 #import "CRRouteMatchingResult_Internal.h"
-#import "CRServer.h"
-#import "CRMessage.h"
-#import "CRMessage_Internal.h"
-#import "CRRequest.h"
-#import "CRRequest_Internal.h"
-#import "CRResponse.h"
-#import "CRResponse_Internal.h"
+#import "CRRouter_Internal.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -54,7 +56,7 @@ NS_ASSUME_NONNULL_END
         NSString* errorDescription;
         switch (statusCode) {
             case 404:
-                errorDescription = [NSString stringWithFormat:NSLocalizedString(@"No routes defined for “%@%@%@”",), NSStringFromCRHTTPMethod(request.method), requestURL.path, [requestURL.path hasSuffix:CRPathSeparator] ? @"" : CRPathSeparator];
+                errorDescription = [NSString stringWithFormat:NSLocalizedString(@"No routes defined for “%@%@%@”",), NSStringFromCRHTTPMethod(request.method), requestURL.path, [requestURL.path hasSuffix:CRRoutePathSeparator] ? @"" : CRRoutePathSeparator];
                 break;
         }
         info[NSLocalizedDescriptionKey] = errorDescription;

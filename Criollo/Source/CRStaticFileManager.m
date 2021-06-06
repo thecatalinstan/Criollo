@@ -6,14 +6,15 @@
 //  Copyright © 2016 Cătălin Stan. All rights reserved.
 //
 
-#import "CRStaticFileManager.h"
-#import "CRStaticFileManager_Internal.h"
+#import <Criollo/CRStaticFileManager.h>
 
-#import "CRRequest.h"
-#import "CRResponse.h"
-#import "CRRequestRange.h"
+#import <Criollo/CRMimeTypeHelper.h>
+#import <Criollo/CRRequest.h>
+#import <Criollo/CRRequestRange.h>
+#import <Criollo/CRResponse.h>
+
 #import "CRRouter_Internal.h"
-#import "CRMimeTypeHelper.h"
+#import "CRStaticFileManager_Internal.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -298,8 +299,8 @@ error:
     // If we cannot satisfy the byte range, return an error
     if (![requestByteRange isSatisfiableForFileSize:size dataRange:&requestDataRange]) {
         // set the the unsatisfyiable conent range header
-        headers[@"Content-range"] =  [NSString stringWithFormat:@"%@ %@", range.bytesUnit, [requestByteRange contentRangeSpecForFileSize:size satisfiable:NO dataRange:requestDataRange]];
-        NSString *description = [NSString stringWithFormat:NSLocalizedString(@"The requested byte-range %@-%@ / %lu could not be satisfied.",), requestByteRange.firstBytePos, requestByteRange.lastBytePos, size];
+        headers[@"Content-range"] = [NSString stringWithFormat:@"%@ %@", range.bytesUnit, [requestByteRange contentRangeSpecForFileSize:size satisfiable:NO dataRange:requestDataRange]];
+        NSString *description = [NSString stringWithFormat:NSLocalizedString(@"The requested byte-range %@-%@ / %llu could not be satisfied.",), requestByteRange.firstBytePos, requestByteRange.lastBytePos, size];
         err = [self errorWithCode:CRStaticFileManagerRangeNotSatisfiableError description:description underlyingError:nil];
         goto done;
     }

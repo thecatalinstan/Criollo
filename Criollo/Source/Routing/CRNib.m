@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Catalin Stan. All rights reserved.
 //
 
-#import "CRNib.h"
+#import <Criollo/CRNib.h>
 
-#define CRNibExtension      @"html"
+static NSString * const CRNibExtension = @"html";
 
 @implementation CRNib
 

@@ -8,19 +8,20 @@
 
 #import "CRHTTPConnection.h"
 
-@import CocoaAsyncSocket;
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
+#import <Criollo/CRApplication.h>
+#import <Criollo/CRHTTPServer.h>
+#import <Criollo/CRMessage.h>
+#import <Criollo/CRRequest.h>
 
 #import "CRConnection_Internal.h"
-#import "CRApplication.h"
-#import "CRHTTPServer.h"
-#import "CRServer_Internal.h"
+#import "CRHTTPConnection_Internal.h"
+#import "CRHTTPResponse.h"
 #import "CRHTTPServerConfiguration.h"
-#import "CRMessage.h"
 #import "CRMessage_Internal.h"
-#import "CRRequest.h"
 #import "CRRequest_Internal.h"
 #import "CRResponse_Internal.h"
-#import "CRHTTPResponse.h"
+#import "CRServer_Internal.h"
 
 @interface CRHTTPConnection () {
     NSUInteger requestBodyLength;

@@ -101,13 +101,4 @@
     
 }
 
-- (void)testRenderPerformance {
-    CRView *view = [self testView:NSStringFromClass(self.class)];
-    NSDictionary *replacements = @{@"title": NSStringFromClass(self.class), @"var": @(self.hash).stringValue};
-    [self measureBlock:^{
-        NSString *replaced = [view render:replacements];
-        XCTAssertNotNil(replaced);
-    }];
-}
-
 @end

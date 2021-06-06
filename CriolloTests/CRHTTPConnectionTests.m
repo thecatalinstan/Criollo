@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "CRHTTPConnection.h"
+#import "CRHTTPConnection_Internal.h"
 #import "CRConnection_Internal.h"
 #import "CRRequest.h"
 

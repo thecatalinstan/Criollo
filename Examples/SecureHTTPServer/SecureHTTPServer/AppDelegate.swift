@@ -14,55 +14,54 @@ import CSSystemInfoHelper
 class AppDelegate: UIResponder, UIApplicationDelegate, CRServerDelegate {
 
     var window: UIWindow?
-    var server: CRHTTPServer?
+    var server: CRHTTPServer
     
     var interface = "127.0.0.1"
     var port = 10781
-    var baseURL = URL(string: "http://127.0.0.1:10781/")
-
+    
+    override init() {
+        server = CRHTTPServer(delegate: nil)
+        super.init()
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        self.interface = CSSystemInfoHelper.shared().ipAddress
-        self.server = CRHTTPServer(delegate: self)
-        
-        // Setup HTTPS
-        self.server?.isSecure = true
-        
-        // Secure with PEM certificate and key
-        self.server?.certificatePath = Bundle.main.path(forResource: "SecureHTTPServer.bundle", ofType: "pem")
-        self.server?.privateKeyPath = Bundle.main.path(forResource: "SecureHTTPServer.key", ofType: "pem")
-        
-        // Secure with PKCS#12 identity and password.
-//        self.server?.identityPath = Bundle.main.path(forResource: "SecureHTTPServer", ofType: "p12")
-//        self.server?.password = "password"
-        
-        self.server?.get("/", block: { (req, res, next) in
-            res.send("Hello over HTTPS.")
+        // Setup route
+        server.get("/", block: { (req, res, next) in
+            res.send("Hello over HTTP\(self.server.isSecure ? "S" : "").")
         })
+
+        // Setup HTTPS with PKCS#12 identity and password.
+        server.isSecure = true
+        server.identityPath = Bundle.main.path(forResource: "SecureHTTPServer", ofType: "p12")
+        server.password = "password"
         
         // Start listening
+        interface = CSSystemInfoHelper.shared().ipAddress
+        
         var error:NSError?
-        if ( self.server?.startListening(&error, portNumber: UInt(self.port), interface: self.interface) )! {
-            print("Started HTTPS server at: https://\(self.interface):\(self.port)/")
-        } else {
+        if !server.startListening(&error, portNumber: UInt(port), interface: interface) {
             print("Failed to start HTTPS server. \(error!.localizedDescription)")
             print(error?.domain ?? "", error?.code ?? 0)
             print(error?.userInfo ?? "")
+            return false
         }
 
+        print("Started HTTPS server at: https://\(self.interface):\(self.port)/")
+        
         return true
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        self.server?.stopListening()
+        server.stopListening()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        self.server?.startListening()
+        server.startListening()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        self.server?.stopListening()
+        server.stopListening()
     }
     
     func serverDidStartListening(_ server: CRServer) {

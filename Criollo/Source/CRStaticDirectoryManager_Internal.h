@@ -1,12 +1,12 @@
 //
-//  CRStaticDirectoryManager+Internal.h
+//  CRStaticDirectoryManager_Internal.h
 //  Criollo macOS
 //
 //  Created by Cătălin Stan on 14/05/2020.
 //  Copyright © 2020 Cătălin Stan. All rights reserved.
 //
 
-#import "CRStaticDirectoryManager.h"
+#import <Criollo/CRStaticDirectoryManager.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

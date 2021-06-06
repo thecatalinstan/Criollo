@@ -8,16 +8,20 @@
 
 #import <Foundation/Foundation.h>
 
-#import "CRTypes.h"
-#import "CRRouter.h"
-
-#define CRServerErrorDomain                   @"CRServerErrorDomain"
-#define CRServerSocketError                   2001
+#import <Criollo/CRRouter.h>
+#import <Criollo/CRTypes.h>
 
 @class CRServer, CRServerConfiguration, GCDAsyncSocket, CRConnection, CRRequest, CRResponse, CRRoute;
 
 NS_ASSUME_NONNULL_BEGIN
 
+FOUNDATION_EXPORT NSErrorDomain const CRServerErrorDomain;
+
+NS_ERROR_ENUM(CRServerErrorDomain) {
+    CRServerSocketError = 2001,
+};
+
+// TODO: Remove inheritance from NSObject
 @protocol CRServerDelegate <NSObject>
 
 @optional
@@ -29,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)serverDidStopListening:(CRServer *)server;
 
 - (void)server:(CRServer *)server didAcceptConnection:(CRConnection *)connection;
-- (void)server:(CRServer  *)server didCloseConnection:(CRConnection *)connection;
+- (void)server:(CRServer *)server didCloseConnection:(CRConnection *)connection;
 
 - (void)server:(CRServer *)server didReceiveRequest:(CRRequest *)request;
 - (void)server:(CRServer *)server didFinishRequest:(CRRequest *)request;
@@ -43,11 +47,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak, nullable) id<CRServerDelegate> delegate;
 @property (nonatomic, strong, nullable) dispatch_queue_t delegateQueue;
 
-@property (nonatomic, strong, nullable) NSOperationQueue* workerQueue;
+@property (nonatomic, strong, nullable) NSOperationQueue *workerQueue;
 
 - (instancetype)initWithDelegate:(id<CRServerDelegate> _Nullable)delegate;
 - (instancetype)initWithDelegate:(id<CRServerDelegate> _Nullable)delegate delegateQueue:(dispatch_queue_t _Nullable)delegateQueue NS_DESIGNATED_INITIALIZER;
 
+// TODO: Move error param to the end
 - (BOOL)startListening;
 - (BOOL)startListening:(NSError * _Nullable __autoreleasing * _Nullable)error;
 - (BOOL)startListening:(NSError * _Nullable __autoreleasing * _Nullable)error portNumber:(NSUInteger)portNumber;

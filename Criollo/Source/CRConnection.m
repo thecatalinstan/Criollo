@@ -6,22 +6,21 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRConnection.h"
+#import <Criollo/CRConnection.h>
 
-@import CocoaAsyncSocket;
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
+#import <Criollo/CRApplication.h>
+#import <Criollo/CRRequest.h>
+#import <Criollo/CRResponse.h>
+#import <Criollo/CRServer.h>
+#import <sys/sysctl.h>
+#import <sys/types.h>
 
 #import "CRConnection_Internal.h"
-#import "CRApplication.h"
-#import "CRServer.h"
+#import "CRRequest_Internal.h"
+#import "CRResponse_Internal.h"
 #import "CRServer_Internal.h"
 #import "CRServerConfiguration.h"
-#import "CRRequest.h"
-#import "CRRequest_Internal.h"
-#import "CRResponse.h"
-#import "CRResponse_Internal.h"
-
-#include <sys/types.h>
-#include <sys/sysctl.h>
 #import "NSDate+RFC1123.h"
 
 static int const CRConnectionSocketTagSendingResponse = 20;
@@ -61,14 +60,6 @@ static const NSData * CRLFCRLFData;
 }
 
 #pragma mark - Responses
-
-- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode {
-    return [self responseWithHTTPStatusCode:HTTPStatusCode description:nil version:CRHTTPVersion1_1];
-}
-
-- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description {
-    return [self responseWithHTTPStatusCode:HTTPStatusCode description:description version:CRHTTPVersion1_1];
-}
 
 - (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(CRHTTPVersion)version {
     return [[CRResponse alloc] initWithConnection:self HTTPStatusCode:HTTPStatusCode description:description version:version];
@@ -141,15 +132,15 @@ static const NSData * CRLFCRLFData;
     }
 
     NSString * contentType = self.requestBeingReceived.env[@"HTTP_CONTENT_TYPE"];
-    if ([contentType hasPrefix:CRRequestTypeURLEncoded]) {
+    if (contentType.requestContentType == CRRequestContentTypeURLEncoded) {
         // URL-encoded requests are parsed after we have all the data
         [self bufferBodyData:data forRequest:self.requestBeingReceived];
-    } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
+    } else if (contentType.requestContentType == CRRequestContentTypeMultipart) {
         NSError* multipartParsingError;
-        if ( ![self.requestBeingReceived parseMultipartBodyDataChunk:data error:&multipartParsingError] ) {
+        if (![self.requestBeingReceived parseMultipartBodyDataChunk:data error:&multipartParsingError]) {
             [CRApp logErrorFormat:@"%@" , multipartParsingError];
         }
-    } else if ([contentType hasPrefix:CRRequestTypeJSON]) {
+    } else if (contentType.requestContentType == CRRequestContentTypeJSON) {
         // JSON requests are parsed after we have all the data
         [self bufferBodyData:data forRequest:self.requestBeingReceived];
     } else {
@@ -173,11 +164,11 @@ static const NSData * CRLFCRLFData;
 
         BOOL result = YES;
 
-        if ([contentType hasPrefix:CRRequestTypeJSON]) {
+        if (contentType.requestContentType == CRRequestContentTypeJSON) {
             result = [self.requestBeingReceived parseJSONBodyData:&bodyParsingError];
-        } else if ([contentType hasPrefix:CRRequestTypeURLEncoded]) {
+        } else if (contentType.requestContentType == CRRequestContentTypeURLEncoded) {
             result = [self.requestBeingReceived parseURLEncodedBodyData:&bodyParsingError];
-        } else if ([contentType hasPrefix:CRRequestTypeMultipart]) {
+        } else if (contentType.requestContentType == CRRequestContentTypeMultipart) {
             // multipart/form-data requests are parsed as they come in and not once the
             // request hast been fully received ;)
         } else {
@@ -187,11 +178,12 @@ static const NSData * CRLFCRLFData;
         }
 
         if ( !result ) {
+            // TODO: Propagate the error, do not log from here
             [CRApp logErrorFormat:@"%@" , bodyParsingError];
         }
     }
 
-    CRResponse* response = [self responseWithHTTPStatusCode:200];
+    CRResponse* response = [self responseWithHTTPStatusCode:200 description:nil version:self.requestBeingReceived.version];
     self.requestBeingReceived.response = response;
     response.request = self.requestBeingReceived;
     [self.delegate connection:self didReceiveRequest:self.requestBeingReceived response:response];

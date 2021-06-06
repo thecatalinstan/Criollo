@@ -6,9 +6,10 @@
 //  Copyright © 2016 Cătălin Stan. All rights reserved.
 //
 
-#import "CRRequestRange.h"
-#import "CRRequestRange_Internal.h"
+#import <Criollo/CRRequestRange.h>
+
 #import "CRRequest_Internal.h"
+#import "CRRequestRange_Internal.h"
 
 /// Parse a requested byte range
 /// @see: https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.1

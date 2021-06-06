@@ -41,11 +41,7 @@
     return [bundle.resourcePath stringByAppendingPathComponent:samplefile];
 }
 
-#if SEC_OS_OSX_INCLUDES
-- (void)test_keychain_notNil  {
-    XCTAssertNotNil((__bridge id)CRHTTPSHelper.new.keychain, @"Custom keychains should NOT return nil.");
-}
-#endif
+#pragma mark - Identity
 
 - (void)test_parseIdentityFile_InvalidPath_failsWithInvalidIdentityError {
     NSError *error;
@@ -105,6 +101,10 @@
     XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[1]), @"The second item in the array should be a SecCertificateRef");
     XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[2]), @"The third item in the array should be a SecCertificateRef");
 }
+
+#pragma mark - Certificates
+
+#if SEC_OS_OSX_INCLUDES
 
 - (void)test_parseCertificateFilePrivateKeyFile_InvalidCertificatePath_failsWithInvalidCertificateError {
         NSError *error;
@@ -238,11 +238,7 @@
 }
 
 - (void)test_parseCertificateFilePrivateKeyFile_ValidPEMFullchainCertificateAndPrivateKey_yieldsCorrectCertificatesArray {
-#if SEC_OS_OSX_INCLUDES
     NSUInteger expectedItemsCount = 3; // [identity, cert (intermediate), cert (root)]
-#else
-    NSUInteger expectedItemsCount = 1; // [identity]
-#endif
     
     NSArray *items = [CRHTTPSHelper.new parseCertificateFile:PEMBundlePath privateKeyFile:PEMKeyPath error:nil];
     
@@ -250,10 +246,8 @@
     XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
     
     XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
-#if SEC_OS_OSX_INCLUDES
     XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[1]), @"The second item in the array should be a SecCertificateRef");
     XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[2]), @"The third item in the array should be a SecCertificateRef");
-#endif
 }
 
 - (void)test_parseCertificateFilePrivateKeyFile_ValidPEMFullchainCertificateAndDERPrivateKey_succeedsWithNoError {
@@ -264,11 +258,7 @@
 }
 
 - (void)test_parseCertificateFilePrivateKeyFile_ValidPEMFullchainCertificateAndDERPrivateKey_yieldsCorrectCertificatesArray {
-#if SEC_OS_OSX_INCLUDES
     NSUInteger expectedItemsCount = 3; // [identity, cert (intermediate), cert (root)]
-#else
-    NSUInteger expectedItemsCount = 1; // [identity]
-#endif
     
     NSArray *items = [CRHTTPSHelper.new parseCertificateFile:PEMBundlePath privateKeyFile:DERKeyPath error:nil];
     
@@ -276,10 +266,16 @@
     XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
     
     XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
-#if SEC_OS_OSX_INCLUDES
     XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[1]), @"The second item in the array should be a SecCertificateRef");
     XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[2]), @"The third item in the array should be a SecCertificateRef");
-#endif
 }
+
+#pragma mark - Keychain
+
+- (void)test_keychain_notNil  {
+    XCTAssertNotNil((__bridge id)CRHTTPSHelper.new.keychain, @"Custom keychains should NOT return nil.");
+}
+
+#endif
 
 @end

@@ -6,7 +6,7 @@
 //  Copyright © 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRConnection.h"
+#import <Criollo/CRConnection.h>
 
 @import CocoaAsyncSocket;
 
@@ -40,8 +40,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithSocket:(GCDAsyncSocket * _Nullable)socket server:(CRServer * _Nullable)server NS_DESIGNATED_INITIALIZER;
 
-- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode;
-- (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString * _Nullable)description;
 - (CRResponse *)responseWithHTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString * _Nullable)description version:(CRHTTPVersion)version;
 
 - (void)startReading NS_REQUIRES_SUPER;

@@ -41,6 +41,8 @@
 
 @implementation CRHTTPServerTests
 
+#pragma mark - Identity
+
 - (NSString *)pathForSampleFile:(NSString *)samplefile {
     NSBundle *bundle = [NSBundle bundleForClass:self.class];
     return [bundle.resourcePath stringByAppendingPathComponent:samplefile];
@@ -183,6 +185,10 @@
     
     CRHTTPServerStop();
 }
+
+#pragma mark - Certificates
+
+#if SEC_OS_OSX_INCLUDES
 
 - (void)test_isSecure_InvalidCertificatePath_failsWithInvalidCertificateError {
     CRHTTPServerCreate();
@@ -433,11 +439,7 @@
 }
 
 - (void)test_isSecure_ValidPEMFullchainCertificateAndPEMPrivateKey_yeldsCorrectCertificatesArray {
-#if SEC_OS_OSX_INCLUDES
     NSUInteger expectedItemsCount = 3; // [identity, cert (intermediate), cert (root)]
-#else
-    NSUInteger expectedItemsCount = 1; // [identity]
-#endif
     
     CRHTTPServerCreate();
     server.isSecure = YES;
@@ -451,11 +453,8 @@
     XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
     
     XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
-    
-#if SEC_OS_OSX_INCLUDES
     XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[1]), @"The second item in the array should be a SecCertificateRef");
     XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[2]), @"The third item in the array should be a SecCertificateRef");
-#endif
 }
 
 - (void)test_isSecure_ValidPEMFullchainCertificateAndDERPrivateKey_succeedsWithNoError {
@@ -472,11 +471,7 @@
 }
 
 - (void)test_isSecure_ValidPEMFullchainCertificateAndDERPrivateKey_yeldsCorrectCertificatesArray {
-#if SEC_OS_OSX_INCLUDES
     NSUInteger expectedItemsCount = 3; // [identity, cert (intermediate), cert (root)]
-#else
-    NSUInteger expectedItemsCount = 1; // [identity]
-#endif
     
     CRHTTPServerCreate();
     server.isSecure = YES;
@@ -490,11 +485,10 @@
     XCTAssertEqual(items.count, expectedItemsCount, @"Resulting items array should have exactly %lu elements.", expectedItemsCount);
     
     XCTAssertTrue(SecIdentityGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[0]), @"The first item in the array should be a SecIdentityRef");
-    
-#if SEC_OS_OSX_INCLUDES
     XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[1]), @"The second item in the array should be a SecCertificateRef");
     XCTAssertTrue(SecCertificateGetTypeID() == CFGetTypeID((__bridge CFTypeRef)items[2]), @"The third item in the array should be a SecCertificateRef");
-#endif
 }
+
+#endif
 
 @end

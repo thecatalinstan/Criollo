@@ -2,9 +2,9 @@
 
 [![Criollo](https://criollo.io/res/doc/images/criollo-github.png)](https://criollo.io/)
 
-#### A powerful Cocoa based web application framework for macOS, iOS and tvOS.
+#### A powerful Cocoa web framework and HTTP server for macS, iOS and tvOS.
 
-[![Build Status](https://travis-ci.org/thecatalinstan/Criollo.svg?branch=master)](https://travis-ci.org/thecatalinstan/Criollo) [![Version Status](https://img.shields.io/cocoapods/v/Criollo.svg?style=flat)](http://cocoadocs.org/docsets/Criollo)  [![Platform](http://img.shields.io/cocoapods/p/Criollo.svg?style=flat)](http://cocoapods.org/?q=Criollo) [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![MIT License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat)](https://opensource.org/licenses/MIT) [![Twitter](https://img.shields.io/badge/twitter-@criolloio-orange.svg?style=flat)](http://twitter.com/Criolloio) [![Gitter](https://img.shields.io/gitter/room/criollo-io/Lobby.svg?style=flat)](https://gitter.im/criollo-io/Lobby)
+[![Build Status](https://travis-ci.com/thecatalinstan/Criollo.svg?branch=master)](https://travis-ci.com/thecatalinstan/Criollo) [![Version Status](https://img.shields.io/cocoapods/v/Criollo.svg?style=flat)](http://cocoadocs.org/docsets/Criollo)  [![Platform](http://img.shields.io/cocoapods/p/Criollo.svg?style=flat)](http://cocoapods.org/?q=Criollo) [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![MIT License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat)](https://opensource.org/licenses/MIT) [![Twitter](https://img.shields.io/badge/twitter-@criolloio-orange.svg?style=flat)](http://twitter.com/Criolloio) [![Gitter](https://img.shields.io/gitter/room/criollo-io/Lobby.svg?style=flat)](https://gitter.im/criollo-io/Lobby)
 
 
 Criollo helps create fast standalone or embedded web apps that deliver content directly over HTTP or FastCGI. You can write code in Swift or Objective-C and you can use the Cocoa technologies you already know. 

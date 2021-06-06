@@ -6,20 +6,22 @@
 //  Copyright (c) 2015 Cătălin Stan. All rights reserved.
 //
 
-#import "CRServer.h"
+#import <Criollo/CRServer.h>
 
-@import CocoaAsyncSocket;
+#import <CocoaAsyncSocket/GCDAsyncSocket.h>
+#import <Criollo/CRConnection.h>
+#import <Criollo/CRRequest.h>
+#import <Criollo/CRResponse.h>
+#import <Criollo/CRViewController.h>
 
-#import "CRServer_Internal.h"
-#import "CRRouter_Internal.h"
-#import "CRServerConfiguration.h"
-#import "CRConnection.h"
 #import "CRConnection_Internal.h"
 #import "CRMessage_Internal.h"
-#import "CRRequest.h"
-#import "CRResponse.h"
 #import "CRRoute.h"
-#import "CRViewController.h"
+#import "CRRouter_Internal.h"
+#import "CRServer_Internal.h"
+#import "CRServerConfiguration.h"
+
+NSErrorDomain const CRServerErrorDomain = @"CRServerErrorDomain";
 
 static NSUInteger const InitialConnectionCapacity = 1 << 10;
 
