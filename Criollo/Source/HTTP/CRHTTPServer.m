@@ -9,12 +9,12 @@
 #import <Criollo/CRHTTPServer.h>
 
 #import <Criollo/CRApplication.h>
-#import <Criollo/CRHTTPSHelper.h>
 #import <Security/Security.h>
 
 #import "CRConnection_Internal.h"
 #import "CRHTTPConnection.h"
 #import "CRHTTPServerConfiguration.h"
+#import "CRHTTPSHelper.h"
 #import "CRServer_Internal.h"
 #import "CocoaAsyncSocket.h"
 
