@@ -6,9 +6,9 @@ import PackageDescription
 let package = Package(
     name: "Criollo",
     platforms: [
-        .iOS(.v8),
+        .iOS(.v12),
         .macOS(.v10_10),
-        .tvOS(.v9)
+        .tvOS(.v12)
     ],
     products: [
         .library(
@@ -17,7 +17,7 @@ let package = Package(
             targets: ["Criollo"]),
     ],
     dependencies: [
-        .package(name:"CocoaAsyncSocket", url: "https://github.com/robbiehanson/CocoaAsyncSocket", from: "7.6.4"),
+        .package(name:"CocoaAsyncSocket", url: "https://github.com/robbiehanson/CocoaAsyncSocket", from: "7.6.5"),
     ],
     targets: [
         .target(
@@ -33,7 +33,9 @@ let package = Package(
                 .headerSearchPath("Source/Extensions"),
                 .headerSearchPath("Source/FCGI"),
                 .headerSearchPath("Source/HTTP"),
-                .headerSearchPath("Source/Routing")]),
+                .headerSearchPath("Source/Routing"),
+            ]
+        ),
 
         .testTarget(name: "CriolloTests",
                     dependencies: ["Criollo"],

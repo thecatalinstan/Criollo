@@ -10,6 +10,9 @@ ln -sv ../Source/CRResponse.h .
 ln -sv ../Source/CRRequestRange.h .
 ln -sv ../Source/CRUploadedFile.h .
 ln -sv ../Source/CRMimeTypeHelper.h .
+ln -sv ../Source/CRStaticDirectoryManager.h .
+ln -sv ../Source/CRStaticFileManager.h .
+
 ln -sv ../Source/HTTP/CRHTTPServer.h .
 ln -sv ../Source/FCGI/CRFCGIServer.h .
 
