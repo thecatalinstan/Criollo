@@ -28,13 +28,6 @@ let package = Package(
             path: "Criollo",
             exclude: ["../Libraries"],
             publicHeadersPath: "includes",
-            cSettings: [
-                .headerSearchPath("Source"),
-                .headerSearchPath("Source/Extensions"),
-                .headerSearchPath("Source/FCGI"),
-                .headerSearchPath("Source/HTTP"),
-                .headerSearchPath("Source/Routing"),
-            ]
         ),
 
         .testTarget(name: "CriolloTests",
