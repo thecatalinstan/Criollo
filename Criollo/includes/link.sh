@@ -25,10 +25,3 @@ cp -v ${CRIOLLOSRCDIR}/Routing/CRRouteController.h ${CRIOLLODIR}/
 cp -v ${CRIOLLOSRCDIR}/Routing/CRNib.h ${CRIOLLODIR}/
 cp -v ${CRIOLLOSRCDIR}/Routing/CRView.h ${CRIOLLODIR}/
 cp -v ${CRIOLLOSRCDIR}/Routing/CRViewController.h ${CRIOLLODIR}/
-
-
-COCOAASYNCSOCKETDIR=./CocoaAsyncSocket
-COCOAASYNCSOCKETSRCDIR=../../Libraries/CocoaAsyncSocket/Source
-mkdir -p ${COCOAASYNCSOCKETDIR}
-rm -vrf ${COCOAASYNCSOCKETDIR}/*.h
-cp -v  ${COCOAASYNCSOCKETSRCDIR}/GCD/GCDAsyncSocket.h  ${COCOAASYNCSOCKETDIR}/
