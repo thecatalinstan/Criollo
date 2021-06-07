@@ -13,12 +13,12 @@
 #import <Criollo/CRRequest.h>
 #import <Criollo/CRServer.h>
 
+#import "CocoaAsyncSocket.h"
 #import "CRConnection_Internal.h"
 #import "CRMessage_Internal.h"
 #import "CRResponse_Internal.h"
 #import "CRServerConfiguration.h"
 #import "NSDate+RFC1123.h"
-#import "CocoaAsyncSocket.h"
 #import "NSHTTPCookie+Criollo.h"
 
 NSUInteger const CRResponseDataInitialCapacity = 1<<16;

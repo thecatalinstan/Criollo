@@ -13,13 +13,13 @@
 #import <Criollo/CRResponse.h>
 #import <Criollo/CRViewController.h>
 
+#import "CocoaAsyncSocket.h"
 #import "CRConnection_Internal.h"
 #import "CRMessage_Internal.h"
 #import "CRRoute.h"
 #import "CRRouter_Internal.h"
 #import "CRServer_Internal.h"
 #import "CRServerConfiguration.h"
-#import "CocoaAsyncSocket.h"
 
 NSErrorDomain const CRServerErrorDomain = @"CRServerErrorDomain";
 
