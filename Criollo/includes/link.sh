@@ -5,7 +5,7 @@ CRIOLLOSRCDIR=../Source
 mkdir -p ${CRIOLLODIR}
 rm -vrf ${CRIOLLODIR}/*.h
 
-cp -v ${CRIOLLOSRCDIR}/Criollo.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/../Criollo.h ${CRIOLLODIR}/
 cp -v ${CRIOLLOSRCDIR}/CRTypes.h ${CRIOLLODIR}/
 cp -v ${CRIOLLOSRCDIR}/CRApplication.h ${CRIOLLODIR}/
 cp -v ${CRIOLLOSRCDIR}/CRServer.h ${CRIOLLODIR}/
