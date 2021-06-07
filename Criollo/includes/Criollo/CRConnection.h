@@ -23,13 +23,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRConnection : NSObject
 
+@property (nonatomic, weak, nullable) id<CRConnectionDelegate> delegate;
+
 @property (nonatomic, readonly) NSString* remoteAddress;
 @property (nonatomic, readonly) NSUInteger remotePort;
 @property (nonatomic, readonly) NSString* localAddress;
 @property (nonatomic, readonly) NSUInteger localPort;
-
-- (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)new NS_UNAVAILABLE;
 
 @end
 

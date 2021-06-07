@@ -8,7 +8,6 @@
 
 #import <Criollo/CRConnection.h>
 
-#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import <Criollo/CRApplication.h>
 #import <Criollo/CRRequest.h>
 #import <Criollo/CRResponse.h>
@@ -16,6 +15,7 @@
 #import <sys/sysctl.h>
 #import <sys/types.h>
 
+#import "CocoaAsyncSocket.h"
 #import "CRConnection_Internal.h"
 #import "CRRequest_Internal.h"
 #import "CRResponse_Internal.h"
