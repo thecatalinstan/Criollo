@@ -20,7 +20,7 @@
 #import "CRResponse_Internal.h"
 #import "CRServer_Internal.h"
 #import "CRServerConfiguration.h"
-#import "GCDAsyncSocket.h"
+#import "CocoaAsyncSocket.h"
 #import "NSDate+RFC1123.h"
 
 static int const CRConnectionSocketTagSendingResponse = 20;

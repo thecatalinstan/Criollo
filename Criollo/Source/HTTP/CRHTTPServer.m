@@ -16,7 +16,7 @@
 #import "CRHTTPConnection.h"
 #import "CRHTTPServerConfiguration.h"
 #import "CRServer_Internal.h"
-#import "GCDAsyncSocket.h"
+#import "CocoaAsyncSocket.h"
 
 @interface CRHTTPServer ()
 

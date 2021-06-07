@@ -19,7 +19,7 @@
 #import "CRRouter_Internal.h"
 #import "CRServer_Internal.h"
 #import "CRServerConfiguration.h"
-#import "GCDAsyncSocket.h"
+#import "CocoaAsyncSocket.h"
 
 NSErrorDomain const CRServerErrorDomain = @"CRServerErrorDomain";
 

@@ -10,7 +10,7 @@
 
 #import <Criollo/CRConnection.h>
 
-#import "GCDAsyncSocket.h"
+#import "CocoaAsyncSocket.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

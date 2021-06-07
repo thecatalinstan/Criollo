@@ -7,8 +7,8 @@
 //
 
 #if __has_feature(modules)
-@import CocoaAsyncSocket.GCDAsyncSocket;
+@import CocoaAsyncSocket;
 #else
-#import <CocoaAsyncSocket/GCDAsyncSocket.h>
+#import <CocoaAsyncSocket/CocoaAsyncSocket.h>
 #endif
 
