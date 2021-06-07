@@ -20,7 +20,7 @@
 #import "CRRequest_Internal.h"
 #import "CRResponse_Internal.h"
 #import "CRServer_Internal.h"
-"
+
 static long const CRFCGIConnectionSocketTagReadRecordHeader = 11;
 static long const CRFCGIConnectionSocketTagReadRecordContent = 12;
 

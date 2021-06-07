@@ -17,7 +17,7 @@
 #import "CRMessage_Internal.h"
 #import "CRResponse_Internal.h"
 #import "NSDate+RFC1123.h"
-"
+
 @interface CRHTTPResponse ()
 
 - (nonnull NSMutableData *)initialResponseData;
