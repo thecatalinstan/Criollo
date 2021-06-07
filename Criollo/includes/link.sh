@@ -1,27 +1,33 @@
 #!/bin/bash
 
-DIR=Criollo
+CRIOLLODIR=./Criollo
+CRIOLLOSRCDIR=../Source
+mkdir -p ${CRIOLLODIR}
+rm -vrf ${CRIOLLODIR}/*.h
 
-rm -vrf ./${DIR}*.h
+cp -v ${CRIOLLOSRCDIR}/CRTypes.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/CRApplication.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/CRServer.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/CRConnection.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/CRMessage.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/CRRequest.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/CRResponse.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/CRRequestRange.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/CRUploadedFile.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/CRMimeTypeHelper.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/CRStaticDirectoryManager.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/CRStaticFileManager.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/HTTP/CRHTTPServer.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/FCGI/CRFCGIServer.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/Routing/CRRouter.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/Routing/CRRouteController.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/Routing/CRNib.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/Routing/CRView.h ${CRIOLLODIR}/
+cp -v ${CRIOLLOSRCDIR}/Routing/CRViewController.h ${CRIOLLODIR}/
 
-cp -v ../Source/CRTypes.h ${DIR}/
-cp -v ../Source/CRApplication.h ${DIR}/
-cp -v ../Source/CRServer.h ${DIR}/
-cp -v ../Source/CRConnection.h ${DIR}/
-cp -v ../Source/CRMessage.h ${DIR}/
-cp -v ../Source/CRRequest.h ${DIR}/
-cp -v ../Source/CRResponse.h ${DIR}/
-cp -v ../Source/CRRequestRange.h ${DIR}/
-cp -v ../Source/CRUploadedFile.h ${DIR}/
-cp -v ../Source/CRMimeTypeHelper.h ${DIR}/
-cp -v ../Source/CRStaticDirectoryManager.h ${DIR}/
-cp -v ../Source/CRStaticFileManager.h ${DIR}/
 
-cp -v ../Source/HTTP/CRHTTPServer.h ${DIR}/
-cp -v ../Source/FCGI/CRFCGIServer.h ${DIR}/
-
-cp -v ../Source/Routing/CRRouter.h ${DIR}/
-cp -v ../Source/Routing/CRRouteController.h ${DIR}/
-cp -v ../Source/Routing/CRNib.h ${DIR}/
-cp -v ../Source/Routing/CRView.h ${DIR}/
-cp -v ../Source/Routing/CRViewController.h ${DIR}/
+COCOAASYNCSOCKETDIR=./CocoaAsyncSocket
+COCOAASYNCSOCKETSRCDIR=../../Libraries/CocoaAsyncSocket/Source
+mkdir -p ${COCOAASYNCSOCKETDIR}
+rm -vrf ${COCOAASYNCSOCKETDIR}/*.h
+cp -v  ${COCOAASYNCSOCKETSRCDIR}/GCD/GCDAsyncSocket.h  ${COCOAASYNCSOCKETDIR}/
