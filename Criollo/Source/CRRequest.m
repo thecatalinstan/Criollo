@@ -183,20 +183,19 @@ CRRequestContentType const CRRequestContentTypeOther = @"";
 }
 
 - (BOOL)parseJSONBodyData:(NSError *__autoreleasing  _Nullable *)error {
-    BOOL result = NO;
-
-    NSError* jsonDecodingError;
-    id decodedBody = [NSJSONSerialization JSONObjectWithData:self.bufferedBodyData options:0 error:&jsonDecodingError];
-
-    if ( jsonDecodingError == nil ) {
-        _body = decodedBody;
-        result = YES;
-        self.bufferedBodyData = nil;
-    } else {
-        *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{NSLocalizedDescriptionKey:@"Unable to parse JSON request.", NSUnderlyingErrorKey:jsonDecodingError}];
+    NSError *jsonDecodingError;
+    if (!(_body = [NSJSONSerialization JSONObjectWithData:self.bufferedBodyData options:0 error:&jsonDecodingError])) {
+        if (error) {
+            *error = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestErrorMalformedBody userInfo:@{
+                NSLocalizedDescriptionKey:@"Unable to parse JSON request.", NSUnderlyingErrorKey:jsonDecodingError
+            }];
+        }
+        return NO;
     }
-
-    return result;
+    
+    self.bufferedBodyData = nil;
+    
+    return YES;
 }
 
 - (BOOL)parseMIMEBodyDataChunk:(NSData *)data error:(NSError *__autoreleasing  _Nullable * _Nullable)error {
