@@ -26,7 +26,11 @@ let package = Package(
                 "CocoaAsyncSocket"
             ],   
             path: "Criollo",
-            exclude: ["../Libraries"],
+            exclude: [
+                "../Libraries",
+                "../Apps",
+                "../Criollo.podspec"
+            ],
             publicHeadersPath: "includes",
             cSettings: [
                 .headerSearchPath("Source"),
