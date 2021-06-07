@@ -1,23 +1,25 @@
 #!/bin/bash
 
-ln -sv ../Source/CRTypes.h .
-ln -sv ../Source/CRApplication.h .
-ln -sv ../Source/CRServer.h .
-ln -sv ../Source/CRConnection.h .
-ln -sv ../Source/CRMessage.h .
-ln -sv ../Source/CRRequest.h .
-ln -sv ../Source/CRResponse.h .
-ln -sv ../Source/CRRequestRange.h .
-ln -sv ../Source/CRUploadedFile.h .
-ln -sv ../Source/CRMimeTypeHelper.h .
-ln -sv ../Source/CRStaticDirectoryManager.h .
-ln -sv ../Source/CRStaticFileManager.h .
+rm -vrf ./*.h
 
-ln -sv ../Source/HTTP/CRHTTPServer.h .
-ln -sv ../Source/FCGI/CRFCGIServer.h .
+cp -v ../Source/CRTypes.h .
+cp -v ../Source/CRApplication.h .
+cp -v ../Source/CRServer.h .
+cp -v ../Source/CRConnection.h .
+cp -v ../Source/CRMessage.h .
+cp -v ../Source/CRRequest.h .
+cp -v ../Source/CRResponse.h .
+cp -v ../Source/CRRequestRange.h .
+cp -v ../Source/CRUploadedFile.h .
+cp -v ../Source/CRMimeTypeHelper.h .
+cp -v ../Source/CRStaticDirectoryManager.h .
+cp -v ../Source/CRStaticFileManager.h .
 
-ln -sv ../Source/Routing/CRRouter.h .
-ln -sv ../Source/Routing/CRRouteController.h .
-ln -sv ../Source/Routing/CRNib.h .
-ln -sv ../Source/Routing/CRView.h .
-ln -sv ../Source/Routing/CRViewController.h .
+cp -v ../Source/HTTP/CRHTTPServer.h .
+cp -v ../Source/FCGI/CRFCGIServer.h .
+
+cp -v ../Source/Routing/CRRouter.h .
+cp -v ../Source/Routing/CRRouteController.h .
+cp -v ../Source/Routing/CRNib.h .
+cp -v ../Source/Routing/CRView.h .
+cp -v ../Source/Routing/CRViewController.h .
