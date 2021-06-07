@@ -1,8 +1,13 @@
+require_relative '../Podfile.common.rb'
+
 use_frameworks!
-install! 'cocoapods', :generate_multiple_pod_projects => true
+install! 'cocoapods', :generate_multiple_pod_projects => $generate_multiple_pod_projects
 
 target 'SecureHTTPServer' do
   platform :ios, '12.0'
-  pod 'Criollo', :git => '../../', :submodules => true
+  pod 'Criollo', :git => $repo, :submodules => true
+  
   pod 'CSSystemInfoHelper', '~> 1.4'
 end
+
+tweaks
