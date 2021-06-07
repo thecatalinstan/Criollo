@@ -27,7 +27,7 @@ let package = Package(
             ],   
             path: "Criollo",
             exclude: ["../Libraries"],
-            publicHeadersPath: "spm-includes",
+            publicHeadersPath: "includes",
             cSettings: [
                 .headerSearchPath("Source"),
                 .headerSearchPath("Source/Extensions"),
