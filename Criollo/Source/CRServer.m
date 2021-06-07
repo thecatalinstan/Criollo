@@ -8,12 +8,12 @@
 
 #import <Criollo/CRServer.h>
 
-#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import <Criollo/CRConnection.h>
 #import <Criollo/CRRequest.h>
 #import <Criollo/CRResponse.h>
 #import <Criollo/CRViewController.h>
 
+#import "CocoaAsyncSocket.h"
 #import "CRConnection_Internal.h"
 #import "CRMessage_Internal.h"
 #import "CRRoute.h"
