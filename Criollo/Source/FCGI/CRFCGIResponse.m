@@ -8,7 +8,6 @@
 
 #import <Criollo/CRFCGIResponse.h>
 
-#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import <Criollo/CRApplication.h>
 #import <Criollo/CRFCGIServer.h>
 
@@ -20,6 +19,7 @@
 #import "CRMessage_Internal.h"
 #import "CRResponse_Internal.h"
 #import "CRServer_Internal.h"
+#import "GCDAsyncSocket.h"
 
 NSString* NSStringFromCRFCGIProtocolStatus(CRFCGIProtocolStatus protocolStatus) {
     NSString* protocolStatusName;

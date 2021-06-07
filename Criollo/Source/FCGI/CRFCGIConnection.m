@@ -8,7 +8,6 @@
 
 #import "CRFCGIConnection.h"
 
-#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import <Criollo/CRApplication.h>
 #import <Criollo/CRFCGIResponse.h>
 #import <Criollo/CRFCGIServer.h>
@@ -20,6 +19,7 @@
 #import "CRRequest_Internal.h"
 #import "CRResponse_Internal.h"
 #import "CRServer_Internal.h"
+#import "GCDAsyncSocket.h"
 
 static long const CRFCGIConnectionSocketTagReadRecordHeader = 11;
 static long const CRFCGIConnectionSocketTagReadRecordContent = 12;

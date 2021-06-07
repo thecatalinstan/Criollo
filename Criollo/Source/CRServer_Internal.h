@@ -8,8 +8,9 @@
 
 #import <Criollo/CRServer.h>
 
-#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import <Criollo/CRConnection.h>
+
+#import "GCDAsyncSocket.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

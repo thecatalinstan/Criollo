@@ -8,7 +8,6 @@
 
 #import <Criollo/CRServer.h>
 
-#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import <Criollo/CRConnection.h>
 #import <Criollo/CRRequest.h>
 #import <Criollo/CRResponse.h>
@@ -20,6 +19,7 @@
 #import "CRRouter_Internal.h"
 #import "CRServer_Internal.h"
 #import "CRServerConfiguration.h"
+#import "GCDAsyncSocket.h"
 
 NSErrorDomain const CRServerErrorDomain = @"CRServerErrorDomain";
 

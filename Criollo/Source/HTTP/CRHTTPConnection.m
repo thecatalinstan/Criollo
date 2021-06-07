@@ -8,7 +8,6 @@
 
 #import "CRHTTPConnection.h"
 
-#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import <Criollo/CRApplication.h>
 #import <Criollo/CRHTTPServer.h>
 #import <Criollo/CRMessage.h>
@@ -22,6 +21,7 @@
 #import "CRRequest_Internal.h"
 #import "CRResponse_Internal.h"
 #import "CRServer_Internal.h"
+#import "GCDAsyncSocket.h"
 
 @interface CRHTTPConnection () {
     NSUInteger requestBodyLength;

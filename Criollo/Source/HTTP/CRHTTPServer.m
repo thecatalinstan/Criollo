@@ -8,7 +8,6 @@
 
 #import <Criollo/CRHTTPServer.h>
 
-#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import <Criollo/CRApplication.h>
 #import <Criollo/CRHTTPSHelper.h>
 #import <Security/Security.h>
@@ -17,6 +16,7 @@
 #import "CRHTTPConnection.h"
 #import "CRHTTPServerConfiguration.h"
 #import "CRServer_Internal.h"
+#import "GCDAsyncSocket.h"
 
 @interface CRHTTPServer ()
 

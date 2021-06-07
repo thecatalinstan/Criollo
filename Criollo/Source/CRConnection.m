@@ -8,7 +8,6 @@
 
 #import <Criollo/CRConnection.h>
 
-#import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import <Criollo/CRApplication.h>
 #import <Criollo/CRRequest.h>
 #import <Criollo/CRResponse.h>
@@ -21,6 +20,7 @@
 #import "CRResponse_Internal.h"
 #import "CRServer_Internal.h"
 #import "CRServerConfiguration.h"
+#import "GCDAsyncSocket.h"
 #import "NSDate+RFC1123.h"
 
 static int const CRConnectionSocketTagSendingResponse = 20;
