@@ -7,6 +7,7 @@
 //
 
 #import <Criollo/CRTypes.h>
+#import <Foundation/Foundation.h>
 
 @class CRRequest, CRResponse;
 

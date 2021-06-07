@@ -8,7 +8,6 @@
 
 #import <Criollo/CRRequest.h>
 
-
 typedef NS_ENUM(UInt8, CRFCGIRequestRole) {
     CRFCGIRequestRoleResponder = 1,
     CRFCGIRequestRoleAuthorizer = 2,

@@ -330,6 +330,9 @@
 		ADEDB3A61AEFCC6400A26AF1 /* NSDate+RFC1123.m in Sources */ = {isa = PBXBuildFile; fileRef = ADEDB3601AEFBD8800A26AF1 /* NSDate+RFC1123.m */; };
 		ADEDB3A71AEFCC8B00A26AF1 /* CRApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB34E1AEFBD8800A26AF1 /* CRApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ADEDB3AA1AEFCC8B00A26AF1 /* NSDate+RFC1123.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEDB35F1AEFBD8800A26AF1 /* NSDate+RFC1123.h */; };
+		ADF84594266E311E00D40D9E /* CocoaAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = ADF84593266E311E00D40D9E /* CocoaAsyncSocket.h */; };
+		ADF84595266E311E00D40D9E /* CocoaAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = ADF84593266E311E00D40D9E /* CocoaAsyncSocket.h */; };
+		ADF84596266E311E00D40D9E /* CocoaAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = ADF84593266E311E00D40D9E /* CocoaAsyncSocket.h */; };
 		F306C201226A24FF00846DC5 /* CRHTTPConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F306C200226A24FF00846DC5 /* CRHTTPConnectionTests.m */; };
 /* End PBXBuildFile section */
 
@@ -457,7 +460,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4A22CEB01F99514F00BA1DD9 /* openssl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = openssl.framework; path = Libraries/OpenSSL/openssl.framework; sourceTree = "<group>"; };
 		4A2F43CA1F659FE400A466D5 /* CRHTTPSHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRHTTPSHelper.h; sourceTree = "<group>"; };
 		4A2F43CB1F659FE400A466D5 /* CRHTTPSHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPSHelper.m; sourceTree = "<group>"; };
 		4A63BAEC1F96BD5C0062D930 /* CRHTTPSHelperTests.bundle.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSHelperTests.bundle.pem; sourceTree = "<group>"; };
@@ -470,12 +472,8 @@
 		4A63BAF61F96BD5C0062D930 /* CRHTTPSHelperTests.key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CRHTTPSHelperTests.key.pem; sourceTree = "<group>"; };
 		4A689EE0222FD4C70074DEA3 /* CRRouterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRRouterTests.m; sourceTree = "<group>"; };
 		4A84C76E1F97E6FE001CC0A5 /* CRHTTPServerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRHTTPServerTests.m; sourceTree = "<group>"; };
-		4A96B1851F95576F0091B193 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "Libraries/OpenSSL-for-iPhone/lib/libcrypto.a"; sourceTree = "<group>"; };
-		4A96B1861F95576F0091B193 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "Libraries/OpenSSL-for-iPhone/lib/libssl.a"; sourceTree = "<group>"; };
 		4ABB1DDA1F9E6B0900480EC7 /* Criollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Criollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4ABB1DE21F9E6B0A00480EC7 /* CriolloTests tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CriolloTests tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4ABB1E491F9E72B500480EC7 /* libssl-tvOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libssl-tvOS.a"; path = "Libraries/OpenSSL/lib/libssl-tvOS.a"; sourceTree = "<group>"; };
-		4ABB1E4A1F9E72B500480EC7 /* libcrypto-tvOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libcrypto-tvOS.a"; path = "Libraries/OpenSSL/lib/libcrypto-tvOS.a"; sourceTree = "<group>"; };
 		4AD0AD581F6662AA00943DC3 /* CRHTTPSHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPSHelperTests.m; sourceTree = "<group>"; };
 		4AE7076C20715315005166FB /* Criollo iOS App.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "Criollo iOS App.xcodeproj"; sourceTree = "<group>"; };
 		4AE7077220715315005166FB /* Criollo macOS App.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "Criollo macOS App.xcodeproj"; sourceTree = "<group>"; };
@@ -500,6 +498,7 @@
 		AD1D44F71F376DED00C5D260 /* CRViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRViewTests.m; sourceTree = "<group>"; };
 		AD227F881BDC3F6000C23D52 /* CRServerConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRServerConfiguration.h; sourceTree = "<group>"; };
 		AD227F891BDC3F6000C23D52 /* CRServerConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRServerConfiguration.m; sourceTree = "<group>"; };
+		AD27FE5E266E105300D016B6 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = SOURCE_ROOT; };
 		AD2A35471C47FA8000E30387 /* CRUploadedFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUploadedFile.h; sourceTree = "<group>"; };
 		AD2A35481C47FA8000E30387 /* CRUploadedFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRUploadedFile.m; sourceTree = "<group>"; };
 		AD4AE7701BDAB1C300B9F221 /* CRConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRConnection.h; sourceTree = "<group>"; };
@@ -584,6 +583,7 @@
 		ADEDB3761AEFC0B000A26AF1 /* Criollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Criollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADEDB37A1AEFC0B000A26AF1 /* Criollo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Criollo-Info.plist"; sourceTree = "<group>"; };
 		ADEDB37B1AEFC0B000A26AF1 /* Criollo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Criollo.h; path = ../Criollo.h; sourceTree = "<group>"; };
+		ADF84593266E311E00D40D9E /* CocoaAsyncSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CocoaAsyncSocket.h; sourceTree = "<group>"; };
 		F306C200226A24FF00846DC5 /* CRHTTPConnectionTests.m */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPConnectionTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -657,11 +657,6 @@
 		4A96B1821F95576F0091B193 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4ABB1E4A1F9E72B500480EC7 /* libcrypto-tvOS.a */,
-				4ABB1E491F9E72B500480EC7 /* libssl-tvOS.a */,
-				4A22CEB01F99514F00BA1DD9 /* openssl.framework */,
-				4A96B1851F95576F0091B193 /* libcrypto.a */,
-				4A96B1861F95576F0091B193 /* libssl.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -894,6 +889,7 @@
 				AD11F4F61C95A81F007DC2FF /* CHANGELOG.md */,
 				AD11F4F71C95A81F007DC2FF /* README.md */,
 				AD0BA9901C961898005206A1 /* LICENSE */,
+				AD27FE5E266E105300D016B6 /* Package.swift */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -907,6 +903,7 @@
 				AD8D1E491C0CF53A00A3763A /* Extensions */,
 				ADEDB37B1AEFC0B000A26AF1 /* Criollo.h */,
 				AD63F8231BFE9FFD003815DC /* CRTypes.h */,
+				ADF84593266E311E00D40D9E /* CocoaAsyncSocket.h */,
 				ADEDB34E1AEFBD8800A26AF1 /* CRApplication.h */,
 				ADEDB34F1AEFBD8800A26AF1 /* CRApplication.m */,
 				AD19695C1B626EF90098CA89 /* CRServer.h */,
@@ -990,6 +987,7 @@
 				4ABB1E201F9E6FA700480EC7 /* Criollo.h in Headers */,
 				4ABB1E351F9E703B00480EC7 /* CRRequestRange_Internal.h in Headers */,
 				4ABB1E0C1F9E6F2B00480EC7 /* CRFCGIResponse.h in Headers */,
+				ADF84596266E311E00D40D9E /* CocoaAsyncSocket.h in Headers */,
 				4ABB1E141F9E6F6D00480EC7 /* CRHTTPServerConfiguration.h in Headers */,
 				4ABB1DFC1F9E6ED500480EC7 /* CRRouteController.h in Headers */,
 				4ABB1E3C1F9E705800480EC7 /* CRStaticFileManager.h in Headers */,
@@ -1044,6 +1042,7 @@
 				AD001AE51D457BB700DE4AC9 /* CRRouteMatchingResult_Internal.h in Headers */,
 				AD5FFFEE1BF0031E00A57FE9 /* CRServerConfiguration.h in Headers */,
 				AD5FFFD41BF002F300A57FE9 /* CRFCGIServer.h in Headers */,
+				ADF84595266E311E00D40D9E /* CocoaAsyncSocket.h in Headers */,
 				AD5FFFF41BF0031E00A57FE9 /* CRRequest.h in Headers */,
 				AD63F8251BFEA016003815DC /* CRTypes.h in Headers */,
 				AD63F8341BFEA9DD003815DC /* CRServer_Internal.h in Headers */,
@@ -1085,6 +1084,7 @@
 				AD61E98D1BDD8C8E00F5BD17 /* CRRequest.h in Headers */,
 				ADA37C811BE3B86B008D89CA /* CRHTTPResponse.h in Headers */,
 				AD60BA4B1C03990500118EED /* CRViewController.h in Headers */,
+				ADF84594266E311E00D40D9E /* CocoaAsyncSocket.h in Headers */,
 				AD63F8391BFEAE96003815DC /* CRMessage_Internal.h in Headers */,
 				AD001AE01D455BA300DE4AC9 /* CRRouteMatchingResult.h in Headers */,
 				ADADAB5F1BEEF28E000FBE6B /* CRRoute.h in Headers */,

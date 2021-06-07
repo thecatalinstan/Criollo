@@ -1,9 +1,13 @@
+require_relative '../Podfile.common.rb'
+
 use_frameworks!
-install! 'cocoapods', :generate_multiple_pod_projects => true
+install! 'cocoapods', :generate_multiple_pod_projects => $generate_multiple_pod_projects
 
 target 'CriolloServerStats' do
-  platform :osx, '10.10'  
-  pod 'Criollo', :git => '../../', :submodules => true
+  platform :osx, $osx_platform  
+  pod 'Criollo', :git => $repo, :submodules => true  
   pod 'CSSystemInfoHelper', '~> 1.4'
 end
+
+tweaks
 
