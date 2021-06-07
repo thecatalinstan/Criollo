@@ -11,10 +11,8 @@ let package = Package(
         .tvOS(.v12)
     ],
     products: [
-        .library(
-            name: "Criollo",
-            type: .dynamic,
-            targets: ["Criollo"]),
+        .library(name: "Criollo",
+                 targets: ["Criollo"]),
     ],
     dependencies: [
         .package(name:"CocoaAsyncSocket", url: "https://github.com/robbiehanson/CocoaAsyncSocket", from: "7.6.5"),
@@ -24,7 +22,7 @@ let package = Package(
             name: "Criollo",            
             dependencies: [
                 "CocoaAsyncSocket"
-            ],   
+            ],
             path: "Criollo",
             exclude: [
                 "../Libraries",
