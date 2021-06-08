@@ -1,11 +1,11 @@
 os: osx
 osx_image: 
-  - xcode11.3 
+  - xcode12.5 
 language: objective-c
 xcode_project: Criollo.xcodeproj
 script: 
-  - ./.scripts/analyze.sh
   - ./.scripts/build.sh
   - ./.scripts/tests.sh
+  - ./.scripts/analyze.sh
   - ./.scripts/apps.sh
   - ./.scripts/examples.sh
