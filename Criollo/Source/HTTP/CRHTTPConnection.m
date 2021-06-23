@@ -151,7 +151,9 @@ typedef NS_ENUM(long, CRHTTPConnectionSocketTag) {
                         }
 
                         // TODO: request.URL should be parsed using no memcpy and using the actual scheme
-                        NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http%@://%@%@", ((CRHTTPServer *)self.server).isSecure ? @"s" : @"", hostSpec, pathSpec]];
+                        NSString* requestString = [NSString stringWithFormat:@"http%@://%@%@", ((CRHTTPServer *)self.server).isSecure ? @"s" : @"", hostSpec, pathSpec];
+                        requestString = [requestString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+                        NSURL* URL = [NSURL URLWithString:requestString];
                         CRRequest* request = [[CRRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self];
                         [self addRequest:request];
                         self.requestBeingReceived = request;
