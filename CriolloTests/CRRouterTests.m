@@ -67,5 +67,30 @@ static CRRouteBlock noop;
         XCTAssertTrue([expectedFoo isEqualToString:foo]);
     }
 }
+    
+- (void)testReplacingRoutes {
+    CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler){};
+    CRRouter *router = [[CRRouter alloc] init];
+    NSString *testPath = @"/routes/test";
+    CRRoute *route = [[CRRoute alloc] initWithBlock:block method:CRHTTPMethodAll path:testPath recursive:NO];
+    [router addRoute:route];
+    
+    NSArray<CRRouteMatchingResult *> *matches = [router routesForPath:testPath method:CRHTTPMethodGet];
+    
+    XCTAssertNotNil(matches);
+    XCTAssertEqual(1, matches.count);
+    XCTAssertEqual(matches.firstObject.route.block, block);
+    
+    CRRouteBlock newBlock = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler){};
+    
+    [router replace:testPath block:newBlock];
+    
+    matches = [router routesForPath:testPath method:CRHTTPMethodGet];
+    
+    XCTAssertNotNil(matches);
+    XCTAssertEqual(1, matches.count);
+    XCTAssertNotEqual(matches.firstObject.route.block, block);
+    XCTAssertEqual(matches.firstObject.route.block, newBlock);
+}
 
 @end
