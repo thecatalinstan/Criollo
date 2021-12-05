@@ -14,7 +14,7 @@
 
 @class GCDAsyncSocket;
 
-#define CRHTTPConnectionCreate() CRHTTPConnection *connection = [[CRHTTPConnection alloc] init]
+#define CRHTTPConnectionCreate() CRHTTPConnection *connection = [[CRHTTPConnection alloc] initWithSocket:nil server:nil delegate:nil]
 
 #define HTTP11Header ([@"GET /myendpoint HTTP/1.1\r\n\
 Host: criollo.io\r\n\
