@@ -158,3 +158,7 @@ typedef NS_ENUM(NSUInteger, CRStaticFileContentDisposition) {
 };
 
 NS_ASSUME_NONNULL_END
+
+#define CR_OBJC_ABSTRACT {\
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%s must be implemented in a subclass.", __PRETTY_FUNCTION__] userInfo:nil];\
+}

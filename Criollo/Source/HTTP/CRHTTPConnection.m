@@ -24,11 +24,6 @@
 #import "CRServer_Internal.h"
 #import "NSData+CRLF.h"
 
-typedef NS_ENUM(long, CRHTTPConnectionSocketTag) {
-    CRHTTPConnectionSocketTagBeginReadingRequest = 10,
-    CRHTTPConnectionSocketTagReadingRequestBody = 11,
-};
-
 @interface CRHTTPConnection () {
     NSUInteger requestBodyLength;
     NSUInteger requestBodyReceivedBytesLength;
