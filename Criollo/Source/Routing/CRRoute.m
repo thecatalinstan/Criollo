@@ -141,5 +141,19 @@ static NSString * const CRPathAnyPath = @"*";
     }];
     return result;
 }
+    
+- (BOOL)isEqual:(id)object {
+    if ([object isKindOfClass:[CRRoute class]]) {
+        CRRoute *route = (CRRoute *)object;
+        
+        return _method == route.method &&
+            [_path isEqualToString:route.path] &&
+            _recursive == route.recursive ;
+    } else {
+        return false;
+    }
+}
+    
+
 
 @end

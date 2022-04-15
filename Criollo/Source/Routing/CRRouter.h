@@ -266,6 +266,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)mount:(NSString *)path fileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
 
+/**
+ Replaces a block for a pathspec, for all HTTP methods, non-recursively. If there is no block defined for the specified path, the new block will be added.
+ 
+ @param path  The path specification.
+ @param block The `CRRouteBlock` to be executed.
+*/
+- (void)replace:(NSString * _Nullable)path block:(CRRouteBlock)block;
+
 @end
 
 NS_ASSUME_NONNULL_END
