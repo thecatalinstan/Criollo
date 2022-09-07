@@ -206,35 +206,6 @@
     XCTAssertEqualObjects(expected, label);
 }
 
-- (void)test_getDispatchQueueLabelForQueueLabel_NilLabelReturnsNULL {
-    CRServerCreate();
-    
-    const char *out = "foo";
-    [server getDispatchQueueLabel:&out forQueueLabel:nil];
-    
-    XCTAssertTrue(out == NULL);
-}
-
-- (void)test_getDispatchQueueLabelForQueueLabel_ASCIILabelReturnsAllCharacters {
-    CRServerCreate();
-    
-    const char *in = "foobarbaz";
-    const char *out;
-    [server getDispatchQueueLabel:&out forQueueLabel:[NSString stringWithCString:in encoding:NSASCIIStringEncoding]];
-    
-    XCTAssertEqual(0, strcmp(in, out));
-}
-
-- (void)test_getDispatchQueueLabelForQueueLabel_UTF8LabelReturnsNotNull {
-    CRServerCreate();
-    
-    const char *in = "🕸🎸🍻🤷🏻‍♂️";
-    const char *out;
-    [server getDispatchQueueLabel:&out forQueueLabel:[NSString stringWithUTF8String:in]];
-    
-    XCTAssertFalse(out == NULL);
-}
-
 - (void)test_createQueueWithNameConcurrentQOS_NilName_ReturnsNonnull {
     CRServerCreate();
     

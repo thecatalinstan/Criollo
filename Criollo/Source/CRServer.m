@@ -261,32 +261,11 @@ NS_ASSUME_NONNULL_END
     return [bundleIndentifier stringByAppendingPathExtension:name];
 }
 
-- (void)getDispatchQueueLabel:(const char **)dispatchLabel forQueueLabel:(NSString *)label {
-    if (label.length == 0) {
-        *dispatchLabel = NULL;
-        return;
-    }
-    
-    NSStringEncoding encoding = NSASCIIStringEncoding;
-    if ([label canBeConvertedToEncoding:encoding]) {
-        *dispatchLabel = [label cStringUsingEncoding:encoding];
-        return;
-    }
-       
-    NSData *labelData = [label dataUsingEncoding:encoding allowLossyConversion:YES];
-    unsigned long size = labelData.length;
-    char buf[size + 1]; // NULL terminated string
-    [labelData getBytes:(void *)&buf length:labelData.length];
-    buf[size] = '\0';
-    *dispatchLabel = buf;
-}
-
 - (dispatch_queue_t)createQueueWithName:(NSString *)name concurrent:(BOOL)concurrent qos:(qos_class_t)qos {
-    const char *label;
-    [self getDispatchQueueLabel:&label forQueueLabel:[self queueLabelForName:name bundleIdentifier:NSBundle.mainBundle.bundleIdentifier]];
+    NSString *label = [self queueLabelForName:name bundleIdentifier:NSBundle.mainBundle.bundleIdentifier];
 
     dispatch_queue_attr_t attr = concurrent ? DISPATCH_QUEUE_CONCURRENT : DISPATCH_QUEUE_SERIAL;
-    dispatch_queue_t queue = dispatch_queue_create(label, attr);
+    dispatch_queue_t queue = dispatch_queue_create(label.UTF8String, attr);
     
     if (qos != QOS_CLASS_UNSPECIFIED) {
         dispatch_set_target_queue(queue, dispatch_get_global_queue(qos, 0));
