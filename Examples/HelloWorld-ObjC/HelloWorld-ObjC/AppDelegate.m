@@ -13,7 +13,7 @@
 #import "MultipartViewController.h"
 
 #define PortNumber          10781
-#define LogConnections          0
+#define LogConnections          1
 #define LogRequests             1
 
 #define UseFCGI                 0

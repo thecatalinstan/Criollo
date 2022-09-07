@@ -91,7 +91,7 @@
 		ADBB1D24247137F000D4F51F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1240;
+				LastUpgradeCheck = 1340;
 				ORGANIZATIONNAME = Criollo;
 				TargetAttributes = {
 					ADBB1D2B247137F000D4F51F = {
@@ -258,7 +258,7 @@
 		ADBB1D3E247137F300D4F51F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = HTTPAuthentication/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -274,7 +274,7 @@
 		ADBB1D3F247137F300D4F51F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = HTTPAuthentication/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

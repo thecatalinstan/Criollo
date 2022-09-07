@@ -1248,7 +1248,7 @@
 			attributes = {
 				CLASSPREFIX = CR;
 				LastSwiftUpdateCheck = 0710;
-				LastUpgradeCheck = 1250;
+				LastUpgradeCheck = 1340;
 				ORGANIZATIONNAME = "Cătălin Stan";
 				TargetAttributes = {
 					4ABB1DD91F9E6B0900480EC7 = {
