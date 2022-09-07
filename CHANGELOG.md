@@ -6,6 +6,33 @@ Criollo uses [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [1.1.0](https://github.com/thecatalinstan/Criollo/releases/tag/1.1.0) (09/07/2020)
+
+**Released on Wednesday, September 7, 2022**. This release removes OpenSSL, adds initial SPM support and improved Apple Sillicon support, as well as a few improvement and stabilization refactors, bug fixes and general purpose updates in dependencies and Xcode projects.
+
+### Tweaks and improvements
+
+* Remove _OpenSSL_ submodule which removes support for HTTPS with certificate and private key on iOS. HTTPS using identity is still possible. [#69](https://github.com/thecatalinstan/Criollo/issues/69)
+
+* Adds initial SPM support. Work is already in progress om improved support. [#28](https://github.com/thecatalinstan/Criollo/issues/28)
+
+* _CocoaAsyncSocket_ was updated to commit [5ddba5e](https://github.com/robbiehanson/CocoaAsyncSocket/commit/5ddba5e72f38e56010dbfac08b4447).
+
+
+### API Changes
+
+* `CRStaticFileManager` and `CRStaticDirectoryManager` were made public. [54a3138](https://github.com/thecatalinstan/Criollo/commit/54a3138dac6c1b11a09fa5794d8ad11646b9be7e)
+
+* Update iOS deployment target to 12.0 [4d5b102](https://github.com/thecatalinstan/Criollo/commit/4d5b102bb135f86deecf7663b152420d844eb35d)
+
+
+### Bugfixes
+
+* Remove deprecated and redundant `VALID_ARCHS=x86_64` which prevented compilation on Apple Sillicon. [#73](https://github.com/thecatalinstan/Criollo/issues/30)
+
+* Since _OpenSSL_ has been completely removed, there should be no more issues with linking it for Apple Sillicon. [#92](https://github.com/thecatalinstan/Criollo/issues/92)
+
+
 ## [1.0.1](https://github.com/thecatalinstan/Criollo/releases/tag/1.0.1) (07/07/2020)
 
 **Released on Tuesday, July 7, 2020**. This is a hotfix release that fixes a minor bug whereby the `CRApp` global is not initialized correctly.
