@@ -11,8 +11,10 @@ let package = Package(
         .tvOS(.v12)
     ],
     products: [
-        .library(name: "Criollo",
-                 targets: ["Criollo"]),
+        .library(
+            name: "Criollo",
+            targets: ["Criollo"]
+        ),
     ],
     dependencies: [
         .package(name:"CocoaAsyncSocket", url: "https://github.com/robbiehanson/CocoaAsyncSocket", from: "7.6.5"),
@@ -29,18 +31,19 @@ let package = Package(
                 "../Apps",
                 "../Criollo.podspec"
             ],
-            publicHeadersPath: "includes",
+            publicHeadersPath: "Public Headers",
             cSettings: [
-                .headerSearchPath("Source"),
-                .headerSearchPath("Source/Extensions"),
-                .headerSearchPath("Source/FCGI"),
-                .headerSearchPath("Source/HTTP"),
-                .headerSearchPath("Source/Routing"),
+                .headerSearchPath("Sources"),
+                .headerSearchPath("Sources/Extensions"),
+                .headerSearchPath("Sources/FCGI"),
+                .headerSearchPath("Sources/HTTP"),
+                .headerSearchPath("Sources/Routing"),
             ]
         ),
-
-        .testTarget(name: "CriolloTests",
-                    dependencies: ["Criollo"],
-                    path: "CriolloTests"),
+        .testTarget(
+            name: "CriolloTests",
+            dependencies: ["Criollo"],
+            path: "CriolloTests"
+        ),
     ]
 )

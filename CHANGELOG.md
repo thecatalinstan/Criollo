@@ -232,17 +232,17 @@ The whole routing subsystem has been changed. The public API’s have also been 
 
 ## [0.3.0](https://github.com/thecatalinstan/Criollo/releases/tag/0.3.0) (07/25/2016)
 
-**Released on Monday, July 25, 2016**. This release has significant API changes. It’s main focus is on extending the functionality of the [`CRRouter`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/Routing/CRRouter.h) API introduced in version 0.2.0.
+**Released on Monday, July 25, 2016**. This release has significant API changes. It’s main focus is on extending the functionality of the [`CRRouter`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Sources/Routing/CRRouter.h) API introduced in version 0.2.0.
 
 The core router logic has been re-written. Also now you can define routes using regular expressions, variable replacements.
 
 #### Added
 
-* [`CRRouter`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/Routing/CRRouter.h#L28-L37) now has a series of convenience methods for adding blocks to routes. This should make the code much cleaner and it looks damn good in swift. [`7ad5d9ae`](https://github.com/thecatalinstan/Criollo/commit/7ad5d9ae1cd0ca16a3d51870267c67c80b980822)
+* [`CRRouter`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Sources/Routing/CRRouter.h#L28-L37) now has a series of convenience methods for adding blocks to routes. This should make the code much cleaner and it looks damn good in swift. [`7ad5d9ae`](https://github.com/thecatalinstan/Criollo/commit/7ad5d9ae1cd0ca16a3d51870267c67c80b980822)
 
 #### Changed APIs
 
-* All methods containing `HTTPMethod:` in their signatures have been refactored to include `method:`. This affects [`CRRouter`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/Routing/CRRouter.h). [`c3a4974`](https://github.com/thecatalinstan/Criollo/commit/c3a4974dc9b83518a33052550c4c6a771e953461)
+* All methods containing `HTTPMethod:` in their signatures have been refactored to include `method:`. This affects [`CRRouter`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Sources/Routing/CRRouter.h). [`c3a4974`](https://github.com/thecatalinstan/Criollo/commit/c3a4974dc9b83518a33052550c4c6a771e953461)
 
 ## [0.2.0](https://github.com/thecatalinstan/Criollo/releases/tag/0.2.0) (07/21/2016)
 
@@ -250,13 +250,13 @@ The core router logic has been re-written. Also now you can define routes using 
 
 #### Added
 
-* [`CRRouter`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/Routing/CRRouter.h) is base-class for routing. Functionality previously implemented by `CRServer` is now implemented by this class. `CRServer` now inherits from [`CRRouter`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/Routing/CRRouter.h). [`10165eb3`](https://github.com/thecatalinstan/Criollo/commit/10165eb3c4627a468e203a1fea566d18da0ba812)
-* [`CRRouteController`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/Routing/CRRouteController.h) is meant to delegate control over a particular set of routes. It is mean for implementing more complex routing patterns. [`CRRouteController`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/Routing/CRRouteController.h) inherits from [`CRRouter`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/Routing/CRRouter.h) so it also can define and implement its own routes, relative to the path it was mounted at. [`4dfe99ee`](https://github.com/thecatalinstan/Criollo/commit/4dfe99ee3e10b204214eadfd5d7a9d0de1c5de42)
+* [`CRRouter`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Sources/Routing/CRRouter.h) is base-class for routing. Functionality previously implemented by `CRServer` is now implemented by this class. `CRServer` now inherits from [`CRRouter`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Sources/Routing/CRRouter.h). [`10165eb3`](https://github.com/thecatalinstan/Criollo/commit/10165eb3c4627a468e203a1fea566d18da0ba812)
+* [`CRRouteController`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Sources/Routing/CRRouteController.h) is meant to delegate control over a particular set of routes. It is mean for implementing more complex routing patterns. [`CRRouteController`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Sources/Routing/CRRouteController.h) inherits from [`CRRouter`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Sources/Routing/CRRouter.h) so it also can define and implement its own routes, relative to the path it was mounted at. [`4dfe99ee`](https://github.com/thecatalinstan/Criollo/commit/4dfe99ee3e10b204214eadfd5d7a9d0de1c5de42)
 * The [`CRResponse redirectToURL:statusCode:finish:`] and [`CRResponse redirectToLocation:statusCode:finish:`] methods which control wether the response should be finished after the redirect header is set. [`ba7c915b`](https://github.com/thecatalinstan/Criollo/commit/ba7c915bb4bdb7654af8df872f344bbeb884c621)
 
 #### Changed APIs
 
-* [`CRViewController`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/Routing/CRViewController.h) now inherits from [`CRRouteController`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/Routing/CRRoute.h) so it is a router as well. [`4daf1415`](https://github.com/thecatalinstan/Criollo/commit/4daf1415b12c35417ead4bafedb7c721d27335ae)
+* [`CRViewController`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Sources/Routing/CRViewController.h) now inherits from [`CRRouteController`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Sources/Routing/CRRoute.h) so it is a router as well. [`4daf1415`](https://github.com/thecatalinstan/Criollo/commit/4daf1415b12c35417ead4bafedb7c721d27335ae)
 * The [`templateVariables`] property of [`CRViewController`] has been renamed to [`vars`]. [`ddbbdbaf`](https://github.com/thecatalinstan/Criollo/commit/ddbbdbafa2cb0900b252bddb49114d1f235d2afa)
 
 ## [0.1.14](https://github.com/thecatalinstan/Criollo/releases/tag/0.1.14) (04/14/2016)
@@ -336,8 +336,8 @@ The core router logic has been re-written. Also now you can define routes using 
 
 * Added [Read me](https://github.com/thecatalinstan/Criollo/README.md) content and [Wiki](https://github.com/thecatalinstan/Criollo/wiki) articles to help developers get started.
 * Added this [Change Log](https://github.com/thecatalinstan/Criollo/CHANGELOG.md)
-* Added the [`[CRResponse redirect:]`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/CRResponse.h#L48-L52)` convenience methods.
-* Added the [`[CRResponse write:]`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/CRResponse.h#L36) and [`[CRResponse send:]`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Source/CRResponse.h#L42) convenience functions.****
+* Added the [`[CRResponse redirect:]`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Sources/CRResponse.h#L48-L52)` convenience methods.
+* Added the [`[CRResponse write:]`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Sources/CRResponse.h#L36) and [`[CRResponse send:]`](https://github.com/thecatalinstan/Criollo/blob/master/Criollo/Sources/CRResponse.h#L42) convenience functions.****
 * Added the `[CRServer mountStaticFileAtPath:]`. [`644ac67`](https://github.com/thecatalinstan/Criollo/commit/644ac6783eaea2294843bdfacbdb79d8c256fb6e) family of functions.
 * `CRViewController` sets `Content-Length` header. [`3aabce5`](https://github.com/thecatalinstan/Criollo/commit/3aabce5e85b3de3c2f4d6f255ff2979bed7d71da) if not set before sending the response.
 
