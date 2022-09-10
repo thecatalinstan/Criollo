@@ -7,18 +7,18 @@ Pod::Spec.new do |s|
   s.summary                 =  "A powerful Cocoa web framework and HTTP server for macS, iOS and tvOS."
 
   s.homepage                =  "https://criollo.io/"
-  s.author                  =   { "Cătălin Stan" => "catalin.stan@me.com" }
-  s.social_media_url        =   "http://twitter.com/criolloio"
+  s.author                  =  { "Cătălin Stan" => "catalin.stan@me.com" }
+  s.social_media_url        =  "http://twitter.com/criolloio"
 
   s.source                  =  { :git => "https://github.com/thecatalinstan/Criollo.git", :tag => s.version, :submodules => true }
 
-  s.module_name             = "Criollo"
+  s.module_name             =  "Criollo"
 
-  s.requires_arc            = true
+  s.requires_arc            =  true
   s.dependency              "CocoaAsyncSocket", "~> 7.6.5"
 
-  s.source_files            = "Criollo/Criollo.h", "Criollo/Source/*.{h,m}", "Criollo/Source/{HTTP,FCGI,Routing,Extensions}/*.{h,m}"
-  s.public_header_files     = "Criollo/Criollo.h",  "Criollo/Source/CRTypes.h",  "Criollo/Source/CRApplication.h",  "Criollo/Source/Routing/CRRouter.h",  "Criollo/Source/CRServer.h",  "Criollo/Source/CRConnection.h",  "Criollo/Source/CRMessage.h",  "Criollo/Source/CRRequest.h",  "Criollo/Source/CRRequestRange.h",  "Criollo/Source/CRResponse.h",  "Criollo/Source/CRUploadedFile.h",  "Criollo/Source/HTTP/CRHTTPServer.h",  "Criollo/Source/FCGI/CRFCGIServer.h",  "Criollo/Source/Routing/CRRouteController.h",  "Criollo/Source/Routing/CRNib.h",  "Criollo/Source/Routing/CRView.h",  "Criollo/Source/Routing/CRViewController.h",  "Criollo/Source/CRStaticFileManager.h",  "Criollo/Source/CRStaticDirectoryManager.h",  "Criollo/Source/CRMimeTypeHelper.h"
+  s.source_files            =  "Criollo/Public Headers/*", "Criollo/Sources/*.{h,m}", "Criollo/Sources/{HTTP,FCGI,Routing,Extensions}/*.{h,m}"
+  s.public_header_files     =  "Criollo/Public Headers/*"
 
   s.osx.deployment_target   = "10.10"
   s.ios.deployment_target   = "12.0"

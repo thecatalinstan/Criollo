@@ -163,6 +163,12 @@
 		AD1D44F91F3772ED00C5D260 /* CRViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD1D44F71F376DED00C5D260 /* CRViewTests.m */; };
 		AD227F8A1BDC3F6000C23D52 /* CRServerConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = AD227F881BDC3F6000C23D52 /* CRServerConfiguration.h */; };
 		AD227F8B1BDC3F6000C23D52 /* CRServerConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = AD227F891BDC3F6000C23D52 /* CRServerConfiguration.m */; };
+		AD232B2328CC53EF00D1A670 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD232B0D28CC515A00D1A670 /* CocoaAsyncSocket.framework */; };
+		AD232B2428CC53EF00D1A670 /* CocoaAsyncSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AD232B0D28CC515A00D1A670 /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		AD232B2528CC53FD00D1A670 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD232B0B28CC515A00D1A670 /* CocoaAsyncSocket.framework */; };
+		AD232B2628CC53FD00D1A670 /* CocoaAsyncSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AD232B0B28CC515A00D1A670 /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		AD232B2728CC540500D1A670 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD232B0F28CC515A00D1A670 /* CocoaAsyncSocket.framework */; };
+		AD232B2828CC540500D1A670 /* CocoaAsyncSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AD232B0F28CC515A00D1A670 /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AD2A35491C47FA8000E30387 /* CRUploadedFile.h in Headers */ = {isa = PBXBuildFile; fileRef = AD2A35471C47FA8000E30387 /* CRUploadedFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD2A354A1C47FA8000E30387 /* CRUploadedFile.h in Headers */ = {isa = PBXBuildFile; fileRef = AD2A35471C47FA8000E30387 /* CRUploadedFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD2A354B1C47FA8000E30387 /* CRUploadedFile.m in Sources */ = {isa = PBXBuildFile; fileRef = AD2A35481C47FA8000E30387 /* CRUploadedFile.m */; };
@@ -252,12 +258,6 @@
 		AD7009C82478EFAA00F3C06A /* CRRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD7009C72478EFAA00F3C06A /* CRRequestTests.m */; };
 		AD7009C92478EFAA00F3C06A /* CRRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD7009C72478EFAA00F3C06A /* CRRequestTests.m */; };
 		AD7009CA2478EFAA00F3C06A /* CRRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD7009C72478EFAA00F3C06A /* CRRequestTests.m */; };
-		AD7009EC24792ECB00F3C06A /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD7009E624792E7900F3C06A /* CocoaAsyncSocket.framework */; };
-		AD7009ED24792ECB00F3C06A /* CocoaAsyncSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AD7009E624792E7900F3C06A /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		AD7009F12479305300F3C06A /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD7009E424792E7900F3C06A /* CocoaAsyncSocket.framework */; };
-		AD7009F22479305300F3C06A /* CocoaAsyncSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AD7009E424792E7900F3C06A /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		AD7009F42479308300F3C06A /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD7009E824792E7900F3C06A /* CocoaAsyncSocket.framework */; };
-		AD7009F52479308300F3C06A /* CocoaAsyncSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AD7009E824792E7900F3C06A /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AD7F2F711F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */; };
 		AD7F2F721F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */; };
 		AD8D1E451C0CF4F700A3763A /* NSString+Criollo.h in Headers */ = {isa = PBXBuildFile; fileRef = AD8D1E431C0CF4F700A3763A /* NSString+Criollo.h */; };
@@ -385,42 +385,42 @@
 			remoteGlobalIDString = AD5FFFCB1BF0024D00A57FE9;
 			remoteInfo = "Criollo iOS";
 		};
-		AD7009E324792E7900F3C06A /* PBXContainerItemProxy */ = {
+		AD232B0A28CC515A00D1A670 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AD7009DD24792E7900F3C06A /* CocoaAsyncSocket.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 6CD990101B77868C0011A685;
 			remoteInfo = "iOS CocoaAsyncSocket";
 		};
-		AD7009E524792E7900F3C06A /* PBXContainerItemProxy */ = {
+		AD232B0C28CC515A00D1A670 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AD7009DD24792E7900F3C06A /* CocoaAsyncSocket.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 9FC41F131B9D965000578BEB;
 			remoteInfo = "Mac CocoaAsyncSocket";
 		};
-		AD7009E724792E7900F3C06A /* PBXContainerItemProxy */ = {
+		AD232B0E28CC515A00D1A670 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AD7009DD24792E7900F3C06A /* CocoaAsyncSocket.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 7D8B70C41BCFA15700D8E273;
 			remoteInfo = "tvOS CocoaAsyncSocket";
 		};
-		AD7009EF24792EE000F3C06A /* PBXContainerItemProxy */ = {
+		AD232B1428CC529F00D1A670 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AD7009DD24792E7900F3C06A /* CocoaAsyncSocket.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 9FC41F121B9D965000578BEB;
 			remoteInfo = "Mac CocoaAsyncSocket";
 		};
-		ADD8B8E8247A622900BE6F94 /* PBXContainerItemProxy */ = {
+		AD232B1D28CC533B00D1A670 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AD7009DD24792E7900F3C06A /* CocoaAsyncSocket.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 6CD9900F1B77868C0011A685;
 			remoteInfo = "iOS CocoaAsyncSocket";
 		};
-		ADD8B8EC247A628F00BE6F94 /* PBXContainerItemProxy */ = {
+		AD232B2028CC536900D1A670 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AD7009DD24792E7900F3C06A /* CocoaAsyncSocket.xcodeproj */;
 			proxyType = 1;
@@ -436,7 +436,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				AD7009ED24792ECB00F3C06A /* CocoaAsyncSocket.framework in Embed Frameworks */,
+				AD232B2428CC53EF00D1A670 /* CocoaAsyncSocket.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -447,7 +447,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				AD7009F22479305300F3C06A /* CocoaAsyncSocket.framework in Embed Frameworks */,
+				AD232B2628CC53FD00D1A670 /* CocoaAsyncSocket.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -458,7 +458,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				AD7009F52479308300F3C06A /* CocoaAsyncSocket.framework in Embed Frameworks */,
+				AD232B2828CC540500D1A670 /* CocoaAsyncSocket.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -492,10 +492,7 @@
 		AD030FDB1F0C02C900BD9FE4 /* CriolloTests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CriolloTests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD030FDF1F0C02C900BD9FE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD030FEC1F0C037500BD9FE4 /* CriolloTests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CriolloTests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AD0BA9901C961898005206A1 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		AD0BCC62245EBCEE0014A920 /* CRServerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRServerTests.m; sourceTree = "<group>"; };
-		AD11F4F61C95A81F007DC2FF /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
-		AD11F4F71C95A81F007DC2FF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		AD19695C1B626EF90098CA89 /* CRServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRServer.h; sourceTree = "<group>"; };
 		AD19695D1B626EF90098CA89 /* CRServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRServer.m; sourceTree = "<group>"; };
 		AD1D44E11F375DE100C5D260 /* CRNibTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRNibTests.m; sourceTree = "<group>"; };
@@ -504,14 +501,17 @@
 		AD1D44F71F376DED00C5D260 /* CRViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRViewTests.m; sourceTree = "<group>"; };
 		AD227F881BDC3F6000C23D52 /* CRServerConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRServerConfiguration.h; sourceTree = "<group>"; };
 		AD227F891BDC3F6000C23D52 /* CRServerConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRServerConfiguration.m; sourceTree = "<group>"; };
-		AD27FE5E266E105300D016B6 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = SOURCE_ROOT; };
+		AD26E53628CC600100A423ED /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
+		AD26E53728CC600100A423ED /* Criollo.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = Criollo.podspec; sourceTree = "<group>"; };
+		AD26E53828CC600100A423ED /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		AD26E53928CC600200A423ED /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		AD26E53A28CC600200A423ED /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		AD2A35471C47FA8000E30387 /* CRUploadedFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUploadedFile.h; sourceTree = "<group>"; };
 		AD2A35481C47FA8000E30387 /* CRUploadedFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRUploadedFile.m; sourceTree = "<group>"; };
 		AD4AE7701BDAB1C300B9F221 /* CRConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRConnection.h; sourceTree = "<group>"; };
 		AD4AE7711BDAB1C300B9F221 /* CRConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRConnection.m; sourceTree = "<group>"; };
 		AD542C0D247668F8000E5CEC /* CRServerDelegateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRServerDelegateTests.m; sourceTree = "<group>"; };
 		AD5FFFCC1BF0024D00A57FE9 /* Criollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Criollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AD609C5E1BDA7A4C0003E702 /* Criollo.podSpec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Criollo.podSpec; sourceTree = SOURCE_ROOT; };
 		AD60BA3D1C0389F800118EED /* CRNib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRNib.h; sourceTree = "<group>"; };
 		AD60BA3E1C0389F800118EED /* CRNib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRNib.m; sourceTree = "<group>"; };
 		AD60BA431C03977300118EED /* CRView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRView.h; sourceTree = "<group>"; };
@@ -539,7 +539,7 @@
 		AD63F8381BFEAE96003815DC /* CRMessage_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRMessage_Internal.h; sourceTree = "<group>"; };
 		AD63F83B1BFEB114003815DC /* CRResponse_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRResponse_Internal.h; sourceTree = "<group>"; };
 		AD7009C72478EFAA00F3C06A /* CRRequestTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRRequestTests.m; sourceTree = "<group>"; };
-		AD7009DD24792E7900F3C06A /* CocoaAsyncSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CocoaAsyncSocket.xcodeproj; path = Libraries/CocoaAsyncSocket/CocoaAsyncSocket.xcodeproj; sourceTree = "<group>"; };
+		AD7009DD24792E7900F3C06A /* CocoaAsyncSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CocoaAsyncSocket.xcodeproj; path = CocoaAsyncSocket/CocoaAsyncSocket.xcodeproj; sourceTree = "<group>"; };
 		AD7F2F701F1A1D6D001DD6BE /* CRMimeTypeHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRMimeTypeHelperTests.m; sourceTree = "<group>"; };
 		AD8D1E431C0CF4F700A3763A /* NSString+Criollo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Criollo.h"; sourceTree = "<group>"; };
 		AD8D1E441C0CF4F700A3763A /* NSString+Criollo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Criollo.m"; sourceTree = "<group>"; };
@@ -587,10 +587,9 @@
 		ADEDB34F1AEFBD8800A26AF1 /* CRApplication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRApplication.m; sourceTree = "<group>"; };
 		ADEDB35F1AEFBD8800A26AF1 /* NSDate+RFC1123.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDate+RFC1123.h"; sourceTree = "<group>"; };
 		ADEDB3601AEFBD8800A26AF1 /* NSDate+RFC1123.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDate+RFC1123.m"; sourceTree = "<group>"; };
-		ADEDB36D1AEFBEF400A26AF1 /* Criollo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Criollo-Prefix.pch"; sourceTree = "<group>"; };
 		ADEDB3761AEFC0B000A26AF1 /* Criollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Criollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		ADEDB37A1AEFC0B000A26AF1 /* Criollo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Criollo-Info.plist"; sourceTree = "<group>"; };
-		ADEDB37B1AEFC0B000A26AF1 /* Criollo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Criollo.h; path = ../Criollo.h; sourceTree = "<group>"; };
+		ADEDB37A1AEFC0B000A26AF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ADEDB37B1AEFC0B000A26AF1 /* Criollo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Criollo.h; sourceTree = "<group>"; };
 		ADF84593266E311E00D40D9E /* CocoaAsyncSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CocoaAsyncSocket.h; sourceTree = "<group>"; };
 		F306C200226A24FF00846DC5 /* CRHTTPConnectionTests.m */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPConnectionTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -600,7 +599,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD7009F42479308300F3C06A /* CocoaAsyncSocket.framework in Frameworks */,
+				AD232B2728CC540500D1A670 /* CocoaAsyncSocket.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -632,7 +631,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD7009F12479305300F3C06A /* CocoaAsyncSocket.framework in Frameworks */,
+				AD232B2528CC53FD00D1A670 /* CocoaAsyncSocket.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -640,7 +639,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD7009EC24792ECB00F3C06A /* CocoaAsyncSocket.framework in Frameworks */,
+				AD232B2328CC53EF00D1A670 /* CocoaAsyncSocket.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -730,6 +729,51 @@
 			path = CRViewTests;
 			sourceTree = "<group>";
 		};
+		AD232AF828CC4CAE00D1A670 /* Public Headers */ = {
+			isa = PBXGroup;
+			children = (
+				AD232AFD28CC4D1600D1A670 /* Criollo */,
+			);
+			path = "Public Headers";
+			sourceTree = "<group>";
+		};
+		AD232AFD28CC4D1600D1A670 /* Criollo */ = {
+			isa = PBXGroup;
+			children = (
+				ADEDB37B1AEFC0B000A26AF1 /* Criollo.h */,
+				ADEDB34E1AEFBD8800A26AF1 /* CRApplication.h */,
+				AD4AE7701BDAB1C300B9F221 /* CRConnection.h */,
+				AD61E97F1BDD880C00F5BD17 /* CRFCGIServer.h */,
+				AD61E9741BDD7FDF00F5BD17 /* CRHTTPServer.h */,
+				AD61E9851BDD8C8E00F5BD17 /* CRMessage.h */,
+				ADEBD0221C6C9D5F00F91D28 /* CRMimeTypeHelper.h */,
+				AD60BA3D1C0389F800118EED /* CRNib.h */,
+				AD61E9871BDD8C8E00F5BD17 /* CRRequest.h */,
+				ADAB165F1C8C49DB001E104C /* CRRequestRange.h */,
+				AD61E9891BDD8C8E00F5BD17 /* CRResponse.h */,
+				ADAD525F1D3E484900DDFBB5 /* CRRouteController.h */,
+				ADAD52571D3E31AC00DDFBB5 /* CRRouter.h */,
+				AD19695C1B626EF90098CA89 /* CRServer.h */,
+				ADE99FB51C6B40E10080B1FA /* CRStaticDirectoryManager.h */,
+				AD9BE7F21C91B9A400CE52B0 /* CRStaticFileManager.h */,
+				AD63F8231BFE9FFD003815DC /* CRTypes.h */,
+				AD2A35471C47FA8000E30387 /* CRUploadedFile.h */,
+				AD60BA431C03977300118EED /* CRView.h */,
+				AD60BA491C03990500118EED /* CRViewController.h */,
+			);
+			path = Criollo;
+			sourceTree = "<group>";
+		};
+		AD232B0528CC515A00D1A670 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AD232B0B28CC515A00D1A670 /* CocoaAsyncSocket.framework */,
+				AD232B0D28CC515A00D1A670 /* CocoaAsyncSocket.framework */,
+				AD232B0F28CC515A00D1A670 /* CocoaAsyncSocket.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		AD5B3C7D1CA821E9000988B7 /* Apps */ = {
 			isa = PBXGroup;
 			children = (
@@ -749,16 +793,11 @@
 				AD001ADE1D455BA300DE4AC9 /* CRRouteMatchingResult.h */,
 				AD001AE21D455C4F00DE4AC9 /* CRRouteMatchingResult_Internal.h */,
 				AD001ADF1D455BA300DE4AC9 /* CRRouteMatchingResult.m */,
-				ADAD52571D3E31AC00DDFBB5 /* CRRouter.h */,
 				AD001AE91D45883C00DE4AC9 /* CRRouter_Internal.h */,
 				ADAD52581D3E31AC00DDFBB5 /* CRRouter.m */,
-				ADAD525F1D3E484900DDFBB5 /* CRRouteController.h */,
 				ADAD52601D3E484900DDFBB5 /* CRRouteController.m */,
-				AD60BA3D1C0389F800118EED /* CRNib.h */,
 				AD60BA3E1C0389F800118EED /* CRNib.m */,
-				AD60BA431C03977300118EED /* CRView.h */,
 				AD60BA441C03977300118EED /* CRView.m */,
-				AD60BA491C03990500118EED /* CRViewController.h */,
 				AD60BA4A1C03990500118EED /* CRViewController.m */,
 			);
 			path = Routing;
@@ -767,7 +806,6 @@
 		AD61E9731BDD7F8000F5BD17 /* HTTP */ = {
 			isa = PBXGroup;
 			children = (
-				AD61E9741BDD7FDF00F5BD17 /* CRHTTPServer.h */,
 				AD61E9751BDD7FDF00F5BD17 /* CRHTTPServer.m */,
 				4A2F43CA1F659FE400A466D5 /* CRHTTPSHelper.h */,
 				4A2F43CB1F659FE400A466D5 /* CRHTTPSHelper.m */,
@@ -785,7 +823,6 @@
 		AD61E97C1BDD880C00F5BD17 /* FCGI */ = {
 			isa = PBXGroup;
 			children = (
-				AD61E97F1BDD880C00F5BD17 /* CRFCGIServer.h */,
 				AD61E9801BDD880C00F5BD17 /* CRFCGIServer.m */,
 				ADA37C8B1BE3C7A0008D89CA /* CRFCGIServerConfiguration.h */,
 				ADA37C8C1BE3C7A0008D89CA /* CRFCGIServerConfiguration.m */,
@@ -799,16 +836,6 @@
 				ADA37C731BE38E69008D89CA /* CRFCGIRecord.m */,
 			);
 			path = FCGI;
-			sourceTree = "<group>";
-		};
-		AD7009DE24792E7900F3C06A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				AD7009E424792E7900F3C06A /* CocoaAsyncSocket.framework */,
-				AD7009E624792E7900F3C06A /* CocoaAsyncSocket.framework */,
-				AD7009E824792E7900F3C06A /* CocoaAsyncSocket.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		AD8D1E491C0CF53A00A3763A /* Extensions */ = {
@@ -853,8 +880,14 @@
 				ADEDB3781AEFC0B000A26AF1 /* Criollo */,
 				AD030FDC1F0C02C900BD9FE4 /* CriolloTests */,
 				AD5B3C7D1CA821E9000988B7 /* Apps */,
+				ADEDB3681AEFBE2C00A26AF1 /* Libraries */,
 				ADEDB3771AEFC0B000A26AF1 /* Products */,
 				4A96B1821F95576F0091B193 /* Frameworks */,
+				AD26E53928CC600200A423ED /* Package.swift */,
+				AD26E53728CC600100A423ED /* Criollo.podspec */,
+				AD26E53A28CC600200A423ED /* README.md */,
+				AD26E53628CC600100A423ED /* CHANGELOG.md */,
+				AD26E53828CC600100A423ED /* LICENSE */,
 			);
 			sourceTree = "<group>";
 		};
@@ -863,9 +896,8 @@
 			children = (
 				AD7009DD24792E7900F3C06A /* CocoaAsyncSocket.xcodeproj */,
 			);
-			name = Libraries;
-			path = ..;
-			sourceTree = "<group>";
+			path = Libraries;
+			sourceTree = SOURCE_ROOT;
 		};
 		ADEDB3771AEFC0B000A26AF1 /* Products */ = {
 			isa = PBXGroup;
@@ -883,72 +915,45 @@
 		ADEDB3781AEFC0B000A26AF1 /* Criollo */ = {
 			isa = PBXGroup;
 			children = (
-				ADEDB3AB1AEFCCCD00A26AF1 /* Source */,
-				ADEDB3681AEFBE2C00A26AF1 /* Libraries */,
-				ADEDB3791AEFC0B000A26AF1 /* Supporting Files */,
+				AD232AF828CC4CAE00D1A670 /* Public Headers */,
+				ADEDB3AB1AEFCCCD00A26AF1 /* Sources */,
+				ADEDB37A1AEFC0B000A26AF1 /* Info.plist */,
 			);
 			path = Criollo;
 			sourceTree = "<group>";
 		};
-		ADEDB3791AEFC0B000A26AF1 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				AD609C5E1BDA7A4C0003E702 /* Criollo.podSpec */,
-				ADEDB36D1AEFBEF400A26AF1 /* Criollo-Prefix.pch */,
-				ADEDB37A1AEFC0B000A26AF1 /* Criollo-Info.plist */,
-				AD11F4F61C95A81F007DC2FF /* CHANGELOG.md */,
-				AD11F4F71C95A81F007DC2FF /* README.md */,
-				AD0BA9901C961898005206A1 /* LICENSE */,
-				AD27FE5E266E105300D016B6 /* Package.swift */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		ADEDB3AB1AEFCCCD00A26AF1 /* Source */ = {
+		ADEDB3AB1AEFCCCD00A26AF1 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				AD60BA3C1C0389A400118EED /* Routing */,
 				AD61E97C1BDD880C00F5BD17 /* FCGI */,
 				AD61E9731BDD7F8000F5BD17 /* HTTP */,
 				AD8D1E491C0CF53A00A3763A /* Extensions */,
-				ADEDB37B1AEFC0B000A26AF1 /* Criollo.h */,
-				AD63F8231BFE9FFD003815DC /* CRTypes.h */,
 				ADF84593266E311E00D40D9E /* CocoaAsyncSocket.h */,
-				ADEDB34E1AEFBD8800A26AF1 /* CRApplication.h */,
 				ADEDB34F1AEFBD8800A26AF1 /* CRApplication.m */,
-				AD19695C1B626EF90098CA89 /* CRServer.h */,
 				AD63F8321BFEA9DD003815DC /* CRServer_Internal.h */,
 				AD19695D1B626EF90098CA89 /* CRServer.m */,
 				AD227F881BDC3F6000C23D52 /* CRServerConfiguration.h */,
 				AD227F891BDC3F6000C23D52 /* CRServerConfiguration.m */,
-				AD4AE7701BDAB1C300B9F221 /* CRConnection.h */,
 				AD63F82F1BFEA782003815DC /* CRConnection_Internal.h */,
 				AD4AE7711BDAB1C300B9F221 /* CRConnection.m */,
-				AD61E9851BDD8C8E00F5BD17 /* CRMessage.h */,
 				AD63F8381BFEAE96003815DC /* CRMessage_Internal.h */,
 				AD61E9861BDD8C8E00F5BD17 /* CRMessage.m */,
-				ADEBD0221C6C9D5F00F91D28 /* CRMimeTypeHelper.h */,
 				ADEBD0231C6C9D5F00F91D28 /* CRMimeTypeHelper.m */,
-				AD61E9871BDD8C8E00F5BD17 /* CRRequest.h */,
 				AD63F8351BFEAD08003815DC /* CRRequest_Internal.h */,
 				AD61E9881BDD8C8E00F5BD17 /* CRRequest.m */,
-				ADAB165F1C8C49DB001E104C /* CRRequestRange.h */,
 				ADAB16631C8C4E90001E104C /* CRRequestRange_Internal.h */,
 				ADAB16601C8C49DB001E104C /* CRRequestRange.m */,
-				AD61E9891BDD8C8E00F5BD17 /* CRResponse.h */,
 				AD63F83B1BFEB114003815DC /* CRResponse_Internal.h */,
 				AD61E98A1BDD8C8E00F5BD17 /* CRResponse.m */,
-				ADE99FB51C6B40E10080B1FA /* CRStaticDirectoryManager.h */,
 				ADC29ADD246D37E1007D443E /* CRStaticDirectoryManager_Internal.h */,
 				ADE99FB61C6B40E10080B1FA /* CRStaticDirectoryManager.m */,
-				AD9BE7F21C91B9A400CE52B0 /* CRStaticFileManager.h */,
 				ADB32F8624680015005D729A /* CRStaticFileManager_Internal.h */,
 				AD9BE7F31C91B9A400CE52B0 /* CRStaticFileManager.m */,
-				AD2A35471C47FA8000E30387 /* CRUploadedFile.h */,
 				ADED0FD31DB7A1E700E2CDE9 /* CRUploadedFile_Internal.h */,
 				AD2A35481C47FA8000E30387 /* CRUploadedFile.m */,
 			);
-			path = Source;
+			path = Sources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1139,7 +1144,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				ADD8B8ED247A628F00BE6F94 /* PBXTargetDependency */,
+				AD232B2128CC536900D1A670 /* PBXTargetDependency */,
 			);
 			name = "Criollo tvOS";
 			productName = "Criollo-tvos";
@@ -1213,7 +1218,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				ADD8B8E9247A622900BE6F94 /* PBXTargetDependency */,
+				AD232B1E28CC533B00D1A670 /* PBXTargetDependency */,
 			);
 			name = "Criollo iOS";
 			productName = CriolloiOS;
@@ -1233,7 +1238,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				AD7009F024792EE000F3C06A /* PBXTargetDependency */,
+				AD232B1528CC529F00D1A670 /* PBXTargetDependency */,
 			);
 			name = "Criollo macOS";
 			productName = Criollo;
@@ -1283,7 +1288,7 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = AD7009DE24792E7900F3C06A /* Products */;
+					ProductGroup = AD232B0528CC515A00D1A670 /* Products */;
 					ProjectRef = AD7009DD24792E7900F3C06A /* CocoaAsyncSocket.xcodeproj */;
 				},
 				{
@@ -1333,25 +1338,25 @@
 			remoteRef = 4AE7077C20715315005166FB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		AD7009E424792E7900F3C06A /* CocoaAsyncSocket.framework */ = {
+		AD232B0B28CC515A00D1A670 /* CocoaAsyncSocket.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = CocoaAsyncSocket.framework;
-			remoteRef = AD7009E324792E7900F3C06A /* PBXContainerItemProxy */;
+			remoteRef = AD232B0A28CC515A00D1A670 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		AD7009E624792E7900F3C06A /* CocoaAsyncSocket.framework */ = {
+		AD232B0D28CC515A00D1A670 /* CocoaAsyncSocket.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = CocoaAsyncSocket.framework;
-			remoteRef = AD7009E524792E7900F3C06A /* PBXContainerItemProxy */;
+			remoteRef = AD232B0C28CC515A00D1A670 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		AD7009E824792E7900F3C06A /* CocoaAsyncSocket.framework */ = {
+		AD232B0F28CC515A00D1A670 /* CocoaAsyncSocket.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = CocoaAsyncSocket.framework;
-			remoteRef = AD7009E724792E7900F3C06A /* PBXContainerItemProxy */;
+			remoteRef = AD232B0E28CC515A00D1A670 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -1638,20 +1643,20 @@
 			target = AD5FFFCB1BF0024D00A57FE9 /* Criollo iOS */;
 			targetProxy = AD030FF21F0C037500BD9FE4 /* PBXContainerItemProxy */;
 		};
-		AD7009F024792EE000F3C06A /* PBXTargetDependency */ = {
+		AD232B1528CC529F00D1A670 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Mac CocoaAsyncSocket";
-			targetProxy = AD7009EF24792EE000F3C06A /* PBXContainerItemProxy */;
+			targetProxy = AD232B1428CC529F00D1A670 /* PBXContainerItemProxy */;
 		};
-		ADD8B8E9247A622900BE6F94 /* PBXTargetDependency */ = {
+		AD232B1E28CC533B00D1A670 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "iOS CocoaAsyncSocket";
-			targetProxy = ADD8B8E8247A622900BE6F94 /* PBXContainerItemProxy */;
+			targetProxy = AD232B1D28CC533B00D1A670 /* PBXContainerItemProxy */;
 		};
-		ADD8B8ED247A628F00BE6F94 /* PBXTargetDependency */ = {
+		AD232B2128CC536900D1A670 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "tvOS CocoaAsyncSocket";
-			targetProxy = ADD8B8EC247A628F00BE6F94 /* PBXContainerItemProxy */;
+			targetProxy = AD232B2028CC536900D1A670 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1676,12 +1681,7 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Libraries/OpenSSL/include/**";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Libraries/OpenSSL/lib",
-				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -1706,12 +1706,7 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Libraries/OpenSSL/include/**";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Libraries/OpenSSL/lib",
-				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -1987,7 +1982,6 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREFIX_HEADER = "Criollo/Criollo-Prefix.pch";
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1997,7 +1991,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Criollo/Criollo-Info.plist";
+				INFOPLIST_FILE = Criollo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MARKETING_VERSION = 1.0.0;
@@ -2040,7 +2034,6 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = fast;
-				GCC_PREFIX_HEADER = "Criollo/Criollo-Prefix.pch";
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -2050,7 +2043,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Criollo/Criollo-Info.plist";
+				INFOPLIST_FILE = Criollo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MARKETING_VERSION = 1.0.0;
