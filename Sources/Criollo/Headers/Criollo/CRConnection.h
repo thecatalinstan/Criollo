@@ -5,15 +5,13 @@
 //  Created by Cătălin Stan on 10/23/15.
 //
 
-#import <Criollo/CRTypes.h>
 #import <Foundation/Foundation.h>
 
-@class CRConnection, GCDAsyncSocket, CRServer, CRRequest, CRResponse;
+@class CRConnection, CRRequest, CRResponse;
 
 NS_ASSUME_NONNULL_BEGIN
 
-// TODO: Remove inheritance from NSObject
-@protocol CRConnectionDelegate <NSObject>
+@protocol CRConnectionDelegate
 
 - (void)connection:(CRConnection *)connection didReceiveRequest:(CRRequest *)request response:(CRResponse *)response;
 - (void)connection:(CRConnection *)connection didFinishRequest:(CRRequest *)request response:(CRResponse *)response;

@@ -5,17 +5,12 @@
 //  Created by Cătălin Stan on 10/23/15.
 //
 
-#import <Criollo/CRConnection.h>
+#import "CRConnection_Internal.h"
 
-#import <Criollo/CRApplication.h>
-#import <Criollo/CRRequest.h>
-#import <Criollo/CRResponse.h>
-#import <Criollo/CRServer.h>
 #import <sys/sysctl.h>
 #import <sys/types.h>
 
 #import "CocoaAsyncSocket.h"
-#import "CRConnection_Internal.h"
 #import "CRRequest_Internal.h"
 #import "CRResponse_Internal.h"
 #import "CRServer_Internal.h"

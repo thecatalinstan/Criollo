@@ -6,8 +6,9 @@
 //
 
 #import <Criollo/CRConnection.h>
+#import <Criollo/CRTypes.h>
 
-@import CocoaAsyncSocket;
+#import "CocoaAsyncSocket.h"
 
 @class CRServer, CRRequest;
 
