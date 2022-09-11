@@ -135,9 +135,9 @@ static uint16_t const port = 10781;
         [paths addObject:[baseURL URLByAppendingPathComponent:obj]];
     }];
     NSArray<NSURL*>* sortedPaths =[paths sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"absoluteString" ascending:YES]]];
-    [CRApp logFormat:@"Available paths are:"];
+    NSLog(@"Available paths are:");
     [sortedPaths enumerateObjectsUsingBlock:^(NSURL * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [CRApp logFormat:@" %@", obj.absoluteString];
+        NSLog(@" %@", obj.absoluteString);
     }];
 }
 
