@@ -113,7 +113,7 @@ NS_ASSUME_NONNULL_END
     } else if (contentType.requestContentType == CRRequestContentTypeMultipart) {
         NSError* multipartParsingError;
         if (![request parseMultipartBodyDataChunk:data error:&multipartParsingError]) {
-            [CRApp logErrorFormat:@"%@" , multipartParsingError];
+            NSLog(@"%@" , multipartParsingError);
         }
     } else if (contentType.requestContentType == CRRequestContentTypeJSON) {
         // JSON requests are parsed after we have all the data
@@ -121,7 +121,7 @@ NS_ASSUME_NONNULL_END
     } else {
         NSError* mimeParsingError;
         if ( ![request parseMIMEBodyDataChunk:data error:&mimeParsingError] ) {
-            [CRApp logErrorFormat:@"%@" , mimeParsingError];
+            NSLog(@"%@" , mimeParsingError);
         }
     }
 }
@@ -154,7 +154,7 @@ NS_ASSUME_NONNULL_END
 
         if ( !result ) {
             // TODO: Propagate the error, do not log from here
-            [CRApp logErrorFormat:@"%@" , bodyParsingError];
+            NSLog(@"%@" , bodyParsingError);
         }
     }
 

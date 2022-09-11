@@ -14,7 +14,7 @@
 #import "MultiRouteViewController.h"
 
 #define PortNumber          10781
-#define LogConnections          0
+#define LogConnections          1
 #define LogRequests             1
 #define HTTPS                   0
 #define HTTPS_PKS12             0
@@ -61,7 +61,7 @@ NS_ASSUME_NONNULL_END
 #endif
     }
 #endif
-
+    
     backgroundQueue = dispatch_queue_create(self.className.UTF8String, DISPATCH_QUEUE_SERIAL);
     dispatch_set_target_queue(backgroundQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
 
@@ -263,7 +263,7 @@ NS_ASSUME_NONNULL_END
 }
 
 - (CRApplicationTerminateReply)applicationShouldTerminate:(CRApplication *)sender {
-    [CRApp logFormat:@"%s", __PRETTY_FUNCTION__];
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self.server closeAllConnections:^{
         [self.server stopListening];
         [sender replyToApplicationShouldTerminate:CRTerminateNow];
@@ -272,7 +272,7 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
-    [CRApp logFormat:@"%s", __PRETTY_FUNCTION__];
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)startServer {
@@ -286,7 +286,7 @@ NS_ASSUME_NONNULL_END
         // Set the base url. This is only for logging
         NSURL *baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"http%@://%@:%d", ((CRHTTPServer *)self.server).isSecure ? @"s" : @"", address, PortNumber]];
 
-        [CRApp logFormat:@"%@ Started HTTP server at %@", [NSDate date], baseURL.absoluteString];
+        NSLog(@"%@ Started HTTP server at %@", [NSDate date], baseURL.absoluteString);
 
         // Get the list of paths
         NSArray<NSString *> * routePaths = [self.server valueForKeyPath:@"routes.path"];
@@ -298,49 +298,49 @@ NS_ASSUME_NONNULL_END
             [paths addObject:[baseURL URLByAppendingPathComponent:obj]];
         }];
         NSArray<NSURL*>* sortedPaths =[paths sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"absoluteString" ascending:YES]]];
-        [CRApp logFormat:@"Available paths are:"];
+        NSLog(@"Available paths are:");
         [sortedPaths enumerateObjectsUsingBlock:^(NSURL * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             dispatch_async( self->backgroundQueue, ^{
-                [CRApp logFormat:@" * %@", obj.absoluteString];
+                NSLog(@" * %@", obj.absoluteString);
             });
         }];
 
     } else {
-        [CRApp logErrorFormat:@"%@ Failed to start HTTP server. %@", [NSDate date], serverError.localizedDescription];
+        NSLog(@"%@ Failed to start HTTP server. %@", [NSDate date], serverError.localizedDescription);
         [CRApp terminate:nil];
     }
 }
 
 - (void)serverWillStartListening:(CRServer *)server {
-    [CRApp logFormat:@"%s", __PRETTY_FUNCTION__];
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)serverDidStartListening:(CRServer *)server {
-    [CRApp logFormat:@"%s", __PRETTY_FUNCTION__];
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)serverWillStopListening:(CRServer *)server {
-    [CRApp logFormat:@"%s", __PRETTY_FUNCTION__];
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)serverDidStopListening:(CRServer *)server {
-    [CRApp logFormat:@"%s", __PRETTY_FUNCTION__];
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 #if LogConnections
 - (void)server:(CRServer *)server didAcceptConnection:(CRConnection *)connection {
     NSString* remoteAddress = connection.remoteAddress.copy;
     NSUInteger remotePort = connection.remotePort;
-    dispatch_async( backgroundQueue, ^{
-        [CRApp logFormat:@"Accepted connection from %@:%d", remoteAddress, remotePort];
+    dispatch_async(backgroundQueue, ^{
+        NSLog(@"Accepted connection from %@:%lu", remoteAddress, (unsigned long)remotePort);
     });
 }
 
 - (void)server:(CRServer *)server didCloseConnection:(CRConnection *)connection {
     NSString* remoteAddress = connection.remoteAddress.copy;
     NSUInteger remotePort = connection.remotePort;
-    dispatch_async( backgroundQueue, ^{
-        [CRApp logFormat:@"Disconnected %@:%d", remoteAddress, remotePort];
+    dispatch_async(backgroundQueue, ^{
+        NSLog(@"Disconnected %@:%lu", remoteAddress, (unsigned long)remotePort);
     });
 }
 #endif
@@ -351,8 +351,8 @@ NS_ASSUME_NONNULL_END
     NSString* userAgent = request.env[@"HTTP_USER_AGENT"];
     NSString* remoteAddress = request.env[@"HTTP_X_FORWARDED_FOR"].length > 0 ? request.env[@"HTTP_X_FORWARDED_FOR"] : request.env[@"REMOTE_ADDR"];
     NSUInteger statusCode = request.response.statusCode;
-    dispatch_async( backgroundQueue, ^{
-        [CRApp logFormat:@"%@ %@ %@ - %lu %@ - %@", [NSDate date], remoteAddress, request, statusCode, contentLength ? : @"-", userAgent];
+    dispatch_async(backgroundQueue, ^{
+        NSLog(@"%@ %@ %@ - %lu %@ - %@", [NSDate date], remoteAddress, request, statusCode, contentLength ? : @"-", userAgent);
     });
 #endif
     [SystemInfoHelper addRequest];

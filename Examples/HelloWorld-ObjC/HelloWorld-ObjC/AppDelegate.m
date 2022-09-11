@@ -173,7 +173,7 @@
         // Set the base url. This is only for logging
         self.baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d", CSSystemInfoHelper.sharedHelper.IPAddress, PortNumber]];
 
-        [CRApp logFormat:@"Started HTTP server at %@", self.baseURL.absoluteString];
+        NSLog(@"Started HTTP server at %@", self.baseURL.absoluteString);
 
         // Get the list of paths
         NSArray<CRRoute *> *routes = [[self.server valueForKey:@"routes"] mutableCopy];
@@ -187,13 +187,13 @@
         }];
    
         NSArray<NSURL *> *sortedPaths =[paths sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"absoluteString" ascending:YES]]];
-        [CRApp logFormat:@"Available paths are:"];
+        NSLog(@"Available paths are:");
         [sortedPaths enumerateObjectsUsingBlock:^(NSURL * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [CRApp logFormat:@" * %@", obj.absoluteString];
+            NSLog(@" * %@", obj.absoluteString);
         }];
 
     } else {
-        [CRApp logErrorFormat:@"Failed to start HTTP server. %@", serverError.localizedDescription];
+        NSLog(@"Failed to start HTTP server. %@", serverError.localizedDescription);
         [CRApp terminate:nil];
     }
 }
@@ -204,18 +204,18 @@
 
 #if LogConnections
 - (void)server:(CRServer *)server didAcceptConnection:(CRConnection *)connection {
-    [CRApp logFormat:@" * Accepted connection from %@:%d", connection.remoteAddress, connection.remotePort];
+    NSLog(@" * Accepted connection from %@:%d", connection.remoteAddress, connection.remotePort);
 }
 
 - (void)server:(CRServer *)server didCloseConnection:(CRConnection *)connection {
-    [CRApp logFormat:@" * Disconnected %@:%d", connection.remoteAddress, connection.remotePort];
+    NSLog(@" * Disconnected %@:%d", connection.remoteAddress, connection.remotePort);
 }
 #endif
 
 #if LogRequests
 - (void)server:(CRServer *)server didFinishRequest:(CRRequest *)request {
     NSString* contentLength = [request.response valueForHTTPHeaderField:@"Content-Length"];
-    [CRApp logFormat:@" * %@ %@ - %lu %@ - %@", request.response.connection.remoteAddress, request, request.response.statusCode, contentLength ? : @"-", request.env[@"HTTP_USER_AGENT"]];
+    NSLog(@" * %@ %@ - %lu %@ - %@", request.response.connection.remoteAddress, request, request.response.statusCode, contentLength ? : @"-", request.env[@"HTTP_USER_AGENT"]);
 }
 #endif
 
