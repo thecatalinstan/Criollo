@@ -13,7 +13,7 @@
 - (void)applicationWillFinishLaunching:(NSNotification *)notification {
     [[NSNotificationCenter defaultCenter] addObserverForName:LogMessageNotificationName object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         NSAttributedString* attributtedString = note.object;
-        [CRApp logFormat:@"%@", attributtedString.string];
+        NSLog(@"%@", attributtedString.string);
     }];
 }
 

@@ -8,7 +8,6 @@
 
 #import <Criollo/CRUploadedFile.h>
 
-#import <Criollo/CRApplication.h>
 #import <Criollo/CRMimeTypeHelper.h>
 #import <Criollo/CRRequest.h>
 
@@ -49,10 +48,9 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)fetchAttributes {
-    NSError * error;
-    self.attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:self.temporaryFileURL.path error:&error];
-    if ( !self.attributes ) {
-        [CRApp logErrorFormat:@"Unable to fetch attributes of %@: %@", self.temporaryFileURL, error];
+    NSError *error;
+    if(!(self.attributes = [NSFileManager.defaultManager attributesOfItemAtPath:self.temporaryFileURL.path error:&error])) {
+        NSLog(@"Unable to fetch attributes of %@: %@", self.temporaryFileURL, error);
     }
 }
 
@@ -76,7 +74,8 @@ NS_ASSUME_NONNULL_END
         userInfo[NSFilePathErrorKey] = self.temporaryFileURL.path;
         userInfo[NSUnderlyingErrorKey] = self.fileWriteStream.streamError;
         NSError* fileWriteError = [NSError errorWithDomain:CRRequestErrorDomain code:CRRequestFileWriteError userInfo:userInfo];
-        [CRApp logErrorFormat:@"%@: %@", fileWriteError.localizedDescription, fileWriteError];
+        
+        NSLog(@"%@: %@", fileWriteError.localizedDescription, fileWriteError);
     }
 }
 
@@ -93,10 +92,10 @@ NS_ASSUME_NONNULL_END
 + (NSURL *)temporaryFileURL {
     NSURL *directoryURL = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] isDirectory:YES];
 
-    if ( ![[NSFileManager defaultManager] fileExistsAtPath:directoryURL.path isDirectory:NULL] ) {
+    if (![[NSFileManager defaultManager] fileExistsAtPath:directoryURL.path isDirectory:NULL] ) {
         NSError * error;
         if ( ! [[NSFileManager defaultManager] createDirectoryAtURL:directoryURL withIntermediateDirectories:YES attributes:nil error:&error] ) {
-            [CRApp logErrorFormat:@"Unable to create temporary directory %@: %@", directoryURL, error];
+            NSLog(@"Unable to create temporary directory %@: %@", directoryURL, error);
             return nil;
         }
     }

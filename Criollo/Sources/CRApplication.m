@@ -14,10 +14,10 @@ NSNotificationName const CRApplicationWillFinishLaunchingNotification = @"CRAppl
 NSNotificationName const CRApplicationDidFinishLaunchingNotification = @"CRApplicationDidFinishLaunchingNotification";
 NSNotificationName const CRApplicationWillTerminateNotification = @"CRApplicationWillTerminateNotification";
 
-static NSString* const CRApplicationRunLoopMode    = @"NSDefaultRunLoopMode";
+static NSString *const CRApplicationRunLoopMode = @"NSDefaultRunLoopMode";
 static NSNotificationName const CRApplicationDidReceiveSignalNotification = @"CRApplicationDidReceiveSignal";
 
-CRApplication* CRApp;
+CRApplication *CRApp;
 static id<CRApplicationDelegate> CRAppDelegate;
 
 @interface CRApplication ()
@@ -55,20 +55,20 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 @implementation CRApplication
 
 - (void)setDelegate:(id<CRApplicationDelegate>)delegate {
-    if ( _delegate ) {
+    if (_delegate) {
         [[NSNotificationCenter defaultCenter] removeObserver:_delegate];
         _delegate = nil;
     }
     
     _delegate = delegate;
     
-    if ( [(id)_delegate respondsToSelector:@selector(applicationWillFinishLaunching:)] ) {
+    if ([(id)_delegate respondsToSelector:@selector(applicationWillFinishLaunching:)]) {
         [[NSNotificationCenter defaultCenter] addObserver:_delegate selector:@selector(applicationWillFinishLaunching:) name:CRApplicationWillFinishLaunchingNotification object:nil];
     }
-    if ( [(id)_delegate respondsToSelector:@selector(applicationDidFinishLaunching:)] ) {
+    if ([(id)_delegate respondsToSelector:@selector(applicationDidFinishLaunching:)]) {
         [[NSNotificationCenter defaultCenter] addObserver:_delegate selector:@selector(applicationDidFinishLaunching:) name:CRApplicationDidFinishLaunchingNotification object:nil];
     }
-    if ( [(id)_delegate respondsToSelector:@selector(applicationWillTerminate:)] ) {
+    if ([(id)_delegate respondsToSelector:@selector(applicationWillTerminate:)]) {
         [[NSNotificationCenter defaultCenter] addObserver:_delegate selector:@selector(applicationWillTerminate:) name:CRApplicationWillTerminateNotification object:nil];
     }
 }
@@ -84,7 +84,7 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 		}
         
 		if(![class isSubclassOfClass:self.class]) {
-			NSLog(@"Principal class (%@) of main bundle is not subclass of %@", NSStringFromClass(class), NSStringFromClass(self.class) );
+			NSLog(@"Principal class (%@) of main bundle is not subclass of %@", NSStringFromClass(class), NSStringFromClass(self.class));
 		}
         
         CRApp = [[class alloc] initWithDelegate:CRAppDelegate];
@@ -176,46 +176,4 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 	[[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationWillFinishLaunchingNotification object:self];
 }
 
-#pragma mark - Output
-
-- (void)log:(NSString *)string {
-    [self logFormat:string];
-}
-
-- (void)logFormat:(NSString *)format, ... {
-    va_list args;
-    va_start(args, format);
-    [self logFormat:format args:args];
-    va_end(args);
-}
-
-- (void)logFormat:(NSString *)format args:(va_list)args {
-    [self logFormat:format args:args fileHandle:NSFileHandle.fileHandleWithStandardOutput];
-}
-
-- (void)logError:(NSString *)string {
-    [self logErrorFormat:string];
-}
-
-- (void)logErrorFormat:(NSString *)format, ... {
-    va_list args;
-    va_start(args, format);
-    [self logErrorFormat:format args:args];
-    va_end(args);
-}
-
-- (void)logErrorFormat:(NSString *)format args:(va_list)args {
-    [self logFormat:format args:args fileHandle:NSFileHandle.fileHandleWithStandardError];
-}
-
-- (void)logFormat:(NSString *)format args:(va_list)args fileHandle:(NSFileHandle *)fileHandle {
-    NSString *string = [[NSString alloc] initWithFormat:format arguments:args];
-    assert(string != nil);
-    
-    NSData *data = [[string stringByAppendingString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding];
-    assert(data != nil);
-        
-    [fileHandle writeData:data];
-}
-    
 @end

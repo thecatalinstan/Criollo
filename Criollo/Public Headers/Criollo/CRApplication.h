@@ -81,14 +81,6 @@ FOUNDATION_EXPORT int CRApplicationMain(int argc, const char * _Nullable argv[_N
 - (void)terminate:(id _Nullable)sender;
 - (void)replyToApplicationShouldTerminate:(BOOL)shouldTerminate;
 
-- (void)log:(NSString *)string;
-- (void)logFormat:(NSString *)format, ...;
-- (void)logFormat:(NSString *)format args:(va_list)args;
-
-- (void)logError:(NSString *)string;
-- (void)logErrorFormat:(NSString *)format, ...;
-- (void)logErrorFormat:(NSString *)format args:(va_list)args;
-
 @end
 
 NS_ASSUME_NONNULL_END
