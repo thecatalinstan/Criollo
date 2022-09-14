@@ -1,6 +1,6 @@
 
 
-[![Criollo](https://criollo.io/res/doc/images/criollo-github.png)](https://criollo.io/)
+#Criollo
 
 #### A powerful Cocoa web framework and HTTP server for macS, iOS and tvOS.
 
@@ -192,8 +192,7 @@ class HelloWorldViewController: CRViewController {
     self.vars["content"] = "Hello from the view controller."
 
     return super.present(with: request, response: response)
-  }
-  
+  }  
 }
 
 // Add the view controller to server
@@ -316,13 +315,7 @@ The preferred way of installing Criollo is through [CocoaPods](http://cocoapods.
 
 Please note that Criollo will download [CocoaAsyncSocket](https://github.com/robbiehanson/CocoaAsyncSocket) as a dependency.
 
-### Cloning the repo
-
-Criollo uses [CocoaAsyncSocket](https://github.com/robbiehanson/CocoaAsyncSocket) which is included as a git submodule
-
-```bashh
-git clone --recursive https://github.com/thecatalinstan/Criollo.git
-```
+### Swift Package Manager
 
 ## Get in Touch
 
