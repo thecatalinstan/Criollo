@@ -350,27 +350,6 @@
 			remoteGlobalIDString = 4ABB1DD91F9E6B0900480EC7;
 			remoteInfo = "Criollo-tvos";
 		};
-		4AE7077020715315005166FB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4AE7076C20715315005166FB /* Criollo iOS App.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = AD5B3C511CA820B5000988B7;
-			remoteInfo = "Criollo iOS App";
-		};
-		4AE7077620715315005166FB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4AE7077220715315005166FB /* Criollo macOS App.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = ADC1A5C01CA30F49009A4A19;
-			remoteInfo = "Criollo macOS App";
-		};
-		4AE7077C20715315005166FB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4AE7077820715315005166FB /* Criollo tvOS App.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4ABB1E6A1F9E7A8500480EC7;
-			remoteInfo = "Criollo tvOS App";
-		};
 		AD030FE11F0C02C900BD9FE4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = ADEDB3481AEFBCF800A26AF1 /* Project object */;
@@ -427,13 +406,6 @@
 			remoteGlobalIDString = 7D8B70C31BCFA15700D8E273;
 			remoteInfo = "tvOS CocoaAsyncSocket";
 		};
-		AD232B5E28CC5EF200D1A670 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AD232B5528CC5EB600D1A670 /* Criollo SPM.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = AD232B4B28CC5EB600D1A670;
-			remoteInfo = "Criollo SPM";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -488,9 +460,6 @@
 		4ABB1DDA1F9E6B0900480EC7 /* Criollo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Criollo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4ABB1DE21F9E6B0A00480EC7 /* CriolloTests tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CriolloTests tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AD0AD581F6662AA00943DC3 /* CRHTTPSHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRHTTPSHelperTests.m; sourceTree = "<group>"; };
-		4AE7076C20715315005166FB /* Criollo iOS App.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "Criollo iOS App.xcodeproj"; sourceTree = "<group>"; };
-		4AE7077220715315005166FB /* Criollo macOS App.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "Criollo macOS App.xcodeproj"; sourceTree = "<group>"; };
-		4AE7077820715315005166FB /* Criollo tvOS App.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "Criollo tvOS App.xcodeproj"; sourceTree = "<group>"; };
 		AD001AD91D4555A500DE4AC9 /* CRRoute_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRoute_Internal.h; sourceTree = "<group>"; };
 		AD001ADE1D455BA300DE4AC9 /* CRRouteMatchingResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRRouteMatchingResult.h; sourceTree = "<group>"; };
 		AD001ADF1D455BA300DE4AC9 /* CRRouteMatchingResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRRouteMatchingResult.m; sourceTree = "<group>"; };
@@ -508,7 +477,6 @@
 		AD1D44F71F376DED00C5D260 /* CRViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRViewTests.m; sourceTree = "<group>"; };
 		AD227F881BDC3F6000C23D52 /* CRServerConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRServerConfiguration.h; sourceTree = "<group>"; };
 		AD227F891BDC3F6000C23D52 /* CRServerConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRServerConfiguration.m; sourceTree = "<group>"; };
-		AD232B5528CC5EB600D1A670 /* Criollo SPM.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "Criollo SPM.xcodeproj"; sourceTree = "<group>"; };
 		AD26E53628CC600100A423ED /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		AD26E53728CC600100A423ED /* Criollo.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = Criollo.podspec; sourceTree = "<group>"; };
 		AD26E53828CC600100A423ED /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -676,30 +644,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		4AE7076D20715315005166FB /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4AE7077120715315005166FB /* Criollo iOS App.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		4AE7077320715315005166FB /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4AE7077720715315005166FB /* Criollo macOS App.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		4AE7077920715315005166FB /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4AE7077D20715315005166FB /* Criollo tvOS App.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		AD030FDC1F0C02C900BD9FE4 /* CriolloTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -780,25 +724,6 @@
 				AD232B0F28CC515A00D1A670 /* CocoaAsyncSocket.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		AD232B5B28CC5EF200D1A670 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				AD232B5F28CC5EF200D1A670 /* Criollo SPM */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		AD5B3C7D1CA821E9000988B7 /* Apps */ = {
-			isa = PBXGroup;
-			children = (
-				AD232B5528CC5EB600D1A670 /* Criollo SPM.xcodeproj */,
-				4AE7077220715315005166FB /* Criollo macOS App.xcodeproj */,
-				4AE7076C20715315005166FB /* Criollo iOS App.xcodeproj */,
-				4AE7077820715315005166FB /* Criollo tvOS App.xcodeproj */,
-			);
-			path = Apps;
 			sourceTree = "<group>";
 		};
 		AD60BA3C1C0389A400118EED /* Routing */ = {
@@ -896,7 +821,6 @@
 			children = (
 				ADEDB3781AEFC0B000A26AF1 /* Criollo */,
 				AD030FDC1F0C02C900BD9FE4 /* CriolloTests */,
-				AD5B3C7D1CA821E9000988B7 /* Apps */,
 				ADEDB3681AEFBE2C00A26AF1 /* Libraries */,
 				ADEDB3771AEFC0B000A26AF1 /* Products */,
 				4A96B1821F95576F0091B193 /* Frameworks */,
@@ -1308,22 +1232,6 @@
 					ProductGroup = AD232B0528CC515A00D1A670 /* Products */;
 					ProjectRef = AD7009DD24792E7900F3C06A /* CocoaAsyncSocket.xcodeproj */;
 				},
-				{
-					ProductGroup = 4AE7076D20715315005166FB /* Products */;
-					ProjectRef = 4AE7076C20715315005166FB /* Criollo iOS App.xcodeproj */;
-				},
-				{
-					ProductGroup = 4AE7077320715315005166FB /* Products */;
-					ProjectRef = 4AE7077220715315005166FB /* Criollo macOS App.xcodeproj */;
-				},
-				{
-					ProductGroup = AD232B5B28CC5EF200D1A670 /* Products */;
-					ProjectRef = AD232B5528CC5EB600D1A670 /* Criollo SPM.xcodeproj */;
-				},
-				{
-					ProductGroup = 4AE7077920715315005166FB /* Products */;
-					ProjectRef = 4AE7077820715315005166FB /* Criollo tvOS App.xcodeproj */;
-				},
 			);
 			projectRoot = "";
 			targets = (
@@ -1338,27 +1246,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		4AE7077120715315005166FB /* Criollo iOS App.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = "Criollo iOS App.app";
-			remoteRef = 4AE7077020715315005166FB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4AE7077720715315005166FB /* Criollo macOS App.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = "Criollo macOS App.app";
-			remoteRef = 4AE7077620715315005166FB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4AE7077D20715315005166FB /* Criollo tvOS App.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = "Criollo tvOS App.app";
-			remoteRef = 4AE7077C20715315005166FB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		AD232B0B28CC515A00D1A670 /* CocoaAsyncSocket.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -1378,13 +1265,6 @@
 			fileType = wrapper.framework;
 			path = CocoaAsyncSocket.framework;
 			remoteRef = AD232B0E28CC515A00D1A670 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		AD232B5F28CC5EF200D1A670 /* Criollo SPM */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = "Criollo SPM";
-			remoteRef = AD232B5E28CC5EF200D1A670 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
