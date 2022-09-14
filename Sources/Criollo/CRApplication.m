@@ -13,7 +13,7 @@ NSNotificationName const CRApplicationWillFinishLaunchingNotification = @"CRAppl
 NSNotificationName const CRApplicationDidFinishLaunchingNotification = @"CRApplicationDidFinishLaunchingNotification";
 NSNotificationName const CRApplicationWillTerminateNotification = @"CRApplicationWillTerminateNotification";
 
-static NSString *const CRApplicationRunLoopMode = @"NSDefaultRunLoopMode";
+static NSRunLoopMode CRApplicationRunLoopMode;
 static NSNotificationName const CRApplicationDidReceiveSignalNotification = @"CRApplicationDidReceiveSignal";
 
 CRApplication *CRApp;
@@ -33,13 +33,13 @@ static id<CRApplicationDelegate> CRAppDelegate;
 
 NS_ASSUME_NONNULL_END
 
-void CRHandleSignal(int sig) {
+static void CRHandleSignal(int sig) {
     signal(sig, SIG_IGN);
     [CRApplication.sharedApplication terminate:nil];
     signal(sig, CRHandleSignal);
 }
 
-int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> delegate) {
+int CRApplicationMain(int argc, char *argv[], id<CRApplicationDelegate> delegate) {
     signal(SIGTERM, CRHandleSignal);
     signal(SIGINT, CRHandleSignal);
     signal(SIGQUIT, CRHandleSignal);
@@ -52,6 +52,10 @@ int CRApplicationMain(int argc, const char * argv[], id<CRApplicationDelegate> d
 }
 
 @implementation CRApplication
+
++ (void)initialize {
+    CRApplicationRunLoopMode = NSDefaultRunLoopMode;
+}
 
 - (void)setDelegate:(id<CRApplicationDelegate>)delegate {
     if (_delegate) {

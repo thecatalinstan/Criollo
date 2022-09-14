@@ -5,13 +5,18 @@
 //  Created by Cătălin Stan on 15/09/2022.
 //
 
-import Criollo
+import CriolloSwift
 
-class AppDelegate: CRApplicationDelegate {
-    
+@main
+class AppDelegate: ApplicationDelegate {
+
     private lazy var server = CRHTTPServer()
     
-    // MARK: - CRApplicationDelegate
+    public static func main() throws {
+        try Criollo.applicationMain(AppDelegate())
+    }
+        
+    // MARK: - ApplicationDelegate
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         server.add { _, res, _ in
@@ -19,4 +24,5 @@ class AppDelegate: CRApplicationDelegate {
         }
         server.startListening()
     }
+    
 }
