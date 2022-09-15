@@ -36,8 +36,8 @@
 @implementation CRHTTPSHelperTests
 
 - (NSString *)pathForSampleFile:(NSString *)samplefile {
-    NSBundle *bundle = [NSBundle bundleForClass:self.class];
-    return [bundle.resourcePath stringByAppendingPathComponent:samplefile];
+    const NSString *samplesPath = [@(__FILE__).stringByDeletingLastPathComponent stringByAppendingPathComponent:@"Samples"];
+    return [samplesPath stringByAppendingPathComponent:samplefile];
 }
 
 #pragma mark - Identity
