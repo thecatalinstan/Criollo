@@ -5,11 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Criollo",
-    platforms: [
-        .iOS(.v12),
-        .macOS(.v10_10),
-        .tvOS(.v12)
-    ],
+    platforms: [.iOS(.v9), .macOS(.v10_10), .tvOS(.v9)],
     products: [
         .library(
             name: "Criollo",
@@ -17,33 +13,36 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(name:"CocoaAsyncSocket", url: "https://github.com/robbiehanson/CocoaAsyncSocket", from: "7.6.5"),
+        .package(name:"CocoaAsyncSocket", url: "https://github.com/robbiehanson/CocoaAsyncSocket", .upToNextMinor(from: "7.6.5")),
     ],
     targets: [
         .target(
             name: "Criollo",            
             dependencies: [
-                "CocoaAsyncSocket"
+                .product(name: "CocoaAsyncSocket", package: "CocoaAsyncSocket")
             ],
-            path: "Criollo",
             exclude: [
-                "../Libraries",
-                "../Apps",
-                "../Criollo.podspec"
+                "../../Criollo.podspec"
             ],
-            publicHeadersPath: "Public Headers",
+            publicHeadersPath: "Headers",
             cSettings: [
-                .headerSearchPath("Sources"),
-                .headerSearchPath("Sources/Extensions"),
-                .headerSearchPath("Sources/FCGI"),
-                .headerSearchPath("Sources/HTTP"),
-                .headerSearchPath("Sources/Routing"),
+                .headerSearchPath("."),
+                .headerSearchPath("./Extensions"),
+                .headerSearchPath("./FCGI"),
+                .headerSearchPath("./HTTP"),
+                .headerSearchPath("./Routing"),
             ]
         ),
         .testTarget(
             name: "CriolloTests",
             dependencies: ["Criollo"],
-            path: "CriolloTests"
+            cSettings: [
+                .headerSearchPath("../../Sources/Criollo"),
+                .headerSearchPath("../../Sources/Criollo/Extensions"),
+                .headerSearchPath("../../Sources/Criollo/FCGI"),
+                .headerSearchPath("../../Sources/Criollo/HTTP"),
+                .headerSearchPath("../../Sources/Criollo/Routing"),
+            ]
         ),
     ]
 )

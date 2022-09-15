@@ -17,8 +17,8 @@ Pod::Spec.new do |s|
   s.requires_arc            =  true
   s.dependency              "CocoaAsyncSocket", "~> 7.6.5"
 
-  s.source_files            =  "Criollo/Public Headers/*", "Criollo/Sources/*.{h,m}", "Criollo/Sources/{HTTP,FCGI,Routing,Extensions}/*.{h,m}"
-  s.public_header_files     =  "Criollo/Public Headers/*"
+  s.source_files            =  "Sources/Criollo/Headers/Criollo/*", "Sources/Criollo/*.{h,m}", "Sources/Criollo/{HTTP,FCGI,Routing,Extensions}/*.{h,m}"
+  s.public_header_files     =  "Sources/Criollo/Headers/Criollo/*"
 
   s.osx.deployment_target   = "10.10"
   s.ios.deployment_target   = "12.0"
