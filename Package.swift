@@ -7,10 +7,9 @@ let package = Package(
     name: "Criollo",
     platforms: [.iOS(.v9), .macOS(.v10_10), .tvOS(.v9)],
     products: [
-        .library(
-            name: "Criollo",
-            targets: ["Criollo"]
-        ),
+        .library(name: "Criollo", targets: ["Criollo"]),
+        .executable(name: "CriolloDemoSwift", targets: ["CriolloDemoSwift"]),
+        .executable(name: "CriolloDemoObjectiveC", targets: ["CriolloDemoObjectiveC"]),
     ],
     dependencies: [
         .package(name:"CocoaAsyncSocket", url: "https://github.com/robbiehanson/CocoaAsyncSocket", .upToNextMinor(from: "7.6.5")),
@@ -44,5 +43,13 @@ let package = Package(
                 .headerSearchPath("../../Sources/Criollo/Routing"),
             ]
         ),
+        .executableTarget(
+            name: "CriolloDemoSwift",
+            dependencies: ["Criollo"]
+        ),
+        .executableTarget(
+            name: "CriolloDemoObjectiveC",
+            dependencies: ["Criollo"]
+        )
     ]
 )
