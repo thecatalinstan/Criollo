@@ -16,19 +16,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRConnection () <GCDAsyncSocketDelegate>
 
-@property (nonatomic, strong, nullable) GCDAsyncSocket* socket;
-@property (nonatomic, weak) CRServer* server;
+@property (nonatomic, strong, nullable) GCDAsyncSocket *socket;
+@property (nonatomic, weak) CRServer *server;
 
 /// The current request being parsed. This is used internally as the data comes
 /// in from the socket. Once the request is fully formed, it can be passed on to
 /// be handled.
-@property (nonatomic, weak, nullable) CRRequest* requestBeingReceived;
+@property (nonatomic, weak, nullable) CRRequest *requestBeingReceived;
 
 /// HTTP Pipelining allows multiple requests to be send "in one go" and requires
 /// their responses to be sent in order. As these requests can be completed out
 /// of sequence, we'll keep a reference to the first request we need to send a
 /// response for.
-@property (nonatomic, weak, nullable) CRRequest* firstRequest;
+@property (nonatomic, weak, nullable) CRRequest *firstRequest;
 
 - (void)addRequest:(CRRequest *)request;
 - (void)removeRequest:(CRRequest *)request;

@@ -20,10 +20,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRConnection : NSObject
 
-@property (nonatomic, readonly) NSString* remoteAddress;
-@property (nonatomic, readonly) NSUInteger remotePort;
-@property (nonatomic, readonly) NSString* localAddress;
-@property (nonatomic, readonly) NSUInteger localPort;
+@property (nonatomic, readonly) NSString *remoteAddress;
+@property (nonatomic, readonly) uint16_t remotePort;
+@property (nonatomic, readonly) NSString *localAddress;
+@property (nonatomic, readonly) uint16_t localPort;
 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;

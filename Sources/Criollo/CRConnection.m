@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak, nullable) id<CRConnectionDelegate> delegate;
 
 @property (nonatomic, strong) NSLock *requestsLock;
-@property (nonatomic, strong) NSMutableArray<CRRequest *> * requests;
+@property (nonatomic, strong) NSMutableArray<CRRequest *> *requests;
 
 - (void)bufferBodyData:(NSData *)data request:(CRRequest *)request;
 
