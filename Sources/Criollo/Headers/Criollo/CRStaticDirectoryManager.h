@@ -5,7 +5,8 @@
 //  Created by Cătălin Stan on 2/10/16.
 //
 
-#import <Criollo/CRTypes.h>
+#import <Criollo/CRRouteBlock.h>
+#import <Criollo/CRStaticDirectoryServingOptions.h>
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN

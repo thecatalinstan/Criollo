@@ -62,23 +62,27 @@ FOUNDATION_EXPORT NSNotificationName const CRApplicationWillFinishLaunchingNotif
 FOUNDATION_EXPORT NSNotificationName const CRApplicationDidFinishLaunchingNotification NS_SWIFT_NAME(criolloApplicationDidFinishLaunching);
 FOUNDATION_EXPORT NSNotificationName const CRApplicationWillTerminateNotification NS_SWIFT_NAME(criolloApplicationWillTerminate);
 
-FOUNDATION_EXTERN __kindof CRApplication * _Null_unspecified CRApp;
 FOUNDATION_EXTERN int CRApplicationMain(int argc, char * _Nullable argv[_Nonnull], id<CRApplicationDelegate> delegate) NS_REFINED_FOR_SWIFT;
 
 NS_SWIFT_NAME(Application)
 @interface CRApplication : NSObject
 
-@property (nonatomic, readonly, weak) id<CRApplicationDelegate> delegate;
-
 @property (class, nonatomic, readonly) CRApplication *sharedApplication;
 
+@property (nonatomic, weak, nullable) id<CRApplicationDelegate> delegate;
+
 - (instancetype)initWithDelegate:(id<CRApplicationDelegate> _Nullable)delegate NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
 - (void)finishLaunching NS_REQUIRES_SUPER;
 
 - (void)run;
+
 - (void)stop:(id _Nullable)sender;
 - (void)terminate:(id _Nullable)sender;
+
 - (void)replyToApplicationShouldTerminate:(BOOL)shouldTerminate;
 
 @end

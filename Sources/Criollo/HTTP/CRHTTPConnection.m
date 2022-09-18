@@ -58,8 +58,8 @@
     env[@"CONTENT_LENGTH"] = env[@"HTTP_CONTENT_LENGTH"];
     env[@"CONTENT_TYPE"] = env[@"HTTP_CONTENT_TYPE"];
     env[@"SERVER_NAME"] = env[@"HTTP_HOST"];
-    env[@"REQUEST_METHOD"] = NSStringFromCRHTTPMethod(request.method);
-    env[@"SERVER_PROTOCOL"] = NSStringFromCRHTTPVersion(request.version);
+    env[@"REQUEST_METHOD"] = request.method;
+    env[@"SERVER_PROTOCOL"] = request.version;
     
     GCDAsyncSocket *socket = self.socket;
     env[@"SERVER_ADDR"] = socket.localHost;
@@ -121,13 +121,13 @@
                 NSRange versionRange = NSMakeRange(rangeOfSecondSpace.location + rangeOfSecondSpace.length, rangeOfFirstNewline.location - rangeOfSecondSpace.location - rangeOfSecondSpace.length);
 
                 NSString * methodSpec = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes + methodRange.location length:methodRange.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
-                CRHTTPMethod requestMethod = CRHTTPMethodMake(methodSpec);
+                CRHTTPMethod requestMethod = CRHTTPMethodFromString(methodSpec);
 
-                if ( requestMethod != CRHTTPMethodNone ) {
+                if (requestMethod) {
                     NSString* pathSpec = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes + pathRange.location length:pathRange.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
 
                     NSString* versionSpec = [[NSString alloc] initWithBytesNoCopy:(void *)data.bytes + versionRange.location length:versionRange.length encoding:NSUTF8StringEncoding freeWhenDone:NO];
-                    CRHTTPVersion version = CRHTTPVersionMake(versionSpec);
+                    CRHTTPVersion version = CRHTTPVersionFromString(versionSpec);
 
                     NSRange rangeOfHostHeader = [data rangeOfData:[@"Host: " dataUsingEncoding:NSUTF8StringEncoding] options:0 range:NSMakeRange(0, data.length)];
 
@@ -146,7 +146,7 @@
 
                         // TODO: request.URL should be parsed using no memcpy and using the actual scheme
                         NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http%@://%@%@", ((CRHTTPServer *)self.server).isSecure ? @"s" : @"", hostSpec, pathSpec]];
-                        CRRequest* request = [[CRRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:CRHTTPVersionMake(versionSpec) connection:self];
+                        CRRequest* request = [[CRRequest alloc] initWithMethod:CRHTTPMethodFromString(methodSpec) URL:URL version:CRHTTPVersionFromString(versionSpec) connection:self env:nil];
                         [self addRequest:request];
                         self.requestBeingReceived = request;
                     } else {

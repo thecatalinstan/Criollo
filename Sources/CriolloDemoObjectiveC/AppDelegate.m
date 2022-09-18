@@ -26,7 +26,7 @@
 #pragma mark - CRApplicationDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification {
-    [self.server add:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
+    [self.server add:^(CRRequest *request, CRResponse *response, dispatch_block_t completionHandler) {
             [response send:@"Hello world"];
     }];
     

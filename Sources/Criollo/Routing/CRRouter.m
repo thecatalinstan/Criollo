@@ -5,27 +5,19 @@
 //  Created by Cătălin Stan on 19/07/16.
 //
 
-#import <Criollo/CRRouter.h>
-
-#import <Criollo/CRMessage.h>
-#import <Criollo/CRRequest.h>
-#import <Criollo/CRResponse.h>
-#import <Criollo/CRServer.h>
+#import "CRRouter_Internal.h"
 
 #import "CRMessage_Internal.h"
 #import "CRRequest_Internal.h"
 #import "CRResponse_Internal.h"
-#import "CRRoute.h"
 #import "CRRoute_Internal.h"
-#import "CRRouteMatchingResult.h"
 #import "CRRouteMatchingResult_Internal.h"
-#import "CRRouter_Internal.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CRRouter ()
 
-@property (nonatomic, strong, readonly) NSMutableArray<CRRoute *> * routes;
+@property (nonatomic, strong, readonly) NSMutableArray<CRRoute *> *routes;
 
 @end
 
@@ -33,15 +25,13 @@ NS_ASSUME_NONNULL_END
 
 @implementation CRRouter
 
-
 + (CRRouteBlock)errorHandlingBlockWithStatus:(NSUInteger)statusCode error:(NSError *)error {
-    return ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) { @autoreleasepool {
+    return ^(CRRequest *request, CRResponse *response, dispatch_block_t completionHandler) { @autoreleasepool {
         [self handleErrorResponse:statusCode error:error request:request response:response completion:completionHandler];
     }};
 }
 
-+ (void)handleErrorResponse:(NSUInteger)statusCode error:(NSError *)error request:(CRRequest *)request response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion {
-    
++ (void)handleErrorResponse:(NSUInteger)statusCode error:(NSError *)error request:(CRRequest *)request response:(CRResponse *)response completion:(dispatch_block_t)completion {
     [response setStatusCode:statusCode description:nil];
     [response setValue:@"text/plain; charset=utf-8" forHTTPHeaderField:@"Content-type"];
     
@@ -55,7 +45,7 @@ NS_ASSUME_NONNULL_END
         NSString* errorDescription;
         switch (statusCode) {
             case 404:
-                errorDescription = [NSString stringWithFormat:NSLocalizedString(@"No routes defined for “%@%@%@”",), NSStringFromCRHTTPMethod(request.method), requestURL.path, [requestURL.path hasSuffix:CRRoutePathSeparator] ? @"" : CRRoutePathSeparator];
+                errorDescription = [NSString stringWithFormat:NSLocalizedString(@"No routes defined for “%@%@%@”",), request.method, requestURL.path, [requestURL.path hasSuffix:CRRoutePathSeparator] ? @"" : CRRoutePathSeparator];
                 break;
         }
         info[NSLocalizedDescriptionKey] = errorDescription;
@@ -103,11 +93,11 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Block Routes
 
 - (void)add:(CRRouteBlock)block {
-    [self add:nil block:block recursive:NO method:CRHTTPMethodAll];
+    [self add:nil block:block recursive:NO method:CRHTTPMethodAny];
 }
 
 - (void)add:(NSString *)path block:(CRRouteBlock)block {
-    [self add:path block:block recursive:NO method:CRHTTPMethodAll];
+    [self add:path block:block recursive:NO method:CRHTTPMethodAny];
 }
 
 - (void)add:(NSString *)path block:(CRRouteBlock)block recursive:(BOOL)recursive method:(CRHTTPMethod)method {
@@ -119,34 +109,38 @@ NS_ASSUME_NONNULL_END
     [self add:path block:block recursive:NO method:CRHTTPMethodGet];
 }
 
+- (void)head:(NSString *)path block:(CRRouteBlock)block {
+    [self add:path block:block recursive:NO method:CRHTTPMethodHead];
+}
+
 - (void)post:(NSString *)path block:(CRRouteBlock)block {
     [self add:path block:block recursive:NO method:CRHTTPMethodPost];
-}
-  
-- (void)patch:(NSString *)path block:(CRRouteBlock)block {
-    [self add:path block:block recursive:NO method:CRHTTPMethodPatch];
 }
 
 - (void)put:(NSString *)path block:(CRRouteBlock)block {
     [self add:path block:block recursive:NO method:CRHTTPMethodPut];
 }
 
-- (void)delete:(NSString *)path block:(CRRouteBlock)block {
-    [self add:path block:block recursive:NO method:CRHTTPMethodDelete];
+- (void)connect:(NSString *)path block:(CRRouteBlock)block {
+    [self add:path block:block recursive:NO method:CRHTTPMethodPatch];
 }
 
-- (void)head:(NSString *)path block:(CRRouteBlock)block {
-    [self add:path block:block recursive:NO method:CRHTTPMethodHead];
+- (void)delete:(NSString *)path block:(CRRouteBlock)block {
+    [self add:path block:block recursive:NO method:CRHTTPMethodDelete];
 }
 
 - (void)options:(NSString *)path block:(CRRouteBlock)block {
     [self add:path block:block recursive:NO method:CRHTTPMethodOptions];
 }
 
+- (void)patch:(NSString *)path block:(CRRouteBlock)block {
+    [self add:path block:block recursive:NO method:CRHTTPMethodPatch];
+}
+
 #pragma mark - Route Controller Routes
 
 - (void)add:(NSString *)path controller:(__unsafe_unretained Class)controllerClass {
-    [self add:path controller:controllerClass recursive:YES method:CRHTTPMethodAll];
+    [self add:path controller:controllerClass recursive:YES method:CRHTTPMethodAny];
 }
 
 - (void)add:(NSString *)path controller:(__unsafe_unretained Class)controllerClass recursive:(BOOL)recursive method:(CRHTTPMethod)method {
@@ -158,7 +152,7 @@ NS_ASSUME_NONNULL_END
 #pragma mark - View Controller Routes
 
 - (void)add:(NSString *)path viewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil {
-    [self add:path viewController:viewControllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil recursive:YES method:CRHTTPMethodAll];
+    [self add:path viewController:viewControllerClass withNibName:nibNameOrNil bundle:nibBundleOrNil recursive:YES method:CRHTTPMethodAny];
 }
 
 - (void)add:(NSString *)path viewController:(__unsafe_unretained Class)viewControllerClass withNibName:(NSString *)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil recursive:(BOOL)recursive method:(CRHTTPMethod)method {
@@ -178,10 +172,10 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)mount:(NSString *)path fileAtPath:(NSString *)filePath {
-    [self mount:path fileAtPath:filePath options:0 fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone];
+    [self mount:path fileAtPath:filePath options:0 fileName:nil contentType:nil contentDisposition:nil];
 }
 
-- (void)mount:(NSString *)path fileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition {
+- (void)mount:(NSString *)path fileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRContentDisposition)contentDisposition {
     CRRoute* route = [[CRRoute alloc] initWithStaticFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition path:path];
     [self addRoute:route];
 }
@@ -198,7 +192,7 @@ NS_ASSUME_NONNULL_END
     [self.routes enumerateObjectsUsingBlock:^(CRRoute * _Nonnull route, NSUInteger idx, BOOL * _Nonnull stop) {
         @autoreleasepool {
             // Bailout early if method does not match
-            if ( route.method != method && route.method != CRHTTPMethodAll ) {
+            if ( route.method != method && route.method != CRHTTPMethodAny ) {
                 return;
             }
 
@@ -228,17 +222,17 @@ NS_ASSUME_NONNULL_END
     return routes;
 }
 
-- (void)executeRoutes:(NSArray<CRRouteMatchingResult *> *)routes request:(CRRequest *)request response:(CRResponse *)response withCompletion:(nonnull CRRouteCompletionBlock)completionBlock {
+- (void)executeRoutes:(NSArray<CRRouteMatchingResult *> *)routes request:(CRRequest *)request response:(CRResponse *)response withCompletion:(nonnull dispatch_block_t)completionBlock {
     [self executeRoutes:routes request:request response:response withCompletion:completionBlock notFoundBlock:nil];
 }
 
-- (void)executeRoutes:(NSArray<CRRouteMatchingResult *> *)routes request:(CRRequest *)request response:(CRResponse *)response withCompletion:(nonnull CRRouteCompletionBlock)completionBlock notFoundBlock:(CRRouteBlock _Nullable)notFoundBlock {
+- (void)executeRoutes:(NSArray<CRRouteMatchingResult *> *)routes request:(CRRequest *)request response:(CRResponse *)response withCompletion:(nonnull dispatch_block_t)completionBlock notFoundBlock:(CRRouteBlock _Nullable)notFoundBlock {
     if ( !notFoundBlock ) {
         notFoundBlock = [CRRouter errorHandlingBlockWithStatus:404 error:nil];
     }
 
     if ( routes.count == 0 ) {
-        CRRoute* defaultRoute = [[CRRoute alloc] initWithBlock:notFoundBlock method:CRHTTPMethodAll path:nil recursive:NO];
+        CRRoute* defaultRoute = [[CRRoute alloc] initWithBlock:notFoundBlock method:CRHTTPMethodAny path:nil recursive:NO];
         routes = @[[CRRouteMatchingResult routeMatchingResultWithRoute:defaultRoute matches:nil]];
     }
 

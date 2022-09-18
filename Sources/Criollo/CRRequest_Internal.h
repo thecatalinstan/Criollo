@@ -5,6 +5,7 @@
 //  Created by Cătălin Stan on 11/20/15.
 //
 
+#import <Criollo/CRHTTPVersion.h>
 #import <Criollo/CRRequest.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -19,26 +20,22 @@ FOUNDATION_EXPORT NSString * const CRRequestBoundaryPrefix;
 
 @interface CRRequest ()
 
-@property (nonatomic, readwrite, strong) NSURL * URL;
-@property (nonatomic, readwrite) CRHTTPMethod method;
-@property (nonatomic, readwrite, strong) NSDictionary<NSString *, NSString *> * env;
-@property (nonatomic, readwrite, strong) NSDictionary<NSString *, NSString *> * query;
-@property (nonatomic, readwrite, strong, nullable) NSDictionary<NSString *, NSString *> * cookies;
-@property (nonatomic, readwrite, nullable) CRRequestRange * range;
+@property (nonatomic, readonly, weak, nullable) CRConnection *connection;
+@property (nonatomic, nullable) CRResponse *response;
+
+@property (nonatomic, readwrite) NSDictionary<NSString *, NSString *> *env;
 
 @property (nonatomic, readonly) BOOL shouldCloseConnection;
 
-@property (nonatomic, strong, nullable) NSMutableData * bufferedBodyData;
-@property (nonatomic, strong, nullable) NSMutableData * bufferedResponseData;
+@property (nonatomic, nullable) NSMutableData *bufferedBodyData;
+@property (nonatomic, nullable) NSMutableData *bufferedResponseData;
 
-@property (nonatomic, readonly, nullable) NSString * multipartBoundary;
+@property (nonatomic, readonly, nullable) NSString *multipartBoundary;
 @property (nonatomic, readonly) NSData * multipartBoundaryPrefixData;
 @property (nonatomic, readonly, nullable) NSString * multipartBoundaryPrefixedString;
 @property (nonatomic, readonly, nullable) NSData * multipartBoundaryPrefixedData;
 
-- (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL * _Nullable)URL version:(CRHTTPVersion)version;
-- (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL * _Nullable)URL version:(CRHTTPVersion)version connection:(CRConnection* _Nullable) connection;
-- (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL * _Nullable)URL version:(CRHTTPVersion)version connection:(CRConnection* _Nullable) connection env:(NSDictionary* _Nullable)env NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL * _Nullable)URL version:(CRHTTPVersion)version connection:(CRConnection* _Nullable)connection env:(NSDictionary* _Nullable)env NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)appendData:(NSData *)data;
 - (void)bufferBodyData:(NSData *)data;

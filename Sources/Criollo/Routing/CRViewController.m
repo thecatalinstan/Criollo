@@ -51,11 +51,11 @@ NS_ASSUME_NONNULL_END
         _vars = [NSMutableDictionary dictionary];
 
         CRViewController* __weak controller = self;
-        self.routeBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) { @autoreleasepool {
+        self.routeBlock = ^(CRRequest *request, CRResponse *response, dispatch_block_t completionHandler) { @autoreleasepool {
             NSString* requestedPath = request.env[@"DOCUMENT_URI"];
             NSString* requestedRelativePath = [requestedPath pathRelativeToPath:controller.prefix separator:CRRoutePathSeparator];
             NSArray<CRRouteMatchingResult * >* routes = [controller routesForPath:requestedRelativePath method:request.method];
-            [controller executeRoutes:routes request:request response:response withCompletion:completionHandler notFoundBlock:^(CRRequest * _Nonnull req, CRResponse * _Nonnull res, CRRouteCompletionBlock  _Nonnull completion) { @autoreleasepool {
+            [controller executeRoutes:routes request:request response:response withCompletion:completionHandler notFoundBlock:^(CRRequest * _Nonnull req, CRResponse * _Nonnull res, dispatch_block_t  _Nonnull completion) { @autoreleasepool {
                 [res setValue:@"text/html; charset=utf-8" forHTTPHeaderField:@"Content-type"];
 
                 NSString* output = [controller presentViewControllerWithRequest:req response:res];

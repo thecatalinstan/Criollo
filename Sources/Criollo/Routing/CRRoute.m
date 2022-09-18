@@ -5,47 +5,33 @@
 //  Created by Cătălin Stan on 11/8/15.
 //
 
-#import "CRRoute.h"
+#import "CRRoute_Internal.h"
 
-#import <Criollo/CRRequest.h>
-#import <Criollo/CRResponse.h>
 #import <Criollo/CRRouteController.h>
 #import <Criollo/CRStaticDirectoryManager.h>
 #import <Criollo/CRStaticFileManager.h>
-#import <Criollo/CRTypes.h>
 #import <Criollo/CRViewController.h>
 
 #import "CRRequest_Internal.h"
 #import "CRResponse_Internal.h"
-#import "CRRoute_Internal.h"
 #import "CRServer_Internal.h"
 
 NSString * const CRRoutePathSeparator = @"/";
 static NSString * const CRPathAnyPath = @"*";
 
-@interface CRRoute ()
-
-@end
-
 @implementation CRRoute
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"<CRRoute %@, %@ %@%@>", @(self.hash), NSStringFromCRHTTPMethod(self.method), self.path ? : @"*", self.recursive ? @" recursive" : @""];
-}
-
-- (instancetype)init {
-    return [self initWithBlock:^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {} method:CRHTTPMethodAll path:nil recursive:NO];
+    return [NSString stringWithFormat:@"<CRRoute %@, %@ %@%@>", @(self.hash), self.method, self.path ? : @"*", self.recursive ? @" recursive" : @""];
 }
 
 - (instancetype)initWithBlock:(CRRouteBlock)block method:(CRHTTPMethod)method path:(NSString * _Nullable)path recursive:(BOOL)recursive {
     self = [super init];
     if ( self != nil ) {
-        self.block = block;
-        self.method = method;
-        if ( path ) {
-            self.path = path;
-        }
-        self.recursive = recursive;
+        _block = block;
+        _method = method;
+        _path = path;
+        _recursive = recursive;
 
         if ( self.path != nil ) {
             __block BOOL isRegex = NO;
@@ -96,48 +82,48 @@ static NSString * const CRPathAnyPath = @"*";
     return self;
 }
 
-- (instancetype)initWithControllerClass:(Class)controllerClass method:(CRHTTPMethod)method path:(NSString * _Nullable)path recursive:(BOOL)recursive {
-    CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
++ (instancetype)routeWithControllerClass:(Class)controllerClass method:(CRHTTPMethod)method path:(NSString * _Nullable)path recursive:(BOOL)recursive {
+    CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, dispatch_block_t  _Nonnull completionHandler) {
         @autoreleasepool {
             CRViewController* controller = [[controllerClass alloc] initWithPrefix:path];
             controller.routeBlock(request, response, completionHandler);
         }
     };
-    return [self initWithBlock:block method:method path:path recursive:recursive];
+    return [[self alloc] initWithBlock:block method:method path:path recursive:recursive];
 }
 
-- (instancetype)initWithViewControllerClass:(Class)viewControllerClass nibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil method:(CRHTTPMethod)method path:(NSString * _Nullable)path recursive:(BOOL)recursive {
-    CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler) {
++ (instancetype)routeWithViewControllerClass:(Class)viewControllerClass nibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil method:(CRHTTPMethod)method path:(NSString * _Nullable)path recursive:(BOOL)recursive {
+    CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, dispatch_block_t  _Nonnull completionHandler) {
         @autoreleasepool {
             CRViewController* viewController = [[viewControllerClass alloc] initWithNibName:nibNameOrNil bundle:nibBundleOrNil prefix:path];
             viewController.routeBlock(request, response, completionHandler);
         }
     };
-    return [self initWithBlock:block method:method path:path recursive:recursive];
+    return [[self alloc] initWithBlock:block method:method path:path recursive:recursive];
 }
 
-- (instancetype)initWithStaticDirectoryAtPath:(NSString *)directoryPath options:(CRStaticDirectoryServingOptions)options path:(NSString * _Nullable)path {
++ (instancetype)routeWithStaticDirectoryAtPath:(NSString *)directoryPath options:(CRStaticDirectoryServingOptions)options path:(NSString * _Nullable)path {
     CRStaticDirectoryManager *manager = [CRStaticDirectoryManager managerWithDirectoryAtPath:directoryPath prefix:path options:options];
-    CRRoute* route = [self initWithBlock:manager.routeBlock method:CRHTTPMethodGet path:path recursive:YES];
+    CRRoute *route = [[self alloc] initWithBlock:manager.routeBlock method:CRHTTPMethodGet path:path recursive:YES];
     route.associatedObject = manager;
     return route;
 }
 
-- (instancetype)initWithStaticFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString *)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition path:(NSString * _Nullable)path {
-    CRStaticFileManager *manager = [CRStaticFileManager managerWithFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition];
-    CRRoute* route = [self initWithBlock:manager.routeBlock method:CRHTTPMethodGet path:path recursive:NO];
++ (instancetype)routeWithStaticFileAtPath:(NSString *)filePath options:(CRStaticFileServingOptions)options fileName:(NSString *)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRContentDisposition)contentDisposition path:(NSString * _Nullable)path {
+    CRStaticFileManager *manager = [[CRStaticFileManager alloc] initWithFileAtPath:filePath options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition attributes:nil];
+    CRRoute *route = [[self alloc] initWithBlock:manager.routeBlock method:CRHTTPMethodGet path:path recursive:NO];
     route.associatedObject = manager;
     return route;
 }
 
 - (NSArray<NSString *> *)processMatchesInPath:(NSString *)path {
-    NSMutableArray<NSString *> * result = [NSMutableArray array];
-    NSArray<NSTextCheckingResult *> * matches = [self.pathRegex matchesInString:path options:0 range:NSMakeRange(0, path.length)];
-    [matches enumerateObjectsUsingBlock:^(NSTextCheckingResult * _Nonnull match, NSUInteger idx, BOOL * _Nonnull stop) {
-        for( NSUInteger i = 1; i < match.numberOfRanges; i++ ) {
+    NSMutableArray<NSString *> *result = [NSMutableArray arrayWithCapacity:8];
+    NSArray<NSTextCheckingResult *> *matches = [self.pathRegex matchesInString:path options:0 range:NSMakeRange(0, path.length)];
+    for (NSTextCheckingResult *match in matches) {
+        for(NSUInteger i = 1; i < match.numberOfRanges; i++) {
             [result addObject:[path substringWithRange:[match rangeAtIndex:i]]];
         }
-    }];
+    }
     return result;
 }
 

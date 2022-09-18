@@ -5,8 +5,10 @@
 //  Created by Cătălin Stan on 10/03/16.
 //
 
+#import <Criollo/CRContentDisposition.h>
+#import <Criollo/CRRouteBlock.h>
+#import <Criollo/CRStaticFileServingOptions.h>
 #import <Foundation/Foundation.h>
-#import <Criollo/CRTypes.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,63 +16,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly, copy) CRRouteBlock routeBlock;
 
-#pragma mark - Convenience Class Initializers
-
-+ (instancetype)managerWithFileAtPath:(NSString *)path;
-
 + (instancetype)managerWithFileAtPath:(NSString *)path
                               options:(CRStaticFileServingOptions)options;
 
-+ (instancetype)managerWithFileAtPath:(NSString *)path
-                              options:(CRStaticFileServingOptions)options
-                             fileName:(NSString * _Nullable)fileName;
-
-+ (instancetype)managerWithFileAtPath:(NSString *)path
-                              options:(CRStaticFileServingOptions)options
-                             fileName:(NSString * _Nullable)fileName
-                          contentType:(NSString * _Nullable)contentType;
-
-+ (instancetype)managerWithFileAtPath:(NSString *)path
-                              options:(CRStaticFileServingOptions)options
-                             fileName:(NSString * _Nullable)fileName
-                          contentType:(NSString * _Nullable)contentType
-                   contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
-
-+ (instancetype)managerWithFileAtPath:(NSString *)path
-                              options:(CRStaticFileServingOptions)options
-                             fileName:(NSString * _Nullable)fileName
-                          contentType:(NSString * _Nullable)contentType
-                   contentDisposition:(CRStaticFileContentDisposition)contentDisposition
-                           attributes:(NSDictionary<NSFileAttributeKey, id> * _Nullable)attributes;
-
-#pragma mark - Convenience Initializers
-
-- (instancetype)initWithFileAtPath:(NSString *)path;
-
-- (instancetype)initWithFileAtPath:(NSString *)path
-                           options:(CRStaticFileServingOptions)options;
-
-- (instancetype)initWithFileAtPath:(NSString *)path
-                           options:(CRStaticFileServingOptions)options
-                          fileName:(NSString * _Nullable)fileName;
-
-- (instancetype)initWithFileAtPath:(NSString *)path
-                           options:(CRStaticFileServingOptions)options
-                          fileName:(NSString * _Nullable)fileName
-                       contentType:(NSString * _Nullable)contentType;
-
 - (instancetype)initWithFileAtPath:(NSString *)path
                            options:(CRStaticFileServingOptions)options
                           fileName:(NSString * _Nullable)fileName
                        contentType:(NSString * _Nullable)contentType
-                contentDisposition:(CRStaticFileContentDisposition)contentDisposition;
+                contentDisposition:(CRContentDisposition _Nullable)contentDisposition
+                        attributes:(NSDictionary<NSFileAttributeKey, id> * _Nullable)attributes
+NS_DESIGNATED_INITIALIZER;
 
-- (instancetype)initWithFileAtPath:(NSString *)path
-                           options:(CRStaticFileServingOptions)options
-                          fileName:(NSString * _Nullable)fileName
-                       contentType:(NSString * _Nullable)contentType
-                contentDisposition:(CRStaticFileContentDisposition)contentDisposition
-                        attributes:(NSDictionary<NSFileAttributeKey, id> * _Nullable)attributes NS_DESIGNATED_INITIALIZER;
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
 NS_ASSUME_NONNULL_END
 

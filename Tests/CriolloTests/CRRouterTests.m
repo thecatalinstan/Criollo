@@ -25,9 +25,9 @@ static CRRouteBlock noop;
 
 - (void)testPlaceholderRoutes {
     
-    CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock  _Nonnull completionHandler){};
+    CRRouteBlock block = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, dispatch_block_t  _Nonnull completionHandler){};
     CRRouter *router = [[CRRouter alloc] init];
-    CRRoute *route = [[CRRoute alloc] initWithBlock:block method:CRHTTPMethodAll path:@"/routes/:foo" recursive:NO];
+    CRRoute *route = [[CRRoute alloc] initWithBlock:block method:CRHTTPMethodAny path:@"/routes/:foo" recursive:NO];
     [router addRoute:route];
     
     NSArray<NSString *> *paths = @[

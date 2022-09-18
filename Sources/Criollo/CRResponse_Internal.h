@@ -14,13 +14,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRResponse ()
 
-@property (nonatomic, assign) NSUInteger proposedStatusCode;
-@property (nonatomic, strong, nullable) NSString* proposedStatusDescription;
+@property (nonatomic, weak, nullable) CRConnection *connection;
+@property (nonatomic, weak, nullable) CRRequest *request;
+- (NSData *)serializeOutputObject:(id)obj error:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
-@property (nonatomic, assign) BOOL alreadySentHeaders;
-@property (nonatomic, assign) BOOL alreadyBuiltHeaders;
-@property (nonatomic, readonly) BOOL finished;
-@property (nonatomic, readonly) BOOL hasWrittenBodyData;
+@property (nonatomic) NSUInteger proposedStatusCode;
+@property (nonatomic, nullable) NSString* proposedStatusDescription;
+
+@property BOOL alreadySentHeaders;
+@property BOOL alreadyBuiltHeaders;
+@property (readonly) BOOL finished;
+@property (readonly) BOOL hasWrittenBodyData;
 
 - (instancetype)initWithConnection:(CRConnection *)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString * _Nullable)description version:(CRHTTPVersion)version NS_DESIGNATED_INITIALIZER;
 

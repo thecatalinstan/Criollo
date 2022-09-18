@@ -215,7 +215,7 @@ NS_ASSUME_NONNULL_END
                         NSString* methodSpec = currentRequestParams[@"REQUEST_METHOD"];
                         NSString* path = currentRequestParams[@"DOCUMENT_URI"];
                         NSString* versionSpec = currentRequestParams[@"SERVER_PROTOCOL"];
-                        CRHTTPVersion version = CRHTTPVersionMake(versionSpec);
+                        CRHTTPVersion version = CRHTTPVersionFromString(versionSpec);
                         NSString* host;
                         if (!(host = currentRequestParams[@"HTTP_HOST"])) {
                             if (version != CRHTTPVersion1_0) {
@@ -226,7 +226,7 @@ NS_ASSUME_NONNULL_END
                         }
 
                         NSURL* URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@%@", host, path]];
-                        CRFCGIRequest* request = [[CRFCGIRequest alloc] initWithMethod:CRHTTPMethodMake(methodSpec) URL:URL version:version connection:self env:currentRequestParams];
+                        CRFCGIRequest* request = [[CRFCGIRequest alloc] initWithMethod:CRHTTPMethodFromString(methodSpec) URL:URL version:version connection:self env:currentRequestParams];
                         request.requestID = currentRequestID;
                         request.requestRole = currentRequestRole;
                         request.requestFlags = currentRequestFlags;

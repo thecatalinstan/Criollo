@@ -7,7 +7,7 @@
 
 #import <Criollo/CRServer.h>
 #import <Foundation/Foundation.h>
-#import <Security/SecBase.h> // SEC_OS_OSX_INCLUDES
+#import <Security/SecBase.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,12 +15,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) BOOL isSecure;
 
-@property (nonatomic, strong, nullable) NSString *identityPath;
-@property (nonatomic, strong, nullable) NSString *password;
+@property (nonatomic, nullable) NSString *identityPath;
+@property (nonatomic, nullable) NSString *password;
 
 #if SEC_OS_OSX_INCLUDES
-@property (nonatomic, strong, nullable) NSString *certificatePath;
-@property (nonatomic, strong, nullable) NSString *privateKeyPath;
+@property (nonatomic, nullable) NSString *certificatePath;
+@property (nonatomic, nullable) NSString *privateKeyPath;
 #endif
 
 @end

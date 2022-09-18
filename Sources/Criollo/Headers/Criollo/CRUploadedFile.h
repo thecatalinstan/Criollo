@@ -11,10 +11,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRUploadedFile : NSObject
 
-@property (nonatomic, strong) NSString * name;
-@property (nonatomic, strong) NSURL * temporaryFileURL;
-@property (nonatomic, strong, nullable) NSDictionary<NSFileAttributeKey,id> * attributes;
-@property (nonatomic, strong, nullable) NSString * mimeType;
+@property (nonatomic) NSString *name;
+@property (nonatomic) NSURL *temporaryFileURL;
+@property (nonatomic, nullable) NSDictionary<NSFileAttributeKey, id> *attributes;
+@property (nonatomic, nullable) NSString *mimeType;
 
 @end
 

@@ -13,13 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRResponse : CRMessage
 
-@property (nonatomic, weak, nullable) CRConnection *connection;
-@property (nonatomic, weak, nullable) CRRequest *request;
-
-@property (nonatomic, readonly) NSUInteger statusCode;
-@property (nonatomic, strong, readonly, nullable) NSString* statusDescription;
-
+@property (nonatomic) NSUInteger statusCode;
 - (void)setStatusCode:(NSUInteger)statusCode description:(NSString * _Nullable)description;
+@property (nonatomic, readonly, nullable) NSString* statusDescription;
 
 - (void)setAllHTTPHeaderFields:(NSDictionary<NSString *, NSString *> *)headerFields;
 - (void)addValue:(NSString *)value forHTTPHeaderField:(NSString *)HTTPHeaderField;
@@ -27,8 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setCookie:(NSHTTPCookie *)cookie;
 - (NSHTTPCookie *)setCookie:(NSString *)name value:(NSString *)value path:(NSString *)path expires:(NSDate * _Nullable)expires domain:(NSString * _Nullable)domain secure:(BOOL)secure;
-
-- (NSData *)serializeOutputObject:(id)obj error:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
 - (void)write:(id)obj;
 - (void)writeData:(NSData *)data;

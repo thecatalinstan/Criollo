@@ -5,8 +5,6 @@
 //  Created by Cătălin Stan on 4/12/14.
 //
 
-#import <Criollo/CRTypes.h>
-
 #import "NSString+Criollo.h"
 
 @implementation NSString (Criollo)

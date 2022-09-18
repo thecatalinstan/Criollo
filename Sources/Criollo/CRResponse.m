@@ -5,7 +5,7 @@
 //  Created by Cătălin Stan on 3/30/14.
 //
 
-#import <Criollo/CRResponse.h>
+#import "CRResponse_Internal.h"
 
 #import <Criollo/CRApplication.h>
 #import <Criollo/CRConnection.h>
@@ -15,7 +15,6 @@
 #import "CocoaAsyncSocket.h"
 #import "CRConnection_Internal.h"
 #import "CRMessage_Internal.h"
-#import "CRResponse_Internal.h"
 #import "CRServerConfiguration.h"
 #import "NSData+CRLF.h"
 #import "NSDate+RFC1123.h"
@@ -33,8 +32,8 @@ NSUInteger const CRResponseDataInitialCapacity = 1<<16;
 
 - (instancetype)initWithConnection:(CRConnection*)connection HTTPStatusCode:(NSUInteger)HTTPStatusCode description:(NSString *)description version:(CRHTTPVersion)version {
     self  = [super init];
-    if ( self != nil ) {
-        self.message = CFBridgingRelease(CFHTTPMessageCreateResponse(NULL, (CFIndex)HTTPStatusCode, (__bridge CFStringRef)description, (__bridge CFStringRef)NSStringFromCRHTTPVersion(version)));
+    if (self != nil) {
+        self.message = CFBridgingRelease(CFHTTPMessageCreateResponse(NULL, (CFIndex)HTTPStatusCode, (__bridge CFStringRef)description, (__bridge CFStringRef)version));
         _connection = connection;
         _statusDescription = description;
         _HTTPCookies = [NSMutableDictionary dictionary];
@@ -43,7 +42,7 @@ NSUInteger const CRResponseDataInitialCapacity = 1<<16;
 }
 
 - (NSUInteger)statusCode {
-    return (NSUInteger)CFHTTPMessageGetResponseStatusCode((__bridge CFHTTPMessageRef _Nonnull)(self.message));
+    return (NSUInteger)CFHTTPMessageGetResponseStatusCode((__bridge CFHTTPMessageRef)self.message);
 }
 
 - (void)setStatusCode:(NSUInteger)statusCode description:(NSString *)description {
@@ -52,11 +51,7 @@ NSUInteger const CRResponseDataInitialCapacity = 1<<16;
 }
 
 - (void)setAllHTTPHeaderFields:(NSDictionary<NSString *, NSString *> *)headerFields {
-    [headerFields enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        if ( [key isKindOfClass:[NSString class]] && [obj isKindOfClass:[NSString class]] ) {
-            [self setValue:obj forHTTPHeaderField:key];
-        }
-    }];
+    [self.allHTTPHeaderFields setValuesForKeysWithDictionary:headerFields];
 }
 
 - (void)addValue:(NSString *)value forHTTPHeaderField:(NSString *)HTTPHeaderField {
@@ -197,7 +192,6 @@ NSUInteger const CRResponseDataInitialCapacity = 1<<16;
 }
 
 - (void)buildStatusLine {
-
     // If there's no changes don't do anything
     if ( (self.proposedStatusCode == 0 && self.proposedStatusDescription.length == 0) || ( self.proposedStatusCode == self.statusCode && [self.proposedStatusDescription isEqualToString:self.statusDescription] ) ) {
         return;
@@ -212,7 +206,7 @@ NSUInteger const CRResponseDataInitialCapacity = 1<<16;
         self.proposedStatusDescription = self.statusDescription;
     }
 
-    CFHTTPMessageRef newMessage = CFHTTPMessageCreateResponse(NULL, (CFIndex)self.proposedStatusCode, (__bridge CFStringRef)self.proposedStatusDescription, (__bridge CFStringRef) NSStringFromCRHTTPVersion(self.version));
+    CFHTTPMessageRef newMessage = CFHTTPMessageCreateResponse(NULL, (CFIndex)self.proposedStatusCode, (__bridge CFStringRef)self.proposedStatusDescription, (__bridge CFStringRef)self.version);
 
     NSData* currentMessageData = self.serializedData;
     NSRange rangeOfFirstCRLF = [currentMessageData rangeOfData:NSData.CRLF options:0 range:NSMakeRange(0, currentMessageData.length)];
@@ -263,7 +257,7 @@ NSUInteger const CRResponseDataInitialCapacity = 1<<16;
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ %lu %@ %@", NSStringFromCRHTTPVersion(self.version), (unsigned long)self.statusCode, self.allHTTPHeaderFields[@"Content-type"], self.allHTTPHeaderFields[@"Content-length"]];
+    return [NSString stringWithFormat:@"%@ %lu %@ %@", self.version, (unsigned long)self.statusCode, self.allHTTPHeaderFields[@"Content-type"], self.allHTTPHeaderFields[@"Content-length"]];
 }
 
 @end

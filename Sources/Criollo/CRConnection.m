@@ -7,6 +7,7 @@
 
 #import "CRConnection_Internal.h"
 
+#import <Criollo/CriolloGlobals.h>
 #import <sys/sysctl.h>
 #import <sys/types.h>
 

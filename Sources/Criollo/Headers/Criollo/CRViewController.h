@@ -6,7 +6,6 @@
 //
 
 #import <Criollo/CRRouteController.h>
-#import <Criollo/CRTypes.h>
 #import <Foundation/Foundation.h>
 
 @class CRView, CRRequest, CRResponse;

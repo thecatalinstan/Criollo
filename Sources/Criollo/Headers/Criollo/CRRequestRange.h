@@ -5,7 +5,6 @@
 //  Created by Cătălin Stan on 06/03/16.
 //
 
-#import <Criollo/CRTypes.h>
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN

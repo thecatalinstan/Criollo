@@ -5,21 +5,19 @@
 //  Created by Cătălin Stan on 1/14/16.
 //
 
-#import <Criollo/CRUploadedFile.h>
+#import "CRUploadedFile_Internal.h"
 
 #import <Criollo/CRMimeTypeHelper.h>
 #import <Criollo/CRRequest.h>
-
-#import "CRUploadedFile_Internal.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CRUploadedFile ()
 
-@property (nonatomic, strong, nullable) NSOutputStream * fileWriteStream;
-@property (nonatomic, readonly) BOOL canCloseStream;
-@property (nonatomic) NSUInteger totalBytesToWrite;
-@property (nonatomic) NSUInteger bytesWritten;
+@property (nullable) NSOutputStream *fileWriteStream;
+@property (readonly) BOOL canCloseStream;
+@property NSUInteger totalBytesToWrite;
+@property NSUInteger bytesWritten;
 
 + (nullable NSURL *)temporaryFileURL;
 

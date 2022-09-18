@@ -59,14 +59,14 @@ NS_ASSUME_NONNULL_END
         _prefix = prefix.stringByStandardizingPath;
         
         __weak typeof(self) wself = self;
-        _routeBlock = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock _Nonnull completion) {
+        _routeBlock = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, dispatch_block_t _Nonnull completion) {
             [wself handleRequest:request response:response completion:completion];
         };
     }
     return self;
 }
 
-- (void)handleRequest:(CRRequest *)request response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion {
+- (void)handleRequest:(CRRequest *)request response:(CRResponse *)response completion:(dispatch_block_t)completion {
     // Determine the absolute and relative requested file paths
     NSString *requestedPath = request.env[@"DOCUMENT_URI"];
     
@@ -88,7 +88,7 @@ NS_ASSUME_NONNULL_END
         }
     } else {
         // If the file is not a directory, hand it over to a static file manager
-        CRStaticFileManager *manager = [[CRStaticFileManager alloc] initWithFileAtPath:absolutePath options:(CRStaticFileServingOptions)_options fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:attributes];
+        CRStaticFileManager *manager = [[CRStaticFileManager alloc] initWithFileAtPath:absolutePath options:(CRStaticFileServingOptions)self.options fileName:nil contentType:nil contentDisposition:nil attributes:attributes];
         [manager handleRequest:request response:response completion:completion];
     }
     
@@ -98,7 +98,7 @@ error:
     [self handleError:error request:request response:response completion:completion];
 }
 
-- (BOOL)generateIndexForPath:(NSString *)absolurePath requestedPath:(NSString *)requestedPath relativePath:(NSString *)relativePath response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion error:(NSError *__autoreleasing *)error {
+- (BOOL)generateIndexForPath:(NSString *)absolurePath requestedPath:(NSString *)requestedPath relativePath:(NSString *)relativePath response:(CRResponse *)response completion:(dispatch_block_t)completion error:(NSError *__autoreleasing *)error {
     if (!(_options & CRStaticDirectoryServingOptionsAutoIndex)) {
         if (error) {
             *error = [self errorWithCode:CRStaticDirectoryManagerDirectoryListingForbiddenError description:NSLocalizedString(@"Directory index auto-generation is disabled",) underlyingError:nil];
@@ -175,7 +175,7 @@ error:
 
 #pragma mark - Error Response
 
-- (void)handleError:(NSError *)error request:(CRRequest *)request response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion {
+- (void)handleError:(NSError *)error request:(CRRequest *)request response:(CRResponse *)response completion:(dispatch_block_t)completion {
     [CRRouter handleErrorResponse:HTTPStatusCodeForError(error) error:error request:request response:response completion:completion];
 }
 

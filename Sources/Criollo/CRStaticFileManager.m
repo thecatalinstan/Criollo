@@ -8,10 +8,10 @@
 #import <Criollo/CRStaticFileManager.h>
 
 #import <Criollo/CRMimeTypeHelper.h>
-#import <Criollo/CRRequest.h>
 #import <Criollo/CRRequestRange.h>
-#import <Criollo/CRResponse.h>
 
+#import "CRRequest_Internal.h"
+#import "CRResponse_Internal.h"
 #import "CRRouter_Internal.h"
 #import "CRStaticFileManager_Internal.h"
 
@@ -29,23 +29,16 @@ static NSUInteger const CRStaticFileManagerRestrictedFileTypeError      = 202;
 static NSUInteger const CRStaticFileManagerRangeNotSatisfiableError     = 203;
 static NSUInteger const CRStaticFileManagerNotImplementedError          = 999;
 
-static NSString * CRStaticFileContentDispositionNoneValue = @"none";
-static NSString * CRStaticFileContentDispositionInlineValue = @"inline";
-static NSString * CRStaticFileContentDispositionAttachmentValue = @"attachment";
-
-NS_INLINE NSString * NSStringFromCRStaticFileContentDisposition(CRStaticFileContentDisposition contentDisposition);
-NS_INLINE CRStaticFileContentDisposition CRStaticFileContentDispositionMake(NSString * contentDispositionName);
-
 NS_INLINE NSUInteger HTTPStatusCodeForError(NSError *error);
 
 @interface CRStaticFileManager ()
 
-@property (nonatomic, strong, readonly) NSString *path;
+@property (nonatomic, readonly) NSString *path;
 @property (nonatomic, readonly) CRStaticFileServingOptions options;
-@property (nonatomic, strong, readonly) NSString *fileName;
-@property (nonatomic, strong, readonly) NSString *contentType;
-@property (nonatomic, readonly) CRStaticFileContentDisposition contentDisposition;
-@property (nonatomic, strong, readonly, nullable) NSDictionary<NSFileAttributeKey, id> *attributes;
+@property (nonatomic, readonly) NSString *fileName;
+@property (nonatomic, readonly) NSString *contentType;
+@property (nonatomic, readonly) CRContentDisposition contentDisposition;
+@property (nonatomic, readonly, nullable) NSDictionary<NSFileAttributeKey, id> *attributes;
 
 @end
 
@@ -57,7 +50,7 @@ NS_ASSUME_NONNULL_END
                            options:(CRStaticFileServingOptions)options
                           fileName:(NSString *)fileName
                        contentType:(NSString *)contentType
-                contentDisposition:(CRStaticFileContentDisposition)contentDisposition
+                contentDisposition:(CRContentDisposition)contentDisposition
                         attributes:(NSDictionary<NSFileAttributeKey, id> *)attributes {
     
     self = [super init];
@@ -69,23 +62,23 @@ NS_ASSUME_NONNULL_END
         }
         _fileName = _fileName ?: _path.lastPathComponent;
         _contentType = contentType ?: [CRMimeTypeHelper.sharedHelper mimeTypeForFileAtPath:_path];
-        if (_contentDisposition == CRStaticFileContentDispositionNone) {
+        if (!_contentDisposition) {
             if ([_contentType hasPrefix:@"application/octet-stream"]) {
-                _contentDisposition = CRStaticFileContentDispositionAttachment;
+                _contentDisposition = CRContentDispositionAttachment;
             } else {
-                _contentDisposition = CRStaticFileContentDispositionInline;
+                _contentDisposition = CRContentDispositionInline;
             }
         }
         
          __weak typeof (self) wself = self;
-        _routeBlock = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, CRRouteCompletionBlock _Nonnull completion) {
+        _routeBlock = ^(CRRequest * _Nonnull request, CRResponse * _Nonnull response, dispatch_block_t _Nonnull completion) {
             [wself handleRequest:request response:response completion:completion];
         };
     }
     return self;
 }
 
-- (void)handleRequest:(CRRequest *)request response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion  {
+- (void)handleRequest:(CRRequest *)request response:(CRResponse *)response completion:(dispatch_block_t)completion  {
     NSRange requestDataRange;
     BOOL partial;
     NSDictionary<NSString *, NSString *> *headers;
@@ -128,7 +121,7 @@ error:
     [self handleError:error request:request response:response completion:completion];
 }
 
-- (BOOL)sendFileDataRange:(NSRange)dataRange partial:(BOOL)partial response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion error:(NSError *__autoreleasing *)error {
+- (BOOL)sendFileDataRange:(NSRange)dataRange partial:(BOOL)partial response:(CRResponse *)response completion:(dispatch_block_t)completion error:(NSError *__autoreleasing *)error {
 
     off_t offset = partial ? dataRange.location : 0;
     size_t length = partial ? dataRange.length : (size_t)_attributes.fileSize;
@@ -175,7 +168,7 @@ error:
     return NO;
 }
 
-- (BOOL)dispatchDataRange:(NSRange)dataRange partial:(BOOL)partial request:(CRRequest *)request response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion error:(NSError *__autoreleasing *)error {
+- (BOOL)dispatchDataRange:(NSRange)dataRange partial:(BOOL)partial request:(CRRequest *)request response:(CRResponse *)response completion:(dispatch_block_t)completion error:(NSError *__autoreleasing *)error {
 
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     
@@ -202,7 +195,7 @@ error:
     dispatch_io_set_high_water(channel, DispatchIOHiWater);
         
     dispatch_io_handler_t read = ^(bool done, dispatch_data_t data, int errnum) {
-        if (request.connection == nil || response.connection == nil) {
+        if (!request.connection || !response.connection) {
             dispatch_io_close(channel, DISPATCH_IO_STOP);
             return;
         }
@@ -241,7 +234,7 @@ error:
     return result;
 }
 
-- (void)handleError:(NSError *)error request:(CRRequest *)request response:(CRResponse *)response completion:(CRRouteCompletionBlock)completion {
+- (void)handleError:(NSError *)error request:(CRRequest *)request response:(CRResponse *)response completion:(dispatch_block_t)completion {
     [CRRouter handleErrorResponse:HTTPStatusCodeForError(error) error:error request:request response:response completion:completion];
 }
 
@@ -276,7 +269,7 @@ error:
     NSMutableDictionary<NSString *, NSString *> *headers = [NSMutableDictionary dictionaryWithCapacity:5];
     
     headers[@"Content-Type"] = _contentType;
-    headers[@"Content-Disposition"] = [NSString stringWithFormat:@"%@; filename=\"%@\"", NSStringFromCRStaticFileContentDisposition(_contentDisposition), [_fileName stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""]];
+    headers[@"Content-Disposition"] = [NSString stringWithFormat:@"%@; filename=\"%@\"", self.contentDisposition, [self.fileName stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""]];
     
     // In any case, let the client know that we can handle byte ranges
     headers[@"Accept-Ranges"] = CRRequestRange.acceptRangesSpec;
@@ -338,82 +331,11 @@ done:
     return [NSError errorWithDomain:CRStaticFileManagerErrorDomain code:code userInfo:info];
 }
 
-#pragma mark - Convenience Class Initializers
-
-+ (instancetype)managerWithFileAtPath:(NSString *)path {
-    return [[CRStaticFileManager alloc] initWithFileAtPath:path options:0 fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
-}
-
 + (instancetype)managerWithFileAtPath:(NSString *)path options:(CRStaticFileServingOptions)options {
-    return [[CRStaticFileManager alloc] initWithFileAtPath:path options:options fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
-}
-
-+ (instancetype)managerWithFileAtPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName {
-    return [[CRStaticFileManager alloc] initWithFileAtPath:path options:options fileName:fileName contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
-}
-
-+ (instancetype)managerWithFileAtPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType {
-    return [[CRStaticFileManager alloc] initWithFileAtPath:path options:options fileName:fileName contentType:contentType contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
-}
-
-+ (instancetype)managerWithFileAtPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition {
-    return [[CRStaticFileManager alloc] initWithFileAtPath:path options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition attributes:nil];
-}
-
-+ (instancetype)managerWithFileAtPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition attributes:(NSDictionary<NSFileAttributeKey, id> * _Nullable)attributes {
-    return [[CRStaticFileManager alloc] initWithFileAtPath:path options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition attributes:attributes];
-}
-
-#pragma mark - Convenience Initializers
-
-- (instancetype)init {
-    return  [self initWithFileAtPath:@"" options:0 fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
-}
-
-- (instancetype)initWithFileAtPath:(NSString *)path {
-    return [self initWithFileAtPath:path options:0 fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
-}
-
-- (instancetype)initWithFileAtPath:(NSString *)path options:(CRStaticFileServingOptions)options {
-    return [self initWithFileAtPath:path options:options fileName:nil contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
-}
-
-- (instancetype)initWithFileAtPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName {
-    return [self initWithFileAtPath:path options:options fileName:fileName contentType:nil contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
-}
-
-- (instancetype)initWithFileAtPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType {
-    return [self initWithFileAtPath:path options:options fileName:fileName contentType:contentType contentDisposition:CRStaticFileContentDispositionNone attributes:nil];
-}
-
-- (instancetype)initWithFileAtPath:(NSString *)path options:(CRStaticFileServingOptions)options fileName:(NSString * _Nullable)fileName contentType:(NSString * _Nullable)contentType contentDisposition:(CRStaticFileContentDisposition)contentDisposition {
-    return [self initWithFileAtPath:path options:options fileName:fileName contentType:contentType contentDisposition:contentDisposition attributes:nil];
+    return [[CRStaticFileManager alloc] initWithFileAtPath:path options:options fileName:nil contentType:nil contentDisposition:nil attributes:nil];
 }
 
 @end
-
-NSString * NSStringFromCRStaticFileContentDisposition(CRStaticFileContentDisposition contentDisposition) {
-    switch (contentDisposition) {
-        case CRStaticFileContentDispositionNone:
-            return CRStaticFileContentDispositionNoneValue;
-        case CRStaticFileContentDispositionInline:
-            return CRStaticFileContentDispositionInlineValue;
-        case CRStaticFileContentDispositionAttachment:
-            return CRStaticFileContentDispositionAttachmentValue;
-    }
-}
-
-__attribute__((unused)) CRStaticFileContentDisposition CRStaticFileContentDispositionMake(NSString * contentDispositionName) {
-    CRStaticFileContentDisposition contentDisposition;
-    if ( [contentDispositionName isEqualToString:CRStaticFileContentDispositionInlineValue] ) {
-        contentDisposition = CRStaticFileContentDispositionInline;
-    } else if ( [contentDispositionName isEqualToString:CRStaticFileContentDispositionAttachmentValue] ) {
-        contentDisposition = CRStaticFileContentDispositionAttachment;
-    } else {
-        contentDisposition = CRStaticFileContentDispositionNone;
-    }
-    return contentDisposition;
-}
 
 NSUInteger HTTPStatusCodeForError(NSError *error) {
     NSUInteger statusCode = 500;

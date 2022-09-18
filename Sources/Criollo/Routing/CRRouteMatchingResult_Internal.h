@@ -13,9 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CRRouteMatchingResult ()
 
-+ (instancetype)routeMatchingResultWithRoute:(CRRoute *)route matches:(NSArray<NSString *> * _Nullable)matches;
-
-- (instancetype)initWithRoute:(CRRoute *)route matches:(NSArray<NSString *> * _Nullable)matches NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithRoute:(CRRoute *)route
+                      matches:(NSArray<NSString *> * _Nullable)matches
+NS_DESIGNATED_INITIALIZER;
 
 @end
 

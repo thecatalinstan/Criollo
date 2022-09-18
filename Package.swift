@@ -42,7 +42,8 @@ let package = Package(
                 .headerSearchPath("./Routing"),
             ],
             linkerSettings: [
-                .linkedFramework("Security")
+                .linkedFramework("CFNetwork"),
+                .linkedFramework("Security"),
             ]
         ),
         .testTarget(

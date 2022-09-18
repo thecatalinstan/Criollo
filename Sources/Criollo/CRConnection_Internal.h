@@ -6,7 +6,7 @@
 //
 
 #import <Criollo/CRConnection.h>
-#import <Criollo/CRTypes.h>
+#import <Criollo/CRHTTPVersion.h>
 
 #import "CocoaAsyncSocket.h"
 
@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// The current request being parsed. This is used internally as the data comes
 /// in from the socket. Once the request is fully formed, it can be passed on to
 /// be handled.
-@property (nonatomic, weak, nullable) CRRequest *requestBeingReceived;
+@property (weak, nullable) CRRequest *requestBeingReceived;
 
 /// HTTP Pipelining allows multiple requests to be send "in one go" and requires
 /// their responses to be sent in order. As these requests can be completed out

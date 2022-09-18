@@ -13,21 +13,13 @@ NSNotificationName const CRApplicationWillFinishLaunchingNotification = @"CRAppl
 NSNotificationName const CRApplicationDidFinishLaunchingNotification = @"CRApplicationDidFinishLaunchingNotification";
 NSNotificationName const CRApplicationWillTerminateNotification = @"CRApplicationWillTerminateNotification";
 
-static NSRunLoopMode CRApplicationRunLoopMode;
-static NSNotificationName const CRApplicationDidReceiveSignalNotification = @"CRApplicationDidReceiveSignal";
-
 CRApplication *CRApp;
 static id<CRApplicationDelegate> CRAppDelegate;
 
 @interface CRApplication ()
 
-@property (nonatomic, readwrite, weak) id<CRApplicationDelegate> delegate;
-
 - (void)startRunLoop;
-- (void)stopRunLoop;
-
 - (void)quit;
-- (void)cancelTermination;
 
 @end
 
@@ -53,26 +45,24 @@ int CRApplicationMain(int argc, char *argv[], id<CRApplicationDelegate> delegate
 
 @implementation CRApplication
 
-+ (void)initialize {
-    CRApplicationRunLoopMode = NSDefaultRunLoopMode;
-}
-
 - (void)setDelegate:(id<CRApplicationDelegate>)delegate {
+    NSNotificationCenter *defaultCenter = NSNotificationCenter.defaultCenter;
+    
     if (_delegate) {
-        [[NSNotificationCenter defaultCenter] removeObserver:_delegate];
+        [defaultCenter removeObserver:_delegate];
         _delegate = nil;
     }
     
     _delegate = delegate;
     
     if ([(id)_delegate respondsToSelector:@selector(applicationWillFinishLaunching:)]) {
-        [[NSNotificationCenter defaultCenter] addObserver:_delegate selector:@selector(applicationWillFinishLaunching:) name:CRApplicationWillFinishLaunchingNotification object:nil];
+        [defaultCenter addObserver:_delegate selector:@selector(applicationWillFinishLaunching:) name:CRApplicationWillFinishLaunchingNotification object:nil];
     }
     if ([(id)_delegate respondsToSelector:@selector(applicationDidFinishLaunching:)]) {
-        [[NSNotificationCenter defaultCenter] addObserver:_delegate selector:@selector(applicationDidFinishLaunching:) name:CRApplicationDidFinishLaunchingNotification object:nil];
+        [defaultCenter addObserver:_delegate selector:@selector(applicationDidFinishLaunching:) name:CRApplicationDidFinishLaunchingNotification object:nil];
     }
     if ([(id)_delegate respondsToSelector:@selector(applicationWillTerminate:)]) {
-        [[NSNotificationCenter defaultCenter] addObserver:_delegate selector:@selector(applicationWillTerminate:) name:CRApplicationWillTerminateNotification object:nil];
+        [defaultCenter addObserver:_delegate selector:@selector(applicationWillTerminate:) name:CRApplicationWillTerminateNotification object:nil];
     }
 }
 
@@ -95,13 +85,9 @@ int CRApplicationMain(int argc, char *argv[], id<CRApplicationDelegate> delegate
 	return CRApp;
 }
 
-- (instancetype)init {
-    return [self initWithDelegate:nil];
-}
-
 - (instancetype)initWithDelegate:(id<CRApplicationDelegate>)delegate {
     self = [super init];
-    if ( self != nil ) {
+    if (self != nil) {
         self.delegate = delegate;
     }
     return self;
@@ -110,35 +96,32 @@ int CRApplicationMain(int argc, char *argv[], id<CRApplicationDelegate> delegate
 #pragma mark - Lifecycle
 
 - (void)quit {
-    [[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationWillTerminateNotification object:self];
+    [NSNotificationCenter.defaultCenter postNotificationName:CRApplicationWillTerminateNotification object:self];
     exit(EXIT_SUCCESS);
 }
 
-- (void)cancelTermination {
-    [self startRunLoop];
-}
-
 - (void)startRunLoop {
-    [[NSRunLoop mainRunLoop] addTimer:[NSTimer timerWithTimeInterval:[[NSDate distantFuture] timeIntervalSinceNow] target:self selector:@selector(stop) userInfo:nil repeats:YES] forMode:CRApplicationRunLoopMode];
+    NSDate *distantFuture = NSDate.distantFuture;
+    NSRunLoop *mainRunLoop = NSRunLoop.mainRunLoop;
+    NSRunLoopMode mode = NSDefaultRunLoopMode;
+    
+    NSTimer *timer = [NSTimer timerWithTimeInterval:distantFuture.timeIntervalSinceNow target:self selector:@selector(stop:) userInfo:nil repeats:YES];
+    [mainRunLoop addTimer:timer forMode:mode];
 
-    while ([[NSRunLoop mainRunLoop] runMode:CRApplicationRunLoopMode beforeDate:[NSDate distantFuture]] );
-}
-
-- (void)stopRunLoop {
-    CFRunLoopStop(CFRunLoopGetMain());
+    while ([mainRunLoop runMode:mode beforeDate:distantFuture]);
 }
 
 - (void)terminate:(id)sender {
     [self performSelectorOnMainThread:@selector(stop:) withObject:nil waitUntilDone:YES];
     
     CRApplicationTerminateReply reply = CRTerminateNow;
-    if ([(id)_delegate respondsToSelector:@selector(applicationShouldTerminate:)]) {
-        reply = [_delegate applicationShouldTerminate:self];
+    if ([(id)self.delegate respondsToSelector:@selector(applicationShouldTerminate:)]) {
+        reply = [self.delegate applicationShouldTerminate:self];
     }
     
     switch (reply) {
         case CRTerminateCancel:
-            [self cancelTermination];
+            [self startRunLoop];
             break;
             
         case CRTerminateLater:
@@ -158,7 +141,7 @@ int CRApplicationMain(int argc, char *argv[], id<CRApplicationDelegate> delegate
     if (shouldTerminate) {
         [self quit];
     } else {
-        [self cancelTermination];
+        [self startRunLoop];
     }
 }
 
@@ -172,11 +155,11 @@ int CRApplicationMain(int argc, char *argv[], id<CRApplicationDelegate> delegate
 }
 
 - (void)stop:(id)sender {
-    [self stopRunLoop];
+    CFRunLoopStop(CFRunLoopGetMain());
 }
 
 - (void)finishLaunching {
-	[[NSNotificationCenter defaultCenter] postNotificationName:CRApplicationWillFinishLaunchingNotification object:self];
+	[NSNotificationCenter.defaultCenter postNotificationName:CRApplicationWillFinishLaunchingNotification object:self];
 }
 
 @end

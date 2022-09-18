@@ -87,18 +87,16 @@ CRRequestContentType const CRRequestContentTypeOther = @"";
 
 - (instancetype)initWithMethod:(CRHTTPMethod)method URL:(NSURL *)URL version:(CRHTTPVersion)version connection:(CRConnection *)connection env:(NSDictionary *)env {
     self = [super init];
-    if ( self != nil ) {
-        self.method = method;
-        if ( connection ) {
-            self.connection = connection;
+    if (self != nil) {
+        _method = method;
+        _connection = connection;
+        if (URL) {
+            self.message = CFBridgingRelease(CFHTTPMessageCreateRequest(NULL, (__bridge CFStringRef)_method, (__bridge CFURLRef)URL, (__bridge CFStringRef)version));
         }
-        if ( URL ) {
-            self.message = CFBridgingRelease( CFHTTPMessageCreateRequest(NULL, (__bridge CFStringRef)NSStringFromCRHTTPMethod(_method), (__bridge CFURLRef)URL, (__bridge CFStringRef)NSStringFromCRHTTPVersion(version)) );
-        }
-        if ( env != nil ) {
-            self.env = [NSMutableDictionary dictionaryWithDictionary:env];
+        if (env) {
+            _env = [env mutableCopy];
         } else {
-            self.env = [NSMutableDictionary dictionary];
+            _env = [NSMutableDictionary dictionaryWithCapacity:16];
         }
         [self parseQueryString];
         [self parseCookiesHeader];
@@ -117,8 +115,8 @@ CRRequestContentType const CRRequestContentTypeOther = @"";
 
 - (void)parseQueryString {
     // Parse request query string
-    NSMutableDictionary<NSString *,NSString *> *query = self.query ? self.query.mutableCopy : [NSMutableDictionary dictionary];
-    if ( self.env[@"QUERY_STRING"] != nil ) {
+    NSMutableDictionary<NSString *,NSString *> *query = self.query ? self.query.mutableCopy : [NSMutableDictionary dictionaryWithCapacity:16];
+    if (self.env[@"QUERY_STRING"]) {
         NSArray<NSString *> *queryVars = [self.env[@"QUERY_STRING"] componentsSeparatedByString:CRRequestKeySeparator];
         [queryVars enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) { @autoreleasepool {
             NSArray<NSString *> *queryVarComponents = [[obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsSeparatedByString:CRRequestValueSeparator];
@@ -127,7 +125,7 @@ CRRequestContentType const CRRequestContentTypeOther = @"";
             query[key] = value;
         }}];
     }
-    self.query = query;
+    _query = query;
 }
 
 - (void)parseCookiesHeader {
@@ -140,13 +138,12 @@ CRRequestContentType const CRRequestContentTypeOther = @"";
             cookies[cookieComponents[0]] = cookieComponents.count > 1 ? cookieComponents[1] : @"";
         }}];
     }
-    self.cookies = cookies;
+    _cookies = cookies;
 }
 
 - (void)parseRangeHeader {
-    // Parse Range header
-    if ( self.env[@"HTTP_RANGE"] != nil ) {
-        self.range = [CRRequestRange reuestRangeWithRangesSpecifier:self.env[@"HTTP_RANGE"]];
+    if (self.env[@"HTTP_RANGE"]) {
+        _range = [CRRequestRange reuestRangeWithRangesSpecifier:self.env[@"HTTP_RANGE"]];
     }
 }
 
@@ -159,7 +156,7 @@ CRRequestContentType const CRRequestContentTypeOther = @"";
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ %@ %@", NSStringFromCRHTTPMethod(self.method), self.URL.path, NSStringFromCRHTTPVersion(self.version)];
+    return [NSString stringWithFormat:@"%@ %@ %@", self.method, self.URL.path, self.version];
 }
 
 - (BOOL)shouldCloseConnection {

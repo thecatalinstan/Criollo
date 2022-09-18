@@ -11,6 +11,7 @@
 #import <Criollo/CRRequest.h>
 #import <Criollo/CRResponse.h>
 #import <Criollo/CRViewController.h>
+#import <Criollo/CriolloGlobals.h>
 
 #import "CocoaAsyncSocket.h"
 #import "CRConnection_Internal.h"

@@ -8,7 +8,6 @@
 #import <Foundation/Foundation.h>
 
 #import <Criollo/CRRouter.h>
-#import <Criollo/CRTypes.h>
 
 @class CRServer, CRServerConfiguration, GCDAsyncSocket, CRConnection, CRRequest, CRResponse, CRRoute;
 

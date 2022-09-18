@@ -6,21 +6,15 @@
 //
 //
 
-#import <Criollo/CRTypes.h>
+#import <Criollo/CRHTTPVersion.h>
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-FOUNDATION_EXTERN NSString * NSStringFromCRHTTPVersion(CRHTTPVersion version);
-FOUNDATION_EXTERN CRHTTPVersion CRHTTPVersionMake(NSString * versionSpec);
-
-FOUNDATION_EXTERN NSString * NSStringFromCRHTTPMethod(CRHTTPMethod method);
-FOUNDATION_EXTERN CRHTTPMethod CRHTTPMethodMake(NSString * methodSpec);
-
 @interface CRMessage : NSObject
 
 @property (nonatomic, readonly) CRHTTPVersion version;
-@property (nonatomic, readonly) NSDictionary<NSString*, NSString*>* allHTTPHeaderFields;
+@property (nonatomic, readonly) NSDictionary<NSString*, NSString*> *allHTTPHeaderFields;
 
 @property (nonatomic, copy, nullable) NSData* bodyData;
 

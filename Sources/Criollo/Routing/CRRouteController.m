@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_END
         _prefix = prefix;
 
         CRRouteController * __weak controller = self;
-        _routeBlock = ^(CRRequest *request, CRResponse *response, CRRouteCompletionBlock completionHandler) {
+        _routeBlock = ^(CRRequest *request, CRResponse *response, dispatch_block_t completionHandler) {
             @autoreleasepool {
                 NSString* requestedPath = request.env[@"DOCUMENT_URI"];
                 NSString* requestedRelativePath = [requestedPath pathRelativeToPath:controller.prefix separator:CRRoutePathSeparator];

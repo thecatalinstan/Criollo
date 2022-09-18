@@ -23,7 +23,7 @@ server.startListening()
 
 ```objective-c
 CRServer* server = [[CRHTTPServer alloc] init];
-[server get:@"/" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
+[server get:@"/" block:^(CRRequest *req, CRResponse *res, dispatch_block_t next) {
   [res send:@"Hello world!"];
 }];
 [server startListening];
@@ -99,17 +99,17 @@ server.add("/[0-9]{4}/[0-9]{1,2}/[a-zA-Z0-9-]+") { (req, res, next) in
 ... and in Objective-C:
 
 ```objective-c
-[server add:@"/api" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
+[server add:@"/api" block:^(CRRequest *req, CRResponse *res, dispatch_block_t next) {
   // /api/?pid=12345
   [res send:req];
 }];
 
-[server add:@"/posts/:pid" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
+[server add:@"/posts/:pid" block:^(CRRequest *req, CRResponse *res, dispatch_block_t next) {
   // /posts/12345
   [res send:req];
 }];
 
-[server add:@"/[0-9]{4}/[0-9]{1,2}/[a-zA-Z0-9-]+" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
+[server add:@"/[0-9]{4}/[0-9]{1,2}/[a-zA-Z0-9-]+" block:^(CRRequest *req, CRResponse *res, dispatch_block_t next) {
   // /2017/10/my-first-criollo-app
   [res send:req];
 }];
@@ -148,7 +148,7 @@ server.add("/api", controller:APIController.self)
   self = [super initWithPrefix:prefix];
   if ( self != nil ) {
     
-    [self add:@"/status" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
+    [self add:@"/status" block:^(CRRequest *req, CRResponse *res, dispatch_block_t next) {
       [res send:@{@"status": @YES}];
     }];
          
@@ -266,7 +266,7 @@ self.server.post("/image") { (req, res, next) in
 
 ```objective-c
 // Serve the first uploaded file back to the client
-[server post:@"/image" block:^(CRRequest *req, CRResponse *res, CRRouteCompletionBlock next) {
+[server post:@"/image" block:^(CRRequest *req, CRResponse *res, dispatch_block_t next) {
   NSError *error;
   NSData *data = [NSData dataWithContentsOfURL:req[0].temporaryFileURL options:0 error:&error];
   if ( error ) {

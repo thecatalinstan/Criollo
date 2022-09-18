@@ -5,6 +5,7 @@
 //  Created by Cătălin Stan on 11/20/15.
 //
 
+#import <Criollo/CRHTTPMethod.h>
 #import <Criollo/CRMessage.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -15,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) id message;
 @property (nonatomic, readonly) BOOL headersComplete;
 
-+ (NSArray<NSString *>*)acceptedHTTPMethods;
+@property (class, readonly) const NSHashTable<CRHTTPMethod> *acceptedHTTPMethods;
 
 @end
 
