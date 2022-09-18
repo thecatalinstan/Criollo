@@ -40,6 +40,9 @@ let package = Package(
                 .headerSearchPath("./FCGI"),
                 .headerSearchPath("./HTTP"),
                 .headerSearchPath("./Routing"),
+            ],
+            linkerSettings: [
+                .linkedFramework("Security")
             ]
         ),
         .testTarget(
